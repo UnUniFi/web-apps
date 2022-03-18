@@ -1,5 +1,4 @@
-name: Node.js CI main
-
+name: Node.js CI portal
 on:
   pull_request:
     paths:

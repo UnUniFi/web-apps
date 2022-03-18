@@ -1,4 +1,4 @@
-name: CI Telescope Docker image
+name: CI Portal Docker image
 on:
   pull_request:
     paths:

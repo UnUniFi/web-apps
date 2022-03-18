@@ -26,10 +26,7 @@
             "main": "projects/main/src/main.ts",
             "polyfills": "projects/main/src/polyfills.ts",
             "tsConfig": "projects/main/tsconfig.app.json",
-            "assets": [
-              "projects/main/src/favicon.png",
-              "projects/main/src/assets"
-            ],
+            "assets": ["projects/main/src/favicon.png", "projects/main/src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/main/src/styles.css"
@@ -96,10 +93,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/main/**/*.ts",
-              "projects/main/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/main/**/*.ts", "projects/main/**/*.html"]
           }
         },
         "cypress-run": {
@@ -167,10 +161,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/shared/**/*.ts",
-              "projects/shared/**/*.html"
-            ]
+            "lintFilePatterns": ["projects/shared/**/*.ts", "projects/shared/**/*.html"]
           }
         },
         "cypress-run": {
@@ -203,6 +194,130 @@
           "configurations": {
             "production": {
               "devServerTarget": "shared:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "portal": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/portal",
+      "sourceRoot": "projects/portal/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/portal",
+            "index": "projects/portal/src/index.html",
+            "main": "projects/portal/src/main.ts",
+            "polyfills": "projects/portal/src/polyfills.ts",
+            "tsConfig": "projects/portal/tsconfig.app.json",
+            "assets": ["projects/portal/src/favicon.png", "projects/portal/src/assets"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "projects/portal/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/portal/src/environments/environment.ts",
+                  "with": "projects/portal/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "portal:build:production"
+            },
+            "development": {
+              "browserTarget": "portal:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "portal:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "./jest.config.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/portal/**/*.ts", "projects/portal/**/*.html"]
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "portal:serve",
+            "configFile": "projects/portal/cypress.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "portal:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/portal/cypress.json"
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "portal:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "portal:serve:production"
             }
           }
         }

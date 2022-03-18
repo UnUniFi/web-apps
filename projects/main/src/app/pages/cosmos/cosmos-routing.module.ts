@@ -3,19 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'bank',
-    loadChildren: () =>
-      import('./bank/bank.module').then((mod) => mod.AppBankModule),
-  },
-  {
     path: 'gov',
-    loadChildren: () =>
-      import('./gov/gov.module').then((mod) => mod.AppGovModule),
+    loadChildren: () => import('./gov/gov.module').then((mod) => mod.AppGovModule),
   },
   {
     path: 'staking',
-    loadChildren: () =>
-      import('./staking/staking.module').then((mod) => mod.AppStakingModule),
+    loadChildren: () => import('./staking/staking.module').then((mod) => mod.AppStakingModule),
   },
 ];
 

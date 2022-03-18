@@ -3,10 +3,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
-import { KeyBackupDialogModule } from './views/keys/key-backup-dialog/key-backup-dialog.module';
-import { KeyDeleteConfirmDialogModule } from './views/keys/key-delete-confirm-dialog/key-delete-confirm-dialog.module';
-import { KeyDeleteDialogModule } from './views/keys/key-delete-dialog/key-delete-dialog.module';
-import { KeySelectDialogModule } from './views/keys/key-select-dialog/key-select-dialog.module';
 import { ToolbarModule } from './views/toolbar/toolbar.module';
 import { ViewModule } from './views/view.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,10 +31,6 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     ViewModule,
     ToolbarModule,
     HttpClientModule,
-    KeySelectDialogModule,
-    KeyBackupDialogModule,
-    KeyDeleteDialogModule,
-    KeyDeleteConfirmDialogModule,
     TxFeeConfirmDialogModule,
   ],
   providers: [],

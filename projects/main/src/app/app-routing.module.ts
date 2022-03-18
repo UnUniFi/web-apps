@@ -20,16 +20,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cosmos/cosmos.module').then((m) => m.AppCosmosModule),
   },
   {
-    path: 'keys',
-    loadChildren: () => import('./pages/keys/keys.module').then((m) => m.AppKeysModule),
-  },
-  {
     path: 'monitor',
     loadChildren: () => import('./pages/monitor/monitor.module').then((m) => m.AppMonitorModule),
-  },
-  {
-    path: 'faucet',
-    loadChildren: () => import('./pages/faucet/faucet.module').then((m) => m.AppFaucetModule),
   },
 ];
 

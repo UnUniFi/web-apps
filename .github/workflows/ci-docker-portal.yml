@@ -1,8 +1,8 @@
-name: CI Monitor Docker image
+name: CI Telescope Docker image
 on:
   pull_request:
     paths:
-      - 'projects/monitor/**'
+      - 'projects/portal/**'
 jobs:
   push_to_registry:
     name: Build Docker image
@@ -19,12 +19,12 @@ jobs:
       - name: Setup variables
         id: variables
         run: echo "::set-output name=version::${GITHUB_REF##*/}"
-      - name: Push to Docker Hub
+      - name: Build only
         uses: docker/build-push-action@v2
         with:
-          context: ./projects/monitor
-          file: ./projects/monitor/Dockerfile
+          context: .
+          file: ./projects/portal/Dockerfile
           push: false
           tags: |
-            ghcr.io/ununifi/telescope-monitor:${{ steps.variables.outputs.version }}
-            ghcr.io/ununifi/telescope-monitor:latest
+            ghcr.io/ununifi/portal:${{ steps.variables.outputs.version }}
+            ghcr.io/ununifi/portal:latest

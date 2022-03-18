@@ -3,7 +3,7 @@ version: '3'
 services:
   telescope:
     container_name: telescope
-    image: ghcr.io/UnUniFi/telescope
+    image: ghcr.io/ununifi/telescope
     # build:
     #   dockerfile: ./Dockerfile
     volumes:

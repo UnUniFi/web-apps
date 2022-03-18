@@ -2,8 +2,8 @@ name: CI Telescope Docker image
 on:
   pull_request:
     paths:
-      - "projects/main/**"
-      - "projects/shared/**"
+      - 'projects/main/**'
+      - 'projects/shared/**'
 jobs:
   push_to_registry:
     name: Build Docker image
@@ -27,5 +27,5 @@ jobs:
           file: ./projects/main/Dockerfile
           push: false
           tags: |
-            ghcr.io/cauchye/telescope:${{ steps.variables.outputs.version }}
-            ghcr.io/cauchye/telescope:latest
+            ghcr.io/ununifi/telescope:${{ steps.variables.outputs.version }}
+            ghcr.io/ununifi/telescope:latest

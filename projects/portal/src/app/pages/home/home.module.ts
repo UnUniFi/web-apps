@@ -13,6 +13,8 @@ import { MintComponent } from './mint/mint.component';
 import { TxsComponent } from './txs/txs.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AccountsComponent } from './accounts/accounts.component';
+import { AccountsModule } from '../../views/home/accounts/accounts.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { NgModule } from '@angular/core';
     DistributionComponent,
     MintComponent,
     TxsComponent,
+    AccountsComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +35,7 @@ import { NgModule } from '@angular/core';
     DistributionModule,
     MintModule,
     TxsModule,
+    AccountsModule
   ],
 })
 export class AppHomeModule {}

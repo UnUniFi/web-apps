@@ -20,19 +20,13 @@
         <mat-icon class="mr-2" color="primary">account_tree</mat-icon>Blocks
       </mat-list-item>
       <mat-list-item routerLink="/txs">
-        <mat-icon class="mr-2" color="primary">mail</mat-icon>Txs
+        <mat-icon class="mr-2" color="primary">mail</mat-icon>Transactions
       </mat-list-item>
-      <mat-list-item routerLink="/keys">
-        <mat-icon class="mr-2" color="primary">manage_accounts</mat-icon>Keys
+      <mat-list-item routerLink="/cosmos/staking/validators">
+        <mat-icon class="mr-2" color="primary">savings</mat-icon>Validators
       </mat-list-item>
-      <mat-list-item routerLink="/cosmos/bank">
-        <mat-icon class="mr-2" color="primary">sync_alt</mat-icon>Bank
-      </mat-list-item>
-      <mat-list-item routerLink="/cosmos/staking">
-        <mat-icon class="mr-2" color="primary">savings</mat-icon>Staking
-      </mat-list-item>
-      <mat-list-item routerLink="/cosmos/gov">
-        <mat-icon class="mr-2" color="primary">message</mat-icon>Gov
+      <mat-list-item routerLink="/cosmos/gov/proposals">
+        <mat-icon class="mr-2" color="primary">message</mat-icon>Votes
       </mat-list-item>
       <ng-template ngFor let-extension [ngForOf]="extensionNavigations">
         <ng-container *ngIf="extension?.name && extension?.link">

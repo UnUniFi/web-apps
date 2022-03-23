@@ -17,13 +17,6 @@ export type Config = {
     amount: string;
   }[];
   extension?: {
-    faucet?: {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[];
     monitor?: {
       monitorURL: string;
     };

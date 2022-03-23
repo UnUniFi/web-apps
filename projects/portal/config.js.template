@@ -1,0 +1,50 @@
+const config = {
+  restURL: `${location.protocol}//${location.hostname}:1317`,
+  websocketURL: `${location.protocol.replace('http', 'ws')}//${location.hostname}:26657`,
+  chainID: 'cosmoshub-3',
+  // bech32Prefix: {
+  //   accAddr: '',
+  //   accPub: '',
+  //   valAddr: '',
+  //   valPub: '',
+  //   consAddr: '',
+  //   consPub: '',
+  // },
+  // minimumGasPrices: {
+  //   denom: '';
+  //   amount: '';
+  // }[];
+  // extension: {
+  //   faucet: [
+  //     {
+  //       hasFaucet: false,
+  //       faucetURL: `${location.protocol}//${location.hostname}:8000`,
+  //       denom: '',
+  //       creditAmount: 0, // amount to credit in max request
+  //       maxCredit: 0, // account has already maxCredit balance cannot claim anymore
+  //     }
+  //   ],
+  //   monitor: {
+  //     monitorURL: `${location.protocol}//${location.hostname}:9000`,
+  //   },
+  //   navigations: [
+  //     {
+  //       name: '',
+  //       link: '',
+  //       icon: '',
+  //     },
+  //   ],
+  //   messageModules: [
+  //     'bank', // hit
+  //     'auth',
+  //     'crisis',
+  //     'distribution',
+  //     'evidence',
+  //     'genaccounts',
+  //     'gov',
+  //     'ibc',
+  //     'slashing',
+  //     'staking', // hit
+  //   ],
+  // }
+};

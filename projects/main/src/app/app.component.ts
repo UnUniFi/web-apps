@@ -35,13 +35,6 @@ export class AppComponent {
     private readonly configS: ConfigService,
   ) {
     this.config = this.configS.config;
-    if (this.config.extension?.faucet !== undefined) {
-      this.config.extension.navigations.unshift({
-        name: 'Faucet',
-        link: '/faucet',
-        icon: 'clean_hands',
-      });
-    }
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {

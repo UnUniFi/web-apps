@@ -2,7 +2,7 @@ name: CI Monitor Docker image
 on:
   pull_request:
     paths:
-      - "projects/monitor/**"
+      - 'projects/monitor/**'
 jobs:
   push_to_registry:
     name: Build Docker image
@@ -26,5 +26,5 @@ jobs:
           file: ./projects/monitor/Dockerfile
           push: false
           tags: |
-            ghcr.io/cauchye/telescope-monitor:${{ steps.variables.outputs.version }}
-            ghcr.io/cauchye/telescope-monitor:latest
+            ghcr.io/ununifi/telescope-monitor:${{ steps.variables.outputs.version }}
+            ghcr.io/ununifi/telescope-monitor:latest

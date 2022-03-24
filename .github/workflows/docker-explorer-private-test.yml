@@ -1,7 +1,8 @@
-name: Publish Telescope Docker image
+name: Publish Explorer Docker image for Private Testnet
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - develop
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -22,16 +23,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./projects/main/Dockerfile
+          file: ./projects/explorer/Dockerfile
           push: true
           tags: |
-            ghcr.io/ununifi/telescope:${{ steps.variables.outputs.version }}
-            ghcr.io/ununifi/telescope:latest
-      - name: Create GitHub dispatch event
-        run: |
-          curl --request POST 'https://api.github.com/repos/UnUniFi/utils/dispatches' \
-          --header 'Authorization: Bearer ${{secrets.REPO_GITHUB_ACCESS_TOKEN}}' \
-          --header 'Content-Type: application/json' \
-          --data-raw '{
-            "event_type": "repository-telescope-new-release"
-          }'
+            ghcr.io/ununifi/explorer:test
+      # - name: Create GitHub dispatch event
+      #   run: |
+      #     curl --request POST 'https://api.github.com/repos/UnUniFi/utils/dispatches' \
+      #     --header 'Authorization: Bearer ${{secrets.REPO_GITHUB_ACCESS_TOKEN}}' \
+      #     --header 'Content-Type: application/json' \
+      #     --data-raw '{
+      #       "event_type": "repository-telescope-new-release"
+      #     }'

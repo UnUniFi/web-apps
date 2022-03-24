@@ -1,8 +1,8 @@
-name: CI Telescope Docker image
+name: CI Explorer Docker image
 on:
   pull_request:
     paths:
-      - 'projects/main/**'
+      - 'projects/explorer/**'
       - 'projects/shared/**'
 jobs:
   push_to_registry:
@@ -24,8 +24,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./projects/main/Dockerfile
+          file: ./projects/explorer/Dockerfile
           push: false
           tags: |
-            ghcr.io/ununifi/telescope:${{ steps.variables.outputs.version }}
-            ghcr.io/ununifi/telescope:latest
+            ghcr.io/ununifi/explorer:${{ steps.variables.outputs.version }}
+            ghcr.io/ununifi/explorer:latest

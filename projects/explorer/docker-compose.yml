@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  telescope:
-    container_name: telescope
-    image: ghcr.io/ununifi/telescope
+  ununifi-explorer:
+    container_name: ununifi-explorer
+    image: ghcr.io/ununifi/explorer
     # build:
     #   dockerfile: ./Dockerfile
     volumes:

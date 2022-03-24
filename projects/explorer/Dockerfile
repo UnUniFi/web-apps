@@ -3,7 +3,7 @@ FROM node:14 as build-stage
 WORKDIR /root/app
 COPY . /root/app/
 RUN npm ci
-RUN npm run build -- --prod
+RUN npm run build:explorer
 
 FROM nginx:1.15
 

@@ -1,9 +1,8 @@
 #!/bin/bash
 cd ~/telescope
 docker-compose down
-docker pull ghcr.io/cauchye/telescope:latest
-docker pull ghcr.io/ununifi/telescope-ununifi:latest
-curl -O https://raw.githubusercontent.com/UnUniFi/utils/main/projects/telescope-extension/editions/ununifi/docker-compose.yml
-curl -O https://raw.githubusercontent.com/UnUniFi/utils/main/projects/telescope-extension/nginx.conf
-curl -O https://raw.githubusercontent.com/UnUniFi/utils/main/projects/telescope-extension/editions/ununifi/launch/ununifi-6-test/light/config.js
+docker pull ghcr.io/ununifi/explorer:latest
+curl -O https://raw.githubusercontent.com/UnUniFi/web-apps/main/projects/explorer/editions/ununifi/launch/ununifi-6-test/docker-compose.yml
+curl -O https://raw.githubusercontent.com/UnUniFi/web-apps/main/projects/explorer/nginx.conf
+curl -O https://raw.githubusercontent.com/UnUniFi/web-apps/main/projects/explorer/editions/ununifi/launch/ununifi-6-test/light/config.js
 docker-compose up -d

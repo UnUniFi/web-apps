@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start:portal": "ng serve --project portal",
     "build": "ng build",
+    "build:explorer": "ng build --project explorer",
     "build:portal": "ng build --project portal",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

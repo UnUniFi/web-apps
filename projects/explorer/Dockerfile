@@ -7,4 +7,4 @@ RUN npm run build:explorer
 
 FROM nginx:1.15
 
-COPY --from=build-stage /root/app/dist/main/ /usr/share/nginx/html/
+COPY --from=build-stage /root/app/dist/explorer/ /usr/share/nginx/html/

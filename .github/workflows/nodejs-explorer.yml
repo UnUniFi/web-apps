@@ -1,9 +1,9 @@
-name: Node.js CI main
+name: Node.js CI explorer
 
 on:
   pull_request:
     paths:
-      - "projects/main/**"
+      - "projects/explorer/**"
       - "projects/shared/**"
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm i -g npm
       - run: npm ci
-      - run: npm run build --if-present -- --project=main
-      - run: npm run test -- --project=main
+      - run: npm run build --if-present -- --project=explorer
+      - run: npm run test -- --project=explorer
         env:
           CI: true

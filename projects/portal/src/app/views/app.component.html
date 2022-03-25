@@ -25,14 +25,18 @@
       <mat-list-item routerLink="/cosmos/staking">
         <mat-icon class="mr-2" color="primary">savings</mat-icon>Delegate
       </mat-list-item>
-      <ng-template ngFor let-extension [ngForOf]="extensionNavigations">
-        <ng-container *ngIf="extension?.name && extension?.link">
-          <a mat-list-item [href]="extension.link">
-            <mat-icon class="mr-2" color="primary"> {{ extension.icon }}</mat-icon>
-            {{ extension.name }}
-          </a>
-        </ng-container>
-      </ng-template>
+      <mat-list-item routerLink="/faucet">
+        <mat-icon class="mr-2" color="primary">clean_hands</mat-icon>Faucet
+      </mat-list-item>
+      <mat-list-item routerLink="/mint">
+        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Mint
+      </mat-list-item>
+      <mat-list-item routerLink="/auction">
+        <mat-icon class="mr-2" color="primary">gavel</mat-icon>Auction
+      </mat-list-item>
+      <mat-list-item routerLink="/monitor">
+        <mat-icon class="mr-2" color="primary">personal_video</mat-icon>Monitor
+      </mat-list-item>
     </mat-nav-list>
   </mat-drawer>
 

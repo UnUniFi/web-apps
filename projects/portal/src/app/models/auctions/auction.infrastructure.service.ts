@@ -1,3 +1,4 @@
+import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { TxCommonInfrastructureService } from '../tx-common/tx-common.infrastructure.service';
@@ -6,7 +7,6 @@ import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/telescope-extension/src/app/models/cosmos-sdk.service';
 import { ununifi } from 'ununifi-client';
 
 @Injectable({

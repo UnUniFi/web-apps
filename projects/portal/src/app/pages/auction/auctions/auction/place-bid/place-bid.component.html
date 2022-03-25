@@ -1,0 +1,9 @@
+<view-place-bid
+  [key]="key$ | async"
+  [auctionID]="auctionID$ | async"
+  [auction]="auction$ | async"
+  [endTime]="endTime$ | async"
+  [maxEndTime]="maxEndTime$ | async"
+  [minimumGasPrices]="minimumGasPrices"
+  (appSubmit)="onSubmit($event)"
+></view-place-bid>

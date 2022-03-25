@@ -1,4 +1,4 @@
-import { TxFeeConfirmDialogComponent } from '../../views/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { Key } from '../keys/key.model';
 import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { AuctionService } from './auction.service';

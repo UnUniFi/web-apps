@@ -1,0 +1,144 @@
+<h2>CDP</h2>
+<ng-container *ngIf="cdp === null; then empty; else exist"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #exist>
+  <mat-card>
+    <mat-list>
+      <mat-list-item>
+        <span class="column-name">Owner: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{ owner }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Collateral: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          {{ cdp?.cdp?.collateral?.amount }}
+          {{ cdp?.cdp?.collateral?.denom }}
+          <ng-template [ngIf]="!!withdrawLimit">
+            (Available: {{ withdrawLimit }} {{ cdp?.cdp?.collateral?.denom }})
+          </ng-template>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name"></span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          <a
+            mat-stroked-button
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/deposit"
+            target="_blank"
+            >Deposit</a
+          >
+          <a
+            class="withdraw-button"
+            mat-stroked-button
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/withdraw"
+            target="_blank"
+            >Withdraw</a
+          >
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Principal: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value"
+          >{{ cdp?.cdp?.principal?.amount }}
+          {{ cdp?.cdp?.principal?.denom }}
+          <ng-template [ngIf]="!!issueLimit">
+            (Available: {{ issueLimit }} {{ cdp?.cdp?.principal?.denom }})
+          </ng-template>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name"></span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          <a
+            mat-stroked-button
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/issue"
+            target="_blank"
+          >
+            Issue
+          </a>
+          <a
+            class="clear-button"
+            mat-stroked-button
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/clear"
+            target="_blank"
+          >
+            Clear
+          </a>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Fees: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          {{ cdp?.cdp?.accumulated_fees?.amount }}
+          {{ cdp?.cdp?.accumulated_fees?.denom }}
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name"> Fees Updated: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          {{ cdp?.cdp?.fees_updated | date: 'yyyy-M-d a h:mm:ss z' }}
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Spot Price: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          {{ spotPrice?.price | number: '1.9-9' }} [{{ spotPrice?.market_id }}]
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Liquidation Price: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">
+          {{ liquidationPrice?.price | number: '1.9-9' }} [{{ liquidationPrice?.market_id }}]
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+
+      <mat-list-item>
+        <span class="column-name">Collateralization Ratio: </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{ cdp?.collateralization_ratio | number: '1.9-9' }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
+  <h4>Deposits</h4>
+  <mat-card>
+    <ng-template ngFor let-deposit [ngForOf]="deposits">
+      <mat-list>
+        <span class="column-name">{{ deposit.depositor }}</span>
+        <span class="flex-auto"></span>
+        <span class="column-value"> {{ deposit.amount?.amount }} {{ deposit.amount?.denom }} </span>
+      </mat-list>
+    </ng-template>
+  </mat-card>
+</ng-template>
+<ng-template #empty>
+  <p class="empty">There is no cdp</p>
+</ng-template>

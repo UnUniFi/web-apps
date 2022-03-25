@@ -1,0 +1,48 @@
+<h2>View Auctions</h2>
+<mat-card>
+  <mat-nav-list>
+    <mat-list-item routerLink="/auction/auctions">Auctions List</mat-list-item>
+  </mat-nav-list>
+</mat-card>
+
+<h2>Auction parameters</h2>
+<h3>Increment Params</h3>
+<mat-card>
+  <mat-list>
+    <mat-list-item>
+      <span>Increment Collateral:</span>
+      <span class="flex-auto"></span>
+      <span>{{ params?.increment_collateral | number: '1.9-9' }}</span>
+    </mat-list-item>
+    <mat-divider [inset]="true"></mat-divider>
+    <mat-list-item>
+      <span>Increment Debt:</span>
+      <span class="flex-auto"></span>
+      <span>{{ params?.increment_debt | number: '1.9-9' }}</span>
+    </mat-list-item>
+    <mat-divider [inset]="true"></mat-divider>
+    <mat-list-item>
+      <span>Increment Surplus:</span>
+      <span class="flex-auto"></span>
+      <span>{{ params?.increment_surplus | number: '1.9-9' }}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+
+<h3>Duration Params</h3>
+<mat-card>
+  <mat-list>
+    <mat-list-item>
+      <span>Bid Duration:</span>
+      <span class="flex-auto"></span>
+      <span>{{ params?.bid_duration }}</span>
+    </mat-list-item>
+    <mat-divider [inset]="true"></mat-divider>
+    <mat-list-item>
+      <span>Max Auction Duration:</span>
+      <span class="flex-auto"></span>
+      <span>{{ params?.max_auction_duration }}</span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+<!--<pre>{{ params | json }}</pre>-->

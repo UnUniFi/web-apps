@@ -115,7 +115,7 @@ header {
   color: #5e5e5e;
   font-size: 15px;
   line-height: 20px;
-  background: url(~projects/main/src/assets/images/arrow.png) no-repeat left 0 top 5px;
+  background: url(~projects/landing-page/src/assets/images/arrow.png) no-repeat left 0 top 5px;
   background-size: 5px auto;
 }
 
@@ -208,7 +208,7 @@ header {
   padding: 80px 760px 0 40px;
   min-height: 415px;
   text-align: left;
-  background: url(~projects/main/src/assets/images/mv.png) no-repeat right 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/mv.png) no-repeat right 0 top 0;
   background-size: auto 415px;
   box-sizing: border-box;
 }
@@ -356,21 +356,21 @@ header {
   font-size: 20px;
   font-weight: bold;
   border-right: 1px solid #a1a1a1;
-  background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
   background-size: 20px auto;
 }
 
 #s-01 div ul li.guu-box p {
-  background-image: url(~projects/main/src/assets/images/GUU.png);
+  background-image: url(~projects/landing-page/src/assets/images/GUU.png);
 }
 #s-01 div ul li.jpu-box p {
-  background-image: url(~projects/main/src/assets/images/JPU.png);
+  background-image: url(~projects/landing-page/src/assets/images/JPU.png);
 }
 #s-01 div ul li.euu-box p {
-  background-image: url(~projects/main/src/assets/images/EUU.png);
+  background-image: url(~projects/landing-page/src/assets/images/EUU.png);
 }
 #s-01 div ul li.usu-box p {
-  background-image: url(~projects/main/src/assets/images/USU.png);
+  background-image: url(~projects/landing-page/src/assets/images/USU.png);
 }
 
 #s-02 {
@@ -397,7 +397,7 @@ header {
   width: 70%;
   font-size: 14px;
   border-right: 1px solid #a1a1a1;
-  background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
   background-size: 14px auto;
 }
 #s-02 div ul li p {
@@ -434,12 +434,12 @@ header {
   padding: 0 5px 0 34px;
   font-size: 14px;
   line-height: 24px;
-  background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
   background-size: 24px auto;
 }
 
 #s-03 div.kava-box ul li h3 {
-  background-image: url(~projects/main/src/assets/images/kava.svg);
+  background-image: url(~projects/landing-page/src/assets/images/kava.svg);
 }
 
 #s-03 div ul li span {
@@ -447,28 +447,28 @@ header {
   padding: 0 0 0 64px;
   font-size: 12px;
   line-height: 14px;
-  background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
   background-size: 24px auto;
   display: block;
 }
 
 #s-03 div ul li.kimura-san-box span {
-  background-image: url(~projects/main/src/assets/images/profile-k.png);
+  background-image: url(~projects/landing-page/src/assets/images/profile-k.png);
   background-size: 54px auto;
 }
 
 #s-03 div ul li.shimojima-san-box span {
-  background-image: url(~projects/main/src/assets/images/profile-s.png);
+  background-image: url(~projects/landing-page/src/assets/images/profile-s.png);
   background-size: 54px auto;
 }
 #s-03 div ul li.yanagisawa-san-box span {
-  background-image: url(~projects/main/src/assets/images/profile-y.png);
+  background-image: url(~projects/landing-page/src/assets/images/profile-y.png);
   background-size: 54px auto;
 }
 
 
 #s-03 div.lcnem-box ul li h3 {
-  background-image: url(~projects/main/src/assets/images/lcnem.svg);
+  background-image: url(~projects/landing-page/src/assets/images/lcnem.svg);
   background-size: 24px auto;
 }
 
@@ -494,7 +494,7 @@ header {
   padding: 0 5px 0 34px;
   font-size: 14px;
   line-height: 24px;
-  background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+  background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
   background-size: 24px auto;
 }
 #s-04 div ul li p {
@@ -524,7 +524,7 @@ footer p {
 footer p span {
   display: inline-block;
   padding: 0 0 0 180px;
-  background: url(~projects/main/src/assets/images/logo.svg) no-repeat left 0 top 50%;
+  background: url(~projects/landing-page/src/assets/images/logo.svg) no-repeat left 0 top 50%;
   background-size: auto 18px;
 }
 
@@ -592,7 +592,7 @@ footer p span {
     color: #5e5e5e;
     font-size: 15px;
     line-height: 20px;
-    background: url(~projects/main/src/assets/images/arrow.png) no-repeat left 0 top 5px;
+    background: url(~projects/landing-page/src/assets/images/arrow.png) no-repeat left 0 top 5px;
     background-size: 5px auto;
   }
 
@@ -676,7 +676,7 @@ footer p span {
     padding: 55% 5% 0 5%;
     min-height: 415px;
     text-align: left;
-    background: url(~projects/main/src/assets/images/mv.png) no-repeat right 0 top 0;
+    background: url(~projects/landing-page/src/assets/images/mv.png) no-repeat right 0 top 0;
     background-size: 100% auto;
     box-sizing: border-box;
   }
@@ -783,7 +783,7 @@ footer p span {
     font-size: 14px;
     border-right: none;
     border-bottom: 1px solid #a1a1a1;
-    background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+    background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
     background-size: 14px auto;
   }
   #s-02 div ul li p {
@@ -813,7 +813,7 @@ footer p span {
     padding: 0 5px 0 34px;
     font-size: 14px;
     line-height: 24px;
-    background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+    background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
     background-size: 24px auto;
   }
   #s-03 div ul li p {
@@ -825,10 +825,10 @@ footer p span {
   }
 
   #s-03 div.kava-box ul li h3 {
-    background-image: url(~projects/main/src/assets/images/kava.svg);
+    background-image: url(~projects/landing-page/src/assets/images/kava.svg);
   }
   #s-03 div.lcnem-box ul li h3 {
-    background-image: url(~projects/main/src/assets/images/lcnem.svg);
+    background-image: url(~projects/landing-page/src/assets/images/lcnem.svg);
     background-size: 24px auto;
   }
 
@@ -851,7 +851,7 @@ footer p span {
     padding: 0 5px 0 34px;
     font-size: 14px;
     line-height: 24px;
-    background: url(~projects/main/src/assets/images/circle-c.png) no-repeat left 0 top 0;
+    background: url(~projects/landing-page/src/assets/images/circle-c.png) no-repeat left 0 top 0;
     background-size: 24px auto;
   }
   #s-04 div ul li p {

@@ -1,5 +1,4 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
-import { DbService } from '../db.service';
 import { Key, KeyType } from './key.model';
 import { IKeyInfrastructure } from './key.service';
 import { Injectable } from '@angular/core';
@@ -12,12 +11,16 @@ import Dexie from 'dexie';
 export class KeyInfrastructureService implements IKeyInfrastructure {
   private db: Dexie;
 
-  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly dbS: DbService) {
-    this.db = this.dbS.db;
+  constructor(private readonly cosmosSDK: CosmosSDKService) {
+    const dbName = 'telescope';
+    this.db = new Dexie(dbName);
+    this.db.version(1).stores({
+      keys: '++index, &id, type, public_key',
+    });
   }
 
-  getPrivKey(type: KeyType, privateKey: string) {
-    const privKeyBuffer = Buffer.from(privateKey, 'hex');
+  getPrivKey(type: KeyType, privateKey: Uint8Array) {
+    const privKeyBuffer = Buffer.from(privateKey);
     switch (type) {
       case KeyType.SECP256K1:
         return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
@@ -40,18 +43,12 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
     }
   }
 
-  sign(type: KeyType, privateKey: string, message: Uint8Array): Uint8Array {
-    const privKey = this.getPrivKey(type, privateKey);
-    return privKey.sign(message);
-  }
-
   async getPrivateKeyFromMnemonic(mnemonic: string) {
     return Buffer.from(await cosmosclient.generatePrivKeyFromMnemonic(mnemonic)).toString('hex');
   }
 
   /**
    * Get one from Indexed DB
-   *
    * @param id
    */
   async get(id: string): Promise<Key | undefined> {
@@ -81,19 +78,17 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
         public_key: data.public_key,
       }));
     } catch (error) {
-      console.error(error);
       return [];
     }
   }
 
   /**
    * Set with id in Indexed DB
-   *
    * @param id
    * @param type
    * @param privateKey
    */
-  async set(id: string, type: KeyType, privateKey: string) {
+  async set(id: string, type: KeyType, privateKey: Uint8Array) {
     const key = await this.get(id);
     if (key !== undefined) {
       console.log('Already exists');
@@ -110,7 +105,6 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
     };
     try {
       await this.db.table('keys').put(data);
-      return;
     } catch (error) {
       console.error(error);
       throw new Error('Failed to put key data!');
@@ -119,7 +113,6 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
 
   /**
    * Delete with id from Indexed DB
-   *
    * @param id
    */
   async delete(id: string) {

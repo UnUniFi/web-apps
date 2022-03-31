@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - 'projects/portal/**'
-      -
+      - 'projects/shared/**'
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -47,7 +47,7 @@ export class CreateValidatorComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmitCreateValidator(
-    privateKey: string,
+    privateKey: Uint8Array,
     moniker: string,
     identity: string,
     website: string,

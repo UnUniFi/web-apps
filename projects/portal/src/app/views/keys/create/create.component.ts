@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export type CreateOnSubmitEvent = {
   id: string;
   type: KeyType;
-  privateKey: string;
+  privateKey: Uint8Array;
   mnemonic: string;
 };
 
@@ -49,7 +49,7 @@ export class CreateComponent implements OnInit {
     this.appBlurMnemonic.next(mnemonic);
   }
 
-  onSubmit(id: string, type: KeyType, privateKey: string, mnemonic: string) {
+  onSubmit(id: string, type: KeyType, privateKey: Uint8Array, mnemonic: string) {
     this.isPasswordVisible = false;
     this.appSubmit.emit({ id, type, privateKey, mnemonic });
   }

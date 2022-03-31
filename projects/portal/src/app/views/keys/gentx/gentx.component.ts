@@ -33,7 +33,7 @@ export class GentxComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmitGentx(
-    privateKey: string,
+    privateKey: Uint8Array,
     moniker: string,
     identity: string,
     website: string,

@@ -7,7 +7,7 @@ export type SendOnSubmitEvent = {
   toAddress: string;
   amount: proto.cosmos.base.v1beta1.ICoin[];
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  privateKey: string;
+  privateKey: Uint8Array;
   coins: proto.cosmos.base.v1beta1.ICoin[];
 };
 
@@ -46,7 +46,7 @@ export class SendComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(toAddress: string, privateKey: string, minimumGasPrice: string) {
+  onSubmit(toAddress: string, privateKey: Uint8Array, minimumGasPrice: string) {
     if (!this.amount) {
       return;
     }

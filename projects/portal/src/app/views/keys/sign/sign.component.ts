@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export type SignOnSignEvent = {
   data: string;
-  privateKey: string;
+  privateKey: Uint8Array;
 };
 
 @Component({
@@ -26,7 +26,7 @@ export class SignComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onClickButton(data: string, privateKey: string) {
+  onClickButton(data: string, privateKey: Uint8Array) {
     this.appSign.emit({
       data,
       privateKey,

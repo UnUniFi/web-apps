@@ -108,7 +108,7 @@ export class StakingApplicationService {
     key: Key,
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: string,
+    privateKey: Uint8Array,
   ) {
     const dialogRef = this.loadingDialog.open('Sending');
     let txhash: string;

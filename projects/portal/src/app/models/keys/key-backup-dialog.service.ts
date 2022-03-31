@@ -11,7 +11,7 @@ export class KeyBackupDialogService {
 
   async open(
     mnemonic: string,
-    privatekey: string,
+    privateKey: Uint8Array,
     id: string,
   ): Promise<KeyBackupResult | undefined> {
     const keyBackupResult: KeyBackupResult = await this.dialog

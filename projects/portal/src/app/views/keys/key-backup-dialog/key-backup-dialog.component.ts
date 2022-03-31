@@ -29,7 +29,7 @@ export class KeyBackupDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public readonly data: {
       mnemonic: string;
-      privatekey: string;
+      privateKey: Uint8Array;
       id: string;
     },
     public matDialogRef: MatDialogRef<KeyBackupDialogComponent>,

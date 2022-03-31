@@ -1,4 +1,4 @@
-name: Publish Telescope Docker image for Private Testnet
+name: Publish Portal Docker image for Private Testnet
 on:
   push:
     branches:
@@ -23,15 +23,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./projects/main/Dockerfile
+          file: ./projects/portal/Dockerfile
           push: true
           tags: |
-            ghcr.io/cauchye/telescope:test
-      - name: Create GitHub dispatch event
-        run: |
-          curl --request POST 'https://api.github.com/repos/UnUniFi/utils/dispatches' \
-          --header 'Authorization: Bearer ${{secrets.REPO_GITHUB_ACCESS_TOKEN}}' \
-          --header 'Content-Type: application/json' \
-          --data-raw '{
-            "event_type": "repository-telescope-new-release-for-private-testnet"
-          }'
+            ghcr.io/ununifi/portal:test
+      # - name: Create GitHub dispatch event
+      #   run: |
+      #     curl --request POST 'https://api.github.com/repos/UnUniFi/utils/dispatches' \
+      #     --header 'Authorization: Bearer ${{secrets.REPO_GITHUB_ACCESS_TOKEN}}' \
+      #     --header 'Content-Type: application/json' \
+      #     --data-raw '{
+      #       "event_type": "repository-telescope-new-release-for-private-testnet"
+      #     }'

@@ -8,8 +8,9 @@ import { ununifi } from 'ununifi-client';
 })
 export class MintComponent implements OnInit {
   @Input()
-  params?: ununifi.cdp.IParams | null;
-
+  collateralParams?: ununifi.cdp.ICollateralParam[] | null;
+  @Input()
+  debtParams?: ununifi.cdp.IDebtParam[] | null;
   constructor() {}
 
   ngOnInit(): void {}

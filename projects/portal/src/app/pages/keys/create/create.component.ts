@@ -14,7 +14,7 @@ import { KeyApplicationService } from 'projects/portal/src/app/models/keys/key.a
 })
 export class CreateComponent implements OnInit {
   mnemonic: string;
-  privateKey: Uint8Array;
+  privateKey: string;
   keyBackupResult?: KeyBackupResult;
 
   constructor(

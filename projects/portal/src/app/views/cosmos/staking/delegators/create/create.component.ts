@@ -6,7 +6,7 @@ export type CreateOnSubmitEvent = {
   key: Key;
   validatorAddress: string;
   amount: proto.cosmos.base.v1beta1.ICoin;
-  privateKey: Uint8Array;
+  privateKey: string;
 };
 
 @Component({
@@ -33,7 +33,7 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(validatorAddress: string, amount: string, privateKey: Uint8Array) {
+  onSubmit(validatorAddress: string, amount: string, privateKey: string) {
     this.appSubmit.emit({
       key: this.key!,
       validatorAddress,

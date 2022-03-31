@@ -26,7 +26,12 @@ export class SignComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onClickButton(data: string, privateKey: Uint8Array) {
+  onClickButton(data: string, privateKeyString: string) {
+
+    const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
+    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex')
+    const privateKey = Uint8Array.from(privateKeyBuffer)
+
     this.appSign.emit({
       data,
       privateKey,

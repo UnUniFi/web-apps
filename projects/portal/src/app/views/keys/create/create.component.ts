@@ -49,8 +49,13 @@ export class CreateComponent implements OnInit {
     this.appBlurMnemonic.next(mnemonic);
   }
 
-  onSubmit(id: string, type: KeyType, privateKey: Uint8Array, mnemonic: string) {
+  onSubmit(id: string, type: KeyType, privateKeyString: string, mnemonic: string) {
     this.isPasswordVisible = false;
+
+    const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
+    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex')
+    const privateKey = Uint8Array.from(privateKeyBuffer)
+
     this.appSubmit.emit({ id, type, privateKey, mnemonic });
   }
 

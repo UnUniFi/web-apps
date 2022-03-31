@@ -32,6 +32,9 @@ export class KeyService {
     return this.iKeyInfrastructure.getPubKey(type, publicKeyWithNoWhitespace);
   }
 
+  sign(type: KeyType, privateKey: Uint8Array, message: Uint8Array) {
+    return this.iKeyInfrastructure.sign(type, privateKey, message);
+  }
 
   getPrivateKeyFromMnemonic(mnemonic: string) {
     const mnemonicWithNoWhitespace = mnemonic.trim();
@@ -54,10 +57,6 @@ export class KeyService {
 
   set(id: string, type: KeyType, privateKey: Uint8Array) {
     return this.iKeyInfrastructure.set(id, type, privateKey);
-  }
-
-  sign(type: KeyType, privateKey: Uint8Array, message: Uint8Array) {
-    return this.iKeyInfrastructure.sign(type, privateKey, message);
   }
 
   delete(id: string) {

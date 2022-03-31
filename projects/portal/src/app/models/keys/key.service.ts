@@ -6,6 +6,7 @@ import { cosmosclient } from '@cosmos-client/core';
 export interface IKeyInfrastructure {
   getPrivKey(type: KeyType, privateKey: Uint8Array): cosmosclient.PrivKey;
   getPubKey(type: KeyType, publicKey: string): cosmosclient.PubKey;
+  sign(type: KeyType, privateKey: Uint8Array, message: Uint8Array): Uint8Array;
   getPrivateKeyFromMnemonic(mnemonic: string): Promise<string>;
   get(id: string): Promise<Key | undefined>;
   list(): Promise<Key[]>;
@@ -31,19 +32,16 @@ export class KeyService {
     return this.iKeyInfrastructure.getPubKey(type, publicKeyWithNoWhitespace);
   }
 
+
   getPrivateKeyFromMnemonic(mnemonic: string) {
     const mnemonicWithNoWhitespace = mnemonic.trim();
     return this.iKeyInfrastructure.getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace);
   }
 
   async validatePrivKey(key: Key, privateKey: Uint8Array) {
-    try {
-      const privKey = this.getPrivKey(key.type, privateKey);
-      return key.public_key === Buffer.from(privKey.pubKey().bytes()).toString('hex');
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    const privKey = this.getPrivKey(key.type, privateKey);
+
+    return key.public_key === Buffer.from(privKey.pubKey().bytes()).toString('hex');
   }
 
   get(id: string) {
@@ -56,6 +54,10 @@ export class KeyService {
 
   set(id: string, type: KeyType, privateKey: Uint8Array) {
     return this.iKeyInfrastructure.set(id, type, privateKey);
+  }
+
+  sign(type: KeyType, privateKey: Uint8Array, message: Uint8Array) {
+    return this.iKeyInfrastructure.sign(type, privateKey, message);
   }
 
   delete(id: string) {

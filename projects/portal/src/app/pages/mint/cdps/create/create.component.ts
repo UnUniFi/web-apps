@@ -35,7 +35,7 @@ export class CreateComponent implements OnInit {
   collateralLimit$: Observable<number>;
 
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
-  LiquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
@@ -117,33 +117,31 @@ export class CreateComponent implements OnInit {
     );
 
     // get principal limit
-    // check cdp
     this.collateralType$ = this.selectedCollateralType$.pipe(map((type) => (type ? type : '')));
-    this.cdp$ = combineLatest([this.address$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(sdk.rest, ownerAddr, collateralType),
-      ),
-      map((res) => res.data.cdp!),
-    );
-    this.LiquidationPrice$ = this.cosmosSDK.sdk$.pipe(
+
+    this.liquidationPrice$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.cdpParams$)),
     );
     this.principalLimit$ = combineLatest([
-      this.cdp$,
       this.collateralType$,
       this.cdpParams$,
-      this.LiquidationPrice$,
+      this.liquidationPrice$,
       this.collateralInputValue.asObservable(),
     ]).pipe(
-      map(([cdp, collateralType, params, liquidationPrice, collateralAmount]) => {
-        return getCreateLimit(
-          cdp?.cdp!,
-          params,
-          collateralAmount,
-          collateralType,
-          liquidationPrice,
-        );
+      map(([collateralType, params, liquidationPrice, collateralAmount]) => {
+        return getCreateLimit(params, collateralAmount, collateralType, liquidationPrice);
       }),
+    );
+
+    // check cdp
+    this.cdp$ = combineLatest([this.address$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
+      mergeMap(([ownerAddr, collateralType, sdk]) =>
+        rest.ununifi.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
+          console.error(err);
+          return;
+        }),
+      ),
+      map((res) => (res ? res.data.cdp : undefined)),
     );
 
     this.minimumGasPrices = this.configS.config.minimumGasPrices;

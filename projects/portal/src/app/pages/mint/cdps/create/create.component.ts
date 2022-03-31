@@ -1,5 +1,4 @@
-import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
-import { CdpApplicationService } from '../../../../models/cdps/cdp.application.service';
+import { CdpApplicationService, CosmosSDKService } from '../../../../models/index';
 import { Key } from '../../../../models/keys/key.model';
 import { KeyService } from '../../../../models/keys/key.service';
 import { getCreateLimit } from '../../../../utils/function';
@@ -29,14 +28,14 @@ export class CreateComponent implements OnInit {
   minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
 
   address$: Observable<cosmosclient.AccAddress>;
-  balance$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   collateralType$: Observable<string>;
   collateralLimit$: Observable<number>;
 
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  LiquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
@@ -82,7 +81,7 @@ export class CreateComponent implements OnInit {
       }),
     );
 
-    // get account balance information
+    //get account balance information
     this.address$ = this.key$.pipe(
       filter((key): key is Key => key !== undefined),
       map((key) =>
@@ -90,7 +89,7 @@ export class CreateComponent implements OnInit {
       ),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balance$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
+    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
       mergeMap(([n, sdk, address]) => {
         if (address === undefined) {
           return of([]);
@@ -102,7 +101,7 @@ export class CreateComponent implements OnInit {
     );
 
     // get collateral limit
-    this.collateralLimit$ = combineLatest([this.balance$, this.selectedCollateralParam$]).pipe(
+    this.collateralLimit$ = combineLatest([this.balances$, this.selectedCollateralParam$]).pipe(
       map(([balances, CollateralParam]) => {
         if (!CollateralParam) {
           return 0;
@@ -114,7 +113,7 @@ export class CreateComponent implements OnInit {
           (balance) => balance.denom === CollateralParam.denom,
         )?.amount;
         return Number(collateralDenomLimit);
-      })
+      }),
     );
 
     // get principal limit
@@ -126,14 +125,14 @@ export class CreateComponent implements OnInit {
       ),
       map((res) => res.data.cdp!),
     );
-    this.liquidationPrice$ = this.cosmosSDK.sdk$.pipe(
+    this.LiquidationPrice$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.cdpParams$)),
     );
     this.principalLimit$ = combineLatest([
       this.cdp$,
       this.collateralType$,
       this.cdpParams$,
-      this.liquidationPrice$,
+      this.LiquidationPrice$,
       this.collateralInputValue.asObservable(),
     ]).pipe(
       map(([cdp, collateralType, params, liquidationPrice, collateralAmount]) => {
@@ -168,7 +167,7 @@ export class CreateComponent implements OnInit {
     this.selectedCollateralTypeSubject.next(collateralType);
   }
 
-  onCollateralInputValue(amount: number): void {
+  onCollateralAmountChanged(amount: number): void {
     this.collateralInputValue.next(amount);
   }
 }

@@ -83,6 +83,7 @@ export class CreateComponent implements OnInit {
     principalDenom: string,
     principalAmount: string,
     privateKeyString: string,
+    minimumGasPrice: string,
   ) {
     if (!collateralAmount || !principalAmount) {
       return;

@@ -1,5 +1,6 @@
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
+import { WalletApplicationService } from './models/wallets/wallet.application.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -33,6 +34,7 @@ export class AppComponent {
     private router: Router,
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly walletAPplicationService: WalletApplicationService,
   ) {
     this.config = this.configS.config;
     if (this.config.extension?.faucet !== undefined) {
@@ -199,5 +201,10 @@ export class AppComponent {
 
   onChangeInputValue(value: string) {
     this.searchBoxInputValue$.next(value);
+  }
+
+  // WIP
+  async onConnectWallet($event: {}) {
+    const cosmosWallet = await this.walletAPplicationService.connectWalletDialog();
   }
 }

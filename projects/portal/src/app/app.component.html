@@ -2,6 +2,7 @@
   [searchResult]="searchResult$ | async"
   (appSubmitSearchResult)="onSubmitSearchResult($event)"
   (appChangeInputValue)="onChangeInputValue($event)"
+  (appConnectWallet)="onConnectWallet($event)"
 >
   <router-outlet></router-outlet>
 </view-app>

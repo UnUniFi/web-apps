@@ -11,7 +11,6 @@ export class MintComponent implements OnInit {
   collateralParams?: ununifi.cdp.ICollateralParam[] | null;
   @Input()
   debtParams?: ununifi.cdp.IDebtParam[] | null;
-
   constructor() {}
 
   ngOnInit(): void {}

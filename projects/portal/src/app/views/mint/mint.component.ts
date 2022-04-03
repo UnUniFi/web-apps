@@ -11,6 +11,11 @@ export class MintComponent implements OnInit {
   collateralParams?: ununifi.cdp.ICollateralParam[] | null;
   @Input()
   debtParams?: ununifi.cdp.IDebtParam[] | null;
+
+  // Todo: should add global parameter (not debt / not collateral)
+  @Input()
+  params?: ununifi.cdp.IParams | null;
+
   constructor() {}
 
   ngOnInit(): void {}

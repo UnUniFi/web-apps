@@ -22,7 +22,14 @@ export class MintComponent implements OnInit {
       map((res) => res.data.params!),
     );
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
-    this.debtParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.debt_params));
+    this.debtParams$ = this.cdpParams$.pipe(
+      map((cdpParams) => {
+        if (!cdpParams?.debt_param) {
+          return undefined;
+        }
+        return [cdpParams?.debt_param];
+      }),
+    );
   }
 
   ngOnInit(): void {}

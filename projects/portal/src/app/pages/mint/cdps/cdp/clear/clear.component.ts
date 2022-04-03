@@ -83,12 +83,19 @@ export class ClearComponent implements OnInit {
       map((res) => res.data.cdp!),
     );
 
+    /* */
+    this.repaymentDenomString$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      map((param) => param.data.params?.debt_param?.denom || ''),
+    );
+    /* Todo : enable this code, after "IParams" Interface have "debt_params" param
     this.repaymentDenomString$ = combineLatest([this.params$, this.cdp$]).pipe(
       map(([params, cdp]) =>
         params.debt_params?.find((debtParam) => debtParam.denom == cdp.cdp?.principal?.denom),
       ),
       map((res) => res?.denom!),
     );
+    */
 
     this.repaymentDenom$ = combineLatest([this.repaymentDenomString$, this.balances$]).pipe(
       map(([repaymentDenom, balances]) => {

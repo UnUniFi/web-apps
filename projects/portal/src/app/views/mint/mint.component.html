@@ -131,6 +131,46 @@
         <span>{{ debt.debt_floor }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
+
+      <!--Todo: should add global parameter (not debt / not collateral)-->
+      <mat-list-item>
+        <span>Global Debt Limit:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.global_debt_limit?.amount | number: '1.0-0' }}</span>
+        <span class="ml-1">{{ params?.global_debt_limit?.denom }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Surplus Auction Threshold:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.surplus_auction_threshold | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Surplus Auction Lot:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.surplus_auction_lot | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Debt Auction Threshold:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.debt_auction_threshold | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Debt Auction Lot:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.debt_auction_lot | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Circuit Breaker:</span>
+        <span class="flex-auto"></span>
+        <span>{{ params?.circuit_breaker }}</span>
+      </mat-list-item>
+
+      <!--
       <mat-list-item>
         <span>Global Debt Limit:</span>
         <span class="flex-auto"></span>
@@ -167,6 +207,7 @@
         <span class="flex-auto"></span>
         <span>{{ debt.circuit_breaker }}</span>
       </mat-list-item>
+    -->
     </mat-list>
   </mat-card>
 </ng-template>

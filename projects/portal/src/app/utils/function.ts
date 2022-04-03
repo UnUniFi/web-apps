@@ -11,9 +11,15 @@ export const getWithdrawLimit = (
   const currentPrincipalAmount = Number.parseInt(cdp.principal?.amount!);
   const currentAccumulatedFees = Number.parseInt(cdp.accumulated_fees?.amount!);
   const principalTotal = currentPrincipalAmount + currentAccumulatedFees;
+
+  /* */
+  const principalDebtParam = cdpParams.debt_param;
+  /* Todo : enable below code, after "IParams" Interface have "debt_params" parameter
   const principalDebtParam = cdpParams.debt_params?.find(
     (debtParam) => debtParam.denom == cdp.principal?.denom,
   );
+  */
+
   const principalConversionFactor = Number.parseInt(principalDebtParam?.conversion_factor || '0');
 
   const collateralParams = cdpParams.collateral_params?.find(
@@ -41,9 +47,15 @@ export const getIssueLimit = (
   const currentCollateralAmount = Number.parseInt(cdp.collateral?.amount!);
   const currentPrincipalAmount = Number.parseInt(cdp.principal?.amount!);
   const currentAccumulatedFees = Number.parseInt(cdp.accumulated_fees?.amount!);
+
+  /* */
+  const principalDebtParam = cdpParams.debt_param;
+  /* Todo : enable below code, after "IParams" Interface have "debt_params" parameter
   const principalDebtParam = cdpParams.debt_params?.find(
     (debtParam) => debtParam.denom == cdp.principal?.denom,
   );
+  */
+
   const principalConversionFactor = Number.parseInt(principalDebtParam?.conversion_factor || '0');
   const price = Number.parseFloat(liquidationPrice.price!);
 
@@ -78,9 +90,15 @@ export const getCreateLimit = (
     (param) => param.type === selectedCollateralType,
   );
   const liquidationRatio = Number.parseFloat(collateralParams?.liquidation_ratio || '0');
+
+  /* */
+  const principalDebtParam = cdpParams.debt_param;
+  /* Todo : enable below code, after "IParams" Interface have "debt_params" parameter
   const principalDebtParam = cdpParams.debt_params?.find(
-    (debtParam) => debtParam.denom == collateralParams?.debt_limit?.denom,
+    (debtParam) => debtParam.denom == cdp.principal?.denom,
   );
+  */
+
   const principalConversionFactor = Number.parseInt(principalDebtParam?.conversion_factor || '0');
   const collateralConversionFactor = Number.parseInt(collateralParams?.conversion_factor || '0');
   const price = Number.parseFloat(liquidationPrice.price!);

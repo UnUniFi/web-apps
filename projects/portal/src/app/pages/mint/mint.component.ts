@@ -27,6 +27,7 @@ export class MintComponent implements OnInit {
         if (!cdpParams?.debt_param) {
           return undefined;
         }
+        // Todo : return IDebtParam array, after IParams have IDebtParam array
         return [cdpParams?.debt_param];
       }),
     );

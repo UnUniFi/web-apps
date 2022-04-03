@@ -1,12 +1,12 @@
-<h2>View CDPs</h2>
-<mat-card>
+<h2 class="mb-0">View CDPs</h2>
+<mat-card class="mb-4">
   <mat-nav-list>
     <mat-list-item routerLink="/mint/cdps">You owned CDPs</mat-list-item>
   </mat-nav-list>
 </mat-card>
 
-<h2>CDP parameters</h2>
-<h3>Collateral Params</h3>
+<h2 class="mb-0">CDP parameters</h2>
+<h3 class="mb-0 ml-4">Collateral Params</h3>
 <ng-template ngFor let-collateral [ngForOf]="collateralParams || []">
   <h4 class="mb-0 ml-8">Params of {{ collateral.type }}</h4>
   <mat-card class="mb-4">

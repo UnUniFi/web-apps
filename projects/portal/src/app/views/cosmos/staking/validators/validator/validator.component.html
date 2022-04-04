@@ -37,7 +37,12 @@
         <mat-list-item>
           <span>Delegator Shares: </span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.delegator_shares | number: '1.6-6' }}</span>
+          <span class="ml-2 break-all">
+            <span>{{ validator?.delegator_shares | floor }}</span>
+            <span class="text-gray-300 text-sm"
+              >{{ validator?.delegator_shares | decimals: 6 }}
+            </span>
+          </span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
         <mat-list-item>
@@ -73,7 +78,10 @@
           <span class="whitespace-nowrap">Rate: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.commission?.commission_rates?.rate | number: '1.6-6' }}
+            <span>{{ validator?.commission?.commission_rates?.rate | floor }}</span>
+            <span class="text-gray-300 text-sm"
+              >{{ validator?.commission?.commission_rates?.rate | decimals: 6 }}
+            </span>
           </span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
@@ -81,7 +89,10 @@
           <span class="whitespace-nowrap">Max Rate: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.commission?.commission_rates?.max_rate | number: '1.6-6' }}
+            <span>{{ validator?.commission?.commission_rates?.max_rate | floor }}</span>
+            <span class="text-gray-300 text-sm"
+              >{{ validator?.commission?.commission_rates?.max_rate | decimals: 6 }}
+            </span>
           </span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
@@ -89,7 +100,10 @@
           <span class="whitespace-nowrap">Max Change Rate: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.commission?.commission_rates?.max_change_rate | number: '1.6-6' }}
+            <span>{{ validator?.commission?.commission_rates?.max_change_rate | floor }}</span>
+            <span class="text-gray-300 text-sm"
+              >{{ validator?.commission?.commission_rates?.max_change_rate | decimals: 6 }}
+            </span>
           </span>
         </mat-list-item>
       </mat-list>

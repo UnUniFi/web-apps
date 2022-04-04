@@ -41,7 +41,7 @@
             mat-stroked-button
             href="mint/cdps/{{ owner }}/{{ collateralType }}/withdraw"
             target="_blank"
-            [disabled]="withdrawLimit === 0 || !withdrawLimit"
+            [disabled]="!withdrawLimit || withdrawLimit <= 0"
             >Withdraw</a
           >
         </span>
@@ -69,7 +69,7 @@
             mat-stroked-button
             href="mint/cdps/{{ owner }}/{{ collateralType }}/issue"
             target="_blank"
-            [disabled]="issueLimit === 0 || !issueLimit"
+            [disabled]="!issueLimit || issueLimit <= 0"
           >
             Issue
           </a>
@@ -110,7 +110,7 @@
         <span class="column-value">
           <span class="ml-2 break-all">
             <span>{{ spotPrice?.price | floor }}</span>
-            <span class="text-gray-500 text-sm">{{ spotPrice?.price | decimals: 9 }} </span>
+            <span class="text-gray-300 text-sm">{{ spotPrice?.price | decimals: 9 }} </span>
           </span>
           [{{ spotPrice?.market_id }}]
         </span>
@@ -123,7 +123,7 @@
         <span class="column-value">
           <span class="ml-2 break-all">
             <span>{{ liquidationPrice?.price | floor }}</span>
-            <span class="text-gray-500 text-sm">{{ liquidationPrice?.price | decimals: 9 }} </span>
+            <span class="text-gray-300 text-sm">{{ liquidationPrice?.price | decimals: 9 }} </span>
           </span>
           [{{ liquidationPrice?.market_id }}]
         </span>
@@ -135,7 +135,7 @@
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">
           <span>{{ cdp?.collateralization_ratio | floor }}</span>
-          <span class="text-gray-500 text-sm"
+          <span class="text-gray-300 text-sm"
             >{{ cdp?.collateralization_ratio | decimals: 9 }}
           </span>
         </span>

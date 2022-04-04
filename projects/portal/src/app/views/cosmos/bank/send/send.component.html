@@ -12,9 +12,10 @@
     <mat-divider></mat-divider>
     <ng-container *ngFor="let coin of coins">
       <mat-list-item>
-        <span>{{ coin?.denom }}</span>
-        <span class="flex-auto"> </span>
-        <span>{{ coin?.amount }}</span>
+        <span class="flex-auto"></span>
+        <span class="mr-2">{{ coin.amount | number: '1.0-0' }}</span>
+        <span>{{ coin.denom }}</span>
+        <span *ngIf="coin?.denom?.length == 3" class="mr-2"></span>
       </mat-list-item>
       <mat-divider></mat-divider>
     </ng-container>

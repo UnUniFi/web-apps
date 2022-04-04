@@ -1,3 +1,4 @@
+import { PipesModule } from '../../pipes/pipes.module';
 import { MaterialModule } from '../material.module';
 import { MonitorComponent } from './monitor.component';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,8 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    PipesModule,
   ],
   exports: [MonitorComponent],
 })
-export class MonitorModule { }
+export class MonitorModule {}

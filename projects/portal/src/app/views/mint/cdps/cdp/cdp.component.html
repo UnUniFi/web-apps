@@ -32,14 +32,14 @@
         <span class="column-value">
           <a
             mat-stroked-button
-            href="cdp/cdps/{{ owner }}/{{ collateralType }}/deposit"
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/deposit"
             target="_blank"
             >Deposit</a
           >
           <a
             class="withdraw-button"
             mat-stroked-button
-            href="cdp/cdps/{{ owner }}/{{ collateralType }}/withdraw"
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/withdraw"
             target="_blank"
             [disabled]="withdrawLimit === 0 || !withdrawLimit"
             >Withdraw</a
@@ -67,7 +67,7 @@
         <span class="column-value">
           <a
             mat-stroked-button
-            href="cdp/cdps/{{ owner }}/{{ collateralType }}/issue"
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/issue"
             target="_blank"
             [disabled]="issueLimit === 0 || !issueLimit"
           >
@@ -76,7 +76,7 @@
           <a
             class="clear-button"
             mat-stroked-button
-            href="cdp/cdps/{{ owner }}/{{ collateralType }}/clear"
+            href="mint/cdps/{{ owner }}/{{ collateralType }}/clear"
             target="_blank"
           >
             Clear

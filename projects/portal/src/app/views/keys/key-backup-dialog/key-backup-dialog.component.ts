@@ -34,7 +34,7 @@ export class KeyBackupDialogComponent implements OnInit {
     },
     public matDialogRef: MatDialogRef<KeyBackupDialogComponent>,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
   onClickSubmit(): void {
     const keyBackupResult: KeyBackupResult = { saved: this.saved, checked: this.checked };
@@ -96,5 +96,5 @@ export class KeyBackupDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

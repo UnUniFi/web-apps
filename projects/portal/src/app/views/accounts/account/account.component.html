@@ -1,9 +1,5 @@
 <h2 class="mb-0">Account Info</h2>
 <ng-container *ngIf="baseAccount === undefined || null; then empty; else exist"></ng-container>
-<<<<<<< hotfix/telescope-minor-fixes
-=======
-
->>>>>>> develop
 <ng-template #empty>
   <p class="ml-4">*This account has no denoms</p>
 </ng-template>
@@ -38,20 +34,11 @@
 
   <h2 class="mb-0">Coins</h2>
   <mat-card class="mb-4">
-<<<<<<< hotfix/telescope-minor-fixes
-    <mat-list *ngFor="let balance of balances; last as last">
-      <mat-list-item>
-        <span class="flex-auto"></span>
-        <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
-        <span>{{ balance.denom }}</span>
-        <span *ngIf="balance?.denom?.length == 3" class="mr-2"></span>
-=======
     <mat-list>
       <mat-list-item *ngFor="let balance of balances; last as last">
         <span class="whitespace-nowrap">{{ balance.amount | number: '1.0-0' }}</span>
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">{{ balance.denom }}</span>
->>>>>>> develop
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>

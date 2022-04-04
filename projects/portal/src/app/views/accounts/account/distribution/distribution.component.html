@@ -1,8 +1,4 @@
 <h2 class="mb-0">Validator Rewards</h2>
-<<<<<<< hotfix/telescope-minor-fixes
-
-=======
->>>>>>> develop
 <ng-container
   *ngIf="
     (commission?.commission?.commission?.length || 0) > 0;
@@ -17,14 +13,9 @@
 <ng-template #existCommission>
   <h3 class="ml-4 mb-0">Accumulated Commission</h3>
   <mat-card class="mb-2">
-<<<<<<< hotfix/telescope-minor-fixes
-    <mat-list *ngFor="let commission of commission?.commission?.commission; last as last">
-      <mat-list-item>
-=======
     <mat-list>
       <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
         <span>{{ commission.amount | number: '1.6-6' }}</span>
->>>>>>> develop
         <span class="flex-auto"></span>
         <span class="mr-2 break-all">
           <span>{{ commission.amount | floor }}</span>
@@ -47,14 +38,9 @@
 <ng-template #existRewards>
   <h3 class="ml-4 mb-0">Outstanding Rewards</h3>
   <mat-card class="mb-2">
-<<<<<<< hotfix/telescope-minor-fixes
-    <mat-list *ngFor="let reward of rewards?.rewards?.rewards; last as last">
-      <mat-list-item>
-=======
     <mat-list>
       <mat-list-item *ngFor="let reward of rewards?.rewards?.rewards; last as last">
         <span>{{ reward.amount | number: '1.6-6' }}</span>
->>>>>>> develop
         <span class="flex-auto"></span>
         <span class="mr-2 break-all">
           <span>{{ reward.amount | floor }}</span>
@@ -74,13 +60,8 @@
 </ng-template>
 <ng-template #existSlashes>
   <h3 class="ml-4 mb-0">Slashing</h3>
-<<<<<<< hotfix/telescope-minor-fixes
-  <mat-card class="mb-2" *ngFor="let slash of slashes?.slashes">
-    <mat-list>
-=======
   <mat-card class="mb-4">
     <mat-list *ngFor="let slash of slashes?.slashes; last as last">
->>>>>>> develop
       <mat-list-item>
         <span>Validator Period:</span>
         <span class="flex-auto"></span>
@@ -90,13 +71,8 @@
       <mat-list-item>
         <span>Fraction:</span>
         <span class="flex-auto"></span>
-<<<<<<< hotfix/telescope-minor-fixes
-        <span>{{ slash.fraction | floor }}</span>
-        <span class="text-gray-500 text-sm">{{ slash.fraction | decimals: 6 }}</span>
-=======
         <span>{{ slash.fraction }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
->>>>>>> develop
       </mat-list-item>
     </mat-list>
   </mat-card>

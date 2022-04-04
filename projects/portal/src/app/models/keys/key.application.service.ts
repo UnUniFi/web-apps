@@ -27,8 +27,10 @@ export class KeyApplicationService {
       return;
     }
 
-    const publicKey = Buffer.from(await this.key.getPrivKey(type, privateKey).pubKey().bytes()).toString('hex');
-    const keyList = await this.key.list()
+    const publicKey = Buffer.from(
+      await this.key.getPrivKey(type, privateKey).pubKey().bytes(),
+    ).toString('hex');
+    const keyList = await this.key.list();
     for (var i = 0; i < keyList.length; i++) {
       if (keyList[i].public_key === publicKey) {
         this.snackBar.open('This mnemonic is already used', undefined, {
@@ -42,7 +44,7 @@ export class KeyApplicationService {
     try {
       await this.key.set(id, type, privateKey);
     } catch {
-      this.snackBar.open('Error has occured', undefined, {
+      this.snackBar.open('Error has occurred', undefined, {
         duration: 6000,
       });
       return;

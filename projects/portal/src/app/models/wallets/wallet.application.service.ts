@@ -24,7 +24,7 @@ export class WalletApplicationService {
 
     const selectedWalletType = await this.openConnectWalletStartDialog();
     if (
-      selectedWalletType === WalletType.kepler ||
+      selectedWalletType === WalletType.keplr ||
       selectedWalletType === WalletType.keyStation ||
       selectedWalletType === WalletType.ledger
     ) {

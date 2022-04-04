@@ -8,7 +8,28 @@ import { WalletType } from 'projects/portal/src/app/models/wallets/wallet.model'
   styleUrls: ['./connect-wallet-start-dialog.component.css'],
 })
 export class ConnectWalletStartDialogComponent implements OnInit {
-  walletTypeOptions = Object.values(WalletType);
+  walletOptions = [
+    {
+      logo: '../../../../../favicon.png',
+      walletType: WalletType.ununifi,
+      name: 'UnUniFi',
+    },
+    {
+      logo: '../../../../../assets/keplr-logo.svg',
+      walletType: WalletType.keplr,
+      name: 'Keplr',
+    },
+    {
+      logo: '../../../../../assets/ledger-logo.png',
+      walletType: WalletType.ledger,
+      name: 'Ledger',
+    },
+    {
+      logo: '../../../../../assets/key-station-logo.png',
+      walletType: WalletType.ununifi,
+      name: 'Key Station',
+    },
+  ];
 
   constructor(public matDialogRef: MatDialogRef<ConnectWalletStartDialogComponent>) {}
 

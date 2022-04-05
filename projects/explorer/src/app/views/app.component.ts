@@ -16,11 +16,20 @@ export class AppComponent implements OnInit {
   @Input()
   searchResult?: SearchResult | null;
 
+  @Input()
+  configTypeOptions?: string[];
+
+  @Input()
+  selectedConfigType?: string | null;
+
   @Output()
   appSubmitSearchResult: EventEmitter<SearchResult>;
 
   @Output()
   appChangeInputValue: EventEmitter<string>;
+
+  @Output()
+  appChangeConfigType: EventEmitter<string>;
 
   @ViewChild('drawer')
   sidenav!: MatSidenav;
@@ -32,6 +41,7 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private ngZone: NgZone) {
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
+    this.appChangeConfigType = new EventEmitter();
 
     window.onresize = (_) => {
       this.ngZone.run(() => {
@@ -66,5 +76,9 @@ export class AppComponent implements OnInit {
 
   onChangeInputValue(inputValue: string) {
     this.appChangeInputValue.emit(inputValue);
+  }
+
+  onChangeConfigType(selectedConfigType: string): void {
+    this.appChangeConfigType.emit(selectedConfigType);
   }
 }

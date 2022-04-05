@@ -14,6 +14,8 @@ import { mergeMap, map } from 'rxjs/operators';
 })
 export class AppComponent {
   config: Config;
+  configTypeOptions?: string[];
+  selectedConfigType$?: Observable<string>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -42,6 +44,9 @@ export class AppComponent {
         icon: 'clean_hands',
       });
     }
+
+    this.configTypeOptions = this.configS.configs.map((config) => config.id);
+    this.selectedConfigType$ = of(this.configS.configs[0].id);
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {
@@ -199,5 +204,9 @@ export class AppComponent {
 
   onChangeInputValue(value: string) {
     this.searchBoxInputValue$.next(value);
+  }
+
+  onChangeConfigType(value: string) {
+    console.log(value);
   }
 }

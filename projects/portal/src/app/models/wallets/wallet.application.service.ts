@@ -1,3 +1,4 @@
+import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
@@ -63,6 +64,7 @@ export class WalletApplicationService {
         }
         await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
         await this.walletService.load();
+        await this.openConnectWalletCompletedDialog(selectedStoredWallet);
         return;
       }
     }
@@ -93,4 +95,11 @@ export class WalletApplicationService {
   }
 
   // WIP
+
+  async openConnectWalletCompletedDialog(connectedStoredWallet: StoredWallet): Promise<void> {
+    await this.dialog
+      .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
+      .afterClosed()
+      .toPromise();
+  }
 }

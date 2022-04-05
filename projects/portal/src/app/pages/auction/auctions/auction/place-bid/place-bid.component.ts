@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import { AuctionApplicationService } from 'projects/portal/src/app/models/auctions/auction.application.service';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { ConfigStoreService } from 'projects/portal/src/app/models/config.store.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
@@ -22,7 +23,7 @@ export class PlaceBidComponent implements OnInit {
   auction$: Observable<ununifi.auction.CollateralAuction | undefined>;
   endTime$: Observable<Date | undefined>;
   maxEndTime$: Observable<Date | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +31,7 @@ export class PlaceBidComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private readonly auctionApplicationService: AuctionApplicationService,
     private readonly configS: ConfigService,
+    private readonly configStore: ConfigStoreService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.auctionID$ = this.route.params.pipe(map((params) => params.auction_id));
@@ -81,7 +83,9 @@ export class PlaceBidComponent implements OnInit {
         return maxEndTime;
       }),
     );
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configStore.currentConfig$.pipe(
+      map((config) => config?.minimumGasPrices),
+    );
   }
 
   ngOnInit(): void {}

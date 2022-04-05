@@ -282,7 +282,7 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
 
   async getStoredWallet(id: string): Promise<StoredWallet | undefined> {
     try {
-      const data = await this.db.table('wallets').get(id);
+      const data = await this.db.table('wallets').where('id').equals(id).first();
       const storedWallet: StoredWallet = {
         id: id,
         type: data.type,
@@ -329,7 +329,10 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     try {
       const existingCurrentStoredWallets = await this.db.table('current_wallets').toArray();
       if (existingCurrentStoredWallets?.length) {
-        await this.db.table('current_wallets').bulkDelete(existingCurrentStoredWallets);
+        const primaryKeys = existingCurrentStoredWallets.map(
+          (existingCurrentStoredWallet) => existingCurrentStoredWallet.index,
+        );
+        await this.db.table('current_wallets').bulkDelete(primaryKeys);
       }
       await this.db.table('current_wallets').put(storedWallet);
     } catch (error) {

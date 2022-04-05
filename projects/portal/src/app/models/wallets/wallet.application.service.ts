@@ -27,7 +27,7 @@ export class WalletApplicationService {
     const selectedWalletType = await this.openConnectWalletStartDialog();
 
     if (!selectedWalletType) {
-      this.snackBar.open('Connect Wallet Dialog is canceled!', 'Close');
+      this.snackBar.open('Dialog is canceled!', 'Close');
       return;
     }
 
@@ -51,7 +51,13 @@ export class WalletApplicationService {
       return;
     }
 
-    const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
+    if (selectedWalletType === WalletType.ununifi) {
+      const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
+
+      if (!selectOrImportOrCreate) {
+        this.snackBar.open('Dialog is canceled!', 'Close');
+      }
+    }
   }
 
   async openConnectWalletStartDialog(): Promise<WalletType | undefined> {

@@ -3,7 +3,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'view-ununifi-select-wallet-dialog',
@@ -11,8 +10,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./ununifi-select-wallet-dialog.component.css'],
 })
 export class UnunifiSelectWalletDialogComponent implements OnInit {
-  // storedWallets$: Observable<StoredWallet[] | null | undefined>;
-  // currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   storedWallets$: Promise<StoredWallet[] | null | undefined>;
   currentStoredWallet$: Promise<StoredWallet | null | undefined>;
 
@@ -23,7 +20,6 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
     this.storedWallets$ = this.walletService
       .listStoredWallets()
       .then((storedWallets) => {
-        console.log(storedWallets);
         return storedWallets;
       })
       .catch((error) => {
@@ -33,7 +29,6 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
     this.currentStoredWallet$ = this.walletService
       .getCurrentStoredWallet()
       .then((currentStoredWallet) => {
-        console.log(currentStoredWallet);
         return currentStoredWallet;
       })
       .catch((error) => {

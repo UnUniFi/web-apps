@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export type Config = {
+  id: string;
   restURL: string;
   websocketURL: string;
   chainID: string;
@@ -36,14 +37,16 @@ export type Config = {
   };
 };
 
-declare const config: Config;
+declare const configs: Config[];
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
   config: Config;
+  configs: Config[];
   constructor() {
-    this.config = config;
+    this.configs = configs;
+    this.config = configs[Math.floor(Math.random() * configs.length)];
   }
 }

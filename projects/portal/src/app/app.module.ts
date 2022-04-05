@@ -5,10 +5,10 @@ import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
-import { BackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/backup-mnemonic-and-private-key-wizard-dialog/backup-mnemonic-and-private-key-wizard-dialog.module';
-import { CreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/create-wallet-form-dialog/create-wallet-form-dialog.module';
-import { ImportWalletFormDialogModule } from './views/dialogs/wallets/ununifi/import-wallet-form-dialog/import-wallet-form-dialog.module';
-import { SelectCreateOrImportDialogModule } from './views/dialogs/wallets/ununifi/select-create-or-import-dialog/select-create-or-import-dialog.module';
+import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
+import { UnunifiCreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
+import { UnunifiImportWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-import-wallet-form-dialog/ununifi-import-wallet-form-dialog.module';
+import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
 import { KeyBackupDialogModule } from './views/keys/key-backup-dialog/key-backup-dialog.module';
 import { KeyDeleteConfirmDialogModule } from './views/keys/key-delete-confirm-dialog/key-delete-confirm-dialog.module';
 import { KeyDeleteDialogModule } from './views/keys/key-delete-dialog/key-delete-dialog.module';
@@ -48,10 +48,10 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     TxFeeConfirmDialogModule,
     ConnectWalletCompletedDialogModule,
     ConnectWalletStartDialogModule,
-    BackupMnemonicAndPrivateKeyWizardDialogModule,
-    CreateWalletFormDialogModule,
-    ImportWalletFormDialogModule,
-    SelectCreateOrImportDialogModule,
+    UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule,
+    UnunifiCreateWalletFormDialogModule,
+    UnunifiImportWalletFormDialogModule,
+    UnunifiSelectCreateImportDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

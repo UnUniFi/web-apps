@@ -1,6 +1,7 @@
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
-import { WalletType } from './wallet.model';
+import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,15 +20,10 @@ export class WalletApplicationService {
   async connectWalletDialog(): Promise<void> {
     const currentCosmosWallet = await this.walletService.getCurrentCosmosWallet();
 
-    if (currentCosmosWallet) {
-      this.snackBar.open('You have already connected your wallet to this app!', 'Close');
-      return;
-    }
-
     const selectedWalletType = await this.openConnectWalletStartDialog();
 
     if (!selectedWalletType) {
-      this.snackBar.open('Dialog is canceled!', 'Close');
+      this.snackBar.open('Dialog was canceled!', 'Close');
       return;
     }
 
@@ -55,7 +51,19 @@ export class WalletApplicationService {
       const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 
       if (!selectOrImportOrCreate) {
-        this.snackBar.open('Dialog is canceled!', 'Close');
+        this.snackBar.open('Dialog was canceled!', 'Close');
+        return;
+      }
+
+      if (selectOrImportOrCreate === 'select') {
+        const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
+        if (!selectedStoredWallet) {
+          this.snackBar.open('Dialog was canceled!', 'Close');
+          return;
+        }
+        await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
+        await this.walletService.load();
+        return;
       }
     }
   }
@@ -74,6 +82,14 @@ export class WalletApplicationService {
       .afterClosed()
       .toPromise();
     return selectedResult;
+  }
+
+  async openUnunifiSelectWalletDialog(): Promise<StoredWallet | undefined> {
+    const selectedStoredWallet: StoredWallet | undefined = await this.dialog
+      .open(UnunifiSelectWalletDialogComponent)
+      .afterClosed()
+      .toPromise();
+    return selectedStoredWallet;
   }
 
   // WIP

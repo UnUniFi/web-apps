@@ -9,6 +9,7 @@ import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/di
 import { UnunifiCreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
 import { UnunifiImportWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-import-wallet-form-dialog/ununifi-import-wallet-form-dialog.module';
 import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
+import { UnunifiSelectWalletDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
 import { KeyBackupDialogModule } from './views/keys/key-backup-dialog/key-backup-dialog.module';
 import { KeyDeleteConfirmDialogModule } from './views/keys/key-delete-confirm-dialog/key-delete-confirm-dialog.module';
 import { KeyDeleteDialogModule } from './views/keys/key-delete-dialog/key-delete-dialog.module';
@@ -52,6 +53,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiCreateWalletFormDialogModule,
     UnunifiImportWalletFormDialogModule,
     UnunifiSelectCreateImportDialogModule,
+    UnunifiSelectWalletDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

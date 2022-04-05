@@ -63,7 +63,6 @@ export class WalletApplicationService {
           return;
         }
         await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
-        await this.walletService.load();
         await this.openConnectWalletCompletedDialog(selectedStoredWallet);
         return;
       }

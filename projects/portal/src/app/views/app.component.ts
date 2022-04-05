@@ -11,6 +11,9 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   @Input()
+  extensionNavigations?: { name: string; link: string; icon: string }[];
+
+  @Input()
   searchResult?: SearchResult | null;
 
   @Output()

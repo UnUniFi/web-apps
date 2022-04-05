@@ -1,5 +1,6 @@
 import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
+import { UnunifiCreateWalletFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 import { WalletType, StoredWallet } from './wallet.model';
@@ -66,6 +67,11 @@ export class WalletApplicationService {
         await this.openConnectWalletCompletedDialog(selectedStoredWallet);
         return;
       }
+
+      if (selectOrImportOrCreate === 'create') {
+        const privateWallet = await this.openUnunifiCreateWalletDialog();
+        // WIP
+      }
     }
   }
 
@@ -91,6 +97,16 @@ export class WalletApplicationService {
       .afterClosed()
       .toPromise();
     return selectedStoredWallet;
+  }
+
+  async openUnunifiCreateWalletDialog(): Promise<
+    (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
+  > {
+    const privateWallet: StoredWallet & { mnemonic: string; privateKey: string } = await this.dialog
+      .open(UnunifiCreateWalletFormDialogComponent)
+      .afterClosed()
+      .toPromise();
+    return privateWallet;
   }
 
   // WIP

@@ -26,7 +26,7 @@ export class ConnectWalletStartDialogComponent implements OnInit {
     },
     {
       logo: '../../../../../assets/key-station-logo.png',
-      walletType: WalletType.ununifi,
+      walletType: WalletType.keyStation,
       name: 'Key Station',
     },
   ];

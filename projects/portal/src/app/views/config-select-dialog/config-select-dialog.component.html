@@ -1,0 +1,14 @@
+<mat-dialog-content>
+  <mat-nav-list>
+    <ng-template ngFor let-config [ngForOf]="data.configs">
+      <mat-list-item (click)="onClickConfig(config)">
+        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(config) }"> circle </mat-icon>
+        <span>{{ config.id }}</span>
+        <span class="flex-auto"></span>
+        <ng-container *ngIf="data.currentConfigID === config.id">
+          <mat-icon color="primary">check</mat-icon>
+        </ng-container>
+      </mat-list-item>
+    </ng-template>
+  </mat-nav-list>
+</mat-dialog-content>

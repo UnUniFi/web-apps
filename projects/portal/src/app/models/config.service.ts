@@ -1,6 +1,9 @@
+import { KeyStoreService } from './keys/key.store.service';
 import { Injectable } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 export type Config = {
+  id: string;
   restURL: string;
   websocketURL: string;
   chainID: string;
@@ -36,14 +39,14 @@ export type Config = {
   };
 };
 
-declare const config: Config;
+declare const configs: Config[];
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  config: Config;
-  constructor() {
-    this.config = config;
+  configs: Config[];
+  constructor(private readonly keyStore: KeyStoreService) {
+    this.configs = configs;
   }
 }

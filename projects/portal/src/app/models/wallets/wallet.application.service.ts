@@ -3,6 +3,7 @@ import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/c
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
 import { UnunifiCreateWalletFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
 import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.component';
+import { UnunifiKeyFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 import { WalletType, StoredWallet } from './wallet.model';
@@ -187,5 +188,13 @@ export class WalletApplicationService {
       .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
       .afterClosed()
       .toPromise();
+  }
+
+  async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {
+    const privateKey = await this.dialog
+      .open(UnunifiKeyFormDialogComponent)
+      .afterClosed()
+      .toPromise();
+    return privateKey;
   }
 }

@@ -1,3 +1,4 @@
+import { Config } from '../models/config.service';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
@@ -11,7 +12,16 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   @Input()
+  config?: Config | null;
+
+  @Input()
   searchResult?: SearchResult | null;
+
+  @Input()
+  configTypeOptions?: string[];
+
+  @Input()
+  selectedConfigType?: string | null;
 
   @Output()
   appSubmitSearchResult: EventEmitter<SearchResult>;
@@ -21,6 +31,9 @@ export class AppComponent implements OnInit {
 
   @Output()
   appConnectWallet: EventEmitter<{}>;
+
+  @Output()
+  appChangeConfigType: EventEmitter<string>;
 
   @ViewChild('drawer')
   sidenav!: MatSidenav;
@@ -33,6 +46,7 @@ export class AppComponent implements OnInit {
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
     this.appConnectWallet = new EventEmitter();
+    this.appChangeConfigType = new EventEmitter();
 
     window.onresize = (_) => {
       this.ngZone.run(() => {
@@ -71,5 +85,9 @@ export class AppComponent implements OnInit {
 
   onConnectWallet($event: {}) {
     this.appConnectWallet.emit($event);
+  }
+
+  onChangeConfigType(selectedConfigType: string): void {
+    this.appChangeConfigType.emit(selectedConfigType);
   }
 }

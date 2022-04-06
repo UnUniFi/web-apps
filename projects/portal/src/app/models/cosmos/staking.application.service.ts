@@ -93,7 +93,7 @@ export class StakingApplicationService {
     } catch (error) {
       console.error(error);
       const msg = (error as Error).toString();
-      this.snackBar.open(`An error has occur: ${msg}`, undefined, { duration: 6000 });
+      this.snackBar.open(`An error has occur: ${msg}`, 'Close');
       return;
     } finally {
       dialogRef.close();
@@ -108,7 +108,7 @@ export class StakingApplicationService {
     key: Key,
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: string,
+    privateKey: Uint8Array,
   ) {
     const dialogRef = this.loadingDialog.open('Sending');
     let txhash: string;
@@ -116,7 +116,7 @@ export class StakingApplicationService {
     try {
       txhash = await this.staking.createDelegator(key, validatorAddress, amount, privateKey);
     } catch {
-      this.snackBar.open('Error has occured', undefined, {
+      this.snackBar.open('Error has occurred', undefined, {
         duration: 6000,
       });
       return;

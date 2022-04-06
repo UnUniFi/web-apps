@@ -1,5 +1,6 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { Key } from '../keys/key.model';
+import { KeyService } from '../keys/key.service';
 import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { CdpService } from './cdp.service';
 import { Injectable } from '@angular/core';
@@ -20,22 +21,43 @@ export class CdpApplicationService {
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly cdp: CdpService,
+    private readonly key: KeyService,
   ) {}
 
   async createCDP(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // validation
+    if (!(await this.key.validatePrivKey(key, privateKey))) {
+      this.snackBar.open(`Invalid private key.`, 'Close');
+      return;
+    }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+    // confirm whether account has enough gas denom for simulation
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+    if (simulationFeeAmount > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      dialogRefSimulating.close();
+      return;
+    }
 
     try {
       simulatedResultData = await this.cdp.simulateToCreateCDP(
@@ -51,10 +73,20 @@ export class CdpApplicationService {
     } catch (error) {
       console.error(error);
       const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`);
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       return;
     } finally {
       dialogRefSimulating.close();
+    }
+
+    // check whether the fee exceeded
+    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
+    if (simulatedFee > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for Create!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      return;
     }
 
     // ask the user to confirm the fee with a dialog
@@ -92,9 +124,7 @@ export class CdpApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       console.error(error);
       return;
     } finally {
@@ -111,17 +141,37 @@ export class CdpApplicationService {
 
   async drawCDP(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     collateralType: string,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // validation
+    if (!(await this.key.validatePrivKey(key, privateKey))) {
+      this.snackBar.open(`Invalid private key.`, 'Close');
+      return;
+    }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+    // confirm whether account has enough gas denom for simulation
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+    if (simulationFeeAmount > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      dialogRefSimulating.close();
+      return;
+    }
 
     try {
       simulatedResultData = await this.cdp.simulateToDrawCDP(
@@ -136,10 +186,20 @@ export class CdpApplicationService {
     } catch (error) {
       console.error(error);
       const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`);
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       return;
     } finally {
       dialogRefSimulating.close();
+    }
+
+    // check whether the fee exceeded
+    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
+    if (simulatedFee > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for issue!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      return;
     }
 
     // ask the user to confirm the fee with a dialog
@@ -176,9 +236,7 @@ export class CdpApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       console.error(error);
       return;
     } finally {
@@ -195,24 +253,44 @@ export class CdpApplicationService {
 
   async repayCDP(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     collateralType: string,
-    payment: proto.cosmos.base.v1beta1.ICoin,
+    repayment: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // validation
+    if (!(await this.key.validatePrivKey(key, privateKey))) {
+      this.snackBar.open(`Invalid private key.`, 'Close');
+      return;
+    }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+    // confirm whether account has enough gas denom for simulation
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+    if (simulationFeeAmount > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      dialogRefSimulating.close();
+      return;
+    }
 
     try {
       simulatedResultData = await this.cdp.simulateToRepayCDP(
         key,
         privateKey,
         collateralType,
-        payment,
+        repayment,
         minimumGasPrice,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
@@ -220,10 +298,20 @@ export class CdpApplicationService {
     } catch (error) {
       console.error(error);
       const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`);
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       return;
     } finally {
       dialogRefSimulating.close();
+    }
+
+    // check whether the fee exceeded
+    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
+    if (simulatedFee > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for clear!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      return;
     }
 
     // ask the user to confirm the fee with a dialog
@@ -249,7 +337,7 @@ export class CdpApplicationService {
         key,
         privateKey,
         collateralType,
-        payment,
+        repayment,
         gas,
         fee,
       );
@@ -259,9 +347,7 @@ export class CdpApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       console.error(error);
       return;
     } finally {
@@ -278,18 +364,38 @@ export class CdpApplicationService {
 
   async depositCDP(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // validation
+    if (!(await this.key.validatePrivKey(key, privateKey))) {
+      this.snackBar.open(`Invalid private key.`, 'Close');
+      return;
+    }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+    // confirm whether account has enough gas denom for simulation
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+    if (simulationFeeAmount > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      dialogRefSimulating.close();
+      return;
+    }
 
     try {
       simulatedResultData = await this.cdp.simulateToDepositCDP(
@@ -305,10 +411,20 @@ export class CdpApplicationService {
     } catch (error) {
       console.error(error);
       const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`);
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       return;
     } finally {
       dialogRefSimulating.close();
+    }
+
+    // check whether the fee exceeded
+    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
+    if (simulatedFee > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for deposit!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      return;
     }
 
     // ask the user to confirm the fee with a dialog
@@ -346,9 +462,7 @@ export class CdpApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       console.error(error);
       return;
     } finally {
@@ -365,18 +479,38 @@ export class CdpApplicationService {
 
   async withdrawCDP(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // validation
+    if (!(await this.key.validatePrivKey(key, privateKey))) {
+      this.snackBar.open(`Invalid private key.`, 'Close');
+      return;
+    }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+    // confirm whether account has enough gas denom for simulation
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+    if (simulationFeeAmount > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      dialogRefSimulating.close();
+      return;
+    }
 
     try {
       simulatedResultData = await this.cdp.simulateToWithdrawCDP(
@@ -392,10 +526,20 @@ export class CdpApplicationService {
     } catch (error) {
       console.error(error);
       const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`);
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       return;
     } finally {
       dialogRefSimulating.close();
+    }
+
+    // check whether the fee exceeded
+    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
+    if (simulatedFee > balance) {
+      this.snackBar.open(
+        `Insufficient fee margin for withdraw!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
+        'Close',
+      );
+      return;
     }
 
     // ask the user to confirm the fee with a dialog
@@ -433,9 +577,7 @@ export class CdpApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       console.error(error);
       return;
     } finally {

@@ -11,12 +11,13 @@ export class KeyBackupDialogService {
 
   async open(
     mnemonic: string,
-    privatekey: string,
+    privatekey: Uint8Array,
     id: string,
   ): Promise<KeyBackupResult | undefined> {
+    const privatekeyString = Buffer.from(privatekey).toString('hex');
     const keyBackupResult: KeyBackupResult = await this.dialog
       .open(KeyBackupDialogComponent, {
-        data: { mnemonic: mnemonic, privatekey: privatekey, id: id },
+        data: { mnemonic: mnemonic, privateKey: privatekeyString, id: id },
       })
       .afterClosed()
       .toPromise();

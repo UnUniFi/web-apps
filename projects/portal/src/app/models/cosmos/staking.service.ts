@@ -158,7 +158,7 @@ export class StakingService {
     key: Key,
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: string,
+    privateKey: Uint8Array,
   ) {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const privKey = this.key.getPrivKey(key.type, privateKey);

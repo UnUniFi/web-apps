@@ -22,7 +22,7 @@ export class PlaceBidComponent implements OnInit {
   auction$: Observable<ununifi.auction.CollateralAuction | undefined>;
   endTime$: Observable<Date | undefined>;
   maxEndTime$: Observable<Date | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,7 +81,7 @@ export class PlaceBidComponent implements OnInit {
         return maxEndTime;
       }),
     );
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

@@ -1,3 +1,4 @@
+import { Config } from '../models/config.service';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
@@ -11,7 +12,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   @Input()
-  extensionNavigations?: { name: string; link: string; icon: string }[];
+  config?: Config | null;
 
   @Input()
   searchResult?: SearchResult | null;

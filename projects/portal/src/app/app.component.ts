@@ -4,7 +4,7 @@ import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
-import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
+import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
@@ -13,9 +13,9 @@ import { mergeMap, map } from 'rxjs/operators';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  config: Config;
+  config$: Observable<Config | undefined>;
   configTypeOptions?: string[];
-  selectedConfigType$?: Observable<string>;
+  selectedConfigType$?: Observable<string | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -36,17 +36,21 @@ export class AppComponent {
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
   ) {
-    this.config = this.configS.config;
-    if (this.config.extension?.faucet !== undefined) {
-      this.config.extension.navigations.unshift({
-        name: 'Faucet',
-        link: '/faucet',
-        icon: 'clean_hands',
-      });
-    }
+    this.config$ = this.configS.config$;
+    this.config$.pipe(
+      map((config) => {
+        if (config?.extension?.faucet != undefined) {
+          config.extension.navigations.unshift({
+            name: 'Faucet',
+            link: '/faucet',
+            icon: 'clean_hands',
+          });
+        }
+      }),
+    );
 
     this.configTypeOptions = this.configS.configs.map((config) => config.id);
-    this.selectedConfigType$ = of(this.configS.configs[0].id);
+    this.selectedConfigType$ = this.config$.pipe(map((config) => config?.id));
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {
@@ -55,11 +59,14 @@ export class AppComponent {
       }),
     );
 
-    this.matchAccAddressPattern$ = this.searchBoxInputValue$.asObservable().pipe(
-      map((value) => {
-        const prefix = this.config.bech32Prefix?.accAddr ? this.config.bech32Prefix?.accAddr : '';
-        const prefixCount = this.config.bech32Prefix?.accAddr.length
-          ? this.config.bech32Prefix?.accAddr.length
+    this.matchAccAddressPattern$ = combineLatest([
+      this.config$,
+      this.searchBoxInputValue$.asObservable(),
+    ]).pipe(
+      map(([config, value]) => {
+        const prefix = config?.bech32Prefix?.accAddr ? config.bech32Prefix?.accAddr : '';
+        const prefixCount = config?.bech32Prefix?.accAddr.length
+          ? config.bech32Prefix?.accAddr.length
           : 0;
         const regExp = /^[0-9a-z]{39}$/;
         return regExp.test(value.slice(prefixCount)) && value.substring(0, prefixCount) === prefix;
@@ -207,6 +214,6 @@ export class AppComponent {
   }
 
   onChangeConfigType(value: string) {
-    console.log(value);
+    this.configS.config$ = of(this.configS.configs.find((config) => config.id == value));
   }
 }

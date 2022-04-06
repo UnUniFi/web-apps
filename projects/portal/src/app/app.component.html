@@ -1,5 +1,5 @@
 <view-app
-  [extensionNavigations]="config.extension?.navigations"
+  [config]="config$ | async"
   [configTypeOptions]="configTypeOptions"
   [selectedConfigType]="selectedConfigType$ | async"
   [searchResult]="searchResult$ | async"

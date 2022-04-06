@@ -21,7 +21,7 @@ export class BankApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly key: KeyService,
-  ) { }
+  ) {}
 
   async send(
     key: Key,

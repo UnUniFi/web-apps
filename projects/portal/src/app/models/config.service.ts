@@ -48,7 +48,5 @@ export class ConfigService {
   constructor() {
     this.configs = configs;
     this.config = configs[Math.floor(Math.random() * configs.length)];
-    this.configs = configs;
-    this.config = configs[Math.floor(Math.random() * configs.length)];
   }
 }

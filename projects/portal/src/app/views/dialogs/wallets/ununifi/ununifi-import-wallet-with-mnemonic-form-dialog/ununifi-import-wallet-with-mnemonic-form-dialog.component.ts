@@ -100,15 +100,12 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   }
 
   onChangeIdAndMnemonic(id: string, mnemonic: string) {
-    console.log(id);
-    console.log(mnemonic);
     this.idSubject$.next(id);
     this.mnemonicSubject$.next(mnemonic);
   }
 
   onClickButton(id: string) {
     const subscription = this.privateWallet$.subscribe((privateWallet) => {
-      console.log(privateWallet);
       if (!privateWallet) {
         this.snackBar.open('Invalid wallet!');
         subscription.unsubscribe();

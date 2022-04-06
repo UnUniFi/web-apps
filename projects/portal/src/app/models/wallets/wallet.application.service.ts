@@ -77,10 +77,22 @@ export class WalletApplicationService {
         }
         const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
         if (!(backupResult?.checked && backupResult.saved)) {
-          this.snackBar.open('Backup failed! Try to create wallet again.', 'Close');
+          this.snackBar.open('Backup failed! Try again.', 'Close');
           return;
         }
-        // WIP
+        const storedWallet = {
+          id: privateWallet.id,
+          type: privateWallet.type,
+          key_type: privateWallet.key_type,
+          public_key: privateWallet.public_key,
+          address: privateWallet.address,
+        };
+        await this.walletService.setStoredWallet(storedWallet);
+        await this.walletService.setCurrentStoredWallet(storedWallet);
+        this.snackBar.open('Successfully wallet connected.', undefined, {
+          duration: 2000,
+        });
+        return;
       }
     }
   }

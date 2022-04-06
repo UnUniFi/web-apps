@@ -58,6 +58,5 @@ export class ConfigService {
   async setCurrentConfig(configID: string) {
     const selectedConfig = this.configs.find((config) => config.id == configID);
     this.configSubject$.next(selectedConfig);
-    console.log(configID);
   }
 }

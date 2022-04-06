@@ -45,7 +45,6 @@ declare const configs: Config[];
 })
 export class ConfigService {
   configTypeOptions: Config[];
-  // config: Config;
   configType$: Observable<Config | undefined>;
   configSubject$: BehaviorSubject<Config | undefined>;
   constructor() {

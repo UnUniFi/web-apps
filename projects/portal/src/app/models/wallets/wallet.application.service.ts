@@ -1,5 +1,6 @@
 import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
+import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
 import { UnunifiCreateWalletFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
@@ -70,6 +71,15 @@ export class WalletApplicationService {
 
       if (selectOrImportOrCreate === 'create') {
         const privateWallet = await this.openUnunifiCreateWalletDialog();
+        if (!privateWallet) {
+          this.snackBar.open('Dialog was canceled!', 'Close');
+          return;
+        }
+        const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
+        if (!(backupResult?.checked && backupResult.saved)) {
+          this.snackBar.open('Backup failed! Try to create wallet again.', 'Close');
+          return;
+        }
         // WIP
       }
     }
@@ -107,6 +117,24 @@ export class WalletApplicationService {
       .afterClosed()
       .toPromise();
     return privateWallet;
+  }
+
+  async openUnunifiBackupMnemonicAndPrivateKeyDialog(
+    privateWallet: StoredWallet & { mnemonic: string; privateKey: string },
+  ): Promise<
+    | (StoredWallet & { mnemonic: string; privateKey: string; checked: boolean; saved: boolean })
+    | undefined
+  > {
+    const backupResult: StoredWallet & {
+      mnemonic: string;
+      privateKey: string;
+      checked: boolean;
+      saved: boolean;
+    } = await this.dialog
+      .open(UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent, { data: privateWallet })
+      .afterClosed()
+      .toPromise();
+    return backupResult;
   }
 
   // WIP

@@ -26,13 +26,21 @@ export class BlocksComponent implements OnInit {
   @Output()
   paginationChange: EventEmitter<PageEvent>;
 
+  @Output()
+  checkBoxAutoChange: EventEmitter<boolean>;
+
   constructor() {
     this.paginationChange = new EventEmitter();
+    this.checkBoxAutoChange = new EventEmitter();
   }
 
   ngOnInit(): void {}
 
   onPaginationChange(pageEvent: PageEvent): void {
     this.paginationChange.emit(pageEvent);
+  }
+
+  onCheckBoxAutoChange(checked: boolean) {
+    this.checkBoxAutoChange.emit(checked);
   }
 }

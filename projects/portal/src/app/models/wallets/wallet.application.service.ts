@@ -90,9 +90,7 @@ export class WalletApplicationService {
         };
         await this.walletService.setStoredWallet(storedWallet);
         await this.walletService.setCurrentStoredWallet(storedWallet);
-        this.snackBar.open('Successfully wallet connected.', undefined, {
-          duration: 2000,
-        });
+        await this.openConnectWalletCompletedDialog(storedWallet);
         return;
       }
 
@@ -183,8 +181,6 @@ export class WalletApplicationService {
       .toPromise();
     return backupResult;
   }
-
-  // WIP
 
   async openConnectWalletCompletedDialog(connectedStoredWallet: StoredWallet): Promise<void> {
     await this.dialog

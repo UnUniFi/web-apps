@@ -29,7 +29,7 @@ export class ClearComponent implements OnInit {
 
   address$: Observable<cosmosclient.AccAddress | undefined>;
   balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   constructor(
@@ -98,7 +98,10 @@ export class ClearComponent implements OnInit {
         return repaymentDenomWithBalance;
       }),
     );
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+
+    this.minimumGasPrices$ = this.configS.configType$.pipe(
+      map((config) => config?.minimumGasPrices),
+    );
   }
 
   ngOnInit(): void {

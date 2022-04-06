@@ -25,7 +25,7 @@ export class CreateComponent implements OnInit {
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
   selectedCollateralType$: Observable<string | null | undefined>;
   selectedCollateralParam$: Observable<ununifi.cdp.ICollateralParam | null | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   address$: Observable<cosmosclient.AccAddress>;
   balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
@@ -144,7 +144,9 @@ export class CreateComponent implements OnInit {
       map((res) => (res ? res.data.cdp : undefined)),
     );
 
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.configType$.pipe(
+      map((config) => config?.minimumGasPrices),
+    );
   }
 
   ngOnInit(): void {}

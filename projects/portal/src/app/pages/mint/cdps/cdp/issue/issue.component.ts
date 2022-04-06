@@ -25,7 +25,7 @@ export class IssueComponent implements OnInit {
   collateralType$: Observable<string>;
   params$: Observable<ununifi.cdp.IParams>;
   principalDenom$: Observable<string>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   cdp$: Observable<InlineResponse2004Cdp1>;
   liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
@@ -100,7 +100,9 @@ export class IssueComponent implements OnInit {
       map(([cdp, params, price]) => getIssueLimit(cdp.cdp!, params, price)),
     );
 
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.configType$.pipe(
+      map((config) => config?.minimumGasPrices),
+    );
   }
 
   ngOnInit(): void {}

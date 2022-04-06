@@ -33,7 +33,7 @@ export class CreateValidatorComponent implements OnInit {
   ip$: Observable<string>;
   node_id$: Observable<string>;
   pubkey$: Observable<string>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -108,7 +108,9 @@ export class CreateValidatorComponent implements OnInit {
       map((queryParams) => queryParams.pubkey),
     );
 
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.configType$.pipe(
+      map((config) => config?.minimumGasPrices),
+    );
   }
 
   ngOnInit(): void {}

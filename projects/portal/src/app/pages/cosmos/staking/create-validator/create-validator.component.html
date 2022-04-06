@@ -16,6 +16,6 @@
   [ip]="ip$ | async"
   [node_id]="node_id$ | async"
   [pubkey]="pubkey$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (submitCreateValidator)="appSubmitCreateValidator($event)"
 ></app-view-create-validator>

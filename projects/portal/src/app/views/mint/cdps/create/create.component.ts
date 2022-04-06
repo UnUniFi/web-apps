@@ -37,7 +37,7 @@ export class CreateComponent implements OnInit {
   selectedCollateralParam?: ununifi.cdp.ICollateralParam | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;

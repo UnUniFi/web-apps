@@ -5,6 +5,6 @@
   [principalDenom]="principalDenom$ | async"
   [balances]="balances$ | async"
   [issueLimit]="issueLimit$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (appSubmit)="onSubmit($event)"
 ></view-issue>

@@ -5,6 +5,6 @@
   [denom]="denom$ | async"
   [balances]="balances$ | async"
   [withdrawLimit]="withdrawLimit$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (appSubmit)="onSubmit($event)"
 ></view-withdraw>

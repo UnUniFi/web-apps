@@ -24,7 +24,7 @@ export class DepositComponent implements OnInit {
   denom$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   address$: Observable<cosmosclient.AccAddress | undefined>;
   balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   constructor(
@@ -83,7 +83,7 @@ export class DepositComponent implements OnInit {
         return collateralDenomWithBalance;
       }),
     );
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

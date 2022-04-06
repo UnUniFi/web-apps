@@ -1,5 +1,5 @@
 <app-view-faucet
-  [denoms]="denoms"
+  [denoms]="denoms$ | async"
   [address]="address$ | async"
   [denom]="denom$ | async"
   [amount]="amount$ | async"

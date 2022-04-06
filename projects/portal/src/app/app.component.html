@@ -1,7 +1,11 @@
 <view-app
+  [config]="config$ | async"
+  [configTypeOptions]="configTypeOptions"
+  [selectedConfigType]="selectedConfigType$ | async"
   [searchResult]="searchResult$ | async"
   (appSubmitSearchResult)="onSubmitSearchResult($event)"
   (appChangeInputValue)="onChangeInputValue($event)"
+  (appChangeConfigType)="onChangeConfigType($event)"
 >
   <router-outlet></router-outlet>
 </view-app>

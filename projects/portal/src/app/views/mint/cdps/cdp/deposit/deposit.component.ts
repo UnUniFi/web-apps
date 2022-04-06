@@ -31,7 +31,7 @@ export class DepositComponent implements OnInit {
   denom?: proto.cosmos.base.v1beta1.ICoin | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;

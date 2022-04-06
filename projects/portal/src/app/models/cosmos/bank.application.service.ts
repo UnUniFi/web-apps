@@ -1,6 +1,8 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
+import { WalletApplicationService } from '../wallets/wallet.application.service';
+import { StoredWallet } from '../wallets/wallet.model';
 import { BankService } from './bank.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
@@ -20,6 +22,7 @@ export class BankApplicationService {
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
+    private readonly walletApplicationService: WalletApplicationService,
     private readonly key: KeyService,
   ) {}
 
@@ -28,13 +31,25 @@ export class BankApplicationService {
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
     coins: proto.cosmos.base.v1beta1.ICoin[],
   ) {
+    // Note: Open dialog and get Wallet info with privateKeyString
+    const privateWallet: StoredWallet & { privateKey: string } =
+      await this.walletApplicationService.openUnunifiKeyFormDialog();
+    if (!privateWallet || !privateWallet.privateKey) {
+      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
+      return;
+    }
+
+    const privateKeyWithNoWhitespace = privateWallet.privateKey.replace(/\s+/g, '');
+    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex');
+    const privateKey = Uint8Array.from(privateKeyBuffer);
+
     if (!(await this.key.validatePrivKey(key, privateKey))) {
       this.snackBar.open(`Invalid private key.`, 'Close');
       return;
     }
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;

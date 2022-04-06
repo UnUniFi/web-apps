@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 export type Config = {
   id: string;
@@ -44,9 +45,11 @@ declare const configs: Config[];
 })
 export class ConfigService {
   config: Config;
+  config$: Observable<Config | undefined>;
   configs: Config[];
   constructor() {
     this.configs = configs;
     this.config = configs[Math.floor(Math.random() * configs.length)];
+    this.config$ = of(configs[Math.floor(Math.random() * configs.length)]);
   }
 }

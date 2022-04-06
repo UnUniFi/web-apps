@@ -144,9 +144,7 @@ export class CreateComponent implements OnInit {
       map((res) => (res ? res.data.cdp : undefined)),
     );
 
-    this.minimumGasPrices$ = this.configS.configType$.pipe(
-      map((config) => config?.minimumGasPrices),
-    );
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

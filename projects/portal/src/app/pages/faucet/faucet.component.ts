@@ -24,7 +24,7 @@ export class FaucetComponent implements OnInit {
     private configS: ConfigService,
     private faucetApplication: FaucetApplicationService,
   ) {
-    const config$ = this.configS.configType$;
+    const config$ = this.configS.config$;
     this.denoms$ = config$.pipe(
       map((config) => config?.extension?.faucet?.map((faucet) => faucet.denom)),
     );

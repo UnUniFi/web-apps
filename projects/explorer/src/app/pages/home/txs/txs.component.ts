@@ -27,7 +27,7 @@ export class TxsComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
   ) {
-    this.txTypeOptions$ = this.configService.configType$.pipe(
+    this.txTypeOptions$ = this.configService.config$.pipe(
       map((config) => config?.extension?.messageModules),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);

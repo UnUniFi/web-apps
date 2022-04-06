@@ -18,7 +18,7 @@ export class MonitorService {
   constructor(private readonly http: HttpClient, private readonly config: ConfigService) {}
 
   list(year: number, month: number, day: number, count: number): Observable<Data[]> {
-    return this.config.configType$.pipe(
+    return this.config.config$.pipe(
       mergeMap((config) =>
         this.http.get<Data[]>(`${config?.extension?.monitor?.monitorURL}/list`, {
           params: {
@@ -36,7 +36,7 @@ export class MonitorService {
     const requestBody = {
       gentx_string: gentxString,
     };
-    return this.config.configType$.pipe(
+    return this.config.config$.pipe(
       mergeMap((config) => {
         const requestUrl = `${config?.extension?.monitor?.monitorURL}/gentx`;
         if (config?.extension?.monitor?.monitorURL !== undefined) {

@@ -100,9 +100,7 @@ export class IssueComponent implements OnInit {
       map(([cdp, params, price]) => getIssueLimit(cdp.cdp!, params, price)),
     );
 
-    this.minimumGasPrices$ = this.configS.configType$.pipe(
-      map((config) => config?.minimumGasPrices),
-    );
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

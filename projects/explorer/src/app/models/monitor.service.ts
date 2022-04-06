@@ -17,7 +17,7 @@ export class MonitorService {
   constructor(private readonly http: HttpClient, private readonly config: ConfigService) {}
 
   list(year: number, month: number, day: number, count: number): Observable<Data[]> {
-    return this.config.configType$.pipe(
+    return this.config.config$.pipe(
       mergeMap((config) =>
         this.http.get<Data[]>(`${config?.extension?.monitor?.monitorURL}/list`, {
           params: {

@@ -14,7 +14,7 @@ export class CosmosSDKService {
   sdk$: Observable<{ rest: cosmosclient.CosmosSDK; websocket: cosmosclient.CosmosSDK }>;
 
   constructor(private readonly configS: ConfigService) {
-    this.configS.configType$.pipe(
+    this.configS.config$.pipe(
       map((config) => {
         if (
           config &&
@@ -37,9 +37,9 @@ export class CosmosSDKService {
       }),
     );
 
-    this.restURL$ = this.configS.configType$.pipe(map((config) => config?.restURL!));
-    this.websocketURL$ = this.configS.configType$.pipe(map((config) => config?.websocketURL!));
-    this.chainID$ = this.configS.configType$.pipe(map((config) => config?.chainID!));
+    this.restURL$ = this.configS.config$.pipe(map((config) => config?.restURL!));
+    this.websocketURL$ = this.configS.config$.pipe(map((config) => config?.websocketURL!));
+    this.chainID$ = this.configS.config$.pipe(map((config) => config?.chainID!));
     this.sdk$ = combineLatest([this.restURL$, this.websocketURL$, this.chainID$]).pipe(
       map(([restURL, websocketURL, chainID]) => ({
         rest: new cosmosclient.CosmosSDK(restURL, chainID),

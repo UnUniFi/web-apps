@@ -44,19 +44,20 @@ declare const configs: Config[];
   providedIn: 'root',
 })
 export class ConfigService {
-  configTypeOptions: Config[];
-  configType$: Observable<Config | undefined>;
+  configs: Config[];
+  config$: Observable<Config | undefined>;
   configSubject$: BehaviorSubject<Config | undefined>;
   constructor() {
-    this.configTypeOptions = configs;
+    this.configs = configs;
     this.configSubject$ = new BehaviorSubject<Config | undefined>(undefined);
     const randomConfig = configs[Math.floor(Math.random() * configs.length)];
     this.configSubject$.next(randomConfig);
-    this.configType$ = this.configSubject$.asObservable();
+    this.config$ = this.configSubject$.asObservable();
   }
 
   async setCurrentConfig(configID: string) {
-    const selectedConfig = this.configTypeOptions.find((config) => config.id == configID);
+    const selectedConfig = this.configs.find((config) => config.id == configID);
     this.configSubject$.next(selectedConfig);
+    console.log(configID);
   }
 }

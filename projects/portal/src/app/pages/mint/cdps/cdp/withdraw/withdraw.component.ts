@@ -101,9 +101,7 @@ export class WithdrawComponent implements OnInit {
       map(([cdp, params, price]) => getWithdrawLimit(cdp.cdp!, params, price)),
     );
 
-    this.minimumGasPrices$ = this.configS.configType$.pipe(
-      map((config) => config?.minimumGasPrices),
-    );
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

@@ -37,7 +37,7 @@ export class KeyComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
   ) {
-    this.config$ = this.configService.configType$;
+    this.config$ = this.configService.config$;
     this.keyID$ = this.route.params.pipe(map((params) => params['key_id']));
     this.key$ = this.keyID$.pipe(mergeMap((keyID) => this.key.get(keyID)));
     const pubKey$ = this.key$.pipe(

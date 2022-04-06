@@ -34,7 +34,7 @@ export class FaucetInfrastructureService implements InterfaceFaucetInfrastructur
   }
 
   getFaucetURL(denom: string): Observable<string | undefined> {
-    return this.configS.configType$.pipe(
+    return this.configS.config$.pipe(
       map(
         (config) => config?.extension?.faucet?.find((faucet) => faucet.denom === denom)?.faucetURL,
       ),

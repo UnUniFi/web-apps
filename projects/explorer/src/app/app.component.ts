@@ -36,8 +36,8 @@ export class AppComponent {
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
   ) {
-    this.config$ = this.configS.configType$;
-    this.configTypeOptions = this.configS.configTypeOptions.map((config) => config.id);
+    this.config$ = this.configS.config$;
+    this.configTypeOptions = this.configS.configs.map((config) => config.id);
     this.selectedConfigType$ = this.config$.pipe(map((config) => config?.id));
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(

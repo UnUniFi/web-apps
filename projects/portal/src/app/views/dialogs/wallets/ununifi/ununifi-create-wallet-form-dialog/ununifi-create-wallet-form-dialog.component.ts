@@ -25,7 +25,10 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
   ) {
     const mnemonic = bip39.generateMnemonic();
     this.privateWallet$ = this.keyService.getPrivateKeyFromMnemonic(mnemonic).then((privateKey) => {
-      const cosmosPrivateKey = this.keyService.getPrivKey(KeyType.secp256k1, privateKey);
+      const cosmosPrivateKey = this.keyService.getPrivKey(
+        KeyType.secp256k1,
+        Uint8Array.from(Buffer.from(privateKey, 'hex')),
+      );
       const cosmosPublicKey = cosmosPrivateKey.pubKey();
       const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
       const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);

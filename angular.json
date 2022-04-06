@@ -53,7 +53,8 @@
                   "with": "projects/explorer/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/explorer/"
             },
             "development": {
               "buildOptimizer": false,
@@ -61,7 +62,8 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "baseHref": "/explorer/"
             }
           },
           "defaultConfiguration": "production"
@@ -70,10 +72,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "explorer:build:production"
+              "browserTarget": "explorer:build:production",
+              "baseHref": "/explorer/"
             },
             "development": {
-              "browserTarget": "explorer:build:development"
+              "browserTarget": "explorer:build:development",
+              "baseHref": "/explorer/"
             }
           },
           "defaultConfiguration": "development"
@@ -245,7 +249,8 @@
                   "with": "projects/portal/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/portal/"
             },
             "development": {
               "buildOptimizer": false,
@@ -253,7 +258,8 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "baseHref": "/portal/"
             }
           },
           "defaultConfiguration": "production"
@@ -262,10 +268,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "portal:build:production"
+              "browserTarget": "portal:build:production",
+              "baseHref": "/portal/"
             },
             "development": {
-              "browserTarget": "portal:build:development"
+              "browserTarget": "portal:build:development",
+              "baseHref": "/portal/"
             }
           },
           "defaultConfiguration": "development"

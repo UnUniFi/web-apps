@@ -184,7 +184,6 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
   async getCurrentStoredWallet(): Promise<StoredWallet | undefined> {
     try {
       const array = await this.db.table('current_wallets').toArray();
-      console.log(array);
       if (!array?.length) {
         throw Error('There is no current_wallets!');
       }
@@ -368,7 +367,7 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
   async setStoredWallet(storedWallet: StoredWallet): Promise<void> {
     try {
       const sameStoredWallet = await this.getStoredWallet(storedWallet.id);
-      if (!sameStoredWallet) {
+      if (sameStoredWallet) {
         throw Error('The wallet is already exists!');
       }
       await this.db.table('wallets').put(storedWallet);

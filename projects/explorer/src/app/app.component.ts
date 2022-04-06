@@ -202,6 +202,6 @@ export class AppComponent {
   }
 
   onChangeConfigType(value: string) {
-    console.log(value);
+    this.configS.setCurrentConfig(value);
   }
 }

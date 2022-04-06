@@ -15,7 +15,7 @@ import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 export class TxsComponent implements OnInit {
   pollingInterval = 30 * 60;
   txs$?: Observable<InlineResponse20075TxResponse[] | undefined>;
-  txTypeOptions?: string[];
+  txTypeOptions$?: Observable<string[] | undefined>;
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(20);
   pageNumber$: BehaviorSubject<number> = new BehaviorSubject(1);
   txsTotalCount$: Observable<bigint>;
@@ -27,7 +27,9 @@ export class TxsComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
   ) {
-    this.txTypeOptions = this.configService.config.extension?.messageModules;
+    this.txTypeOptions$ = this.configService.configType$.pipe(
+      map((config) => config?.extension?.messageModules),
+    );
     const timer$ = timer(0, this.pollingInterval * 1000);
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
 

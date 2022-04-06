@@ -2,6 +2,6 @@
   [key]="key$ | async"
   [coins]="coins$ | async"
   [amount]="amount$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (appSubmit)="onSubmit($event)"
 ></view-send>

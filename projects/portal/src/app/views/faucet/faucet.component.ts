@@ -13,7 +13,7 @@ export type Amount = {
   styleUrls: ['./faucet.component.css'],
 })
 export class FaucetComponent implements OnInit {
-  @Input() denoms?: string[];
+  @Input() denoms?: string[] | null;
   @Input() address?: string | null;
   @Input() denom?: string | null;
   @Input() amount?: number | null;

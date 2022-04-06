@@ -20,7 +20,7 @@ export class SendComponent implements OnInit {
   key$: Observable<Key | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   amount$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
@@ -53,7 +53,7 @@ export class SendComponent implements OnInit {
       ),
     );
 
-    this.minimumGasPrices = this.configS.config.minimumGasPrices;
+    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

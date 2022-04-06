@@ -37,7 +37,7 @@ export class WithdrawComponent implements OnInit {
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<WithdrawCdpOnSubmitEvent>;

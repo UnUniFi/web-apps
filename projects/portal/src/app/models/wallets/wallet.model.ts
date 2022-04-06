@@ -10,7 +10,7 @@ export enum WalletType {
   keyStation = 'keyStation',
 }
 
-// Note: For general purpose? Uint8Array
+// Note: For general purpose? Uint8Array ... Want to use this as possible?
 export type Wallet = {
   id: string;
   type: WalletType;
@@ -19,7 +19,7 @@ export type Wallet = {
   address: Uint8Array;
 };
 
-// Note: For Indexed DB (string)
+// Note: For Indexed DB (string) ... This type is necessary for Indexed DB.
 export type StoredWallet = {
   id: string;
   type: WalletType;
@@ -28,7 +28,7 @@ export type StoredWallet = {
   address: string;
 };
 
-// Note: cosmos-client/core type
+// Note: cosmos-client/core type ... I guess sdk declared type is more convenient than Uint8Array?
 export type CosmosWallet = {
   id: string;
   type: WalletType;

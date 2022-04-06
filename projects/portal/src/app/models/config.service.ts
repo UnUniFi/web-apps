@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Config = {
   id: string;
@@ -44,12 +44,20 @@ declare const configs: Config[];
   providedIn: 'root',
 })
 export class ConfigService {
+  configs: Config[];
   config: Config;
   config$: Observable<Config | undefined>;
-  configs: Config[];
+  configSubject$: BehaviorSubject<Config | undefined>;
   constructor() {
     this.configs = configs;
     this.config = configs[Math.floor(Math.random() * configs.length)];
-    this.config$ = of(configs[Math.floor(Math.random() * configs.length)]);
+    this.configSubject$ = new BehaviorSubject<Config | undefined>(undefined);
+    this.configSubject$.next(this.config);
+    this.config$ = this.configSubject$.asObservable();
+  }
+
+  async setCurrentConfig(configID: string) {
+    const selectedConfig = this.configs.find((config) => config.id == configID);
+    this.configSubject$.next(selectedConfig);
   }
 }

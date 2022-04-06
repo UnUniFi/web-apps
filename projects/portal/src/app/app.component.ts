@@ -214,6 +214,6 @@ export class AppComponent {
   }
 
   onChangeConfigType(value: string) {
-    this.configS.config$ = of(this.configS.configs.find((config) => config.id == value));
+    this.configS.setCurrentConfig(value);
   }
 }

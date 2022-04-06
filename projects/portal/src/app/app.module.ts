@@ -7,7 +7,7 @@ import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/conn
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
 import { UnunifiCreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
-import { UnunifiImportWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-import-wallet-form-dialog/ununifi-import-wallet-form-dialog.module';
+import { UnunifiImportWalletWithMnemonicFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.module';
 import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
 import { UnunifiSelectWalletDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
 import { KeyBackupDialogModule } from './views/keys/key-backup-dialog/key-backup-dialog.module';
@@ -51,7 +51,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     ConnectWalletStartDialogModule,
     UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule,
     UnunifiCreateWalletFormDialogModule,
-    UnunifiImportWalletFormDialogModule,
+    UnunifiImportWalletWithMnemonicFormDialogModule,
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
   ],

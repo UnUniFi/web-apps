@@ -23,6 +23,9 @@ export class AppComponent implements OnInit {
   @Input()
   selectedConfig?: string | null;
 
+  @Input()
+  navigations?: { name: string; link: string; icon: string }[] | null;
+
   @Output()
   appSubmitSearchResult: EventEmitter<SearchResult>;
 

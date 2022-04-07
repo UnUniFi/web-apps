@@ -15,8 +15,8 @@ import { mergeMap, map } from 'rxjs/operators';
 })
 export class AppComponent {
   config$: Observable<Config | undefined>;
-  configTypeOptions?: string[];
-  selectedConfigType$?: Observable<string | undefined>;
+  configs?: string[];
+  selectedConfig?: Observable<string | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -51,8 +51,8 @@ export class AppComponent {
       }),
     );
 
-    this.configTypeOptions = this.configS.configs.map((config) => config.id);
-    this.selectedConfigType$ = this.config$.pipe(map((config) => config?.id));
+    this.configs = this.configS.configs.map((config) => config.id);
+    this.selectedConfig = this.config$.pipe(map((config) => config?.id));
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {
@@ -220,7 +220,7 @@ export class AppComponent {
     const cosmosWallet = await this.walletAPplicationService.connectWalletDialog();
   }
 
-  onChangeConfigType(value: string) {
+  onChangeConfig(value: string) {
     this.configS.setCurrentConfig(value);
   }
 }

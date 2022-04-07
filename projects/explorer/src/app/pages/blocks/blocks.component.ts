@@ -27,19 +27,19 @@ export class BlocksComponent implements OnInit {
   blocks$: Observable<InlineResponse20036[] | undefined>;
 
   autoEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  blocksEmpty: boolean;
+  isFirstAccess: boolean;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private cosmosSDK: CosmosSDKService,
   ) {
-    this.blocksEmpty = true;
+    this.isFirstAccess = true;
     const timerWithEnable$ = combineLatest([
       timer(0, this.pollingInterval * 1000),
       this.autoEnabled.asObservable(),
     ]).pipe(
-      filter(([n, enable]) => enable || this.blocksEmpty),
+      filter(([n, enable]) => enable || this.isFirstAccess),
       map(([n, _]) => n),
     );
 
@@ -49,7 +49,7 @@ export class BlocksComponent implements OnInit {
 
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       map((latestBlock) => {
-        this.blocksEmpty = false;
+        this.isFirstAccess = false;
         return latestBlock?.block?.header?.height
           ? BigInt(latestBlock.block.header.height)
           : undefined;

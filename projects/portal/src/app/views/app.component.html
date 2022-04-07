@@ -14,9 +14,9 @@
 
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Change Node</mat-label>
-      <mat-select [(value)]="selectedConfigType" (valueChange)="onChangeConfigType($event)">
-        <mat-option *ngFor="let configType of configTypeOptions" [value]="configType">
-          {{ configType }}
+      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+        <mat-option *ngFor="let conf of configs" [value]="conf">
+          {{ conf }}
         </mat-option>
       </mat-select>
     </mat-form-field>

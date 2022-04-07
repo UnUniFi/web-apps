@@ -10,22 +10,22 @@ import { WalletType } from 'projects/portal/src/app/models/wallets/wallet.model'
 export class ConnectWalletStartDialogComponent implements OnInit {
   walletOptions = [
     {
-      logo: '../../../../../favicon.png',
+      logo: 'assets/favicon.png',
       walletType: WalletType.ununifi,
       name: 'UnUniFi',
     },
     {
-      logo: '../../../../../assets/keplr-logo.svg',
+      logo: 'assets/keplr-logo.svg',
       walletType: WalletType.keplr,
       name: 'Keplr',
     },
     {
-      logo: '../../../../../assets/ledger-logo.png',
+      logo: 'assets/ledger-logo.png',
       walletType: WalletType.ledger,
       name: 'Ledger',
     },
     {
-      logo: '../../../../../assets/key-station-logo.png',
+      logo: 'assets/key-station-logo.png',
       walletType: WalletType.keyStation,
       name: 'Key Station',
     },

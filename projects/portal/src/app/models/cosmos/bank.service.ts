@@ -1,6 +1,6 @@
+import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { Key } from '../keys/key.model';
-import { KeyService } from '../keys/key.service';
+import { KeyType } from '../keys/key.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
@@ -13,24 +13,23 @@ import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 export class BankService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   async send(
-    key: Key,
+    keyType: KeyType,
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
   ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildSendTx(key, toAddress, amount, gas, fee, privateKey);
+    const txBuilder = await this.buildSendTx(keyType, toAddress, amount, gas, fee, privateKey);
     return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToSend(
-    key: Key,
+    keyType: KeyType,
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
@@ -45,7 +44,7 @@ export class BankService {
       amount: '1',
     };
     const simulatedTxBuilder = await this.buildSendTx(
-      key,
+      keyType,
       toAddress,
       amount,
       dummyGas,
@@ -56,7 +55,7 @@ export class BankService {
   }
 
   async buildSendTx(
-    key: Key,
+    keyType: KeyType,
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     gas: proto.cosmos.base.v1beta1.ICoin,
@@ -64,7 +63,10 @@ export class BankService {
     privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = this.key.getPrivKey(key.type, privateKey);
+    const privKey = createCosmosPrivateKeyFromUint8Array(keyType, privateKey);
+    if (!privKey) {
+      throw Error('privKey is falsy!');
+    }
     const pubKey = privKey.pubKey();
     const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
 

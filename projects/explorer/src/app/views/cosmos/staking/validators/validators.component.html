@@ -4,8 +4,7 @@
   <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <ng-container *ngIf="(validators?.validators?.length || 0) > 0; then exist; else empty">
-  </ng-container>
+  <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
 </ng-template>
 <ng-template #exist>
   <mat-card>
@@ -24,17 +23,23 @@
 
     <mat-nav-list>
       <mat-list-item
-        *ngFor="let validator of validators?.validators"
-        routerLink="{{ validator.operator_address }}"
+        *ngFor="let validator of validators"
+        routerLink="{{ validator.val.operator_address }}"
       >
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator) }"> circle </mat-icon>
-        <span class="w-1/2 break-all text-sm sm:text-base">{{ validator.operator_address }}</span>
+        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }"> circle </mat-icon>
+        <span class="w-1/2 break-all text-sm sm:text-base">{{
+          validator.val.operator_address
+        }}</span>
         <span class="flex-auto"></span>
-        <!--<span class="break-all text-sm sm:text-base">{{ validator.operator_address }}</span>-->
+        <span class="break-all text-sm sm:text-base">{{ validator.share | percent }}</span>
         <span class="flex-auto"></span>
-        <span class="break-all text-sm sm:text-base">{{ validator.tokens }}</span>
+        <span class="break-all text-sm sm:text-base">{{
+          validator.val.tokens | unitConversion
+        }}</span>
         <span class="flex-auto"></span>
-        <!--<span class="break-all text-sm sm:text-base">{{ validator.operator_address }}</span>-->
+        <span class="break-all text-sm sm:text-base">{{
+          validator.val.commission?.commission_rates?.rate | percent
+        }}</span>
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-nav-list>

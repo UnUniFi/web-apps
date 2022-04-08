@@ -4,6 +4,10 @@ import {
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import {
+  validatorType,
+  validatorWithShareType,
+} from 'projects/explorer/src/app/pages/cosmos/staking/validators/validators.component';
 
 @Component({
   selector: 'view-validators',
@@ -12,7 +16,7 @@ import * as crypto from 'crypto';
 })
 export class ValidatorsComponent implements OnInit {
   @Input()
-  validators?: QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod | null;
+  validators?: validatorType[] | null;
 
   constructor() {}
 

@@ -102,7 +102,7 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
 
   convertCosmosWalletToStoredWallet(cosmosWallet: CosmosWallet): StoredWallet {
     const public_key: string = cosmosWallet.public_key.bytes().toString();
-    const address: string = cosmosWallet.address.toString();
+    const address: string = cosmosWallet.address.toAccAddress().toString();
     return {
       id: cosmosWallet.id,
       type: WalletType[cosmosWallet.type],
@@ -126,7 +126,7 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
 
   convertWalletToStoredWallet(wallet: Wallet): StoredWallet {
     const public_key: string = Buffer.from(wallet.public_key).toString('hex');
-    const address: string = new cosmosclient.AccAddress(wallet.address).toString();
+    const address: string = new cosmosclient.AccAddress(wallet.address).toAccAddress().toString();
     return {
       id: wallet.id,
       type: wallet.type,

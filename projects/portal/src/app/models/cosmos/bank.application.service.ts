@@ -1,6 +1,6 @@
+import { convertHexStringToUint8Array } from '../../utils/converter';
+import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { Key } from '../keys/key.model';
-import { KeyService } from '../keys/key.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet } from '../wallets/wallet.model';
 import { BankService } from './bank.service';
@@ -23,30 +23,31 @@ export class BankApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly walletApplicationService: WalletApplicationService,
-    private readonly key: KeyService,
   ) {}
 
   async send(
-    key: Key,
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     coins: proto.cosmos.base.v1beta1.ICoin[],
   ) {
     // Note: Open dialog and get Wallet info with privateKeyString
-    const privateWallet: StoredWallet & { privateKey: string } =
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
-      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
+      this.snackBar.open('Failed to get Wallet info from dialog!', 'Close');
       return;
     }
 
-    const privateKeyWithNoWhitespace = privateWallet.privateKey.replace(/\s+/g, '');
-    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex');
-    const privateKey = Uint8Array.from(privateKeyBuffer);
+    if (!validatePrivateStoredWallet(privateWallet)) {
+      this.snackBar.open('Invalid Wallet info!', 'Close');
+      return;
+    }
 
-    if (!(await this.key.validatePrivKey(key, privateKey))) {
-      this.snackBar.open(`Invalid private key.`, 'Close');
+    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
+
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }
 
@@ -77,7 +78,7 @@ export class BankApplicationService {
 
     try {
       simulatedResultData = await this.bank.simulateToSend(
-        key,
+        privateWallet.key_type,
         toAddress,
         amount,
         minimumGasPrice,
@@ -125,7 +126,14 @@ export class BankApplicationService {
     let txhash: string | undefined;
 
     try {
-      const res = await this.bank.send(key, toAddress, amount, gas, fee, privateKey);
+      const res = await this.bank.send(
+        privateWallet.key_type,
+        toAddress,
+        amount,
+        gas,
+        fee,
+        privateKey,
+      );
       txhash = res.tx_response?.txhash;
       if (txhash === undefined) {
         throw Error('Invalid txhash!');

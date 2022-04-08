@@ -18,6 +18,8 @@ export class ValidatorsComponent implements OnInit {
       mergeMap((sdk) => rest.staking.validators(sdk.rest)),
       map((result) => result.data),
     );
+    //for debug
+    this.validators$.subscribe((x) => console.log(x));
   }
 
   ngOnInit() {}

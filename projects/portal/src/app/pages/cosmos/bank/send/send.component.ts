@@ -1,13 +1,12 @@
 import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
 import { BankApplicationService } from '../../../../models/cosmos/bank.application.service';
-import { Key } from '../../../../models/keys/key.model';
-import { KeyService } from '../../../../models/keys/key.service';
-import { KeyStoreService } from '../../../../models/keys/key.store.service';
 import { SendOnSubmitEvent } from '../../../../views/cosmos/bank/send/send.component';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap, filter } from 'rxjs/operators';
 
@@ -17,26 +16,23 @@ import { map, mergeMap, filter } from 'rxjs/operators';
   styleUrls: ['./send.component.css'],
 })
 export class SendComponent implements OnInit {
-  key$: Observable<Key | undefined>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   amount$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
-    private readonly keyStore: KeyStoreService,
+    private readonly walletService: WalletService,
     private readonly bankApplication: BankApplicationService,
     private readonly snackBar: MatSnackBar,
     private readonly configS: ConfigService,
   ) {
-    this.key$ = this.keyStore.currentKey$;
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
 
-    const address$ = this.key$.pipe(
-      filter((key): key is Key => key !== undefined),
-      map((key) =>
-        cosmosclient.AccAddress.fromPublicKey(this.key.getPubKey(key!.type, key.public_key)),
-      ),
+    const address$ = this.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
@@ -66,11 +62,9 @@ export class SendComponent implements OnInit {
       return;
     }
     await this.bankApplication.send(
-      $event.key,
       $event.toAddress,
       $event.amount,
       $event.minimumGasPrice,
-      $event.privateKey,
       $event.coins,
     );
   }

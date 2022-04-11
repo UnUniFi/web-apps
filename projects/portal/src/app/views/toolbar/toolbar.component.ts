@@ -20,6 +20,9 @@ export class ToolbarComponent implements OnInit {
   @Output()
   appChangeInputValue: EventEmitter<string>;
 
+  @Output()
+  appConnectWallet: EventEmitter<{}>;
+
   searchValue: string;
 
   constructor() {
@@ -30,6 +33,7 @@ export class ToolbarComponent implements OnInit {
     };
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
+    this.appConnectWallet = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -56,5 +60,9 @@ export class ToolbarComponent implements OnInit {
 
   onFocusInput(inputValue: string): void {
     this.appChangeInputValue.emit(inputValue);
+  }
+
+  onConnectWallet(): void {
+    this.appConnectWallet.emit();
   }
 }

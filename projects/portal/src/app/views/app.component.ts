@@ -33,6 +33,9 @@ export class AppComponent implements OnInit {
   appChangeInputValue: EventEmitter<string>;
 
   @Output()
+  appConnectWallet: EventEmitter<{}>;
+
+  @Output()
   appChangeConfig: EventEmitter<string>;
 
   @ViewChild('drawer')
@@ -45,6 +48,7 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private ngZone: NgZone) {
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
+    this.appConnectWallet = new EventEmitter();
     this.appChangeConfig = new EventEmitter();
 
     window.onresize = (_) => {
@@ -80,6 +84,10 @@ export class AppComponent implements OnInit {
 
   onChangeInputValue(inputValue: string) {
     this.appChangeInputValue.emit(inputValue);
+  }
+
+  onConnectWallet($event: {}) {
+    this.appConnectWallet.emit($event);
   }
 
   onChangeConfig(selectedConfig: string): void {

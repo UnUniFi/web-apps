@@ -1,13 +1,13 @@
 import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
 import { CreateValidatorData } from '../../../models/cosmos/staking.model';
-import { Key } from '../../../models/keys/key.model';
-import { KeyService } from '../../../models/keys/key.service';
-import { KeyStoreService } from '../../../models/keys/key.store.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
+import { createCosmosPublicKeyFromString } from '../../../utils/key';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { proto } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +16,7 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./create-validator.component.css'],
 })
 export class CreateValidatorComponent implements OnInit {
-  key$: Observable<Key | undefined>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   moniker$: Observable<string>;
   identity$: Observable<string>;
   website$: Observable<string>;
@@ -37,12 +37,11 @@ export class CreateValidatorComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly keyService: KeyService,
-    private readonly keyStoreService: KeyStoreService,
+    private readonly walletService: WalletService,
     private readonly stakingApplicationService: StakingApplicationService,
     private readonly configS: ConfigService,
   ) {
-    this.key$ = this.keyStoreService.currentKey$;
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.moniker$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.moniker),
       map((queryParams) => queryParams.moniker),
@@ -79,13 +78,74 @@ export class CreateValidatorComponent implements OnInit {
       filter((queryParams) => queryParams.min_self_delegation),
       map((queryParams) => queryParams.min_self_delegation),
     );
-    this.delegator_address$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.delegator_address),
-      map((queryParams) => queryParams.delegator_address),
+    this.delegator_address$ = combineLatest([
+      this.route.queryParams,
+      this.currentStoredWallet$,
+    ]).pipe(
+      filter(
+        ([queryParams, currentStoredWallet]) =>
+          queryParams.delegator_address &&
+          currentStoredWallet?.address &&
+          currentStoredWallet.key_type &&
+          currentStoredWallet.public_key,
+      ),
+      map(([queryParams, currentStoredWallet]) => {
+        if (
+          currentStoredWallet?.address &&
+          currentStoredWallet.public_key &&
+          currentStoredWallet.key_type
+        ) {
+          const cosmosPublicKey = createCosmosPublicKeyFromString(
+            currentStoredWallet.key_type,
+            currentStoredWallet.public_key,
+          );
+          if (!cosmosPublicKey) {
+            return undefined;
+          }
+          const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+          if (accAddress.toAccAddress().toString() === queryParams.delegator_address) {
+            return queryParams.delegator_address;
+          } else {
+            return undefined;
+          }
+        }
+        return queryParams.delegator_address;
+      }),
     );
-    this.validator_address$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.validator_address),
-      map((queryParams) => queryParams.validator_address),
+    this.validator_address$ = combineLatest([
+      this.route.queryParams,
+      this.currentStoredWallet$,
+    ]).pipe(
+      filter(
+        ([queryParams, currentStoredWallet]) =>
+          queryParams.validator_address ||
+          (currentStoredWallet?.address &&
+            currentStoredWallet.public_key &&
+            currentStoredWallet.key_type),
+      ),
+      map(([queryParams, currentStoredWallet]) => {
+        if (
+          currentStoredWallet?.address &&
+          currentStoredWallet.public_key &&
+          currentStoredWallet.key_type
+        ) {
+          const cosmosPublicKey = createCosmosPublicKeyFromString(
+            currentStoredWallet.key_type,
+            currentStoredWallet.public_key,
+          );
+          if (!cosmosPublicKey) {
+            return undefined;
+          }
+          const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+          const valAddress = cosmosclient.ValAddress.fromPublicKey(cosmosPublicKey);
+          if (accAddress.toAccAddress().toString() === queryParams.delegator_address) {
+            return valAddress.toValAddress().toString();
+          } else {
+            return undefined;
+          }
+        }
+        return queryParams.validator_address;
+      }),
     );
     this.denom$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.denom),
@@ -118,12 +178,9 @@ export class CreateValidatorComponent implements OnInit {
       minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
     },
   ): Promise<void> {
-    this.key$.subscribe(async (key) => {
-      await this.stakingApplicationService.createValidator(
-        key,
-        createValidatorData,
-        createValidatorData.minimumGasPrice,
-      );
-    });
+    await this.stakingApplicationService.createValidator(
+      createValidatorData,
+      createValidatorData.minimumGasPrice,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import { CreateValidatorData } from '../../../models/cosmos/staking.model';
-import { Key } from '../../../models/keys/key.model';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
 
 @Component({
@@ -9,7 +10,7 @@ import { proto } from '@cosmos-client/core';
   styleUrls: ['./create-validator.component.css'],
 })
 export class CreateValidatorComponent implements OnInit {
-  @Input() key?: Key | null;
+  @Input() currentStoredWallet?: StoredWallet | null;
   @Input() moniker?: string | null;
   @Input() identity?: string | null;
   @Input() website?: string | null;
@@ -36,7 +37,7 @@ export class CreateValidatorComponent implements OnInit {
 
   minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
 
-  constructor() {}
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -47,7 +48,6 @@ export class CreateValidatorComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmitCreateValidator(
-    privateKeyString: string,
     moniker: string,
     identity: string,
     website: string,
@@ -66,16 +66,17 @@ export class CreateValidatorComponent implements OnInit {
     pubkey: string,
     minimumGasPriceAmount: string,
   ): Promise<void> {
-    if (this.minimumGasPrice === undefined) {
+    if (!this.currentStoredWallet) {
+      this.snackBar.open('Wallet is not connected! Please connect wallet first.', 'Close');
       return;
     }
 
-    const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
-    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex');
-    const privateKey = Uint8Array.from(privateKeyBuffer);
+    if (this.minimumGasPrice === undefined) {
+      this.snackBar.open('Invalid gas fee!');
+      return;
+    }
 
     this.submitCreateValidator.emit({
-      privateKey,
       moniker,
       identity,
       website,

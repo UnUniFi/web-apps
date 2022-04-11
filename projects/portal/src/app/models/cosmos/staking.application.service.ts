@@ -1,5 +1,9 @@
+import { convertHexStringToUint8Array } from '../../utils/converter';
+import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { Key } from '../keys/key.model';
+import { WalletApplicationService } from '../wallets/wallet.application.service';
+import { StoredWallet } from '../wallets/wallet.model';
 import { CreateValidatorData } from './staking.model';
 import { StakingService } from './staking.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -21,16 +25,30 @@ export class StakingApplicationService {
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: StakingService,
+    private readonly walletApplicationService: WalletApplicationService,
   ) {}
 
+  // WIP
   async createValidator(
-    key: Key | undefined,
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
   ) {
-    if (key === undefined) {
-      this.snackBar.open('Error has occur', undefined, { duration: 6000 });
-      this.snackBar.open('Invalid key', undefined, { duration: 6000 });
+    const privateWallet: StoredWallet & { privateKey: string } =
+      await this.walletApplicationService.openUnunifiKeyFormDialog();
+    if (!privateWallet || !privateWallet.privateKey) {
+      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
+      return;
+    }
+
+    if (!validatePrivateStoredWallet(privateWallet)) {
+      this.snackBar.open('Invalid Wallet info!', 'Close');
+      return;
+    }
+
+    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
+
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }
 
@@ -43,9 +61,10 @@ export class StakingApplicationService {
 
     try {
       simulatedResultData = await this.staking.simulateToCreateValidator(
-        key,
+        privateWallet.key_type,
         createValidatorData,
         minimumGasPrice,
+        privateKey,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -81,10 +100,11 @@ export class StakingApplicationService {
 
     try {
       createValidatorResult = await this.staking.createValidator(
-        key,
+        privateWallet.key_type,
         createValidatorData,
         gas,
         fee,
+        privateKey,
       );
       txHash = createValidatorResult.tx_response?.txhash;
       if (txHash === undefined) {

@@ -1,8 +1,8 @@
 version: '3'
 services:
-  ununifi-explorer:
-    container_name: ununifi-explorer
-    image: ghcr.io/ununifi/explorer:test
+  ununifi-portal:
+    container_name: ununifi-portal
+    image: ghcr.io/ununifi/portal:test
     volumes:
       - ./config.js:/usr/share/nginx/html/assets/config.js
       - ./config.js:/usr/share/nginx/html/ununifi/assets/config.js

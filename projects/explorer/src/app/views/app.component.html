@@ -37,11 +37,11 @@
       <mat-list-item routerLink="/cosmos/gov/proposals">
         <mat-icon class="mr-2" color="primary">message</mat-icon>Votes
       </mat-list-item>
-      <ng-template ngFor let-extension [ngForOf]="config?.extension?.navigations">
-        <ng-container *ngIf="extension?.name && extension?.link">
-          <a mat-list-item [href]="extension.link">
-            <mat-icon class="mr-2" color="primary"> {{ extension.icon }}</mat-icon>
-            {{ extension.name }}
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <a mat-list-item [href]="navigation.link">
+            <mat-icon class="mr-2" color="primary"> {{ navigation.icon }}</mat-icon>
+            {{ navigation.name }}
           </a>
         </ng-container>
       </ng-template>

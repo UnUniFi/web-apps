@@ -15,7 +15,8 @@ import { mergeMap, map } from 'rxjs/operators';
 export class AppComponent {
   config$: Observable<Config | undefined>;
   configs?: string[];
-  selectedConfig$?: Observable<string | undefined>;
+  navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
+  selectedConfig$: Observable<string | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -39,6 +40,18 @@ export class AppComponent {
     this.config$ = this.configS.config$;
     this.configs = this.configS.configs.map((config) => config.id);
     this.selectedConfig$ = this.config$.pipe(map((config) => config?.id));
+    this.navigations$ = this.config$.pipe(
+      map((config) => {
+        if (config?.extension?.monitor != undefined) {
+          config.extension.navigations.unshift({
+            name: 'Monitor',
+            link: '/explorer/monitor',
+            icon: 'monitor',
+          });
+        }
+        return config?.extension?.navigations;
+      }),
+    );
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {

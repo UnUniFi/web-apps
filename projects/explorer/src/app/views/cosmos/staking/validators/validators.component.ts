@@ -1,13 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {
-  InlineResponse20066Validators,
-  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
-} from '@cosmos-client/core/esm/openapi';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
-import {
-  validatorType,
-  validatorWithShareType,
-} from 'projects/explorer/src/app/pages/cosmos/staking/validators/validators.component';
+
+export type validatorType = {
+  val: InlineResponse20066Validators;
+  share: number;
+  inList: boolean;
+  rank: number;
+};
+
+export type validatorWithShareType = {
+  val: InlineResponse20066Validators;
+  share: number;
+};
 
 @Component({
   selector: 'view-validators',
@@ -18,7 +23,12 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   validators?: validatorType[] | null;
 
-  constructor() {}
+  @Output()
+  toggleActiveChange: EventEmitter<boolean>;
+
+  constructor() {
+    this.toggleActiveChange = new EventEmitter();
+  }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -34,5 +44,14 @@ export class ValidatorsComponent implements OnInit {
       .toString('hex');
 
     return `#${hash.substr(0, 6)}`;
+  }
+
+  onToggleChange(value: string) {
+    if (value == 'active') {
+      this.toggleActiveChange.emit(true);
+    }
+    if (value == 'inactive') {
+      this.toggleActiveChange.emit(false);
+    }
   }
 }

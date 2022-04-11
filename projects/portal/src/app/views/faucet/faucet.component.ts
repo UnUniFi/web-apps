@@ -1,7 +1,6 @@
 import { Config } from '../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
 
 export type Amount = {
   amount: number;

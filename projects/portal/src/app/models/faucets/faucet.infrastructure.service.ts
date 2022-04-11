@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 
-
 @Injectable({
   providedIn: 'root',
 })

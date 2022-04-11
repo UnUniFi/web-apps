@@ -1,7 +1,8 @@
 <view-app
   [config]="config$ | async"
   [configs]="configs"
-  [selectedConfig]="selectedConfig | async"
+  [selectedConfig]="selectedConfig$ | async"
+  [navigations]="navigations$ | async"
   [searchResult]="searchResult$ | async"
   (appSubmitSearchResult)="onSubmitSearchResult($event)"
   (appChangeInputValue)="onChangeInputValue($event)"

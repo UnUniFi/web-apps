@@ -16,11 +16,11 @@ export class FaucetApplicationService {
     private readonly faucetService: FaucetService,
   ) {}
 
-  async postFaucetRequest(faucetRequest: FaucetRequest) {
+  async postFaucetRequest(faucetRequest: FaucetRequest, faucetURL: string) {
     const dialogRef = this.loadingDialog.open('Claiming...');
 
     this.faucetService
-      .postFaucetRequest(faucetRequest)
+      .postFaucetRequest(faucetRequest, faucetURL)
       .then((faucetResponse) => {
         console.log(faucetResponse);
 

@@ -1,5 +1,6 @@
+import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { Key } from '../keys/key.model';
+import { Key, KeyType } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { CreateValidatorData } from './staking.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -19,19 +20,27 @@ export class StakingService {
   ) {}
 
   async createValidator(
-    key: Key,
+    keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
+    privateKey: Uint8Array,
   ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildCreateValidator(key, createValidatorData, gas, fee, false);
+    const txBuilder = await this.buildCreateValidator(
+      keyType,
+      createValidatorData,
+      gas,
+      fee,
+      privateKey,
+    );
     return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToCreateValidator(
-    key: Key,
+    keyType: KeyType,
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    privateKey: Uint8Array,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -42,24 +51,27 @@ export class StakingService {
       amount: '1',
     };
     const simulatedTxBuilder = await this.buildCreateValidator(
-      key,
+      keyType,
       createValidatorData,
       dummyGas,
       dummyFee,
-      true,
+      privateKey,
     );
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
   }
 
   async buildCreateValidator(
-    key: Key,
+    keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    isSimulation: boolean,
+    privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = this.key.getPrivKey(key.type, createValidatorData.privateKey);
+    const privKey = createCosmosPrivateKeyFromUint8Array(keyType, privateKey);
+    if (!privKey) {
+      throw Error('Invalid privateKey!');
+    }
     const pubKey = privKey.pubKey();
     const accAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
     const valAddress = cosmosclient.ValAddress.fromPublicKey(pubKey);
@@ -82,13 +94,9 @@ export class StakingService {
       throw Error('validator_address mismatch!');
     }
 
-    const base64DecodedPublicKey = Uint8Array.from(
-      Buffer.from(createValidatorData.pubkey, 'base64'),
-    );
-    const publicKey = new proto.cosmos.crypto.ed25519.PubKey({
-      key: base64DecodedPublicKey,
-    });
-    const packAnyPublicKey = cosmosclient.codec.packAny(publicKey);
+    const pubKeyJson = JSON.parse(createValidatorData.pubkey);
+    const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
+    const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
 
     // build tx
     const createValidatorTxData = {
@@ -100,20 +108,14 @@ export class StakingService {
         details: createValidatorData.details,
       },
       commission: {
-        rate: isSimulation
-          ? (parseInt(createValidatorData.rate) / 100).toFixed(2)
-          : createValidatorData.rate,
-        max_rate: isSimulation
-          ? (parseInt(createValidatorData.max_rate) / 100).toFixed(2)
-          : createValidatorData.max_rate,
-        max_change_rate: isSimulation
-          ? (parseInt(createValidatorData.max_change_rate) / 100).toFixed(2)
-          : createValidatorData.max_change_rate,
+        rate: createValidatorData.rate,
+        max_rate: createValidatorData.max_rate,
+        max_change_rate: createValidatorData.max_change_rate,
       },
       min_self_delegation: createValidatorData.min_self_delegation,
       delegator_address: createValidatorData.delegator_address,
       validator_address: createValidatorData.validator_address,
-      pubkey: packAnyPublicKey,
+      pubkey: packedAnyCosmosValConsPublicKey,
       value: {
         denom: createValidatorData.denom,
         amount: createValidatorData.amount,

@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'auction',
     loadChildren: () => import('./pages/auction/auction.module').then((m) => m.AppAuctionModule),
   },
+  {
+    path: 'staking',
+    loadChildren: () => import('./pages/staking/staking.module').then((m) => m.AppStakingModule),
+  },
 ];
 
 @NgModule({

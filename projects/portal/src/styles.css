@@ -29,4 +29,6 @@ mat-progress-spinner {
   margin: 1em auto;
 }
 
-
+mat-dialog-container {
+  background: #3734B0 !important;
+}

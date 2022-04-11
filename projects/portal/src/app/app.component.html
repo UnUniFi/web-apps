@@ -6,6 +6,7 @@
   [searchResult]="searchResult$ | async"
   (appSubmitSearchResult)="onSubmitSearchResult($event)"
   (appChangeInputValue)="onChangeInputValue($event)"
+  (appConnectWallet)="onConnectWallet($event)"
   (appChangeConfig)="onChangeConfig($event)"
 >
   <router-outlet></router-outlet>

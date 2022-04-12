@@ -1,10 +1,8 @@
 <h2 class="mb-0">Account Info</h2>
 <ng-container *ngIf="baseAccount === undefined || null; then empty; else exist"></ng-container>
-
 <ng-template #empty>
   <p class="ml-4">*This account has no denoms</p>
 </ng-template>
-
 <ng-template #exist>
   <mat-card class="mb-4" *ngIf="baseAccount">
     <mat-list>

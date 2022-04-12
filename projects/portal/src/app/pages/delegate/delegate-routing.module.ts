@@ -1,12 +1,12 @@
 import { WalletGuard } from '../../models/wallets/wallet.guard';
-import { CreateValidatorComponent } from './create-validator/create-validator.component';
+import { DelegateComponent } from './delegate.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'create-validator',
-    component: CreateValidatorComponent,
+    path: '',
+    component: DelegateComponent,
     canActivate: [WalletGuard],
   },
 ];
@@ -15,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class StakingRoutingModule {}
+export class DelegateRoutingModule {}

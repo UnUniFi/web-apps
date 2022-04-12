@@ -15,11 +15,11 @@ export type validatorWithShareType = {
 };
 
 @Component({
-  selector: 'view-staking',
-  templateUrl: './staking.component.html',
-  styleUrls: ['./staking.component.css'],
+  selector: 'view-delegate',
+  templateUrl: './delegate.component.html',
+  styleUrls: ['./delegate.component.css'],
 })
-export class StakingComponent implements OnInit {
+export class DelegateComponent implements OnInit {
   @Input()
   validators?: validatorType[] | null;
 

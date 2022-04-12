@@ -1,5 +1,5 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
-import { validatorType, validatorWithShareType } from '../../views/staking/staking.component';
+import { validatorType, validatorWithShareType } from '../../views/delegate/delegate.component';
 import { Component, OnInit } from '@angular/core';
 import { rest } from '@cosmos-client/core';
 import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
@@ -7,11 +7,11 @@ import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-staking',
-  templateUrl: './staking.component.html',
-  styleUrls: ['./staking.component.css'],
+  selector: 'app-delegate',
+  templateUrl: './delegate.component.html',
+  styleUrls: ['./delegate.component.css'],
 })
-export class StakingComponent implements OnInit {
+export class DelegateComponent implements OnInit {
   validatorsList$: Observable<QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod>;
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;

@@ -29,10 +29,7 @@
     </mat-list>
 
     <mat-nav-list>
-      <mat-list-item
-        *ngFor="let validator of validators; last as last"
-        routerLink="{{ validator.val.operator_address }}"
-      >
+      <mat-list-item *ngFor="let validator of validators; last as last">
         <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }"> circle </mat-icon>
         <span class="w-1/2 break-all text-sm sm:text-base">{{
           validator.val.operator_address

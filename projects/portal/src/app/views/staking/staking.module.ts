@@ -1,11 +1,13 @@
+import { PipesModule } from '../../pipes/pipes.module';
 import { MaterialModule } from '../../views/material.module';
+import { StakingComponent } from './staking.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, RouterModule, MaterialModule],
-  exports: [],
+  declarations: [StakingComponent],
+  imports: [CommonModule, RouterModule, MaterialModule, PipesModule],
+  exports: [StakingComponent],
 })
 export class StakingModule {}

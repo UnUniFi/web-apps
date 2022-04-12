@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'delegate',
     loadChildren: () => import('./pages/delegate/delegate.module').then((m) => m.AppDelegateModule),
   },
+  {
+    path: 'vote',
+    loadChildren: () => import('./pages/vote/vote.module').then((m) => m.AppVoteModule),
+  },
 ];
 
 @NgModule({

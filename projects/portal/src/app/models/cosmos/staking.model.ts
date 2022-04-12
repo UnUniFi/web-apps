@@ -1,5 +1,4 @@
 export type CreateValidatorData = {
-  privateKey: Uint8Array;
   moniker: string;
   identity?: string;
   website?: string;

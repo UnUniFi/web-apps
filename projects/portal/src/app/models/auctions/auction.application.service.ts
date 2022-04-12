@@ -97,9 +97,7 @@ export class AuctionApplicationService {
       }
     } catch (error) {
       const msg = (error as Error).toString();
-      this.snackBar.open(`Error has occured: ${msg}`, undefined, {
-        duration: 6000,
-      });
+      this.snackBar.open(`Error has occurred: ${msg}`, 'Close');
       return;
     } finally {
       dialogRef.close();

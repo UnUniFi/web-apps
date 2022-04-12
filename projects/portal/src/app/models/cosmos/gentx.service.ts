@@ -1,4 +1,3 @@
-import { ConfigService } from '../config.service';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
@@ -10,11 +9,7 @@ import { cosmosclient, proto } from '@cosmos-client/core';
   providedIn: 'root',
 })
 export class GentxService {
-  constructor(
-    private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
-    private readonly configS: ConfigService,
-  ) {}
+  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) {}
 
   async gentx(key: Key, gentxData: GentxData): Promise<{ [k: string]: any }> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);

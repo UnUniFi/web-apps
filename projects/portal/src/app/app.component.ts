@@ -1,10 +1,11 @@
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
+import { WalletApplicationService } from './models/wallets/wallet.application.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
-import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
+import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +14,10 @@ import { mergeMap, map } from 'rxjs/operators';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  config: Config;
+  config$: Observable<Config | undefined>;
+  configs?: string[];
+  navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
+  selectedConfig$: Observable<string | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -33,15 +37,30 @@ export class AppComponent {
     private router: Router,
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly walletAPplicationService: WalletApplicationService,
   ) {
-    this.config = this.configS.config;
-    if (this.config.extension?.faucet !== undefined) {
-      this.config.extension.navigations.unshift({
-        name: 'Faucet',
-        link: '/faucet',
-        icon: 'clean_hands',
-      });
-    }
+    this.config$ = this.configS.config$;
+    this.configs = this.configS.configs.map((config) => config.id);
+    this.selectedConfig$ = this.config$.pipe(map((config) => config?.id));
+    this.navigations$ = this.config$.pipe(
+      map((config) => {
+        if (config?.extension?.faucet != undefined) {
+          config.extension.navigations.unshift({
+            name: 'Faucet',
+            link: '/portal/faucet',
+            icon: 'clean_hands',
+          });
+        }
+        if (config?.extension?.monitor != undefined) {
+          config.extension.navigations.unshift({
+            name: 'Monitor',
+            link: '/portal/monitor',
+            icon: 'monitor',
+          });
+        }
+        return config?.extension?.navigations;
+      }),
+    );
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {
@@ -50,11 +69,14 @@ export class AppComponent {
       }),
     );
 
-    this.matchAccAddressPattern$ = this.searchBoxInputValue$.asObservable().pipe(
-      map((value) => {
-        const prefix = this.config.bech32Prefix?.accAddr ? this.config.bech32Prefix?.accAddr : '';
-        const prefixCount = this.config.bech32Prefix?.accAddr.length
-          ? this.config.bech32Prefix?.accAddr.length
+    this.matchAccAddressPattern$ = combineLatest([
+      this.config$,
+      this.searchBoxInputValue$.asObservable(),
+    ]).pipe(
+      map(([config, value]) => {
+        const prefix = config?.bech32Prefix?.accAddr ? config.bech32Prefix?.accAddr : '';
+        const prefixCount = config?.bech32Prefix?.accAddr.length
+          ? config.bech32Prefix?.accAddr.length
           : 0;
         const regExp = /^[0-9a-z]{39}$/;
         return regExp.test(value.slice(prefixCount)) && value.substring(0, prefixCount) === prefix;
@@ -199,5 +221,14 @@ export class AppComponent {
 
   onChangeInputValue(value: string) {
     this.searchBoxInputValue$.next(value);
+  }
+
+  // WIP
+  async onConnectWallet($event: {}) {
+    const cosmosWallet = await this.walletAPplicationService.connectWalletDialog();
+  }
+
+  onChangeConfig(value: string) {
+    this.configS.setCurrentConfig(value);
   }
 }

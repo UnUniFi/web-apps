@@ -1,13 +1,12 @@
-import { Key } from '../../../../models/keys/key.model';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { proto } from '@cosmos-client/core';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type SendOnSubmitEvent = {
-  key: Key;
+  currentStoredWallet: StoredWallet;
   toAddress: string;
   amount: proto.cosmos.base.v1beta1.ICoin[];
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  privateKey: Uint8Array;
   coins: proto.cosmos.base.v1beta1.ICoin[];
 };
 
@@ -18,7 +17,7 @@ export type SendOnSubmitEvent = {
 })
 export class SendComponent implements OnInit {
   @Input()
-  key?: Key | null;
+  currentStoredWallet?: StoredWallet | null;
 
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
@@ -27,7 +26,7 @@ export class SendComponent implements OnInit {
   amount?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<SendOnSubmitEvent>;
@@ -44,9 +43,12 @@ export class SendComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  onSubmit(toAddress: string, privateKeyString: string, minimumGasPrice: string) {
+  onSubmit(toAddress: string, minimumGasPrice: string) {
+    if (!this.currentStoredWallet) {
+      return;
+    }
     if (!this.amount) {
       return;
     }
@@ -55,12 +57,8 @@ export class SendComponent implements OnInit {
     }
     this.selectedGasPrice.amount = minimumGasPrice.toString();
 
-    const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
-    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex')
-    const privateKey = Uint8Array.from(privateKeyBuffer)
-
     this.appSubmit.emit({
-      key: this.key!,
+      currentStoredWallet: this.currentStoredWallet,
       toAddress,
       amount: this.amount
         .filter((coin) => {
@@ -71,7 +69,6 @@ export class SendComponent implements OnInit {
           amount: coin.amount?.toString(),
         })),
       minimumGasPrice: this.selectedGasPrice,
-      privateKey,
       coins: this.coins!,
     });
   }

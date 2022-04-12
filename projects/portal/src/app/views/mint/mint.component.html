@@ -28,7 +28,7 @@
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">
           <span>{{ collateral.liquidation_ratio | floor }}</span>
-          <span class="text-gray-500 text-sm"
+          <span class="text-gray-300 text-sm"
             >{{ collateral.liquidation_ratio | decimals: 6 }}
           </span>
         </span>
@@ -44,7 +44,10 @@
       <mat-list-item>
         <span>Stability Fee:</span>
         <span class="flex-auto"></span>
-        <span>{{ collateral.stability_fee }}</span>
+        <span class="ml-2 break-all">
+          <span>{{ collateral.stability_fee | floor }}</span>
+          <span class="text-gray-300 text-sm">{{ collateral.stability_fee | decimals: 15 }} </span>
+        </span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
@@ -58,7 +61,7 @@
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">
           <span>{{ collateral.liquidation_penalty | floor }}</span>
-          <span class="text-gray-500 text-sm"
+          <span class="text-gray-300 text-sm"
             >{{ collateral.liquidation_penalty | decimals: 6 }}
           </span>
         </span>
@@ -81,7 +84,7 @@
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">
           <span>{{ collateral.keeper_reward_percentage | floor }}</span>
-          <span class="text-gray-500 text-sm"
+          <span class="text-gray-300 text-sm"
             >{{ collateral.keeper_reward_percentage | decimals: 9 }}
           </span>
         </span>

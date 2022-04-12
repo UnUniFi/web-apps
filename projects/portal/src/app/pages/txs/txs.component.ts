@@ -21,7 +21,7 @@ export type PaginationInfo = {
 export class TxsComponent implements OnInit {
   pollingInterval = 30;
   pageSizeOptions = [5, 10, 20, 50, 100];
-  txTypeOptions?: string[];
+  txTypeOptions$?: Observable<string[] | undefined>;
 
   defaultPageSize = this.pageSizeOptions[1];
   defaultPageNumber = 1;
@@ -41,13 +41,15 @@ export class TxsComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
   ) {
-    this.txTypeOptions = this.configService.config.extension?.messageModules;
+    this.txTypeOptions$ = this.configService.config$.pipe(
+      map((config) => config?.extension?.messageModules),
+    );
     const timer$ = timer(0, this.pollingInterval * 1000);
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
 
-    this.selectedTxType$ = this.route.queryParams.pipe(
-      map((params) =>
-        this.txTypeOptions?.includes(params.txType) ? params.txType : this.defaultTxType,
+    this.selectedTxType$ = combineLatest([this.txTypeOptions$, this.route.queryParams]).pipe(
+      map(([options, params]) =>
+        options?.includes(params.txType) ? params.txType : this.defaultTxType,
       ),
     );
 

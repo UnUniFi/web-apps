@@ -19,11 +19,11 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
   getPrivKey(type: KeyType, privateKey: Uint8Array) {
     const privKeyBuffer = Buffer.from(privateKey)
     switch (type) {
-      case KeyType.SECP256K1:
+      case KeyType.secp256k1:
         return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
-      case KeyType.ED25519:
+      case KeyType.ed25519:
         throw Error('not supported yet');
-      case KeyType.SR25519:
+      case KeyType.sr25519:
         throw Error('not supported yet');
     }
   }
@@ -31,11 +31,11 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
   getPubKey(type: KeyType, publicKey: string) {
     const pubKeyBuffer = Buffer.from(publicKey, 'hex');
     switch (type) {
-      case KeyType.SECP256K1:
+      case KeyType.secp256k1:
         return new proto.cosmos.crypto.secp256k1.PubKey({ key: pubKeyBuffer });
-      case KeyType.ED25519:
+      case KeyType.ed25519:
         throw Error('not supported yet');
-      case KeyType.SR25519:
+      case KeyType.sr25519:
         throw Error('not supported yet');
     }
   }

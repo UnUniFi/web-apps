@@ -13,7 +13,10 @@ import { mergeMap, map } from 'rxjs/operators';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  config: Config;
+  config$: Observable<Config | undefined>;
+  configs?: string[];
+  navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
+  selectedConfig$: Observable<string | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -34,7 +37,21 @@ export class AppComponent {
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
   ) {
-    this.config = this.configS.config;
+    this.config$ = this.configS.config$;
+    this.configs = this.configS.configs.map((config) => config.id);
+    this.selectedConfig$ = this.config$.pipe(map((config) => config?.id));
+    this.navigations$ = this.config$.pipe(
+      map((config) => {
+        if (config?.extension?.monitor != undefined) {
+          config.extension.navigations.unshift({
+            name: 'Monitor',
+            link: '/explorer/monitor',
+            icon: 'monitor',
+          });
+        }
+        return config?.extension?.navigations;
+      }),
+    );
 
     this.matchBlockHeightPattern$ = this.searchBoxInputValue$.asObservable().pipe(
       map((value) => {
@@ -43,11 +60,14 @@ export class AppComponent {
       }),
     );
 
-    this.matchAccAddressPattern$ = this.searchBoxInputValue$.asObservable().pipe(
-      map((value) => {
-        const prefix = this.config.bech32Prefix?.accAddr ? this.config.bech32Prefix?.accAddr : '';
-        const prefixCount = this.config.bech32Prefix?.accAddr.length
-          ? this.config.bech32Prefix?.accAddr.length
+    this.matchAccAddressPattern$ = combineLatest([
+      this.config$,
+      this.searchBoxInputValue$.asObservable(),
+    ]).pipe(
+      map(([config, value]) => {
+        const prefix = config?.bech32Prefix?.accAddr ? config.bech32Prefix?.accAddr : '';
+        const prefixCount = config?.bech32Prefix?.accAddr.length
+          ? config.bech32Prefix?.accAddr.length
           : 0;
         const regExp = /^[0-9a-z]{39}$/;
         return regExp.test(value.slice(prefixCount)) && value.substring(0, prefixCount) === prefix;
@@ -192,5 +212,9 @@ export class AppComponent {
 
   onChangeInputValue(value: string) {
     this.searchBoxInputValue$.next(value);
+  }
+
+  onChangeConfig(value: string) {
+    this.configS.setCurrentConfig(value);
   }
 }

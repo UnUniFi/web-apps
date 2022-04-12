@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplyService } from './apply.service';
+import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class ApplyApplicationService {
     try {
       await this.api.sendMail(name, email, company, country, address, comment);
     } catch {
-      this.snackBar.open('Error has occured', undefined, { duration: 6000 });
+      this.snackBar.open('Error has occurred', undefined, { duration: 6000 });
       return;
     } finally {
       dialogRef.close();

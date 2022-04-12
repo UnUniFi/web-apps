@@ -1,5 +1,5 @@
 <app-view-create-validator
-  [key]="key$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async"
   [moniker]="moniker$ | async"
   [identity]="identity$ | async"
   [website]="website$ | async"
@@ -16,6 +16,6 @@
   [ip]="ip$ | async"
   [node_id]="node_id$ | async"
   [pubkey]="pubkey$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (submitCreateValidator)="appSubmitCreateValidator($event)"
 ></app-view-create-validator>

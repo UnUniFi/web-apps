@@ -17,6 +17,10 @@
       <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
         <span>{{ commission.amount | number: '1.6-6' }}</span>
         <span class="flex-auto"></span>
+        <span class="mr-2 break-all">
+          <span>{{ commission.amount | floor }}</span>
+          <span class="text-gray-500 text-sm">{{ commission.amount | decimals: 6 }}</span>
+        </span>
         <span>{{ commission.denom }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
@@ -38,6 +42,10 @@
       <mat-list-item *ngFor="let reward of rewards?.rewards?.rewards; last as last">
         <span>{{ reward.amount | number: '1.6-6' }}</span>
         <span class="flex-auto"></span>
+        <span class="mr-2 break-all">
+          <span>{{ reward.amount | floor }}</span>
+          <span class="text-gray-500 text-sm">{{ reward.amount | decimals: 6 }}</span>
+        </span>
         <span>{{ reward.denom }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>

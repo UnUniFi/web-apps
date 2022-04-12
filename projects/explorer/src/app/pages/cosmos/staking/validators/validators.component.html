@@ -1,1 +1,4 @@
-<view-validators [validators]="validators$ | async"></view-validators>
+<view-validators
+  [validators]="validators$ | async"
+  (toggleActiveChange)="onToggleChange($event)"
+></view-validators>

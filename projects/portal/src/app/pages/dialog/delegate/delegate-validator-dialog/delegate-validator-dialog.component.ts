@@ -50,11 +50,11 @@ export class DelegateValidatorDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: DelegateOnSubmitEvent) {
-    await this.stakingAppService.createDelegator(
+    const txHash = await this.stakingAppService.createDelegator(
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,
     );
-    this.matDialogRef.close();
+    this.matDialogRef.close(txHash);
   }
 }

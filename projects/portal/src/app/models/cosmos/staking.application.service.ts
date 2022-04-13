@@ -1,3 +1,4 @@
+import { DelegateValidatorDialogComponent } from '../../pages/dialog/delegate/delegate-validator-dialog/delegate-validator-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -12,7 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20066Validators,
+  InlineResponse20075,
+} from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
@@ -124,6 +128,14 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
+  async openConnectWalletStartDialog(validator: InlineResponse20066Validators): Promise<void> {
+    const txHash = await this.dialog
+      .open(DelegateValidatorDialogComponent, { data: validator })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
+
   async createDelegator(
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
@@ -219,6 +231,7 @@ export class StakingApplicationService {
 
     this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
+    return txHash;
+    // await this.router.navigate(['txs', txHash]);
   }
 }

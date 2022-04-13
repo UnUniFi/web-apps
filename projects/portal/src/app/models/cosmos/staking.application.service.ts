@@ -125,29 +125,100 @@ export class StakingApplicationService {
   }
 
   async createDelegator(
-    key: Key,
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
   ) {
-    const dialogRef = this.loadingDialog.open('Sending');
-    let txhash: string;
+    const privateWallet: StoredWallet & { privateKey: string } =
+      await this.walletApplicationService.openUnunifiKeyFormDialog();
+    if (!privateWallet || !privateWallet.privateKey) {
+      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
+      return;
+    }
+
+    if (!validatePrivateStoredWallet(privateWallet)) {
+      this.snackBar.open('Invalid Wallet info!', 'Close');
+      return;
+    }
+
+    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
+
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
+      return;
+    }
+
+    // simulate
+    let simulatedResultData: SimulatedTxResultResponse;
+    let gas: proto.cosmos.base.v1beta1.ICoin;
+    let fee: proto.cosmos.base.v1beta1.ICoin;
+
+    const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     try {
-      txhash = await this.staking.createDelegator(key, validatorAddress, amount, privateKey);
-    } catch {
-      this.snackBar.open('Error has occurred', undefined, {
-        duration: 6000,
-      });
+      simulatedResultData = await this.staking.simulateToCreateDelegator(
+        privateWallet.key_type,
+        validatorAddress,
+        amount,
+        minimumGasPrice,
+        privateKey,
+      );
+      gas = simulatedResultData.estimatedGasUsedWithMargin;
+      fee = simulatedResultData.estimatedFeeWithMargin;
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      return;
+    } finally {
+      dialogRefSimulating.close();
+    }
+
+    // ask the user to confirm the fee with a dialog
+    const txFeeConfirmedResult = await this.dialog
+      .open(TxFeeConfirmDialogComponent, {
+        data: {
+          fee,
+          isConfirmed: false,
+        },
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+      return;
+    }
+
+    const dialogRef = this.loadingDialog.open('Sending');
+
+    let createDelegatorResult: InlineResponse20075 | undefined;
+    let txHash: string | undefined;
+
+    try {
+      createDelegatorResult = await this.staking.createDelegator(
+        privateWallet.key_type,
+        validatorAddress,
+        amount,
+        gas,
+        fee,
+        privateKey,
+      );
+      txHash = createDelegatorResult.tx_response?.txhash;
+      if (txHash === undefined) {
+        throw Error('Invalid txHash!');
+      }
+    } catch (error) {
+      console.error(error);
+      const msg = (error as Error).toString();
+      this.snackBar.open(`An error has occur: ${msg}`, 'Close');
       return;
     } finally {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully sent', undefined, {
-      duration: 6000,
-    });
+    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txhash]);
+    await this.router.navigate(['txs', txHash]);
   }
 }

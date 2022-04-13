@@ -1,8 +1,9 @@
-name: CD Firebase Landing Page
+name: CD Firebase Prod
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,5 +27,5 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm i -g npm
       - run: npm ci
-      - run: npm run build --if-present -- --configuration=production --project=landing-page
+      - run: npm run build:all:prod
       - run: npx firebase deploy --only hosting --project=default --token=${{ secrets.FIREBASE_TOKEN }}

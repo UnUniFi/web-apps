@@ -44,5 +44,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# config.js
-projects/explorer/src/assets/config.js
+# firebase
+.firebase/*
+*.log

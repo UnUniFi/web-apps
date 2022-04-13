@@ -26,8 +26,12 @@ export class DelegateComponent implements OnInit {
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
 
+  @Output()
+  appSubmitDelegate: EventEmitter<InlineResponse20066Validators>;
+
   constructor() {
     this.toggleActiveChange = new EventEmitter();
+    this.appSubmitDelegate = new EventEmitter();
   }
 
   ngOnInit(): void {
@@ -53,5 +57,9 @@ export class DelegateComponent implements OnInit {
     if (value == 'inactive') {
       this.toggleActiveChange.emit(false);
     }
+  }
+
+  onSubmitDelegate(validator: InlineResponse20066Validators) {
+    this.appSubmitDelegate.emit(validator);
   }
 }

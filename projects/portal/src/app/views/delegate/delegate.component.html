@@ -47,6 +47,10 @@
         <span class="break-all text-sm sm:text-base">{{
           validator.val.commission?.commission_rates?.rate | percent
         }}</span>
+        <span class="flex-auto"></span>
+        <button mat-icon-button (click)="onSubmitDelegate(validator.val)">
+          <mat-icon>money</mat-icon>
+        </button>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>

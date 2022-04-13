@@ -1,8 +1,12 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
+import { StakingApplicationService } from '../../models/cosmos/staking.application.service';
 import { validatorType, validatorWithShareType } from '../../views/delegate/delegate.component';
 import { Component, OnInit } from '@angular/core';
 import { rest } from '@cosmos-client/core';
-import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20066Validators,
+  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
+} from '@cosmos-client/core/esm/openapi';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
@@ -19,7 +23,10 @@ export class DelegateComponent implements OnInit {
 
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(
+    private cosmosSDK: CosmosSDKService,
+    private readonly stakingAppService: StakingApplicationService,
+  ) {
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.staking.validators(sdk.rest)),
       map((result) => result.data),
@@ -82,5 +89,9 @@ export class DelegateComponent implements OnInit {
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);
+  }
+
+  onSubmitDelegate(validator: InlineResponse20066Validators) {
+    this.stakingAppService.openConnectWalletStartDialog(validator);
   }
 }

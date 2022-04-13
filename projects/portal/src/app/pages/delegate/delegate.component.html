@@ -1,4 +1,5 @@
 <view-delegate
   [validators]="validators$ | async"
   (toggleActiveChange)="onToggleChange($event)"
+  (appSubmitDelegate)="onSubmitDelegate($event)"
 ></view-delegate>

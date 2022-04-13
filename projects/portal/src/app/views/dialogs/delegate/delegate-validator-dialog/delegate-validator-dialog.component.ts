@@ -33,7 +33,8 @@ export class DelegateValidatorDialogComponent implements OnInit {
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = this.coins?.map((coin) => coin.denom!);
+    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
+    this.availableDenoms = ['uguu'];
     if (this.coins) {
       this.selectedAmount = { denom: this.coins[0].denom, amount: '0' };
     }

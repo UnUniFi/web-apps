@@ -71,7 +71,7 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
     const sec = String(this.now.getSeconds());
 
     // filename
-    const fileName = `wallet-backup-${this.data.id}-${year}${month}${date}${hour}${min}${sec}.json`;
+    const fileName = `wallet-backup-${this.data.id}-${year}${month}${date}${hour}${min}${sec}.txt`;
 
     // json
     const json = {

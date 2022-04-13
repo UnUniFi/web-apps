@@ -1,0 +1,7 @@
+<view-delegate-validator-dialog
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [coins]="coins$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [validator]="validator"
+  (appSubmit)="onSubmit($event)"
+></view-delegate-validator-dialog>

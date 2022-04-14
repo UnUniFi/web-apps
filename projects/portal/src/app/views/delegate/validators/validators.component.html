@@ -1,0 +1,57 @@
+<div class="flex flex-row items-end mb-2">
+  <h2 class="mb-0">Validators</h2>
+  <span class="flex-auto"></span>
+  <mat-button-toggle-group #tgl="matButtonToggleGroup" (change)="onToggleChange(tgl.value)">
+    <mat-button-toggle value="active">Active</mat-button-toggle>
+    <mat-button-toggle value="inactive">Inactive</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+<ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
+</ng-template>
+<ng-template #exist>
+  <mat-card>
+    <mat-list>
+      <mat-list-item>
+        <span class="w-3/5 break-all truncate pl-8 pr-8">Validator</span>
+        <span class="flex-auto"></span>
+        <span class="w-1/8 break-all truncate pr-4">Voting Power</span>
+        <span class="flex-auto"></span>
+        <span class="w-1/8 break-all truncate pr-4">Tokens</span>
+        <span class="flex-auto"></span>
+        <span class="w-1/8 break-all truncate">Commission</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+
+    <mat-nav-list>
+      <mat-list-item
+        *ngFor="let validator of validators; last as last"
+        (click)="onClickValidator(validator.val)"
+      >
+        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }"> circle </mat-icon>
+        <span class="w-1/2 break-all text-sm sm:text-base">{{
+          validator.val.operator_address
+        }}</span>
+        <span class="flex-auto"></span>
+        <span class="break-all text-sm sm:text-base">{{ validator.share | percent }}</span>
+        <span class="flex-auto"></span>
+        <span class="break-all text-sm sm:text-base">{{
+          validator.val.tokens | unitConversion
+        }}</span>
+        <span class="flex-auto"></span>
+        <span class="break-all text-sm sm:text-base">{{
+          validator.val.commission?.commission_rates?.rate | percent
+        }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-card>
+</ng-template>
+<ng-template #empty>
+  <p>There is no validators.</p>
+</ng-template>

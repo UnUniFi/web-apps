@@ -157,13 +157,63 @@ export class StakingService {
   }
 
   async createDelegator(
-    key: Key,
+    keyType: KeyType,
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    gas: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-  ) {
+  ): Promise<InlineResponse20075> {
+    const txBuilder = await this.buildCreateDelegator(
+      keyType,
+      validatorAddress,
+      amount,
+      gas,
+      fee,
+      privateKey,
+    );
+    return await this.txCommonService.announceTx(txBuilder);
+  }
+
+  async simulateToCreateDelegator(
+    keyType: KeyType,
+    validatorAddress: string,
+    amount: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    privateKey: Uint8Array,
+  ): Promise<SimulatedTxResultResponse> {
+    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const simulatedTxBuilder = await this.buildCreateDelegator(
+      keyType,
+      validatorAddress,
+      amount,
+      dummyGas,
+      dummyFee,
+      privateKey,
+    );
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+  }
+
+  async buildCreateDelegator(
+    keyType: KeyType,
+    validatorAddress: string,
+    amount: proto.cosmos.base.v1beta1.ICoin,
+    gas: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin,
+    privateKey: Uint8Array,
+  ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = this.key.getPrivKey(key.type, privateKey);
+    const privKey = this.key.getPrivKey(keyType, privateKey);
+    if (!privKey) {
+      throw Error('Invalid privateKey!');
+    }
     const pubKey = privKey.pubKey();
     const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
 
@@ -206,7 +256,8 @@ export class StakingService {
         },
       ],
       fee: {
-        gas_limit: cosmosclient.Long.fromString('200000'),
+        amount: [fee],
+        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
       },
     });
 
@@ -215,12 +266,6 @@ export class StakingService {
     const signDocBytes = txBuilder.signDocBytes(account.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
-    // broadcast
-    const result = await rest.tx.broadcastTx(sdk, {
-      tx_bytes: txBuilder.txBytes(),
-      mode: rest.tx.BroadcastTxMode.Block,
-    });
-
-    return result.data.tx_response?.txhash || '';
+    return txBuilder;
   }
 }

@@ -45,4 +45,13 @@
   >
     <span class="text-black">Delegate to this Validator</span>
   </button>
+  <ng-container *ngIf="isDelegated">
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickDelegateButton()"
+    >
+      <span class="text-black">Change Delegate from this Validator to Another</span>
+    </button>
+  </ng-container>
 </div>

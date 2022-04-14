@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
+import {
+  InlineResponse20063,
+  InlineResponse20066Validators,
+} from '@cosmos-client/core/esm/openapi/api';
 import * as crypto from 'crypto';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 @Component({
   selector: 'view-delegate-menu-dialog',
@@ -10,6 +14,15 @@ import * as crypto from 'crypto';
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   selectedValidator?: InlineResponse20066Validators | null;
+
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
+
+  @Input()
+  delegations?: InlineResponse20063 | null;
+
+  @Input()
+  isDelegated?: boolean | null;
 
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;

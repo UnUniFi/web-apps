@@ -39,6 +39,14 @@ const routes: Routes = [
     path: 'staking',
     loadChildren: () => import('./pages/staking/staking.module').then((m) => m.AppStakingModule),
   },
+  {
+    path: 'delegate',
+    loadChildren: () => import('./pages/delegate/delegate.module').then((m) => m.AppDelegateModule),
+  },
+  {
+    path: 'vote',
+    loadChildren: () => import('./pages/vote/vote.module').then((m) => m.AppVoteModule),
+  },
 ];
 
 @NgModule({

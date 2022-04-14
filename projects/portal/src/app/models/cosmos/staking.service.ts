@@ -98,7 +98,7 @@ export class StakingService {
     const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
     const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
 
-    // build tx
+    // build tx ... Note: commission percent rate values are converted here.
     const createValidatorTxData = {
       description: {
         moniker: createValidatorData.moniker,
@@ -108,9 +108,9 @@ export class StakingService {
         details: createValidatorData.details,
       },
       commission: {
-        rate: createValidatorData.rate,
-        max_rate: createValidatorData.max_rate,
-        max_change_rate: createValidatorData.max_change_rate,
+        rate: `${createValidatorData.rate}${'0000000000000000'}`,
+        max_rate: `${createValidatorData.max_rate}${'0000000000000000'}`,
+        max_change_rate: `${createValidatorData.max_change_rate}${'0000000000000000'}`,
       },
       min_self_delegation: createValidatorData.min_self_delegation,
       delegator_address: createValidatorData.delegator_address,

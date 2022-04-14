@@ -30,20 +30,19 @@
     <div class="flex flex-row content-content items-end">
       <mat-form-field class="flex-auto">
         <mat-label>Delegate Denom</mat-label>
-        <mat-select
+        <input
           [(ngModel)]="selectedAmount && selectedAmount.denom"
           name="delegate-denom"
+          matInput
+          type="text"
           required
-        >
-          <mat-option *ngFor="let denom of availableDenoms" [value]="denom">
-            {{ denom }}
-          </mat-option>
-        </mat-select>
+          readonly
+        />
       </mat-form-field>
       <mat-form-field class="flex-auto">
         <mat-label>Delegate Amount</mat-label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.denom"
+          [(ngModel)]="selectedAmount && selectedAmount.amount"
           name="delegate-amount"
           matInput
           type="number"

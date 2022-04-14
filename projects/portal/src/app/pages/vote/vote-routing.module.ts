@@ -9,7 +9,11 @@ const routes: Routes = [
     path: 'proposals',
     component: ProposalsComponent,
     canActivate: [WalletGuard],
-    children: [{ path: ':address', component: ProposalComponent }],
+  },
+  {
+    path: 'proposals/:address',
+    component: ProposalComponent,
+    canActivate: [WalletGuard],
   },
 ];
 

@@ -10,15 +10,17 @@ export type DelegateOnSubmitEvent = {
 };
 
 @Component({
-  selector: 'view-delegate-validator-dialog',
-  templateUrl: './delegate-validator-dialog.component.html',
-  styleUrls: ['./delegate-validator-dialog.component.css'],
+  selector: 'view-delegate-form-dialog',
+  templateUrl: './delegate-form-dialog.component.html',
+  styleUrls: ['./delegate-form-dialog.component.css'],
 })
-export class DelegateValidatorDialogComponent implements OnInit {
+export class DelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  uguuBalance?: string | null;
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -35,9 +37,8 @@ export class DelegateValidatorDialogComponent implements OnInit {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
-    if (this.coins) {
-      this.selectedAmount = { denom: this.coins[0].denom, amount: '0' };
-    }
+
+    this.selectedAmount = { denom: 'uguu', amount: '0' };
   }
 
   ngOnChanges(): void {
@@ -48,10 +49,10 @@ export class DelegateValidatorDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getColorCode(validator: InlineResponse20066Validators) {
+  getColorCode(address: string) {
     const hash = crypto
       .createHash('sha256')
-      .update(Buffer.from(validator.operator_address ?? ''))
+      .update(Buffer.from(address ?? ''))
       .digest()
       .toString('hex');
     return `#${hash.substr(0, 6)}`;

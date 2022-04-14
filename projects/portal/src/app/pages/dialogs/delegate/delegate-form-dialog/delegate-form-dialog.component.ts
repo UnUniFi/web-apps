@@ -8,25 +8,26 @@ import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { DelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/delegate-validator-dialog/delegate-validator-dialog.component';
+import { DelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-delegate-validator-dialog',
-  templateUrl: './delegate-validator-dialog.component.html',
-  styleUrls: ['./delegate-validator-dialog.component.css'],
+  selector: 'app-delegate-form-dialog',
+  templateUrl: './delegate-form-dialog.component.html',
+  styleUrls: ['./delegate-form-dialog.component.css'],
 })
-export class DelegateValidatorDialogComponent implements OnInit {
+export class DelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: InlineResponse20066Validators | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public readonly data: InlineResponse20066Validators,
-    public matDialogRef: MatDialogRef<DelegateValidatorDialogComponent>,
+    public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
@@ -42,6 +43,12 @@ export class DelegateValidatorDialogComponent implements OnInit {
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
       mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
       map((result) => result.data.balances),
+    );
+    this.uguuBalance$ = this.coins$.pipe(
+      map((coins) => {
+        const balance = coins?.find((coin) => coin.denom == 'uguu');
+        return balance ? balance.amount! : '0';
+      }),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

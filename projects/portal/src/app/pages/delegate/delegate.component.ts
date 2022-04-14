@@ -92,6 +92,6 @@ export class DelegateComponent implements OnInit {
   }
 
   onSubmitDelegate(validator: InlineResponse20066Validators) {
-    this.stakingAppService.openConnectWalletStartDialog(validator);
+    this.stakingAppService.openDelegateFormDialog(validator);
   }
 }

@@ -1,4 +1,4 @@
-import { DelegateValidatorDialogComponent } from '../../pages/dialog/delegate/delegate-validator-dialog/delegate-validator-dialog.component';
+import { DelegateFormDialogComponent } from '../../pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -128,9 +128,9 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openConnectWalletStartDialog(validator: InlineResponse20066Validators): Promise<void> {
+  async openDelegateFormDialog(validator: InlineResponse20066Validators): Promise<void> {
     const txHash = await this.dialog
-      .open(DelegateValidatorDialogComponent, { data: validator })
+      .open(DelegateFormDialogComponent, { data: validator })
       .afterClosed()
       .toPromise();
     await this.router.navigate(['txs', txHash]);

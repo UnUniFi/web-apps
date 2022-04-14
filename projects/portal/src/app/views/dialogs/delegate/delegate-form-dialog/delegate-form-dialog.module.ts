@@ -1,12 +1,12 @@
 import { MaterialModule } from '../../../material.module';
-import { DelegateValidatorDialogComponent } from './delegate-validator-dialog.component';
+import { DelegateFormDialogComponent } from './delegate-form-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [DelegateValidatorDialogComponent],
+  declarations: [DelegateFormDialogComponent],
   imports: [CommonModule, FormsModule, MaterialModule],
-  exports: [DelegateValidatorDialogComponent],
+  exports: [DelegateFormDialogComponent],
 })
-export class DelegateValidatorDialogModule {}
+export class DelegateFormDialogModule {}

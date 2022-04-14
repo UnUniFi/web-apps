@@ -1,7 +1,7 @@
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppDelegateValidatorDialogModule } from './pages/dialog/delegate/delegate-validator-dialog/delegate-validator-dialog.module';
+import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
@@ -57,7 +57,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
     UnunifiKeyFormDialogModule,
-    AppDelegateValidatorDialogModule,
+    AppDelegateFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

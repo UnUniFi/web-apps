@@ -59,43 +59,52 @@ export class WalletApplicationService {
       }
 
       if (selectOrImportOrCreate === 'select') {
-        await this.ununifiSelectWallet();
+        const isSuccessSelect = await this.ununifiSelectWallet();
+        if (isSuccessSelect) {
+          window.location.reload();
+        }
         return;
       }
 
       if (selectOrImportOrCreate === 'import') {
-        await this.ununifiImportWallet();
+        const isSuccessImport = await this.ununifiImportWallet();
+        if (isSuccessImport) {
+          window.location.reload();
+        }
         return;
       }
 
       if (selectOrImportOrCreate === 'create') {
-        await this.ununifiCreateWallet();
+        const isSuccessCreate = await this.ununifiCreateWallet();
+        if (isSuccessCreate) {
+          window.location.reload();
+        }
         return;
       }
     }
   }
 
-  async ununifiSelectWallet(): Promise<void> {
+  async ununifiSelectWallet(): Promise<boolean> {
     const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
     if (!selectedStoredWallet) {
       this.snackBar.open('Dialog was canceled!', 'Close');
-      return;
+      return false;
     }
     await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
     await this.openConnectWalletCompletedDialog(selectedStoredWallet);
-    return;
+    return true;
   }
 
-  async ununifiImportWallet(): Promise<void> {
+  async ununifiImportWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiImportWalletWithMnemonicDialog();
     if (!privateWallet) {
       this.snackBar.open('Dialog was canceled!', 'Close');
-      return;
+      return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
       this.snackBar.open('Backup failed! Try again.', 'Close');
-      return;
+      return false;
     }
     const storedWallet = {
       id: privateWallet.id,
@@ -107,19 +116,19 @@ export class WalletApplicationService {
     await this.walletService.setStoredWallet(storedWallet);
     await this.walletService.setCurrentStoredWallet(storedWallet);
     await this.openConnectWalletCompletedDialog(storedWallet);
-    return;
+    return true;
   }
 
-  async ununifiCreateWallet(): Promise<void> {
+  async ununifiCreateWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiCreateWalletDialog();
     if (!privateWallet) {
       this.snackBar.open('Dialog was canceled!', 'Close');
-      return;
+      return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
       this.snackBar.open('Backup failed! Try again.', 'Close');
-      return;
+      return false;
     }
     const storedWallet = {
       id: privateWallet.id,
@@ -131,7 +140,7 @@ export class WalletApplicationService {
     await this.walletService.setStoredWallet(storedWallet);
     await this.walletService.setCurrentStoredWallet(storedWallet);
     await this.openConnectWalletCompletedDialog(storedWallet);
-    return;
+    return true;
   }
 
   async openConnectWalletStartDialog(): Promise<WalletType | undefined> {

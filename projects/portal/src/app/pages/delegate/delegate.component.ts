@@ -91,7 +91,7 @@ export class DelegateComponent implements OnInit {
     this.activeEnabled.next(value);
   }
 
-  onSubmitDelegate(validator: InlineResponse20066Validators) {
-    this.stakingAppService.openDelegateFormDialog(validator);
+  onSelectValidator(validator: InlineResponse20066Validators) {
+    this.stakingAppService.openDelegateMenuDialog(validator);
   }
 }

@@ -27,11 +27,11 @@ export class DelegateComponent implements OnInit {
   toggleActiveChange: EventEmitter<boolean>;
 
   @Output()
-  appSubmitDelegate: EventEmitter<InlineResponse20066Validators>;
+  appClickValidator: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.toggleActiveChange = new EventEmitter();
-    this.appSubmitDelegate = new EventEmitter();
+    this.appClickValidator = new EventEmitter();
   }
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class DelegateComponent implements OnInit {
     }
   }
 
-  onSubmitDelegate(validator: InlineResponse20066Validators) {
-    this.appSubmitDelegate.emit(validator);
+  onClickValidator(validator: InlineResponse20066Validators) {
+    this.appClickValidator.emit(validator);
   }
 }

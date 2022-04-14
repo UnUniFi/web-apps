@@ -31,7 +31,7 @@
     <mat-nav-list>
       <mat-list-item
         *ngFor="let validator of validators; last as last"
-        routerLink="validators/{{ validator.val.operator_address }}"
+        (click)="onClickValidator(validator.val)"
       >
         <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }"> circle </mat-icon>
         <span class="w-1/2 break-all text-sm sm:text-base">{{
@@ -47,10 +47,6 @@
         <span class="break-all text-sm sm:text-base">{{
           validator.val.commission?.commission_rates?.rate | percent
         }}</span>
-        <span class="flex-auto"></span>
-        <button mat-icon-button (click)="onSubmitDelegate(validator.val)">
-          <mat-icon>money</mat-icon>
-        </button>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>

@@ -1,4 +1,5 @@
 import { DelegateFormDialogComponent } from '../../pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
+import { DelegateMenuDialogComponent } from '../../pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -31,6 +32,21 @@ export class StakingApplicationService {
     private readonly staking: StakingService,
     private readonly walletApplicationService: WalletApplicationService,
   ) {}
+
+  async openDelegateMenuDialog(validator: InlineResponse20066Validators): Promise<void> {
+    await this.dialog
+      .open(DelegateMenuDialogComponent, { data: validator })
+      .afterClosed()
+      .toPromise();
+  }
+
+  async openDelegateFormDialog(validator: InlineResponse20066Validators): Promise<void> {
+    const txHash = await this.dialog
+      .open(DelegateFormDialogComponent, { data: validator })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
 
   // WIP
   async createValidator(
@@ -125,14 +141,6 @@ export class StakingApplicationService {
 
     this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
-  }
-
-  async openDelegateFormDialog(validator: InlineResponse20066Validators): Promise<void> {
-    const txHash = await this.dialog
-      .open(DelegateFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

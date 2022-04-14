@@ -1,1 +1,5 @@
-<view-delegate-menu-dialog></view-delegate-menu-dialog>>
+<view-delegate-menu-dialog
+  [selectedValidator]="selectedValidator"
+  (appDelegate)="onSubmitDelegate($event)"
+  (appDetail)="onSubmitDetail($event)"
+></view-delegate-menu-dialog>

@@ -65,8 +65,7 @@ export class DelegateFormDialogComponent implements OnInit {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.selectedGasPrice.amount = minimumGasPrice.toString();
-
+    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({ amount: this.selectedAmount, minimumGasPrice: this.selectedGasPrice });
   }
 

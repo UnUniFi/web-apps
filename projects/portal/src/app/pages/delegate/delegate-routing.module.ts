@@ -1,17 +1,14 @@
 import { WalletGuard } from '../../models/wallets/wallet.guard';
-import { DelegateComponent } from './delegate.component';
 import { ValidatorComponent } from './validator/validator.component';
+import { ValidatorsComponent } from './validators/validators.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
-    component: DelegateComponent,
-    canActivate: [WalletGuard],
-  },
-  {
     path: 'validators',
+    component: ValidatorsComponent,
+    canActivate: [WalletGuard],
     children: [{ path: ':address', component: ValidatorComponent }],
   },
 ];

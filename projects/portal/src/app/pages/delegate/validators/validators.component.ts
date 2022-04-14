@@ -1,6 +1,9 @@
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
-import { StakingApplicationService } from '../../models/cosmos/staking.application.service';
-import { validatorType, validatorWithShareType } from '../../views/delegate/delegate.component';
+import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
+import {
+  validatorType,
+  validatorWithShareType,
+} from '../../../views/delegate/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
 import { rest } from '@cosmos-client/core';
 import {
@@ -11,11 +14,11 @@ import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-delegate',
-  templateUrl: './delegate.component.html',
-  styleUrls: ['./delegate.component.css'],
+  selector: 'app-validators',
+  templateUrl: './validators.component.html',
+  styleUrls: ['./validators.component.css'],
 })
-export class DelegateComponent implements OnInit {
+export class ValidatorsComponent implements OnInit {
   validatorsList$: Observable<QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod>;
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;

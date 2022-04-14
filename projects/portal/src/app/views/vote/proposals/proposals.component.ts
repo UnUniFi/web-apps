@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { InlineResponse20052 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
-  selector: 'view-vote',
-  templateUrl: './vote.component.html',
-  styleUrls: ['./vote.component.css'],
+  selector: 'view-proposals',
+  templateUrl: './proposals.component.html',
+  styleUrls: ['./proposals.component.css'],
 })
-export class VoteComponent implements OnInit {
+export class ProposalsComponent implements OnInit {
   @Input()
   proposals?: InlineResponse20052 | null;
 

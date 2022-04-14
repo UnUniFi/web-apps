@@ -1,12 +1,12 @@
 import { MaterialModule } from '../../material.module';
-import { ProposalComponent } from './proposal.component';
+import { ProposalsComponent } from './proposals.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [ProposalComponent],
+  declarations: [ProposalsComponent],
   imports: [CommonModule, RouterModule, MaterialModule],
-  exports: [ProposalComponent],
+  exports: [ProposalsComponent],
 })
-export class ProposalModule {}
+export class VoteModule {}

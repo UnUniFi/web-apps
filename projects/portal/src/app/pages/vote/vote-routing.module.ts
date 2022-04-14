@@ -1,17 +1,14 @@
 import { WalletGuard } from '../../models/wallets/wallet.guard';
-import { ProposalComponent } from './proposal/proposal.component';
-import { VoteComponent } from './vote.component';
+import { ProposalComponent } from './proposals/proposal/proposal.component';
+import { ProposalsComponent } from './proposals/proposals.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
-    component: VoteComponent,
+    path: 'proposals',
+    component: ProposalsComponent,
     canActivate: [WalletGuard],
-  },
-  {
-    path: 'validators',
     children: [{ path: ':address', component: ProposalComponent }],
   },
 ];

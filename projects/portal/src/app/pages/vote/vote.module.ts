@@ -1,13 +1,13 @@
-import { ProposalModule } from '../../views/vote/proposal/proposal.module';
-import { VoteModule } from '../../views/vote/vote.module';
-import { ProposalComponent } from './proposal/proposal.component';
+import { ProposalModule } from '../../views/vote/proposals/proposal/proposal.module';
+import { VoteModule } from '../../views/vote/proposals/proposals.module';
+import { ProposalComponent } from './proposals/proposal/proposal.component';
+import { ProposalsComponent } from './proposals/proposals.component';
 import { VoteRoutingModule } from './vote-routing.module';
-import { VoteComponent } from './vote.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 @NgModule({
-  declarations: [VoteComponent, ProposalComponent],
+  declarations: [ProposalsComponent, ProposalComponent],
   imports: [CommonModule, VoteRoutingModule, VoteModule, ProposalModule],
 })
 export class AppVoteModule {}

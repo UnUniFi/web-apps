@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-vote',
-  templateUrl: './vote.component.html',
-  styleUrls: ['./vote.component.css'],
+  selector: 'app-proposals',
+  templateUrl: './proposals.component.html',
+  styleUrls: ['./proposals.component.css'],
 })
-export class VoteComponent implements OnInit {
+export class ProposalsComponent implements OnInit {
   proposals$: Observable<InlineResponse20048>;
 
   constructor(

@@ -1,4 +1,4 @@
-name: CD Firebase Prod
+name: CD Firebase ununifi
 
 on:
   release:
@@ -28,4 +28,4 @@ jobs:
       - run: npm i -g npm
       - run: npm ci
       - run: npm run build:all:prod
-      - run: npx firebase deploy --only hosting --project=default --token=${{ secrets.FIREBASE_TOKEN }}
+      - run: npx firebase deploy --only hosting:ununifi --project=default --token=${{ secrets.FIREBASE_TOKEN }}

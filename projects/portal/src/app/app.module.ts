@@ -3,6 +3,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.module';
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
+import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
@@ -60,6 +61,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiKeyFormDialogModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
+    AppRedelegateFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

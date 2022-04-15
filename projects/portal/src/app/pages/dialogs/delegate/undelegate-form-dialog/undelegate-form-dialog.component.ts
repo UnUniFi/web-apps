@@ -1,7 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
+import {
+  InlineResponse20063,
+  InlineResponse20066Validators,
+} from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
@@ -12,12 +15,14 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-delegate-form-dialog',
-  templateUrl: './delegate-form-dialog.component.html',
-  styleUrls: ['./delegate-form-dialog.component.css'],
+  selector: 'app-undelegate-form-dialog',
+  templateUrl: './undelegate-form-dialog.component.html',
+  styleUrls: ['./undelegate-form-dialog.component.css'],
 })
-export class DelegateFormDialogComponent implements OnInit {
+export class UndelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
+  delegations$: Observable<InlineResponse20063>;
+  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
@@ -26,7 +31,7 @@ export class DelegateFormDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public readonly data: InlineResponse20066Validators,
-    public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
+    public matDialogRef: MatDialogRef<UndelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
@@ -37,6 +42,19 @@ export class DelegateFormDialogComponent implements OnInit {
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    );
+    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
+      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      map((res) => res.data),
+    );
+    this.delegateAmount$ = this.delegations$.pipe(
+      map(
+        (delegations) =>
+          delegations.delegation_responses?.find(
+            (response) =>
+              response.delegation?.validator_address == this.validator?.operator_address,
+          )?.balance,
+      ),
     );
 
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
@@ -56,7 +74,7 @@ export class DelegateFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: DelegateOnSubmitEvent) {
-    const txHash = await this.stakingAppService.createDelegate(
+    const txHash = await this.stakingAppService.undelegate(
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,

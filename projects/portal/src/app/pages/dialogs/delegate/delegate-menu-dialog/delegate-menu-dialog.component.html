@@ -1,5 +1,11 @@
 <view-delegate-menu-dialog
   [selectedValidator]="selectedValidator"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [delegations]="delegations$ | async"
+  [delegateAmount]="delegateAmount$ | async"
+  [isDelegated]="isDelegated$ | async"
   (appDelegate)="onSubmitDelegate($event)"
+  (appRedelegate)="onSubmitRedelegate($event)"
+  (appUndelegate)="onSubmitUndelegate($event)"
   (appDetail)="onSubmitDetail($event)"
 ></view-delegate-menu-dialog>

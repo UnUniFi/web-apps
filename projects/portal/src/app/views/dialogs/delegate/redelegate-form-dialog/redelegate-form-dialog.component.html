@@ -52,7 +52,7 @@
         />
       </mat-form-field>
       <mat-form-field class="flex-auto">
-        <mat-label>Delegated Before</mat-label>
+        <mat-label>Delegated Amount</mat-label>
         <input
           [(ngModel)]="delegateAmount && delegateAmount.amount"
           name="delegate-amount"
@@ -109,7 +109,7 @@
     </mat-slider>
 
     <button mat-flat-button class="w-full" color="accent" [disabled]="formRef.invalid">
-      Delegate
+      Change Delegate
     </button>
   </form>
 </div>

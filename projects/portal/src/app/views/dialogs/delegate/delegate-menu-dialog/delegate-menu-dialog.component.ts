@@ -27,16 +27,16 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
-  appChangeDelegate: EventEmitter<InlineResponse20066Validators>;
+  appRedelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
-  appDeleteDelegate: EventEmitter<InlineResponse20066Validators>;
+  appUndelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
-    this.appChangeDelegate = new EventEmitter();
-    this.appDeleteDelegate = new EventEmitter();
+    this.appRedelegate = new EventEmitter();
+    this.appUndelegate = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -58,18 +58,18 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.appDelegate.emit(this.selectedValidator);
   }
 
-  onClickChangeDelegateButton() {
+  onClickRedelegateButton() {
     if (!this.selectedValidator) {
       return;
     }
-    this.appChangeDelegate.emit(this.selectedValidator);
+    this.appRedelegate.emit(this.selectedValidator);
   }
 
-  onClickDeleteDelegateButton() {
+  onClickUndelegateButton() {
     if (!this.selectedValidator) {
       return;
     }
-    this.appDeleteDelegate.emit(this.selectedValidator);
+    this.appUndelegate.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

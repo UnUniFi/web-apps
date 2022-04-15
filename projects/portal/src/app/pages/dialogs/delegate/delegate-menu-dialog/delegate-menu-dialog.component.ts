@@ -70,12 +70,12 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.stakingAppService.openDelegateFormDialog(validator);
   }
 
-  onSubmitChangeDelegate(validator: InlineResponse20066Validators) {
+  onSubmitRedelegate(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
-  onSubmitDeleteDelegate(validator: InlineResponse20066Validators) {
+  onSubmitUndelegate(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openUndelegateFormDialog(validator);
   }

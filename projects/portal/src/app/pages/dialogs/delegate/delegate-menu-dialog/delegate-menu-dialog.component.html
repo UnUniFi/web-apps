@@ -5,7 +5,7 @@
   [delegateAmount]="delegateAmount$ | async"
   [isDelegated]="isDelegated$ | async"
   (appDelegate)="onSubmitDelegate($event)"
-  (appChangeDelegate)="onSubmitChangeDelegate($event)"
-  (appDeleteDelegate)="onSubmitDeleteDelegate($event)"
+  (appRedelegate)="onSubmitRedelegate($event)"
+  (appUndelegate)="onSubmitUndelegate($event)"
   (appDetail)="onSubmitDetail($event)"
 ></view-delegate-menu-dialog>

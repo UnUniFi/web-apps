@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
-import { delegation } from '@cosmos-client/core/cjs/rest/slashing/module';
+import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063,
-  InlineResponse20066,
   InlineResponse20066Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
@@ -24,8 +22,8 @@ export class DelegateMenuDialogComponent implements OnInit {
   selectedValidator: InlineResponse20066Validators | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20063>;
+  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
-  // validators$: Observable<InlineResponse20066>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -46,7 +44,15 @@ export class DelegateMenuDialogComponent implements OnInit {
       mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
       map((res) => res.data),
     );
-    this.delegations$.subscribe((a) => console.log(a));
+    this.delegateAmount$ = this.delegations$.pipe(
+      map(
+        (delegations) =>
+          delegations.delegation_responses?.find(
+            (response) =>
+              response.delegation?.validator_address == this.selectedValidator?.operator_address,
+          )?.balance,
+      ),
+    );
     this.isDelegated$ = this.delegations$.pipe(
       map((delegations) =>
         delegations.delegation_responses?.some(
@@ -62,6 +68,11 @@ export class DelegateMenuDialogComponent implements OnInit {
   onSubmitDelegate(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openDelegateFormDialog(validator);
+  }
+
+  onSubmitChangeDelegate(validator: InlineResponse20066Validators) {
+    this.matDialogRef.close();
+    this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
   onSubmitDetail(validator: InlineResponse20066Validators) {

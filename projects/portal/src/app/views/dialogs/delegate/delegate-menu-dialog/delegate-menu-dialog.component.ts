@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
   InlineResponse20066Validators,
@@ -14,24 +15,25 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   selectedValidator?: InlineResponse20066Validators | null;
-
   @Input()
   currentStoredWallet?: StoredWallet | null;
-
   @Input()
   delegations?: InlineResponse20063 | null;
-
+  @Input()
+  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   isDelegated?: boolean | null;
 
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;
-
+  @Output()
+  appChangeDelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
+    this.appChangeDelegate = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -51,6 +53,13 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appDelegate.emit(this.selectedValidator);
+  }
+
+  onClickChangeDelegateButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appChangeDelegate.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

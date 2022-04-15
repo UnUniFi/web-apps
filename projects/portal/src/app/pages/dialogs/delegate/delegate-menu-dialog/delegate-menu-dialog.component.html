@@ -2,7 +2,9 @@
   [selectedValidator]="selectedValidator"
   [currentStoredWallet]="currentStoredWallet$ | async"
   [delegations]="delegations$ | async"
+  [delegateAmount]="delegateAmount$ | async"
   [isDelegated]="isDelegated$ | async"
   (appDelegate)="onSubmitDelegate($event)"
+  (appChangeDelegate)="onSubmitChangeDelegate($event)"
   (appDetail)="onSubmitDetail($event)"
 ></view-delegate-menu-dialog>

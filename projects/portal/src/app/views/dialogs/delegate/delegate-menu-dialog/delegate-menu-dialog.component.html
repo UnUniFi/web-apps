@@ -29,6 +29,13 @@
         <span class="column-value">{{ selectedValidator?.description?.website }}</span>
       </mat-list-item>
     </a>
+    <ng-container *ngIf="isDelegated">
+      <mat-list-item>
+        <span class="column-name">Delegated Amount</span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
+      </mat-list-item>
+    </ng-container>
   </mat-nav-list>
   <button
     mat-flat-button
@@ -49,7 +56,7 @@
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickDelegateButton()"
+      (click)="onClickChangeDelegateButton()"
     >
       <span class="text-black">Change Delegate from this Validator to Another</span>
     </button>

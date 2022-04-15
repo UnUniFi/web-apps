@@ -255,7 +255,7 @@ export class StakingApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
+    this.snackBar.open('Successfully create the validator', undefined, { duration: 6000 });
 
     return txHash;
     // await this.router.navigate(['txs', txHash]);
@@ -357,7 +357,7 @@ export class StakingApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
+    this.snackBar.open('Successfully redelegate the validator', undefined, { duration: 6000 });
 
     return txHash;
     // await this.router.navigate(['txs', txHash]);
@@ -456,7 +456,7 @@ export class StakingApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
+    this.snackBar.open('Successfully undelegate the validator', undefined, { duration: 6000 });
 
     return txHash;
     // await this.router.navigate(['txs', txHash]);

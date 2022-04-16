@@ -1,1 +1,9 @@
-<p>balance works!</p>
+<view-balance
+  [walletId]="walletId$ | async"
+  [accAddress]="accAddress$ | async"
+  [accountTypeName]="accountTypeName$ | async"
+  [publicKey]="publicKey$ | async"
+  [valAddress]="valAddress$ | async"
+  [balances]="balances$ | async"
+  [faucets]="faucets$ | async"
+></view-balance>

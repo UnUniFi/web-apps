@@ -1,6 +1,6 @@
 <h2 class="mb-0">Account</h2>
 
-<mat-card class="mb-4">
+<mat-card>
   <mat-list>
     <mat-list-item>
       <span class="whitespace-nowrap">Name</span>
@@ -60,7 +60,7 @@
         <!-- Todo: Explorer's routing should be changed to /explorer/validators/{{ valAddress }} -->
         <a
           class="ml-2 break-all text-xs md:text-base underline"
-          href="/explorer/staking/validators/{{ valAddress }}"
+          href="/explorer/cosmos/staking/validators/{{ valAddress }}"
         >{{ valAddress }}</a>
         <button mat-icon-button type="button" (click)="copyClipboard(valAddress ? valAddress : '')">
           <mat-icon>content_copy</mat-icon>

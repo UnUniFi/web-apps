@@ -1,9 +1,9 @@
 <div class="flex flex-col items-center">
   <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-  <div class="font-bold text-xl m-3">Delegate to this validator</div>
+  <div class="font-bold text-xl m-3">Delegate Menu</div>
 
   <mat-nav-list>
-    <mat-label>Validator Menu</mat-label>
+    <mat-label>Validator</mat-label>
     <mat-list-item>
       <mat-icon
         matListIcon
@@ -29,13 +29,20 @@
         <span class="column-value">{{ selectedValidator?.description?.website }}</span>
       </mat-list-item>
     </a>
+    <ng-container *ngIf="isDelegated">
+      <mat-list-item>
+        <span class="column-name">Delegated Amount</span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
+      </mat-list-item>
+    </ng-container>
   </mat-nav-list>
   <button
     mat-flat-button
     class="inline-flex justify-between items-center w-full m-3 bg-white"
     (click)="onClickDetailButton()"
   >
-    <span class="text-black">More Information</span>
+    <span class="text-black">More information</span>
     Details
   </button>
   <button
@@ -43,6 +50,22 @@
     class="inline-flex justify-between items-center w-full m-3 bg-white"
     (click)="onClickDelegateButton()"
   >
-    <span class="text-black">Delegate to this Validator</span>
+    <span class="text-black">Delegate to this validator</span>
   </button>
+  <ng-container *ngIf="isDelegated">
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickRedelegateButton()"
+    >
+      <span class="text-black">Redelegate to another validator</span>
+    </button>
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickUndelegateButton()"
+    >
+      <span class="text-black">Undelegate from this validator</span>
+    </button>
+  </ng-container>
 </div>

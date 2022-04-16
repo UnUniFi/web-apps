@@ -1,0 +1,11 @@
+<view-redelegate-form-dialog
+  [validatorsList]="validatorsList$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [delegations]="delegations$ | async"
+  [delegateAmount]="delegateAmount$ | async"
+  [coins]="coins$ | async"
+  [uguuBalance]="uguuBalance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [validator]="validator"
+  (appSubmit)="onSubmit($event)"
+></view-redelegate-form-dialog>

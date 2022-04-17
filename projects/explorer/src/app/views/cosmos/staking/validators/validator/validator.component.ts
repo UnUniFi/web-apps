@@ -1,9 +1,6 @@
-import {
-  validatorType,
-  validatorWithShareType,
-} from './../../../../../views/cosmos/staking/validators/validators.component';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import { validatorType } from './../../../../../views/cosmos/staking/validators/validators.component';
+import { Component, OnInit, Input } from '@angular/core';
+import { cosmosclient } from '@cosmos-client/core';
 import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 

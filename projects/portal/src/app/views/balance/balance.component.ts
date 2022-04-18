@@ -2,6 +2,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
+import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-balance',
@@ -24,6 +25,7 @@ export class ViewBalanceComponent implements OnInit {
         maxCredit: number;
       }[]
     | null;
+  @Input() nodeInfo?: InlineResponse20037 | null;
 
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 

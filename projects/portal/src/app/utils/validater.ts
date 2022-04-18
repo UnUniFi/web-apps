@@ -9,7 +9,7 @@ export const validatePrivateStoredWallet = (
     privateStoredWallet.key_type,
     privateStoredWallet.privateKey,
   );
-  if (!cosmosPrivateKey) {
+  if (cosmosPrivateKey?.bytes().length != 32) {
     return false;
   }
   const cosmosPublicKey = createCosmosPublicKeyFromString(

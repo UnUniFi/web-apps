@@ -1,6 +1,9 @@
 name: CD Firebase ununifi-beta-test
 
 on:
+  push:
+    branches:
+      - "main"
   workflow_dispatch:
 
 jobs:

@@ -20,13 +20,28 @@
       </mat-list-item>
     </mat-list>
     <mat-nav-list>
-      <ng-container *ngFor="let tx of txsWithPagination?.tx_responses">
+      <ng-container *ngFor="let tx of txsWithPagination?.tx_responses; last as last">
         <mat-list-item routerLink="/txs/{{ tx.txhash }}">
-          <span class="pr-4 font-mono">{{ tx.height }}</span>
+          <span class="pr-4">{{ tx.logs?.[0]?.events?.[3]?.type }}</span>
           <span class="flex-auto"></span>
-          <span class="break-all truncate font-mono">{{ tx.txhash }}</span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/8 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span class="w-1/5 break-all">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+          <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
-        <mat-divider></mat-divider>
       </ng-container>
     </mat-nav-list>
   </ng-template>

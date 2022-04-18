@@ -22,7 +22,7 @@
         <span class="flex-auto"></span>
         <span class="whitespace-nowrap">{{ balance.amount | number: '1.0-0' }}</span>
         <span class="ml-2 break-all">{{ balance.denom }}</span>
-        <mat-divider></mat-divider>
+        <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>
     <!--  Todo: enable after price information enabled

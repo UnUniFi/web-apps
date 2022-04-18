@@ -36,6 +36,7 @@ export class TxsComponent implements OnInit {
           });
       }),
     );
+    this.txsWithPagination$.subscribe((x) => console.log(x));
   }
 
   ngOnInit(): void {}

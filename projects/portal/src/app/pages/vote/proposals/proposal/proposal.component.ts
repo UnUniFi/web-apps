@@ -18,14 +18,14 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20052Proposals | undefined>;
+  proposalType$: Observable<string | undefined>;
   deposits$: Observable<InlineResponse20054Deposits[] | undefined>;
   tally$: Observable<InlineResponse20052FinalTallyResult | undefined>;
   votes$: Observable<InlineResponse20057Votes[] | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id));
-    console.log('proposalID');
-    console.log(proposalID$);
+    proposalID$.subscribe((a) => console.log(a));
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
@@ -34,6 +34,15 @@ export class ProposalComponent implements OnInit {
       catchError((error) => {
         console.error(error);
         return of(undefined);
+      }),
+    );
+    this.proposal$.subscribe((a) => console.log(a));
+
+    this.proposalType$ = this.proposal$.pipe(
+      map((proposal) => {
+        if (proposal && proposal.content) {
+          return (proposal.content as any)['@type'];
+        }
       }),
     );
 
@@ -45,6 +54,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.deposits$.subscribe((a) => console.log(a));
 
     this.tally$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
@@ -54,6 +64,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.tally$.subscribe((a) => console.log(a));
 
     this.votes$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
@@ -63,6 +74,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.votes$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

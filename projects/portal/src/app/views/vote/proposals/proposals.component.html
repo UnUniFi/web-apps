@@ -1,0 +1,29 @@
+<div class="flex flex-row items-end mb-2">
+  <h2 class="mb-0">Proposals</h2>
+</div>
+<ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="(proposals?.proposals?.length || 0) > 0; then exist; else empty">
+  </ng-container>
+</ng-template>
+
+<ng-template #exist>
+  <mat-card>
+    <mat-nav-list>
+      <ng-container *ngFor="let proposal of proposals?.proposals">
+        <mat-list-item routerLink="{{ proposal.proposal_id }}">
+          <span>{{ proposal.proposal_id }}</span>
+          <span class="flex-auto"></span>
+          <span>{{ proposal.status }}</span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+  </mat-card>
+</ng-template>
+<ng-template #empty>
+  <p>There is no proposal.</p>
+</ng-template>

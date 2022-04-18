@@ -1,5 +1,6 @@
 <app-view-faucet
-  [denoms]="denoms"
+  [config]="config$ | async"
+  [denoms]="denoms$ | async"
   [address]="address$ | async"
   [denom]="denom$ | async"
   [amount]="amount$ | async"

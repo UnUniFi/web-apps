@@ -14,7 +14,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./key.component.css'],
 })
 export class KeyComponent implements OnInit {
-  config: Config;
+  config$: Observable<Config | undefined>;
   keyID$: Observable<string>;
   key$: Observable<Key | undefined>;
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
@@ -37,7 +37,7 @@ export class KeyComponent implements OnInit {
     private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
   ) {
-    this.config = this.configService.config;
+    this.config$ = this.configService.config$;
     this.keyID$ = this.route.params.pipe(map((params) => params['key_id']));
     this.key$ = this.keyID$.pipe(mergeMap((keyID) => this.key.get(keyID)));
     const pubKey$ = this.key$.pipe(
@@ -60,9 +60,9 @@ export class KeyComponent implements OnInit {
       }),
     );
 
-    this.faucets$ = this.balances$.pipe(
-      map((balances) => {
-        const initialFaucets = this.config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet);
+    this.faucets$ = combineLatest([this.config$, this.balances$]).pipe(
+      map(([config, balances]) => {
+        const initialFaucets = config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet);
         return initialFaucets?.filter((faucet) => {
           const faucetDenomBalanceNotFound =
             balances.find((balance) => balance.denom === faucet.denom) === undefined;

@@ -1,0 +1,124 @@
+<div class="flex flex-col items-center">
+  <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+  <div class="font-bold text-xl m-3">Redelegate to another validator</div>
+
+  <mat-form-field class="w-full">
+    <mat-label>Before</mat-label>
+
+    <mat-select [(ngModel)]="validator && validator.operator_address" name="validator" required>
+      <mat-option [value]="validator?.operator_address">
+        <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
+          circle
+        </mat-icon>
+        {{ validator?.operator_address }}
+      </mat-option>
+      <mat-select-trigger>
+        <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
+          circle </mat-icon
+        >&nbsp;{{ validator?.operator_address }}
+      </mat-select-trigger>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>After</mat-label>
+    <mat-select [(ngModel)]="selectedValidator" name="selected-validator" required>
+      <mat-option *ngFor="let val of validatorsList" [value]="val">
+        <mat-icon matPrefix [ngStyle]="{ color: getColorCode(val!) }">circle</mat-icon>
+        {{ val }}
+      </mat-option>
+      <mat-select-trigger>
+        <mat-icon matPrefix [ngStyle]="{ color: getColorCode(selectedValidator!) }">
+          circle</mat-icon
+        >&nbsp;{{ selectedValidator }}
+      </mat-select-trigger>
+    </mat-select>
+  </mat-form-field>
+
+  <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
+    <div class="flex flex-row content-content items-end">
+      <mat-form-field class="flex-auto">
+        <mat-label>Delegate Denom</mat-label>
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.denom"
+          name="delegate-denom"
+          matInput
+          type="text"
+          required
+          readonly
+        />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>ReDelegate Amount</mat-label>
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.amount"
+          name="redelegate-amount"
+          matInput
+          type="number"
+          pattern="^\d+$"
+          [min]="0"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Delegated Amount</mat-label>
+        <input
+          [(ngModel)]="delegateAmount && delegateAmount.amount"
+          name="delegate-amount"
+          matInput
+          type="number"
+          pattern="^\d+$"
+          [min]="0"
+          required
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <h3 class="pt-3">Gas Settings</h3>
+    <div class="flex flex-row content-content items-end">
+      <mat-form-field class="flex-auto">
+        <mat-label>Minimum Gas Denom</mat-label>
+        <mat-select
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+          name="minimum-gas-denom"
+          required
+          (valueChange)="onMinimumGasDenomChanged($event)"
+        >
+          <mat-option
+            *ngFor="let minimumGasPriceOption of minimumGasPrices"
+            [value]="minimumGasPriceOption.denom"
+          >
+            {{ minimumGasPriceOption.denom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Minimum Gas Price</mat-label>
+        <input
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          #minimumGasPriceRef
+          name="minimum-gas-price"
+          matInput
+          type="number"
+          [min]="0"
+          required
+          readonly
+        />
+      </mat-form-field>
+    </div>
+    <mat-slider
+      class="w-full"
+      [max]="1"
+      [min]="0"
+      [step]="0.015"
+      [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+      name="minimum-gas-price-slider"
+    >
+    </mat-slider>
+
+    <button mat-flat-button class="w-full" color="accent" [disabled]="formRef.invalid">
+      Change Delegate
+    </button>
+  </form>
+</div>

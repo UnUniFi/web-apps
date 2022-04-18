@@ -2,33 +2,25 @@ import { FaucetRequest, FaucetResponse } from './faucet.model';
 import { InterfaceFaucetInfrastructureService } from './faucet.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FaucetInfrastructureService implements InterfaceFaucetInfrastructureService {
-  constructor(private configS: ConfigService, private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  async postFaucetRequest(faucetRequest: FaucetRequest): Promise<FaucetResponse> {
+  async postFaucetRequest(
+    faucetRequest: FaucetRequest,
+    faucetURL: string,
+  ): Promise<FaucetResponse> {
     const requestBody = {
       address: faucetRequest.address,
       coins: faucetRequest.coins.map((coin) => coin.amount + coin.denom),
     };
-    const faucetURL = this.getFaucetURL(faucetRequest.coins[0].denom);
     if (faucetURL !== undefined) {
       return this.http.post<FaucetResponse>(faucetURL, requestBody).toPromise();
     } else {
-      return {
-        transfers: [],
-      };
+      throw Error('Invalid faucetURL!');
     }
-  }
-
-  getFaucetURL(denom: string): string | undefined {
-    const faucetURL = this.configS.config.extension?.faucet?.find(
-      (faucet) => faucet.denom === denom,
-    )?.faucetURL;
-    return faucetURL;
   }
 }

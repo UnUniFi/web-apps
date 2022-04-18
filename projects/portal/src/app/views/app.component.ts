@@ -1,3 +1,4 @@
+import { Config } from '../models/config.service';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
@@ -11,13 +12,31 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   @Input()
+  config?: Config | null;
+
+  @Input()
   searchResult?: SearchResult | null;
+
+  @Input()
+  configs?: string[];
+
+  @Input()
+  selectedConfig?: string | null;
+
+  @Input()
+  navigations?: { name: string; link: string; icon: string }[] | null;
 
   @Output()
   appSubmitSearchResult: EventEmitter<SearchResult>;
 
   @Output()
   appChangeInputValue: EventEmitter<string>;
+
+  @Output()
+  appConnectWallet: EventEmitter<{}>;
+
+  @Output()
+  appChangeConfig: EventEmitter<string>;
 
   @ViewChild('drawer')
   sidenav!: MatSidenav;
@@ -29,6 +48,8 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private ngZone: NgZone) {
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
+    this.appConnectWallet = new EventEmitter();
+    this.appChangeConfig = new EventEmitter();
 
     window.onresize = (_) => {
       this.ngZone.run(() => {
@@ -63,5 +84,13 @@ export class AppComponent implements OnInit {
 
   onChangeInputValue(inputValue: string) {
     this.appChangeInputValue.emit(inputValue);
+  }
+
+  onConnectWallet($event: {}) {
+    this.appConnectWallet.emit($event);
+  }
+
+  onChangeConfig(selectedConfig: string): void {
+    this.appChangeConfig.emit(selectedConfig);
   }
 }

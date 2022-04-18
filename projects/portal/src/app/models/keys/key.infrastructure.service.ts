@@ -16,14 +16,14 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
     this.db = this.dbS.db;
   }
 
-  getPrivKey(type: KeyType, privateKey: string) {
-    const privKeyBuffer = Buffer.from(privateKey, 'hex');
+  getPrivKey(type: KeyType, privateKey: Uint8Array) {
+    const privKeyBuffer = Buffer.from(privateKey)
     switch (type) {
-      case KeyType.SECP256K1:
+      case KeyType.secp256k1:
         return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
-      case KeyType.ED25519:
+      case KeyType.ed25519:
         throw Error('not supported yet');
-      case KeyType.SR25519:
+      case KeyType.sr25519:
         throw Error('not supported yet');
     }
   }
@@ -31,16 +31,16 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
   getPubKey(type: KeyType, publicKey: string) {
     const pubKeyBuffer = Buffer.from(publicKey, 'hex');
     switch (type) {
-      case KeyType.SECP256K1:
+      case KeyType.secp256k1:
         return new proto.cosmos.crypto.secp256k1.PubKey({ key: pubKeyBuffer });
-      case KeyType.ED25519:
+      case KeyType.ed25519:
         throw Error('not supported yet');
-      case KeyType.SR25519:
+      case KeyType.sr25519:
         throw Error('not supported yet');
     }
   }
 
-  sign(type: KeyType, privateKey: string, message: Uint8Array): Uint8Array {
+  sign(type: KeyType, privateKey: Uint8Array, message: Uint8Array): Uint8Array {
     const privKey = this.getPrivKey(type, privateKey);
     return privKey.sign(message);
   }
@@ -93,7 +93,7 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
    * @param type
    * @param privateKey
    */
-  async set(id: string, type: KeyType, privateKey: string) {
+  async set(id: string, type: KeyType, privateKey: Uint8Array) {
     const key = await this.get(id);
     if (key !== undefined) {
       console.log('Already exists');

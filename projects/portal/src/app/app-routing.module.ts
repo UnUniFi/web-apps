@@ -2,7 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./pages/home/home.module').then((m) => m.AppHomeModule) },
+  {
+    path: '',
+    loadChildren: () => import('./pages/balance/balance.module').then((m) => m.AppBalanceModule),
+  },
+  {
+    path: 'balance',
+    loadChildren: () => import('./pages/balance/balance.module').then((m) => m.AppBalanceModule),
+  },
   {
     path: 'accounts',
     loadChildren: () => import('./pages/accounts/accounts.module').then((m) => m.AppAccountsModule),
@@ -34,6 +41,18 @@ const routes: Routes = [
   {
     path: 'auction',
     loadChildren: () => import('./pages/auction/auction.module').then((m) => m.AppAuctionModule),
+  },
+  {
+    path: 'staking',
+    loadChildren: () => import('./pages/staking/staking.module').then((m) => m.AppStakingModule),
+  },
+  {
+    path: 'delegate',
+    loadChildren: () => import('./pages/delegate/delegate.module').then((m) => m.AppDelegateModule),
+  },
+  {
+    path: 'vote',
+    loadChildren: () => import('./pages/vote/vote.module').then((m) => m.AppVoteModule),
   },
 ];
 

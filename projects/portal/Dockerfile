@@ -7,4 +7,4 @@ RUN npm run build:portal -- --prod
 
 FROM nginx:1.15
 
-COPY --from=build-stage /root/app/dist/portal/ /usr/share/nginx/html/
+COPY --from=build-stage /root/app/dist/portal/ /usr/share/nginx/html/portal/

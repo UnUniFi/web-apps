@@ -7,36 +7,51 @@
   >
     <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
       <button class="align-middle" mat-icon-button routerLink="/">
-        <img class="p-1 w-10 h-10" src="/favicon.png" />
+        <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
       <h1 class="align-middle">UnUniFi Portal</h1>
     </mat-toolbar>
 
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Change Node</mat-label>
+      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+        <mat-option *ngFor="let conf of configs" [value]="conf">
+          {{ conf }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-nav-list>
       <mat-list-item routerLink="/">
-        <mat-icon class="mr-2" color="primary">other_houses</mat-icon>Home
+        <mat-icon class="mr-2" color="primary">other_houses</mat-icon>Balance
       </mat-list-item>
-      <mat-list-item routerLink="/keys">
+      <!-- <mat-list-item routerLink="/keys">
         <mat-icon class="mr-2" color="primary">manage_accounts</mat-icon>Keys
-      </mat-list-item>
+      </mat-list-item> -->
       <mat-list-item routerLink="/cosmos/bank/send">
         <mat-icon class="mr-2" color="primary">sync_alt</mat-icon>Send
       </mat-list-item>
-      <mat-list-item routerLink="/cosmos/staking">
+
+      <!-- <mat-list-item routerLink="/mint">
+        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Mint
+      </mat-list-item> -->
+      <mat-list-item routerLink="/vote/proposals">
+        <mat-icon class="mr-2" color="primary">how_to_vote</mat-icon>Vote
+      </mat-list-item>
+      <mat-list-item routerLink="/delegate/validators">
         <mat-icon class="mr-2" color="primary">savings</mat-icon>Delegate
       </mat-list-item>
-      <mat-list-item routerLink="/faucet">
-        <mat-icon class="mr-2" color="primary">clean_hands</mat-icon>Faucet
-      </mat-list-item>
-      <mat-list-item routerLink="/mint">
-        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Mint
-      </mat-list-item>
-      <mat-list-item routerLink="/auction">
+      <!-- <mat-list-item routerLink="/auction">
         <mat-icon class="mr-2" color="primary">gavel</mat-icon>Auction
-      </mat-list-item>
-      <mat-list-item routerLink="/monitor">
-        <mat-icon class="mr-2" color="primary">personal_video</mat-icon>Monitor
-      </mat-list-item>
+      </mat-list-item> -->
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <a mat-list-item [href]="navigation.link">
+            <mat-icon class="mr-2" color="primary"> {{ navigation.icon }}</mat-icon>
+            {{ navigation.name }}
+          </a>
+        </ng-container>
+      </ng-template>
     </mat-nav-list>
   </mat-drawer>
 
@@ -52,6 +67,7 @@
         [searchResult]="searchResult"
         (appSubmitSearchResult)="onSubmitSearchResult($event)"
         (appChangeInputValue)="onChangeInputValue($event)"
+        (appConnectWallet)="onConnectWallet($event)"
       >
       </view-toolbar>
     </mat-toolbar>

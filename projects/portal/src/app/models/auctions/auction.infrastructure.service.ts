@@ -1,4 +1,3 @@
-import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { TxCommonInfrastructureService } from '../tx-common/tx-common.infrastructure.service';
@@ -7,6 +6,7 @@ import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { ununifi } from 'ununifi-client';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
   async placeBid(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
@@ -33,7 +33,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
   async simulateToPlaceBid(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
@@ -59,7 +59,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
   async buildPlaceBidTx(
     key: Key,
-    privateKey: string,
+    privateKey: Uint8Array,
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,

@@ -29,12 +29,12 @@ export class KeyBackupDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public readonly data: {
       mnemonic: string;
-      privatekey: string;
+      privateKey: string;
       id: string;
     },
     public matDialogRef: MatDialogRef<KeyBackupDialogComponent>,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
   onClickSubmit(): void {
     const keyBackupResult: KeyBackupResult = { saved: this.saved, checked: this.checked };
@@ -67,7 +67,7 @@ export class KeyBackupDialogComponent implements OnInit {
       this.data.id +
       '\n' +
       'private key : ' +
-      this.data.privatekey +
+      this.data.privateKey +
       '\n' +
       'mnemonic : ' +
       this.data.mnemonic;
@@ -85,7 +85,7 @@ export class KeyBackupDialogComponent implements OnInit {
   checkSaveMnemonic(str: string): void {
     if (this.mnemonicArray[this.requiredMnemonicNumber] === str) {
       this.checked = true;
-      this.snackBar.open('Collect', undefined, {
+      this.snackBar.open('Correct', undefined, {
         duration: 2000,
       });
     } else {
@@ -96,5 +96,5 @@ export class KeyBackupDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

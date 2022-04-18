@@ -3,6 +3,7 @@
   [owner]="owner$ | async"
   [collateralType]="collateralType$ | async"
   [denom]="denom$ | async"
-  [minimumGasPrices]="minimumGasPrices"
+  [balances]="balances$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (appSubmit)="onSubmit($event)"
 ></view-deposit>

@@ -1,0 +1,105 @@
+<mat-dialog-content>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
+    <div class="font-bold text-xl m-3">Connect Your Wallet</div>
+    <div class="text-base m-3">Start earning high yield on your crypto</div>
+    <ng-container *ngIf="privateWallet$ | async as privateWallet">
+      <ng-container *ngIf="privateWallet">
+        <form #formRef="ngForm" (submit)="onClickButton(idRef.value)">
+          <mat-form-field class="w-full">
+            <mat-label>Wallet ID</mat-label>
+            <input
+              #idRef
+              name="id"
+              [(ngModel)]="privateWallet.id"
+              matInput
+              required
+              pattern="^[a-z_][a-z_0-9]*$"
+              autocomplete="username"
+            />
+            <mat-error>^[a-z_][a-z_0-9]*$</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-full">
+            <mat-label>Wallet Type</mat-label>
+            <input
+              #walletTypeRef
+              name="walletType"
+              [(ngModel)]="privateWallet.type"
+              matInput
+              required
+              readonly
+            />
+          </mat-form-field>
+
+          <mat-form-field class="w-full">
+            <mat-label>Key Type</mat-label>
+            <mat-select #keyTypeRef [(ngModel)]="privateWallet.key_type" name="keyType" matInput required disabled >
+              <mat-option [value]="'secp256k1'">Secp256k1</mat-option>
+              <mat-option [value]="'ed25519'" disabled>Ed25519</mat-option>
+              <mat-option [value]="'sr25519'" disabled>Sr25519</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-full">
+            <mat-label>Mnemonic</mat-label>
+            <textarea
+              #mnemonicRef
+              name="mnemonic"
+              [(ngModel)]="privateWallet.mnemonic"
+              matInput
+              rows="3"
+              style="resize: none"
+              readOnly
+              required pattern="^[a-z\s]+$"
+            ></textarea>
+            <button mat-button type="button" matSuffix (click)="copyClipboard(mnemonicRef.value)">
+              <mat-icon>content_copy</mat-icon>
+              <span>copy</span>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field class="w-full mb-4 md:mb-0">
+            <mat-label>Private key</mat-label>
+            <input
+              #privateKeyRef
+              name="password"
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="privateWallet.privateKey"
+              matInput
+              readonly
+              required
+              autocomplete="new-password"
+            />
+            <button
+              mat-button
+              type="button"
+              matSuffix
+              (click)="togglePasswordVisibility()"
+            >
+              <mat-icon>
+                {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+            <button
+              mat-button
+              type="button"
+              matSuffix
+              (click)="copyClipboard(privateKeyRef.value)"
+            >
+              <mat-icon>content_copy</mat-icon>
+              <span>copy</span>
+            </button>
+            <mat-hint>
+              You must save this private key as a password using password manager built in the web browser.
+            </mat-hint>
+          </mat-form-field>
+
+          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">
+            Next
+          </button>
+        </form>
+      </ng-container>
+    </ng-container>
+  </div>
+</mat-dialog-content>

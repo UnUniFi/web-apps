@@ -10,6 +10,6 @@ export type FaucetResponse = {
   transfers: {
     coin: string;
     status: string;
-    message?: string;
+    error?: string;
   }[];
 };

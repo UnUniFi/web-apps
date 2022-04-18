@@ -96,14 +96,14 @@ export class VoteFormDialogComponent implements OnInit {
     );
     this.matDialogRef.close(txHash);
   }
-  async onSubmitAbstain(gasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async onSubmitAbstain(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin) {
     if (!this.proposalID) {
       return;
     }
     const txHash = await this.govAppService.Vote(
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_ABSTAIN,
-      gasPrice,
+      minimumGasPrice,
     );
     this.matDialogRef.close(txHash);
   }

@@ -40,8 +40,7 @@ export class BankApplicationService {
     }
 
     const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-
-    if (privateKey?.length != 32) {
+    if (!privateKey) {
       this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }

@@ -1,0 +1,137 @@
+<h2 class="mb-0">Account</h2>
+
+<mat-card>
+  <mat-list>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Name</span>
+      <span class="flex-auto"></span>
+      <span class="ml2 break-all">{{ walletId }}</span>
+    </mat-list-item>
+
+    <mat-list-item>
+      <span class="whitespace-nowrap">Address</span>
+      <span class="flex-auto"></span>
+      <a
+        class="ml-2 break-all text-sm sm:text-base underline"
+        href="/explorer/accounts/{{ accAddress }}"
+      >{{ accAddress }}</a>
+      <button mat-icon-button type="button" (click)="copyClipboard(accAddress ? accAddress : '')">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Advanced
+      </mat-panel-title>
+      <mat-panel-description>
+        Account Details
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Account Type</span>
+        <span class="flex-auto"></span>
+        <ng-container *ngIf="accountTypeName === null">
+          <mat-spinner [diameter]="20"></mat-spinner>
+        </ng-container>
+        <ng-container *ngIf="accountTypeName === undefined">
+          <span class="ml2 break-all">Unsupported Account Type or Unused Account!</span>
+        </ng-container>
+        <span class="ml2 break-all">{{ accountTypeName }}</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <span class="whitespace-nowrap">Public Key</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs md:text-base">{{ publicKey }}</span>
+        <button mat-icon-button type="button" (click)="copyClipboard(publicKey ? publicKey : '')">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-list-item>
+
+      <mat-list-item>
+        <span class="whitespace-nowrap">Validator Address</span>
+        <span class="flex-auto"></span>
+        <!-- Todo: Explorer's routing should be changed to /explorer/validators/{{ valAddress }} -->
+        <a
+          class="ml-2 break-all text-xs md:text-base underline"
+          href="/explorer/cosmos/staking/validators/{{ valAddress }}"
+        >{{ valAddress }}</a>
+        <button mat-icon-button type="button" (click)="copyClipboard(valAddress ? valAddress : '')">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-container *ngIf="faucets && faucets.length > 0">
+  <h2 class="mt-6 mb-0">Faucet</h2>
+
+  <mat-card class="mb-4">
+    <mat-nav-list>
+      <mat-list-item
+        routerLink="/faucet"
+        [queryParams]="{
+          address: accAddress,
+          denom: faucet.denom,
+          amount: faucet.creditAmount
+        }"
+        *ngFor="let faucet of faucets; last as last"
+      >
+        <mat-icon color="accent">clean_hands</mat-icon>
+        <span class="ml-2">Go to Faucet of {{ faucet.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-card>
+</ng-container>
+
+<h2 class="mt-6 mb-0">Balance</h2>
+
+<mat-card class="mb-4">
+  <mat-list>
+    <mat-list-item *ngIf="balances === null">
+      <mat-spinner></mat-spinner>
+    </mat-list-item>
+    <mat-list-item *ngIf="balances === undefined">
+      No Balances!
+    </mat-list-item>
+    <mat-list-item *ngIf="balances && balances.length === 0">
+      No Balances!
+    </mat-list-item>
+    <ng-container *ngIf="balances && balances.length > 0">
+      <mat-list-item *ngFor="let balance of balances; last as last">
+        <span class="flex-auto"></span>
+        <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
+        <span>{{ balance.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</mat-card>
+
+<h2 class="mt-6 mb-0">Network</h2>
+
+<mat-card class="mb-4">
+  <mat-list>
+    <mat-list-item *ngIf="nodeInfo === null">
+      <mat-spinner></mat-spinner>
+    </mat-list-item>
+    <mat-list-item *ngIf="nodeInfo === undefined">
+      Invalid Network!
+    </mat-list-item>
+    <ng-container *ngIf="nodeInfo">
+      <mat-list-item>
+        <span class="whitespace-nowrap">Chain ID</span>
+        <span class="flex-auto"></span>
+        <span class="ml2 break-all">{{ nodeInfo.default_node_info?.network }}</span>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</mat-card>

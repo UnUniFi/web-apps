@@ -56,7 +56,7 @@ export class DelegateFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: DelegateOnSubmitEvent) {
-    const txHash = await this.stakingAppService.createDelegator(
+    const txHash = await this.stakingAppService.createDelegate(
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,

@@ -1,5 +1,26 @@
 {
   "projects": {
     "default": "botany-website-984e0"
+  },
+  "targets": {
+    "botany-website-984e0": {
+      "hosting": {
+        "ununifi-8-private-test": [
+          "ununifi-8-private-test"
+        ],
+        "ununifi-alpha-test": [
+          "ununifi-alpha-test"
+        ],
+        "ununifi-beta-test": [
+          "ununifi-beta-test"
+        ],
+        "ununifi-test": [
+          "ununifi-test"
+        ],
+        "ununifi": [
+          "botany-website-984e0"
+        ]
+      }
+    }
   }
 }

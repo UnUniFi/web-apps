@@ -295,14 +295,14 @@ export class GovService {
     }
 
     // build tx
-    const msgVote = new proto.cosmos.gov.v1beta1.MsgDeposit({
+    const msgDeposit = new proto.cosmos.gov.v1beta1.MsgDeposit({
       proposal_id: cosmosclient.Long.fromNumber(proposalID),
       depositor: fromAddress.toString(),
       amount: [amount],
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgVote)],
+      messages: [cosmosclient.codec.packAny(msgDeposit)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [

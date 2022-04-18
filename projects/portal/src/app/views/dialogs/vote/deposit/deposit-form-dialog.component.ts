@@ -76,6 +76,7 @@ export class DepositFormDialogComponent implements OnInit {
     if (this.selectedGasPrice === undefined) {
       return;
     }
+    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({ amount: this.selectedAmount, minimumGasPrice: this.selectedGasPrice });
   }
 

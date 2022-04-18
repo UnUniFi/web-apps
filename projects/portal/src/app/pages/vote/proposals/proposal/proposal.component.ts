@@ -34,7 +34,7 @@ export class ProposalComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.proposal(sdk.rest, address)),
+      mergeMap(([sdk, id]) => rest.gov.proposal(sdk.rest, id)),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);

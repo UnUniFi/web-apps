@@ -1,0 +1,87 @@
+<div class="flex flex-col items-center">
+  <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+  <div class="font-bold text-xl m-3">Vote to this proposal</div>
+</div>
+<ng-container *ngIf="unpackContent(proposal?.content) as content">
+  <mat-list>
+    <mat-list-item>
+      <div mat-line>
+        <span># {{ proposal?.proposal_id }} {{ content.title }}</span>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</ng-container>
+
+<mat-list>
+  <mat-label>Voter</mat-label>
+  <mat-list-item>
+    <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+      >circle</mat-icon
+    >
+    <div mat-line>
+      <span>{{ currentStoredWallet?.address }}</span>
+    </div>
+  </mat-list-item>
+</mat-list>
+
+<h3 class="pt-3">Gas Settings</h3>
+<div class="flex flex-row content-content items-end">
+  <mat-form-field class="flex-auto">
+    <mat-label>Minimum Gas Denom</mat-label>
+    <mat-select
+      [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+      name="minimum-gas-denom"
+      required
+      (valueChange)="onMinimumGasDenomChanged($event)"
+    >
+      <mat-option
+        *ngFor="let minimumGasPriceOption of minimumGasPrices"
+        [value]="minimumGasPriceOption.denom"
+      >
+        {{ minimumGasPriceOption.denom }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="flex-auto">
+    <mat-label>Minimum Gas Price</mat-label>
+    <input
+      [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+      #minimumGasPriceRef
+      name="minimum-gas-price"
+      matInput
+      type="number"
+      [min]="0"
+      required
+      readonly
+    />
+  </mat-form-field>
+</div>
+<mat-slider
+  class="w-full"
+  [max]="1"
+  [min]="0"
+  [step]="0.015"
+  [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+  name="minimum-gas-price-slider"
+>
+</mat-slider>
+
+<button class="w-full mb-4" mat-flat-button color="primary" (click)="onSubmitYes()">
+  <mat-icon class="mr-2">thumb_up</mat-icon>
+  <span>Yes</span>
+</button>
+
+<button class="w-full mb-4" mat-flat-button color="warn" (click)="onSubmitNoWithVeto()">
+  <mat-icon class="mr-2">thumb_down</mat-icon>
+  <span>No with Veto</span>
+</button>
+
+<button class="w-full mb-4" mat-flat-button color="accent" (click)="onSubmitNo()">
+  <mat-icon class="mr-2">thumb_down</mat-icon>
+  <span>No</span>
+</button>
+
+<button class="w-full mb-4" mat-flat-button (click)="onSubmitAbstain()">
+  <mat-icon class="mr-2">subtitles_off</mat-icon>
+  <span>Abstain</span>
+</button>

@@ -1,87 +1,44 @@
-<h2>Account Info</h2>
-<ng-container *ngIf="baseAccount === undefined || null ; then empty; else exist"></ng-container>
+<div class="flex flex-row items-end">
+  <h2 class="mb-4">
+    <span>Address</span>
+    <span class="flex-auto"></span>
+    <span class="ml-2 break-all text-gray-600 text-sm sm:text-base">{{
+      baseAccount?.address
+    }}</span>
+  </h2>
+</div>
+
+<ng-container *ngIf="baseAccount === undefined || null; then empty; else exist"></ng-container>
 
 <ng-template #empty>
   <span>*This account has no denoms</span>
 </ng-template>
 
 <ng-template #exist>
-  <mat-card *ngIf="baseAccount">
+  <h3 class="mb-0 ml-2">Over view</h3>
+  <mat-card class="mb-4">
+    <mat-list *ngFor="let balance of balances; last as last">
+      <mat-list-item>
+        <span class="flex-auto"></span>
+        <span class="whitespace-nowrap">{{ balance.amount | number: '1.0-0' }}</span>
+        <span class="ml-2 break-all">{{ balance.denom }}</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+    <!--  Todo: enable after price information enabled
     <mat-list>
       <mat-list-item>
-        <span class="whitespace-nowrap">Sequence:</span>
+        <span class="whitespace-nowrap">Total Balances: </span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ baseAccount?.sequence }}</span>
+        <span class="ml-2 break-all">{{ value }}</span>
+        <mat-divider></mat-divider>
       </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-
       <mat-list-item>
-        <span class="whitespace-nowrap">Account Number: </span>
+        <span class="whitespace-nowrap">Total Value: </span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ baseAccount?.account_number }}</span>
+        $<span class="ml-2 break-all">{{ value }}</span> (@ $ {{ value }} / )
       </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-
-      <mat-list-item>
-        <span class="whitespace-nowrap">Address: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-sm sm:text-base">{{ baseAccount?.address }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-
-      <mat-list-item>
-        <span class="whitespace-nowrap">Public key: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs md:text-base">{{ publicKey }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
     </mat-list>
-  </mat-card>
-
-  <h2>Coins</h2>
-  <mat-card>
-    <mat-list *ngFor="let balance of balances">
-      <mat-list-item>
-        <span class="whitespace-nowrap">{{ balance.amount | number:'1.0-0' }}</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ balance.denom }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-    </mat-list>
+    -->
   </mat-card>
 </ng-template>
-
-<!-- <h3>Transactions</h3>
-<mat-card>
-    <table mat-table [dataSource]="paginatedTxs?.txs" class="table-container">
-      <ng-container matColumnDef="height">
-        <th mat-header-cell *matHeaderCellDef>height</th>
-        <td mat-cell *matCellDef="let element">{{ element.height }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="txhash">
-        <th mat-header-cell *matHeaderCellDef>hash</th>
-        <td mat-cell *matCellDef="let element">
-          <a href="/txs/{{ element.txhash }}">{{ element.txhash }}</a>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="gas_wanted">
-        <th mat-header-cell *matHeaderCellDef>Gas Wanted</th>
-        <td mat-cell *matCellDef="let element">{{ element.gas_wanted }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="gas_used">
-        <th mat-header-cell *matHeaderCellDef>Gas Used</th>
-        <td mat-cell *matCellDef="let element">{{ element.gas_used }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="timestamp">
-        <th mat-header-cell *matHeaderCellDef>timestamp</th>
-        <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="txColumnKeys"></tr>
-      <tr mat-row *matRowDef="let row; columns: txColumnKeys"></tr>
-    </table>
-</mat-card> -->

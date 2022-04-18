@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { VoteFormDialogComponent } from '../../pages/dialogs/vote/vote-form-dialog/vote-form-dialog.component';
+import { DepositFormDialogComponent } from '../../pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +26,22 @@ export class GovApplicationService {
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
   ) {}
+
+  async openVoteFormDialog(proposalID: number): Promise<void> {
+    const txHash = await this.dialog
+      .open(VoteFormDialogComponent, { data: proposalID })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
+
+  async openDepositFormDialog(proposalID: number): Promise<void> {
+    const txHash = await this.dialog
+      .open(DepositFormDialogComponent, { data: proposalID })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
 
   // WIP
   async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin) {

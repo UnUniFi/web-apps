@@ -5,6 +5,8 @@ import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-f
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
+import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
+import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
@@ -64,6 +66,8 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,
     AppUndelegateFormDialogModule,
+    AppVoteFormDialogModule,
+    AppDepositFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

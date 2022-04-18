@@ -8,6 +8,7 @@ import {
   InlineResponse20057Votes,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -23,7 +24,11 @@ export class ProposalComponent implements OnInit {
   tally$: Observable<InlineResponse20052FinalTallyResult | undefined>;
   votes$: Observable<InlineResponse20057Votes[] | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(
+    private route: ActivatedRoute,
+    private cosmosSDK: CosmosSDKService,
+    private readonly govAppService: GovApplicationService,
+  ) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id));
     proposalID$.subscribe((a) => console.log(a));
 
@@ -78,4 +83,12 @@ export class ProposalComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onVoteProposal(proposalID: number) {
+    this.govAppService.openVoteFormDialog(proposalID);
+  }
+
+  onDepositProposal(proposalID: number) {
+    this.govAppService.openDepositFormDialog(proposalID);
+  }
 }

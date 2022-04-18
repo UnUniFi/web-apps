@@ -22,7 +22,7 @@
             <span class="flex-auto"></span>
             <span>{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}</span>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item (click)="onClickVote(proposal.proposal_id!)">
             <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
             <span>{{ proposal.final_tally_result?.yes }}</span>
             <span class="flex-auto"></span>

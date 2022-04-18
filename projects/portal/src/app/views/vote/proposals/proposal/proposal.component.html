@@ -91,7 +91,12 @@
     </mat-card-content>
   </mat-card>
 
-  <button class="w-full mb-4" mat-flat-button color="primary">
+  <button
+    class="w-full mb-4"
+    mat-flat-button
+    color="primary"
+    (click)="onClickVote(proposal?.proposal_id!)"
+  >
     <mat-icon>how_to_vote</mat-icon>
     <span>Vote</span>
   </button>
@@ -135,7 +140,12 @@
     </mat-card>
   </ng-container>
 
-  <button class="w-full mb-4" mat-flat-button color="primary">
+  <button
+    class="w-full mb-4"
+    mat-flat-button
+    color="primary"
+    (click)="onClickDeposit(proposal?.proposal_id!)"
+  >
     <mat-icon>add</mat-icon>
     <span>Deposit</span>
   </button>

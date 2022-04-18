@@ -1,5 +1,5 @@
 import { ProposalContent } from '../proposals.component';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
 import {
   InlineResponse20052Proposals,
@@ -25,7 +25,15 @@ export class ProposalComponent implements OnInit {
   @Input()
   votes?: InlineResponse20057Votes[] | null;
 
-  constructor() {}
+  @Output()
+  appClickVote: EventEmitter<number>;
+  @Output()
+  appClickDeposit: EventEmitter<number>;
+
+  constructor() {
+    this.appClickVote = new EventEmitter();
+    this.appClickDeposit = new EventEmitter();
+  }
 
   ngOnInit(): void {}
 
@@ -35,5 +43,13 @@ export class ProposalComponent implements OnInit {
     } catch {
       return null;
     }
+  }
+
+  onClickVote(proposalID: string) {
+    this.appClickVote.emit(Number(proposalID));
+  }
+
+  onClickDeposit(proposalID: string) {
+    this.appClickDeposit.emit(Number(proposalID));
   }
 }

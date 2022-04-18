@@ -4,4 +4,6 @@
   [deposits]="deposits$ | async"
   [tally]="tally$ | async"
   [votes]="votes$ | async"
+  (appClickVote)="onVoteProposal($event)"
+  (appClickDeposit)="onDepositProposal($event)"
 ></view-proposal>

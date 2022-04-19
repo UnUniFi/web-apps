@@ -1,4 +1,4 @@
-import { MaterialModule } from '../../../material.module';
+import { MaterialModule } from '../../material.module';
 import { ValidatorComponent } from './validator.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';

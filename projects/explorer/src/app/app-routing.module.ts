@@ -26,10 +26,6 @@ const routes: Routes = [
       import('./pages/proposals/proposals.module').then((m) => m.AppProposalsModule),
   },
   {
-    path: 'cosmos',
-    loadChildren: () => import('./pages/cosmos/cosmos.module').then((m) => m.AppCosmosModule),
-  },
-  {
     path: 'monitor',
     loadChildren: () => import('./pages/monitor/monitor.module').then((m) => m.AppMonitorModule),
   },

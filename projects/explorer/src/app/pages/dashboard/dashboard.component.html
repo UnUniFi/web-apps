@@ -1,1 +1,11 @@
-<view-dashboard></view-dashboard>
+<view-dashboard
+  [latestBlockHeight]="latestBlockHeight$ | async"
+  [totalSupply]="totalSupply$ | async"
+  [stakedTokens]="stakedTokens$ | async"
+  [stakedRatio]="stakedRatio$ | async"
+  [inflation]="inflation$ | async"
+></view-dashboard>
+<div class="flex flex-col lg:flex-row">
+  <app-blocks class="m-4 lg:w-1/2"></app-blocks>
+  <app-validators class="m-4 lg:w-1/2"></app-validators>
+</div>

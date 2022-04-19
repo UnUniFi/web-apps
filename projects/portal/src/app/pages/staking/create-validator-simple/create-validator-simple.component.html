@@ -1,4 +1,4 @@
-<app-view-simple
+<app-view-create-validator-simple
   [currentStoredWallet]="currentStoredWallet$ | async"
   [moniker]="moniker$ | async"
   [identity]="identity$ | async"
@@ -18,4 +18,4 @@
   [pubkey]="pubkey$ | async"
   [minimumGasPrices]="minimumGasPrices$ | async"
   (submitCreateValidator)="appSubmitCreateValidator($event)"
-></app-view-simple>
+></app-view-create-validator-simple>

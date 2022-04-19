@@ -1,24 +1,14 @@
-<h2>Create Validator</h2>
-<form #formRef="ngForm" (submit)="onSubmitCreateValidator(
-  monikerRef.value,
-  identityRef.value,
-  websiteRef.value,
-  securityContactRef.value,
-  detailsRef.value,
-  rateRef.value,
-  maxRateRef.value,
-  maxChangeRateRef.value,
-  minSelfDelegationRef.value,
-  delegatorAddressRef.value,
-  validatorAddressRef.value,
-  denomRef.value,
-  amountRef.value,
-  ipRef.value,
-  nodeIdRef.value,
-  pubkeyRef.value,
-  minimumGasPriceRef.value)"
->
-  <mat-accordion>
+<h2>Upload file here to be Validator!</h2>
+<form class="h-screen" #formRef="ngForm">
+  <input
+    #fileInputRef
+    name="fileInput"
+    type="file"
+    multiple="false"
+    accept="image/*"
+    (change)="onChangeFile($event)"
+  />
+  <!-- <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -258,8 +248,8 @@
         disabled
       >
       </mat-slider>
-    </mat-expansion-panel>
-  </mat-accordion>
 
-  <button class="mt-6" mat-flat-button color="accent" [disabled]="formRef.invalid">Send Tx</button>
+      <button class="mt-6" mat-flat-button color="accent" [disabled]="true">Send Tx</button>
+    </mat-expansion-panel>
+  </mat-accordion> -->
 </form>

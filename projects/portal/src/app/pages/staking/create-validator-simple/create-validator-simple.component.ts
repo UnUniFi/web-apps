@@ -1,8 +1,8 @@
-import { StakingApplicationService } from '../../../../models/cosmos/staking.application.service';
-import { CreateValidatorData } from '../../../../models/cosmos/staking.model';
-import { StoredWallet } from '../../../../models/wallets/wallet.model';
-import { WalletService } from '../../../../models/wallets/wallet.service';
-import { createCosmosPublicKeyFromString } from '../../../../utils/key';
+import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
+import { CreateValidatorData } from '../../../models/cosmos/staking.model';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
+import { createCosmosPublicKeyFromString } from '../../../utils/key';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, proto } from '@cosmos-client/core';
@@ -11,11 +11,11 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-simple',
-  templateUrl: './simple.component.html',
-  styleUrls: ['./simple.component.css'],
+  selector: 'app-create-validator-simple',
+  templateUrl: './create-validator-simple.component.html',
+  styleUrls: ['./create-validator-simple.component.css'],
 })
-export class SimpleComponent implements OnInit {
+export class CreateValidatorSimpleComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   moniker$: Observable<string>;
   identity$: Observable<string>;

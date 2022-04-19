@@ -5,7 +5,7 @@ import { UndelegateFormDialogComponent } from '../../pages/dialogs/delegate/unde
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { Key } from '../keys/key.model';
+import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet } from '../wallets/wallet.model';
 import { CreateValidatorData } from './staking.model';
@@ -66,7 +66,51 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  // WIP
+  async createValidatorSimple(
+    createValidatorData: CreateValidatorData,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    privateKeyString: string,
+  ) {
+    const privateKey = convertHexStringToUint8Array(privateKeyString);
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
+      return;
+    }
+
+    const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
+
+    try {
+      const simulatedResultData = await this.staking.simulateToCreateValidator(
+        KeyType.secp256k1,
+        createValidatorData,
+        minimumGasPrice,
+        privateKey,
+      );
+      const gas = simulatedResultData.estimatedGasUsedWithMargin;
+      const fee = simulatedResultData.estimatedFeeWithMargin;
+      const createValidatorResult = await this.staking.createValidator(
+        KeyType.secp256k1,
+        createValidatorData,
+        gas,
+        fee,
+        privateKey,
+      );
+      const txHash = createValidatorResult.tx_response?.txhash;
+      if (txHash === undefined) {
+        throw Error('Invalid txHash!');
+      }
+    } catch (error) {
+      console.error(error);
+      this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      return;
+    } finally {
+      dialogRef.close();
+    }
+
+    this.snackBar.open('Success', undefined, { duration: 6000 });
+    this.router.navigate([`/explorer/validators/${createValidatorData.validator_address}`]);
+  }
+
   async createValidator(
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,

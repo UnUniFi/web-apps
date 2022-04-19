@@ -2,7 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./pages/home/home.module').then((m) => m.AppHomeModule) },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./pages/dashboard/dashboard.module').then((m) => m.AppDashboardModule),
+  },
   {
     path: 'accounts',
     loadChildren: () => import('./pages/accounts/accounts.module').then((m) => m.AppAccountsModule),

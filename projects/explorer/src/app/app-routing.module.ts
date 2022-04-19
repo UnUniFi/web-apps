@@ -21,6 +21,11 @@ const routes: Routes = [
       import('./pages/validators/validators.module').then((m) => m.AppValidatorsModule),
   },
   {
+    path: 'proposals',
+    loadChildren: () =>
+      import('./pages/proposals/proposals.module').then((m) => m.AppProposalsModule),
+  },
+  {
     path: 'cosmos',
     loadChildren: () => import('./pages/cosmos/cosmos.module').then((m) => m.AppCosmosModule),
   },

@@ -38,14 +38,14 @@
           validator.val.operator_address
         }}</span>
         <span class="flex-auto"></span>
-        <span class="break-all text-sm sm:text-base">{{ validator.share | percent }}</span>
+        <span class="break-all text-sm sm:text-base">{{ validator.share | percent: '1.2-2' }}</span>
         <span class="flex-auto"></span>
         <span class="break-all text-sm sm:text-base">{{
           validator.val.tokens | unitConversion
         }}</span>
         <span class="flex-auto"></span>
         <span class="break-all text-sm sm:text-base">{{
-          validator.val.commission?.commission_rates?.rate | percent
+          validator.val.commission?.commission_rates?.rate | percent: '1.0-0'
         }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>

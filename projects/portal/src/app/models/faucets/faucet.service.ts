@@ -3,7 +3,7 @@ import { FaucetRequest, FaucetResponse } from './faucet.model';
 import { Injectable } from '@angular/core';
 
 export interface InterfaceFaucetInfrastructureService {
-  postFaucetRequest: (faucetRequest: FaucetRequest, faucetURL: string) => void;
+  postFaucetRequest: (faucetRequest: FaucetRequest, faucetURL: string) => Promise<FaucetResponse>;
 }
 
 @Injectable({

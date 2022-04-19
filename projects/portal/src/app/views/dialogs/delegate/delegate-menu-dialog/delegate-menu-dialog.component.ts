@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
+import { proto } from '@cosmos-client/core';
+import {
+  InlineResponse20063,
+  InlineResponse20066Validators,
+} from '@cosmos-client/core/esm/openapi/api';
 import * as crypto from 'crypto';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 @Component({
   selector: 'view-delegate-menu-dialog',
@@ -10,15 +15,28 @@ import * as crypto from 'crypto';
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   selectedValidator?: InlineResponse20066Validators | null;
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
+  @Input()
+  delegations?: InlineResponse20063 | null;
+  @Input()
+  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  isDelegated?: boolean | null;
 
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;
-
+  @Output()
+  appRedelegate: EventEmitter<InlineResponse20066Validators>;
+  @Output()
+  appUndelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
+    this.appRedelegate = new EventEmitter();
+    this.appUndelegate = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -38,6 +56,20 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appDelegate.emit(this.selectedValidator);
+  }
+
+  onClickRedelegateButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appRedelegate.emit(this.selectedValidator);
+  }
+
+  onClickUndelegateButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appUndelegate.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

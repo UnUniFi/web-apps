@@ -1,0 +1,115 @@
+<ng-container *ngIf="validator === null; then loading; else loaded"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="validator !== undefined; then exist; else notFound"> </ng-container>
+</ng-template>
+<ng-template #exist>
+  <div class="flex items-center">
+    <mat-icon class="mr-1" matListIcon [ngStyle]="{ color: getColorCode(validator?.val) }">
+      circle
+    </mat-icon>
+    <h2 class="mb-0">
+      {{ validator?.val?.description?.moniker }}
+    </h2>
+    <span class="flex-auto"></span>
+    <mat-chip-list>
+      <mat-chip *ngIf="validator?.inList" color="primary" selected> Active </mat-chip>
+      <mat-chip *ngIf="!validator?.inList" color="warn" selected> inactive </mat-chip>
+    </mat-chip-list>
+    <!-- <span
+      *ngIf="validator?.inList"
+      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-blue-500"
+    >
+      Active
+    </span>
+    <span
+      *ngIf="!validator?.inList"
+      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-red-500"
+    >
+      Inactive
+    </span> -->
+  </div>
+
+  <mat-card class="mb-4">
+    <mat-list>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Validator Address: </span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">{{ validator?.val?.operator_address }}</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Account Address: </span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">{{ accAddress }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
+  <mat-card class="mb-4">
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <span class="whitespace-nowrap">Rank: </span>
+          <span class="flex-auto"></span>
+          #<span class="ml-1 break-all">{{ validator?.rank }}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          <span class="whitespace-nowrap">Website: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">{{ validator?.val?.description?.website }}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item>
+          <span class="whitespace-nowrap">Commission: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">
+            {{ validator?.val?.commission?.commission_rates?.rate | percent: '1.0-0' }}
+          </span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item>
+          <span class="whitespace-nowrap">Max Commission: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">
+            {{ validator?.val?.commission?.commission_rates?.max_rate | percent: '1.0-0' }}
+          </span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item>
+          <span class="whitespace-nowrap">Commission Updated: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">
+            {{ validator?.val?.commission?.update_time | date: 'yyyy-M-d a h:mm:ss z' }}
+          </span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item>
+          <span class="whitespace-nowrap">Voting Power: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">
+            {{ validator?.share | percent: '1.2-2' }}
+          </span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item>
+          <span class="whitespace-nowrap">Staked: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">{{ validator?.val?.tokens | number: '1.0-0' }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #notFound>
+  <p>404 Not Found</p>
+</ng-template>

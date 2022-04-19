@@ -9,28 +9,146 @@
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   },
-  "hosting": {
-    "public": "dist/landing-page",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/explorer/**",
-        "destination": "/explorer/index.html"
-      },
-      {
-        "source": "/portal/**",
-        "destination": "/portal/index.html"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
+  "hosting": [
+    {
+      "target": "ununifi-alpha-test",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-beta-test",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-test",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-8-private-test",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-9-beta-test-v1",
+      "public": "dist/landing-page",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ],
   "storage": {
     "rules": "storage.rules"
   },

@@ -51,28 +51,86 @@
 <mat-card class="mb-2">
   <mat-list>
     <mat-list-item>
-      <span class="break-all truncate pr-4">Hash</span>
+      <span class="break-all truncate">Hash</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate pl-4">Type</span>
+      <span class="break-all truncate">Type</span>
       <span class="flex-auto"></span>
       <span class="break-all truncate">From</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">To</span>
+      <span class="break-all truncate pr-10">To</span>
       <span class="flex-auto"></span>
       <span class="break-all truncate">Total Amount</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">When</span>
+
       <mat-divider></mat-divider>
     </mat-list-item>
-    <mat-list-item>
-      <ng-container
-        *ngIf="(transactions?.length || 0) > 0; then existTransactions; else emptyTransactions"
-      >
-      </ng-container>
-      <ng-template #emptyTransactions>
-        <span>*No Transactions</span>
-      </ng-template>
-      <ng-template #existTransactions> OK Transaction </ng-template>
-    </mat-list-item>
   </mat-list>
+  <ng-container
+    *ngIf="
+      (transactions?.tx_responses?.length || 0) > 0;
+      then existTransactions;
+      else emptyTransactions
+    "
+  >
+  </ng-container>
+
+  <ng-template #emptyTransactions>
+    <span>*No Transactions</span>
+  </ng-template>
+
+  <ng-template #existTransactions>
+    <mat-nav-list>
+      <mat-list-item
+        routerLink="/txs/{{ tx.txhash }}"
+        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
+      >
+        <span class="pr-2 w-1/12 text-sm truncate">{{ tx.txhash }}</span>
+        <span class="flex-auto"></span>
+        <span class="w-1/6 truncate">{{ tx.logs?.[0]?.events?.[3]?.type }}</span>
+        <span class="flex-auto"></span>
+        <span
+          class="w-1/5 break-all truncate"
+          >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
+        >
+        <span class="flex-auto"></span>
+        <span
+          class="w-1/5 break-all truncate"
+          >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
+        >
+        <span class="flex-auto"></span>
+        <span
+          class="w-1/6 break-all truncate"
+          >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
+        >
+
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-nav-list>
+  </ng-template>
 </mat-card>
+
+<!--
+
+<h3>Msgs</h3>
+<ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
+  <ng-container *ngIf="unpackMsg(message) as msg">
+    <mat-card>
+      <mat-list>
+        <mat-list-item>
+          <span class="whitespace-nowrap">Type: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">{{ constructorName(msg) }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
+          <mat-list-item>
+            <span class="whitespace-nowrap">{{ data[0] }}</span>
+            <span class="flex-auto"></span>
+            <span class="ml-2 break-all text-xs sm:text-base">{{ data[1] | json }}</span>
+          </mat-list-item>
+          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+        </ng-template>
+      </mat-list>
+    </mat-card>
+  </ng-container>
+</ng-template>
+-->

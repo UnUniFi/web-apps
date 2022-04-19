@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { cosmosclient } from '@cosmos-client/core';
 import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
+import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 
 @Component({
   selector: 'view-block',
@@ -16,14 +18,10 @@ export class BlockComponent implements OnInit {
   @Input()
   previousBlock?: number | null;
 
-  @Input() //Todo: fix real txs
-  transactions?: number[];
+  @Input()
+  transactions?: CosmosTxV1beta1GetTxsEventResponse | null;
 
   constructor() {}
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      console.log('block', this.block);
-    }, 5000);
-  }
+  ngOnInit(): void {}
 }

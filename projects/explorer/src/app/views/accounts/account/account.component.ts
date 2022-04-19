@@ -13,6 +13,10 @@ export class AccountComponent implements OnInit, OnChanges {
   @Input()
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
+  //Todo : add price information
+  @Input()
+  value?: number;
+
   baseAccount?: proto.cosmos.auth.v1beta1.BaseAccount;
   vestingAccount?: proto.cosmos.vesting.v1beta1.ContinuousVestingAccount;
   publicKey?: string;

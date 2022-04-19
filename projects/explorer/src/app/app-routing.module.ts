@@ -16,8 +16,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/txs/txs.module').then((m) => m.AppTxsModule),
   },
   {
-    path: 'cosmos',
-    loadChildren: () => import('./pages/cosmos/cosmos.module').then((m) => m.AppCosmosModule),
+    path: 'validators',
+    loadChildren: () =>
+      import('./pages/validators/validators.module').then((m) => m.AppValidatorsModule),
+  },
+  {
+    path: 'proposals',
+    loadChildren: () =>
+      import('./pages/proposals/proposals.module').then((m) => m.AppProposalsModule),
   },
   {
     path: 'monitor',

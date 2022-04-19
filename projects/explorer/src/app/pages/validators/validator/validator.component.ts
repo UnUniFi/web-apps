@@ -1,5 +1,5 @@
-import { CosmosSDKService } from '../../../../../models/cosmos-sdk.service';
-import { validatorType } from './../../../../../views/cosmos/staking/validators/validators.component';
+import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { validatorType } from '../../../views/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';

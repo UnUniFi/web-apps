@@ -5,6 +5,9 @@ export const convertHexStringToUint8Array = (hexString: string): Uint8Array | un
     const hexStringWithNoWhitespace = hexString.replace(/\s+/g, '');
     const buffer = Buffer.from(hexStringWithNoWhitespace, 'hex');
     const uint8Array = Uint8Array.from(buffer);
+    if (uint8Array.length == 0) {
+      return undefined;
+    }
     return uint8Array;
   } catch (error) {
     console.error(error);

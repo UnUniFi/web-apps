@@ -30,7 +30,6 @@ export class ProposalComponent implements OnInit {
     private readonly govAppService: GovApplicationService,
   ) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id));
-    proposalID$.subscribe((a) => console.log(a));
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
@@ -41,7 +40,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.proposal$.subscribe((a) => console.log(a));
 
     this.proposalType$ = this.proposal$.pipe(
       map((proposal) => {
@@ -59,7 +57,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.deposits$.subscribe((a) => console.log(a));
 
     this.tally$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
@@ -69,7 +66,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.tally$.subscribe((a) => console.log(a));
 
     this.votes$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
@@ -79,7 +75,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.votes$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

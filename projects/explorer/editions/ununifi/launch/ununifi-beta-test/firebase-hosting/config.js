@@ -60,14 +60,14 @@ const configs = [
     extension: {
       faucet: [
         {
-          hasFaucet: true,
+          hasFaucet: false,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
           denom: 'ubtc',
           creditAmount: 100, // amount to credit in max request
           maxCredit: 99, // account has already maxCredit balance cannot claim anymore
         },
         {
-          hasFaucet: true,
+          hasFaucet: false,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
           creditAmount: 2000000,
@@ -81,7 +81,7 @@ const configs = [
           maxCredit: 9,
         },
         {
-          hasFaucet: true,
+          hasFaucet: false,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
           denom: 'ueth',
           creditAmount: 1000,
@@ -119,14 +119,14 @@ const configs = [
   //   extension: {
   //     faucet: [
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
   //         denom: 'ubtc',
   //         creditAmount: 100, // amount to credit in max request
   //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
   //         denom: 'uguu',
   //         creditAmount: 2000000,
@@ -140,7 +140,7 @@ const configs = [
   //         maxCredit: 9,
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
   //         denom: 'ueth',
   //         creditAmount: 1000,
@@ -178,14 +178,14 @@ const configs = [
   //   extension: {
   //     faucet: [
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
   //         denom: 'ubtc',
   //         creditAmount: 100, // amount to credit in max request
   //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
   //         denom: 'uguu',
   //         creditAmount: 2000000,
@@ -199,7 +199,7 @@ const configs = [
   //         maxCredit: 9,
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
   //         denom: 'ueth',
   //         creditAmount: 1000,
@@ -237,14 +237,14 @@ const configs = [
   //   extension: {
   //     faucet: [
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
   //         denom: 'ubtc',
   //         creditAmount: 100, // amount to credit in max request
   //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
   //         denom: 'uguu',
   //         creditAmount: 2000000,
@@ -258,7 +258,7 @@ const configs = [
   //         maxCredit: 9,
   //       },
   //       {
-  //         hasFaucet: true,
+  //         hasFaucet: false,
   //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
   //         denom: 'ueth',
   //         creditAmount: 1000,

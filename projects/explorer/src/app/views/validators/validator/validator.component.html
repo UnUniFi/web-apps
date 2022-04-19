@@ -14,7 +14,11 @@
       {{ validator?.val?.description?.moniker }}
     </h2>
     <span class="flex-auto"></span>
-    <span
+    <mat-chip-list>
+      <mat-chip *ngIf="validator?.inList" color="primary" selected> Active </mat-chip>
+      <mat-chip *ngIf="!validator?.inList" color="warn" selected> inactive </mat-chip>
+    </mat-chip-list>
+    <!-- <span
       *ngIf="validator?.inList"
       class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-blue-500"
     >
@@ -25,7 +29,7 @@
       class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-red-500"
     >
       Inactive
-    </span>
+    </span> -->
   </div>
 
   <mat-card class="mb-4">

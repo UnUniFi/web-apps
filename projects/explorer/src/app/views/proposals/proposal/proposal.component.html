@@ -21,7 +21,9 @@
           <mat-list-item>
             <span>Type </span>
             <span class="flex-auto"></span>
-            <span>{{ proposalType?.replace('/cosmos.gov.v1beta1.', '') }}</span>
+            <span>{{
+              proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
+            }}</span>
           </mat-list-item>
           <mat-divider [inset]="true"></mat-divider>
           <mat-list-item>

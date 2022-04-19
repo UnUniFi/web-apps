@@ -1,0 +1,10 @@
+<view-blocks
+  [blocks]="blocks$ | async"
+  [pageSize]="pageSize$ | async"
+  [pageNumber]="pageNumber$ | async"
+  [pageLength]="pageLength$ | async"
+  [pageSizeOptions]="pageSizeOptions"
+  (paginationChange)="appPaginationChanged($event)"
+  (checkBoxAutoChange)="onCheckBoxAutoChange($event)"
+>
+</view-blocks>

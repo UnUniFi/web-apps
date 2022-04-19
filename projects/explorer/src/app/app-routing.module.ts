@@ -2,7 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./pages/home/home.module').then((m) => m.AppHomeModule) },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./pages/dashboard/dashboard.module').then((m) => m.AppDashboardModule),
+  },
   {
     path: 'accounts',
     loadChildren: () => import('./pages/accounts/accounts.module').then((m) => m.AppAccountsModule),
@@ -16,8 +20,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/txs/txs.module').then((m) => m.AppTxsModule),
   },
   {
-    path: 'cosmos',
-    loadChildren: () => import('./pages/cosmos/cosmos.module').then((m) => m.AppCosmosModule),
+    path: 'validators',
+    loadChildren: () =>
+      import('./pages/validators/validators.module').then((m) => m.AppValidatorsModule),
+  },
+  {
+    path: 'proposals',
+    loadChildren: () =>
+      import('./pages/proposals/proposals.module').then((m) => m.AppProposalsModule),
   },
   {
     path: 'monitor',

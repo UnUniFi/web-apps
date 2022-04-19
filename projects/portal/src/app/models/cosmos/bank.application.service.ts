@@ -39,15 +39,14 @@ export class BankApplicationService {
       return;
     }
 
-    if (!validatePrivateStoredWallet(privateWallet)) {
-      this.snackBar.open('Invalid Wallet info!', 'Close');
+    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }
 
-    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-
-    if (!privateKey) {
-      this.snackBar.open('Invalid PrivateKey!', 'Close');
+    if (!validatePrivateStoredWallet(privateWallet)) {
+      this.snackBar.open('Invalid Wallet info!', 'Close');
       return;
     }
 

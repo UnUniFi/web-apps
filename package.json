@@ -19,6 +19,7 @@
     "build:all:prod": "rm -r dist ; mkdir dist && npm run build:landing-page:prod && npm run build:explorer:prod && npm run build:portal:prod && node bundle",
     "build:all:prod:ununifi": "npm run build:all:prod && node copy-config ununifi",
     "build:all:prod:ununifi-alpha-test": "npm run build:all:prod && node copy-config ununifi-alpha-test",
+    "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-8-private-test": "npm run build:all:prod && node copy-config ununifi-8-private-test",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

@@ -44,7 +44,7 @@ export class AppComponent {
     this.selectedConfig$ = this.config$.pipe(map((config) => config?.id));
     this.navigations$ = this.config$.pipe(
       map((config) => {
-        if (config?.extension?.faucet != undefined) {
+        if (config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet == true).length) {
           config.extension.navigations.unshift({
             name: 'Faucet',
             link: '/portal/faucet',

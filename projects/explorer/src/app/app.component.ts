@@ -1,18 +1,19 @@
+import { environment } from '../environments/environment';
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   config$: Observable<Config | undefined>;
   configs?: string[];
   navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
@@ -216,5 +217,12 @@ export class AppComponent {
 
   onChangeConfig(value: string) {
     this.configS.setCurrentConfig(value);
+  }
+
+  ngOnInit() {
+    // tracking
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
   }
 }

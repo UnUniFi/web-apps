@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  gtagId: 'G-SS4M3SBJ6C',
+  production: true,
 };

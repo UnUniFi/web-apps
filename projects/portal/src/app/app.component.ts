@@ -215,7 +215,7 @@ export class AppComponent {
     } else if (searchResult.type === 'txHash') {
       await this.router.navigate(['txs', searchResult.searchValue]);
     } else if (searchResult.type === 'block') {
-      await this.router.navigate(['blocks', searchResult.searchValue]);
+      await this.router.navigate(['explorer/blocks', searchResult.searchValue]);
     }
   }
 

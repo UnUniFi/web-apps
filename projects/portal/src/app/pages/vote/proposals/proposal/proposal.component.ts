@@ -64,11 +64,11 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+
     this.depositParams$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.gov.params(sdk.rest, 'deposit')),
       map((result) => result.data.deposit_params),
     );
-    this.depositParams$.subscribe((a) => console.log(a));
 
     this.tally$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
@@ -78,6 +78,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+
     this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.gov.params(sdk.rest, 'tallying')),
       map((result) => result.data.tally_params),
@@ -86,7 +87,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.tallyParams$.subscribe((a) => console.log(a));
 
     this.votes$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
@@ -96,6 +96,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+
     this.votingParams$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.gov.params(sdk.rest, 'voting')),
       map((result) => result.data.voting_params),
@@ -104,7 +105,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.votingParams$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

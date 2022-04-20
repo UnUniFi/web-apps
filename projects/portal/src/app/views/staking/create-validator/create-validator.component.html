@@ -1,29 +1,32 @@
 <h2>Create Validator</h2>
-<form #formRef="ngForm" (submit)="onSubmitCreateValidator(
-  monikerRef.value,
-  identityRef.value,
-  websiteRef.value,
-  securityContactRef.value,
-  detailsRef.value,
-  rateRef.value,
-  maxRateRef.value,
-  maxChangeRateRef.value,
-  minSelfDelegationRef.value,
-  delegatorAddressRef.value,
-  validatorAddressRef.value,
-  denomRef.value,
-  amountRef.value,
-  ipRef.value,
-  nodeIdRef.value,
-  pubkeyRef.value,
-  minimumGasPriceRef.value)"
+<form
+  #formRef="ngForm"
+  (submit)="
+    onSubmitCreateValidator(
+      monikerRef.value,
+      identityRef.value,
+      websiteRef.value,
+      securityContactRef.value,
+      detailsRef.value,
+      rateRef.value,
+      maxRateRef.value,
+      maxChangeRateRef.value,
+      minSelfDelegationRef.value,
+      delegatorAddressRef.value,
+      validatorAddressRef.value,
+      denomRef.value,
+      amountRef.value,
+      ipRef.value,
+      nodeIdRef.value,
+      pubkeyRef.value,
+      minimumGasPriceRef.value
+    )
+  "
 >
   <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          Tx Details
-        </mat-panel-title>
+        <mat-panel-title> Tx Details </mat-panel-title>
         <mat-panel-description>
           This is a Tx Form to be validator. All value has been already input.
         </mat-panel-description>
@@ -42,25 +45,11 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Identity</mat-label>
-        <input
-          #identityRef
-          [(ngModel)]="identity"
-          name="identity"
-          matInput
-          type="text"
-          readonly
-        />
+        <input #identityRef [(ngModel)]="identity" name="identity" matInput type="text" readonly />
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Website</mat-label>
-        <input
-          #websiteRef
-          [(ngModel)]="website"
-          name="website"
-          matInput
-          type="text"
-          readonly
-        />
+        <input #websiteRef [(ngModel)]="website" name="website" matInput type="text" readonly />
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Security contact</mat-label>
@@ -75,26 +64,11 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Details</mat-label>
-        <input
-          #detailsRef
-          [(ngModel)]="details"
-          name="details"
-          matInput
-          type="text"
-          readonly
-        />
+        <input #detailsRef [(ngModel)]="details" name="details" matInput type="text" readonly />
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Rate</mat-label>
-        <input
-          #rateRef
-          [(ngModel)]="rate"
-          name="rate"
-          matInput
-          type="text"
-          required
-          readonly
-        />
+        <input #rateRef [(ngModel)]="rate" name="rate" matInput type="text" required readonly />
         <span matSuffix>%</span>
       </mat-form-field>
       <mat-form-field class="w-full">
@@ -161,15 +135,7 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Denom</mat-label>
-        <input
-          #denomRef
-          [(ngModel)]="denom"
-          name="denom"
-          matInput
-          type="text"
-          required
-          readonly
-        />
+        <input #denomRef [(ngModel)]="denom" name="denom" matInput type="text" required readonly />
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Amount</mat-label>
@@ -185,15 +151,7 @@
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>IP or Domain</mat-label>
-        <input
-          #ipRef
-          [(ngModel)]="ip"
-          type="text"
-          name="ip"
-          matInput
-          required
-          readonly
-        />
+        <input #ipRef [(ngModel)]="ip" type="text" name="ip" matInput required readonly />
       </mat-form-field>
       <mat-form-field class="w-full">
         <mat-label>Node id</mat-label>
@@ -230,7 +188,10 @@
             required
             (valueChange)="onMinimumGasDenomChanged($event)"
           >
-            <mat-option *ngFor="let minimumGasPriceOption of minimumGasPrices" [value]="minimumGasPriceOption.denom">
+            <mat-option
+              *ngFor="let minimumGasPriceOption of minimumGasPrices"
+              [value]="minimumGasPriceOption.denom"
+            >
               {{ minimumGasPriceOption.denom }}
             </mat-option>
           </mat-select>
@@ -249,7 +210,8 @@
           />
         </mat-form-field>
       </div>
-      <mat-slider class="w-full"
+      <mat-slider
+        class="w-full"
         [max]="1"
         [min]="0"
         [step]="0.015"

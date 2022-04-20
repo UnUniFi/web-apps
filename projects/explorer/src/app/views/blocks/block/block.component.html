@@ -85,23 +85,45 @@
       >
         <span class="pr-2 w-1/12 text-sm truncate">{{ tx.txhash }}</span>
         <span class="flex-auto"></span>
-        <span class="w-1/6 truncate">{{ tx.logs?.[0]?.events?.[3]?.type }}</span>
-        <span class="flex-auto"></span>
-        <span
-          class="w-1/5 break-all truncate"
-          >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
-        >
-        <span class="flex-auto"></span>
-        <span
-          class="w-1/5 break-all truncate"
-          >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
-        >
-        <span class="flex-auto"></span>
-        <span
-          class="w-1/6 break-all truncate"
-          >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
-        >
-
+        <ng-container *ngIf="tx.logs?.[0]?.events?.[1]?.type === 'oracle_updated_price' ">
+          <span
+            class="w-1/6 truncate"
+            >{{ tx.logs?.[0]?.events?.[0]?.attributes?.[0]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[0]?.attributes?.[2]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{tx.logs?.[0]?.events?.[1]?.attributes?.[0]?.value}}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/6 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[1]?.attributes?.[2]?.value }}</span
+          >
+        </ng-container>
+        <ng-container *ngIf="tx.logs?.[0]?.events?.[3]?.type  == 'transfer'">
+          <span class="w-1/6 truncate">{{ tx.logs?.[0]?.events?.[3]?.type }}</span>
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/6 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
+          >
+        </ng-container>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>

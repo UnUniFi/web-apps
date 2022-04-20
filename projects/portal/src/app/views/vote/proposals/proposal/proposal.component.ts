@@ -6,6 +6,9 @@ import {
   InlineResponse20054Deposits,
   InlineResponse20052FinalTallyResult,
   InlineResponse20057Votes,
+  InlineResponse20051DepositParams,
+  InlineResponse20051TallyParams,
+  InlineResponse20051VotingParams,
 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -21,9 +24,15 @@ export class ProposalComponent implements OnInit {
   @Input()
   deposits?: InlineResponse20054Deposits[] | null;
   @Input()
+  depositParams?: InlineResponse20051DepositParams | null;
+  @Input()
   tally?: InlineResponse20052FinalTallyResult | null;
   @Input()
+  tallyParams?: InlineResponse20051TallyParams | null;
+  @Input()
   votes?: InlineResponse20057Votes[] | null;
+  @Input()
+  votingParams?: InlineResponse20051VotingParams | null;
 
   @Output()
   appClickVote: EventEmitter<number>;

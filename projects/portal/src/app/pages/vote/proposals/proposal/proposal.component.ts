@@ -6,6 +6,9 @@ import {
   InlineResponse20054Deposits,
   InlineResponse20052FinalTallyResult,
   InlineResponse20057Votes,
+  InlineResponse20051DepositParams,
+  InlineResponse20051TallyParams,
+  InlineResponse20051VotingParams,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -21,8 +24,11 @@ export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20052Proposals | undefined>;
   proposalType$: Observable<string | undefined>;
   deposits$: Observable<InlineResponse20054Deposits[] | undefined>;
+  depositParams$: Observable<InlineResponse20051DepositParams | undefined>;
   tally$: Observable<InlineResponse20052FinalTallyResult | undefined>;
+  tallyParams$: Observable<InlineResponse20051TallyParams | undefined>;
   votes$: Observable<InlineResponse20057Votes[] | undefined>;
+  votingParams$: Observable<InlineResponse20051VotingParams | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +46,7 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.proposal$.subscribe((a) => console.log(a));
 
     this.proposalType$ = this.proposal$.pipe(
       map((proposal) => {
@@ -57,6 +64,11 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.depositParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'deposit')),
+      map((result) => result.data.deposit_params),
+    );
+    this.depositParams$.subscribe((a) => console.log(a));
 
     this.tally$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
@@ -66,6 +78,15 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'tallying')),
+      map((result) => result.data.tally_params),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+    this.tallyParams$.subscribe((a) => console.log(a));
 
     this.votes$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
@@ -75,6 +96,15 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+    this.votingParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'voting')),
+      map((result) => result.data.voting_params),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+    this.votingParams$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

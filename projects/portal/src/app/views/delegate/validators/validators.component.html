@@ -62,37 +62,49 @@
 </ng-template>
 
 <h2 class="mb-0">Delegations</h2>
-<mat-card class="mb-4">
-  <mat-list>
-    <mat-list-item>
-      <span class="w-2/3 break-all truncate pl-8 pr-8">Validator</span>
-      <span class="flex-auto"></span>
-      <span class="w-1/6 break-all truncate pr-4">Amount</span>
-      <span class="flex-auto"></span>
-      <span class="w-1/6 break-all truncate pr-4">Shares</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <ng-container *ngFor="let delegation of delegations">
+<ng-container *ngIf="delegations === null; then loading; else loadedDelegations"> </ng-container>
+<ng-template #loadedDelegations>
+  <ng-container
+    *ngIf="(delegations?.length || 0) > 0; then existDelegations; else emptyDelegations"
+  >
+  </ng-container>
+</ng-template>
+<ng-template #existDelegations>
+  <mat-card class="mb-4">
+    <mat-list>
       <mat-list-item>
-        <mat-icon
-          matListIcon
-          [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
-        >
-          circle
-        </mat-icon>
-        <span class="w-3/5 break-all text-sm sm:text-base">{{
-          delegation.delegation?.validator_address
-        }}</span>
+        <span class="w-2/3 break-all truncate pl-8 pr-8">Validator</span>
         <span class="flex-auto"></span>
-        <span class="w-1/6 break-all text-sm sm:text-base"
-          >{{ delegation.balance?.amount }} {{ delegation.balance?.denom }}
-        </span>
+        <span class="w-1/6 break-all truncate pr-4">Amount</span>
         <span class="flex-auto"></span>
-        <span class="w-1/6 break-all text-sm sm:text-base"
-          >{{ toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}
-        </span>
+        <span class="w-1/6 break-all truncate pr-4">Shares</span>
+        <mat-divider></mat-divider>
       </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-    </ng-container>
-  </mat-list>
-</mat-card>
+      <ng-container *ngFor="let delegation of delegations; last as last">
+        <mat-list-item>
+          <mat-icon
+            matListIcon
+            [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
+          >
+            circle
+          </mat-icon>
+          <span class="w-3/5 break-all text-sm sm:text-base">{{
+            delegation.delegation?.validator_address
+          }}</span>
+          <span class="flex-auto"></span>
+          <span class="w-1/6 break-all text-sm sm:text-base"
+            >{{ delegation.balance?.amount }} {{ delegation.balance?.denom }}
+          </span>
+          <span class="flex-auto"></span>
+          <span class="w-1/6 break-all text-sm sm:text-base"
+            >{{ toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}
+          </span>
+        </mat-list-item>
+        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
+      </ng-container>
+    </mat-list>
+  </mat-card>
+</ng-template>
+<ng-template #emptyDelegations>
+  <p>There is no delegations.</p>
+</ng-template>

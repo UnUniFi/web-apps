@@ -54,6 +54,10 @@ export class ProposalComponent implements OnInit {
     }
   }
 
+  toNumber(str: string) {
+    return Number(str);
+  }
+
   onClickVote(proposalID: string) {
     this.appClickVote.emit(Number(proposalID));
   }

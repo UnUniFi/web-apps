@@ -45,4 +45,8 @@ export class ProposalComponent implements OnInit {
       return null;
     }
   }
+
+  toNumber(str: string) {
+    return Number(str);
+  }
 }

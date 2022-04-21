@@ -30,6 +30,13 @@
     <mat-divider [inset]="true"></mat-divider>
 
     <mat-list-item>
+      <span class="whitespace-nowrap">Type: </span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all">{{ txOverview?.[0]?.from }}</span>
+    </mat-list-item>
+    <mat-divider [inset]="true"></mat-divider>
+
+    <mat-list-item>
       <span class="whitespace-nowrap">Timestamp: </span>
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-xs sm:text-base">

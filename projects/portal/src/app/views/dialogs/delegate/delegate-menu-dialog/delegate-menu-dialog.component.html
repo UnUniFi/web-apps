@@ -22,7 +22,9 @@
         selectedValidator?.commission?.commission_rates?.rate | percent
       }}</span>
     </mat-list-item>
-    <ng-container *ngIf="selectedValidator?.description?.website">
+    <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
+    </ng-container>
+    <ng-template #exist>
       <a href="{{ selectedValidator?.description?.website }}" target="_blank">
         <mat-list-item>
           <span class="column-name"> Website </span>
@@ -30,7 +32,14 @@
           <span class="column-value">{{ selectedValidator?.description?.website }}</span>
         </mat-list-item>
       </a>
-    </ng-container>
+    </ng-template>
+    <ng-template #empty>
+      <mat-list-item>
+        <span class="column-name"> Website </span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{ selectedValidator?.description?.website }}</span>
+      </mat-list-item>
+    </ng-template>
     <ng-container *ngIf="isDelegated">
       <mat-list-item>
         <span class="column-name">Delegated Amount</span>

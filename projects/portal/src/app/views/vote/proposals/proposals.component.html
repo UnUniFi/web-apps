@@ -13,7 +13,7 @@
 <ng-template #exist>
   <mat-card>
     <mat-nav-list>
-      <ng-container *ngFor="let proposal of proposals?.proposals">
+      <ng-container *ngFor="let proposal of proposals?.proposals; last as last">
         <ng-container *ngIf="unpackContent(proposal.content) as content">
           <mat-list-item routerLink="{{ proposal.proposal_id }}">
             <span># {{ proposal.proposal_id }}</span>
@@ -35,7 +35,7 @@
             <mat-icon class="mr-2">subtitles_off</mat-icon>
             <span>{{ proposal.final_tally_result?.abstain }}</span>
           </mat-list-item>
-          <mat-divider></mat-divider>
+          <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
         </ng-container>
       </ng-container>
     </mat-nav-list>

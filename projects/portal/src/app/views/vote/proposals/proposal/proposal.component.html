@@ -110,21 +110,21 @@
         <mat-list-item>
           <span>Quorum: </span>
           <span class="flex-auto"></span>
-          <span>{{ tallyParams?.quorum?.substring(0, 5) }}</span>
+          <span>{{ toNumber(tallyParams?.quorum ?? '0') }}</span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
 
         <mat-list-item>
           <span>Threshold: </span>
           <span class="flex-auto"></span>
-          <span>{{ tallyParams?.threshold?.substring(0, 5) }}</span>
+          <span>{{ toNumber(tallyParams?.threshold ?? '0') }}</span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
 
         <mat-list-item>
           <span>Veto Threshold: </span>
           <span class="flex-auto"></span>
-          <span>{{ tallyParams?.veto_threshold?.substring(0, 5) }}</span>
+          <span>{{ toNumber(tallyParams?.veto_threshold ?? '0') }}</span>
         </mat-list-item>
       </mat-list>
     </mat-card-content>
@@ -176,7 +176,7 @@
 
   <mat-card class="mb-4">
     <mat-list>
-      <ng-container *ngFor="let deposit of deposits">
+      <ng-container *ngFor="let deposit of deposits; last as last">
         <ng-container *ngFor="let amount of deposit.amount">
           <mat-list-item>
             <span>{{ deposit.depositor }}:</span>
@@ -184,7 +184,7 @@
             <span>{{ amount.amount }} {{ amount.denom }}</span>
           </mat-list-item>
         </ng-container>
-        <mat-divider [inset]="true"></mat-divider>
+        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
       </ng-container>
     </mat-list>
   </mat-card>
@@ -202,13 +202,13 @@
   <h3>Vote</h3>
   <mat-card>
     <mat-list>
-      <ng-container *ngFor="let vote of votes">
+      <ng-container *ngFor="let vote of votes; last as last">
         <mat-list-item>
           <span class="break-all">{{ vote.voter }}: </span>
           <span class="flex-auto"></span>
           <span>{{ vote.option?.replace('VOTE_OPTION_', '') }}</span>
         </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
+        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
       </ng-container>
     </mat-list>
   </mat-card>

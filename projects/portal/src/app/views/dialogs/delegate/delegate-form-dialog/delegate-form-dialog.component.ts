@@ -7,6 +7,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 export type DelegateOnSubmitEvent = {
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  validatorList: InlineResponse20066Validators[];
 };
 
 @Component({
@@ -17,6 +18,8 @@ export type DelegateOnSubmitEvent = {
 export class DelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
+  @Input()
+  validatorsList?: InlineResponse20066Validators[] | null;
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -62,11 +65,18 @@ export class DelegateFormDialogComponent implements OnInit {
     if (!this.selectedAmount) {
       return;
     }
-    if (this.selectedGasPrice === undefined) {
+    if (!this.selectedGasPrice) {
+      return;
+    }
+    if (!this.validatorsList) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
-    this.appSubmit.emit({ amount: this.selectedAmount, minimumGasPrice: this.selectedGasPrice });
+    this.appSubmit.emit({
+      amount: this.selectedAmount,
+      minimumGasPrice: this.selectedGasPrice,
+      validatorList: this.validatorsList,
+    });
   }
 
   onMinimumGasDenomChanged(denom: string): void {

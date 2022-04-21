@@ -10,7 +10,7 @@ import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { DelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
+import { UndelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -73,7 +73,7 @@ export class UndelegateFormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onSubmit($event: DelegateOnSubmitEvent) {
+  async onSubmit($event: UndelegateOnSubmitEvent) {
     const txHash = await this.stakingAppService.undelegate(
       this.validator?.operator_address!,
       $event.amount,

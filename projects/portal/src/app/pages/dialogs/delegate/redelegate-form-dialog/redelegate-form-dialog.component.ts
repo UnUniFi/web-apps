@@ -88,34 +88,29 @@ export class RedelegateFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: RedelegateOnSubmitEvent) {
-    this.validatorsDetailList$.subscribe(async (valList) => {
-      const validatorStatus = valList?.find(
-        (val) => val.operator_address == $event.destinationValidator,
-      )?.status;
-      if (validatorStatus != 'BOND_STATUS_BONDED') {
-        const inactiveValidatorResult = await this.dialog
-          .open(InactiveValidatorConfirmDialogComponent, {
-            data: { valAddress: $event.destinationValidator, isConfirmed: false },
-          })
-          .afterClosed()
-          .toPromise();
+    const validatorStatus = $event.validatorList.find(
+      (val) => val.operator_address == $event.destinationValidator,
+    )?.status;
+    if (validatorStatus != 'BOND_STATUS_BONDED') {
+      const inactiveValidatorResult = await this.dialog
+        .open(InactiveValidatorConfirmDialogComponent, {
+          data: { valAddress: $event.destinationValidator, isConfirmed: false },
+        })
+        .afterClosed()
+        .toPromise();
 
-        if (
-          inactiveValidatorResult === undefined ||
-          inactiveValidatorResult.isConfirmed === false
-        ) {
-          this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
-          return;
-        }
+      if (inactiveValidatorResult === undefined || inactiveValidatorResult.isConfirmed === false) {
+        this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
+        return;
       }
+    }
 
-      const txHash = await this.stakingAppService.Redelegate(
-        this.validator?.operator_address!,
-        $event.destinationValidator,
-        $event.amount,
-        $event.minimumGasPrice,
-      );
-      this.matDialogRef.close(txHash);
-    });
+    const txHash = await this.stakingAppService.Redelegate(
+      this.validator?.operator_address!,
+      $event.destinationValidator,
+      $event.amount,
+      $event.minimumGasPrice,
+    );
+    this.matDialogRef.close(txHash);
   }
 }

@@ -65,33 +65,28 @@ export class DelegateFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: DelegateOnSubmitEvent) {
-    this.validatorsList$.subscribe(async (valList) => {
-      const validatorStatus = valList?.find(
-        (val) => val.operator_address == this.validator?.operator_address,
-      )?.status;
-      if (validatorStatus != 'BOND_STATUS_BONDED') {
-        const inactiveValidatorResult = await this.dialog
-          .open(InactiveValidatorConfirmDialogComponent, {
-            data: { valAddress: this.validator?.operator_address!, isConfirmed: false },
-          })
-          .afterClosed()
-          .toPromise();
+    const validatorStatus = $event.validatorList.find(
+      (val) => val.operator_address == this.validator?.operator_address,
+    )?.status;
+    if (validatorStatus != 'BOND_STATUS_BONDED') {
+      const inactiveValidatorResult = await this.dialog
+        .open(InactiveValidatorConfirmDialogComponent, {
+          data: { valAddress: this.validator?.operator_address!, isConfirmed: false },
+        })
+        .afterClosed()
+        .toPromise();
 
-        if (
-          inactiveValidatorResult === undefined ||
-          inactiveValidatorResult.isConfirmed === false
-        ) {
-          this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
-          return;
-        }
+      if (inactiveValidatorResult === undefined || inactiveValidatorResult.isConfirmed === false) {
+        this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
+        return;
       }
+    }
 
-      const txHash = await this.stakingAppService.createDelegate(
-        this.validator?.operator_address!,
-        $event.amount,
-        $event.minimumGasPrice,
-      );
-      this.matDialogRef.close(txHash);
-    });
+    const txHash = await this.stakingAppService.createDelegate(
+      this.validator?.operator_address!,
+      $event.amount,
+      $event.minimumGasPrice,
+    );
+    this.matDialogRef.close(txHash);
   }
 }

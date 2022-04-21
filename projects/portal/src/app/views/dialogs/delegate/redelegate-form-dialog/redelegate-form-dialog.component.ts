@@ -11,6 +11,7 @@ export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  validatorList: InlineResponse20066Validators[];
 };
 
 @Component({
@@ -21,6 +22,8 @@ export type RedelegateOnSubmitEvent = {
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   validatorsList?: (string | undefined)[] | null;
+  @Input()
+  validatorsDetailList?: InlineResponse20066Validators[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -77,7 +80,10 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.selectedAmount) {
       return;
     }
-    if (this.selectedGasPrice === undefined) {
+    if (!this.selectedGasPrice) {
+      return;
+    }
+    if (!this.validatorsDetailList) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
@@ -85,6 +91,7 @@ export class RedelegateFormDialogComponent implements OnInit {
       destinationValidator: this.selectedValidator,
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
+      validatorList: this.validatorsDetailList,
     });
   }
 

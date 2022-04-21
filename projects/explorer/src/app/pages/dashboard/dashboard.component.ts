@@ -47,13 +47,11 @@ export class DashboardComponent implements OnInit {
       mergeMap((sdk) => rest.bank.totalSupply(sdk.rest).then((res) => res.data)),
       map((sdk) => Number(sdk.supply?.find((supply) => supply.denom == 'uguu')?.amount)),
     );
-    this.totalSupply$.subscribe((a) => console.log(a));
 
     this.stakedTokens$ = sdk$.pipe(
       mergeMap((sdk) => rest.staking.pool(sdk.rest).then((res) => res.data)),
       map((res) => Number(res.pool?.bonded_tokens) + Number(res.pool?.not_bonded_tokens)),
     );
-    this.stakedTokens$.subscribe((a) => console.log(a));
 
     this.stakedRatio$ = combineLatest([this.totalSupply$, this.stakedTokens$]).pipe(
       map(([total, staked]) => ((100 * staked!) / total!).toFixed(2)),

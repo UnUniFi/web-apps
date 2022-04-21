@@ -1,11 +1,15 @@
-<view-dashboard
-  [latestBlockHeight]="latestBlockHeight$ | async"
-  [totalSupply]="totalSupply$ | async"
-  [stakedTokens]="stakedTokens$ | async"
-  [stakedRatio]="stakedRatio$ | async"
-  [inflation]="inflation$ | async"
-></view-dashboard>
-<div class="flex flex-col lg:flex-row">
-  <app-blocks class="m-4 lg:w-1/2"></app-blocks>
-  <app-validators class="m-4 lg:w-1/2"></app-validators>
+<div class="flex flex-col">
+  <view-dashboard
+    class="mb-4"
+    [latestBlockHeight]="latestBlockHeight$ | async"
+    [totalSupply]="totalSupply$ | async"
+    [stakedTokens]="stakedTokens$ | async"
+    [stakedRatio]="stakedRatio$ | async"
+    [inflation]="inflation$ | async"
+  ></view-dashboard>
+  <app-txs class="mb-4"></app-txs>
+  <div class="flex flex-col lg:flex-row">
+    <app-blocks class="mr-4 lg:w-1/2"></app-blocks>
+    <app-validators class="lg:w-1/2"></app-validators>
+  </div>
 </div>

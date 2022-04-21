@@ -7,6 +7,7 @@ import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelega
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
+import { InactiveValidatorModule } from './views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
@@ -60,6 +61,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
     UnunifiKeyFormDialogModule,
+    InactiveValidatorModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,

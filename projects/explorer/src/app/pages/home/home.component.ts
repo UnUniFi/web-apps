@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.nodeInfo$ = combined$.pipe(
       mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
     );
-    this.nodeInfo$.subscribe((a) => console.log(a));
 
     this.syncing$ = combined$.pipe(
       mergeMap((sdk) =>

@@ -2,14 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
 
-export type txOverview = {
-  hash: string;
-  type: string;
-  from: string;
-  to: string;
-  amount: string;
-};
-
 @Component({
   selector: 'view-tx',
   templateUrl: './tx.component.html',
@@ -20,7 +12,7 @@ export class TxComponent implements OnInit {
   tx?: CosmosTxV1beta1GetTxResponse | null;
 
   @Input()
-  txOverview?: txOverview[] | null;
+  txType?: string[] | null;
 
   constructor() {}
 

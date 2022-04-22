@@ -1,3 +1,5 @@
+import { DepositFormDialogComponent } from '../../pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.component';
+import { VoteFormDialogComponent } from '../../pages/dialogs/vote/vote-form-dialog/vote-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
@@ -11,8 +13,6 @@ import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
-import { VoteFormDialogComponent } from '../../pages/dialogs/vote/vote-form-dialog/vote-form-dialog.component';
-import { DepositFormDialogComponent } from '../../pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +44,7 @@ export class GovApplicationService {
   }
 
   // WIP
-  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin, gasRatio: number) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
@@ -71,6 +71,7 @@ export class GovApplicationService {
         privateWallet.key_type,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -133,6 +134,7 @@ export class GovApplicationService {
     proposalID: number,
     voteOption: proto.cosmos.gov.v1beta1.VoteOption,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -162,6 +164,7 @@ export class GovApplicationService {
         voteOption,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -225,6 +228,7 @@ export class GovApplicationService {
     proposalID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -254,6 +258,7 @@ export class GovApplicationService {
         amount,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

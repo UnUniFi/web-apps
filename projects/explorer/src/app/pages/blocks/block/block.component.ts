@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest, proto } from '@cosmos-client/core';
+import { rest } from '@cosmos-client/core';
 import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
@@ -19,6 +19,7 @@ export class BlockComponent implements OnInit {
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;
   txs$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
+  txTypes$: Observable<string[] | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
@@ -42,6 +43,29 @@ export class BlockComponent implements OnInit {
             return undefined;
           }),
       ),
+    );
+    this.txTypes$ = this.txs$.pipe(
+      map((txs) => {
+        if (!txs?.txs) {
+          return undefined;
+        }
+        const txTypeList = txs?.txs?.map((tx) => {
+          if (!tx.body?.messages) {
+            return '';
+          }
+          const txTypes = tx.body?.messages.map((message) => {
+            if (!message) {
+              return [];
+            }
+            const txTypeRaw = (message as any)['@type'] as string;
+            const startLength = txTypeRaw.lastIndexOf('.');
+            const txType = txTypeRaw.substring(startLength + 1, txTypeRaw.length);
+            return txType;
+          });
+          return txTypes.join();
+        });
+        return txTypeList;
+      }),
     );
 
     this.latestBlockHeight$ = this.cosmosSDK.sdk$.pipe(

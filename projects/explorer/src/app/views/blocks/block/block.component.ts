@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
 import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 
@@ -20,6 +19,9 @@ export class BlockComponent implements OnInit {
 
   @Input()
   transactions?: CosmosTxV1beta1GetTxsEventResponse | null;
+
+  @Input()
+  txTypes?: string[] | null;
 
   constructor() {}
 

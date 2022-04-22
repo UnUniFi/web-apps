@@ -34,6 +34,7 @@ export class BankService {
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
+    gasRatio?: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -51,7 +52,7 @@ export class BankService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildSendTx(

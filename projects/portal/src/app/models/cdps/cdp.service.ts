@@ -23,6 +23,7 @@ export interface ICdpInfrastructure {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio?: number,
   ): Promise<SimulatedTxResultResponse>;
 
   drawCDP(
@@ -134,6 +135,7 @@ export class CdpService {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio?: number,
   ): Promise<SimulatedTxResultResponse> {
     return this.iCdpInfrastructure.simulateToCreateCDP(
       key,
@@ -142,6 +144,7 @@ export class CdpService {
       collateral,
       principal,
       minimumGasPrice,
+      gasRatio,
     );
   }
 

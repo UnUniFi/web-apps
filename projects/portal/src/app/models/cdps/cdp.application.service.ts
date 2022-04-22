@@ -32,6 +32,7 @@ export class CdpApplicationService {
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio?: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -67,6 +68,7 @@ export class CdpApplicationService {
         collateral,
         principal,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

@@ -37,6 +37,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio?: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -54,7 +55,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonService.simulateTx(SimulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(SimulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildPlaceBidTx(

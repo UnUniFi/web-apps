@@ -44,29 +44,5 @@ export class SimpleComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.privateWallet$.then((privateWallet) => {
-      const walletBackupFileName = `wallet-backup-file-${privateWallet.id}.txt`;
-      const walletBackupJsonString = JSON.stringify(privateWallet, null, 2);
-      const walletBackupLink = document.createElement('a');
-      walletBackupLink.href = 'data:text/plain,' + encodeURIComponent(walletBackupJsonString);
-      walletBackupLink.download = walletBackupFileName;
-      walletBackupLink.click();
-
-      const publicWalletUploadFileName = `public-wallet-upload-file-${privateWallet.id}.txt`;
-      const publicWalletUploadJson: StoredWallet = {
-        id: privateWallet.id,
-        type: privateWallet.type,
-        key_type: privateWallet.key_type,
-        public_key: privateWallet.public_key,
-        address: privateWallet.address,
-      };
-      const publicWalletUploadJsonString = JSON.stringify(publicWalletUploadJson, null, 2);
-      const publicWalletUploadLink = document.createElement('a');
-      publicWalletUploadLink.href =
-        'data:text/plain,' + encodeURIComponent(publicWalletUploadJsonString);
-      publicWalletUploadLink.download = publicWalletUploadFileName;
-      publicWalletUploadLink.click();
-    });
-  }
+  ngOnInit(): void {}
 }

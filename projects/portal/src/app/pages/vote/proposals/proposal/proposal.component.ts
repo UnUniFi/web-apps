@@ -6,8 +6,12 @@ import {
   InlineResponse20054Deposits,
   InlineResponse20052FinalTallyResult,
   InlineResponse20057Votes,
+  InlineResponse20051DepositParams,
+  InlineResponse20051TallyParams,
+  InlineResponse20051VotingParams,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -18,22 +22,37 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20052Proposals | undefined>;
+  proposalType$: Observable<string | undefined>;
   deposits$: Observable<InlineResponse20054Deposits[] | undefined>;
+  depositParams$: Observable<InlineResponse20051DepositParams | undefined>;
   tally$: Observable<InlineResponse20052FinalTallyResult | undefined>;
+  tallyParams$: Observable<InlineResponse20051TallyParams | undefined>;
   votes$: Observable<InlineResponse20057Votes[] | undefined>;
+  votingParams$: Observable<InlineResponse20051VotingParams | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(
+    private route: ActivatedRoute,
+    private cosmosSDK: CosmosSDKService,
+    private readonly govAppService: GovApplicationService,
+  ) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id));
-    console.log('proposalID');
-    console.log(proposalID$);
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.proposal(sdk.rest, address)),
+      mergeMap(([sdk, id]) => rest.gov.proposal(sdk.rest, id)),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);
         return of(undefined);
+      }),
+    );
+    this.proposal$.subscribe((a) => console.log(a));
+
+    this.proposalType$ = this.proposal$.pipe(
+      map((proposal) => {
+        if (proposal && proposal.content) {
+          return (proposal.content as any)['@type'];
+        }
       }),
     );
 
@@ -46,9 +65,23 @@ export class ProposalComponent implements OnInit {
       }),
     );
 
+    this.depositParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'deposit')),
+      map((result) => result.data.deposit_params),
+    );
+
     this.tally$ = combined$.pipe(
       mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
       map((result) => result.data.tally!),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'tallying')),
+      map((result) => result.data.tally_params),
       catchError((error) => {
         console.error(error);
         return of(undefined);
@@ -63,7 +96,24 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
+
+    this.votingParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.gov.params(sdk.rest, 'voting')),
+      map((result) => result.data.voting_params),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
   }
 
   ngOnInit(): void {}
+
+  onVoteProposal(proposalID: number) {
+    this.govAppService.openVoteFormDialog(proposalID);
+  }
+
+  onDepositProposal(proposalID: number) {
+    this.govAppService.openDepositFormDialog(proposalID);
+  }
 }

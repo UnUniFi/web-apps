@@ -71,39 +71,27 @@
     <mat-label>Gas Ratio</mat-label>
     <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
   </mat-form-field>
-  <div class="flex flex-row content-content items-end mb-4">
-    <button mat-flat-button type="button" class="flex-auto mr-2" (click)="changeGasRatio(1.1)">
-      Low
-    </button>
-    <button
-      mat-flat-button
-      type="button"
-      class="flex-auto mr-2"
-      color="accent"
-      (click)="changeGasRatio(2)"
+  <mat-button-toggle-group class="flex mb-4" value="low">
+    <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(1.1)"
+      >Low</mat-button-toggle
     >
-      Middle
-    </button>
-    <button
-      mat-flat-button
-      type="button"
-      class="flex-auto"
-      color="primary"
-      (click)="changeGasRatio(3)"
+    <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(2)"
+      >Middle</mat-button-toggle
     >
-      High
-    </button>
-  </div>
+    <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(3)"
+      >High</mat-button-toggle
+    >
+  </mat-button-toggle-group>
 
   <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title> Advanced </mat-panel-title>
-        <mat-panel-description> Change Minimum Gas </mat-panel-description>
+        <mat-panel-description> Change Default Gas Price </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="flex flex-row content-content items-end">
         <mat-form-field class="flex-auto">
-          <mat-label>Minimum Gas Denom</mat-label>
+          <mat-label>Gas Denom</mat-label>
           <mat-select
             [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
             name="minimum-gas-denom"
@@ -119,7 +107,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="flex-auto">
-          <mat-label>Minimum Gas Price</mat-label>
+          <mat-label>Gas Price</mat-label>
           <input
             [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
             #minimumGasPriceRef

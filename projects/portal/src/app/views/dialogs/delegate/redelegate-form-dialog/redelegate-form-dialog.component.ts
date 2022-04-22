@@ -76,6 +76,10 @@ export class RedelegateFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
   onSubmit(minimumGasPrice: string) {
     if (!this.selectedValidator) {
       return;
@@ -97,10 +101,6 @@ export class RedelegateFormDialogComponent implements OnInit {
       validatorList: this.validatorsDetailList,
       gasRatio: this.gasRatio,
     });
-  }
-
-  changeGasRatio(ratio: number) {
-    this.gasRatio = ratio;
   }
 
   onMinimumGasDenomChanged(denom: string): void {

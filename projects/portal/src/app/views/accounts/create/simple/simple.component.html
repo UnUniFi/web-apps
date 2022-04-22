@@ -1,0 +1,17 @@
+<h2>Step1</h2>
+<p>Click to download your wallet backup file.</p>
+<button
+  mat-flat-button
+  color="primary"
+  (click)="downloadWalletBackupFile()"
+  [disabled]="isAlreadyDownloadedWalletBackupFile"
+>Download (Step1)</button>
+
+<h2 class="mt-6">Step2</h2>
+<p>Click to download your public wallet upload file.</p>
+<button
+  mat-flat-button
+  color="primary"
+  (click)="downloadPublicWalletFile()"
+  [disabled]="isAlreadyDownloadedPublicWalletFile"
+>Download (Step2)</button>

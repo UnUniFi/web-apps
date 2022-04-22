@@ -1,7 +1,7 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { AuctionService } from './auction.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,6 +30,7 @@ export class AuctionApplicationService {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -51,6 +52,7 @@ export class AuctionApplicationService {
         auction_id,
         amount,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

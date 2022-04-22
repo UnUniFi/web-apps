@@ -1,17 +1,20 @@
 import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
 import {
   validatorType,
   validatorWithShareType,
 } from '../../../views/delegate/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
-import { rest } from '@cosmos-client/core';
+import { cosmosclient, rest } from '@cosmos-client/core';
 import {
+  InlineResponse20063DelegationResponses,
   InlineResponse20066Validators,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-validators',
@@ -23,11 +26,14 @@ export class ValidatorsComponent implements OnInit {
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
+  delegations$: Observable<InlineResponse20063DelegationResponses[] | undefined>;
 
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
     private cosmosSDK: CosmosSDKService,
+    private readonly walletService: WalletService,
     private readonly stakingAppService: StakingApplicationService,
   ) {
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
@@ -84,6 +90,28 @@ export class ValidatorsComponent implements OnInit {
             }
           })
           .filter((validator) => validator.inList),
+      ),
+    );
+
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
+    const address$ = this.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    );
+
+    const combined$ = combineLatest([this.cosmosSDK.sdk$, address$]);
+    this.delegations$ = combined$.pipe(
+      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      map((result) => result.data.delegation_responses),
+    );
+
+    this.delegations$.pipe(
+      map((delegations) =>
+        delegations?.reduce(
+          (sum, element) =>
+            element.balance?.denom == 'uguu' ? sum + Number(element.balance?.amount) : sum,
+          0,
+        ),
       ),
     );
   }

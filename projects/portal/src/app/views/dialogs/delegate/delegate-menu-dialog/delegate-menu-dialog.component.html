@@ -2,7 +2,7 @@
   <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
   <div class="font-bold text-xl m-3">Delegate Menu</div>
 
-  <mat-nav-list>
+  <mat-nav-list class="w-full">
     <mat-label>Validator</mat-label>
     <mat-list-item>
       <mat-icon
@@ -11,9 +11,7 @@
       >
         circle
       </mat-icon>
-      <div mat-line>
-        <span>{{ selectedValidator?.operator_address }}</span>
-      </div>
+      <span class="break-all truncate">{{ selectedValidator?.operator_address }}</span>
     </mat-list-item>
     <mat-list-item>
       <span class="column-name">Commission</span>
@@ -22,13 +20,24 @@
         selectedValidator?.commission?.commission_rates?.rate | percent
       }}</span>
     </mat-list-item>
-    <a href="{{ selectedValidator?.description?.website }}" target="_blank">
+    <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
+    </ng-container>
+    <ng-template #exist>
+      <a href="{{ selectedValidator?.description?.website }}" target="_blank">
+        <mat-list-item>
+          <span class="column-name"> Website </span>
+          <span class="flex-auto"></span>
+          <span class="column-value">{{ selectedValidator?.description?.website }}</span>
+        </mat-list-item>
+      </a>
+    </ng-template>
+    <ng-template #empty>
       <mat-list-item>
         <span class="column-name"> Website </span>
         <span class="flex-auto"></span>
         <span class="column-value">{{ selectedValidator?.description?.website }}</span>
       </mat-list-item>
-    </a>
+    </ng-template>
     <ng-container *ngIf="isDelegated">
       <mat-list-item>
         <span class="column-name">Delegated Amount</span>

@@ -13,13 +13,30 @@
 <ng-template #exist>
   <mat-card>
     <mat-nav-list>
-      <ng-container *ngFor="let proposal of proposals?.proposals">
-        <mat-list-item routerLink="{{ proposal.proposal_id }}">
-          <span>{{ proposal.proposal_id }}</span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal.status }}</span>
-        </mat-list-item>
-        <mat-divider></mat-divider>
+      <ng-container *ngFor="let proposal of proposals?.proposals; last as last">
+        <ng-container *ngIf="unpackContent(proposal.content) as content">
+          <mat-list-item routerLink="{{ proposal.proposal_id }}">
+            <span># {{ proposal.proposal_id }}</span>
+            <span class="flex-auto"></span>
+            <span>{{ content.title }}</span>
+            <span class="flex-auto"></span>
+            <span>{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}</span>
+          </mat-list-item>
+          <mat-list-item (click)="onClickVote(proposal.proposal_id!)">
+            <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
+            <span>{{ proposal.final_tally_result?.yes }}</span>
+            <span class="flex-auto"></span>
+            <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
+            <span>{{ proposal.final_tally_result?.no_with_veto }}</span>
+            <span class="flex-auto"></span>
+            <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
+            <span>{{ proposal.final_tally_result?.no }}</span>
+            <span class="flex-auto"></span>
+            <mat-icon class="mr-2">subtitles_off</mat-icon>
+            <span>{{ proposal.final_tally_result?.abstain }}</span>
+          </mat-list-item>
+          <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
+        </ng-container>
       </ng-container>
     </mat-nav-list>
   </mat-card>

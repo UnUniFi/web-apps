@@ -1,3 +1,4 @@
+import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { rest } from '@cosmos-client/core';
@@ -17,6 +18,7 @@ export class ProposalsComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly cosmosSDK: CosmosSDKService,
+    private readonly govAppService: GovApplicationService,
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
@@ -25,4 +27,8 @@ export class ProposalsComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onVoteProposal(proposalID: number) {
+    this.govAppService.openVoteFormDialog(proposalID);
+  }
 }

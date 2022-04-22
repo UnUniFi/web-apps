@@ -1,7 +1,7 @@
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
+import { TxCommonService } from '../cosmos/tx-common.service';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
-import { TxCommonInfrastructureService } from '../tx-common/tx-common.infrastructure.service';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
@@ -16,7 +16,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly keyService: KeyService,
-    private readonly txCommonInfrastructureService: TxCommonInfrastructureService,
+    private readonly txCommonService: TxCommonService,
   ) {}
 
   async placeBid(
@@ -28,7 +28,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<InlineResponse20075> {
     const txBuilder = await this.buildPlaceBidTx(key, privateKey, auction_id, amount, gas, fee);
-    return await this.txCommonInfrastructureService.announceTx(txBuilder);
+    return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToPlaceBid(
@@ -37,6 +37,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -54,7 +55,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(SimulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(SimulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildPlaceBidTx(

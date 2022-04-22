@@ -36,7 +36,7 @@ export class DelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  gasRatio?: number;
+  gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -76,9 +76,6 @@ export class DelegateFormDialogComponent implements OnInit {
       return;
     }
     if (!this.validatorsList) {
-      return;
-    }
-    if (!this.gasRatio) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();

@@ -72,7 +72,7 @@ export class DepositFormDialogComponent implements OnInit {
       this.proposalID,
       $event.amount,
       $event.minimumGasPrice,
-      1.1,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }

@@ -1,5 +1,5 @@
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { CdpInfrastructureService } from './cdp.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';

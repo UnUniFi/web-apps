@@ -1,5 +1,5 @@
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { AuctionInfrastructureService } from './auction.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { proto } from '@cosmos-client/core';

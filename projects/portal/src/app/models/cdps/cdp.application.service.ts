@@ -1,7 +1,7 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { CdpService } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';

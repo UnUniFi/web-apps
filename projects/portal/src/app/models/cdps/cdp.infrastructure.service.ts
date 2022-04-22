@@ -1,7 +1,7 @@
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
+import { TxCommonService } from '../cosmos/tx-common.service';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
-import { TxCommonInfrastructureService } from '../tx-common/tx-common.infrastructure.service';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
@@ -16,7 +16,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly keyService: KeyService,
-    private readonly txCommonInfrastructureService: TxCommonInfrastructureService,
+    private readonly txCommonService: TxCommonService,
   ) {}
 
   async createCDP(
@@ -37,7 +37,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonInfrastructureService.announceTx(txBuilder);
+    return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToCreateCDP(
@@ -65,7 +65,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
   }
 
   async buildCreateCDPTx(
@@ -145,7 +145,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonInfrastructureService.announceTx(txBuilder);
+    return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToDrawCDP(
@@ -171,7 +171,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
   }
 
   async buildDrawCDPTx(
@@ -248,7 +248,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonInfrastructureService.announceTx(txBuilder);
+    return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToRepayCDP(
@@ -274,7 +274,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
   }
 
   async buildRepayCDPTx(
@@ -353,7 +353,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonInfrastructureService.announceTx(txBUilder);
+    return await this.txCommonService.announceTx(txBUilder);
   }
 
   async simulateToDepositCDP(
@@ -381,7 +381,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(simulatedTxBUilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBUilder, minimumGasPrice);
   }
 
   async buildDepositCDPTx(
@@ -463,7 +463,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonInfrastructureService.announceTx(txBuilder);
+    return await this.txCommonService.announceTx(txBuilder);
   }
 
   async simulateToWithdrawCDP(
@@ -491,7 +491,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonInfrastructureService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
   }
 
   async buildWithdrawCDPTx(

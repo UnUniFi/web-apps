@@ -30,7 +30,7 @@ export class AuctionApplicationService {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {

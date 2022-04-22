@@ -13,7 +13,7 @@ export class TxCommonService {
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 

@@ -34,7 +34,7 @@ export class BankService {
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,

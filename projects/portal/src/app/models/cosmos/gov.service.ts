@@ -32,7 +32,7 @@ export class GovService {
     keyType: KeyType,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -136,7 +136,7 @@ export class GovService {
     voteOption: proto.cosmos.gov.v1beta1.VoteOption,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -244,7 +244,7 @@ export class GovService {
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,

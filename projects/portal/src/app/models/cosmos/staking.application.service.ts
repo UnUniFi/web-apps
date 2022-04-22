@@ -70,6 +70,7 @@ export class StakingApplicationService {
   async createValidator(
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -103,6 +104,7 @@ export class StakingApplicationService {
         createValidatorData,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -166,6 +168,7 @@ export class StakingApplicationService {
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -200,6 +203,7 @@ export class StakingApplicationService {
         amount,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -266,6 +270,7 @@ export class StakingApplicationService {
     validatorAddressAfter: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -301,6 +306,7 @@ export class StakingApplicationService {
         amount,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -367,6 +373,7 @@ export class StakingApplicationService {
     validatorAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -401,6 +408,7 @@ export class StakingApplicationService {
         amount,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

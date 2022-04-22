@@ -44,7 +44,7 @@ export class GovApplicationService {
   }
 
   // WIP
-  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin, gasRatio?: number) {
+  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin, gasRatio: number) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
@@ -134,7 +134,7 @@ export class GovApplicationService {
     proposalID: number,
     voteOption: proto.cosmos.gov.v1beta1.VoteOption,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -228,7 +228,7 @@ export class GovApplicationService {
     proposalID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();

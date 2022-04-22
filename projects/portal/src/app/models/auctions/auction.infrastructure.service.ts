@@ -37,7 +37,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,

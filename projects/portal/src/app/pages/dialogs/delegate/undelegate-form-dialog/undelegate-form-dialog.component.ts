@@ -78,6 +78,7 @@ export class UndelegateFormDialogComponent implements OnInit {
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,
+      1.1,
     );
     this.matDialogRef.close(txHash);
   }

@@ -47,7 +47,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio?: number,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -155,6 +155,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateralType: string,
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -172,7 +173,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildDrawCDPTx(
@@ -258,6 +259,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateralType: string,
     repayment: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -275,7 +277,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildRepayCDPTx(
@@ -364,6 +366,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -382,7 +385,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBUilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBUilder, minimumGasPrice, gasRatio);
   }
 
   async buildDepositCDPTx(
@@ -474,6 +477,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -492,7 +496,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       dummyGas,
       dummyFee,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildWithdrawCDPTx(

@@ -97,6 +97,7 @@ export class DepositComponent implements OnInit {
       $event.collateral,
       $event.minimumGasPrice,
       $event.balances,
+      1.1,
     );
   }
 }

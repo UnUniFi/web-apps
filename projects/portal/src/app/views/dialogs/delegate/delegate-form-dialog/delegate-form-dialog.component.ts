@@ -7,6 +7,8 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 export type DelegateOnSubmitEvent = {
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  validatorList: InlineResponse20066Validators[];
+  gasRatio: number;
 };
 
 @Component({
@@ -17,6 +19,8 @@ export type DelegateOnSubmitEvent = {
 export class DelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
+  @Input()
+  validatorsList?: InlineResponse20066Validators[] | null;
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -32,6 +36,7 @@ export class DelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -39,6 +44,7 @@ export class DelegateFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -58,15 +64,27 @@ export class DelegateFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
+  onSubmit() {
     if (!this.selectedAmount) {
       return;
     }
-    if (this.selectedGasPrice === undefined) {
+    if (!this.selectedGasPrice) {
+      return;
+    }
+    if (!this.validatorsList) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
-    this.appSubmit.emit({ amount: this.selectedAmount, minimumGasPrice: this.selectedGasPrice });
+    this.appSubmit.emit({
+      amount: this.selectedAmount,
+      minimumGasPrice: this.selectedGasPrice,
+      validatorList: this.validatorsList,
+      gasRatio: this.gasRatio,
+    });
   }
 
   onMinimumGasDenomChanged(denom: string): void {

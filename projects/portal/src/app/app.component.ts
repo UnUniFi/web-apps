@@ -1,19 +1,20 @@
+import { environment } from '../environments/environment';
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { WalletApplicationService } from './models/wallets/wallet.application.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   config$: Observable<Config | undefined>;
   configs?: string[];
   navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
@@ -215,7 +216,7 @@ export class AppComponent {
     } else if (searchResult.type === 'txHash') {
       await this.router.navigate(['txs', searchResult.searchValue]);
     } else if (searchResult.type === 'block') {
-      await this.router.navigate(['blocks', searchResult.searchValue]);
+      await this.router.navigate(['explorer/blocks', searchResult.searchValue]);
     }
   }
 
@@ -230,5 +231,12 @@ export class AppComponent {
 
   onChangeConfig(value: string) {
     this.configS.setCurrentConfig(value);
+  }
+
+  ngOnInit() {
+    // tracking
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
   }
 }

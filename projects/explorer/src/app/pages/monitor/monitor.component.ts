@@ -49,7 +49,5 @@ export class MonitorComponent implements OnInit {
 
   appSearchCriteriaChanged(event: { startDate: Date; endDate: Date }): void {
     this.dateRange$.next([event.startDate, event.endDate]);
-    console.log('start', event.startDate);
-    console.log('end', event.endDate);
   }
 }

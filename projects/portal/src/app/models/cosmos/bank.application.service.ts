@@ -30,6 +30,7 @@ export class BankApplicationService {
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     coins: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // Note: Open dialog and get Wallet info with privateKeyString
     const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
@@ -82,6 +83,7 @@ export class BankApplicationService {
         amount,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

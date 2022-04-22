@@ -1,1 +1,4 @@
-<view-proposals [proposals]="proposals$ | async"></view-proposals>
+<view-proposals
+  [proposals]="proposals$ | async"
+  (appClickVote)="onVoteProposal($event)"
+></view-proposals>

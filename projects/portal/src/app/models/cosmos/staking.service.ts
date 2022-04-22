@@ -42,6 +42,7 @@ export class StakingService {
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -58,7 +59,7 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildCreateValidator(
@@ -183,6 +184,7 @@ export class StakingService {
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -200,7 +202,7 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildCreateDelegate(
@@ -300,6 +302,7 @@ export class StakingService {
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -318,7 +321,7 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildRedelegate(
@@ -417,6 +420,7 @@ export class StakingService {
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
@@ -434,7 +438,7 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice);
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildUndelegate(

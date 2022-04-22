@@ -1,9 +1,14 @@
+import { ProposalContent } from '../../../vote/proposals/proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20052Proposals } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { ProposalContent } from '../../../vote/proposals/proposals.component';
+
+export type VoteOnSubmitEvent = {
+  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
+};
 
 @Component({
   selector: 'view-vote-form-dialog',
@@ -25,17 +30,18 @@ export class VoteFormDialogComponent implements OnInit {
   proposalID?: number | null;
 
   @Output()
-  appSubmitYes: EventEmitter<proto.cosmos.base.v1beta1.ICoin>;
+  appSubmitYes: EventEmitter<VoteOnSubmitEvent>;
   @Output()
-  appSubmitNoWithVeto: EventEmitter<proto.cosmos.base.v1beta1.ICoin>;
+  appSubmitNoWithVeto: EventEmitter<VoteOnSubmitEvent>;
   @Output()
-  appSubmitNo: EventEmitter<proto.cosmos.base.v1beta1.ICoin>;
+  appSubmitNo: EventEmitter<VoteOnSubmitEvent>;
   @Output()
-  appSubmitAbstain: EventEmitter<proto.cosmos.base.v1beta1.ICoin>;
+  appSubmitAbstain: EventEmitter<VoteOnSubmitEvent>;
 
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
 
   constructor() {
     this.appSubmitYes = new EventEmitter();
@@ -46,6 +52,7 @@ export class VoteFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -65,6 +72,10 @@ export class VoteFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
   unpackContent(value: any) {
     try {
       return cosmosclient.codec.unpackCosmosAny(value) as ProposalContent;
@@ -77,25 +88,25 @@ export class VoteFormDialogComponent implements OnInit {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit(this.selectedGasPrice);
+    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
   onSubmitNoWithVeto() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit(this.selectedGasPrice);
+    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
   onSubmitNo() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit(this.selectedGasPrice);
+    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
   onSubmitAbstain() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit(this.selectedGasPrice);
+    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
 
   onMinimumGasDenomChanged(denom: string): void {

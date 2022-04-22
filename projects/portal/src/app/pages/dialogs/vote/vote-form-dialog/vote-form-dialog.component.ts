@@ -7,6 +7,7 @@ import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import { VoteOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/vote/vote/vote-form-dialog.component';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 
@@ -63,47 +64,51 @@ export class VoteFormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onSubmitYes(gasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async onSubmitYes($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
       return;
     }
     const txHash = await this.govAppService.Vote(
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_YES,
-      gasPrice,
+      $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }
-  async onSubmitNoWithVeto(gasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async onSubmitNoWithVeto($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
       return;
     }
     const txHash = await this.govAppService.Vote(
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO_WITH_VETO,
-      gasPrice,
+      $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }
-  async onSubmitNo(gasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async onSubmitNo($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
       return;
     }
     const txHash = await this.govAppService.Vote(
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO,
-      gasPrice,
+      $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }
-  async onSubmitAbstain(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin) {
+  async onSubmitAbstain($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
       return;
     }
     const txHash = await this.govAppService.Vote(
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_ABSTAIN,
-      minimumGasPrice,
+      $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }

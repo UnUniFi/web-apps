@@ -10,6 +10,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 export type UndelegateOnSubmitEvent = {
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
 };
 
 @Component({
@@ -39,13 +40,14 @@ export class UndelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
-
     this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -65,6 +67,10 @@ export class UndelegateFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
   onSubmit(minimumGasPrice: string) {
     if (!this.selectedAmount) {
       return;
@@ -73,7 +79,11 @@ export class UndelegateFormDialogComponent implements OnInit {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
-    this.appSubmit.emit({ amount: this.selectedAmount, minimumGasPrice: this.selectedGasPrice });
+    this.appSubmit.emit({
+      amount: this.selectedAmount,
+      minimumGasPrice: this.selectedGasPrice,
+      gasRatio: this.gasRatio,
+    });
   }
 
   onMinimumGasDenomChanged(denom: string): void {

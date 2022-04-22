@@ -81,11 +81,11 @@ export class DelegateFormDialogComponent implements OnInit {
         return;
       }
     }
-
     const txHash = await this.stakingAppService.createDelegate(
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }

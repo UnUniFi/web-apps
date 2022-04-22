@@ -110,6 +110,7 @@ export class RedelegateFormDialogComponent implements OnInit {
       $event.destinationValidator,
       $event.amount,
       $event.minimumGasPrice,
+      $event.gasRatio,
     );
     this.matDialogRef.close(txHash);
   }

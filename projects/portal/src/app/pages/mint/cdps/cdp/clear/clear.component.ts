@@ -114,6 +114,7 @@ export class ClearComponent implements OnInit {
       $event.repayment,
       $event.minimumGasPrice,
       $event.balances,
+      1.1,
     );
   }
 }

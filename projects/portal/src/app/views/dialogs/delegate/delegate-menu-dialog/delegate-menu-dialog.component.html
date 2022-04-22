@@ -2,7 +2,7 @@
   <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
   <div class="font-bold text-xl m-3">Delegate Menu</div>
 
-  <mat-nav-list>
+  <mat-nav-list class="w-full">
     <mat-label>Validator</mat-label>
     <mat-list-item>
       <mat-icon
@@ -11,9 +11,7 @@
       >
         circle
       </mat-icon>
-      <div mat-line>
-        <span>{{ selectedValidator?.operator_address }}</span>
-      </div>
+      <span class="break-all truncate">{{ selectedValidator?.operator_address }}</span>
     </mat-list-item>
     <mat-list-item>
       <span class="column-name">Commission</span>

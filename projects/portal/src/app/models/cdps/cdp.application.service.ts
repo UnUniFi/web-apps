@@ -1,7 +1,7 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { CdpService } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,6 +32,7 @@ export class CdpApplicationService {
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -67,6 +68,7 @@ export class CdpApplicationService {
         collateral,
         principal,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -146,6 +148,7 @@ export class CdpApplicationService {
     principal: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -180,6 +183,7 @@ export class CdpApplicationService {
         collateralType,
         principal,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -258,6 +262,7 @@ export class CdpApplicationService {
     repayment: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -292,6 +297,7 @@ export class CdpApplicationService {
         collateralType,
         repayment,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -370,6 +376,7 @@ export class CdpApplicationService {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -405,6 +412,7 @@ export class CdpApplicationService {
         collateralType,
         collateral,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
@@ -485,6 +493,7 @@ export class CdpApplicationService {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     balances: proto.cosmos.base.v1beta1.ICoin[],
+    gasRatio: number,
   ) {
     // validation
     if (!(await this.key.validatePrivKey(key, privateKey))) {
@@ -520,6 +529,7 @@ export class CdpApplicationService {
         collateralType,
         collateral,
         minimumGasPrice,
+        gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;

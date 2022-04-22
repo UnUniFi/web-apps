@@ -66,6 +66,7 @@ export class SendComponent implements OnInit {
       $event.amount,
       $event.minimumGasPrice,
       $event.coins,
+      1.1,
     );
   }
 }

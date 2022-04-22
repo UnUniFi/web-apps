@@ -36,7 +36,7 @@
   </mat-form-field>
 
   <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
-    <div class="flex flex-row content-content items-end">
+    <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
         <mat-label>Delegate Denom</mat-label>
         <input
@@ -98,7 +98,7 @@
           <mat-panel-title> Advanced </mat-panel-title>
           <mat-panel-description> Change Default Gas Price </mat-panel-description>
         </mat-expansion-panel-header>
-        <div class="flex flex-row content-content items-end">
+        <div class="flex flex-col content-content lg:flex-row">
           <mat-form-field class="flex-auto">
             <mat-label>Gas Denom</mat-label>
             <mat-select

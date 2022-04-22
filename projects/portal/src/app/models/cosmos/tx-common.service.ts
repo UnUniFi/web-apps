@@ -37,7 +37,7 @@ export class TxCommonService {
       ? parseInt(simulatedGasUsed) * (gasRatio ?? 1.1)
       : 200000;
     const simulatedGasUsedWithMargin = simulatedGasUsedWithMarginNumber.toFixed(0);
-    // minimumGasPrice depends on Node's config(`~/.jpyx/config/app.toml` minimum-gas-prices).
+    // minimumGasPrice depends on Node's config(`~/.ununifi/config/app.toml` minimum-gas-prices).
     const simulatedFeeWithMarginNumber =
       parseInt(simulatedGasUsedWithMargin) *
       parseFloat(minimumGasPrice.amount ? minimumGasPrice.amount : '0');

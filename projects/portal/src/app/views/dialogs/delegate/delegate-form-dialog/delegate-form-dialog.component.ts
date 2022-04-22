@@ -8,6 +8,7 @@ export type DelegateOnSubmitEvent = {
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
   validatorList: InlineResponse20066Validators[];
+  gasRatio: number;
 };
 
 @Component({
@@ -35,6 +36,7 @@ export class DelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio?: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -42,6 +44,7 @@ export class DelegateFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -61,7 +64,11 @@ export class DelegateFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
+  onSubmit() {
     if (!this.selectedAmount) {
       return;
     }
@@ -71,11 +78,15 @@ export class DelegateFormDialogComponent implements OnInit {
     if (!this.validatorsList) {
       return;
     }
+    if (!this.gasRatio) {
+      return;
+    }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
+      gasRatio: this.gasRatio,
     });
   }
 

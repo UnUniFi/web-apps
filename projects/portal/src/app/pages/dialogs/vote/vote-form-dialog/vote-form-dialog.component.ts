@@ -71,6 +71,7 @@ export class VoteFormDialogComponent implements OnInit {
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_YES,
       gasPrice,
+      1.1,
     );
     this.matDialogRef.close(txHash);
   }
@@ -82,6 +83,7 @@ export class VoteFormDialogComponent implements OnInit {
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO_WITH_VETO,
       gasPrice,
+      1.1,
     );
     this.matDialogRef.close(txHash);
   }
@@ -93,6 +95,7 @@ export class VoteFormDialogComponent implements OnInit {
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_NO,
       gasPrice,
+      1.1,
     );
     this.matDialogRef.close(txHash);
   }
@@ -104,6 +107,7 @@ export class VoteFormDialogComponent implements OnInit {
       this.proposalID,
       proto.cosmos.gov.v1beta1.VoteOption.VOTE_OPTION_ABSTAIN,
       minimumGasPrice,
+      1.1,
     );
     this.matDialogRef.close(txHash);
   }

@@ -125,7 +125,7 @@ export class TxsComponent implements OnInit {
             : modifiedPageSize;
 
         if (modifiedPageOffset <= 0 || modifiedPageSize <= 0) {
-          return [];
+          return of([]);
         }
 
         return rest.tx

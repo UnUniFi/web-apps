@@ -11,6 +11,9 @@ export class TxComponent implements OnInit {
   @Input()
   tx?: CosmosTxV1beta1GetTxResponse | null;
 
+  @Input()
+  txType?: string[] | null;
+
   constructor() {}
 
   ngOnInit(): void {}

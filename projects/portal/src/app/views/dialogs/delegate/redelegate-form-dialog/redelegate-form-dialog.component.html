@@ -11,12 +11,12 @@
           <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
             circle
           </mat-icon>
-          {{ validator?.operator_address }}
+          {{ validator?.description?.moniker }}
         </mat-option>
         <mat-select-trigger>
           <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
             circle </mat-icon
-          >&nbsp;{{ validator?.operator_address }}
+          >&nbsp;{{ validator?.description?.moniker }}
         </mat-select-trigger>
       </mat-select>
     </mat-form-field>
@@ -25,13 +25,18 @@
       <mat-label>After</mat-label>
       <mat-select [(ngModel)]="selectedValidator" name="selected-validator" required>
         <mat-option *ngFor="let val of validatorsList" [value]="val">
-          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(val!) }">circle</mat-icon>
-          {{ val }}
+          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(val.operator_address!) }"
+            >circle</mat-icon
+          >
+          {{ val.description?.moniker }}
         </mat-option>
         <mat-select-trigger>
-          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(selectedValidator!) }">
+          <mat-icon
+            matPrefix
+            [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
+          >
             circle</mat-icon
-          >&nbsp;{{ selectedValidator }}
+          >&nbsp;{{ selectedValidator?.description?.moniker }}
         </mat-select-trigger>
       </mat-select>
     </mat-form-field>

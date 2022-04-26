@@ -30,6 +30,8 @@ export class ValidatorsComponent implements OnInit {
   currentStoredWallet?: StoredWallet | null;
   @Input()
   delegations?: InlineResponse20063DelegationResponses[] | null;
+  @Input()
+  delegatedValidators?: (InlineResponse20066Validators | undefined)[] | null;
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;

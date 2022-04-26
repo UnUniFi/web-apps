@@ -11,7 +11,6 @@ import { cosmosclient, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063DelegationResponses,
   InlineResponse20066Validators,
-  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
@@ -22,12 +21,14 @@ import { filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
-  validatorsList$: Observable<QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod>;
+  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20063DelegationResponses[] | undefined>;
+  delegatedValidators$: Observable<(InlineResponse20066Validators | undefined)[] | undefined>;
+  totalDelegation$: Observable<number | undefined>;
 
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
@@ -38,12 +39,12 @@ export class ValidatorsComponent implements OnInit {
   ) {
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.staking.validators(sdk.rest)),
-      map((result) => result.data),
+      map((result) => result.data.validators),
     );
 
     this.allValidatorsTokens$ = this.validatorsList$.pipe(
       map((validators) =>
-        validators?.validators?.reduce((sum, validator) => {
+        validators?.reduce((sum, validator) => {
           return sum + Number(validator.tokens);
         }, 0),
       ),
@@ -56,7 +57,7 @@ export class ValidatorsComponent implements OnInit {
           return [];
         }
         // calculate validator share
-        const validatorsWithShare = validators.validators?.map((validator) => {
+        const validatorsWithShare = validators?.map((validator) => {
           const val = validator;
           const share = Number(validator.tokens) / allTokens;
           return { val, share };
@@ -105,7 +106,17 @@ export class ValidatorsComponent implements OnInit {
       map((result) => result.data.delegation_responses),
     );
 
-    this.delegations$.pipe(
+    this.delegatedValidators$ = combineLatest([this.validatorsList$, this.delegations$]).pipe(
+      map(([validators, delegations]) =>
+        delegations?.map((delegation) =>
+          validators?.find(
+            (validator) => validator.operator_address == delegation.delegation?.validator_address,
+          ),
+        ),
+      ),
+    );
+
+    this.totalDelegation$ = this.delegations$.pipe(
       map((delegations) =>
         delegations?.reduce(
           (sum, element) =>

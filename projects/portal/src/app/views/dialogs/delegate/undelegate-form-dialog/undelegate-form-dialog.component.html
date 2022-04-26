@@ -4,25 +4,25 @@
 </div>
 
 <mat-list>
-  <mat-label>To. (Validator Address)</mat-label>
+  <mat-label>To. (Validator)</mat-label>
   <mat-list-item>
     <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
       >circle</mat-icon
     >
     <div mat-line>
-      <span>{{ validator?.operator_address }}</span>
+      <span>{{ validator?.description?.moniker }}</span>
     </div>
   </mat-list-item>
 </mat-list>
 
 <mat-list>
-  <mat-label>From. (Delegator Address)</mat-label>
+  <mat-label>From. (Delegator)</mat-label>
   <mat-list-item>
     <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
       >circle</mat-icon
     >
     <div mat-line>
-      <span>{{ currentStoredWallet?.address }}</span>
+      <span>{{ currentStoredWallet?.id }}</span>
     </div>
   </mat-list-item>
 </mat-list>

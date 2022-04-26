@@ -22,8 +22,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
 export class RedelegateFormDialogComponent implements OnInit {
-  validatorsDetailList$: Observable<InlineResponse20066Validators[] | undefined>;
-  validatorsList$: Observable<(string | undefined)[] | undefined>;
+  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20063>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
@@ -44,12 +43,9 @@ export class RedelegateFormDialogComponent implements OnInit {
     private readonly dialog: MatDialog,
   ) {
     this.validator = data;
-    this.validatorsDetailList$ = this.cosmosSDK.sdk$.pipe(
+    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.staking.validators(sdk.rest)),
       map((result) => result.data.validators),
-    );
-    this.validatorsList$ = this.validatorsDetailList$.pipe(
-      map((validators) => validators?.map((validator) => validator.operator_address)),
     );
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(

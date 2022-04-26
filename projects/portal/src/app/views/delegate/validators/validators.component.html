@@ -71,7 +71,7 @@
 </ng-template>
 <ng-template #existDelegations>
   <mat-card class="mb-4">
-    <mat-list>
+    <mat-nav-list>
       <mat-list-item>
         <span class="w-2/3 break-all truncate pl-8 pr-8">Validator</span>
         <span class="flex-auto"></span>
@@ -81,33 +81,35 @@
         <mat-divider></mat-divider>
       </mat-list-item>
       <ng-container *ngFor="let delegation of delegations; last as last">
-        <mat-list-item>
-          <mat-icon
-            matListIcon
-            [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
+        <ng-container *ngFor="let validator of delegatedValidators">
+          <mat-list-item
+            *ngIf="delegation.delegation?.validator_address == validator?.operator_address"
+            (click)="onClickValidator(validator!)"
           >
-            circle
-          </mat-icon>
-          <ng-container *ngFor="let validator of delegatedValidators">
-            <span
-              *ngIf="delegation.delegation?.validator_address == validator?.operator_address"
-              class="w-3/5 break-all text-sm sm:text-base"
+            <mat-icon
+              matListIcon
+              [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
+            >
+              circle
+            </mat-icon>
+
+            <span class="w-3/5 break-all text-sm sm:text-base"
               >{{ validator?.description?.moniker }}
             </span>
-          </ng-container>
 
-          <span class="flex-auto"></span>
-          <span class="w-1/6 break-all text-sm sm:text-base"
-            >{{ delegation.balance?.amount }} {{ delegation.balance?.denom }}
-          </span>
-          <span class="flex-auto"></span>
-          <span class="w-1/6 break-all text-sm sm:text-base"
-            >{{ toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}
-          </span>
-        </mat-list-item>
+            <span class="flex-auto"></span>
+            <span class="w-1/6 break-all text-sm sm:text-base"
+              >{{ delegation.balance?.amount }} {{ delegation.balance?.denom }}
+            </span>
+            <span class="flex-auto"></span>
+            <span class="w-1/6 break-all text-sm sm:text-base"
+              >{{ toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}
+            </span>
+          </mat-list-item>
+        </ng-container>
         <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
       </ng-container>
-    </mat-list>
+    </mat-nav-list>
   </mat-card>
 </ng-template>
 <ng-template #emptyDelegations>

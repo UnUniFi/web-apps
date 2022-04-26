@@ -1,87 +1,89 @@
-<div class="flex flex-col items-center">
-  <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-  <div class="font-bold text-xl m-3">Delegate Menu</div>
+<mat-dialog-content>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <div class="font-bold text-xl m-3">Delegate Menu</div>
 
-  <mat-nav-list class="w-full">
-    <mat-label>Validator</mat-label>
-    <mat-list-item>
-      <mat-icon
-        matListIcon
-        [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
-      >
-        circle
-      </mat-icon>
-      <div mat-line>
-        <span>{{ selectedValidator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="column-name">Address</span>
-      <span class="flex-auto w-1/4"></span>
-      <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="column-name">Commission</span>
-      <span class="flex-auto"></span>
-      <span class="column-value">{{
-        selectedValidator?.commission?.commission_rates?.rate | percent
-      }}</span>
-    </mat-list-item>
-    <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
-    </ng-container>
-    <ng-template #exist>
-      <a href="{{ selectedValidator?.description?.website }}" target="_blank">
+    <mat-nav-list class="w-full">
+      <mat-label>Validator</mat-label>
+      <mat-list-item>
+        <mat-icon
+          matListIcon
+          [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
+        >
+          circle
+        </mat-icon>
+        <div mat-line>
+          <span>{{ selectedValidator?.description?.moniker }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="column-name">Address</span>
+        <span class="flex-auto w-1/4"></span>
+        <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="column-name">Commission</span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{
+          selectedValidator?.commission?.commission_rates?.rate | percent
+        }}</span>
+      </mat-list-item>
+      <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
+      </ng-container>
+      <ng-template #exist>
+        <a href="{{ selectedValidator?.description?.website }}" target="_blank">
+          <mat-list-item>
+            <span class="column-name"> Website </span>
+            <span class="flex-auto"></span>
+            <span class="column-value">{{ selectedValidator?.description?.website }}</span>
+          </mat-list-item>
+        </a>
+      </ng-template>
+      <ng-template #empty>
         <mat-list-item>
           <span class="column-name"> Website </span>
           <span class="flex-auto"></span>
           <span class="column-value">{{ selectedValidator?.description?.website }}</span>
         </mat-list-item>
-      </a>
-    </ng-template>
-    <ng-template #empty>
-      <mat-list-item>
-        <span class="column-name"> Website </span>
-        <span class="flex-auto"></span>
-        <span class="column-value">{{ selectedValidator?.description?.website }}</span>
-      </mat-list-item>
-    </ng-template>
+      </ng-template>
+      <ng-container *ngIf="isDelegated">
+        <mat-list-item>
+          <span class="column-name">Delegated Amount</span>
+          <span class="flex-auto"></span>
+          <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickDetailButton()"
+    >
+      <span class="text-black">More information</span>
+      Details
+    </button>
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickDelegateButton()"
+    >
+      <span class="text-black">Delegate to this validator</span>
+    </button>
     <ng-container *ngIf="isDelegated">
-      <mat-list-item>
-        <span class="column-name">Delegated Amount</span>
-        <span class="flex-auto"></span>
-        <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
-      </mat-list-item>
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickRedelegateButton()"
+      >
+        <span class="text-black">Redelegate to another validator</span>
+      </button>
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickUndelegateButton()"
+      >
+        <span class="text-black">Undelegate from this validator</span>
+      </button>
     </ng-container>
-  </mat-nav-list>
-  <button
-    mat-flat-button
-    class="inline-flex justify-between items-center w-full m-3 bg-white"
-    (click)="onClickDetailButton()"
-  >
-    <span class="text-black">More information</span>
-    Details
-  </button>
-  <button
-    mat-flat-button
-    class="inline-flex justify-between items-center w-full m-3 bg-white"
-    (click)="onClickDelegateButton()"
-  >
-    <span class="text-black">Delegate to this validator</span>
-  </button>
-  <ng-container *ngIf="isDelegated">
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickRedelegateButton()"
-    >
-      <span class="text-black">Redelegate to another validator</span>
-    </button>
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickUndelegateButton()"
-    >
-      <span class="text-black">Undelegate from this validator</span>
-    </button>
-  </ng-container>
-</div>
+  </div>
+</mat-dialog-content>

@@ -1,2 +1,0 @@
-# UnUnify
-UnUnify HTML Contest 

@@ -24,34 +24,27 @@ export class KeplrImportWalletDialogComponent implements OnInit {
     private readonly keplrAppService: KeplrApplicationService,
     private readonly dialogRef: MatDialogRef<KeplrImportWalletDialogComponent>,
   ) {
-    this.storedWallet$ = this.keplrAppService
-      .getKey()
-      .then((key) => {
-        if (!key) {
-          console.error('Fail.');
-          return undefined;
-        }
-        const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-        if (!pubkey) {
-          console.error('Invalid Pubkey.');
-          return;
-        }
-        const accAddress = cosmosclient.AccAddress.fromPublicKey(pubkey);
-        const pubkeyString = Buffer.from(pubkey.bytes).toString();
-        const storedWallet: StoredWallet = {
-          id: key.name,
-          type: WalletType.keplr,
-          key_type: KeyType.secp256k1,
-          public_key: pubkeyString,
-          address: accAddress.toString(),
-        };
-        return storedWallet;
-      })
-      .catch((error) => {
-        console.error(error);
+    this.storedWallet$ = this.keplrAppService.getKey().then((key) => {
+      if (!key) {
+        console.error('Fail.');
         return undefined;
-      });
-    this.storedWallet$.then((a) => console.log(a));
+      }
+      const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
+      if (!pubkey) {
+        console.error('Invalid Pubkey.');
+        return;
+      }
+      const accAddress = cosmosclient.AccAddress.fromPublicKey(pubkey);
+      const pubkeyString = Buffer.from(pubkey.bytes).toString();
+      const storedWallet: StoredWallet = {
+        id: key.name,
+        type: WalletType.keplr,
+        key_type: KeyType.secp256k1,
+        public_key: pubkeyString,
+        address: accAddress.toString(),
+      };
+      return storedWallet;
+    });
     this.storedWallets$ = this.walletService
       .listStoredWallets()
       .then((storedWallets) => {

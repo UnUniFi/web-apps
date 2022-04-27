@@ -2,7 +2,6 @@ import { StakingApplicationService } from '../../../models/cosmos/staking.applic
 import { CreateValidatorData } from '../../../models/cosmos/staking.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
-import { createCosmosPublicKeyFromString } from '../../../utils/key';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, proto } from '@cosmos-client/core';
@@ -78,71 +77,25 @@ export class CreateValidatorSimpleComponent implements OnInit {
       filter((queryParams) => queryParams.min_self_delegation),
       map((queryParams) => queryParams.min_self_delegation),
     );
-    this.delegator_address$ = combineLatest([
-      this.route.queryParams,
-      this.currentStoredWallet$,
-    ]).pipe(
-      filter(
-        ([queryParams, currentStoredWallet]) =>
-          queryParams.delegator_address &&
-          currentStoredWallet?.address &&
-          currentStoredWallet.key_type &&
-          currentStoredWallet.public_key,
-      ),
-      map(([queryParams, currentStoredWallet]) => {
-        if (
-          currentStoredWallet?.address &&
-          currentStoredWallet.public_key &&
-          currentStoredWallet.key_type
-        ) {
-          const cosmosPublicKey = createCosmosPublicKeyFromString(
-            currentStoredWallet.key_type,
-            currentStoredWallet.public_key,
-          );
-          if (!cosmosPublicKey) {
-            return undefined;
-          }
-          const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-          if (accAddress.toAccAddress().toString() === queryParams.delegator_address) {
-            return queryParams.delegator_address;
-          } else {
-            return undefined;
-          }
-        }
-        return queryParams.delegator_address;
-      }),
+    this.delegator_address$ = this.route.queryParams.pipe(
+      filter((queryParams) => queryParams.delegator_address),
+      map((queryParams) => queryParams.delegator_address),
     );
-    this.validator_address$ = combineLatest([
-      this.route.queryParams,
-      this.currentStoredWallet$,
-    ]).pipe(
+    this.validator_address$ = combineLatest([this.route.queryParams, this.delegator_address$]).pipe(
       filter(
-        ([queryParams, currentStoredWallet]) =>
-          queryParams.validator_address ||
-          (currentStoredWallet?.address &&
-            currentStoredWallet.public_key &&
-            currentStoredWallet.key_type),
+        ([queryParams, delegator_address]) => queryParams.validator_address || delegator_address,
       ),
-      map(([queryParams, currentStoredWallet]) => {
-        if (
-          currentStoredWallet?.address &&
-          currentStoredWallet.public_key &&
-          currentStoredWallet.key_type
-        ) {
-          const cosmosPublicKey = createCosmosPublicKeyFromString(
-            currentStoredWallet.key_type,
-            currentStoredWallet.public_key,
-          );
-          if (!cosmosPublicKey) {
-            return undefined;
-          }
-          const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-          const valAddress = cosmosclient.ValAddress.fromPublicKey(cosmosPublicKey);
-          if (accAddress.toAccAddress().toString() === queryParams.delegator_address) {
-            return valAddress.toValAddress().toString();
-          } else {
-            return undefined;
-          }
+      map(([queryParams, delegator_address]) => {
+        if (!delegator_address) {
+          return undefined;
+        }
+        const accAddress = cosmosclient.AccAddress.fromString(delegator_address);
+        const valAddress = accAddress.toValAddress();
+        if (!queryParams?.validator_address) {
+          return valAddress.toString();
+        }
+        if (queryParams.validator_address !== valAddress.toString()) {
+          return undefined;
         }
         return queryParams.validator_address;
       }),
@@ -176,11 +129,13 @@ export class CreateValidatorSimpleComponent implements OnInit {
   async appSubmitCreateValidator(
     createValidatorData: CreateValidatorData & {
       minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+      privateKey: string;
     },
   ): Promise<void> {
-    await this.stakingApplicationService.createValidator(
+    await this.stakingApplicationService.createValidatorSimple(
       createValidatorData,
       createValidatorData.minimumGasPrice,
+      createValidatorData.privateKey,
     );
   }
 }

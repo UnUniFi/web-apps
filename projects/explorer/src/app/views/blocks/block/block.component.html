@@ -1,51 +1,156 @@
-<h2>Block</h2>
-<mat-card>
+<div class="flex flex-row items-end">
+  <h2 class="mb-0">Block #{{ block?.block?.header?.height }}</h2>
+  <span class="flex-auto"></span>
+  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary"
+    >navigate_before</mat-icon
+  >
+  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary"
+    >navigate_next</mat-icon
+  >
+</div>
+<h3 class="ml-4 mb-0">Block details</h3>
+<mat-card class="mb-4">
   <mat-list>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Time:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">
+        {{ block?.block?.header?.time | date: 'yyyy-M-d a h:mm:ss z' }}
+      </span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Height:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ block?.block?.header?.height }}</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Number of Transactions:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ block?.block?.data?.txs?.length }}</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
     <mat-list-item>
       <span class="whitespace-nowrap">BlockHash:</span>
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-xs sm:text-base">{{ block?.block_id?.hash }}</span>
+      <mat-divider></mat-divider>
     </mat-list-item>
-    <mat-divider [inset]="true"></mat-divider>
-
     <mat-list-item>
-      <span class="whitespace-nowrap">BlockHeight:</span>
+      <span class="whitespace-nowrap">Proposer:</span>
       <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">{{ block?.block?.header?.height }}</span>
-    </mat-list-item>
-    <mat-divider [inset]="true"></mat-divider>
-
-    <mat-list-item>
-      <span class="whitespace-nowrap">Timestamp:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">
-        {{ block?.block?.header?.time | date : 'yyyy-M-d a h:mm:ss z' }}
-      </span>
+      <span class="ml-2 break-all text-xs sm:text-base">{{
+        block?.block?.header?.proposer_address
+      }}</span>
     </mat-list-item>
   </mat-list>
 </mat-card>
 
-<h3>Validator sets</h3>
-<ng-container *ngFor="let validatorset of validatorsets?.validators">
-  <mat-card class="mb-2">
-    <mat-list>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Address:</span>
+<h3 class="mb-0 ml-4">Transactions</h3>
+<mat-card class="mb-2">
+  <mat-list>
+    <mat-list-item>
+      <span class="break-all truncate">Hash</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">Type</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">From</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate pr-10">To</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">Total Amount</span>
+
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+  <ng-container
+    *ngIf="
+      (transactions?.tx_responses?.length || 0) > 0;
+      then existTransactions;
+      else emptyTransactions
+    "
+  >
+  </ng-container>
+
+  <ng-template #emptyTransactions>
+    <span>*No Transactions</span>
+  </ng-template>
+
+  <ng-template #existTransactions>
+    <mat-nav-list>
+      <mat-list-item
+        routerLink="/txs/{{ tx.txhash }}"
+        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
+      >
+        <span class="pr-2 w-1/12 text-sm truncate">{{ tx.txhash }}</span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-sm sm:text-base">{{ validatorset.address }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Voting Power:</span>
+
+        <span class="w-1/6 truncate">{{ txTypes?.[i] }}</span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-sm sm:text-base">{{ validatorset.voting_power }}</span>
+
+        <ng-container *ngIf="tx.logs?.[0]?.events?.[1]?.type === 'oracle_updated_price' ">
+          <span
+            class="w-1/5 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[0]?.attributes?.[2]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{tx.logs?.[0]?.events?.[1]?.attributes?.[0]?.value}}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/6 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[1]?.attributes?.[2]?.value }}</span
+          >
+        </ng-container>
+
+        <ng-container *ngIf="tx.logs?.[0]?.events?.[3]?.type  == 'transfer'">
+          <span
+            class="w-1/5 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/5 break-all truncate"
+            >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
+          >
+          <span class="flex-auto"></span>
+          <span
+            class="w-1/6 break-all truncate"
+            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
+          >
+        </ng-container>
+        <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Proposer Priority:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-sm sm:text-base">{{ validatorset.proposer_priority }}</span>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
-</ng-container>
+    </mat-nav-list>
+  </ng-template>
+</mat-card>
+
+<!--
+
+<h3>Msgs</h3>
+<ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
+  <ng-container *ngIf="unpackMsg(message) as msg">
+    <mat-card>
+      <mat-list>
+        <mat-list-item>
+          <span class="whitespace-nowrap">Type: </span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all">{{ constructorName(msg) }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
+          <mat-list-item>
+            <span class="whitespace-nowrap">{{ data[0] }}</span>
+            <span class="flex-auto"></span>
+            <span class="ml-2 break-all text-xs sm:text-base">{{ data[1] | json }}</span>
+          </mat-list-item>
+          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+        </ng-template>
+      </mat-list>
+    </mat-card>
+  </ng-container>
+</ng-template>
+-->

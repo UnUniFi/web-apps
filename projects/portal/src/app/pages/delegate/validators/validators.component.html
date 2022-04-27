@@ -2,6 +2,7 @@
   [validators]="validators$ | async"
   [currentStoredWallet]="currentStoredWallet$ | async"
   [delegations]="delegations$ | async"
+  [delegatedValidators]="delegatedValidators$ | async"
   (toggleActiveChange)="onToggleChange($event)"
   (appClickValidator)="onSelectValidator($event)"
 ></view-validators>

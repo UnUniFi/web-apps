@@ -92,7 +92,7 @@ export class KeplrService {
         average: 0.025,
         high: 0.03,
       };
-      await window.keplr?.experimentalSuggestChain({
+      const chainInfo: ChainInfo = {
         chainId,
         chainName,
         rpc,
@@ -104,7 +104,8 @@ export class KeplrService {
         stakeCurrency,
         coinType,
         gasPriceStep,
-      });
+      };
+      await window.keplr?.experimentalSuggestChain(chainInfo);
     }
   }
 }

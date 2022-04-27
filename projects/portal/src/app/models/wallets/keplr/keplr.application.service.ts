@@ -1,14 +1,11 @@
-import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { ConnectWalletCompletedDialogComponent } from '../../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { KeplrImportWalletDialogComponent } from '../../../views/dialogs/wallets/keplr/keplr-import-wallet-dialog/keplr-import-wallet-dialog.component';
-import { KeyType } from '../../keys/key.model';
 import { StoredWallet } from '../wallet.model';
 import { WalletService } from '../wallet.service';
 import { KeplrService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
 import { Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
@@ -74,46 +71,46 @@ export class KeplrApplicationService {
     return keyData;
   }
 
-  async getAccAddress(): Promise<cosmosclient.AccAddress | undefined> {
-    return this.keplrService
-      .getKey()
-      .then((key) => {
-        if (!key) {
-          console.error('Fail.');
-          return undefined;
-        }
-        const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-        if (!pubkey) {
-          console.error('Invalid Pubkey.');
-          return undefined;
-        }
-        const accAddress = cosmosclient.AccAddress.fromPublicKey(pubkey);
-        return accAddress;
-      })
-      .catch((error) => {
-        console.error(error);
-        return undefined;
-      });
-  }
+  // async getAccAddress(): Promise<cosmosclient.AccAddress | undefined> {
+  //   return this.keplrService
+  //     .getKey()
+  //     .then((key) => {
+  //       if (!key) {
+  //         console.error('Fail.');
+  //         return undefined;
+  //       }
+  //       const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
+  //       if (!pubkey) {
+  //         console.error('Invalid Pubkey.');
+  //         return undefined;
+  //       }
+  //       const accAddress = cosmosclient.AccAddress.fromPublicKey(pubkey);
+  //       return accAddress;
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       return undefined;
+  //     });
+  // }
 
-  async getPubkey(): Promise<string | undefined> {
-    return this.keplrService
-      .getKey()
-      .then((key) => {
-        if (!key) {
-          console.error('Fail.');
-          return undefined;
-        }
-        const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-        if (!pubkey) {
-          console.error('Invalid Pubkey.');
-          return undefined;
-        }
-        return Buffer.from(pubkey.bytes).toString();
-      })
-      .catch((error) => {
-        console.error(error);
-        return undefined;
-      });
-  }
+  // async getPubkey(): Promise<string | undefined> {
+  //   return this.keplrService
+  //     .getKey()
+  //     .then((key) => {
+  //       if (!key) {
+  //         console.error('Fail.');
+  //         return undefined;
+  //       }
+  //       const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
+  //       if (!pubkey) {
+  //         console.error('Invalid Pubkey.');
+  //         return undefined;
+  //       }
+  //       return Buffer.from(pubkey.bytes).toString();
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       return undefined;
+  //     });
+  // }
 }

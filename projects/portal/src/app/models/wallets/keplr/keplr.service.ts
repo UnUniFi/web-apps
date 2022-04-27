@@ -19,7 +19,7 @@ export class KeplrService {
       alert('Please install keplr extension');
       return;
     } else {
-      const chainID = await this.configService.configs[0].chainID;
+      const chainID = this.configService.configs[0].chainID;
       await window.keplr?.enable(chainID);
 
       const offlineSigner = window.keplr?.getOfflineSigner(chainID);
@@ -32,7 +32,7 @@ export class KeplrService {
       alert('Please install keplr extension');
       return;
     } else {
-      const chainID = await this.configService.configs[0].chainID;
+      const chainID = this.configService.configs[0].chainID;
       await window.keplr?.enable(chainID);
 
       const key = await window.keplr?.getKey(chainID);
@@ -48,7 +48,7 @@ export class KeplrService {
       alert('Please install keplr extension');
       return;
     } else {
-      const chainID = await this.configService.configs[0].chainID;
+      const chainID = this.configService.configs[0].chainID;
       await window.keplr?.enable(chainID);
 
       const chainId = this.configService.configs[0].chainID;

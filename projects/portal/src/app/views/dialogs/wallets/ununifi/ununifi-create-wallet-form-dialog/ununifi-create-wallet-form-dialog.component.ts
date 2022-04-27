@@ -7,6 +7,7 @@ import * as bip39 from 'bip39';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyService } from 'projects/portal/src/app/models/keys/key.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 
 @Component({
   selector: 'view-ununifi-create-wallet-form-dialog',
@@ -16,13 +17,16 @@ import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets
 export class UnunifiCreateWalletFormDialogComponent implements OnInit {
   isPasswordVisible: boolean = false;
   privateWallet$: Promise<StoredWallet & { mnemonic: string; privateKey: string }>;
+  wallets$: Promise<StoredWallet[] | undefined>;
 
   constructor(
     private readonly dialogRef: MatDialogRef<UnunifiCreateWalletFormDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private keyService: KeyService,
+    private walletService: WalletService,
   ) {
+    this.wallets$ = this.walletService.listStoredWallets();
     const mnemonic = bip39.generateMnemonic();
     this.privateWallet$ = this.keyService.getPrivateKeyFromMnemonic(mnemonic).then((privateKey) => {
       const cosmosPrivateKey = this.keyService.getPrivKey(
@@ -63,7 +67,15 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
   }
 
   onClickButton(id: string) {
-    this.privateWallet$.then((privateWallet) => {
+    Promise.all([this.privateWallet$, this.wallets$]).then(([privateWallet, wallets]) => {
+      const sameWallet = wallets?.find((wallet) => wallet.id === id);
+      if (sameWallet) {
+        this.snackBar.open(
+          'Same Wallet ID is already connected! You need to use another Wallet ID!',
+          'Close',
+        );
+        return;
+      }
       privateWallet.id = id;
       this.dialogRef.close(privateWallet);
     });

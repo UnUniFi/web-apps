@@ -5,11 +5,12 @@ import { KeyType } from '../../keys/key.model';
 import { StoredWallet } from '../wallet.model';
 import { WalletService } from '../wallet.service';
 import { KeplrService } from './keplr.service';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
 import { Key } from '@keplr-wallet/types';
-import { Injectable } from '@angular/core';
+import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ export class KeplrApplicationService {
     private readonly walletService: WalletService,
     private readonly keplrService: KeplrService,
     private readonly dialog: MatDialog,
+    private readonly loadingDialog: LoadingDialogService,
     private snackBar: MatSnackBar,
   ) {}
 
@@ -49,19 +51,27 @@ export class KeplrApplicationService {
   }
 
   async getKey(): Promise<Key | undefined> {
-    return this.keplrService
-      .getKey()
-      .then((key) => {
-        if (!key) {
-          console.error('Fail.');
-          return undefined;
-        }
-        return key;
-      })
-      .catch((error) => {
-        console.error(error);
-        return undefined;
-      });
+    const dialogRefGetKey = this.loadingDialog.open('Loading Keplr...');
+    try {
+      await this.keplrService.suggestChain();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      dialogRefGetKey.close();
+      return;
+    }
+    let keyData: Key | undefined;
+    try {
+      keyData = await this.keplrService.getKey();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+    } finally {
+      dialogRefGetKey.close();
+    }
+    return keyData;
   }
 
   async getAccAddress(): Promise<cosmosclient.AccAddress | undefined> {

@@ -1,5 +1,5 @@
+import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
-import { SimulatedTxResultResponse } from '../tx-common/tx-common.model';
 import { AuctionInfrastructureService } from './auction.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { proto } from '@cosmos-client/core';
@@ -21,6 +21,7 @@ export interface IAuctionInfrastructure {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse>;
 }
 
@@ -50,6 +51,7 @@ export class AuctionService {
     auction_id: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     return this.iAuctionInfrastructure.simulateToPlaceBid(
       key,
@@ -57,6 +59,7 @@ export class AuctionService {
       auction_id,
       amount,
       minimumGasPrice,
+      gasRatio,
     );
   }
 }

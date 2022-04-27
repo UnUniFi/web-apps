@@ -1,5 +1,9 @@
+import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20063DelegationResponses,
+  InlineResponse20066Validators,
+} from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
@@ -22,6 +26,12 @@ export type validatorWithShareType = {
 export class ValidatorsComponent implements OnInit {
   @Input()
   validators?: validatorType[] | null;
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
+  @Input()
+  delegations?: InlineResponse20063DelegationResponses[] | null;
+  @Input()
+  delegatedValidators?: (InlineResponse20066Validators | undefined)[] | null;
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
@@ -40,14 +50,18 @@ export class ValidatorsComponent implements OnInit {
     }, 5000);
   }
 
-  getColorCode(validator: InlineResponse20066Validators) {
+  getColorCode(valAddress: string) {
     const hash = crypto
       .createHash('sha256')
-      .update(Buffer.from(validator.operator_address ?? ''))
+      .update(Buffer.from(valAddress ?? ''))
       .digest()
       .toString('hex');
 
     return `#${hash.substr(0, 6)}`;
+  }
+
+  toNumber(str: string) {
+    return Number(str);
   }
 
   onToggleChange(value: string) {

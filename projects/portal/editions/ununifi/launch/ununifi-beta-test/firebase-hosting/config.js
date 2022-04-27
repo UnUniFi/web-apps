@@ -95,7 +95,7 @@ const configs = [
           maxCredit: 9,
         },
       ],
-      monitor: {},
+      monitor: undefined,
       navigations: [],
       messageModules,
     },

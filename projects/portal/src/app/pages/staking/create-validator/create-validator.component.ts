@@ -181,6 +181,7 @@ export class CreateValidatorComponent implements OnInit {
     await this.stakingApplicationService.createValidator(
       createValidatorData,
       createValidatorData.minimumGasPrice,
+      1.1,
     );
   }
 }

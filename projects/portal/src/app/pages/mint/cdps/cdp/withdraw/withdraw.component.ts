@@ -115,6 +115,7 @@ export class WithdrawComponent implements OnInit {
       $event.collateral,
       $event.minimumGasPrice,
       $event.balances,
+      1.1,
     );
   }
 }

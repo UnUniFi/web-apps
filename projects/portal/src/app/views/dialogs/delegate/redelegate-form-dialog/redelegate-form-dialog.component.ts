@@ -11,6 +11,8 @@ export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  validatorList: InlineResponse20066Validators[];
+  gasRatio: number;
 };
 
 @Component({
@@ -20,7 +22,7 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: (string | undefined)[] | null;
+  validatorsList?: InlineResponse20066Validators[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -42,11 +44,13 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: string;
+  selectedValidator?: InlineResponse20066Validators;
+  gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -70,21 +74,30 @@ export class RedelegateFormDialogComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
+
   onSubmit(minimumGasPrice: string) {
-    if (!this.selectedValidator) {
+    if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
     if (!this.selectedAmount) {
       return;
     }
-    if (this.selectedGasPrice === undefined) {
+    if (!this.selectedGasPrice) {
+      return;
+    }
+    if (!this.validatorsList) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      destinationValidator: this.selectedValidator,
+      destinationValidator: this.selectedValidator.operator_address,
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
+      validatorList: this.validatorsList,
+      gasRatio: this.gasRatio,
     });
   }
 

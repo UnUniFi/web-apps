@@ -11,7 +11,7 @@ const routes: Routes = [
     canActivate: [WalletGuard],
   },
   {
-    path: 'proposals/:address',
+    path: 'proposals/:id',
     component: ProposalComponent,
     canActivate: [WalletGuard],
   },

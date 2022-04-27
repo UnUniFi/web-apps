@@ -113,6 +113,7 @@ export class IssueComponent implements OnInit {
       $event.principal,
       $event.minimumGasPrice,
       $event.balances,
+      1.1,
     );
   }
 }

@@ -93,6 +93,7 @@ export class PlaceBidComponent implements OnInit {
       $event.auctionID,
       $event.amount,
       $event.minimumGasPrice,
+      1.1,
     );
   }
 }

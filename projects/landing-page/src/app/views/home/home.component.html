@@ -3,33 +3,40 @@
     <div class="container">
       <nav class="navbar navbar-expand-md justify-content-between align-items-center">
         <a href="/" class="navbar-brand"><img src="assets/images/Vector.png" alt="" /></a>
-
         <button class="navbar-toggler" (click)="toggler()"><span class="fa fa-bars"></span></button>
+
+        <!--when drawer opened-->
         <div class="navbar-collapse collapse">
           <div class="navbar-nav justify-content-between mx-auto">
             <li class="nav-item"><a href="#" class="nav-link active">HOME</a></li>
             <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
             <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
-            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>
+            <!-- comment out
+            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
           </div>
-          <a href="#" class="btn">WHITEPAPER</a>
+          <a href="#" href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn"
+            >WHITEPAPER</a
+          >
         </div>
 
-        <!--
+        <!--when drawer closed-->
         <div class="mobile-nav d-none d-md-none" id="toggled" (click)="toggler()">
           <div class="navbar-nav justify-content-between mx-auto">
             <li class="nav-item"><a href="#" class="nav-link">HOME</a></li>
             <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
             <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
-            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>
+            <!-- comment out
+            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
           </div>
-          <a href="#" class="btn">WHITEPAPER</a>
+          <a href="#" href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn"
+            >WHITEPAPER</a
+          >
         </div>
-      --></nav>
+      </nav>
       <div class="pt-5 text-center">
         <h1 class="bold pt-4">
           Decentralized cross-chain<span class="pink">NFT</span><br />
-          <span class="lightItalic">marketplace</span> <span class="pin">/</span> platform <br />
+          <span class="lightItalic">marketplace</span><span class="pin">/</span> platform <br />
           with auto DeFi yield
         </h1>
       </div>
@@ -39,12 +46,13 @@
           through auto DeFi yield.
         </p>
       </div>
-      <a href="#" class="btn d-block mx-auto btnLaunch p-3">LAUNCH APP</a>
+      <a href="/portal" class="btn d-block mx-auto btnLaunch p-3">LAUNCH APP</a>
     </div>
     <img src="assets/images/arrows.png" class="arrows" alt="arrows" />
     <img src="assets/images/star.png" class="star" alt="star" />
     <img src="assets/images/man.png" class="man d-none d-md-block" alt="man" />
   </div>
+
   <div class="intro pt-5" id="about">
     <div class="container">
       <h5 class="text-center">How does Auto DeFi Yield work?</h5>
@@ -81,6 +89,7 @@
     </div>
   </div>
 </section>
+
 <section class="joinAndPartners">
   <div class="container join py-5" id="community">
     <img src="assets/images/star.png" class="star2" alt="star" />
@@ -115,6 +124,8 @@
       </div>
     </div>
   </div>
+
+  <!-- comment out
   <div class="partners py-5" id="partners">
     <h3 class="text-center">Partners</h3>
     <div class="container">
@@ -132,7 +143,9 @@
     </div>
   </div>
   <img src="assets/images/Ellipse 9.png" class="blur" alt="blur" />
+  -->
 </section>
+
 <footer>
   <div class="container py-3">
     <div class="row justify-content-between">
@@ -140,7 +153,7 @@
         <img src="assets/images/Vector.png" alt="logo" />
       </div>
       <div class="col-9 text-right">
-        <p><span class="pink">&copy; UnUnifi 2022 </span>all right reserved</p>
+        <p><span class="pink">&copy; UnUniFi 2022 </span>all right reserved</p>
       </div>
     </div>
   </div>

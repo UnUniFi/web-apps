@@ -1,0 +1,183 @@
+@use 'variables'as v;
+
+
+// Global Property ( ALL Size )
+.navbar.scrolled{
+    background-color: #1C1B1B;
+    padding: max(.5vw, .5em) max(1vw,1em);
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    transition: all 0.5s ease;
+
+    .mobile {
+        display: none;
+    }
+
+    .menu-button{
+        display: none;
+    }
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .navbar-logo {
+        font-weight: v.$text-bold;
+
+        a {
+            text-decoration: none;
+            color: v.$text-color;
+        }
+    }
+
+    .navbar-menu-list {
+        display: flex;
+        li {
+            list-style: none;
+
+            a {
+                color: v.$text-color;
+                margin: 1em;
+                display: block;
+                font-weight: 400;
+                text-decoration: none;
+                text-transform: uppercase;
+                transition: .5s;
+
+                &:hover{
+                    color: v.$secondary-color;
+                }
+            }
+        }
+    }
+
+    .navbar-button {
+        a {
+            border: 3px solid;
+            border-image-source: linear-gradient(180deg, #FF3DB0 0%, #932064 100%);
+            border-image-slice: 1;
+            font-weight: v.$text-bold;
+            padding: 1em 1.5em;
+            color: v.$text-color;
+            margin: 1em;
+            display: block;
+            text-decoration: none;
+            transition: .5s;
+
+            &:hover{
+                color: v.$secondary-color;
+            }
+        }
+    }
+}
+
+
+
+// Mobile Property ( Mobile Size )
+@media screen and (max-width: 767px) {
+    .navbar {
+        padding: 2em 0;
+
+        .dekstop {
+            display: none;
+        }
+
+        .navbar-logo{
+            padding:  0 2em;
+        }
+
+        .menu-button {
+            font-size: 2em;
+            color: v.$text-color;
+            cursor: pointer;
+            display: block;
+            padding: 0 1em;
+        }
+
+        .navbar-menu {
+            width: 100%;
+            display: grid;
+
+            .navbar-wrapper {
+                background: linear-gradient(137.65deg, #1C1B1B 96.87%, #000000 105.82%);
+                height: 0;
+                overflow: hidden;
+                transition: .5s;
+                text-align: center;
+
+                .navbar-menu-list{
+                    display: unset;
+                    font-size: max(1vw, 14px);
+                }
+
+                .navbar-button{
+                    font-size: max(1vw, 16px);
+                }
+            }
+
+            .navbar-wrapper.expanded {
+                height: 100%;
+            }
+        }
+    }
+}
+
+// Small Dekstop and Tab Property ( Dekstop and Tab Size )
+@media screen and (min-width: v.$mobile-size) and (max-width: v.$tab-size) {
+    .navbar {       
+        padding: max(1.5vw, 2em);
+        
+        .navbar-logo {
+            img{
+                width: max(1vw, 100px);
+            }
+        }
+    
+        .navbar-menu-list {
+            li {
+                a {
+                    font-size: max(1vw, 16px);
+                }
+            }
+        }
+    
+        .navbar-button {
+            a {
+                font-size: max(1vw, 16px);
+            }
+        }
+    }
+}
+
+// Dekstop Property ( Dekstop )
+@media screen and (min-width: v.$tab-size) {
+    .navbar {     
+        padding: max(1.5vw, 2em);
+        
+        .navbar-logo {
+            img{
+                width: max(6vw, 100px);
+            }
+        }
+    
+        .navbar-menu-list {
+            li {
+                a {
+                    font-size: max(1vw, 18px);
+                }
+            }
+        }
+    
+        .navbar-button {
+            a {
+                font-size: max(1vw, 16px);
+            }
+        }
+    }
+}

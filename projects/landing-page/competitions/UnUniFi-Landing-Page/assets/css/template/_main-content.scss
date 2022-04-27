@@ -1,0 +1,240 @@
+@use 'variables'as v;
+@use 'global'as g;
+
+
+section.main-content {
+    background-image: url('../bg-misc-3.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    header {
+        text-align: center;
+        color: v.$text-color;
+        font-weight: v.$text-bold;
+    }
+
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .number {
+            color: rgba(v.$text-color, 0.2);
+            font-weight: v.$text-bold;
+        }
+
+        .text {
+            color: v.$text-color;
+            text-align: center;
+        }
+
+        .image {
+            text-align: center;
+            width: 100%;
+        }
+    }
+}
+
+// Small Moobile Property ( Mobile Size )
+@media screen and (max-width: v.$small-mobile-size) {
+    section.main-content {
+        padding-top: max(5vw, 8em);
+
+        header {
+            font-size: max(1.5vw, 20px);
+        }
+
+        .content {
+            margin-top: 2em;
+
+            .number {
+                order: 2;
+                font-size: max(1.5vw, 50px);
+            }
+
+            .text {
+                order: 3;
+                padding: 1em;
+
+                h1 {
+                    font-size: max(1.5vw, 18px);
+                }
+
+                p {
+                    padding-top: 1em;
+                    font-size: max(1.5vw, 14px);
+                }
+            }
+
+            .image {
+                order: 1;
+
+                img {
+                    width: min(80%, 200px);
+                }
+            }
+        }
+    }
+}
+
+// mobile Property ( Mobile Size )
+@media screen and (min-width: v.$small-mobile-size) and (max-width: v.$mobile-size) {
+    section.main-content {
+        padding-top: max(5vw, 8em);
+
+        header {
+            font-size: max(1.5vw, 20px);
+        }
+
+        .content {
+            margin-top: 2em;
+
+            .number {
+                order: 2;
+                font-size: max(1.5vw, 50px);
+            }
+
+            .text {
+                order: 3;
+                padding: 1em;
+                text-align: left;
+                width: 80%;
+
+                h1 {
+                    font-size: max(1.5vw, 18px);
+                }
+
+                p {
+                    padding-top: 1em;
+                    font-size: max(1.5vw, 14px);
+                }
+            }
+
+            .image {
+                order: 1;
+
+                img {
+                    width: min(80%, 200px);
+                }
+            }
+        }
+    }
+}
+
+
+// Tab Property ( Tab Size )
+@media screen and (min-width: v.$mobile-size) and (max-width: v.$tab-size) {
+    section.main-content {
+        padding-top: max(5vw, 8em);
+
+        header {
+            font-size: max(1.5vw, 20px);
+        }
+
+        .content {
+            margin-top: 2em;
+
+            .number {
+                font-size: max(1.5vw, 50px);
+            }
+
+            .text {
+                padding: 1em;
+                text-align: left;
+                width: 50%;
+
+                h1 {
+                    font-size: max(1.5vw, 18px);
+                }
+
+                p {
+                    padding-top: 1em;
+                    font-size: max(1.5vw, 14px);
+                }
+            }
+
+            .image {
+                width: 30%;
+
+                img {
+                    width: min(80%, 200px);
+                }
+            }
+        }
+
+        .content{
+            &:nth-child(3){
+                .image{
+                    order: 1;
+                }
+
+                .number{
+                    order: 2;
+                }
+
+                .text{
+                    order: 3;
+                }
+            }
+        }
+    }
+}
+
+// Dekstop Property ( Dekstop Size )
+@media screen and (min-width: v.$tab-size) {
+    section.main-content {
+        padding-top: max(5vw, 8em);
+
+        header {
+            font-size: max(1.5vw, 20px);
+        }
+
+        .content {
+            margin-top: 2em;
+
+            .number {
+                font-size: max(1.5vw, 50px);
+            }
+
+            .text {
+                padding: 1em;
+                text-align: left;
+                width: 50%;
+
+                h1 {
+                    font-size: max(1.5vw, 18px);
+                }
+
+                p {
+                    padding-top: 1em;
+                    font-size: max(1.5vw, 14px);
+                }
+            }
+
+            .image {
+                width: 30%;
+
+                img {
+                    width: min(80%, 200px);
+                }
+            }
+        }
+
+        .content{
+            &:nth-child(3){
+                .image{
+                    order: 1;
+                }
+
+                .number{
+                    order: 2;
+                }
+
+                .text{
+                    order: 3;
+                }
+            }
+        }
+    }
+}

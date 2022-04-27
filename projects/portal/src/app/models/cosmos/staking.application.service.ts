@@ -70,6 +70,7 @@ export class StakingApplicationService {
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKeyString: string,
+    gasRatio: number,
   ) {
     const privateKey = convertHexStringToUint8Array(privateKeyString);
     if (!privateKey) {
@@ -85,6 +86,7 @@ export class StakingApplicationService {
         createValidatorData,
         minimumGasPrice,
         privateKey,
+        gasRatio,
       );
       const gas = simulatedResultData.estimatedGasUsedWithMargin;
       const fee = simulatedResultData.estimatedFeeWithMargin;

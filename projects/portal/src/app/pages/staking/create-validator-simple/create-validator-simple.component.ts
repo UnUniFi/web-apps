@@ -132,10 +132,12 @@ export class CreateValidatorSimpleComponent implements OnInit {
       privateKey: string;
     },
   ): Promise<void> {
+    const gasRatio = 1.1;
     await this.stakingApplicationService.createValidatorSimple(
       createValidatorData,
       createValidatorData.minimumGasPrice,
       createValidatorData.privateKey,
+      gasRatio,
     );
   }
 }

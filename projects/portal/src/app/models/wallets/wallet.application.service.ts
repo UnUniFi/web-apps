@@ -6,6 +6,7 @@ import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../views/
 import { UnunifiKeyFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+import { KeplrApplicationService } from './keplr/keplr.application.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
@@ -18,6 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WalletApplicationService {
   constructor(
     private readonly walletService: WalletService,
+    private readonly keplrAppService: KeplrApplicationService,
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {}
@@ -31,11 +33,7 @@ export class WalletApplicationService {
     }
 
     // Todo: After implementation, this should be removed
-    if (
-      selectedWalletType === WalletType.keplr ||
-      selectedWalletType === WalletType.keyStation ||
-      selectedWalletType === WalletType.ledger
-    ) {
+    if (selectedWalletType === WalletType.keyStation || selectedWalletType === WalletType.ledger) {
       this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
       return;
     }
@@ -81,6 +79,14 @@ export class WalletApplicationService {
         }
         return;
       }
+    }
+
+    if (selectedWalletType === WalletType.keplr) {
+      const isSuccessImport = await this.keplrAppService.keplrSelectWallet();
+      if (isSuccessImport) {
+        window.location.reload();
+      }
+      return;
     }
   }
 

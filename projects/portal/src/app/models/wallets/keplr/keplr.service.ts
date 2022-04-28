@@ -48,9 +48,6 @@ export class KeplrService {
       alert('Please install keplr extension');
       return;
     } else {
-      const chainID = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainID);
-
       const chainId = this.configService.configs[0].chainID;
       const chainName = this.configService.configs[0].chainID;
       const rpc = this.configService.configs[0].websocketURL;

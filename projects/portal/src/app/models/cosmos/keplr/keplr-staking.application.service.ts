@@ -1,12 +1,5 @@
-import { DelegateFormDialogComponent } from '../../../pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
-import { DelegateMenuDialogComponent } from '../../../pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.component';
-import { RedelegateFormDialogComponent } from '../../../pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
-import { UndelegateFormDialogComponent } from '../../../pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../../utils/converter';
-import { validatePrivateStoredWallet } from '../../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { WalletApplicationService } from '../../wallets/wallet.application.service';
-import { StoredWallet } from '../../wallets/wallet.model';
 import { WalletService } from '../../wallets/wallet.service';
 import { CreateValidatorData } from '../staking.model';
 import { SimulatedTxResultResponse } from '../tx-common.model';
@@ -16,10 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
-import {
-  InlineResponse20066Validators,
-  InlineResponse20075,
-} from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({

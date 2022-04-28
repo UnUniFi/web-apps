@@ -7,6 +7,11 @@
       <span class="flex-auto"></span>
       <span class="ml2 break-all">{{ walletId }}</span>
     </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Type</span>
+      <span class="flex-auto"></span>
+      <span class="ml2 break-all">{{ walletType }}</span>
+    </mat-list-item>
 
     <mat-list-item>
       <span class="whitespace-nowrap">Address</span>
@@ -14,7 +19,8 @@
       <a
         class="ml-2 break-all text-sm sm:text-base underline"
         href="/explorer/accounts/{{ accAddress }}"
-      >{{ accAddress }}</a>
+        >{{ accAddress }}</a
+      >
       <button mat-icon-button type="button" (click)="copyClipboard(accAddress ? accAddress : '')">
         <mat-icon>content_copy</mat-icon>
       </button>
@@ -25,12 +31,8 @@
 <mat-accordion>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      <mat-panel-title>
-        Advanced
-      </mat-panel-title>
-      <mat-panel-description>
-        Account Details
-      </mat-panel-description>
+      <mat-panel-title> Advanced </mat-panel-title>
+      <mat-panel-description> Account Details </mat-panel-description>
     </mat-expansion-panel-header>
     <mat-list>
       <mat-list-item>
@@ -61,7 +63,8 @@
         <a
           class="ml-2 break-all text-xs md:text-base underline"
           href="/explorer/cosmos/staking/validators/{{ valAddress }}"
-        >{{ valAddress }}</a>
+          >{{ valAddress }}</a
+        >
         <button mat-icon-button type="button" (click)="copyClipboard(valAddress ? valAddress : '')">
           <mat-icon>content_copy</mat-icon>
         </button>
@@ -99,12 +102,8 @@
     <mat-list-item *ngIf="balances === null">
       <mat-spinner></mat-spinner>
     </mat-list-item>
-    <mat-list-item *ngIf="balances === undefined">
-      No Balances!
-    </mat-list-item>
-    <mat-list-item *ngIf="balances && balances.length === 0">
-      No Balances!
-    </mat-list-item>
+    <mat-list-item *ngIf="balances === undefined"> No Balances! </mat-list-item>
+    <mat-list-item *ngIf="balances && balances.length === 0"> No Balances! </mat-list-item>
     <ng-container *ngIf="balances && balances.length > 0">
       <mat-list-item *ngFor="let balance of balances; last as last">
         <span class="flex-auto"></span>
@@ -123,9 +122,7 @@
     <mat-list-item *ngIf="nodeInfo === null">
       <mat-spinner></mat-spinner>
     </mat-list-item>
-    <mat-list-item *ngIf="nodeInfo === undefined">
-      Invalid Network!
-    </mat-list-item>
+    <mat-list-item *ngIf="nodeInfo === undefined"> Invalid Network! </mat-list-item>
     <ng-container *ngIf="nodeInfo">
       <mat-list-item>
         <span class="whitespace-nowrap">Chain ID</span>

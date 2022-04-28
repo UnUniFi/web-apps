@@ -1,3 +1,4 @@
+import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,6 +12,7 @@ import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
 })
 export class ViewBalanceComponent implements OnInit {
   @Input() walletId?: string | null;
+  @Input() walletType?: WalletType | null;
   @Input() accAddress?: string | null;
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;

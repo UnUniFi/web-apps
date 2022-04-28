@@ -27,6 +27,7 @@ export class KeplrApplicationService {
       this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
+    await this.walletService.setStoredWallet(selectedStoredWallet);
     await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
     await this.openConnectWalletCompletedDialog(selectedStoredWallet);
     return true;
@@ -70,47 +71,4 @@ export class KeplrApplicationService {
     }
     return keyData;
   }
-
-  // async getAccAddress(): Promise<cosmosclient.AccAddress | undefined> {
-  //   return this.keplrService
-  //     .getKey()
-  //     .then((key) => {
-  //       if (!key) {
-  //         console.error('Fail.');
-  //         return undefined;
-  //       }
-  //       const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-  //       if (!pubkey) {
-  //         console.error('Invalid Pubkey.');
-  //         return undefined;
-  //       }
-  //       const accAddress = cosmosclient.AccAddress.fromPublicKey(pubkey);
-  //       return accAddress;
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       return undefined;
-  //     });
-  // }
-
-  // async getPubkey(): Promise<string | undefined> {
-  //   return this.keplrService
-  //     .getKey()
-  //     .then((key) => {
-  //       if (!key) {
-  //         console.error('Fail.');
-  //         return undefined;
-  //       }
-  //       const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-  //       if (!pubkey) {
-  //         console.error('Invalid Pubkey.');
-  //         return undefined;
-  //       }
-  //       return Buffer.from(pubkey.bytes).toString();
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       return undefined;
-  //     });
-  // }
 }

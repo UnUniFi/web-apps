@@ -1,6 +1,6 @@
 import { ConfigService } from '../../config.service';
 import { Injectable } from '@angular/core';
-import { AccountData } from '@cosmjs/launchpad';
+import { AccountData, decodeSignature } from '@cosmjs/launchpad';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
 
 declare global {
@@ -103,6 +103,19 @@ export class KeplrService {
         gasPriceStep,
       };
       await window.keplr?.experimentalSuggestChain(chainInfo);
+    }
+  }
+
+  async signArbitrary(signer: string, data: string | Uint8Array): Promise<Uint8Array | undefined> {
+    if (!window.keplr) {
+      alert('Please install keplr extension');
+      return;
+    } else {
+      const chainId = this.configService.configs[0].chainID;
+      await window.keplr?.enable(chainId);
+      const stdSignature = await window.keplr.signArbitrary(chainId, signer, data);
+      const signature = decodeSignature(stdSignature).signature;
+      return signature;
     }
   }
 }

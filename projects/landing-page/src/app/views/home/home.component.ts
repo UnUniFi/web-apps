@@ -9,4 +9,9 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  toggler() {
+    const toggled = document.getElementById('toggled');
+    toggled?.classList.toggle('d-none');
+  }
 }

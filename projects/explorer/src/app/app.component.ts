@@ -1,12 +1,11 @@
-import { environment } from '../environments/environment';
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
-import { mergeMap, map, filter } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -221,8 +220,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     // tracking
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
+    // this.router.events
+    //   .pipe(filter((event) => event instanceof NavigationEnd))
+    //   .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
   }
 }

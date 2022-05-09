@@ -12,5 +12,5 @@ platformBrowserDynamic()
   .catch((err) => console.error(err));
 
 // google analytics
-gtag('js', new Date());
-gtag('config', environment.gtagId);
+// gtag('js', new Date());
+// gtag('config', environment.gtagId);

@@ -235,8 +235,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     // tracking
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
+    // this.router.events
+    //   .pipe(filter((event) => event instanceof NavigationEnd))
+    //   .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
   }
 }

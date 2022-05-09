@@ -60,7 +60,7 @@
         <!-- Todo: Explorer's routing should be changed to /explorer/validators/{{ valAddress }} -->
         <a
           class="ml-2 break-all text-xs md:text-base underline"
-          href="/explorer/cosmos/staking/validators/{{ valAddress }}"
+          href="/explorer/validators/{{ valAddress }}"
         >{{ valAddress }}</a>
         <button mat-icon-button type="button" (click)="copyClipboard(valAddress ? valAddress : '')">
           <mat-icon>content_copy</mat-icon>

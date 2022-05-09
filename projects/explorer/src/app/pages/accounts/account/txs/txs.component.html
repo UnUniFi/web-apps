@@ -1,6 +1,7 @@
 <view-txs
   [pageSizeOptions]="pageSizeOptions"
   [txsWithPagination]="txsWithPagination$ | async"
+  [txTypes]="txTypes$ | async"
   [pageInfo]="paginationInfo$ | async"
   [pageLength]="pageLength$ | async"
   (paginationChange)="appPaginationChanged($event)"

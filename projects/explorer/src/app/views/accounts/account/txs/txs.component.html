@@ -20,9 +20,9 @@
       </mat-list-item>
     </mat-list>
     <mat-nav-list>
-      <ng-container *ngFor="let tx of txsWithPagination?.tx_responses; last as last">
+      <ng-container *ngFor="let tx of txsWithPagination?.tx_responses; let i = index; last as last">
         <mat-list-item routerLink="/txs/{{ tx.txhash }}">
-          <span class="pr-4">{{ tx.logs?.[0]?.events?.[3]?.type }}</span>
+          <span class="pr-4">{{ txTypes?.[i] }}</span>
           <span class="flex-auto"></span>
           <span
             class="w-1/5 break-all truncate"

@@ -11,6 +11,8 @@ import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/open
 export class TxsComponent implements OnInit {
   @Input() txsWithPagination?: CosmosTxV1beta1GetTxsEventResponse | null;
 
+  @Input() txTypes?: string[] | null;
+
   @Input() pageSizeOptions?: number[] | null;
 
   @Input() pageInfo?: PaginationInfo | null;

@@ -30,6 +30,7 @@ export class TxsComponent implements OnInit {
   paginationInfo$: Observable<PaginationInfo>;
   pageLength$: Observable<number | undefined>;
   txsWithPagination$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
+  txTypes$: Observable<string[] | undefined>;
 
   constructor(
     private router: Router,
@@ -134,6 +135,30 @@ export class TxsComponent implements OnInit {
             console.error(error);
             return undefined;
           });
+      }),
+    );
+
+    this.txTypes$ = this.txsWithPagination$.pipe(
+      map((txs) => {
+        if (!txs?.txs) {
+          return undefined;
+        }
+        const txTypeList = txs?.txs?.map((tx) => {
+          if (!tx.body?.messages) {
+            return '';
+          }
+          const txTypes = tx.body?.messages.map((message) => {
+            if (!message) {
+              return [];
+            }
+            const txTypeRaw = (message as any)['@type'] as string;
+            const startLength = txTypeRaw.lastIndexOf('.');
+            const txType = txTypeRaw.substring(startLength + 1, txTypeRaw.length);
+            return txType;
+          });
+          return txTypes.join();
+        });
+        return txTypeList;
       }),
     );
   }

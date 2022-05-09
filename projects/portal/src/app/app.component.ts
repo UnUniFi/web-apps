@@ -216,7 +216,8 @@ export class AppComponent implements OnInit {
     } else if (searchResult.type === 'txHash') {
       await this.router.navigate(['txs', searchResult.searchValue]);
     } else if (searchResult.type === 'block') {
-      await this.router.navigate(['explorer/blocks', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/blocks/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     }
   }
 

@@ -6,6 +6,7 @@ import { cosmosclient } from '@cosmos-client/core';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyService } from 'projects/portal/src/app/models/keys/key.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -21,13 +22,16 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   id$: Observable<string>;
   mnemonicSubject$: BehaviorSubject<string>;
   mnemonic$: Observable<string>;
+  wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
     private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithMnemonicFormDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private keyService: KeyService,
+    private walletService: WalletService,
   ) {
+    this.wallets$ = this.walletService.storedWallets$;
     this.idSubject$ = new BehaviorSubject<string>('');
     this.idSubject$.next('');
     this.id$ = this.idSubject$.asObservable();
@@ -108,15 +112,28 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   }
 
   onClickButton(id: string) {
-    const subscription = this.privateWallet$.subscribe((privateWallet) => {
-      if (!privateWallet) {
-        this.snackBar.open('Invalid wallet!');
+    const subscription = combineLatest([this.privateWallet$, this.wallets$]).subscribe(
+      ([privateWallet, wallets]) => {
+        if (!privateWallet) {
+          this.snackBar.open('Invalid wallet!');
+          subscription.unsubscribe();
+          return;
+        }
+        console.log(id);
+        const sameWallet = wallets?.find((wallet) => wallet.id === id);
+        console.log(sameWallet);
+        if (sameWallet) {
+          this.snackBar.open(
+            'Same Wallet ID is already connected! You need to use another Wallet ID!',
+            'Close',
+          );
+          subscription.unsubscribe();
+          return;
+        }
+        privateWallet.id = id;
+        this.dialogRef.close(privateWallet);
         subscription.unsubscribe();
-        return;
-      }
-      privateWallet.id = id;
-      this.dialogRef.close(privateWallet);
-      subscription.unsubscribe();
-    });
+      },
+    );
   }
 }

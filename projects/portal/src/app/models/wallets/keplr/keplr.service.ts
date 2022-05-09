@@ -1,25 +1,16 @@
-import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { ConfigService } from '../../config.service';
-import { KeyType } from '../../keys/key.model';
-import { AccountData, SigningCosmosClient } from '@cosmjs/launchpad';
-import { cosmosclient } from '@cosmos-client/core';
-import { Window as KeplrWindow } from '@keplr-wallet/types';
+import { Injectable } from '@angular/core';
+import { AccountData } from '@cosmjs/launchpad';
+import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Window extends KeplrWindow {}
 }
 
-export interface keplrKey {
-  // Name of the selected key store.
-  name: string;
-  algo: string;
-  pubKey: Uint8Array;
-  address: Uint8Array;
-  bech32Address: string;
-  isNanoLedger: boolean;
-}
-
+@Injectable({
+  providedIn: 'root',
+})
 export class KeplrService {
   constructor(private configService: ConfigService) {}
 
@@ -28,24 +19,90 @@ export class KeplrService {
       alert('Please install keplr extension');
       return;
     } else {
-      const config = await this.configService.config$.toPromise().then((config) => config);
-      await window.keplr?.enable(config?.chainID!);
-      const offlineSigner = window.keplr?.getOfflineSigner(config?.chainID!);
+      const chainID = this.configService.configs[0].chainID;
+      await window.keplr?.enable(chainID);
 
+      const offlineSigner = window.keplr?.getOfflineSigner(chainID);
       return offlineSigner?.getAccounts();
     }
   }
 
-  async getAddress(): Promise<cosmosclient.AccAddress | undefined> {
+  async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {
       alert('Please install keplr extension');
       return;
     } else {
-      const config = await this.configService.config$.toPromise().then((config) => config);
-      await window.keplr?.enable(config?.chainID!);
-      const key = await window.keplr?.getKey(config?.chainID!);
-      const pubkey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, key.pubKey);
-      return cosmosclient.AccAddress.fromPublicKey(pubkey!);
+      const chainID = this.configService.configs[0].chainID;
+      await window.keplr?.enable(chainID);
+
+      const key = await window.keplr?.getKey(chainID);
+      if (!key) {
+        window.keplr;
+      }
+      return key;
+    }
+  }
+
+  async suggestChain(): Promise<void> {
+    if (!window.keplr) {
+      alert('Please install keplr extension');
+      return;
+    } else {
+      const chainId = this.configService.configs[0].chainID;
+      const chainName = this.configService.configs[0].chainID;
+      const rpc = this.configService.configs[0].websocketURL;
+      const rest = this.configService.configs[0].restURL;
+      const bip44 = { coinType: 118 };
+      const bech32Config = {
+        bech32PrefixAccAddr: this.configService.configs[0].bech32Prefix?.accAddr!,
+        bech32PrefixAccPub: this.configService.configs[0].bech32Prefix?.accPub!,
+        bech32PrefixValAddr: this.configService.configs[0].bech32Prefix?.valAddr!,
+        bech32PrefixValPub: this.configService.configs[0].bech32Prefix?.valPub!,
+        bech32PrefixConsAddr: this.configService.configs[0].bech32Prefix?.consAddr!,
+        bech32PrefixConsPub: this.configService.configs[0].bech32Prefix?.consPub!,
+      };
+      const currencies = [
+        {
+          coinDenom: 'GUU',
+          coinMinimalDenom: 'uguu',
+          coinDecimals: 6,
+          coinGeckoId: 'ununifi',
+        },
+      ];
+      const feeCurrencies = [
+        {
+          coinDenom: 'GUU',
+          coinMinimalDenom: 'uguu',
+          coinDecimals: 6,
+          coinGeckoId: 'ununifi',
+        },
+      ];
+      const stakeCurrency = {
+        coinDenom: 'GUU',
+        coinMinimalDenom: 'uguu',
+        coinDecimals: 6,
+        coinGeckoId: 'ununifi',
+      };
+      const coinType = 118;
+      const gasPriceStep = {
+        low: 0.01,
+        average: 0.025,
+        high: 0.03,
+      };
+      const chainInfo: ChainInfo = {
+        chainId,
+        chainName,
+        rpc,
+        rest,
+        bip44,
+        bech32Config,
+        currencies,
+        feeCurrencies,
+        stakeCurrency,
+        coinType,
+        gasPriceStep,
+      };
+      await window.keplr?.experimentalSuggestChain(chainInfo);
     }
   }
 }

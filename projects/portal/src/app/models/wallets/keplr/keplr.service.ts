@@ -5,6 +5,12 @@ import { AccountData, BroadcastMode, decodeSignature } from '@cosmjs/launchpad';
 import { cosmosclient } from '@cosmos-client/core';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
 
+export interface signKeplr {
+  authInfoBytes: Uint8Array;
+  bodyBytes: Uint8Array;
+  signature: Uint8Array;
+}
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Window extends KeplrWindow {}
@@ -113,7 +119,7 @@ export class KeplrService {
     bodyBytes: Uint8Array,
     authInfoBytes: Uint8Array,
     accountNumber: Long,
-  ): Promise<Uint8Array | undefined> {
+  ): Promise<signKeplr | undefined> {
     if (!window.keplr) {
       alert('Please install keplr extension');
       return;
@@ -126,8 +132,12 @@ export class KeplrService {
         chainId,
         accountNumber,
       });
-      const signature = decodeSignature(directSignResponse.signature).signature;
-      return signature;
+      const signKeplr: signKeplr = {
+        authInfoBytes: directSignResponse.signed.authInfoBytes,
+        bodyBytes: directSignResponse.signed.bodyBytes,
+        signature: decodeSignature(directSignResponse.signature).signature,
+      };
+      return signKeplr;
     }
   }
 

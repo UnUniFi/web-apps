@@ -1,8 +1,7 @@
-import { ConfigService } from '../../config.service';
-import { CosmosSDKService } from '../../cosmos-sdk.service';
+import { ConfigService } from '../config.service';
+import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
-import { AccountData, BroadcastMode, decodeSignature } from '@cosmjs/launchpad';
-import { cosmosclient } from '@cosmos-client/core';
+import { BroadcastMode, decodeSignature } from '@cosmjs/launchpad';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
 
 export interface signKeplr {
@@ -22,19 +21,6 @@ declare global {
 export class KeplrService {
   constructor(private readonly cosmosSDK: CosmosSDKService, private configService: ConfigService) {}
 
-  async getAccounts(): Promise<readonly AccountData[] | undefined> {
-    if (!window.keplr) {
-      alert('Please install keplr extension');
-      return;
-    } else {
-      const chainID = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainID);
-
-      const offlineSigner = window.keplr?.getOfflineSigner(chainID);
-      return offlineSigner?.getAccounts();
-    }
-  }
-
   async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {
       alert('Please install keplr extension');
@@ -44,9 +30,6 @@ export class KeplrService {
       await window.keplr?.enable(chainID);
 
       const key = await window.keplr?.getKey(chainID);
-      if (!key) {
-        window.keplr;
-      }
       return key;
     }
   }
@@ -138,31 +121,6 @@ export class KeplrService {
         signature: decodeSignature(directSignResponse.signature).signature,
       };
       return signKeplr;
-    }
-  }
-
-  async sendTx(tx: Uint8Array): Promise<Uint8Array | undefined> {
-    if (!window.keplr) {
-      alert('Please install keplr extension');
-      return;
-    } else {
-      const chainId = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainId);
-      const txResponse = await window.keplr.sendTx(chainId, tx, BroadcastMode.Async);
-      return txResponse;
-    }
-  }
-
-  async signArbitrary(signer: string, data: string | Uint8Array): Promise<Uint8Array | undefined> {
-    if (!window.keplr) {
-      alert('Please install keplr extension');
-      return;
-    } else {
-      const chainId = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainId);
-      const stdSignature = await window.keplr.signArbitrary(chainId, signer, data);
-      const signature = decodeSignature(stdSignature).signature;
-      return signature;
     }
   }
 }

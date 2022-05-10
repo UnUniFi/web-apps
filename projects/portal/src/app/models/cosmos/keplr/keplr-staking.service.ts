@@ -1,15 +1,12 @@
 import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { CosmosSDKService } from '../../cosmos-sdk.service';
+import { KeplrApplicationService } from '../../keplr/keplr.application.service';
 import { KeyType } from '../../keys/key.model';
-import { KeyService } from '../../keys/key.service';
-import { KeplrService } from '../../wallets/keplr/keplr.service';
 import { CreateValidatorData } from '../staking.model';
 import { SimulatedTxResultResponse } from '../tx-common.model';
 import { TxCommonService } from '../tx-common.service';
 import { Injectable } from '@angular/core';
-import { decodeSignature } from '@cosmjs/launchpad';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
-import { tx } from '@cosmos-client/core/cjs/rest/tx';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
@@ -18,9 +15,8 @@ import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 export class KeplrStakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-    private readonly keplrService: KeplrService,
+    private readonly keplrAppService: KeplrApplicationService,
   ) {}
 
   // Create Validator
@@ -155,21 +151,12 @@ export class KeplrStakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDoc = txBuilder.signDoc(account.account_number);
-    const signKeplr = await this.keplrService.signDirect(
+    const signedTxBuilder = this.keplrAppService.signDirect(
+      txBuilder,
+      account.account_number,
       accAddress.toString(),
-      signDoc.body_bytes,
-      signDoc.auth_info_bytes,
-      signDoc.account_number,
     );
-    if (!signKeplr) {
-      throw Error('Invalid signature!');
-    }
-    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
-    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
-    txBuilder.addSignature(signKeplr.signature);
-
-    return txBuilder;
+    return signedTxBuilder;
   }
 
   // Create Delegate
@@ -280,21 +267,12 @@ export class KeplrStakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDoc = txBuilder.signDoc(account.account_number);
-    const signKeplr = await this.keplrService.signDirect(
+    const signedTxBuilder = this.keplrAppService.signDirect(
+      txBuilder,
+      account.account_number,
       fromAddress.toString(),
-      signDoc.body_bytes,
-      signDoc.auth_info_bytes,
-      signDoc.account_number,
     );
-    if (!signKeplr) {
-      throw Error('Invalid signature!');
-    }
-    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
-    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
-    txBuilder.addSignature(signKeplr.signature);
-
-    return txBuilder;
+    return signedTxBuilder;
   }
 
   // Change Delegate
@@ -411,21 +389,12 @@ export class KeplrStakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDoc = txBuilder.signDoc(account.account_number);
-    const signKeplr = await this.keplrService.signDirect(
+    const signedTxBuilder = this.keplrAppService.signDirect(
+      txBuilder,
+      account.account_number,
       fromAddress.toString(),
-      signDoc.body_bytes,
-      signDoc.auth_info_bytes,
-      signDoc.account_number,
     );
-    if (!signKeplr) {
-      throw Error('Invalid signature!');
-    }
-    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
-    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
-    txBuilder.addSignature(signKeplr.signature);
-
-    return txBuilder;
+    return signedTxBuilder;
   }
 
   //  Delete Delegate
@@ -536,20 +505,11 @@ export class KeplrStakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDoc = txBuilder.signDoc(account.account_number);
-    const signKeplr = await this.keplrService.signDirect(
+    const signedTxBuilder = this.keplrAppService.signDirect(
+      txBuilder,
+      account.account_number,
       fromAddress.toString(),
-      signDoc.body_bytes,
-      signDoc.auth_info_bytes,
-      signDoc.account_number,
     );
-    if (!signKeplr) {
-      throw Error('Invalid signature!');
-    }
-    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
-    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
-    txBuilder.addSignature(signKeplr.signature);
-
-    return txBuilder;
+    return signedTxBuilder;
   }
 }

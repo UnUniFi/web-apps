@@ -1,11 +1,12 @@
-import { ConnectWalletCompletedDialogComponent } from '../../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
-import { KeplrImportWalletDialogComponent } from '../../../views/dialogs/wallets/keplr/keplr-import-wallet-dialog/keplr-import-wallet-dialog.component';
-import { StoredWallet } from '../wallet.model';
-import { WalletService } from '../wallet.service';
+import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
+import { KeplrImportWalletDialogComponent } from '../../views/dialogs/wallets/keplr/keplr-import-wallet-dialog/keplr-import-wallet-dialog.component';
+import { StoredWallet } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { KeplrService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { cosmosclient } from '@cosmos-client/core';
 import { Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
@@ -70,5 +71,27 @@ export class KeplrApplicationService {
       dialogRefGetKey.close();
     }
     return keyData;
+  }
+
+  async signDirect(
+    txBuilder: cosmosclient.TxBuilder,
+    accountNumber: Long.Long,
+    address: string,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signDoc = txBuilder.signDoc(accountNumber);
+    const signKeplr = await this.keplrService.signDirect(
+      address,
+      signDoc.body_bytes,
+      signDoc.auth_info_bytes,
+      signDoc.account_number,
+    );
+    if (!signKeplr) {
+      throw Error('Invalid signature!');
+    }
+    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
+    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
+    txBuilder.addSignature(signKeplr.signature);
+
+    return txBuilder;
   }
 }

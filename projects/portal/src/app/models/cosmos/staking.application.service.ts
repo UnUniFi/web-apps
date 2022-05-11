@@ -235,24 +235,6 @@ export class StakingApplicationService {
     if (!cosmosPublicKey) {
       throw Error('Invalid public key!');
     }
-    // const privateWallet: StoredWallet & { privateKey: string } =
-    //   await this.walletApplicationService.openUnunifiKeyFormDialog();
-    // if (!privateWallet || !privateWallet.privateKey) {
-    //   this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
-    //   return;
-    // }
-
-    // if (!validatePrivateStoredWallet(privateWallet)) {
-    //   this.snackBar.open('Invalid Wallet info!', 'Close');
-    //   return;
-    // }
-
-    // const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-
-    // if (!privateKey) {
-    //   this.snackBar.open('Invalid PrivateKey!', 'Close');
-    //   return;
-    // }
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;

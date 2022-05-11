@@ -8,6 +8,7 @@
     "start:portal": "ng serve --project portal",
     "start:landing-page": "ng serve --project landing-page",
     "start:all": "npm run build:all && firebase emulators:start --only hosting:ununifi-alpha-test",
+    "start:all:prod": "npm run build:all:prod && firebase emulators:start --only hosting:ununifi-alpha-test",
     "build": "ng build",
     "build:explorer": "ng build --project explorer",
     "build:explorer:prod": "ng build --project explorer --configuration=production",

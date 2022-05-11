@@ -1,3 +1,4 @@
+import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Key, KeyType } from '../keys/key.model';
@@ -84,8 +85,10 @@ export class StakingService {
       .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
       .catch((_) => undefined);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('Address not found');
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
     }
 
     if (createValidatorData.delegator_address !== accAddress.toString()) {
@@ -141,7 +144,7 @@ export class StakingService {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: account.sequence,
+          sequence: baseAccount.sequence,
         },
       ],
       fee: {
@@ -152,7 +155,7 @@ export class StakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
+    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
     return txBuilder;
@@ -224,17 +227,13 @@ export class StakingService {
     // get account info
     const account = await rest.auth
       .account(sdk, fromAddress)
-      .then(
-        (res) =>
-          res.data.account &&
-          (cosmosclient.codec.unpackCosmosAny(
-            res.data.account,
-          ) as proto.cosmos.auth.v1beta1.BaseAccount),
-      )
+      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
       .catch((_) => undefined);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('Address not found');
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
     }
 
     // build tx
@@ -256,7 +255,7 @@ export class StakingService {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: account.sequence,
+          sequence: baseAccount.sequence,
         },
       ],
       fee: {
@@ -267,7 +266,7 @@ export class StakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
+    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
     return txBuilder;
@@ -344,17 +343,13 @@ export class StakingService {
     // get account info
     const account = await rest.auth
       .account(sdk, fromAddress)
-      .then(
-        (res) =>
-          res.data.account &&
-          (cosmosclient.codec.unpackCosmosAny(
-            res.data.account,
-          ) as proto.cosmos.auth.v1beta1.BaseAccount),
-      )
+      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
       .catch((_) => undefined);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('Address not found');
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
     }
 
     // build tx
@@ -377,7 +372,7 @@ export class StakingService {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: account.sequence,
+          sequence: baseAccount.sequence,
         },
       ],
       fee: {
@@ -388,7 +383,7 @@ export class StakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
+    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
     return txBuilder;
@@ -460,17 +455,13 @@ export class StakingService {
     // get account info
     const account = await rest.auth
       .account(sdk, fromAddress)
-      .then(
-        (res) =>
-          res.data.account &&
-          (cosmosclient.codec.unpackCosmosAny(
-            res.data.account,
-          ) as proto.cosmos.auth.v1beta1.BaseAccount),
-      )
+      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
       .catch((_) => undefined);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('Address not found');
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
     }
 
     // build tx
@@ -492,7 +483,7 @@ export class StakingService {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: account.sequence,
+          sequence: baseAccount.sequence,
         },
       ],
       fee: {
@@ -503,7 +494,7 @@ export class StakingService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
+    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
     return txBuilder;

@@ -6,7 +6,7 @@ import { KeplrService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
@@ -75,12 +75,11 @@ export class KeplrApplicationService {
 
   async signDirect(
     txBuilder: cosmosclient.TxBuilder,
-    accountNumber: Long.Long,
-    address: string,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    const signDoc = txBuilder.signDoc(accountNumber);
+    const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
     const signKeplr = await this.keplrService.signDirect(
-      address,
+      signerBaseAccount.address,
       signDoc.body_bytes,
       signDoc.auth_info_bytes,
       signDoc.account_number,

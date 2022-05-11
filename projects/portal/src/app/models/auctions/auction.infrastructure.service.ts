@@ -1,3 +1,4 @@
+import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { Key } from '../keys/key.model';
@@ -77,8 +78,10 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
       .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
       .catch((_) => undefined);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('invalid account!');
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
     }
 
     // build tx
@@ -100,7 +103,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: account.sequence,
+          sequence: baseAccount.sequence,
         },
       ],
       fee: {
@@ -111,7 +114,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk.rest, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
+    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
     return txBuilder;

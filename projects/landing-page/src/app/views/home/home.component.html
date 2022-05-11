@@ -8,25 +8,27 @@
         <!--when drawer opened-->
         <div class="navbar-collapse collapse">
           <div class="navbar-nav justify-content-between mx-auto">
-            <li class="nav-item"><a href="#" class="nav-link active">HOME</a></li>
-            <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
-            <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
-            <!-- comment out
-            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
-          </div>
-          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn">WHITEPAPER</a>
-        </div>
-
-        <!--when drawer closed-->
-        <div class="mobile-nav d-none d-md-none" id="toggled" (click)="toggler()">
-          <div class="navbar-nav justify-content-between mx-auto">
             <li class="nav-item"><a href="#" class="nav-link">HOME</a></li>
             <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
             <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
             <!-- comment out
             <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
           </div>
-          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn">WHITEPAPER</a>
+          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn mr-2">WHITEPAPER</a>
+          <a href="assets/download/UnUniFi-OnePage.pdf" download class="btn ml-2">ONE PAGE</a>
+        </div>
+
+        <!--when drawer closed-->
+        <div class="mobile-nav d-none d-md-none" id="toggled" (click)="toggler()">
+          <div class="navbar-nav justify-content-between mx-auto">
+            <li class="nav-item-close"><a href="#" class="nav-link">HOME</a></li>
+            <li class="nav-item-close"><a href="#about" class="nav-link">ABOUT</a></li>
+            <li class="nav-item-close"><a href="#community" class="nav-link">COMMUNITY</a></li>
+            <!-- comment out
+            <li class="nav-item-close"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
+          </div>
+          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn mt-1">WHITEPAPER</a>
+          <a href="assets/download/UnUniFi-OnePage.pdf" download class="btn mt-2">ONE PAGE</a>
         </div>
       </nav>
       <div class="pt-5 text-center">
@@ -43,8 +45,20 @@
         </p>
       </div>
       <div class="flex flex-row justify-center">
-        <a href="/portal" class="btn d-block mr-2 btnLaunch p-3">LAUNCH APP</a>
-        <a href="/explorer" class="btn d-block ml-2 btnLaunch p-3">GO EXPLORER</a>
+        <a
+          href="/portal"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn d-block mr-2 btnLaunch p-3"
+          >LAUNCH APP</a
+        >
+        <a
+          href="/explorer"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn d-block ml-2 btnLaunch p-3"
+          >GO EXPLORER</a
+        >
       </div>
     </div>
     <img src="assets/images/arrows.png" class="arrows" alt="arrows" />
@@ -100,7 +114,11 @@
       <div class="row align-items-center">
         <div class="col-3">
           <div class="ellipse3 d-flex align-items-center justify-content-center">
-            <a href="https://discord.com/invite/gxEkFyu5rn" rel="noopener noreferrer">
+            <a
+              href="https://discord.com/invite/gxEkFyu5rn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div class="ellipse2 d-flex align-items-center justify-content-center">
                 <div class="ellipse1 d-flex align-items-center justify-content-center">
                   <i class="fa-brands fa-discord"></i>
@@ -119,7 +137,7 @@
       <div class="row py-5 align-items-center">
         <div class="col-3">
           <div class="ellipse3 d-flex align-items-center justify-content-center">
-            <a href="https://mobile.twitter.com/ununifi" rel="noopener noreferrer">
+            <a href="https://mobile.twitter.com/ununifi" target="_blank" rel="noopener noreferrer">
               <div class="ellipse2 d-flex align-items-center justify-content-center">
                 <div class="ellipse4 d-flex align-items-center justify-content-center">
                   <i class="fa-brands fa-twitter"> </i>

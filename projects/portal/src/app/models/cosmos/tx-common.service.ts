@@ -84,7 +84,7 @@ export class TxCommonService {
       return await this.signTxWithPrivateKey(txBuilder, signerBaseAccount, privateKey);
     }
     if (currentCosmosWallet.type === WalletType.keplr) {
-      return this.keplrAppService.signDirect(txBuilder, signerBaseAccount);
+      return await this.signTxWithKeplr(txBuilder, signerBaseAccount);
     }
     if (currentCosmosWallet.type === WalletType.ledger) {
       return this.signTxWithLedger(txBuilder, signerBaseAccount);
@@ -128,12 +128,12 @@ export class TxCommonService {
     return txBuilder;
   }
 
-  // Todo: This is dummy function and need to implement later.
-  signTxWithKeplr(
+  async signTxWithKeplr(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
-  ): cosmosclient.TxBuilder {
-    throw Error('Currently signing with Keplr is not supported!');
+  ): Promise<cosmosclient.TxBuilder> {
+    const signedTxBuilder = await this.keplrAppService.signDirect(txBuilder, signerBaseAccount);
+    return signedTxBuilder;
   }
 
   // Todo: This is dummy function and need to implement later.

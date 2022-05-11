@@ -1,0 +1,10 @@
+<h2>Upload wallet-backup file here to Unjail</h2>
+<form class="h-screen" #formRef="ngForm">
+  <input
+    #fileInputRef
+    name="fileInput"
+    type="file"
+    multiple="false"
+    (change)="onChangeFile($event)"
+  />
+</form>

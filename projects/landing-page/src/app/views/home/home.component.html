@@ -1,186 +1,186 @@
-<header>
-  <div id="hdr-box">
-    <div id="logo">
-      <a href="/"><img src="assets/images/logo.svg" /></a>
+<section class="bannerAndIntro">
+  <div class="banner py-4">
+    <div class="container">
+      <nav class="navbar navbar-expand-md justify-content-between align-items-center">
+        <a href="/" class="navbar-brand"><img src="assets/images/Vector.png" alt="" /></a>
+        <button class="navbar-toggler" (click)="toggler()"><span class="fa fa-bars"></span></button>
+
+        <!--when drawer opened-->
+        <div class="navbar-collapse collapse">
+          <div class="navbar-nav justify-content-between mx-auto">
+            <li class="nav-item"><a href="#" class="nav-link">HOME</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
+            <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
+            <!-- comment out
+            <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
+          </div>
+          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn mr-2">WHITEPAPER</a>
+          <a href="assets/download/UnUniFi-OnePage.pdf" download class="btn ml-2">ONE PAGE</a>
+        </div>
+
+        <!--when drawer closed-->
+        <div class="mobile-nav d-none d-md-none" id="toggled" (click)="toggler()">
+          <div class="navbar-nav justify-content-between mx-auto">
+            <li class="nav-item-close"><a href="#" class="nav-link">HOME</a></li>
+            <li class="nav-item-close"><a href="#about" class="nav-link">ABOUT</a></li>
+            <li class="nav-item-close"><a href="#community" class="nav-link">COMMUNITY</a></li>
+            <!-- comment out
+            <li class="nav-item-close"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
+          </div>
+          <a href="assets/download/UnUniFi-Whitepaper.pdf" download class="btn mt-1">WHITEPAPER</a>
+          <a href="assets/download/UnUniFi-OnePage.pdf" download class="btn mt-2">ONE PAGE</a>
+        </div>
+      </nav>
+      <div class="pt-5 text-center">
+        <h1 class="bold pt-4">
+          Decentralized cross-chain<span class="pink">NFT</span><br />
+          <span class="lightItalic">marketplace</span><span class="pin">/</span> platform <br />
+          with auto DeFi yield
+        </h1>
+      </div>
+      <div class="text-center">
+        <p class="bannerParagraph pb-4">
+          Use Your NFTs as collateral to obtain rewards<br />
+          through auto DeFi yield.
+        </p>
+      </div>
+      <div class="flex flex-row justify-center">
+        <a
+          href="/portal"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn d-block mr-2 btnLaunch p-3"
+          >LAUNCH APP</a
+        >
+        <a
+          href="/explorer"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn d-block ml-2 btnLaunch p-3"
+          >GO EXPLORER</a
+        >
+      </div>
     </div>
-    <nav>
-      <ul id="nav-01">
-        <li><a href="/">Home</a></li>
-        <li><a href="https://ununifi.gitbook.io/ununifi-protocol/">For Developer</a></li>
-        <li><a href="http://a.test.ununifi.cauchye.net">Testnet Explorer & Wallet</a></li>
-      </ul>
-      <ul id="nav-02">
-        <li>
-          <a href="assets/download/UnUniFi-Whitepaper.pdf" download><span>White paper</span></a>
-        </li>
-        <li>
-          <a href="assets/download/UnUniFi-OnePage.pdf" download><span>One Page</span></a>
-        </li>
-      </ul>
-    </nav>
+    <img src="assets/images/arrows.png" class="arrows" alt="arrows" />
+    <img src="assets/images/star.png" class="star" alt="star" />
+    <img src="assets/images/man.png" class="man d-none d-md-block" alt="man" />
   </div>
-</header>
 
-<div id="contents">
-  <section id="mv">
-    <h1>
-      <span class="fw-n"
-        >Decentralized cross-chain <br />
-        NFT marketplace/ platform <br />
-        with auto DeFi yield</span
-      >
-    </h1>
-    <p>
-      UnUniFi Protocol is a decentralized finance(DeFi) platform <br />
-      that provides tools and features that allow users to create a <br />
-      collateralized deposit position,<br />
-      to synthesize a number of assets pegged to legal currency <br />
-      using NFTs and cryptocurrencies as collateral. <br />
-      As long as your NFTs are pledged as collateral, <br />
-      some rewards will come in on their own through <br />
-      the automatic DeFi of the issued stablecoins.<br />
-      The mission is “Give all NFTs the opportunity to DeFi”.
-    </p>
-  </section>
-
-  <section id="s-01">
-    <div>
-      <ul>
-        <li class="guu-box">
-          <p>$GUU</p>
-          <span>GUU is a governance token of UnUniFi Protocol</span>
-        </li>
-        <li class="jpu-box">
-          <p>$JPU</p>
-          <span>JPU is a Stablecoin pegged to JPY on UnUniFi Protocol</span>
-        </li>
-      </ul>
+  <div class="intro pt-5" id="about">
+    <div class="container">
+      <h5 class="text-center">How does Auto DeFi Yield work?</h5>
+      <div class="row pt-5 justify-content-between align-items-center">
+        <div class="col-11 col-md-7 mx-auto">
+          <div class="row align-items-center">
+            <img src="assets/images/01.png" class="col-4 d-block" alt="" />
+            <div class="col-8">
+              <h6>Deposit NFT into vault</h6>
+              <p class="pt-2 text-sm">
+                You can deposit your NFT as collateral, and the NFT will be listed on the
+                marketplace. Prospective buyers of that NFT can make a bid. If you accept the bid,
+                you can sell it. The NFT will not be settled without your permission and you will
+                not lose the NFT.
+              </p>
+            </div>
+          </div>
+        </div>
+        <img src="assets/images/bitcoin.png" class="col-4 d-none d-md-block" alt="" />
+      </div>
+      <div class="row pt-5 justify-content-between align-items-center">
+        <img src="assets/images/data.png" class="col-4 d-none d-md-block" alt="" />
+        <div class="col-11 col-md-7 mx-auto">
+          <div class="row align-items-center">
+            <img src="assets/images/02.png" class="col-4 d-block" alt="" />
+            <div class="col-8 col-md-8">
+              <h6>Mint stablecoins & Auto DeFi Yield</h6>
+              <p class="pt-2 text-sm">
+                You can issue stablecoins within the range of bids in the marketplace. UnUniFi can
+                automatically operate the issued stablecoins and you can receive rewards.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div>
-      <ul>
-        <li class="euu-box">
-          <p>$EUU</p>
-          <span>EUU is a Stablecoin pegged to EUR on UnUniFi Protocol</span>
-        </li>
-        <li class="usu-box">
-          <p>$USU</p>
-          <span>USU is a Stablecoin pegged to USD on UnUniFi Protocol</span>
-        </li>
-      </ul>
+<section class="joinAndPartners">
+  <div class="container join py-5" id="community">
+    <img src="assets/images/star.png" class="star2" alt="star" />
+    <h3 class="text-center pt-5">Join UnUniFi Community</h3>
+    <div class="col-md-7 col-11 mx-auto pt-5">
+      <!--discord-->
+      <div class="row align-items-center">
+        <div class="col-3">
+          <div class="ellipse3 d-flex align-items-center justify-content-center">
+            <a
+              href="https://discord.com/invite/gxEkFyu5rn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="ellipse2 d-flex align-items-center justify-content-center">
+                <div class="ellipse1 d-flex align-items-center justify-content-center">
+                  <i class="fa-brands fa-discord"></i>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-9">
+          Join our Discord and become a part of an amazing community. You will also find the UnUniFi
+          team there, ready to support you.
+        </div>
+      </div>
+
+      <!--twitter-->
+      <div class="row py-5 align-items-center">
+        <div class="col-3">
+          <div class="ellipse3 d-flex align-items-center justify-content-center">
+            <a href="https://mobile.twitter.com/ununifi" target="_blank" rel="noopener noreferrer">
+              <div class="ellipse2 d-flex align-items-center justify-content-center">
+                <div class="ellipse4 d-flex align-items-center justify-content-center">
+                  <i class="fa-brands fa-twitter"> </i>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-9">Follow us on Twitter for updates on UnUniFi space in general.</div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <section id="s-02">
-    <div>
-      <h2><span class="fc-guu">GUU ($GUU) </span>token distribution</h2>
-      <ul>
-        <li>
-          <h3>Ecosystem Development</h3>
-          <p>30%</p>
-        </li>
-        <li>
-          <h3>Assingnment for Validators</h3>
-          <p>15%</p>
-        </li>
-        <li>
-          <h3>Assignment for UnUniFi team</h3>
-          <p>20%</p>
-        </li>
-        <li>
-          <h3>Marketing</h3>
-          <p>14%</p>
-        </li>
-        <li>
-          <h3>Treasury</h3>
-          <p>10%</p>
-        </li>
-        <li>
-          <h3>Advisor</h3>
-          <p>1%</p>
-        </li>
-        <li>
-          <h3>Assignment for Business Partners</h3>
-          <p>10%</p>
-        </li>
-      </ul>
+  <!-- comment out
+  <div class="partners py-5" id="partners">
+    <h3 class="text-center">Partners</h3>
+    <div class="container">
+      <div class="row justify-content-between text-center py-5">
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+        <div class="col-6 col-md-4 mb-4"><h3>Partners</h3></div>
+      </div>
     </div>
-  </section>
-
-  <section id="s-03">
-    <div class="lcnem-box">
-      <h2>About us</h2>
-      <p>
-        The UnUniFi Protocol is owned by Botany LLP (Yu Kimura, Takeru Shimojima, Kenji Yanagisawa).
-      </p>
-      <ul>
-        <li class="kimura-san-box">
-          <span
-            >Yu Kimura<br />
-            CEO CTO<br />
-            Botany LLP<br />
-            CauchyE, Inc.</span
-          >
-        </li>
-        <li class="shimojima-san-box">
-          <span
-            >Takeru Shimojima<br />
-            COO CFO<br />
-            Botany LLP<br />
-            CauchyE, Inc.</span
-          >
-        </li>
-        <li class="yanagisawa-san-box">
-          <span>
-            Kenji Yanagisawa<br />
-            Certified Public Tax Account(Japan)<br />
-
-            Botany LLP<br />
-            Yanagisawa and Company</span
-          >
-        </li>
-      </ul>
-    </div>
-
-    <div>
-      <h2>Contributions</h2>
-      <p>
-        We've already done some little contributions to Cosmos ecosystems. We will continue to
-        contribute to Cosmos ecosystem and also Kava ecosystem.
-      </p>
-      <ul>
-        <li>
-          <a href="https://github.com/cosmos-client/cosmos-client-ts" target="_blank">
-            <h3>cosmos-client</h3>
-            <p>github.com</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="s-04">
-    <div>
-      <h2>Contact</h2>
-      <p>To contact us in UnUniFi topic, please create an issue ticket in GitHub.</p>
-      <ul>
-        <li>
-          <a href="https://github.com/UnUniFi/chain/issues" target="_blank">
-            <h3>UnUniFi/chain GitHub Issues</h3>
-            <p>github.com</p>
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/UnUniFi/utils/issues" target="_blank">
-            <h3>UnUniFi/utils GitHub Issues</h3>
-            <p>github.com</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </section>
-</div>
+  </div>
+  <img src="assets/images/Ellipse 9.png" class="blur" alt="blur" />
+  -->
+</section>
 
 <footer>
-  <p><span>&copy; 2021 UnUniFi All rights reserved.</span></p>
+  <div class="container py-3">
+    <div class="row justify-content-between">
+      <div class="col-3">
+        <img src="assets/images/Vector.png" alt="logo" />
+      </div>
+      <div class="col-9 text-right">
+        <p><span class="pink">&copy; UnUniFi 2022 </span>all right reserved</p>
+      </div>
+    </div>
+  </div>
 </footer>

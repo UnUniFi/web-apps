@@ -211,11 +211,14 @@ export class AppComponent implements OnInit {
 
   async onSubmitSearchResult(searchResult: SearchResult) {
     if (searchResult.type === 'address') {
-      await this.router.navigate(['accounts', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/accounts/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     } else if (searchResult.type === 'txHash') {
-      await this.router.navigate(['txs', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/txs/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     } else if (searchResult.type === 'block') {
-      await this.router.navigate(['explorer/blocks', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/blocks/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     }
   }
 

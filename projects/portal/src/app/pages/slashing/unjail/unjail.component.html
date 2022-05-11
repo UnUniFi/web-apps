@@ -1,0 +1,7 @@
+<app-view-unjail
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [delegator_address]="delegator_address$ | async"
+  [validator_address]="validator_address$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (submitUnjail)="appSubmitUnjail($event)"
+></app-view-unjail>

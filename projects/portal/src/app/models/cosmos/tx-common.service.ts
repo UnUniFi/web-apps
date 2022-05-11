@@ -101,14 +101,11 @@ export class TxCommonService {
     privateKey?: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
     let cosmosPrivateKey: cosmosclient.PrivKey | undefined;
-    console.log(privateKey);
     if (privateKey) {
       cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
     } else {
-      console.log('hoge');
       const privateWallet: StoredWallet & { privateKey: string } =
         await this.walletAppService.openUnunifiKeyFormDialog();
-      console.log(privateWallet);
       if (!privateWallet || !privateWallet.privateKey) {
         this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
         return;

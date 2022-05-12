@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type DelegateOnSubmitEvent = {
+  walletType: WalletType;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
   validatorList: InlineResponse20066Validators[];
@@ -69,17 +70,17 @@ export class DelegateFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.selectedAmount) {
-      return;
-    }
-    if (!this.selectedGasPrice) {
-      return;
-    }
-    if (!this.validatorsList) {
+    if (
+      !this.currentStoredWallet ||
+      !this.selectedAmount ||
+      !this.selectedGasPrice ||
+      !this.validatorsList
+    ) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
+      walletType: this.currentStoredWallet?.type,
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

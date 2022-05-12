@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import * as crypto from 'crypto';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 
 @Component({
@@ -20,7 +20,10 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
     this.storedWallets$ = this.walletService
       .listStoredWallets()
       .then((storedWallets) => {
-        return storedWallets;
+        const ununifiWallets = storedWallets?.filter(
+          (storedWallet) => storedWallet.type === WalletType.ununifi,
+        );
+        return ununifiWallets;
       })
       .catch((error) => {
         console.error(error);

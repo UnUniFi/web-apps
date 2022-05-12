@@ -7,7 +7,8 @@ import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
-import { StoredWallet } from '../wallets/wallet.model';
+import { StoredWallet, WalletType } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { CreateValidatorData } from './staking.model';
 import { StakingService } from './staking.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -21,6 +22,7 @@ import {
   InlineResponse20075,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +34,7 @@ export class StakingApplicationService {
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: StakingService,
+    private readonly walletService: WalletService,
     private readonly walletApplicationService: WalletApplicationService,
   ) {}
 
@@ -221,23 +224,16 @@ export class StakingApplicationService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
-    const privateWallet: StoredWallet & { privateKey: string } =
-      await this.walletApplicationService.openUnunifiKeyFormDialog();
-    if (!privateWallet || !privateWallet.privateKey) {
-      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
     }
-
-    if (!validatePrivateStoredWallet(privateWallet)) {
-      this.snackBar.open('Invalid Wallet info!', 'Close');
-      return;
-    }
-
-    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-
-    if (!privateKey) {
-      this.snackBar.open('Invalid PrivateKey!', 'Close');
-      return;
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
@@ -249,11 +245,10 @@ export class StakingApplicationService {
 
     try {
       simulatedResultData = await this.staking.simulateToCreateDelegate(
-        privateWallet.key_type,
         validatorAddress,
         amount,
+        cosmosPublicKey,
         minimumGasPrice,
-        privateKey,
         gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
@@ -267,37 +262,38 @@ export class StakingApplicationService {
       dialogRefSimulating.close();
     }
 
-    // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
-        data: {
-          fee,
-          isConfirmed: false,
-        },
-      })
-      .afterClosed()
-      .toPromise();
-
-    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-      return;
+    // confirm fee only ununifi wallet type case
+    if (currentCosmosWallet.type === WalletType.ununifi) {
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return;
+      }
     }
 
+    // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let createDelegatorResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20075 | undefined;
     let txHash: string | undefined;
 
     try {
-      createDelegatorResult = await this.staking.createDelegate(
-        privateWallet.key_type,
+      txResult = await this.staking.createDelegate(
         validatorAddress,
         amount,
+        currentCosmosWallet,
         gas,
         fee,
-        privateKey,
       );
-      txHash = createDelegatorResult.tx_response?.txhash;
+      txHash = txResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
       }

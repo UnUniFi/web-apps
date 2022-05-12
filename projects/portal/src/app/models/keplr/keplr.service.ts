@@ -1,7 +1,6 @@
 import { ConfigService } from '../config.service';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
-import { BroadcastMode, decodeSignature } from '@cosmjs/launchpad';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
 
 export interface signKeplr {
@@ -40,7 +39,7 @@ export class KeplrService {
       return;
     } else {
       const chainId = this.configService.configs[0].chainID;
-      const chainName = this.configService.configs[0].chainID;
+      const chainName = this.configService.configs[0].chainName;
       const rpc = this.configService.configs[0].websocketURL;
       const rest = this.configService.configs[0].restURL;
       const bip44 = { coinType: 118 };
@@ -118,7 +117,7 @@ export class KeplrService {
       const signKeplr: signKeplr = {
         authInfoBytes: directSignResponse.signed.authInfoBytes,
         bodyBytes: directSignResponse.signed.bodyBytes,
-        signature: decodeSignature(directSignResponse.signature).signature,
+        signature: Uint8Array.from(Buffer.from(directSignResponse.signature.signature, 'base64')),
       };
       return signKeplr;
     }

@@ -45,8 +45,6 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "@cosmjs/launchpad": "^0.27.1",
-    "@cosmjs/stargate": "^0.28.4",
     "@cosmos-client/core": "^0.45.1",
     "@ngneat/tailwind": "^7.0.3",
     "@ngrx/effects": "^12.4.0",

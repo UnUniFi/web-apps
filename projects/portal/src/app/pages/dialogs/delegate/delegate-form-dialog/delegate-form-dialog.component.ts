@@ -5,7 +5,6 @@ import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { KeplrStakingApplicationService } from 'projects/portal/src/app/models/cosmos/keplr/keplr-staking.application.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -35,7 +34,6 @@ export class DelegateFormDialogComponent implements OnInit {
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
-    private readonly keplrStakingAppService: KeplrStakingApplicationService,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
   ) {
@@ -84,21 +82,13 @@ export class DelegateFormDialogComponent implements OnInit {
       }
     }
     let txHash: string | undefined;
-    if ($event.walletType == WalletType.keplr) {
-      txHash = await this.keplrStakingAppService.createDelegateKeplr(
-        this.validator?.operator_address!,
-        $event.amount,
-        $event.minimumGasPrice,
-        $event.gasRatio,
-      );
-    } else {
-      txHash = await this.stakingAppService.createDelegate(
-        this.validator?.operator_address!,
-        $event.amount,
-        $event.minimumGasPrice,
-        $event.gasRatio,
-      );
-    }
+
+    txHash = await this.stakingAppService.createDelegate(
+      this.validator?.operator_address!,
+      $event.amount,
+      $event.minimumGasPrice,
+      $event.gasRatio,
+    );
 
     this.matDialogRef.close(txHash);
   }

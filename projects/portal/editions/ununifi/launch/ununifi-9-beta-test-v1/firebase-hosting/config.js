@@ -11,7 +11,8 @@ const domainCauchyEA = 'ununifi-beta-test-v1.cauchye.net';
 // const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
 // const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
-const chainID = 'ununifi-9-beta-test-v1'
+const chainID = 'ununifi-9-beta-test-v1';
+const chainName = 'UnUnuFi (Beta)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -45,10 +46,7 @@ const configs = [
   {
     id: domainCauchyEA,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
-    websocketURL: `${location.protocol.replace(
-      'http',
-      'ws',
-    )}//${domainCauchyEA}:${websocketPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
     bech32Prefix,
     minimumGasPrices: [

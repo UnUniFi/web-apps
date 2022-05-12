@@ -4,6 +4,7 @@ import { convertHexStringToUint8Array } from '../../utils/converter';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { GovService } from './gov.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +27,7 @@ export class GovApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
+    private readonly walletService: WalletService,
   ) {}
 
   async openVoteFormDialog(proposalID: number): Promise<void> {
@@ -230,18 +233,16 @@ export class GovApplicationService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
-    const privateWallet: StoredWallet & { privateKey: string } =
-      await this.walletApplicationService.openUnunifiKeyFormDialog();
-    if (!privateWallet || !privateWallet.privateKey) {
-      this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
     }
-
-    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-
-    if (!privateKey) {
-      this.snackBar.open('Invalid PrivateKey!', 'Close');
-      return;
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
@@ -253,11 +254,10 @@ export class GovApplicationService {
 
     try {
       simulatedResultData = await this.gov.simulateToDeposit(
-        privateWallet.key_type,
         proposalID,
         amount,
+        cosmosPublicKey,
         minimumGasPrice,
-        privateKey,
         gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
@@ -293,14 +293,7 @@ export class GovApplicationService {
     let txHash: string | undefined;
 
     try {
-      depositResult = await this.gov.Deposit(
-        privateWallet.key_type,
-        proposalID,
-        amount,
-        gas,
-        fee,
-        privateKey,
-      );
+      depositResult = await this.gov.Deposit(proposalID, amount, currentCosmosWallet, gas, fee);
       txHash = depositResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');

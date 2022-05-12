@@ -2,6 +2,7 @@ import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { KeyType } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
+import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
@@ -220,23 +221,43 @@ export class GovService {
 
   // Deposit
   async Deposit(
-    keyType: KeyType,
     proposalID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    privateKey?: string,
   ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildDeposit(keyType, proposalID, amount, gas, fee, privateKey);
-    return await this.txCommonService.announceTx(txBuilder);
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    const txBuilder = await this.buildDepositTxBuilder(
+      proposalID,
+      amount,
+      cosmosPublicKey,
+      gas,
+      fee,
+    );
+    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
+    if (!signerBaseAccount) {
+      throw Error('Unsupported Account!');
+    }
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      signerBaseAccount,
+      currentCosmosWallet,
+      privateKey,
+    );
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
+    return txResult;
   }
 
   async simulateToDeposit(
-    keyType: KeyType,
     proposalID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
@@ -247,78 +268,51 @@ export class GovService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const simulatedTxBuilder = await this.buildDeposit(
-      keyType,
+    const simulatedTxBuilder = await this.buildDepositTxBuilder(
       proposalID,
       amount,
+      cosmosPublicKey,
       dummyGas,
       dummyFee,
-      privateKey,
     );
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
-  async buildDeposit(
-    keyType: KeyType,
+  async buildDepositTxBuilder(
     proposalID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
-    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = this.key.getPrivKey(keyType, privateKey);
-    if (!privKey) {
-      throw Error('Invalid privateKey!');
-    }
-    const pubKey = privKey.pubKey();
-    const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
-
-    // get account info
-    const account = await rest.auth
-      .account(sdk, fromAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
-      .catch((_) => undefined);
-
-    const baseAccount = convertUnknownAccountToBaseAccount(account);
-
+    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
       throw Error('Unused Account or Unsupported Account Type!');
     }
+    const fromAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
 
     // build tx
+    const msgDeposit = this.buildMsgDeposit(proposalID, fromAddress.toString(), amount);
+    const txBuilder = await this.txCommonService.buildTxBuilder(
+      [msgDeposit],
+      cosmosPublicKey,
+      baseAccount,
+      gas,
+      fee,
+    );
+    return txBuilder;
+  }
+
+  buildMsgDeposit(
+    proposalID: number,
+    depositerAddress: string,
+    amount: proto.cosmos.base.v1beta1.ICoin,
+  ): proto.cosmos.gov.v1beta1.MsgDeposit {
     const msgDeposit = new proto.cosmos.gov.v1beta1.MsgDeposit({
       proposal_id: cosmosclient.Long.fromNumber(proposalID),
-      depositor: fromAddress.toString(),
+      depositor: depositerAddress,
       amount: [amount],
     });
-
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgDeposit)],
-    });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
-      signer_infos: [
-        {
-          public_key: cosmosclient.codec.packAny(pubKey),
-          mode_info: {
-            single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
-            },
-          },
-          sequence: baseAccount.sequence,
-        },
-      ],
-      fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
-      },
-    });
-
-    // sign
-    const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
-    txBuilder.addSignature(privKey.sign(signDocBytes));
-
-    return txBuilder;
+    return msgDeposit;
   }
 }

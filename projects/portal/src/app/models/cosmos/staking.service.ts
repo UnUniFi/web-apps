@@ -260,33 +260,47 @@ export class StakingService {
 
   // Change Delegate
   async redelegate(
-    keyType: KeyType,
     validatorAddressBefore: string,
     validatorAddressAfter: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    privateKey?: string,
   ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildRedelegate(
-      keyType,
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+
+    const txBuilder = await this.buildRedelegateTxBuilder(
       validatorAddressBefore,
       validatorAddressAfter,
       amount,
+      cosmosPublicKey,
       gas,
       fee,
+    );
+    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
+    if (!signerBaseAccount) {
+      throw Error('Unsupported Account!');
+    }
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      signerBaseAccount,
+      currentCosmosWallet,
       privateKey,
     );
-    return await this.txCommonService.announceTx(txBuilder);
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
+    return txResult;
   }
 
   async simulateToRedelegate(
-    keyType: KeyType,
     validatorAddressBefore: string,
     validatorAddressAfter: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
@@ -297,82 +311,63 @@ export class StakingService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const simulatedTxBuilder = await this.buildRedelegate(
-      keyType,
+    const simulatedTxBuilder = await this.buildRedelegateTxBuilder(
       validatorAddressBefore,
       validatorAddressAfter,
       amount,
+      cosmosPublicKey,
       dummyGas,
       dummyFee,
-      privateKey,
     );
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
-  async buildRedelegate(
-    keyType: KeyType,
+  async buildRedelegateTxBuilder(
     validatorAddressBefore: string,
     validatorAddressAfter: string,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
-    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = this.key.getPrivKey(keyType, privateKey);
-    if (!privKey) {
-      throw Error('Invalid privateKey!');
-    }
-    const pubKey = privKey.pubKey();
-    const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
-
-    // get account info
-    const account = await rest.auth
-      .account(sdk, fromAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
-      .catch((_) => undefined);
-
-    const baseAccount = convertUnknownAccountToBaseAccount(account);
-
+    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
       throw Error('Unused Account or Unsupported Account Type!');
     }
+    const fromAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+    const msgRedelegate = this.buildMsgRedelegate(
+      fromAddress.toString(),
+      validatorAddressBefore,
+      validatorAddressAfter,
+      amount,
+    );
 
     // build tx
-    const msgDelegate = new proto.cosmos.staking.v1beta1.MsgBeginRedelegate({
-      delegator_address: fromAddress.toString(),
+
+    const txBuilder = await this.txCommonService.buildTxBuilder(
+      [msgRedelegate],
+      cosmosPublicKey,
+      baseAccount,
+      gas,
+      fee,
+    );
+
+    return txBuilder;
+  }
+
+  buildMsgRedelegate(
+    delegatorAddress: string,
+    validatorAddressBefore: string,
+    validatorAddressAfter: string,
+    amount: proto.cosmos.base.v1beta1.ICoin,
+  ): proto.cosmos.staking.v1beta1.MsgBeginRedelegate {
+    const msgRedelegate = new proto.cosmos.staking.v1beta1.MsgBeginRedelegate({
+      delegator_address: delegatorAddress,
       validator_src_address: validatorAddressBefore,
       validator_dst_address: validatorAddressAfter,
       amount,
     });
-
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgDelegate)],
-    });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
-      signer_infos: [
-        {
-          public_key: cosmosclient.codec.packAny(pubKey),
-          mode_info: {
-            single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
-            },
-          },
-          sequence: baseAccount.sequence,
-        },
-      ],
-      fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
-      },
-    });
-
-    // sign
-    const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
-    txBuilder.addSignature(privKey.sign(signDocBytes));
-
-    return txBuilder;
+    return msgRedelegate;
   }
 
   //  Delete Delegate

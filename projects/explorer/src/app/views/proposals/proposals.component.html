@@ -1,6 +1,4 @@
-<div class="flex flex-row items-end mb-2">
-  <h2 class="mb-0">Proposals</h2>
-</div>
+<h2 class="mb-0">Proposals</h2>
 <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
   <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
@@ -16,24 +14,30 @@
         <ng-container *ngIf="unpackContent(proposal.content) as content">
           <mat-list-item routerLink="{{ proposal.proposal_id }}">
             <div matLine class="flex mb-2">
-              <span># {{ proposal.proposal_id }}</span>
-              <span class="flex-auto"></span>
-              <span>{{ content.title }}</span>
-              <span class="flex-auto"></span>
-              <span>{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}</span>
+              <span class="w-2/12"># {{ proposal.proposal_id }}</span>
+              <span class="w-7/12 text-center truncate">{{ content.title }}</span>
+              <span class="w-3/12 text-right truncate">{{
+                proposal.status?.replace('PROPOSAL_STATUS_', '')
+              }}</span>
             </div>
             <div matLine class="flex">
-              <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
-              <span>{{ proposal.final_tally_result?.yes }}</span>
-              <span class="flex-auto"></span>
-              <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
-              <span>{{ proposal.final_tally_result?.no_with_veto }}</span>
-              <span class="flex-auto"></span>
-              <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
-              <span>{{ proposal.final_tally_result?.no }}</span>
-              <span class="flex-auto"></span>
-              <mat-icon class="mr-2">subtitles_off</mat-icon>
-              <span>{{ proposal.final_tally_result?.abstain }}</span>
+              <span class="flex w-1/4 justify-start content-start">
+                <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
+                <span class="truncate">{{ proposal.final_tally_result?.yes }}</span>
+              </span>
+              <span class="flex w-1/4 justify-start content-start">
+                <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
+                <span class="truncate">{{ proposal.final_tally_result?.no_with_veto }}</span>
+              </span>
+
+              <span class="flex w-1/4 justify-start content-start">
+                <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
+                <span class="truncate">{{ proposal.final_tally_result?.no }}</span>
+              </span>
+              <span class="flex w-1/4 justify-start content-start">
+                <mat-icon class="mr-2">subtitles_off</mat-icon>
+                <span class="truncate">{{ proposal.final_tally_result?.abstain }}</span>
+              </span>
             </div>
           </mat-list-item>
           <mat-divider *ngIf="!last" [inset]="true"></mat-divider>

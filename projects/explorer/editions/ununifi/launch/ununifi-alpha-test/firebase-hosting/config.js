@@ -11,7 +11,8 @@ const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
 const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
 const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
-const chainID = 'ununifi-8-private-test'
+const chainID = 'ununifi-8-private-test';
+const chainName = 'UnUniFi (Alpha)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -45,10 +46,7 @@ const configs = [
   {
     id: domainCauchyEA,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
-    websocketURL: `${location.protocol.replace(
-      'http',
-      'ws',
-    )}//${domainCauchyEA}:${websocketPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
     bech32Prefix,
     minimumGasPrices: [
@@ -104,10 +102,7 @@ const configs = [
   {
     id: domainCauchyEB,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-    websocketURL: `${location.protocol.replace(
-      'http',
-      'ws',
-    )}//${domainCauchyEB}:${websocketPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,
     bech32Prefix,
     minimumGasPrices: [
@@ -163,10 +158,7 @@ const configs = [
   {
     id: domainCauchyEC,
     restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-    websocketURL: `${location.protocol.replace(
-      'http',
-      'ws',
-    )}//${domainCauchyEC}:${websocketPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
     chainID: 'ununifi-8-private-test',
     bech32Prefix,
     minimumGasPrices: [
@@ -222,10 +214,7 @@ const configs = [
   {
     id: domainCauchyED,
     restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-    websocketURL: `${location.protocol.replace(
-      'http',
-      'ws',
-    )}//${domainCauchyED}:${websocketPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
     chainID,
     bech32Prefix,
     minimumGasPrices: [

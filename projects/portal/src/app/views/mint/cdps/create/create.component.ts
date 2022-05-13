@@ -1,13 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
-import { Key } from 'projects/portal/src/app/models/keys/key.model';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { ununifi } from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 export type CreateCdpOnSubmitEvent = {
-  key: Key;
-  privateKey: Uint8Array;
   collateralType: string;
   collateral: proto.cosmos.base.v1beta1.ICoin;
   principal: proto.cosmos.base.v1beta1.ICoin;
@@ -22,7 +20,7 @@ export type CreateCdpOnSubmitEvent = {
 })
 export class CreateComponent implements OnInit {
   @Input()
-  key?: Key | null;
+  currentStoredWallet?: StoredWallet | null;
 
   @Input()
   cdpParams?: ununifi.cdp.IParams | null;
@@ -82,7 +80,6 @@ export class CreateComponent implements OnInit {
     collateralAmount: string,
     principalDenom: string,
     principalAmount: string,
-    privateKeyString: string,
     minimumGasPrice: string,
   ) {
     if (!collateralAmount || !principalAmount) {
@@ -103,13 +100,7 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-    const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
-    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex');
-    const privateKey = Uint8Array.from(privateKeyBuffer);
-
     this.appSubmit.emit({
-      key: this.key!,
-      privateKey,
       collateralType,
       collateral: {
         denom: collateralDenom,

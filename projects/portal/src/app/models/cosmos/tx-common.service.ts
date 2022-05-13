@@ -66,7 +66,7 @@ export class TxCommonService {
         },
       ],
       fee: {
-        amount: fee ? [fee] : null,
+        amount: fee ? [fee] : [],
         gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '200000'),
       },
     });

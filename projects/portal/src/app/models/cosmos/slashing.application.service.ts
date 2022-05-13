@@ -121,15 +121,14 @@ export class SlashingApplicationService {
     }
     const dialogRef = this.loadingDialog.open('Sending Tx to unjail...');
     try {
-      // Note: simulate unjail is not implemented?
-      // const simulatedResultData = await this.slashingService.simulateToUnjail(
-      //   validatorAddress,
-      //   cosmosPublicKey,
-      //   minimumGasPrice,
-      //   gasRatio,
-      // );
-      const gas = null; // simulatedResultData.estimatedGasUsedWithMargin;
-      const fee = null; // simulatedResultData.estimatedFeeWithMargin;
+      const simulatedResultData = await this.slashingService.simulateToUnjail(
+        validatorAddress,
+        cosmosPublicKey,
+        minimumGasPrice,
+        gasRatio,
+      );
+      const gas = simulatedResultData.estimatedGasUsedWithMargin;
+      const fee = simulatedResultData.estimatedFeeWithMargin;
       const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
       if (!baseAccount) {
         throw Error('Unused Account or Unsupported Account Type!');

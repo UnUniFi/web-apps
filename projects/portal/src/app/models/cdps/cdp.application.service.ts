@@ -2,6 +2,8 @@ import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-d
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
+import { WalletType } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { CdpService } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +12,7 @@ import { Router } from '@angular/router';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -22,11 +25,10 @@ export class CdpApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly cdp: CdpService,
     private readonly key: KeyService,
+    private readonly walletService: WalletService,
   ) {}
 
   async createCDP(
-    key: Key,
-    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
@@ -34,39 +36,31 @@ export class CdpApplicationService {
     balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
-    // validation
-    if (!(await this.key.validatePrivKey(key, privateKey))) {
-      this.snackBar.open(`Invalid private key.`, 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
-    const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
-    // confirm whether account has enough gas denom for simulation
-    const feeDenom = minimumGasPrice.denom;
-    const simulationFeeAmount = 1;
-    const tempBalance = balances.find((balance) => balance.denom === minimumGasPrice.denom)?.amount;
-    const balance = tempBalance ? parseInt(tempBalance) : 0;
-    if (simulationFeeAmount > balance) {
-      this.snackBar.open(
-        `Insufficient fee margin for simulation!\n Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
-        'Close',
-      );
-      dialogRefSimulating.close();
-      return;
-    }
+    const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     try {
       simulatedResultData = await this.cdp.simulateToCreateCDP(
-        key,
-        privateKey,
         collateralType,
         collateral,
         principal,
+        cosmosPublicKey,
         minimumGasPrice,
         gasRatio,
       );
@@ -81,47 +75,39 @@ export class CdpApplicationService {
       dialogRefSimulating.close();
     }
 
-    // check whether the fee exceeded
-    const simulatedFee = fee.amount ? parseInt(fee.amount) : 0;
-    if (simulatedFee > balance) {
-      this.snackBar.open(
-        `Insufficient fee margin for Create!\n Simulated fee: ${simulatedFee}${feeDenom} > Balance: ${balance}${feeDenom}`,
-        'Close',
-      );
-      return;
+    // confirm fee only ununifi wallet type case
+    if (currentCosmosWallet.type === WalletType.ununifi) {
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return;
+      }
     }
 
-    // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
-        data: {
-          fee,
-          isConfirmed: false,
-        },
-      })
-      .afterClosed()
-      .toPromise();
-
-    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-      return;
-    }
-
+    // send tx
     const dialogRef = this.loadingDialog.open('Sending...');
 
-    let txhash: string | undefined;
+    let txResult: InlineResponse20075 | undefined;
+    let txHash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.createCDP(
-        key,
-        privateKey,
+      txResult = await this.cdp.createCDP(
         collateralType,
         collateral,
         principal,
+        currentCosmosWallet,
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = txResult.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('invalid txhash!');
       }
     } catch (error) {
@@ -137,7 +123,7 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txhash}`;
+    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txHash}`;
     window.location.href = redirectUrl;
   }
 

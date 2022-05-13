@@ -1,4 +1,4 @@
-import { KeySelectGuard } from '../../models/keys/key-select.guard';
+import { WalletGuard } from '../../models/wallets/wallet.guard';
 import { MintComponent } from './mint.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: 'cdps',
     loadChildren: () => import('./cdps/cdps.module').then((mod) => mod.AppCdpsModule),
-    canActivate: [KeySelectGuard],
+    canActivate: [WalletGuard],
   },
 ];
 

@@ -263,20 +263,21 @@ export class GovApplicationService {
       dialogRefSimulating.close();
     }
 
-    // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
-        data: {
-          fee,
-          isConfirmed: false,
-        },
-      })
-      .afterClosed()
-      .toPromise();
-
-    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-      return;
+    // confirm fee only ununifi wallet type case
+    if (currentCosmosWallet.type === WalletType.ununifi) {
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return;
+      }
     }
 
     const dialogRef = this.loadingDialog.open('Sending');

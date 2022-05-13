@@ -25,7 +25,6 @@ export class BankApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly walletService: WalletService,
-    private readonly walletApplicationService: WalletApplicationService,
   ) {}
 
   async send(

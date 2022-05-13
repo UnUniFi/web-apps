@@ -46,7 +46,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.proposal$.subscribe((a) => console.log(a));
 
     this.proposalType$ = this.proposal$.pipe(
       map((proposal) => {
@@ -57,7 +56,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.deposits$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.deposits(sdk.rest, address)),
+      mergeMap(([sdk, proposalID]) => rest.gov.deposits(sdk.rest, proposalID)),
       map((result) => result.data.deposits!),
       catchError((error) => {
         console.error(error);
@@ -71,7 +70,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.tally$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
+      mergeMap(([sdk, proposalID]) => rest.gov.tallyresult(sdk.rest, proposalID)),
       map((result) => result.data.tally!),
       catchError((error) => {
         console.error(error);
@@ -89,7 +88,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votes$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
+      mergeMap(([sdk, proposalID]) => rest.gov.votes(sdk.rest, proposalID)),
       map((result) => result.data.votes!),
       catchError((error) => {
         console.error(error);

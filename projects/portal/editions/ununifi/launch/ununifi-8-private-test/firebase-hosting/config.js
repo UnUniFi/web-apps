@@ -105,6 +105,7 @@ const configs = [
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {

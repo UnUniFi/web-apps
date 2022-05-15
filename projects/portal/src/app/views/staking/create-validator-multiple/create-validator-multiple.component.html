@@ -1,0 +1,88 @@
+<mat-card class="create-val-card">
+  <div
+    [ngTemplateOutlet]="
+      templateToRender === 'loading'
+        ? loadingBlock
+        : templateToRender === 'form'
+        ? formBlock
+        : successBlock
+    "
+  ></div>
+  <ng-template #formBlock>
+    <div class="creat-val-form">
+      <div class="create-val-dropzone" ngx-dropzone (change)="onSelect($event)" accept=".txt">
+        <div class="create-val-dropzone-lable" ngx-dropzone-label>
+          <mat-icon class="create-val-icon" aria-hidden="false" aria-label="Upload icon">
+            cloud_upload
+          </mat-icon>
+          <p class="text-xl text-center mt-4">
+            <span class="font-bold">Drag</span> and <span class="font-bold">drop</span><br />
+            <span class="create-val-file-type font-bold"> wallet-backup </span>
+            files
+          </p>
+          <p class="text-base">
+            or <span class="font-bold underline">browse the files</span> on your computer
+          </p>
+        </div>
+        <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+          <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </div>
+      <p class="create-val-desc">You must upload {{ nodes?.length }} files</p>
+      <button
+        class="create-val-btn"
+        mat-raised-button
+        color="primary"
+        (click)="onSubmitCreateValidators()"
+        [disabled]="!!error || (nodes && files.length < nodes.length)"
+        [class]="
+          !!error || (nodes && files.length < nodes.length)
+            ? 'create-val-btn create-val-btn-disabled'
+            : 'create-val-btn'
+        "
+      >
+        Create Validator
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #loadingBlock>
+    <div class="creat-val-form">
+      <div class="create-val-dropzone">
+        <div class="create-val-dropzone-lable w-3/5">
+          <ngx-skeleton-loader count="1" appearance="circle"></ngx-skeleton-loader>
+          <div class="w-full">
+            <ngx-skeleton-loader count="1" appearance="line"></ngx-skeleton-loader>
+            <br />
+            <ngx-skeleton-loader count="1" appearance="line"></ngx-skeleton-loader>
+          </div>
+          <div class="w-full">
+            <ngx-skeleton-loader count="1" appearance="line"></ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+      <div class="create-val-desc w-3/5">
+        <ngx-skeleton-loader count="1" appearance="line"></ngx-skeleton-loader>
+      </div>
+      <div class="w-36">
+        <ngx-skeleton-loader
+          [theme]="{ height: '36px', 'border-radius': '4px' }"
+          count="1"
+          appearance="line"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #successBlock>
+    <div class="creat-val-success">
+      <mat-icon class="create-val-success-icon" aria-hidden="false" aria-label="Upload icon">
+        check_circle_outline
+      </mat-icon>
+      <p class="text-xl crate-val-success-text">
+        Validator(s) successfully <span class="font-bold">created!</span>
+      </p>
+      <button (click)="openDialog()" class="create-val-btn" mat-raised-button color="primary">
+        View Validator(s)
+      </button>
+    </div>
+  </ng-template>
+</mat-card>

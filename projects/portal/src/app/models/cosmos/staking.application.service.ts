@@ -22,6 +22,10 @@ import {
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
+export interface InterfaceCreateValidatorSimpleOptions {
+  disableRedirect?: boolean;
+  disableErrorSnackBar?: boolean;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -71,15 +75,17 @@ export class StakingApplicationService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKeyString: string,
     gasRatio: number,
-  ) {
+    options?: InterfaceCreateValidatorSimpleOptions,
+  ): Promise<string | undefined> {
     const privateKey = convertHexStringToUint8Array(privateKeyString);
+    console.log('privateKey', privateKey);
     if (!privateKey) {
       this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }
 
     const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
-
+    const { disableRedirect, disableErrorSnackBar } = options || {};
     try {
       const simulatedResultData = await this.staking.simulateToCreateValidator(
         KeyType.secp256k1,
@@ -88,6 +94,8 @@ export class StakingApplicationService {
         privateKey,
         gasRatio,
       );
+      console.log('simulatedResultData', simulatedResultData);
+
       const gas = simulatedResultData.estimatedGasUsedWithMargin;
       const fee = simulatedResultData.estimatedFeeWithMargin;
       const createValidatorResult = await this.staking.createValidator(
@@ -97,25 +105,29 @@ export class StakingApplicationService {
         fee,
         privateKey,
       );
+
       const txHash = createValidatorResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
       }
+      this.snackBar.open('Success', undefined, { duration: 6000 });
+
+      if (!disableRedirect) {
+        const redirectUrl =
+          location.port === '80' || location.port === '443' || location.port === ''
+            ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
+            : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
+        window.location.href = redirectUrl;
+      }
+      return txHash;
     } catch (error) {
-      console.error(error);
-      this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      if (!disableErrorSnackBar) {
+        this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      }
       return;
     } finally {
       dialogRef.close();
     }
-
-    this.snackBar.open('Success', undefined, { duration: 6000 });
-
-    const redirectUrl =
-      location.port === '80' || location.port === '443' || location.port === ''
-        ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
-        : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
-    window.location.href = redirectUrl;
   }
 
   async createValidator(

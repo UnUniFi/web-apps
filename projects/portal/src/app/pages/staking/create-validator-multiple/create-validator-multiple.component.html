@@ -1,0 +1,11 @@
+<app-view-create-validator-multiple
+  class="create-val-root"
+  [nodes]="nodes$ | async"
+  [redirectUrls]="redirectUrls"
+  [loading]="loading"
+  [success]="success"
+  [error]="error"
+  [setError]="setError"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (submitCreateValidators)="appSubmitCreateValidators($event)"
+></app-view-create-validator-multiple>

@@ -81,7 +81,6 @@ export class StakingApplicationService {
     options?: InterfaceCreateValidatorSimpleOptions,
   ): Promise<string | undefined> {
     const privateKey = convertHexStringToUint8Array(privateKeyString);
-    console.log('privateKey', privateKey);
     if (!privateKey) {
       this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
@@ -97,7 +96,6 @@ export class StakingApplicationService {
         privateKey,
         gasRatio,
       );
-      console.log('simulatedResultData', simulatedResultData);
 
       const gas = simulatedResultData.estimatedGasUsedWithMargin;
       const fee = simulatedResultData.estimatedFeeWithMargin;

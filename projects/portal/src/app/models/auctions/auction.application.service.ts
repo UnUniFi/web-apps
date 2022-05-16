@@ -1,41 +1,44 @@
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
-import { Key } from '../keys/key.model';
-import { KeyService } from '../keys/key.service';
+import { WalletType } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { AuctionService } from './auction.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuctionApplicationService {
   constructor(
-    private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly auction: AuctionService,
-    private readonly key: KeyService,
+    private readonly walletService: WalletService,
   ) {}
 
   async placeBid(
-    key: Key,
-    privateKey: Uint8Array,
-    auction_id: string,
+    auctionID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
-    // validation
-    if (!(await this.key.validatePrivKey(key, privateKey))) {
-      this.snackBar.open(`Invalid private key.`, 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
@@ -47,10 +50,9 @@ export class AuctionApplicationService {
 
     try {
       simulatedResultData = await this.auction.simulateToPlaceBid(
-        key,
-        privateKey,
-        auction_id,
+        auctionID,
         amount,
+        cosmosPublicKey,
         minimumGasPrice,
         gasRatio,
       );
@@ -65,20 +67,21 @@ export class AuctionApplicationService {
       dialogRefSimulating.close();
     }
 
-    // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
-        data: {
-          fee,
-          isConfirmed: false,
-        },
-      })
-      .afterClosed()
-      .toPromise();
-
-    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-      return;
+    // confirm fee only ununifi wallet type case
+    if (currentCosmosWallet.type === WalletType.ununifi) {
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return;
+      }
     }
 
     const dialogRef = this.loadingDialog.open('Bidding...');
@@ -86,10 +89,9 @@ export class AuctionApplicationService {
     let txhash: string | undefined;
     try {
       const res: InlineResponse20075 = await this.auction.placeBid(
-        key,
-        privateKey,
-        auction_id,
+        auctionID,
         amount,
+        currentCosmosWallet,
         gas,
         fee,
       );

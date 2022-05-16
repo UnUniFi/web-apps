@@ -88,9 +88,7 @@ export class PlaceBidComponent implements OnInit {
 
   onSubmit($event: PlaceBidOnSubmitEvent) {
     this.auctionApplicationService.placeBid(
-      $event.key,
-      $event.privateKey,
-      $event.auctionID,
+      Number($event.auctionID),
       $event.amount,
       $event.minimumGasPrice,
       1.1,

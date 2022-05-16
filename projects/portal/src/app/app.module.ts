@@ -6,6 +6,8 @@ import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-m
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
 import { AppCollateralMenuDialogModule } from './pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.module';
+import { CreateCdpFormDialogComponent } from './pages/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.component';
+import { AppCreateCdpFormDialogModule } from './pages/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
@@ -38,7 +40,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingDialogModule } from 'ng-loading-dialog';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CreateCdpFormDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -74,6 +76,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     AppCollateralMenuDialogModule,
+    AppCreateCdpFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

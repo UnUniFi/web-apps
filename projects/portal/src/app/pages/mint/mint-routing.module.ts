@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./cdps/cdps.module').then((mod) => mod.AppCdpsModule),
     canActivate: [WalletGuard],
   },
+  {
+    path: 'params',
+    loadChildren: () => import('./params/params.module').then((mod) => mod.AppParamsModule),
+  },
 ];
 
 @NgModule({

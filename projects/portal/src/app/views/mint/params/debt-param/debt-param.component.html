@@ -1,0 +1,80 @@
+<ng-container *ngIf="debtParam === null; then loading; else loaded"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="debtParam !== undefined; then exist; else notFound"></ng-container>
+</ng-template>
+<ng-template #exist>
+  <div class="flex items-center">
+    <h2 class="mb-0">{{ type?.toUpperCase() }} Params</h2>
+  </div>
+  <mat-card class="mb-4">
+    <mat-list>
+      <mat-list-item>
+        <span>Denom:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.denom }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Reference Asset:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.reference_asset }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Conversion Factor:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.conversion_factor }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Debt Floor:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.debt_floor }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Global Debt Limit:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.global_debt_limit?.amount | number: '1.0-0' }}</span>
+        <span class="ml-1">{{ debtParam?.global_debt_limit?.denom }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Surplus Auction Threshold:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.surplus_auction_threshold | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Surplus Auction Lot:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.surplus_auction_lot | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Debt Auction Threshold:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.debt_auction_threshold | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Debt Auction Lot:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.debt_auction_lot | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <span>Circuit Breaker:</span>
+        <span class="flex-auto"></span>
+        <span>{{ debtParam?.circuit_breaker }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</ng-template>
+
+<ng-template #notFound>
+  <p>404 Not Found</p>
+</ng-template>

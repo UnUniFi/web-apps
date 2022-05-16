@@ -6,6 +6,7 @@ export type Config = {
   restURL: string;
   websocketURL: string;
   chainID: string;
+  chainName: string;
   bech32Prefix?: {
     accAddr: string;
     accPub: string;

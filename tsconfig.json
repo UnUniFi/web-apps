@@ -23,6 +23,9 @@
       ],
       "stream": [
         "./node_modules/stream-browserify"
+      ],
+      "path": [
+        "./node_modules/path-browserify"
       ]
     },
     "target": "es2017",

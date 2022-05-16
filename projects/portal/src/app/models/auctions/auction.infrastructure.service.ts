@@ -19,6 +19,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
+    privateKey?: string,
   ): Promise<InlineResponse20075> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildPlaceBidTxBuilder(
@@ -28,7 +29,21 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
       gas,
       fee,
     );
-    return await this.txCommonService.announceTx(txBuilder);
+    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
+    if (!signerBaseAccount) {
+      throw Error('Unsupported Account!');
+    }
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      signerBaseAccount,
+      currentCosmosWallet,
+      privateKey,
+    );
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
+    return txResult;
   }
 
   async simulateToPlaceBid(

@@ -22,7 +22,7 @@
 <h2 class="mb-0">Create CDPs</h2>
 <div class="w-full flex flex-wrap">
   <ng-template ngFor let-collateral [ngForOf]="collateralParams || []">
-    <mat-card class="m-5 h-1/3 w-full lg:w-1/3 clickable" (click)="onClickCollateral(collateral.denom)">
+    <mat-card class="m-5 h-1/3 w-full lg:w-1/3 clickable" (click)="onClickCollateral(collateral)">
       <mat-card-header>
         <img
           *ngIf="collateral.denom == 'ubtc'"

@@ -31,7 +31,7 @@ export class MintComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClickCollateral(denom: string) {
-    this.cdpAppService.openCollateralMenuDialog(denom);
+  onClickCollateral(param: ununifi.cdp.ICollateralParam) {
+    this.cdpAppService.openCollateralMenuDialog(param);
   }
 }

@@ -14,6 +14,7 @@ import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
+import { ununifi } from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -29,9 +30,9 @@ export class CdpApplicationService {
     private readonly walletService: WalletService,
   ) {}
 
-  async openCollateralMenuDialog(denom: string): Promise<void> {
+  async openCollateralMenuDialog(param: ununifi.cdp.ICollateralParam): Promise<void> {
     await this.dialog
-      .open(CollateralMenuDialogComponent, { data: denom })
+      .open(CollateralMenuDialogComponent, { data: param })
       .afterClosed()
       .toPromise();
   }

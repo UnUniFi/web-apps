@@ -22,9 +22,7 @@ export class CollateralParamComponent implements OnInit {
       map((res) => res.data.params!),
     );
     this.collateralParam$ = combineLatest([this.cdpParams$, this.type$]).pipe(
-      map(([cdpParams, type]) =>
-        cdpParams?.collateral_params?.find((param) => param.denom == type),
-      ),
+      map(([cdpParams, type]) => cdpParams?.collateral_params?.find((param) => param.type == type)),
     );
   }
 

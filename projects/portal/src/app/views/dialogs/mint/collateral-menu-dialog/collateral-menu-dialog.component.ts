@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class CollateralMenuDialogComponent implements OnInit {
   @Input()
-  denom?: string | null;
+  type?: string | null;
 
   @Output()
   appCreate: EventEmitter<string>;
@@ -22,16 +22,16 @@ export class CollateralMenuDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickCreateButton() {
-    if (!this.denom) {
+    if (!this.type) {
       return;
     }
-    this.appCreate.emit(this.denom);
+    this.appCreate.emit(this.type);
   }
 
   onClickDetailButton() {
-    if (!this.denom) {
+    if (!this.type) {
       return;
     }
-    this.appDetail.emit(this.denom);
+    this.appDetail.emit(this.type);
   }
 }

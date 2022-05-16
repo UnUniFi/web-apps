@@ -1,3 +1,4 @@
+import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
@@ -27,6 +28,21 @@ export class CdpApplicationService {
     private readonly key: KeyService,
     private readonly walletService: WalletService,
   ) {}
+
+  async openCollateralMenuDialog(denom: string): Promise<void> {
+    await this.dialog
+      .open(CollateralMenuDialogComponent, { data: denom })
+      .afterClosed()
+      .toPromise();
+  }
+
+  async openCreateCdpDialog(denom: string): Promise<void> {
+    await this.dialog
+      // WIP
+      .open(CollateralMenuDialogComponent, { data: denom })
+      .afterClosed()
+      .toPromise();
+  }
 
   async createCDP(
     collateralType: string,

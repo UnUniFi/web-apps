@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ununifi } from 'ununifi-client';
 
 @Component({
@@ -11,7 +11,19 @@ export class MintComponent implements OnInit {
   collateralParams?: ununifi.cdp.ICollateralParam[] | null;
   @Input()
   debtParams?: ununifi.cdp.IDebtParam[] | null;
-  constructor() {}
+  @Output()
+  appClickCollateral: EventEmitter<string>;
+
+  constructor() {
+    this.appClickCollateral = new EventEmitter();
+  }
 
   ngOnInit(): void {}
+
+  onClickCollateral(denom: string | null | undefined) {
+    if (!denom) {
+      return;
+    }
+    this.appClickCollateral.emit(denom);
+  }
 }

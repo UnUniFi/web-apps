@@ -1,3 +1,4 @@
+import { CdpApplicationService } from '../../models';
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, timer } from 'rxjs';
@@ -14,7 +15,10 @@ export class MintComponent implements OnInit {
   collateralParams$: Observable<ununifi.cdp.ICollateralParam[] | null | undefined>;
   debtParams$: Observable<ununifi.cdp.IDebtParam[] | null | undefined>;
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(
+    private cosmosSDK: CosmosSDKService,
+    private readonly cdpAppService: CdpApplicationService,
+  ) {
     const timer$ = timer(0, 60 * 1000);
 
     this.cdpParams$ = combineLatest([this.cosmosSDK.sdk$, timer$]).pipe(
@@ -26,4 +30,8 @@ export class MintComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onClickCollateral(denom: string) {
+    this.cdpAppService.openCollateralMenuDialog(denom);
+  }
 }

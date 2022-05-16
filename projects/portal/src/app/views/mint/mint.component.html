@@ -1,7 +1,7 @@
 <h2 class="mb-0">View CDPs</h2>
 <div class="w-full flex flex-wrap">
   <ng-template ngFor let-debt [ngForOf]="debtParams || []">
-    <mat-card class="m-5 h-1/3 w-full lg:w-1/4 clickable" routerLink="/mint/cdps">
+    <mat-card class="m-5 h-1/3 w-full lg:w-1/3 clickable" routerLink="/mint/cdps">
       <mat-card-header>
         <img *ngIf="debt.denom == 'jpu'" mat-card-avatar src="assets/images/JPU.png" alt="JPU" />
         <img *ngIf="debt.denom == 'euu'" mat-card-avatar src="assets/images/EUU.png" alt="EUU" />
@@ -22,7 +22,7 @@
 <h2 class="mb-0">Create CDPs</h2>
 <div class="w-full flex flex-wrap">
   <ng-template ngFor let-collateral [ngForOf]="collateralParams || []">
-    <mat-card class="m-5 h-1/3 w-full lg:w-1/4 clickable">
+    <mat-card class="m-5 h-1/3 w-full lg:w-1/3 clickable" (click)="onClickCollateral(collateral.denom)">
       <mat-card-header>
         <img
           *ngIf="collateral.denom == 'ubtc'"
@@ -61,7 +61,7 @@
     </mat-card>
   </ng-template>
 
-  <mat-card class="m-5 h-1/3 w-full lg:w-1/4">
+  <!-- <mat-card class="m-5 h-1/3 w-full lg:w-1/4">
     <mat-card-header>
       <img mat-card-avatar src="assets/images/nft.svg" alt="NFT" />
       <mat-card-title>JPU-NFT</mat-card-title>
@@ -103,5 +103,5 @@
         </span>
       </mat-list-item>
     </mat-list>
-  </mat-card>
+  </mat-card> -->
 </div>

@@ -1,10 +1,10 @@
-import { CosmosSDKService, KeyService } from '../../../models/index';
-import { Key } from '../../../models/keys/key.model';
-import { KeyStoreService } from '../../../models/keys/key.store.service';
+import { CosmosSDKService } from '../../../models/index';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { rest } from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
@@ -17,16 +17,13 @@ export class CdpsComponent implements OnInit {
   cdps$: Observable<(InlineResponse2004Cdp1 | undefined)[]>;
 
   constructor(
-    private readonly key: KeyService,
-    private readonly keyStore: KeyStoreService,
+    private readonly walletService: WalletService,
     private readonly cosmosSdk: CosmosSDKService,
   ) {
-    const key$ = this.keyStore.currentKey$.asObservable();
-    const address$ = key$.pipe(
-      filter((key: Key | undefined): key is Key => key !== undefined),
-      map((key: Key) =>
-        cosmosclient.AccAddress.fromPublicKey(this.key.getPubKey(key.type, key.public_key)),
-      ),
+    const currentStoredWallet$ = this.walletService.currentStoredWallet$;
+    const address$ = currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
     const collateralTypes$ = this.cosmosSdk.sdk$.pipe(

@@ -1,5 +1,6 @@
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
+import { CosmosWallet } from '../wallets/wallet.model';
 import { CdpInfrastructureService } from './cdp.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
@@ -7,21 +8,20 @@ import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 
 export interface ICdpInfrastructure {
   createCDP(
-    key: Key,
-    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
+    privateKey?: string,
   ): Promise<InlineResponse20075>;
 
   simulateToCreateCDP(
-    key: Key,
-    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse>;
@@ -113,40 +113,38 @@ export class CdpService {
   }
 
   createCDP(
-    key: Key,
-    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
+    privateKey?: string,
   ): Promise<InlineResponse20075> {
     return this.iCdpInfrastructure.createCDP(
-      key,
-      privateKey,
       collateralType,
       collateral,
       principal,
+      currentCosmosWallet,
       gas,
       fee,
+      privateKey,
     );
   }
 
   simulateToCreateCDP(
-    key: Key,
-    privateKey: Uint8Array,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
     principal: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     return this.iCdpInfrastructure.simulateToCreateCDP(
-      key,
-      privateKey,
       collateralType,
       collateral,
       principal,
+      cosmosPublicKey,
       minimumGasPrice,
       gasRatio,
     );

@@ -1,0 +1,6 @@
+<view-debt-menu-dialog
+  [denom]="denom"
+  [cdps]="cdps$ | async"
+  (appDetail)="onViewDetail($event)"
+  (appCdp)="onOpenCdpMenu($event)"
+></view-debt-menu-dialog>

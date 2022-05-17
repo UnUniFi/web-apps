@@ -1,13 +1,12 @@
 import { CdpApplicationService, CosmosSDKService } from '../../../../models/index';
-import { Key } from '../../../../models/keys/key.model';
-import { KeyService } from '../../../../models/keys/key.service';
 import { getCreateLimit } from '../../../../utils/function';
 import { getLiquidationPriceStream } from '../../../../utils/stream';
 import { CreateCdpOnSubmitEvent } from '../../../../views/mint/cdps/create/create.component';
 import { Component, OnInit } from '@angular/core';
 import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { timer, of, combineLatest, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ununifi, rest } from 'ununifi-client';
@@ -19,7 +18,7 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
-  key$: Observable<Key | undefined>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   cdpParams$: Observable<ununifi.cdp.IParams>;
   collateralParams$: Observable<ununifi.cdp.ICollateralParam[] | null | undefined>;
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
@@ -41,13 +40,17 @@ export class CreateComponent implements OnInit {
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
 
   constructor(
-    private readonly key: KeyService,
-    private readonly keyStore: KeyStoreService,
+    private readonly walletService: WalletService,
     private readonly cdpApplicationService: CdpApplicationService,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
   ) {
-    this.key$ = this.keyStore.currentKey$.asObservable();
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
+    this.address$ = this.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    );
+
     this.cdpParams$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
       map((param) => param.data.params!),
@@ -82,12 +85,6 @@ export class CreateComponent implements OnInit {
     );
 
     //get account balance information
-    this.address$ = this.key$.pipe(
-      filter((key): key is Key => key !== undefined),
-      map((key) =>
-        cosmosclient.AccAddress.fromPublicKey(this.key.getPubKey(key!.type, key.public_key)),
-      ),
-    );
     const timer$ = timer(0, this.pollingInterval * 1000);
     this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
       mergeMap(([n, sdk, address]) => {
@@ -151,8 +148,6 @@ export class CreateComponent implements OnInit {
 
   onSubmit($event: CreateCdpOnSubmitEvent) {
     this.cdpApplicationService.createCDP(
-      $event.key,
-      $event.privateKey,
       $event.collateralType,
       $event.collateral,
       $event.principal,

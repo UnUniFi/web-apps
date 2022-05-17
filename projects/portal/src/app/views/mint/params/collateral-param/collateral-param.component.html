@@ -1,0 +1,112 @@
+<ng-container *ngIf="collateralParam === null; then loading; else loaded"> </ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="collateralParam !== undefined; then exist; else notFound"></ng-container>
+</ng-template>
+<ng-template #exist>
+  <div class="flex items-center">
+    <h2 class="mb-0">{{ type?.toUpperCase() }} Params</h2>
+  </div>
+  <mat-card class="mb-4">
+    <mat-list>
+      <mat-list-item>
+        <span>Denom:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.denom }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Type:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.type }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Liquidation Ratio:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">
+          <span>{{ collateralParam?.liquidation_ratio | floor }}</span>
+          <span class="text-gray-300 text-sm"
+            >{{ collateralParam?.liquidation_ratio | decimals: 6 }}
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Debt Limit:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.debt_limit?.amount | number: '1.0-0' }}</span>
+        <span class="ml-1">{{ collateralParam?.debt_limit?.denom }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Stability Fee:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">
+          <span>{{ collateralParam?.stability_fee | floor }}</span>
+          <span class="text-gray-300 text-sm"
+            >{{ collateralParam?.stability_fee | decimals: 15 }}
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Auction Size:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.auction_size | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Liquidation Penalty:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">
+          <span>{{ collateralParam?.liquidation_penalty | floor }}</span>
+          <span class="text-gray-300 text-sm"
+            >{{ collateralParam?.liquidation_penalty | decimals: 6 }}
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Spot Market ID:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.spot_market_id }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Liquidation Market ID:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.liquidation_market_id }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Keeper Reward Percentage:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">
+          <span>{{ collateralParam?.keeper_reward_percentage | floor }}</span>
+          <span class="text-gray-300 text-sm"
+            >{{ collateralParam?.keeper_reward_percentage | decimals: 9 }}
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Check Collateralization Index Count:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.check_collateralization_index_count | number: '1.0-0' }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span>Conversion Factor:</span>
+        <span class="flex-auto"></span>
+        <span>{{ collateralParam?.conversion_factor }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</ng-template>
+
+<ng-template #notFound>
+  <p>404 Not Found</p>
+</ng-template>

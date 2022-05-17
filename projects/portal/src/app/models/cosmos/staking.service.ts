@@ -26,7 +26,7 @@ export class StakingService {
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<InlineResponse20075> {
     const txBuilder = await this.buildCreateValidator(
@@ -68,7 +68,7 @@ export class StakingService {
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -149,7 +149,7 @@ export class StakingService {
         },
       ],
       fee: {
-        amount: [fee],
+        amount: [],
         gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
       },
     });

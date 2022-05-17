@@ -84,15 +84,18 @@ export class StakingApplicationService {
     const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
 
     try {
-      const simulatedResultData = await this.staking.simulateToCreateValidator(
-        KeyType.secp256k1,
-        createValidatorData,
-        minimumGasPrice,
-        privateKey,
-        gasRatio,
-      );
-      const gas = simulatedResultData.estimatedGasUsedWithMargin;
-      const fee = simulatedResultData.estimatedFeeWithMargin;
+      // const simulatedResultData = await this.staking.simulateToCreateValidator(
+      //   KeyType.secp256k1,
+      //   createValidatorData,
+      //   minimumGasPrice,
+      //   privateKey,
+      //   gasRatio,
+      // );
+      const gas = {
+        denom: 'uguu',
+        amount: '200000',
+      }; // simulatedResultData.estimatedGasUsedWithMargin;
+      const fee = null; // simulatedResultData.estimatedFeeWithMargin;
       const createValidatorResult = await this.staking.createValidator(
         KeyType.secp256k1,
         createValidatorData,

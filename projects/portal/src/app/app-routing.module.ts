@@ -47,6 +47,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/staking/staking.module').then((m) => m.AppStakingModule),
   },
   {
+    path: 'slashing',
+    loadChildren: () => import('./pages/slashing/slashing.module').then((m) => m.AppSlashingModule),
+  },
+  {
     path: 'delegate',
     loadChildren: () => import('./pages/delegate/delegate.module').then((m) => m.AppDelegateModule),
   },

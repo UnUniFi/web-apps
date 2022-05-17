@@ -158,6 +158,19 @@ export class TxCommonService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
+    if (minimumGasPrice.amount == '0' || !gasRatio) {
+      return {
+        minimumGasPrice,
+        estimatedGasUsedWithMargin: {
+          denom: minimumGasPrice.denom,
+          amount: '200000',
+        },
+        estimatedFeeWithMargin: {
+          denom: minimumGasPrice.denom,
+          amount: '0',
+        },
+      };
+    }
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
     const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());

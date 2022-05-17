@@ -75,8 +75,8 @@ export class KeplrService {
       };
       const coinType = 118;
       const gasPriceStep = {
-        low: 0.01,
-        average: 0.025,
+        low: 0,
+        average: 0.01,
         high: 0.03,
       };
       const chainInfo: ChainInfo = {

@@ -84,6 +84,7 @@ export class AuctionApplicationService {
       }
     }
 
+    // send tx
     const dialogRef = this.loadingDialog.open('Bidding...');
 
     let txhash: string | undefined;

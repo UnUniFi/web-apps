@@ -4,27 +4,29 @@
     <div class="font-bold text-xl m-3">Collateral Menu</div>
 
     <mat-nav-list class="w-full">
-      <mat-label>Validator</mat-label>
+      <mat-label>Collateral Type</mat-label>
       <mat-list-item>
         <div mat-line>
           <span>{{ type }}</span>
         </div>
       </mat-list-item>
     </mat-nav-list>
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickDetailButton()"
-    >
-      <span class="text-black">More information</span>
-      Details
-    </button>
+
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"
       (click)="onClickCreateButton()"
     >
       <span class="text-black">Create this CDP</span>
+    </button>
+
+    <button
+      mat-flat-button
+      class="inline-flex justify-between items-center w-full m-3 bg-white"
+      (click)="onClickDetailButton()"
+    >
+      <span class="text-black">View parameter</span>
+      Details
     </button>
   </div>
 </mat-dialog-content>

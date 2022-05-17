@@ -1,5 +1,6 @@
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
 import { CreateCdpFormDialogComponent } from '../../pages/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.component';
+import { DebtMenuDialogComponent } from '../../pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
@@ -16,6 +17,7 @@ import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 import { ununifi } from 'ununifi-client';
+import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +46,35 @@ export class CdpApplicationService {
       .open(CreateCdpFormDialogComponent, { data: param })
       .afterClosed()
       .toPromise();
+  }
+
+  async openDebtMenuDialog(param: ununifi.cdp.IDebtParam): Promise<void> {
+    await this.dialog.open(DebtMenuDialogComponent, { data: param }).afterClosed().toPromise();
+  }
+
+  async openCdpMenuDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
+    // WIP
+    // await this.dialog.open(CdpMenuDialogComponent, { data: cdp }).afterClosed().toPromise();
+  }
+
+  async openCdpIssueFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
+    // WIP
+    // await this.dialog.open(CdpIssueFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+  }
+
+  async openCdpClearFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
+    // WIP
+    // await this.dialog.open(CdpClearFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+  }
+
+  async openCdpDepositFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
+    // WIP
+    // await this.dialog.open(CdpDepositFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+  }
+
+  async openCdpWithdrawFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
+    // WIP
+    // await this.dialog.open(CdpWithdrawFormDialogComponent, { data: cdp }).afterClosed().toPromise();
   }
 
   async createCDP(

@@ -13,9 +13,12 @@ export class MintComponent implements OnInit {
   debtParams?: ununifi.cdp.IDebtParam[] | null;
   @Output()
   appClickCollateral: EventEmitter<ununifi.cdp.ICollateralParam>;
+  @Output()
+  appClickDebt: EventEmitter<ununifi.cdp.IDebtParam>;
 
   constructor() {
     this.appClickCollateral = new EventEmitter();
+    this.appClickDebt = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -25,5 +28,12 @@ export class MintComponent implements OnInit {
       return;
     }
     this.appClickCollateral.emit(param);
+  }
+
+  onClickDebt(param: ununifi.cdp.IDebtParam) {
+    if (!param) {
+      return;
+    }
+    this.appClickDebt.emit(param);
   }
 }

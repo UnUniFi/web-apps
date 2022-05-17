@@ -34,4 +34,7 @@ export class MintComponent implements OnInit {
   onClickCollateral(param: ununifi.cdp.ICollateralParam) {
     this.cdpAppService.openCollateralMenuDialog(param);
   }
+  onClickDebt(param: ununifi.cdp.IDebtParam) {
+    this.cdpAppService.openDebtMenuDialog(param);
+  }
 }

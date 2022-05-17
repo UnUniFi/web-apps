@@ -132,8 +132,9 @@ export class TxCommonService {
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    const signedTxBuilder = await this.keplrAppService.signDirect(txBuilder, signerBaseAccount);
-    return signedTxBuilder;
+    throw Error('Signing with Keplr will be supported in a future update!');
+    // const signedTxBuilder = await this.keplrAppService.signDirect(txBuilder, signerBaseAccount);
+    // return signedTxBuilder;
   }
 
   // Todo: This is dummy function and need to implement later.

@@ -82,11 +82,13 @@ export class WalletApplicationService {
     }
 
     if (selectedWalletType === WalletType.keplr) {
-      const isSuccessImport = await this.keplrAppService.keplrSelectWallet();
-      if (isSuccessImport) {
-        window.location.reload();
-      }
+      this.snackBar.open('Keplr will be supported in a future update!', 'Close');
       return;
+      // const isSuccessImport = await this.keplrAppService.keplrSelectWallet();
+      // if (isSuccessImport) {
+      //   window.location.reload();
+      // }
+      // return;
     }
   }
 

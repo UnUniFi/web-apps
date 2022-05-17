@@ -27,7 +27,13 @@ import { take } from 'rxjs/operators';
 export interface InterfaceCreateValidatorSimpleOptions {
   disableRedirect?: boolean;
   disableErrorSnackBar?: boolean;
+  disableSimulate?: boolean;
 }
+export interface InterfaceGasAndFee {
+  gas: proto.cosmos.base.v1beta1.ICoin;
+  fee: proto.cosmos.base.v1beta1.ICoin | null;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -73,6 +79,41 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
+  async handleSimulateToCreateValidator(
+    createValidatorData: CreateValidatorData,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+    privateKey: Uint8Array,
+    disableSimulate?: boolean,
+  ): Promise<InterfaceGasAndFee> {
+    if (!disableSimulate) {
+      const simulatedResultData = await this.staking.simulateToCreateValidator(
+        KeyType.secp256k1,
+        createValidatorData,
+        minimumGasPrice,
+        privateKey,
+        gasRatio,
+      );
+      const gas = simulatedResultData.estimatedGasUsedWithMargin;
+      const fee = simulatedResultData.estimatedFeeWithMargin;
+      return {
+        gas,
+        fee,
+      };
+    }
+
+    const gas = {
+      denom: 'uguu',
+      amount: '200000',
+    };
+    const fee = null;
+
+    return {
+      gas,
+      fee,
+    };
+  }
+
   async createValidatorSimple(
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
@@ -87,18 +128,17 @@ export class StakingApplicationService {
     }
 
     const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
-    const { disableRedirect, disableErrorSnackBar } = options || {};
+
+    const { disableRedirect, disableErrorSnackBar, disableSimulate } = options || {};
+
     try {
-      const simulatedResultData = await this.staking.simulateToCreateValidator(
-        KeyType.secp256k1,
+      const { gas, fee } = await this.handleSimulateToCreateValidator(
         createValidatorData,
         minimumGasPrice,
-        privateKey,
         gasRatio,
+        privateKey,
+        disableSimulate,
       );
-
-      const gas = simulatedResultData.estimatedGasUsedWithMargin;
-      const fee = simulatedResultData.estimatedFeeWithMargin;
       const createValidatorResult = await this.staking.createValidator(
         KeyType.secp256k1,
         createValidatorData,
@@ -111,6 +151,7 @@ export class StakingApplicationService {
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
       }
+
       this.snackBar.open('Success', undefined, { duration: 6000 });
 
       if (!disableRedirect) {
@@ -122,6 +163,7 @@ export class StakingApplicationService {
       }
       return txHash;
     } catch (error) {
+      console.error(error);
       if (!disableErrorSnackBar) {
         this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
       }

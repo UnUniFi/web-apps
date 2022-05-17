@@ -125,7 +125,7 @@ export class CreateValidatorMultipleComponent implements OnInit {
           createValidatorData.minimumGasPrice,
           createValidatorData.privateKey,
           gasRatio,
-          { disableRedirect: true, disableErrorSnackBar: true },
+          { disableRedirect: true, disableErrorSnackBar: true, disableSimulate: true },
         );
       }),
     )) as (string | undefined)[];

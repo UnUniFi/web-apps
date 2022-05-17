@@ -1,0 +1,11 @@
+<h2>Upload wallet-backup file here to edit Validator information</h2>
+<form class="h-screen" #formRef="ngForm">
+  <input
+    #fileInputRef
+    name="fileInput"
+    type="file"
+    multiple="false"
+    accept="image/*"
+    (change)="onChangeFile($event)"
+  />
+</form>

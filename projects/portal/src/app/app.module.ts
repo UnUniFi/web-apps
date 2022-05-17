@@ -6,6 +6,7 @@ import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-m
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
 import { AppCollateralMenuDialogModule } from './pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.module';
+import { AppDebtMenuDialogModule } from './pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
@@ -74,6 +75,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     AppCollateralMenuDialogModule,
+    AppDebtMenuDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

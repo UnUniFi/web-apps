@@ -80,23 +80,24 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
     if (!this.privateWallet?.privateKey) {
       this.snackBar.open(
         `Error: PrivateKey does not contained! Need to drag and drop correct wallet backup file!`,
+        'Close',
       );
       return;
     }
     if (this.privateWallet?.address && this.privateWallet?.address !== this.delegator_address) {
-      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`);
+      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`, 'Close');
       return;
     }
     if (!this.minimumGasPrice?.amount) {
-      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`);
+      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`, 'Close');
       return;
     }
     if (!this.moniker) {
-      this.snackBar.open(`Error: moniker is invalid!`);
+      this.snackBar.open(`Error: moniker is invalid!`, 'Close');
       return;
     }
     if (!this.identity) {
-      this.snackBar.open(`Error: identity is invalid!`);
+      this.snackBar.open(`Error: identity is invalid!`, 'Close');
       return;
     }
     if (!this.website) {
@@ -109,31 +110,31 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.details = '';
     }
     if (!this.rate) {
-      this.snackBar.open(`Error: rate is invalid!`);
+      this.snackBar.open(`Error: rate is invalid!`, 'Close');
       return;
     }
     if (!this.min_self_delegation) {
-      this.snackBar.open(`Error: min_self_delegation is invalid!`);
+      this.snackBar.open(`Error: min_self_delegation is invalid!`, 'Close');
       return;
     }
     if (!this.delegator_address) {
-      this.snackBar.open(`Error: delegator_address is invalid!`);
+      this.snackBar.open(`Error: delegator_address is invalid!`, 'Close');
       return;
     }
     if (!this.validator_address) {
-      this.snackBar.open(`Error: validator_address is invalid!`);
+      this.snackBar.open(`Error: validator_address is invalid!`, 'Close');
       return;
     }
     if (!this.denom) {
-      this.snackBar.open(`Error: denom is invalid!`);
+      this.snackBar.open(`Error: denom is invalid!`, 'Close');
       return;
     }
     if (!this.amount) {
-      this.snackBar.open(`Error: amount is invalid!`);
+      this.snackBar.open(`Error: amount is invalid!`, 'Close');
       return;
     }
     if (!this.pubkey) {
-      this.snackBar.open(`Error: pubkey is invalid!`);
+      this.snackBar.open(`Error: pubkey is invalid!`, 'Close');
       return;
     }
     await this.onSubmitEditValidator(
@@ -180,7 +181,7 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
     }
 
     if (this.minimumGasPrice === undefined) {
-      this.snackBar.open('Invalid gas fee!');
+      this.snackBar.open('Invalid gas fee!', 'Close');
       return;
     }
     this.submitEditValidator.emit({

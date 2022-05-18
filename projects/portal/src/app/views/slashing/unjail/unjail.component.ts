@@ -38,7 +38,7 @@ export class UnjailComponent implements OnInit {
     }
 
     if (this.minimumGasPrice === undefined) {
-      this.snackBar.open('Invalid gas fee!');
+      this.snackBar.open('Invalid gas fee!', 'Close');
       return;
     }
 

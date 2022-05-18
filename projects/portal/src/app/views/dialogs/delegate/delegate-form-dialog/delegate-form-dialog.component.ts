@@ -45,7 +45,7 @@ export class DelegateFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
-    this.gasRatio = 1.1;
+    this.gasRatio = 0;
   }
 
   ngOnChanges(): void {

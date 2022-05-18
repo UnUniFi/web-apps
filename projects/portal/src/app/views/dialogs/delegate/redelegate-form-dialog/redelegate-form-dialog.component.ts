@@ -50,7 +50,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   constructor() {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
-    this.gasRatio = 1.1;
+    this.gasRatio = 0;
   }
 
   ngOnChanges(): void {

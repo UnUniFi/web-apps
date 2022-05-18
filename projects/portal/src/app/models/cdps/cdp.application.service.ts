@@ -1,3 +1,4 @@
+import { CdpMenuDialogComponent } from '../../pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.component';
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
 import { DebtMenuDialogComponent } from '../../pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -52,8 +53,7 @@ export class CdpApplicationService {
   }
 
   async openCdpMenuDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    // WIP
-    // await this.dialog.open(CdpMenuDialogComponent, { data: cdp }).afterClosed().toPromise();
+    await this.dialog.open(CdpMenuDialogComponent, { data: cdp }).afterClosed().toPromise();
   }
 
   async openCdpIssueFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {

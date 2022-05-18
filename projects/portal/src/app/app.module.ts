@@ -1,6 +1,7 @@
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GraphQLModule } from './graphql.module';
 import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.module';
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
@@ -72,6 +73,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppUndelegateFormDialogModule,
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
+    GraphQLModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

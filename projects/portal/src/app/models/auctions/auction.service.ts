@@ -1,25 +1,23 @@
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
-import { Key } from '../keys/key.model';
+import { CosmosWallet } from '../wallets/wallet.model';
 import { AuctionInfrastructureService } from './auction.infrastructure.service';
 import { Injectable } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 
 export interface IAuctionInfrastructure {
   placeBid(
-    key: Key,
-    privateKey: Uint8Array,
-    auction_id: string,
+    auctionID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<InlineResponse20075>;
 
   simulateToPlaceBid(
-    key: Key,
-    privateKey: Uint8Array,
-    auction_id: string,
+    auction_id: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse>;
@@ -35,29 +33,26 @@ export class AuctionService {
   }
 
   placeBid(
-    key: Key,
-    privateKey: Uint8Array,
-    auction_id: string,
+    auctionID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<InlineResponse20075> {
-    return this.iAuctionInfrastructure.placeBid(key, privateKey, auction_id, amount, gas, fee);
+    return this.iAuctionInfrastructure.placeBid(auctionID, amount, currentCosmosWallet, gas, fee);
   }
 
   simulateToPlaceBid(
-    key: Key,
-    privateKey: Uint8Array,
-    auction_id: string,
+    auctionID: number,
     amount: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     return this.iAuctionInfrastructure.simulateToPlaceBid(
-      key,
-      privateKey,
-      auction_id,
+      auctionID,
       amount,
+      cosmosPublicKey,
       minimumGasPrice,
       gasRatio,
     );

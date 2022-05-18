@@ -24,6 +24,16 @@ import {
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 
+export interface InterfaceCreateValidatorSimpleOptions {
+  disableRedirect?: boolean;
+  disableErrorSnackBar?: boolean;
+  disableSimulate?: boolean;
+}
+export interface InterfaceGasAndFee {
+  gas: proto.cosmos.base.v1beta1.ICoin;
+  fee: proto.cosmos.base.v1beta1.ICoin | null;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,21 +79,14 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async createValidatorSimple(
+  async handleSimulateToCreateValidator(
     createValidatorData: CreateValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKeyString: string,
     gasRatio: number,
-  ) {
-    const privateKey = convertHexStringToUint8Array(privateKeyString);
-    if (!privateKey) {
-      this.snackBar.open('Invalid PrivateKey!', 'Close');
-      return;
-    }
-
-    const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
-
-    try {
+    privateKey: Uint8Array,
+    disableSimulate?: boolean,
+  ): Promise<InterfaceGasAndFee> {
+    if (!disableSimulate) {
       const simulatedResultData = await this.staking.simulateToCreateValidator(
         KeyType.secp256k1,
         createValidatorData,
@@ -93,6 +96,49 @@ export class StakingApplicationService {
       );
       const gas = simulatedResultData.estimatedGasUsedWithMargin;
       const fee = simulatedResultData.estimatedFeeWithMargin;
+      return {
+        gas,
+        fee,
+      };
+    }
+
+    const gas = {
+      denom: 'uguu',
+      amount: '200000',
+    };
+    const fee = null;
+
+    return {
+      gas,
+      fee,
+    };
+  }
+
+  async createValidatorSimple(
+    createValidatorData: CreateValidatorData,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    privateKeyString: string,
+    gasRatio: number,
+    options?: InterfaceCreateValidatorSimpleOptions,
+  ): Promise<string | undefined> {
+    const privateKey = convertHexStringToUint8Array(privateKeyString);
+    if (!privateKey) {
+      this.snackBar.open('Invalid PrivateKey!', 'Close');
+      return;
+    }
+
+    const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
+
+    const { disableRedirect, disableErrorSnackBar, disableSimulate } = options || {};
+
+    try {
+      const { gas, fee } = await this.handleSimulateToCreateValidator(
+        createValidatorData,
+        minimumGasPrice,
+        gasRatio,
+        privateKey,
+        disableSimulate,
+      );
       const createValidatorResult = await this.staking.createValidator(
         KeyType.secp256k1,
         createValidatorData,
@@ -100,25 +146,31 @@ export class StakingApplicationService {
         fee,
         privateKey,
       );
+
       const txHash = createValidatorResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
       }
+
+      this.snackBar.open('Success', undefined, { duration: 6000 });
+
+      if (!disableRedirect) {
+        const redirectUrl =
+          location.port === '80' || location.port === '443' || location.port === ''
+            ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
+            : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
+        window.location.href = redirectUrl;
+      }
+      return txHash;
     } catch (error) {
       console.error(error);
-      this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      if (!disableErrorSnackBar) {
+        this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      }
       return;
     } finally {
       dialogRef.close();
     }
-
-    this.snackBar.open('Success', undefined, { duration: 6000 });
-
-    const redirectUrl =
-      location.port === '80' || location.port === '443' || location.port === ''
-        ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
-        : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
-    window.location.href = redirectUrl;
   }
 
   async createValidator(

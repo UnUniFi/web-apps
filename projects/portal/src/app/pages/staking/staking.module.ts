@@ -1,8 +1,10 @@
+import { ViewCreateValidatorMultipleModule } from '../../views/staking/create-validator-multiple/create-validator-multiple.module';
 import { ViewCreateValidatorSimpleModule } from '../../views/staking/create-validator-simple/create-validator-simple.module';
 import { CreateValidatorModule } from '../../views/staking/create-validator/create-validator.module';
 import { ViewEditValidatorSimpleModule } from '../../views/staking/edit-validator-simple/edit-validator-simple.module';
 import { ViewEditValidatorModule } from '../../views/staking/edit-validator/edit-validator.module';
 import { StakingModule } from '../../views/staking/staking.module';
+import { CreateValidatorMultipleComponent } from './create-validator-multiple/create-validator-multiple.component';
 import { CreateValidatorSimpleComponent } from './create-validator-simple/create-validator-simple.component';
 import { CreateValidatorComponent } from './create-validator/create-validator.component';
 import { EditValidatorSimpleComponent } from './edit-validator-simple/edit-validator-simple.component';
@@ -15,8 +17,11 @@ import { NgModule } from '@angular/core';
   declarations: [
     CreateValidatorComponent,
     CreateValidatorSimpleComponent,
+
     EditValidatorSimpleComponent,
     EditValidatorComponent,
+
+    CreateValidatorMultipleComponent,
   ],
   imports: [
     CommonModule,
@@ -24,8 +29,11 @@ import { NgModule } from '@angular/core';
     CreateValidatorModule,
     StakingModule,
     ViewCreateValidatorSimpleModule,
+
     ViewEditValidatorModule,
     ViewEditValidatorSimpleModule,
+
+    ViewCreateValidatorMultipleModule,
   ],
 })
 export class AppStakingModule {}

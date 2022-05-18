@@ -104,7 +104,7 @@ export class GovService {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
+        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 

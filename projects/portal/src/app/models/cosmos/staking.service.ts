@@ -10,6 +10,7 @@ import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import BigNumber from 'bignumber.js';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class StakingService {
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<InlineResponse20075> {
     const txBuilder = await this.buildCreateValidator(
@@ -36,6 +37,7 @@ export class StakingService {
       fee,
       privateKey,
     );
+
     return await this.txCommonService.announceTx(txBuilder);
   }
 
@@ -61,14 +63,31 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
+
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
+  }
+
+  private makeCommissionValues(
+    commission: proto.cosmos.staking.v1beta1.ICommissionRates,
+  ): proto.cosmos.staking.v1beta1.ICommissionRates {
+    const pairs: [string, string][] = Object.entries(commission).map((pair: [string, string]) => {
+      const [key, value] = pair;
+      const bnValue = new BigNumber(value);
+      const isValidValue = bnValue.gte(0) && bnValue.lte(1);
+      if (!isValidValue) {
+        throw new Error(`Error: commission ${key} expected to be from 0 to 1, but got ${value}`);
+      }
+
+      return [key, bnValue.times(1e18).toFixed(0)];
+    });
+    return Object.fromEntries(pairs);
   }
 
   async buildCreateValidator(
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -104,7 +123,12 @@ export class StakingService {
     const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
     const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
 
-    // build tx ... Note: commission percent rate values are converted here.
+    const commission = this.makeCommissionValues({
+      rate: createValidatorData.rate,
+      max_rate: createValidatorData.max_rate,
+      max_change_rate: createValidatorData.max_change_rate,
+    });
+
     const createValidatorTxData = {
       description: {
         moniker: createValidatorData.moniker,
@@ -113,11 +137,7 @@ export class StakingService {
         security_contact: createValidatorData.security_contact,
         details: createValidatorData.details,
       },
-      commission: {
-        rate: `${createValidatorData.rate}${'0000000000000000'}`,
-        max_rate: `${createValidatorData.max_rate}${'0000000000000000'}`,
-        max_change_rate: `${createValidatorData.max_change_rate}${'0000000000000000'}`,
-      },
+      commission,
       min_self_delegation: createValidatorData.min_self_delegation,
       delegator_address: createValidatorData.delegator_address,
       validator_address: createValidatorData.validator_address,
@@ -149,8 +169,8 @@ export class StakingService {
         },
       ],
       fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
+        amount: [],
+        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 

@@ -1,4 +1,5 @@
 import { WalletGuard } from '../../models/wallets/wallet.guard';
+import { CreateValidatorMultipleComponent } from './create-validator-multiple/create-validator-multiple.component';
 import { CreateValidatorSimpleComponent } from './create-validator-simple/create-validator-simple.component';
 import { CreateValidatorComponent } from './create-validator/create-validator.component';
 import { EditValidatorSimpleComponent } from './edit-validator-simple/edit-validator-simple.component';
@@ -10,6 +11,10 @@ const routes: Routes = [
   {
     path: 'create-validator/simple',
     component: CreateValidatorSimpleComponent,
+  },
+  {
+    path: 'create-validator/multiple',
+    component: CreateValidatorMultipleComponent,
   },
   {
     path: 'create-validator',

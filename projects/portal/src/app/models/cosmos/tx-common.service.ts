@@ -67,7 +67,7 @@ export class TxCommonService {
       ],
       fee: {
         amount: fee?.amount && fee.amount !== '0' ? [fee] : [],
-        gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '200000'),
+        gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '1000000'),
       },
     });
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
@@ -163,7 +163,7 @@ export class TxCommonService {
         minimumGasPrice,
         estimatedGasUsedWithMargin: {
           denom: minimumGasPrice.denom,
-          amount: '200000',
+          amount: '1000000',
         },
         estimatedFeeWithMargin: {
           denom: minimumGasPrice.denom,
@@ -199,7 +199,7 @@ export class TxCommonService {
     // This margin prevents insufficient fee due to data size difference between simulated tx and actual tx.
     const simulatedGasUsedWithMarginNumber = simulatedGasUsed
       ? parseInt(simulatedGasUsed) * (gasRatio ?? 1.1)
-      : 200000;
+      : 1000000;
     const simulatedGasUsedWithMargin = simulatedGasUsedWithMarginNumber.toFixed(0);
     // minimumGasPrice depends on Node's config(`~/.ununifi/config/app.toml` minimum-gas-prices).
     const simulatedFeeWithMarginNumber =

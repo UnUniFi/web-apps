@@ -31,13 +31,13 @@
     <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
   </mat-form-field>
   <mat-button-toggle-group class="flex mb-4" value="low">
-    <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(1.1)"
+    <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(0)"
       >Low</mat-button-toggle
     >
-    <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(2)"
+    <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(1.1)"
       >Middle</mat-button-toggle
     >
-    <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(3)"
+    <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(2)"
       >High</mat-button-toggle
     >
   </mat-button-toggle-group>

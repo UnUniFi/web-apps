@@ -104,7 +104,7 @@ export class StakingApplicationService {
 
     const gas = {
       denom: 'uguu',
-      amount: '200000',
+      amount: '1000000',
     };
     const fee = null;
 

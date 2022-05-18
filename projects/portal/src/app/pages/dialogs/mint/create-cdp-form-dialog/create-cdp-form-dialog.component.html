@@ -1,5 +1,8 @@
-<view-create-cdp-form-dialog>
-  [collateralBalance]="collateralBalance$ | async" [currentStoredWallet]="currentStoredWallet$ |
-  async" [coins]="coins$ | async" [minimumGasPrices]="minimumGasPrices$ | async"
+<view-create-cdp-form-dialog
+  [collateralBalance]="collateralBalance$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [coins]="coins$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
   (appSubmit)="onSubmit($event)"
+>
 </view-create-cdp-form-dialog>

@@ -4,7 +4,7 @@
     <div class="font-bold text-xl m-3">Delegate to this validator</div>
   </div>
   <mat-list>
-    <mat-label>To. (Validator)</mat-label>
+    <mat-label>To. (Principal)</mat-label>
     <mat-list-item>
       <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
         >circle</mat-icon
@@ -16,7 +16,7 @@
   </mat-list>
 
   <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
+    <mat-label>From. (Collateral)</mat-label>
     <mat-list-item>
       <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
         >circle</mat-icon

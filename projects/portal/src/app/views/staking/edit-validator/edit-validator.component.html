@@ -2,22 +2,18 @@
 <form
   #formRef="ngForm"
   (submit)="
-    onSubmitCreateValidator(
+    onSubmitEditValidator(
       monikerRef.value,
       identityRef.value,
       websiteRef.value,
       securityContactRef.value,
       detailsRef.value,
       rateRef.value,
-      maxRateRef.value,
-      maxChangeRateRef.value,
       minSelfDelegationRef.value,
       delegatorAddressRef.value,
       validatorAddressRef.value,
       denomRef.value,
       amountRef.value,
-      ipRef.value,
-      nodeIdRef.value,
       pubkeyRef.value,
       minimumGasPriceRef.value
     )
@@ -71,32 +67,7 @@
         <input #rateRef [(ngModel)]="rate" name="rate" matInput type="text" required readonly />
         <span matSuffix>%</span>
       </mat-form-field>
-      <mat-form-field class="w-full">
-        <mat-label>Max rate</mat-label>
-        <input
-          #maxRateRef
-          [(ngModel)]="max_rate"
-          name="max_rate"
-          matInput
-          type="text"
-          required
-          readonly
-        />
-        <span matSuffix>%</span>
-      </mat-form-field>
-      <mat-form-field class="w-full">
-        <mat-label>Max change rate</mat-label>
-        <input
-          #maxChangeRateRef
-          [(ngModel)]="max_change_rate"
-          name="max_change_rate"
-          matInput
-          type="text"
-          required
-          readonly
-        />
-        <span matSuffix>%</span>
-      </mat-form-field>
+
       <mat-form-field class="w-full">
         <mat-label>Min self delegation</mat-label>
         <input
@@ -145,22 +116,6 @@
           name="amount"
           matInput
           type="text"
-          required
-          readonly
-        />
-      </mat-form-field>
-      <mat-form-field class="w-full">
-        <mat-label>IP or Domain</mat-label>
-        <input #ipRef [(ngModel)]="ip" type="text" name="ip" matInput required readonly />
-      </mat-form-field>
-      <mat-form-field class="w-full">
-        <mat-label>Node id</mat-label>
-        <input
-          #nodeIdRef
-          [(ngModel)]="node_id"
-          type="text"
-          name="node_id"
-          matInput
           required
           readonly
         />

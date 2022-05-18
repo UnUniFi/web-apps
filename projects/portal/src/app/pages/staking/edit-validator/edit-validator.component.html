@@ -1,1 +1,17 @@
-<view-edit-validator></view-edit-validator>
+<view-edit-validator
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [moniker]="moniker$ | async"
+  [identity]="identity$ | async"
+  [website]="website$ | async"
+  [security_contact]="security_contact$ | async"
+  [details]="details$ | async"
+  [rate]="rate$ | async"
+  [min_self_delegation]="min_self_delegation$ | async"
+  [delegator_address]="delegator_address$ | async"
+  [validator_address]="validator_address$ | async"
+  [denom]="denom$ | async"
+  [amount]="amount$ | async"
+  [pubkey]="pubkey$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (submitEditValidator)="appSubmitEditValidator($event)"
+></view-edit-validator>

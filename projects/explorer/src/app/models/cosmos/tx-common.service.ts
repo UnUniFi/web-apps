@@ -34,7 +34,7 @@ export class TxCommonService {
     // This margin prevents insufficient fee due to data size difference between simulated tx and actual tx.
     const simulatedGasUsedWithMarginNumber = simulatedGasUsed
       ? parseInt(simulatedGasUsed) * 1.1
-      : 200000;
+      : 1000000;
     const simulatedGasUsedWithMargin = simulatedGasUsedWithMarginNumber.toFixed(0);
     // minimumGasPrice depends on Node's config(`~/.jpyx/config/app.toml` minimum-gas-prices).
     const simulatedFeeWithMarginNumber =

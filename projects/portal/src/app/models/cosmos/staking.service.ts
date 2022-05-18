@@ -170,7 +170,7 @@ export class StakingService {
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
+        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 

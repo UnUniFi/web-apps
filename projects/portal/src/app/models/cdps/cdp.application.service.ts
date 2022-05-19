@@ -1,3 +1,4 @@
+import { CdpDepositFormDialogComponent } from '../../pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.component';
 import { CdpMenuDialogComponent } from '../../pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.component';
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
 import { DebtMenuDialogComponent } from '../../pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.component';
@@ -67,8 +68,7 @@ export class CdpApplicationService {
   }
 
   async openCdpDepositFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    // WIP
-    // await this.dialog.open(CdpDepositFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+    await this.dialog.open(CdpDepositFormDialogComponent, { data: cdp }).afterClosed().toPromise();
   }
 
   async openCdpWithdrawFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {

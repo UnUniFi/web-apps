@@ -1,9 +1,7 @@
-<view-delegate-form-dialog
+<view-cdp-deposit-form-dialog
   [currentStoredWallet]="currentStoredWallet$ | async"
-  [validatorsList]="validatorsList$ | async"
   [coins]="coins$ | async"
-  [uguuBalance]="uguuBalance$ | async"
+  [collateralBalance]="collateralBalance$ | async"
   [minimumGasPrices]="minimumGasPrices$ | async"
-  [validator]="validator"
   (appSubmit)="onSubmit($event)"
-></view-delegate-form-dialog>
+></view-cdp-deposit-form-dialog>

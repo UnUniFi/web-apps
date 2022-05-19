@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
-// import * as crypto from 'crypto';
-import { WalletType, StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { ununifi } from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
 
@@ -9,9 +7,8 @@ export type CreateCdpOnSubmitEvent = {
   collateralType: string;
   collateral: proto.cosmos.base.v1beta1.ICoin;
   principal: proto.cosmos.base.v1beta1.ICoin;
-  balances: proto.cosmos.base.v1beta1.ICoin[];
-  walletType: WalletType;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  balances: proto.cosmos.base.v1beta1.ICoin[];
   gasRatio: number;
 };
 
@@ -28,8 +25,6 @@ export class CreateCdpFormDialogComponent implements OnInit {
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  currentStoredWallet?: StoredWallet | null;
-  @Input()
   cdpParams?: ununifi.cdp.IParams | null;
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
@@ -37,7 +32,6 @@ export class CreateCdpFormDialogComponent implements OnInit {
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   collateralLimit?: number | null;
-
   @Input()
   principalLimit?: number | null;
 
@@ -98,17 +92,11 @@ export class CreateCdpFormDialogComponent implements OnInit {
       );
       return;
     }
-    if (
-      !this.currentStoredWallet ||
-      !this.collateralParam?.type ||
-      !this.selectedAmount ||
-      !this.selectedGasPrice
-    ) {
+    if (!this.collateralParam?.type || !this.selectedAmount || !this.selectedGasPrice) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      walletType: this.currentStoredWallet?.type,
       collateralType: this.collateralParam.type,
       collateral: {
         denom: collateralDenom,
@@ -119,8 +107,8 @@ export class CreateCdpFormDialogComponent implements OnInit {
         amount: principalAmount,
       },
       minimumGasPrice: this.selectedGasPrice,
-      gasRatio: this.gasRatio,
       balances: this.balances,
+      gasRatio: this.gasRatio,
     });
   }
 

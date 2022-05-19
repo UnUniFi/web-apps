@@ -10,8 +10,8 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { getCreateLimit } from 'projects/portal/src/app/utils/function';
 import { getLiquidationPriceStream } from 'projects/portal/src/app/utils/stream';
 import { CreateCdpOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.component';
-import { BehaviorSubject, combineLatest, Observable, of, Subject, timer } from 'rxjs';
-import { combineAll, filter, map, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { ununifi, rest } from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
 

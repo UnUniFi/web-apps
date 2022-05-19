@@ -78,7 +78,6 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppCollateralMenuDialogModule,
     AppCreateCdpFormDialogModule,
     AppDebtMenuDialogModule,
-    AppCreateCdpFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -403,8 +403,6 @@ export class CdpApplicationService {
   }
 
   async depositCDP(
-    key: Key,
-    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
@@ -412,16 +410,23 @@ export class CdpApplicationService {
     balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
-    // validation
-    if (!(await this.key.validatePrivKey(key, privateKey))) {
-      this.snackBar.open(`Invalid private key.`, 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
+
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -440,11 +445,10 @@ export class CdpApplicationService {
 
     try {
       simulatedResultData = await this.cdp.simulateToDepositCDP(
-        key,
-        privateKey,
         ownerAddr,
         collateralType,
         collateral,
+        cosmosPublicKey,
         minimumGasPrice,
         gasRatio,
       );
@@ -490,11 +494,10 @@ export class CdpApplicationService {
     let txhash: string | undefined;
     try {
       const res: InlineResponse20075 = await this.cdp.depositCDP(
-        key,
-        privateKey,
         ownerAddr,
         collateralType,
         collateral,
+        currentCosmosWallet,
         gas,
         fee,
       );

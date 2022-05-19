@@ -7,9 +7,9 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20075, MintApi } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { ununifi } from 'ununifi-client';
+import { cosmos, ununifi } from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -329,32 +329,43 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
   }
 
   async depositCDP(
-    key: Key,
-    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<InlineResponse20075> {
-    const txBUilder = await this.buildDepositCDPTx(
-      key,
-      privateKey,
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    const txBuilder = await this.buildDepositCDPTxBuilder(
       ownerAddr,
       collateralType,
       collateral,
+      cosmosPublicKey,
       gas,
       fee,
     );
-    return await this.txCommonService.announceTx(txBUilder);
+    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
+    if (!signerBaseAccount) {
+      throw Error('Unsupported Account!');
+    }
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      signerBaseAccount,
+      currentCosmosWallet,
+    );
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
+    return txResult;
   }
 
   async simulateToDepositCDP(
-    key: Key,
-    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
@@ -366,79 +377,63 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const simulatedTxBUilder = await this.buildDepositCDPTx(
-      key,
-      privateKey,
+    const simulatedTxBUilder = await this.buildDepositCDPTxBuilder(
       ownerAddr,
       collateralType,
       collateral,
+      cosmosPublicKey,
       dummyGas,
       dummyFee,
     );
     return await this.txCommonService.simulateTx(simulatedTxBUilder, minimumGasPrice, gasRatio);
   }
 
-  async buildDepositCDPTx(
-    key: Key,
-    privateKey: Uint8Array,
+  async buildDepositCDPTxBuilder(
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
+    cosmosPublicKey: cosmosclient.PubKey,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
-    const sdk = await this.cosmosSDK.sdk();
-    const privKey = this.keyService.getPrivKey(key.type, privateKey);
-    const pubKey = privKey.pubKey();
-    const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
-
     // get account info
-    const account = await rest.auth
-      .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
-      .catch((_) => undefined);
-
-    const baseAccount = convertUnknownAccountToBaseAccount(account);
-
+    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
       throw Error('Unused Account or Unsupported Account Type!');
     }
+    const depositor = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
 
     // build tx
-    const msgDepositCDP = new ununifi.cdp.MsgDeposit({
-      depositor: sender.toString(),
-      owner: ownerAddr.toString(),
+    const msgCreateCdp = await this.buildMsgDepositCDP(
+      depositor.toString(),
+      ownerAddr.toString(),
+      collateralType,
       collateral,
-      collateral_type: collateralType,
-    });
+    );
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgDepositCDP)],
-    });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
-      signer_infos: [
-        {
-          public_key: cosmosclient.codec.packAny(pubKey),
-          mode_info: {
-            single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
-            },
-          },
-          sequence: baseAccount.sequence,
-        },
-      ],
-      fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
-      },
-    });
-
-    // sign
-    const txBuilder = new cosmosclient.TxBuilder(sdk.rest, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
-    txBuilder.addSignature(privKey.sign(signDocBytes));
-
+    const txBuilder = await this.txCommonService.buildTxBuilder(
+      [msgCreateCdp],
+      cosmosPublicKey,
+      baseAccount,
+      gas,
+      fee,
+    );
     return txBuilder;
+  }
+
+  buildMsgDepositCDP(
+    depositor: string,
+    owner: string,
+    collateralType: string,
+    collateral?: cosmos.base.v1beta1.ICoin | null,
+  ): ununifi.cdp.MsgDeposit {
+    const msgDeposit = new ununifi.cdp.MsgDeposit({
+      depositor: depositor,
+      owner: owner,
+      collateral_type: collateralType,
+      collateral: collateral,
+    });
+    return msgDeposit;
   }
 
   async withdrawCDP(

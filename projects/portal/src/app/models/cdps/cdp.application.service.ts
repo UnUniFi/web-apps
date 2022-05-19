@@ -68,7 +68,11 @@ export class CdpApplicationService {
   }
 
   async openCdpDepositFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    await this.dialog.open(CdpDepositFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+    const txHash = await this.dialog
+      .open(CdpDepositFormDialogComponent, { data: cdp })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
   }
 
   async openCdpWithdrawFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
@@ -491,7 +495,7 @@ export class CdpApplicationService {
 
     const dialogRef = this.loadingDialog.open('Sending...');
 
-    let txhash: string | undefined;
+    let txHash: string | undefined;
     try {
       const res: InlineResponse20075 = await this.cdp.depositCDP(
         ownerAddr,
@@ -501,8 +505,8 @@ export class CdpApplicationService {
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = res.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('invalid txhash!');
       }
     } catch (error) {
@@ -518,8 +522,7 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txhash}`;
-    window.location.href = redirectUrl;
+    return txHash;
   }
 
   async withdrawCDP(

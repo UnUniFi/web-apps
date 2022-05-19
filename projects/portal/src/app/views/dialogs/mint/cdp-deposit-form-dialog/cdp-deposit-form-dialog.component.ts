@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
-import * as crypto from 'crypto';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { cosmosclient, proto } from '@cosmos-client/core';
+import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 export type CdpDepositOnSubmitEvent = {
-  walletType: WalletType;
-  amount: proto.cosmos.base.v1beta1.ICoin;
+  ownerAddress: cosmosclient.AccAddress;
+  collateralType: string;
+  collateral: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20066Validators[];
+  balances: proto.cosmos.base.v1beta1.ICoin[];
   gasRatio: number;
 };
 
@@ -19,34 +18,31 @@ export type CdpDepositOnSubmitEvent = {
 })
 export class CdpDepositFormDialogComponent implements OnInit {
   @Input()
-  currentStoredWallet?: StoredWallet | null;
-  @Input()
-  validatorsList?: InlineResponse20066Validators[] | null;
-  @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  cdp?: InlineResponse2004Cdp1;
+
   @Input()
   collateralBalance?: string | null;
+
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<CdpDepositOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  gasRatio: number;
+  public selectedAmount: proto.cosmos.base.v1beta1.ICoin;
+  public selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  public gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { amount: '0' };
     this.gasRatio = 1.1;
   }
+
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -54,38 +50,31 @@ export class CdpDepositFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
-
-  getColorCode(address: string) {
-    const hash = crypto
-      .createHash('sha256')
-      .update(Buffer.from(address ?? ''))
-      .digest()
-      .toString('hex');
-    return `#${hash.substr(0, 6)}`;
-  }
-
-  changeGasRatio(ratio: number) {
-    this.gasRatio = ratio;
-  }
-
   onSubmit() {
-    if (
-      !this.currentStoredWallet ||
-      !this.selectedAmount ||
-      !this.selectedGasPrice ||
-      !this.validatorsList
-    ) {
+    console.log(this.selectedGasPrice);
+    if (!this.selectedGasPrice || !this.cdp?.cdp?.owner || !this.cdp.cdp.type) {
       return;
     }
+
+    if (!this.coins) {
+      console.error('deposit-balances', this.coins);
+      return;
+    }
+
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    this.selectedAmount.denom = this.cdp.cdp.collateral?.denom;
+    console.log(this.cdp.cdp.owner);
     this.appSubmit.emit({
-      walletType: this.currentStoredWallet?.type,
-      amount: this.selectedAmount,
+      ownerAddress: cosmosclient.AccAddress.fromString(this.cdp?.cdp?.owner),
+      collateralType: this.cdp.cdp.type,
+      collateral: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
-      validatorList: this.validatorsList,
+      balances: this.coins,
       gasRatio: this.gasRatio,
     });
+  }
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
   }
 
   onMinimumGasDenomChanged(denom: string): void {

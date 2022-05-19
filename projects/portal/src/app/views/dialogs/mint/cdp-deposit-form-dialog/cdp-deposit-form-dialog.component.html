@@ -3,37 +3,21 @@
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Deposit</div>
   </div>
-  <mat-list>
-    <mat-label>To. (Validator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ validator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
 
   <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
+    <mat-label>Collateral Type</mat-label>
     <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ collateralBalance }}</span>
-      </div>
+      {{ cdp?.cdp?.type }}
     </mat-list-item>
   </mat-list>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
-        <mat-label>Delegate Denom</mat-label>
+        <mat-label>Collateral Denom</mat-label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.denom"
-          name="delegate-denom"
+          [(ngModel)]="cdp && cdp.cdp && cdp.cdp.collateral && cdp.cdp.collateral.denom"
+          name="deposit-denom"
           matInput
           type="text"
           required
@@ -41,10 +25,10 @@
         />
       </mat-form-field>
       <mat-form-field class="flex-auto">
-        <mat-label>Delegate Amount</mat-label>
+        <mat-label>Deposit Amount</mat-label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.amount"
-          name="delegate-amount"
+          [(ngModel)]="selectedAmount.amount"
+          name="deposit-amount"
           matInput
           type="number"
           pattern="^\d+$"
@@ -56,7 +40,7 @@
         <mat-label>Balance</mat-label>
         <input
           [(ngModel)]="collateralBalance"
-          name="delegate-balance"
+          name="deposit-balance"
           matInput
           type="number"
           pattern="^\d+$"
@@ -133,7 +117,7 @@
     </mat-accordion>
 
     <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
-      Delegate
+      Deposit
     </button>
   </form>
 </mat-dialog-content>

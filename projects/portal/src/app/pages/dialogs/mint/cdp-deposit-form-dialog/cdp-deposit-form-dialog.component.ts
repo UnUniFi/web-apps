@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { CdpApplicationService, CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { CdpDepositOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.component';
 import { combineLatest, Observable } from 'rxjs';
@@ -31,9 +29,6 @@ export class CdpDepositFormDialogComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
-    private readonly stakingAppService: StakingApplicationService,
-    private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
     private readonly cdpApplicationService: CdpApplicationService,
   ) {
     this.cdp = data;
@@ -59,15 +54,16 @@ export class CdpDepositFormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
   async onSubmit($event: CdpDepositOnSubmitEvent) {
-    this.cdpApplicationService.depositCDP(
-      $event.key,
-      $event.privateKey,
-      $event.ownerAddr,
+    let txHash: string | undefined;
+
+    txHash = await this.cdpApplicationService.depositCDP(
+      $event.ownerAddress,
       $event.collateralType,
       $event.collateral,
       $event.minimumGasPrice,
       $event.balances,
-      1.1,
+      $event.gasRatio,
     );
+    this.matDialogRef.close(txHash);
   }
 }

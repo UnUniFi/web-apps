@@ -133,6 +133,7 @@ export class CreateCdpFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: CreateCdpOnSubmitEvent) {
+    console.log('huiooisddhios');
     let txHash: string | undefined;
     txHash = await this.cdpApplicationService.createCDP(
       $event.collateralType,

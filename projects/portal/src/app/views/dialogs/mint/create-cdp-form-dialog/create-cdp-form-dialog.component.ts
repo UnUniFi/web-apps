@@ -11,7 +11,6 @@ export type CreateCdpOnSubmitEvent = {
   principal: proto.cosmos.base.v1beta1.ICoin;
   balances: proto.cosmos.base.v1beta1.ICoin[];
   walletType: WalletType;
-  amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
@@ -58,8 +57,7 @@ export class CreateCdpFormDialogComponent implements OnInit {
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    // this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 1.1;
     this.appCollateralAmountChanged = new EventEmitter();
   }
@@ -83,10 +81,13 @@ export class CreateCdpFormDialogComponent implements OnInit {
     principalAmount: string,
     minimumGasPrice: string,
   ) {
+    console.log('a');
     if (!collateralAmount || !principalAmount) {
+      console.log('b');
       return;
     }
     if (this.selectedGasPrice === undefined) {
+      console.log('c');
       return;
     }
     if (!this.balances) {
@@ -106,12 +107,19 @@ export class CreateCdpFormDialogComponent implements OnInit {
       !this.selectedAmount ||
       !this.selectedGasPrice
     ) {
+      console.log(
+        'hs',
+        !this.currentStoredWallet,
+        !this.collateralParam?.type,
+        !this.selectedAmount,
+        !this.selectedGasPrice,
+      );
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    console.log('aaa');
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
-      amount: this.selectedAmount,
       collateralType: this.collateralParam.type,
       collateral: {
         denom: collateralDenom,

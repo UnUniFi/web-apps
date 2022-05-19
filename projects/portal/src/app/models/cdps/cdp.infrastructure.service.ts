@@ -7,7 +7,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20075, MintApi } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { cosmos, ununifi } from 'ununifi-client';
 

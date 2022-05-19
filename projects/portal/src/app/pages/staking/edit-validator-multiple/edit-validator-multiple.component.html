@@ -1,0 +1,11 @@
+<view-edit-validator-multiple
+  class="create-val-root"
+  [nodes]="nodes$ | async"
+  [redirectUrls]="redirectUrls"
+  [loading]="loading"
+  [success]="success"
+  [error]="error"
+  [setError]="setError"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (submitCreateValidators)="appSubmitEditValidators($event)"
+></view-edit-validator-multiple>

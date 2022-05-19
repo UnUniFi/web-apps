@@ -261,10 +261,6 @@ export class StakingService {
       throw Error('validator_address mismatch!');
     }
 
-    const pubKeyJson = JSON.parse(editValidatorData.pubkey);
-    const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
-    const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
-
     // build tx ... Note: commission percent rate values are converted here.
     const createValidatorTxData = {
       description: {
@@ -280,7 +276,7 @@ export class StakingService {
       min_self_delegation: editValidatorData.min_self_delegation,
       delegator_address: editValidatorData.delegator_address,
       validator_address: editValidatorData.validator_address,
-      pubkey: packedAnyCosmosValConsPublicKey,
+
       value: {
         denom: editValidatorData.denom,
         amount: editValidatorData.amount,

@@ -22,7 +22,6 @@ export class ViewEditValidatorComponent implements OnInit {
   @Input() validator_address?: string | null;
   @Input() denom?: string | null;
   @Input() amount?: string | null;
-  @Input() pubkey?: string | null;
   @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitEditValidator = new EventEmitter<
@@ -44,14 +43,11 @@ export class ViewEditValidatorComponent implements OnInit {
     security_contact: string,
     details: string,
     rate: string,
-
     min_self_delegation: string,
     delegator_address: string,
     validator_address: string,
     denom: string,
     amount: string,
-
-    pubkey: string,
     minimumGasPriceAmount: string,
   ): Promise<void> {
     if (!this.currentStoredWallet) {
@@ -76,7 +72,6 @@ export class ViewEditValidatorComponent implements OnInit {
       validator_address,
       denom,
       amount,
-      pubkey,
       minimumGasPrice: {
         denom: this.minimumGasPrice.denom,
         amount: minimumGasPriceAmount,

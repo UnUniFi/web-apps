@@ -24,7 +24,7 @@ import {
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 
-export interface InterfaceCreateValidatorSimpleOptions {
+export interface InterfaceValidatorSimpleOptions {
   disableRedirect?: boolean;
   disableErrorSnackBar?: boolean;
   disableSimulate?: boolean;
@@ -119,7 +119,7 @@ export class StakingApplicationService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKeyString: string,
     gasRatio: number,
-    options?: InterfaceCreateValidatorSimpleOptions,
+    options?: InterfaceValidatorSimpleOptions,
   ): Promise<string | undefined> {
     const privateKey = convertHexStringToUint8Array(privateKeyString);
     if (!privateKey) {
@@ -275,6 +275,7 @@ export class StakingApplicationService {
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     privateKeyString: string,
     gasRatio: number,
+    options?: InterfaceValidatorSimpleOptions,
   ) {
     const privateKey = convertHexStringToUint8Array(privateKeyString);
     if (!privateKey) {

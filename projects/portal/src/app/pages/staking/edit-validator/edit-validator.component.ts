@@ -23,16 +23,11 @@ export class EditValidatorComponent implements OnInit {
   security_contact$: Observable<string>;
   details$: Observable<string>;
   rate$: Observable<string>;
-  max_rate$: Observable<string>;
-  max_change_rate$: Observable<string>;
   min_self_delegation$: Observable<string>;
   delegator_address$: Observable<string>;
   validator_address$: Observable<string>;
   denom$: Observable<string>;
   amount$: Observable<string>;
-  ip$: Observable<string>;
-  node_id$: Observable<string>;
-  pubkey$: Observable<string>;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
@@ -65,14 +60,6 @@ export class EditValidatorComponent implements OnInit {
     this.rate$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.rate),
       map((queryParams) => queryParams.rate),
-    );
-    this.max_rate$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.max_rate),
-      map((queryParams) => queryParams.max_rate),
-    );
-    this.max_change_rate$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.max_change_rate),
-      map((queryParams) => queryParams.max_change_rate),
     );
     this.min_self_delegation$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.min_self_delegation),
@@ -154,18 +141,6 @@ export class EditValidatorComponent implements OnInit {
     this.amount$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.amount),
       map((queryParams) => queryParams.amount),
-    );
-    this.ip$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.ip),
-      map((queryParams) => queryParams.ip),
-    );
-    this.node_id$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.node_id),
-      map((queryParams) => queryParams.node_id),
-    );
-    this.pubkey$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.pubkey),
-      map((queryParams) => queryParams.pubkey),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

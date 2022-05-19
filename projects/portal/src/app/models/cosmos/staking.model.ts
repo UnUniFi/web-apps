@@ -29,5 +29,4 @@ export type EditValidatorData = {
   validator_address: string;
   denom: string;
   amount: string;
-  pubkey: string;
 };

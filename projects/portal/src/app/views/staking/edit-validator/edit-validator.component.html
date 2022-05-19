@@ -14,7 +14,6 @@
       validatorAddressRef.value,
       denomRef.value,
       amountRef.value,
-      pubkeyRef.value,
       minimumGasPriceRef.value
     )
   "
@@ -116,18 +115,6 @@
           name="amount"
           matInput
           type="text"
-          required
-          readonly
-        />
-      </mat-form-field>
-      <mat-form-field class="w-full">
-        <mat-label>Tendermint public key</mat-label>
-        <input
-          #pubkeyRef
-          [(ngModel)]="pubkey"
-          type="text"
-          name="pubkey"
-          matInput
           required
           readonly
         />

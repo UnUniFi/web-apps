@@ -27,7 +27,6 @@ export class EditValidatorSimpleComponent implements OnInit {
   validator_address$: Observable<string>;
   denom$: Observable<string>;
   amount$: Observable<string>;
-  pubkey$: Observable<string>;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
@@ -95,10 +94,6 @@ export class EditValidatorSimpleComponent implements OnInit {
     this.amount$ = this.route.queryParams.pipe(
       filter((queryParams) => queryParams.amount),
       map((queryParams) => queryParams.amount),
-    );
-    this.pubkey$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.pubkey),
-      map((queryParams) => queryParams.pubkey),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

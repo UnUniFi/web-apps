@@ -133,10 +133,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.snackBar.open(`Error: amount is invalid!`, 'Close');
       return;
     }
-    if (!this.pubkey) {
-      this.snackBar.open(`Error: pubkey is invalid!`, 'Close');
-      return;
-    }
     await this.onSubmitEditValidator(
       this.moniker,
       this.identity,
@@ -151,7 +147,7 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.denom,
       this.amount,
 
-      this.pubkey,
+      //this.pubkey,
       this.minimumGasPrice?.amount,
       this.privateWallet.privateKey,
     );
@@ -164,14 +160,11 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
     security_contact: string,
     details: string,
     rate: string,
-
     min_self_delegation: string,
     delegator_address: string,
     validator_address: string,
     denom: string,
     amount: string,
-
-    pubkey: string,
     minimumGasPriceAmount: string,
     privateKey: string,
   ): Promise<void> {
@@ -196,7 +189,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       validator_address,
       denom,
       amount,
-      pubkey,
       minimumGasPrice: {
         denom: this.minimumGasPrice.denom,
         amount: minimumGasPriceAmount,

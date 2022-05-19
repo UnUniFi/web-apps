@@ -1,0 +1,12 @@
+<div class="w-72" mat-dialog-content>
+  <h1 mat-dialog-title>Validators list</h1>
+
+  <mat-list role="list">
+    <mat-list-item class="node-list-item" *ngFor="let url of data.redirectUrls; let i = index">
+      <a class="node-list-item flex justify-between items-center" [href]="url" target="_blank">
+        <span>Node {{i + 1}}</span>
+        <mat-icon class="ml-2">open_in_new</mat-icon>
+      </a>
+    </mat-list-item>
+  </mat-list>
+</div>

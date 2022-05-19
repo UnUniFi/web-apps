@@ -46,7 +46,6 @@ export class ProposalComponent implements OnInit {
         return of(undefined);
       }),
     );
-    this.proposal$.subscribe((a) => console.log(a));
 
     this.proposalType$ = this.proposal$.pipe(
       map((proposal) => {

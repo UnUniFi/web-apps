@@ -114,7 +114,6 @@ export class CreateCdpFormDialogComponent implements OnInit {
         return getCreateLimit(params, collateralAmount, collateralType, liquidationPrice);
       }),
     );
-    this.principalLimit$.subscribe((a) => console.log(a));
 
     // check cdp
     this.cdp$ = combineLatest([this.address$, collateralType$, this.cosmosSDK.sdk$]).pipe(
@@ -133,7 +132,6 @@ export class CreateCdpFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: CreateCdpOnSubmitEvent) {
-    console.log('huiooisddhios');
     let txHash: string | undefined;
     txHash = await this.cdpApplicationService.createCDP(
       $event.collateralType,

@@ -81,13 +81,10 @@ export class CreateCdpFormDialogComponent implements OnInit {
     principalAmount: string,
     minimumGasPrice: string,
   ) {
-    console.log('a');
     if (!collateralAmount || !principalAmount) {
-      console.log('b');
       return;
     }
     if (this.selectedGasPrice === undefined) {
-      console.log('c');
       return;
     }
     if (!this.balances) {
@@ -107,17 +104,9 @@ export class CreateCdpFormDialogComponent implements OnInit {
       !this.selectedAmount ||
       !this.selectedGasPrice
     ) {
-      console.log(
-        'hs',
-        !this.currentStoredWallet,
-        !this.collateralParam?.type,
-        !this.selectedAmount,
-        !this.selectedGasPrice,
-      );
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
-    console.log('aaa');
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       collateralType: this.collateralParam.type,

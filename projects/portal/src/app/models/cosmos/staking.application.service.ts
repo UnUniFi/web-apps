@@ -354,6 +354,8 @@ export class StakingApplicationService {
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
+    console.log('debug', editValidatorData);
+
     try {
       simulatedResultData = await this.staking.simulateToEditValidator(
         privateWallet.key_type,

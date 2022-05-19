@@ -215,6 +215,7 @@ export class StakingService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
+    console.log('debug_in sim1', dummyGas);
     const simulatedTxBuilder = await this.buildEditValidator(
       keyType,
       editValidatorData,
@@ -222,7 +223,10 @@ export class StakingService {
       dummyFee,
       privateKey,
     );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
+    console.log('debug_in sim2_before');
+    const A = await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
+    console.log('debug_in sim2_error_above_code', A);
+    return A;
   }
 
   async buildEditValidator(
@@ -260,9 +264,9 @@ export class StakingService {
     if (editValidatorData.validator_address !== valAddress.toString()) {
       throw Error('validator_address mismatch!');
     }
-
+    console.log('debug_1-1');
     // build tx ... Note: commission percent rate values are converted here.
-    const createValidatorTxData = {
+    const editValidatorTxData = {
       description: {
         moniker: editValidatorData.moniker,
         identity: editValidatorData.identity,
@@ -270,24 +274,26 @@ export class StakingService {
         security_contact: editValidatorData.security_contact,
         details: editValidatorData.details,
       },
+      validator_address: editValidatorData.validator_address,
+      /*
       commission: {
         rate: `${editValidatorData.rate}${'0000000000000000'}`,
       },
+      */
+      commission_rate: '0.10',
       min_self_delegation: editValidatorData.min_self_delegation,
-      delegator_address: editValidatorData.delegator_address,
-      validator_address: editValidatorData.validator_address,
-
+      /*
       value: {
         denom: editValidatorData.denom,
         amount: editValidatorData.amount,
       },
+      */
     };
-    const msgCreateValidator = new proto.cosmos.staking.v1beta1.MsgCreateValidator(
-      createValidatorTxData,
-    );
+    const msgEditValidator = new proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
+    console.log('debug_1-2');
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateValidator)],
+      messages: [cosmosclient.codec.packAny(msgEditValidator)],
     });
 
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
@@ -307,11 +313,13 @@ export class StakingService {
         gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
       },
     });
+    console.log('debug_1-3');
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
-    txBuilder.addSignature(privKey.sign(signDocBytes));
+    //const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
+    //txBuilder.addSignature(privKey.sign(signDocBytes));
+    console.log('debug_1-4', txBuilder);
 
     return txBuilder;
   }

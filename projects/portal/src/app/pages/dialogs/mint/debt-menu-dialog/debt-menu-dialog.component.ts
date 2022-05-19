@@ -60,7 +60,6 @@ export class DebtMenuDialogComponent implements OnInit {
 
   onOpenCdpMenu(cdp: InlineResponse2004Cdp1) {
     this.matDialogRef.close();
-    // WIP
     this.cdpAppService.openCdpMenuDialog(cdp);
   }
 

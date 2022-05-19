@@ -1,0 +1,7 @@
+<view-cdp-deposit-form-dialog
+  [cdp]="cdp"
+  [collateralBalance]="collateralBalance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [coins]="coins$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-cdp-deposit-form-dialog>

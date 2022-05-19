@@ -1,3 +1,5 @@
+import { CdpDepositFormDialogComponent } from '../../pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.component';
+import { CdpMenuDialogComponent } from '../../pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.component';
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
 import { DebtMenuDialogComponent } from '../../pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -52,8 +54,7 @@ export class CdpApplicationService {
   }
 
   async openCdpMenuDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    // WIP
-    // await this.dialog.open(CdpMenuDialogComponent, { data: cdp }).afterClosed().toPromise();
+    await this.dialog.open(CdpMenuDialogComponent, { data: cdp }).afterClosed().toPromise();
   }
 
   async openCdpIssueFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
@@ -67,8 +68,11 @@ export class CdpApplicationService {
   }
 
   async openCdpDepositFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    // WIP
-    // await this.dialog.open(CdpDepositFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+    const txHash = await this.dialog
+      .open(CdpDepositFormDialogComponent, { data: cdp })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
   }
 
   async openCdpWithdrawFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
@@ -403,8 +407,6 @@ export class CdpApplicationService {
   }
 
   async depositCDP(
-    key: Key,
-    privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
     collateral: proto.cosmos.base.v1beta1.ICoin,
@@ -412,16 +414,23 @@ export class CdpApplicationService {
     balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
-    // validation
-    if (!(await this.key.validatePrivKey(key, privateKey))) {
-      this.snackBar.open(`Invalid private key.`, 'Close');
-      return;
+    // get public key
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: proto.cosmos.base.v1beta1.ICoin;
     let fee: proto.cosmos.base.v1beta1.ICoin;
+
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -440,11 +449,10 @@ export class CdpApplicationService {
 
     try {
       simulatedResultData = await this.cdp.simulateToDepositCDP(
-        key,
-        privateKey,
         ownerAddr,
         collateralType,
         collateral,
+        cosmosPublicKey,
         minimumGasPrice,
         gasRatio,
       );
@@ -487,19 +495,18 @@ export class CdpApplicationService {
 
     const dialogRef = this.loadingDialog.open('Sending...');
 
-    let txhash: string | undefined;
+    let txHash: string | undefined;
     try {
       const res: InlineResponse20075 = await this.cdp.depositCDP(
-        key,
-        privateKey,
         ownerAddr,
         collateralType,
         collateral,
+        currentCosmosWallet,
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = res.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('invalid txhash!');
       }
     } catch (error) {
@@ -515,8 +522,7 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txhash}`;
-    window.location.href = redirectUrl;
+    return txHash;
   }
 
   async withdrawCDP(

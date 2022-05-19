@@ -90,8 +90,6 @@ export class DepositComponent implements OnInit {
 
   onSubmit($event: DepositCdpOnSubmitEvent) {
     this.cdpApplicationService.depositCDP(
-      $event.key,
-      $event.privateKey,
       $event.ownerAddr,
       $event.collateralType,
       $event.collateral,

@@ -40,7 +40,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingDialogModule } from 'ng-loading-dialog';
 
 @NgModule({
-  declarations: [AppComponent, CreateCdpFormDialogComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -78,7 +78,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppCollateralMenuDialogModule,
     AppCreateCdpFormDialogModule,
     AppDebtMenuDialogModule,
-
+    AppCreateCdpFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

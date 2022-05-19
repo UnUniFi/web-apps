@@ -41,11 +41,11 @@ export class CdpApplicationService {
   }
 
   async openCreateCdpDialog(param: ununifi.cdp.ICollateralParam): Promise<void> {
-    await this.dialog
-      // WIP
+    const txHash = await this.dialog
       .open(CreateCdpFormDialogComponent, { data: param })
       .afterClosed()
       .toPromise();
+    await this.router.navigate(['txs', txHash]);
   }
 
   async openDebtMenuDialog(param: ununifi.cdp.IDebtParam): Promise<void> {
@@ -172,8 +172,7 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txHash}`;
-    window.location.href = redirectUrl;
+    return txHash;
   }
 
   async drawCDP(

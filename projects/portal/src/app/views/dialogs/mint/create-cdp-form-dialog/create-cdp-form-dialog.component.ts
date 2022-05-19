@@ -1,9 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
-import * as crypto from 'crypto';
+// import * as crypto from 'crypto';
 import { WalletType, StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { ununifi } from 'ununifi-client';
+import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
 
 export type CreateCdpOnSubmitEvent = {
+  collateralType: string;
+  collateral: proto.cosmos.base.v1beta1.ICoin;
+  principal: proto.cosmos.base.v1beta1.ICoin;
+  balances: proto.cosmos.base.v1beta1.ICoin[];
   walletType: WalletType;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
@@ -17,16 +23,33 @@ export type CreateCdpOnSubmitEvent = {
 })
 export class CreateCdpFormDialogComponent implements OnInit {
   @Input()
-  collaterialBalance?: string | null;
+  collateralParam?: ununifi.cdp.ICollateralParam;
   @Input()
-  currentStoredWallet?: StoredWallet | null;
+  collateralBalance?: string | null;
   @Input()
   coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
+  currentStoredWallet?: StoredWallet | null;
+  @Input()
+  cdpParams?: ununifi.cdp.IParams | null;
+  @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  collateralLimit?: number | null;
+
+  @Input()
+  principalLimit?: number | null;
+
+  @Input()
+  cdp?: InlineResponse2004Cdp1 | null;
 
   @Output()
   appSubmit: EventEmitter<CreateCdpOnSubmitEvent>;
+
+  @Output()
+  appCollateralAmountChanged: EventEmitter<number>;
 
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
@@ -36,8 +59,9 @@ export class CreateCdpFormDialogComponent implements OnInit {
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    // this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 1.1;
+    this.appCollateralAmountChanged = new EventEmitter();
   }
 
   ngOnChanges(): void {
@@ -48,29 +72,58 @@ export class CreateCdpFormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getColorCode(address: string) {
-    const hash = crypto
-      .createHash('sha256')
-      .update(Buffer.from(address ?? ''))
-      .digest()
-      .toString('hex');
-    return `#${hash.substr(0, 6)}`;
-  }
-
   changeGasRatio(ratio: number) {
     this.gasRatio = ratio;
   }
 
-  onSubmit() {
-    if (!this.currentStoredWallet || !this.selectedAmount || !this.selectedGasPrice) {
+  onSubmit(
+    collateralDenom: string,
+    collateralAmount: string,
+    principalDenom: string,
+    principalAmount: string,
+    minimumGasPrice: string,
+  ) {
+    if (!collateralAmount || !principalAmount) {
+      return;
+    }
+    if (this.selectedGasPrice === undefined) {
+      return;
+    }
+    if (!this.balances) {
+      console.error('create-balances', this.balances);
+      return;
+    }
+    if (this.cdp && this.cdp.cdp?.type === this.collateralParam?.type) {
+      console.error(
+        `Already have : ${this.collateralParam?.type} CDP. \n ID: ${this.cdp.cdp?.id}`,
+        'Close',
+      );
+      return;
+    }
+    if (
+      !this.currentStoredWallet ||
+      !this.collateralParam?.type ||
+      !this.selectedAmount ||
+      !this.selectedGasPrice
+    ) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       amount: this.selectedAmount,
+      collateralType: this.collateralParam.type,
+      collateral: {
+        denom: collateralDenom,
+        amount: collateralAmount,
+      },
+      principal: {
+        denom: principalDenom,
+        amount: principalAmount,
+      },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
+      balances: this.balances,
     });
   }
 
@@ -84,5 +137,8 @@ export class CreateCdpFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+  onCollateralAmountChanged(amount: number): void {
+    this.appCollateralAmountChanged.emit(amount);
   }
 }

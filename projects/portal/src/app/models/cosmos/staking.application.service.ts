@@ -16,8 +16,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { PubKey } from '@cosmos-client/core/cjs/types';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import {
   InlineResponse20066Validators,
   InlineResponse20075,
@@ -275,7 +274,7 @@ export class StakingApplicationService {
     editValidatorData: EditValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
-    cosmosPublicKey: PubKey,
+    cosmosPublicKey: cosmosclient.PubKey,
     disableSimulate?: boolean,
   ): Promise<InterfaceGasAndFee> {
     if (!disableSimulate) {

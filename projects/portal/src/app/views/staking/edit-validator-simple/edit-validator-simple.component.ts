@@ -168,8 +168,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       min_self_delegation,
       delegator_address,
       validator_address,
-      //denom,
-      //amount,
       minimumGasPrice: {
         denom: this.minimumGasPrice.denom,
         amount: minimumGasPriceAmount,

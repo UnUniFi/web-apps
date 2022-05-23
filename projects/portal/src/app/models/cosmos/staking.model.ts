@@ -27,6 +27,4 @@ export type EditValidatorData = {
   website?: string;
   delegator_address: string;
   validator_address: string;
-  denom: string;
-  amount: string;
 };

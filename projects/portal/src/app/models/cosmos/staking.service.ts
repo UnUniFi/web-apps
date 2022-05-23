@@ -184,27 +184,39 @@ export class StakingService {
 
   // Edit Validator
   async editValidator(
-    keyType: KeyType,
     editValidatorData: EditValidatorData,
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildEditValidator(
-      keyType,
-      editValidatorData,
-      gas,
-      fee,
-      privateKey,
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    const txBuilder = await this.buildEditValidator(editValidatorData, gas, fee, cosmosPublicKey);
+
+    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
+    if (!signerBaseAccount) {
+      throw Error('Unsupported Account!');
+    }
+
+    //Todo: privateKey in tx.common.service should be Uint8Array
+    const privatekyString = Buffer.from(privateKey).toString('hex');
+
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      signerBaseAccount,
+      currentCosmosWallet,
+      privatekyString,
     );
-    return await this.txCommonService.announceTx(txBuilder);
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    return await this.txCommonService.announceTx(signedTxBuilder);
   }
 
   async simulateToEditValidator(
-    keyType: KeyType,
     editValidatorData: EditValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    cosmosPublicKey: cosmosclient.PubKey,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
@@ -217,11 +229,10 @@ export class StakingService {
     };
     console.log('debug_in sim1', dummyGas);
     const simulatedTxBuilder = await this.buildEditValidator(
-      keyType,
       editValidatorData,
       dummyGas,
       dummyFee,
-      privateKey,
+      cosmosPublicKey,
     );
     console.log('debug_in sim2_before');
     const A = await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
@@ -230,20 +241,14 @@ export class StakingService {
   }
 
   async buildEditValidator(
-    keyType: KeyType,
     editValidatorData: EditValidatorData,
     gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    fee: proto.cosmos.base.v1beta1.ICoin | null,
+    cosmosPublicKey: cosmosclient.PubKey,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = createCosmosPrivateKeyFromUint8Array(keyType, privateKey);
-    if (!privKey) {
-      throw Error('Invalid privateKey!');
-    }
-    const pubKey = privKey.pubKey();
-    const accAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
-    const valAddress = cosmosclient.ValAddress.fromPublicKey(pubKey);
+    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+    const valAddress = cosmosclient.ValAddress.fromPublicKey(cosmosPublicKey);
 
     // get account info
     const account = await rest.auth
@@ -264,7 +269,8 @@ export class StakingService {
     if (editValidatorData.validator_address !== valAddress.toString()) {
       throw Error('validator_address mismatch!');
     }
-    console.log('debug_1-1');
+
+    console.log('debug_1-1', editValidatorData);
     // build tx ... Note: commission percent rate values are converted here.
     const editValidatorTxData = {
       description: {
@@ -275,52 +281,18 @@ export class StakingService {
         details: editValidatorData.details,
       },
       validator_address: editValidatorData.validator_address,
-      /*
-      commission: {
-        rate: `${editValidatorData.rate}${'0000000000000000'}`,
-      },
-      */
-      commission_rate: '0.10',
+      commission_rate: `${editValidatorData.rate}${'0000000000000000'}`,
       min_self_delegation: editValidatorData.min_self_delegation,
-      /*
-      value: {
-        denom: editValidatorData.denom,
-        amount: editValidatorData.amount,
-      },
-      */
     };
     const msgEditValidator = new proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
-    console.log('debug_1-2');
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgEditValidator)],
-    });
-
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
-      signer_infos: [
-        {
-          public_key: cosmosclient.codec.packAny(pubKey),
-          mode_info: {
-            single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
-            },
-          },
-          sequence: baseAccount.sequence,
-        },
-      ],
-      fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
-      },
-    });
-    console.log('debug_1-3');
-
-    // sign
-    const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    //const signDocBytes = txBuilder.signDocBytes(baseAccount.account_number);
-    //txBuilder.addSignature(privKey.sign(signDocBytes));
-    console.log('debug_1-4', txBuilder);
-
+    const txBuilder = await this.txCommonService.buildTxBuilder(
+      [msgEditValidator],
+      cosmosPublicKey,
+      baseAccount,
+      gas,
+      fee,
+    );
     return txBuilder;
   }
 

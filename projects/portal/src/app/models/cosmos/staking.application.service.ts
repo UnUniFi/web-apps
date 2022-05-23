@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
+import { PubKey } from '@cosmos-client/core/cjs/types';
 import {
   InlineResponse20066Validators,
   InlineResponse20075,
@@ -270,6 +271,42 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
+  async handleSimulateToEditValidator(
+    editValidatorData: EditValidatorData,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+    cosmosPublicKey: PubKey,
+    disableSimulate?: boolean,
+  ): Promise<InterfaceGasAndFee> {
+    if (!disableSimulate) {
+      const dialogRefSimulating = this.loadingDialog.open('Simulating...');
+
+      try {
+        const simulatedResultData = await this.staking.simulateToEditValidator(
+          editValidatorData,
+          minimumGasPrice,
+          cosmosPublicKey,
+          gasRatio,
+        );
+        const gas = simulatedResultData.estimatedGasUsedWithMargin;
+        const fee = simulatedResultData.estimatedFeeWithMargin;
+        return { gas, fee };
+      } catch (error) {
+        console.error(error);
+        const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
+        this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+        const gas = { denom: 'uguu', amount: '1000000' };
+        const fee = null;
+        return { gas, fee };
+      } finally {
+        dialogRefSimulating.close();
+      }
+    }
+    const gas = { denom: 'uguu', amount: '1000000' };
+    const fee = null;
+    return { gas, fee };
+  }
+
   async editValidatorSimple(
     editValidatorData: EditValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
@@ -277,6 +314,12 @@ export class StakingApplicationService {
     gasRatio: number,
     options?: InterfaceValidatorSimpleOptions,
   ) {
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
     const privateKey = convertHexStringToUint8Array(privateKeyString);
     if (!privateKey) {
       this.snackBar.open('Invalid PrivateKey!', 'Close');
@@ -284,49 +327,53 @@ export class StakingApplicationService {
     }
 
     const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
+    const { disableRedirect, disableErrorSnackBar, disableSimulate } = options || {};
 
     try {
-      const simulatedResultData = await this.staking.simulateToEditValidator(
-        KeyType.secp256k1,
+      const { gas, fee } = await this.handleSimulateToEditValidator(
         editValidatorData,
         minimumGasPrice,
-        privateKey,
         gasRatio,
+        currentCosmosWallet.public_key,
+        disableSimulate,
       );
-      const gas = simulatedResultData.estimatedGasUsedWithMargin;
-      const fee = simulatedResultData.estimatedFeeWithMargin;
-      const createValidatorResult = await this.staking.editValidator(
-        KeyType.secp256k1,
+
+      const editValidatorResult = await this.staking.editValidator(
         editValidatorData,
+        currentCosmosWallet,
         gas,
         fee,
         privateKey,
       );
-      const txHash = createValidatorResult.tx_response?.txhash;
+      const txHash = editValidatorResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
       }
+      this.snackBar.open('Success', undefined, { duration: 6000 });
+      if (!disableRedirect) {
+        const redirectUrl =
+          location.port === '80' || location.port === '443' || location.port === ''
+            ? `${location.protocol}//${location.hostname}/explorer/validators/${editValidatorData.validator_address}`
+            : `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
+        window.location.href = redirectUrl;
+      }
+      return txHash;
     } catch (error) {
       console.error(error);
-      this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      if (!disableErrorSnackBar) {
+        this.snackBar.open(`Error: ${(error as Error).message}`, 'Close');
+      }
       return;
     } finally {
       dialogRef.close();
     }
-
-    this.snackBar.open('Success', undefined, { duration: 6000 });
-
-    const redirectUrl =
-      location.port === '80' || location.port === '443' || location.port === ''
-        ? `${location.protocol}//${location.hostname}/explorer/validators/${editValidatorData.validator_address}`
-        : `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
-    window.location.href = redirectUrl;
   }
 
   async editValidator(
     editValidatorData: EditValidatorData,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
+    options?: InterfaceValidatorSimpleOptions,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
@@ -340,86 +387,75 @@ export class StakingApplicationService {
       return;
     }
 
-    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
 
+    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
     if (!privateKey) {
       this.snackBar.open('Invalid PrivateKey!', 'Close');
       return;
     }
 
-    // simulate
-    let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
-
-    const dialogRefSimulating = this.loadingDialog.open('Simulating...');
-
-    console.log('debug', editValidatorData);
-
+    const dialogRef = this.loadingDialog.open('Loading...');
+    const { disableRedirect, disableErrorSnackBar, disableSimulate } = options || {};
     try {
-      simulatedResultData = await this.staking.simulateToEditValidator(
-        privateWallet.key_type,
+      const { gas, fee } = await this.handleSimulateToEditValidator(
         editValidatorData,
         minimumGasPrice,
-        privateKey,
         gasRatio,
+        currentCosmosWallet.public_key,
+        disableSimulate,
       );
-      gas = simulatedResultData.estimatedGasUsedWithMargin;
-      fee = simulatedResultData.estimatedFeeWithMargin;
-    } catch (error) {
-      console.error(error);
-      const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
-      return;
-    } finally {
-      dialogRefSimulating.close();
-    }
 
-    // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
-        data: {
-          fee,
-          isConfirmed: false,
-        },
-      })
-      .afterClosed()
-      .toPromise();
+      // ask the user to confirm the fee with a dialog
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
 
-    if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-      this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-      return;
-    }
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return;
+      }
 
-    const dialogRef = this.loadingDialog.open('Loading...');
-
-    let createValidatorResult: InlineResponse20075 | undefined;
-    let txHash: string | undefined;
-
-    try {
-      createValidatorResult = await this.staking.editValidator(
-        privateWallet.key_type,
+      const editValidatorResult = await this.staking.editValidator(
         editValidatorData,
+        currentCosmosWallet,
         gas,
         fee,
         privateKey,
       );
-      txHash = createValidatorResult.tx_response?.txhash;
+
+      const txHash = editValidatorResult.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error('Invalid txHash!');
+      }
+
+      this.snackBar.open('Successfully edit validator', undefined, { duration: 6000 });
+
+      if (!disableRedirect) {
+        const redirectUrl = `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
+        window.location.href = redirectUrl;
       }
     } catch (error) {
       console.error(error);
       const msg = (error as Error).toString();
-      this.snackBar.open(`An error has occur: ${msg}`, 'Close');
+      if (!disableErrorSnackBar) {
+        this.snackBar.open(`An error has occur: ${msg}`, 'Close');
+      }
       return;
     } finally {
       dialogRef.close();
     }
-
-    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
-
-    await this.router.navigate(['txs', txHash]);
   }
 
   async createDelegate(

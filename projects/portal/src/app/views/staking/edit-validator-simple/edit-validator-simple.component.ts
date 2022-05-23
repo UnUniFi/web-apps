@@ -89,16 +89,14 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       return;
     }
     if (!this.minimumGasPrice?.amount) {
-      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`, 'Close');
+      this.snackBar.open(`Error: minmumGasPrice.amount is invalid!`, 'Close');
       return;
     }
     if (!this.moniker) {
-      this.snackBar.open(`Error: moniker is invalid!`, 'Close');
-      return;
+      this.moniker = '';
     }
     if (!this.identity) {
-      this.snackBar.open(`Error: identity is invalid!`, 'Close');
-      return;
+      this.identity = '';
     }
     if (!this.website) {
       this.website = '';
@@ -110,12 +108,10 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.details = '';
     }
     if (!this.rate) {
-      this.snackBar.open(`Error: rate is invalid!`, 'Close');
-      return;
+      this.rate = '';
     }
     if (!this.min_self_delegation) {
-      this.snackBar.open(`Error: min_self_delegation is invalid!`, 'Close');
-      return;
+      this.min_self_delegation = '';
     }
     if (!this.delegator_address) {
       this.snackBar.open(`Error: delegator_address is invalid!`, 'Close');
@@ -125,14 +121,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.snackBar.open(`Error: validator_address is invalid!`, 'Close');
       return;
     }
-    if (!this.denom) {
-      this.snackBar.open(`Error: denom is invalid!`, 'Close');
-      return;
-    }
-    if (!this.amount) {
-      this.snackBar.open(`Error: amount is invalid!`, 'Close');
-      return;
-    }
     await this.onSubmitEditValidator(
       this.moniker,
       this.identity,
@@ -140,14 +128,9 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.security_contact,
       this.details,
       this.rate,
-
       this.min_self_delegation,
       this.delegator_address,
       this.validator_address,
-      this.denom,
-      this.amount,
-
-      //this.pubkey,
       this.minimumGasPrice?.amount,
       this.privateWallet.privateKey,
     );
@@ -163,8 +146,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
     min_self_delegation: string,
     delegator_address: string,
     validator_address: string,
-    denom: string,
-    amount: string,
     minimumGasPriceAmount: string,
     privateKey: string,
   ): Promise<void> {
@@ -187,8 +168,8 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       min_self_delegation,
       delegator_address,
       validator_address,
-      denom,
-      amount,
+      //denom,
+      //amount,
       minimumGasPrice: {
         denom: this.minimumGasPrice.denom,
         amount: minimumGasPriceAmount,

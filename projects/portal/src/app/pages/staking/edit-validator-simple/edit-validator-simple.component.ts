@@ -25,8 +25,6 @@ export class EditValidatorSimpleComponent implements OnInit {
   min_self_delegation$: Observable<string>;
   delegator_address$: Observable<string>;
   validator_address$: Observable<string>;
-  denom$: Observable<string>;
-  amount$: Observable<string>;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
@@ -87,14 +85,6 @@ export class EditValidatorSimpleComponent implements OnInit {
         return queryParams.validator_address;
       }),
     );
-    this.denom$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.denom),
-      map((queryParams) => queryParams.denom),
-    );
-    this.amount$ = this.route.queryParams.pipe(
-      filter((queryParams) => queryParams.amount),
-      map((queryParams) => queryParams.amount),
-    );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
@@ -113,6 +103,7 @@ export class EditValidatorSimpleComponent implements OnInit {
       editValidatorData.minimumGasPrice,
       editValidatorData.privateKey,
       gasRatio,
+      { disableRedirect: true, disableErrorSnackBar: false, disableSimulate: true },
     );
   }
 }

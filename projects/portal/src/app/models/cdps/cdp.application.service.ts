@@ -1,6 +1,7 @@
 import { CdpDepositFormDialogComponent } from '../../pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.component';
 import { CdpMenuDialogComponent } from '../../pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.component';
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
+import { CreateCdpFormDialogComponent } from '../../pages/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.component';
 import { DebtMenuDialogComponent } from '../../pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
@@ -41,12 +42,12 @@ export class CdpApplicationService {
       .toPromise();
   }
 
-  async openCreateCdpDialog(denom: string): Promise<void> {
-    await this.dialog
-      // WIP
-      .open(CollateralMenuDialogComponent, { data: denom })
+  async openCreateCdpDialog(param: ununifi.cdp.ICollateralParam): Promise<void> {
+    const txHash = await this.dialog
+      .open(CreateCdpFormDialogComponent, { data: param })
       .afterClosed()
       .toPromise();
+    await this.router.navigate(['txs', txHash]);
   }
 
   async openDebtMenuDialog(param: ununifi.cdp.IDebtParam): Promise<void> {
@@ -175,8 +176,7 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txHash}`;
-    window.location.href = redirectUrl;
+    return txHash;
   }
 
   async drawCDP(

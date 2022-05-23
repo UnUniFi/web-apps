@@ -8,6 +8,7 @@ import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelega
 import { AppCdpDepositFormDialogModule } from './pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.module';
 import { AppCdpMenuDialogModule } from './pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.module';
 import { AppCollateralMenuDialogModule } from './pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.module';
+import { AppCreateCdpFormDialogModule } from './pages/dialogs/mint/create-cdp-form-dialog/create-cdp-form-dialog.module';
 import { AppDebtMenuDialogModule } from './pages/dialogs/mint/debt-menu-dialog/debt-menu-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
@@ -77,6 +78,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     AppCollateralMenuDialogModule,
+    AppCreateCdpFormDialogModule,
     AppDebtMenuDialogModule,
     AppCdpMenuDialogModule,
     AppCdpDepositFormDialogModule,

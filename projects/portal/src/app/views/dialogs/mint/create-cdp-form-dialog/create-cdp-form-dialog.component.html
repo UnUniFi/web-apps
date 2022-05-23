@@ -1,0 +1,185 @@
+<mat-dialog-content>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <div class="font-bold text-xl m-3">CDP Create</div>
+  </div>
+  <form
+    #formRef="ngForm"
+    (submit)="
+      onSubmit(
+        collateralDenomRef.value,
+        collateralAmountRef.value,
+        principalDenomRef.value,
+        principalAmountRef.value,
+        minimumGasPriceRef.value
+      )
+    "
+  >
+    <mat-list>
+      <mat-label>Collateral Type</mat-label>
+      <mat-list-item>
+        <div mat-line>
+          <span>{{ collateralParam?.type }}</span>
+        </div>
+      </mat-list-item>
+    </mat-list>
+
+    <mat-list>
+      <div class="flex flex-col content-content lg:flex-row">
+        <mat-form-field class="flex-auto">
+          <mat-label>Collateral Denom</mat-label>
+          <input
+            #collateralDenomRef
+            [(ngModel)]="collateralParam && collateralParam.denom"
+            name="collateral-denom"
+            matInput
+            readonly
+            disabled
+          />
+        </mat-form-field>
+        <mat-form-field class="w-full">
+          <mat-label>Collateral Amount</mat-label>
+          <input
+            #collateralAmountRef
+            ngModel
+            name="collateral-amount"
+            matInput
+            type="number"
+            pattern="^\d+$"
+            [min]="1"
+            [max]="collateralLimit || 0"
+            (ngModelChange)="onCollateralAmountChanged($event)"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="flex-auto">
+          <mat-label>Balance</mat-label>
+          <input
+            [(ngModel)]="collateralBalance"
+            name="collateral-balance"
+            matInput
+            type="number"
+            pattern="^\d+$"
+            [min]="0"
+            required
+            readonly
+            disabled
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex flex-col content-content lg:flex-row">
+        <mat-form-field class="flex-auto">
+          <mat-label>Principal Denom</mat-label>
+          <input
+            #principalDenomRef
+            [(ngModel)]="
+              collateralParam && collateralParam.debt_limit && collateralParam.debt_limit.denom
+            "
+            name="principal-denom"
+            matInput
+            readonly
+            disabled
+          />
+        </mat-form-field>
+        <mat-form-field class="w-full">
+          <mat-label>Principal Amount</mat-label>
+          <input
+            #principalAmountRef
+            ngModel
+            name="principal-amount"
+            matInput
+            type="number"
+            pattern="^\d+$"
+            [min]="1"
+            [max]="principalLimit || 0"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="flex-auto">
+          <mat-label>Principal Limit</mat-label>
+          <input
+            [(ngModel)]="principalLimit"
+            name="principal-limit"
+            matInput
+            type="number"
+            pattern="^\d+$"
+            [min]="0"
+            required
+            readonly
+            disabled
+          />
+        </mat-form-field>
+      </div>
+    </mat-list>
+
+    <h3 class="pt-3">Gas Settings</h3>
+    <mat-form-field class="w-full">
+      <mat-label>Gas Ratio</mat-label>
+      <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
+    </mat-form-field>
+    <mat-button-toggle-group class="flex mb-4" value="low">
+      <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(1.1)"
+        >Low</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(2)"
+        >Middle</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(3)"
+        >High</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Advanced </mat-panel-title>
+          <mat-panel-description> Change Default Gas Price </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="flex flex-col content-content lg:flex-row">
+          <mat-form-field class="flex-auto">
+            <mat-label>Gas Denom</mat-label>
+            <mat-select
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+              name="minimum-gas-denom"
+              required
+              (valueChange)="onMinimumGasDenomChanged($event)"
+            >
+              <mat-option
+                *ngFor="let minimumGasPriceOption of minimumGasPrices"
+                [value]="minimumGasPriceOption.denom"
+              >
+                {{ minimumGasPriceOption.denom }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="flex-auto">
+            <mat-label>Gas Price</mat-label>
+            <input
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+              #minimumGasPriceRef
+              name="minimum-gas-price"
+              matInput
+              type="number"
+              [min]="0"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <mat-slider
+          class="w-full"
+          [max]="1"
+          [min]="0"
+          [step]="0.015"
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          name="minimum-gas-price-slider"
+        >
+        </mat-slider>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
+      Create
+    </button>
+  </form>
+</mat-dialog-content>

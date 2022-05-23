@@ -1,0 +1,14 @@
+<view-create-cdp-form-dialog
+  [collateralParam]="collateralParam"
+  [collateralBalance]="collateralBalance$ | async"
+  [coins]="coins$ | async"
+  [cdpParams]="cdpParams$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [balances]="balances$ | async"
+  [collateralLimit]="collateralLimit$ | async"
+  [principalLimit]="principalLimit$ | async"
+  [cdp]="cdp$ | async"
+  (appSubmit)="onSubmit($event)"
+  (appCollateralAmountChanged)="onCollateralAmountChanged($event)"
+>
+</view-create-cdp-form-dialog>

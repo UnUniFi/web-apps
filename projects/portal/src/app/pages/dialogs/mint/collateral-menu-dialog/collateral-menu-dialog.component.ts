@@ -10,6 +10,7 @@ import { ununifi } from 'ununifi-client';
   styleUrls: ['./collateral-menu-dialog.component.css'],
 })
 export class CollateralMenuDialogComponent implements OnInit {
+  collateralParam: ununifi.cdp.ICollateralParam;
   type: string | null | undefined;
 
   constructor(
@@ -19,14 +20,15 @@ export class CollateralMenuDialogComponent implements OnInit {
     public matDialogRef: MatDialogRef<CollateralMenuDialogComponent>,
     private readonly cdpAppService: CdpApplicationService,
   ) {
+    this.collateralParam = data;
     this.type = data.type;
   }
 
   ngOnInit() {}
 
-  onSubmitCreate(denom: string | undefined) {
+  onSubmitCreate() {
     this.matDialogRef.close();
-    this.cdpAppService.openCreateCdpDialog(denom!);
+    this.cdpAppService.openCreateCdpDialog(this.collateralParam);
   }
 
   onSubmitDetail(denom: string) {

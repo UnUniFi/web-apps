@@ -1,1 +1,9 @@
-<p>cdp-clear-form-dialog works!</p>
+<view-cdp-clear-form-dialog
+  [key]="key$ | async"
+  [owner]="owner$ | async"
+  [collateralType]="collateralType$ | async"
+  [repaymentDenom]="repaymentDenom$ | async"
+  [balances]="balances$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-cdp-clear-form-dialog>

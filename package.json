@@ -68,6 +68,8 @@
     "stream-browserify": "^3.0.0",
     "tslib": "^2.3.0",
     "ununifi-client": "^0.45.1",
+    "web3": "^1.7.3",
+    "web3modal": "^1.9.7",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

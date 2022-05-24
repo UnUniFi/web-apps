@@ -8,6 +8,7 @@ export enum WalletType {
   keplr = 'keplr',
   ledger = 'ledger',
   keyStation = 'keyStation',
+  metamask = 'metamask',
 }
 
 // Note: For general purpose? Uint8Array ... Want to use this as possible?

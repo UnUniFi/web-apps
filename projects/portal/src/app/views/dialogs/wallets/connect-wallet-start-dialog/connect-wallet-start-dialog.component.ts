@@ -29,6 +29,11 @@ export class ConnectWalletStartDialogComponent implements OnInit {
       walletType: WalletType.keyStation,
       name: 'Key Station',
     },
+    {
+      logo: 'assets/key-station-logo.png',
+      walletType: WalletType.metamask,
+      name: 'Metamask',
+    },
   ];
 
   constructor(public matDialogRef: MatDialogRef<ConnectWalletStartDialogComponent>) {}

@@ -41,8 +41,7 @@ export class WalletApplicationService {
     if (
       selectedWalletType !== WalletType.ununifi &&
       selectedWalletType !== WalletType.keplr &&
-      selectedWalletType !== WalletType.keyStation &&
-      selectedWalletType !== WalletType.ledger
+      selectedWalletType !== WalletType.metamask
     ) {
       this.snackBar.open('Invalid wallet type!', 'Close');
       return;
@@ -89,6 +88,9 @@ export class WalletApplicationService {
       //   window.location.reload();
       // }
       // return;
+    }
+
+    if (selectedWalletType === WalletType.metamask) {
     }
   }
 

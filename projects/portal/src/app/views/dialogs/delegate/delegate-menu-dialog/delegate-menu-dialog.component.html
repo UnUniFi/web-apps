@@ -2,8 +2,7 @@
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Delegate Menu</div>
-
-    <mat-nav-list class="w-full">
+    <mat-list class="w-full">
       <mat-label>Validator</mat-label>
       <mat-list-item>
         <mat-icon
@@ -28,9 +27,11 @@
           selectedValidator?.commission?.commission_rates?.rate | percent
         }}</span>
       </mat-list-item>
-      <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
-      </ng-container>
-      <ng-template #exist>
+    </mat-list>
+    <ng-container *ngIf="selectedValidator?.description?.website; then existURL; else emptyURL">
+    </ng-container>
+    <ng-template #existURL>
+      <mat-nav-list class="w-full">
         <a href="{{ selectedValidator?.description?.website }}" target="_blank">
           <mat-list-item>
             <span class="column-name"> Website </span>
@@ -38,22 +39,28 @@
             <span class="column-value">{{ selectedValidator?.description?.website }}</span>
           </mat-list-item>
         </a>
-      </ng-template>
-      <ng-template #empty>
+      </mat-nav-list>
+    </ng-template>
+    <ng-template #emptyURL>
+      <!-- debug
         <mat-list-item>
           <span class="column-name"> Website </span>
           <span class="flex-auto"></span>
           <span class="column-value">{{ selectedValidator?.description?.website }}</span>
         </mat-list-item>
-      </ng-template>
-      <ng-container *ngIf="isDelegated">
+        -->
+    </ng-template>
+
+    <ng-container *ngIf="isDelegated">
+      <mat-list class="w-full">
         <mat-list-item>
           <span class="column-name">Delegated Amount</span>
           <span class="flex-auto"></span>
           <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
         </mat-list-item>
-      </ng-container>
-    </mat-nav-list>
+      </mat-list>
+    </ng-container>
+
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"

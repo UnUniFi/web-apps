@@ -40,9 +40,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingDialogModule } from 'ng-loading-dialog';
+import { CdpClearDialogComponent } from './pages/views/mint/cdp-clear-dialog/cdp-clear-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CdpClearDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -28,6 +28,8 @@ export class BankService {
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20075> {
+    // TODO: if it's signed with metamask, can get signature from metamask provider
+
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildSendTxBuilder(toAddress, amount, cosmosPublicKey, gas, fee);
     const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);

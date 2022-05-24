@@ -34,6 +34,8 @@ export class BankApplicationService {
     coins: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
+    // TODO: if it's signed with metamask, can get signature from metamask provider
+
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))
       .toPromise();

@@ -55,6 +55,8 @@ export class SendComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: SendOnSubmitEvent) {
+    // TODO: I think this page should be visible to test bank send feature with metamask
+
     if ($event.amount.length === 0) {
       this.snackBar.open('Invalid coins', undefined, {
         duration: 6000,

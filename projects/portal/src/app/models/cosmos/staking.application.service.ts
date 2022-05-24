@@ -155,10 +155,7 @@ export class StakingApplicationService {
       this.snackBar.open('Success', undefined, { duration: 6000 });
 
       if (!disableRedirect) {
-        const redirectUrl =
-          location.port === '80' || location.port === '443' || location.port === ''
-            ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
-            : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
+        const redirectUrl = `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
         window.location.href = redirectUrl;
       }
       return txHash;
@@ -325,7 +322,7 @@ export class StakingApplicationService {
       return;
     }
 
-    const dialogRef = this.loadingDialog.open('Sending Tx to be validator...');
+    const dialogRef = this.loadingDialog.open('Sending Tx to edit validator...');
     const { disableRedirect, disableErrorSnackBar, disableSimulate } = options || {};
 
     try {
@@ -350,10 +347,7 @@ export class StakingApplicationService {
       }
       this.snackBar.open('Success', undefined, { duration: 6000 });
       if (!disableRedirect) {
-        const redirectUrl =
-          location.port === '80' || location.port === '443' || location.port === ''
-            ? `${location.protocol}//${location.hostname}/explorer/validators/${editValidatorData.validator_address}`
-            : `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
+        const redirectUrl = `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
         window.location.href = redirectUrl;
       }
       return txHash;

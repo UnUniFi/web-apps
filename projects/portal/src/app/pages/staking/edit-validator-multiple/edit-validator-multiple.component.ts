@@ -129,11 +129,10 @@ export class EditValidatorMultipleComponent implements OnInit {
     )) as (string | undefined)[];
     const success = results.length > 0 && results.every((result: string | undefined) => !!result);
     if (success) {
-      this.redirectUrls = editValidatorsData.map((editValidatorData) => {
-        return location.port === '80' || location.port === '443' || location.port === ''
-          ? `${location.protocol}//${location.hostname}/explorer/validators/${editValidatorData.validator_address}`
-          : `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`;
-      });
+      this.redirectUrls = editValidatorsData.map(
+        (editValidatorData) =>
+          `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`,
+      );
       this.setSuccess(true);
     } else {
       this.setError('Error: something went wrong. Reload and try again or contact us');

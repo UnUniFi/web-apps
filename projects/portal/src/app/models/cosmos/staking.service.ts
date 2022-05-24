@@ -227,17 +227,14 @@ export class StakingService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    console.log('debug_in sim1', dummyGas);
     const simulatedTxBuilder = await this.buildEditValidator(
       editValidatorData,
       dummyGas,
       dummyFee,
       cosmosPublicKey,
     );
-    console.log('debug_in sim2_before');
-    const A = await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
-    console.log('debug_in sim2_error_above_code', A);
-    return A;
+
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
   async buildEditValidator(
@@ -270,7 +267,6 @@ export class StakingService {
       throw Error('validator_address mismatch!');
     }
 
-    console.log('debug_1-1', editValidatorData);
     // build tx ... Note: commission percent rate values are converted here.
     const editValidatorTxData = {
       description: {

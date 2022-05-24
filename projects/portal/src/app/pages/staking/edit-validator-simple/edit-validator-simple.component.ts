@@ -103,7 +103,7 @@ export class EditValidatorSimpleComponent implements OnInit {
       editValidatorData.minimumGasPrice,
       editValidatorData.privateKey,
       gasRatio,
-      { disableRedirect: true, disableErrorSnackBar: false, disableSimulate: true },
+      { disableRedirect: false, disableErrorSnackBar: false, disableSimulate: false },
     );
   }
 }

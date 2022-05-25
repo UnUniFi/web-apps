@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'keys',
     loadChildren: () => import('./pages/keys/keys.module').then((m) => m.AppKeysModule),
   },
+  {
+    path: 'assets',
+    loadChildren: () => import('./pages/assets/assets.module').then((m) => m.AppAssetsModule),
+  },
 ];
 
 @NgModule({

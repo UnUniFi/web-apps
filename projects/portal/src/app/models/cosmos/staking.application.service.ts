@@ -380,12 +380,7 @@ export class StakingApplicationService {
       return;
     }
 
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
-    }
+    const currentCosmosWallet = this.walletService.convertStoredWalletToCosmosWallet(privateWallet);
 
     const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
     if (!privateKey) {

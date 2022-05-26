@@ -8,7 +8,6 @@ import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type WithdrawDelegatorRewardOnSubmitEvent = {
-  amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
@@ -22,14 +21,6 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
-  @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
-  @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
-  @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   validator?: InlineResponse20066Validators | null;
@@ -39,14 +30,11 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
 
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 
@@ -72,15 +60,10 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.selectedAmount) {
-      return;
-    }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

@@ -2,6 +2,7 @@ import { DelegateFormDialogComponent } from '../../pages/dialogs/delegate/delega
 import { DelegateMenuDialogComponent } from '../../pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.component';
 import { RedelegateFormDialogComponent } from '../../pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
 import { UndelegateFormDialogComponent } from '../../pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
+import { WithdrawDelegatorRewardFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -74,6 +75,14 @@ export class StakingApplicationService {
   async openUndelegateFormDialog(validator: InlineResponse20066Validators): Promise<void> {
     const txHash = await this.dialog
       .open(UndelegateFormDialogComponent, { data: validator })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
+
+  async openWithdrawDelegatorRewardFormDialog(validator: InlineResponse20066Validators): Promise<void> {
+    const txHash = await this.dialog
+      .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
       .afterClosed()
       .toPromise();
     await this.router.navigate(['txs', txHash]);

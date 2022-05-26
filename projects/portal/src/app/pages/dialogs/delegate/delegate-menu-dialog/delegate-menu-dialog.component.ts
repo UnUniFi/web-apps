@@ -82,7 +82,7 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   onSubmitWithdrawDelegatorReward(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
-    this.stakingAppService.openUndelegateFormDialog(validator);
+    this.stakingAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
   onSubmitDetail(validator: InlineResponse20066Validators) {

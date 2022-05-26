@@ -31,12 +31,15 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Output()
   appUndelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
+  appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
+  @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
+    this.appWithdrawDelegatorReward = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -70,6 +73,13 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appUndelegate.emit(this.selectedValidator);
+  }
+
+  onClickWithdrawDelegatorRewardButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appWithdrawDelegatorReward.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

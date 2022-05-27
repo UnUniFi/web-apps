@@ -13,6 +13,9 @@ export const createCosmosPrivateKeyFromUint8Array = (
         return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privateKeyUint8Array });
       case KeyType.ed25519:
         return new proto.cosmos.crypto.ed25519.PrivKey({ key: privateKeyUint8Array });
+      // Todo: implementation is necessary
+      case KeyType.ethsecp256k1:
+        return undefined;
       default:
         return undefined;
     }
@@ -43,6 +46,9 @@ export const createCosmosPublicKeyFromUint8Array = (
         return new proto.cosmos.crypto.secp256k1.PubKey({ key: publicKeyUint8Array });
       case KeyType.ed25519:
         return new proto.cosmos.crypto.ed25519.PubKey({ key: publicKeyUint8Array });
+      // Todo: implementation is necessary
+      case KeyType.ethsecp256k1:
+        return undefined;
       default:
         return undefined;
     }

@@ -55,7 +55,7 @@
               #mnemonicRef
               name="mnemonic"
               [(ngModel)]="privateWallet.mnemonic"
-              (input)="onChangeIdAndMnemonic(idRef.value, mnemonicRef.value)"
+              (change)="onChangeIdAndMnemonic(idRef.value, mnemonicRef.value)"
               matInput
               rows="3"
               style="resize: none"

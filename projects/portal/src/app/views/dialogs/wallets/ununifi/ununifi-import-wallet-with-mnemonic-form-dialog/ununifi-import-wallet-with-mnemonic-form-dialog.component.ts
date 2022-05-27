@@ -51,7 +51,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             address: '',
           });
         }
-        const mnemonicWithNoWhitespace = mnemonic.trim();
+        const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s{2,}/, ' ');
         return this.keyService
           .getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace)
           .then((privateKey) => {

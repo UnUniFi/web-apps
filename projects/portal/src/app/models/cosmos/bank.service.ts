@@ -1,15 +1,10 @@
-import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
-import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
-import { Amount } from '../../views/faucet/faucet.component';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { KeyType } from '../keys/key.model';
 import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root',
@@ -84,13 +79,12 @@ export class BankService {
       throw Error('Unused Account or Unsupported Account Type!');
     }
     const fromAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const msgSend = this.buildMsgSend(fromAddress.toString(), toAddress, amount);
-
     // remove unintentional whitespace
     const toAddressWithNoWhitespace = toAddress.replace(/\s+/g, '');
 
-    // build tx
+    const msgSend = this.buildMsgSend(fromAddress.toString(), toAddressWithNoWhitespace, amount);
 
+    // build tx
     const txBuilder = await this.txCommonService.buildTxBuilder(
       [msgSend],
       cosmosPublicKey,
@@ -101,6 +95,7 @@ export class BankService {
 
     return txBuilder;
   }
+
   buildMsgSend(
     fromAddress: string,
     toAddress: string,

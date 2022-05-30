@@ -170,6 +170,7 @@ export class TxCommonService {
         },
       };
     }
+
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
     const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());

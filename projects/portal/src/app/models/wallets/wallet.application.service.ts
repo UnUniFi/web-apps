@@ -13,6 +13,7 @@ import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class WalletApplicationService {
     private readonly metaMaskService: MetaMaskService,
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private loadingDialog: LoadingDialogService,
   ) {}
 
   async connectWalletDialog(): Promise<void> {
@@ -160,7 +162,9 @@ export class WalletApplicationService {
   }
 
   async metaMaskConnectWallet(): Promise<boolean> {
+    const loadingDialogRef = this.loadingDialog.open('Connecting to MetaMask...');
     const connectedStoredWallet = await this.metaMaskService.connectWallet();
+    loadingDialogRef.close();
     if (!connectedStoredWallet) {
       this.snackBar.open('Connecting MetaMask was failed!', 'Close');
       return false;

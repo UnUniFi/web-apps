@@ -51,7 +51,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             address: '',
           });
         }
-        const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s{2,}/g, ' ');
+        const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s+/g, ' ');
         return this.keyService
           .getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace)
           .then((privateKey) => {
@@ -66,7 +66,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             return {
               id,
               type: WalletType.ununifi,
-              mnemonic: mnemonicWithNoWhitespace,
+              mnemonic: mnemonic,
               key_type: KeyType.secp256k1,
               privateKey,
               public_key,
@@ -131,6 +131,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
           return;
         }
         privateWallet.id = id;
+        privateWallet.mnemonic = privateWallet.mnemonic.trim().replace(/\s+/g, ' ');
         this.dialogRef.close(privateWallet);
         subscription.unsubscribe();
       },

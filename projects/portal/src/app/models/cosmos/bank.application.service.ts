@@ -1,5 +1,5 @@
 import { convertHexStringToUint8Array } from '../../utils/converter';
-import { validatePrivateStoredWallet } from '../../utils/validater';
+import { validatePrivateStoredWallet } from '../../utils/validation';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet } from '../wallets/wallet.model';

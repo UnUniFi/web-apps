@@ -1,3 +1,4 @@
+import { validatePrivateStoredWallet } from '../../../../../utils/validation';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -132,6 +133,12 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
         }
         privateWallet.id = id;
         privateWallet.mnemonic = privateWallet.mnemonic.trim().replace(/\s+/g, ' ');
+
+        if (!validatePrivateStoredWallet(privateWallet)) {
+          this.snackBar.open('Invalid Wallet info!', 'Close');
+          subscription.unsubscribe();
+          return;
+        }
         this.dialogRef.close(privateWallet);
         subscription.unsubscribe();
       },

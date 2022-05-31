@@ -1,11 +1,14 @@
 import { StoredWallet } from '../wallet.model';
 import { MetaMaskInfrastructureService } from './metamask.infrastructure.service';
 import { Injectable } from '@angular/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 
 export interface IMetaMaskInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
-  // Todo: Currently, I don't know what kind of type should be return. But, I set Uint8Array temporally.
-  signWithMetaMask: (unsignedData: unknown) => Promise<Uint8Array | null | undefined>;
+  signWithMetaMask: (
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+  ) => Promise<cosmosclient.TxBuilder>;
 }
 
 @Injectable({
@@ -22,8 +25,10 @@ export class MetaMaskService {
     return await this.iMetaMaskInfrastructureService.connectWallet();
   }
 
-  // Todo: Currently, I don't know what kind of type should be return. But, I set Uint8Array temporally.
-  async signWithMetaMask(unsignedData: unknown): Promise<Uint8Array | null | undefined> {
-    return await this.iMetaMaskInfrastructureService.signWithMetaMask(unsignedData);
+  async signWithMetaMask(
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    return await this.iMetaMaskInfrastructureService.signWithMetaMask(txBuilder, signerBaseAccount);
   }
 }

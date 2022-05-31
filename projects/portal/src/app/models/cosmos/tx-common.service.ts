@@ -4,6 +4,7 @@ import { validatePrivateStoredWallet } from '../../utils/validation';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { KeyType } from '../keys/key.model';
 import { KeplrService } from '../wallets/keplr/keplr.service';
+import { MetaMaskService } from '../wallets/metamask/metamask.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -21,6 +22,7 @@ export class TxCommonService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
+    private readonly metaMaskService: MetaMaskService,
   ) {}
 
   async getBaseAccount(
@@ -92,6 +94,9 @@ export class TxCommonService {
     if (currentCosmosWallet.type === WalletType.keyStation) {
       return this.signTxWithKeyStation(txBuilder, signerBaseAccount);
     }
+    if (currentCosmosWallet.type === WalletType.metaMask) {
+      return this.signTxWithMetaMask(txBuilder, signerBaseAccount);
+    }
     throw Error('Unsupported wallet type!');
   }
 
@@ -150,6 +155,17 @@ export class TxCommonService {
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): cosmosclient.TxBuilder {
     throw Error('Currently signing with KeyStation is not supported!');
+  }
+
+  async signTxWithMetaMask(
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signedTxBuilder = await this.metaMaskService.signWithMetaMask(
+      txBuilder,
+      signerBaseAccount,
+    );
+    return signedTxBuilder;
   }
 
   async simulateTx(
@@ -229,6 +245,7 @@ export class TxCommonService {
 
   async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20075> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    console.log(txBuilder);
 
     // broadcast tx
     const result = await rest.tx.broadcastTx(sdk, {

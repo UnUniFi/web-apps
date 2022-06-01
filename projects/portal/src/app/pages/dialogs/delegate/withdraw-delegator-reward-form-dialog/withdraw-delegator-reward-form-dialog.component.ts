@@ -4,7 +4,7 @@ import { proto } from '@cosmos-client/core';
 import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
+import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { WithdrawDelegatorRewardOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.component';
@@ -28,7 +28,7 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
-    private readonly stakingAppService: StakingApplicationService,
+    private readonly distributionAppService: DistributionApplicationService,
   ) {
     this.validator = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -38,7 +38,7 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit($event: WithdrawDelegatorRewardOnSubmitEvent) {
-    const txHash = await this.stakingAppService.withdrawDelegatorReward(
+    const txHash = await this.distributionAppService.withdrawDelegatorReward(
       this.validator?.operator_address!,
       $event.minimumGasPrice,
       $event.gasRatio,

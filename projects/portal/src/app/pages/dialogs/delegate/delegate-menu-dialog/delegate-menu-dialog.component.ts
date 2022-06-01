@@ -7,6 +7,7 @@ import {
   InlineResponse20066Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
+import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -31,6 +32,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     private router: Router,
     public matDialogRef: MatDialogRef<DelegateMenuDialogComponent>,
     private readonly stakingAppService: StakingApplicationService,
+    private readonly distributionAppService: DistributionApplicationService,
     private readonly walletService: WalletService,
     private readonly cosmosSDK: CosmosSDKService,
   ) {
@@ -82,7 +84,7 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   onSubmitWithdrawDelegatorReward(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
-    this.stakingAppService.openWithdrawDelegatorRewardFormDialog(validator);
+    this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
   onSubmitDetail(validator: InlineResponse20066Validators) {

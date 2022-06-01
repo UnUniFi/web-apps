@@ -17,7 +17,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   saved: boolean = false;
-  checked: boolean = false;
+  checked: boolean = true; // !! For indexDB save error. !!
   inputPrivateKey: string = '';
 
   now = new Date();

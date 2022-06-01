@@ -16,6 +16,7 @@
           <button mat-flat-button color="primary" [disabled]="!saved" matStepperNext>Next</button>
         </div>
       </mat-step>
+      <!-- !! comment out for indexDB save error. !!
       <mat-step [completed]="checked">
         <form #formRef="ngForm" (submit)="checkSavedPrivateKey(inputPrivateKey)">
           <ng-template matStepLabel>Check</ng-template>
@@ -33,6 +34,7 @@
           <button mat-flat-button color="primary" [disabled]="!checked" matStepperNext>Next</button>
         </div>
       </mat-step>
+      -->
       <mat-step>
         <ng-template matStepLabel>Next</ng-template>
         <div class="mb-2 flex justify-start">

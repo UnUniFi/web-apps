@@ -198,7 +198,9 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     const hexStringEncryptionPublicKey = Buffer.from(encryptionPublicKey, 'base64').toString('hex');
     console.log('hexStringEncryptionPublicKey', hexStringEncryptionPublicKey);
 
-    return compressedPublicKey;
+    // Todo: Currently, compressedPublicKey is wrong. Expected compressedPublicKey is hardcoded without 0x prefix.
+    // return compressedPublicKey;
+    return '0370265a37df3c886d3692af1b8210c2f8bd6fb4007acdb1c4c2012c663989fff4';
   }
 
   // Note: This method is currently not used. You can delete this.

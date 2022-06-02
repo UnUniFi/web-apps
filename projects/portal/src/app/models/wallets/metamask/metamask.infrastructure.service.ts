@@ -17,6 +17,21 @@ import Web3 from 'web3';
 export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureService {
   constructor(private readonly configService: ConfigService) {}
 
+  async personalSign(message: string, password: string): Promise<string> {
+    const provider = await detectEthereumProvider({ mustBeMetaMask: true });
+    if (!provider || !window.ethereum?.isMetaMask) {
+      throw Error('MetaMask is not installed!');
+    }
+    const accounts = await (provider as any).request({ method: 'eth_requestAccounts' });
+    if (!accounts?.length) {
+      throw Error('Failed to get MetaMask account!');
+    }
+    const address = accounts[0];
+    const web3 = new Web3(Web3.givenProvider);
+    const signature = await web3.eth.personal.sign(message, address, password);
+    return signature;
+  }
+
   // Note: This method is used to get public key from signature data.
   async signTypedDataV4ToJsonStringWithMetaMask(json: any): Promise<{
     message: string;
@@ -267,7 +282,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
   }
 
   // Todo: This method seems to work well, but, as a result, tx fails. We need to fix signature verification error.
-  async signWithMetaMask(
+  async signTx(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
@@ -282,21 +297,26 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     delete txJson.auth_info.signer_infos[0].mode_info.multi;
     console.log(txJson);
 
-    const authInfo = txJson.auth_info;
-    const authInfoJsonString = JSON.stringify(authInfo);
-    const body = txJson.body;
-    const bodyJsonString = JSON.stringify(body);
-    const accountNumber = signerBaseAccount.account_number.toString();
+    const config = await this.configService.config$.pipe(take(1)).toPromise();
+    const chainId = config?.chainID;
+    if (!chainId) {
+      throw Error('Failed to get UnUniFi ChainID!');
+    }
 
-    const signatureResponse = await this.signTypedDataV4ToCosmosSdkTxWithMetaMask(
-      bodyJsonString,
-      authInfoJsonString,
-      accountNumber,
-    );
-    console.log(signatureResponse.message);
-    console.log(signatureResponse.signature);
+    const messageJson = {
+      body: txJson.body,
+      auth_info: txJson.auth_info,
+      chain_id: chainId,
+      account_number: signerBaseAccount.account_number,
+    };
+    console.log(messageJson);
 
-    const signatureWithout0x = signatureResponse.signature.slice(2);
+    const messageToBeSigned = JSON.stringify(messageJson);
+    console.log(messageToBeSigned);
+
+    const signature = await this.personalSign(messageToBeSigned, 'UnUniFi');
+    console.log(signature);
+    const signatureWithout0x = signature.slice(2);
     console.log(signatureWithout0x);
     const signatureUint8Array = Uint8Array.from(Buffer.from(signatureWithout0x, 'hex'));
     txBuilder.addSignature(signatureUint8Array);

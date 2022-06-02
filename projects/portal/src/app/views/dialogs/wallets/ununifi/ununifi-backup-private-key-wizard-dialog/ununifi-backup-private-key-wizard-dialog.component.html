@@ -16,14 +16,21 @@
           <button mat-flat-button color="primary" [disabled]="!saved" matStepperNext>Next</button>
         </div>
       </mat-step>
-      <!-- !! comment out for indexDB save error. !!
       <mat-step [completed]="checked">
         <form #formRef="ngForm" (submit)="checkSavedPrivateKey(inputPrivateKey)">
           <ng-template matStepLabel>Check</ng-template>
-          <p>Input private key</p>
+          <p class="flex justify-between items-center">
+            Input private key
+            <button mat-button type="button" (click)="togglePasswordVisibility()">
+              <mat-icon>
+                {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+          </p>
           <mat-form-field appearance="fill">
             <mat-label>Private Key</mat-label>
-            <input matInput required name="privateKey" [(ngModel)]="inputPrivateKey" />
+            <input matInput required name="privateKey" [type]="isPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="inputPrivateKey" />
           </mat-form-field>
           <div class="mb-2">
             <button mat-flat-button class="w-full" color="accent">Check</button>
@@ -34,19 +41,12 @@
           <button mat-flat-button color="primary" [disabled]="!checked" matStepperNext>Next</button>
         </div>
       </mat-step>
-      -->
       <mat-step>
         <ng-template matStepLabel>Next</ng-template>
         <div class="mb-2 flex justify-start">
           <button mat-flat-button matStepperPrevious>Back</button>
         </div>
-        <button
-          mat-flat-button
-          class="w-full"
-          color="accent"
-          [disabled]="!checked || !saved"
-          (click)="onClickSubmit()"
-        >
+        <button mat-flat-button class="w-full" color="accent" [disabled]="!checked || !saved" (click)="onClickSubmit()">
           Next
         </button>
       </mat-step>

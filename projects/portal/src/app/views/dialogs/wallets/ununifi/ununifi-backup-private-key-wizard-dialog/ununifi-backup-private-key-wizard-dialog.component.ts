@@ -17,8 +17,9 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   saved: boolean = false;
-  checked: boolean = true; // !! For indexDB save error. !!
+  checked: boolean = false;
   inputPrivateKey: string = '';
+  isPasswordVisible: boolean = false;
 
   now = new Date();
   sec = this.now.getSeconds();
@@ -96,5 +97,10 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
       this.checked = false;
       this.snackBar.open('Wrong private key!', 'Closed');
     }
+  }
+
+  togglePasswordVisibility() {
+    this.isPasswordVisible = !this.isPasswordVisible;
+    return false;
   }
 }

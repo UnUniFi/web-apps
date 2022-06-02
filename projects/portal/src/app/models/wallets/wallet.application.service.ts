@@ -6,7 +6,7 @@ import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../views/
 import { UnunifiKeyFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
 import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
-import { KeplrApplicationService } from '../keplr/keplr.application.service';
+import { KeplrService } from '../keplr/keplr.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
@@ -19,7 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WalletApplicationService {
   constructor(
     private readonly walletService: WalletService,
-    private readonly keplrAppService: KeplrApplicationService,
+    private readonly keplrService: KeplrService,
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {}
@@ -82,13 +82,11 @@ export class WalletApplicationService {
     }
 
     if (selectedWalletType === WalletType.keplr) {
-      this.snackBar.open('Keplr will be supported in a future update!', 'Close');
+      const isSuccessConnected = await this.keplrConnectWallet();
+      if (isSuccessConnected) {
+        window.location.reload();
+      }
       return;
-      // const isSuccessImport = await this.keplrAppService.keplrSelectWallet();
-      // if (isSuccessImport) {
-      //   window.location.reload();
-      // }
-      // return;
     }
   }
 
@@ -148,6 +146,17 @@ export class WalletApplicationService {
     await this.walletService.setStoredWallet(storedWallet);
     await this.walletService.setCurrentStoredWallet(storedWallet);
     await this.openConnectWalletCompletedDialog(storedWallet);
+    return true;
+  }
+
+  async keplrConnectWallet(): Promise<boolean> {
+    const connectedStoredWallet = await this.keplrService.connectWallet();
+    if (!connectedStoredWallet) {
+      this.snackBar.open('Dialog was canceled!', 'Close');
+      return false;
+    }
+    await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
+    await this.openConnectWalletCompletedDialog(connectedStoredWallet);
     return true;
   }
 

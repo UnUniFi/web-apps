@@ -2,7 +2,7 @@ import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { createCosmosPrivateKeyFromString } from '../../utils/key';
 import { validatePrivateStoredWallet } from '../../utils/validater';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { KeplrApplicationService } from '../keplr/keplr.application.service';
+import { KeplrService } from '../keplr/keplr.service';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../wallets/wallet.model';
@@ -20,7 +20,7 @@ export class TxCommonService {
     private readonly snackBar: MatSnackBar,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletAppService: WalletApplicationService,
-    private readonly keplrAppService: KeplrApplicationService,
+    private readonly keplrService: KeplrService,
   ) {}
 
   async getBaseAccount(
@@ -132,9 +132,8 @@ export class TxCommonService {
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    throw Error('Signing with Keplr will be supported in a future update!');
-    // const signedTxBuilder = await this.keplrAppService.signDirect(txBuilder, signerBaseAccount);
-    // return signedTxBuilder;
+    const signedTxBuilder = await this.keplrService.signTx(txBuilder, signerBaseAccount);
+    return signedTxBuilder;
   }
 
   // Todo: This is dummy function and need to implement later.

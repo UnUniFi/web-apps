@@ -1,4 +1,4 @@
-import { StoredWallet } from '../wallets/wallet.model';
+import { StoredWallet } from '../wallet.model';
 import { KeplrInfrastructureService } from './keplr.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
@@ -10,6 +10,7 @@ export interface IKeplrInfrastructureService {
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ) => Promise<cosmosclient.TxBuilder>;
 }
+
 @Injectable({
   providedIn: 'root',
 })

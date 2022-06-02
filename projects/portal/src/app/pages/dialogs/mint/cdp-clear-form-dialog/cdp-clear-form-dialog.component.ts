@@ -23,9 +23,9 @@ export class CdpClearFormDialogComponent implements OnInit {
   // coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   // collateralBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  // cdp: InlineResponse2004Cdp1;
+  cdp: InlineResponse2004Cdp1;
 
-  cdp$: Observable<InlineResponse2004Cdp1>;
+  // cdp$: Observable<InlineResponse2004Cdp1>;
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
@@ -40,14 +40,14 @@ export class CdpClearFormDialogComponent implements OnInit {
     public readonly data: InlineResponse2004Cdp1,
     public matDialogRef: MatDialogRef<CdpClearFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly walletService: WalletService,
+    // private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly cdpApplicationService: CdpApplicationService,
 
     private readonly route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
   ) {
-    // this.cdp = data;
+    this.cdp = data;
     // this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     // const address$ = this.currentStoredWallet$.pipe(
     //   filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -64,8 +64,6 @@ export class CdpClearFormDialogComponent implements OnInit {
     //     return balance ? balance.amount! : '0';
     //   }),
     // );
-
-    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
 
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
@@ -100,20 +98,20 @@ export class CdpClearFormDialogComponent implements OnInit {
       map((data) => data.data.params!),
     );
 
-    this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
-          sdk.rest,
-          cosmosclient.AccAddress.fromString(ownerAddr),
-          collateralType,
-        ),
-      ),
-      map((res) => res.data.cdp!),
-    );
+    // this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
+    //   mergeMap(([ownerAddr, collateralType, sdk]) =>
+    //     rest.ununifi.cdp.cdp(
+    //       sdk.rest,
+    //       cosmosclient.AccAddress.fromString(ownerAddr),
+    //       collateralType,
+    //     ),
+    //   ),
+    //   map((res) => res.data.cdp!),
+    // );
 
-    this.repaymentDenomString$ = combineLatest([this.params$, this.cdp$]).pipe(
-      map(([params, cdp]) =>
-        params.debt_params?.find((debtParam) => debtParam.denom == cdp.cdp?.principal?.denom),
+    this.repaymentDenomString$ = this.params$.pipe(
+      map((params) =>
+        params.debt_params?.find((debtParam) => debtParam.denom == this.cdp.cdp?.principal?.denom),
       ),
       map((res) => res?.denom!),
     );
@@ -130,32 +128,19 @@ export class CdpClearFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {
-    this.collateralType$.subscribe((collateralType) => console.log(collateralType));
-  }
-  // async onSubmit($event: CdpDepositOnSubmitEvent) {
-  //   let txHash: string | undefined;
+  ngOnInit(): void {}
+  async onSubmit($event: ClearCdpOnSubmitEvent) {
+    let txHash: string | undefined;
 
-  //   txHash = await this.cdpApplicationService.depositCDP(
-  //     $event.ownerAddress,
-  //     $event.collateralType,
-  //     $event.collateral,
-  //     $event.minimumGasPrice,
-  //     $event.balances,
-  //     $event.gasRatio,
-  //   );
-  //   this.matDialogRef.close(txHash);
-  // }
-
-  onSubmit($event: ClearCdpOnSubmitEvent) {
-    this.cdpApplicationService.repayCDP(
+    txHash = await this.cdpApplicationService.repayCDP(
       $event.key,
       $event.privateKey,
       $event.collateralType,
       $event.repayment,
       $event.minimumGasPrice,
       $event.balances,
-      1.1,
+      $event.gasRatio,
     );
+    this.matDialogRef.close(txHash);
   }
 }

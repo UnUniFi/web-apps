@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
+import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 export type ClearCdpOnSubmitEvent = {
   key: Key;
@@ -10,6 +11,7 @@ export type ClearCdpOnSubmitEvent = {
   repayment: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
   balances: proto.cosmos.base.v1beta1.ICoin[];
+  gasRatio: number;
 };
 
 @Component({
@@ -18,6 +20,9 @@ export type ClearCdpOnSubmitEvent = {
   styleUrls: ['./cdp-clear-form-dialog.component.css'],
 })
 export class CdpClearFormDialogComponent implements OnInit {
+  @Input()
+  cdp?: InlineResponse2004Cdp1;
+
   @Input()
   key?: Key | null;
 
@@ -41,10 +46,12 @@ export class CdpClearFormDialogComponent implements OnInit {
 
   public repayment_amount: string;
   public selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  public gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
     this.repayment_amount = '';
+    this.gasRatio = 1.1;
   }
 
   ngOnChanges(): void {
@@ -88,9 +95,12 @@ export class CdpClearFormDialogComponent implements OnInit {
       },
       minimumGasPrice: this.selectedGasPrice,
       balances: this.balances,
+      gasRatio: this.gasRatio,
     });
   }
-
+  changeGasRatio(ratio: number) {
+    this.gasRatio = ratio;
+  }
   onMinimumGasDenomChanged(denom: string): void {
     this.selectedGasPrice = this.minimumGasPrices?.find(
       (minimumGasPrice) => minimumGasPrice.denom === denom,

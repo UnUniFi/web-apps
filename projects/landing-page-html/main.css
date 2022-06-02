@@ -177,6 +177,13 @@ a:hover{
     height: 40px;
     border-radius: 50%;
 }
+.ellipse5{
+  background-color: #613bfa;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
 .joinAndPartners{
     position: relative;
 }

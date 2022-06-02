@@ -161,10 +161,7 @@ export class TxCommonService {
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    const signedTxBuilder = await this.metaMaskService.signWithMetaMask(
-      txBuilder,
-      signerBaseAccount,
-    );
+    const signedTxBuilder = await this.metaMaskService.signTx(txBuilder, signerBaseAccount);
     return signedTxBuilder;
   }
 

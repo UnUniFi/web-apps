@@ -5,7 +5,7 @@ import { cosmosclient, proto } from '@cosmos-client/core';
 
 export interface IMetaMaskInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
-  signWithMetaMask: (
+  signTx: (
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ) => Promise<cosmosclient.TxBuilder>;
@@ -25,10 +25,10 @@ export class MetaMaskService {
     return await this.iMetaMaskInfrastructureService.connectWallet();
   }
 
-  async signWithMetaMask(
+  async signTx(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    return await this.iMetaMaskInfrastructureService.signWithMetaMask(txBuilder, signerBaseAccount);
+    return await this.iMetaMaskInfrastructureService.signTx(txBuilder, signerBaseAccount);
   }
 }

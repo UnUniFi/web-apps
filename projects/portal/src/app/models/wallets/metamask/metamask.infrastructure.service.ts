@@ -286,7 +286,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    txBuilder.signDoc(signerBaseAccount.account_number);
+    txBuilder.signDocBytes(signerBaseAccount.account_number);
     const txJsonString = txBuilder.cosmosJSONStringify();
     if (!txBuilder) {
       throw Error('Failed to txBuilder');
@@ -295,6 +295,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
 
     // fix JSONstringify issue
     delete txJson.auth_info.signer_infos[0].mode_info.multi;
+    txJson.auth_info.signer_infos[0].mode_info.single.mode = 'SIGN_DIRECT';
     console.log(txJson);
 
     const config = await this.configService.config$.pipe(take(1)).toPromise();

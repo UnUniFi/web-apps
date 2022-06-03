@@ -1,7 +1,13 @@
-import { ConfigService } from '../config.service';
-import { CosmosSDKService } from '../cosmos-sdk.service';
+import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
+import { ConfigService } from '../../config.service';
+import { KeyType } from '../../keys/key.model';
+import { StoredWallet, WalletType } from '../wallet.model';
+import { IKeplrInfrastructureService } from './keplr.service';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
+import { LoadingDialogService } from 'ng-loading-dialog';
 
 export interface signKeplr {
   authInfoBytes: Uint8Array;
@@ -17,10 +23,14 @@ declare global {
 @Injectable({
   providedIn: 'root',
 })
-export class KeplrService {
-  constructor(private readonly cosmosSDK: CosmosSDKService, private configService: ConfigService) {}
+export class KeplrInfrastructureService implements IKeplrInfrastructureService {
+  constructor(
+    private readonly loadingDialog: LoadingDialogService,
+    private snackBar: MatSnackBar,
+    private configService: ConfigService,
+  ) {}
 
-  async getKey(): Promise<Key | undefined> {
+  private async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {
       alert('Please install keplr extension');
       return;
@@ -33,7 +43,7 @@ export class KeplrService {
     }
   }
 
-  async suggestChain(): Promise<void> {
+  private async suggestChain(): Promise<void> {
     if (!window.keplr) {
       alert('Please install keplr extension');
       return;
@@ -96,7 +106,54 @@ export class KeplrService {
     }
   }
 
-  async signDirect(
+  private async suggestChainAndGetKey(): Promise<Key | undefined> {
+    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Keplr...');
+    try {
+      await this.suggestChain();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      dialogRefSuggestChainAndGetKey.close();
+      return;
+    }
+    let keyData: Key | undefined;
+    try {
+      keyData = await this.getKey();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+    } finally {
+      dialogRefSuggestChainAndGetKey.close();
+    }
+    return keyData;
+  }
+
+  private convertKeplrKeyToStoredWallet(keyData: Key | undefined): StoredWallet | undefined {
+    if (!keyData) {
+      console.error('Fail.');
+      return undefined;
+    }
+    const cosmosPublicKey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, keyData.pubKey);
+    if (!cosmosPublicKey) {
+      console.error('Invalid Pubkey.');
+      return;
+    }
+    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+    const pubkey = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
+    const storedWallet: StoredWallet = {
+      id: keyData.name,
+      type: WalletType.keplr,
+      key_type: KeyType.secp256k1,
+      public_key: pubkey,
+      address: accAddress.toString(),
+    };
+    console.log(storedWallet);
+    return storedWallet;
+  }
+
+  private async signDirect(
     signer: string,
     bodyBytes: Uint8Array,
     authInfoBytes: Uint8Array,
@@ -121,5 +178,32 @@ export class KeplrService {
       };
       return signKeplr;
     }
+  }
+
+  async connectWallet(): Promise<StoredWallet | null | undefined> {
+    const keyData = await this.suggestChainAndGetKey();
+    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
+    return storedWallet;
+  }
+
+  async signTx(
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
+    const signKeplr = await this.signDirect(
+      signerBaseAccount.address,
+      signDoc.body_bytes,
+      signDoc.auth_info_bytes,
+      signDoc.account_number,
+    );
+    if (!signKeplr) {
+      throw Error('Invalid signature!');
+    }
+    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
+    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
+    txBuilder.addSignature(signKeplr.signature);
+
+    return txBuilder;
   }
 }

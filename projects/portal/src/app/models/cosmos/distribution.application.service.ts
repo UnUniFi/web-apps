@@ -124,7 +124,7 @@ export class DistributionApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully delegate to the validator', undefined, { duration: 6000 });
+    this.snackBar.open('Successfully withdraw delegator reward.', undefined, { duration: 6000 });
 
     return txHash;
   }

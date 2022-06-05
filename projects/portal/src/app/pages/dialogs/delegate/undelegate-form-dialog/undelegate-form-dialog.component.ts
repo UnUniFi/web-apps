@@ -27,6 +27,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: InlineResponse20066Validators | undefined;
+  unbondingDelegation$: Observable<any>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -45,6 +46,21 @@ export class UndelegateFormDialogComponent implements OnInit {
     );
     this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
       mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      map((res) => res.data),
+    );
+    this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
+      mergeMap(([sdk, address]) => {
+        console.log(this.validator);
+        const validatorAddress = this.validator?.operator_address;
+        const validatorAccAddress = cosmosclient.ValAddress.fromString(validatorAddress || '');
+        const unbondingDelegation = rest.staking.unbondingDelegation(
+          sdk.rest,
+          validatorAccAddress,
+          address,
+        );
+        console.log({ address, validatorAccAddress, unbondingDelegation });
+        return unbondingDelegation;
+      }),
       map((res) => res.data),
     );
     this.delegateAmount$ = this.delegations$.pipe(
@@ -71,7 +87,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmit($event: UndelegateOnSubmitEvent) {
     const txHash = await this.stakingAppService.undelegate(

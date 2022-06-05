@@ -32,6 +32,8 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
+  unbondingDelegation?: any | null;
+  @Input()
   validator?: InlineResponse20066Validators | null;
 
   @Output()

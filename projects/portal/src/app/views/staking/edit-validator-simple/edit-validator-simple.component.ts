@@ -62,7 +62,6 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.minimumGasPrice = this.minimumGasPrices[0];
     }
   }
-
   ngOnInit(): void {}
 
   async onChangeFile($event: Event): Promise<void> {
@@ -176,15 +175,8 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
     });
   }
 
-  onMinimumGasDenomChanged(denom: string): void {
-    this.minimumGasPrice = this.minimumGasPrices?.find(
-      (minimumGasPrice) => minimumGasPrice.denom === denom,
-    );
-  }
-
-  onMinimumGasAmountSliderChanged(amount: string): void {
-    if (this.minimumGasPrice) {
-      this.minimumGasPrice.amount = amount;
-    }
+  onClickInputForm() {
+    const fileInputForm: HTMLElement | null = document.getElementById('fileInputForm');
+    if (fileInputForm) fileInputForm.click();
   }
 }

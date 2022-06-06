@@ -54,7 +54,7 @@
             <textarea
               #mnemonicRef
               name="mnemonic"
-              [(ngModel)]="privateWallet.mnemonic"
+              ngModel
               (input)="onChangeIdAndMnemonic(idRef.value, mnemonicRef.value)"
               matInput
               rows="3"

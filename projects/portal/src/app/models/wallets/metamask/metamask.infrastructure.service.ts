@@ -295,7 +295,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
 
     // fix JSONstringify issue
     delete txJson.auth_info.signer_infos[0].mode_info.multi;
-    txJson.auth_info.signer_infos[0].mode_info.single.mode = 'SIGN_DIRECT';
+    txJson.auth_info.signer_infos[0].mode_info.single.mode = 'SIGN_MODE_DIRECT';
     console.log(txJson);
 
     const config = await this.configService.config$.pipe(take(1)).toPromise();

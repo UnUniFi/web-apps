@@ -5,9 +5,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { KeyService } from 'projects/portal/src/app/models/keys/key.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from 'projects/portal/src/app/utils/key';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -29,7 +32,6 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithMnemonicFormDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
-    private keyService: KeyService,
     private walletService: WalletService,
   ) {
     this.wallets$ = this.walletService.storedWallets$;
@@ -52,13 +54,20 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             address: '',
           });
         }
-        return this.keyService
-          .getPrivateKeyFromMnemonic(mnemonic)
+        return createPrivateKeyStringFromMnemonic(mnemonic)
           .then((privateKey) => {
-            const cosmosPrivateKey = this.keyService.getPrivKey(
+            if (!privateKey) {
+              this.snackBar.open('Invalid mnemonic!', 'Close');
+              throw Error('Invalid mnemonic!');
+            }
+            const cosmosPrivateKey = createCosmosPrivateKeyFromString(
               KeyType.secp256k1,
-              Uint8Array.from(Buffer.from(privateKey, 'hex')),
+              privateKey,
             );
+            if (!cosmosPrivateKey) {
+              this.snackBar.open('Invalid privateKey!', 'Close');
+              throw Error('Invalid privateKey!');
+            }
             const cosmosPublicKey = cosmosPrivateKey.pubKey();
             const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
             const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);

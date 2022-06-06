@@ -72,10 +72,11 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
             const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
             const address = accAddress.toString();
+            const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s+/g, ' ');
             return {
               id,
               type: WalletType.ununifi,
-              mnemonic: mnemonic,
+              mnemonic: mnemonicWithNoWhitespace,
               key_type: KeyType.secp256k1,
               privateKey,
               public_key,
@@ -98,7 +99,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

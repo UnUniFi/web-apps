@@ -66,8 +66,3 @@ import 'zone.js';
  */
 (window as any).global = window;
 global.Buffer = global.Buffer || require('buffer').Buffer;
-global.process = {
-  env: { DEBUG: undefined },
-  version: '',
-  nextTick: require('next-tick'),
-} as any;

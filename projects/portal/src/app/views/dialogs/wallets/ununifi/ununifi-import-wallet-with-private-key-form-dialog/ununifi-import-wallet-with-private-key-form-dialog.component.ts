@@ -4,11 +4,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { KeyService } from 'projects/portal/src/app/models/keys/key.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { createCosmosPrivateKeyFromString } from 'projects/portal/src/app/utils/key';
 
 @Component({
   selector: 'view-ununifi-import-wallet-with-private-key-form-dialog',
@@ -28,7 +28,6 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithPrivateKeyFormDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
-    private keyService: KeyService,
     private walletService: WalletService,
   ) {
     this.wallets$ = this.walletService.storedWallets$;
@@ -53,10 +52,14 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
         }
 
         try {
-          const cosmosPrivateKey = this.keyService.getPrivKey(
+          const cosmosPrivateKey = createCosmosPrivateKeyFromString(
             KeyType.secp256k1,
-            Uint8Array.from(Buffer.from(privateKey, 'hex')),
+            privateKey,
           );
+          if (!cosmosPrivateKey) {
+            this.snackBar.open('Invalid privateKey!', 'Close');
+            throw Error('Invalid privateKey!');
+          }
           const cosmosPublicKey = cosmosPrivateKey.pubKey();
           const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
           const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
@@ -86,7 +89,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

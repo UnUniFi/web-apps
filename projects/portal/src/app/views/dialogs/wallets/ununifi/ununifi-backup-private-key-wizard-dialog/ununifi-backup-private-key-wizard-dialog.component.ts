@@ -29,9 +29,9 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
     public readonly data: StoredWallet & { mnemonic: string; privateKey: string },
     public matDialogRef: MatDialogRef<UnunifiBackupPrivateKeyWizardDialogComponent>,
     private readonly snackBar: MatSnackBar,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onClickSubmit(): void {
     const walletBackupResult: StoredWallet & {
@@ -90,7 +90,7 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   }
 
   checkSavedPrivateKey(inputPrivateKey: string): void {
-    if (this.inputPrivateKey === inputPrivateKey) {
+    if (this.data.privateKey === inputPrivateKey) {
       this.checked = true;
       this.snackBar.open('Correct', undefined, { duration: 2000 });
     } else {

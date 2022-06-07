@@ -1,7 +1,48 @@
 import { KeyType } from '../models/keys/key.model';
-import { convertHexStringToUint8Array } from './converter';
-import { proto } from '@cosmos-client/core';
+import { convertHexStringToUint8Array, convertUint8ArrayToHexString } from './converter';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { PrivKey, PubKey } from '@cosmos-client/core/esm/types';
+
+export const createPrivateKeyFromMnemonic = async (
+  mnemonicString: string,
+): Promise<Uint8Array | undefined> => {
+  try {
+    const mnemonicWithoutWhiteSpace = mnemonicString.trim().replace(/\s+/g, ' ');
+    const privateKeyUint8Array = await cosmosclient.generatePrivKeyFromMnemonic(
+      mnemonicWithoutWhiteSpace,
+    );
+    return privateKeyUint8Array;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+};
+
+export const createPrivateKeyStringFromMnemonic = async (
+  mnemonicString: string,
+): Promise<string | undefined> => {
+  const privateKeyUint8Array = await createPrivateKeyFromMnemonic(mnemonicString);
+  if (!privateKeyUint8Array) {
+    return undefined;
+  }
+  const privateKeyString = convertUint8ArrayToHexString(privateKeyUint8Array);
+  return privateKeyString;
+};
+
+export const createCosmosPrivateKeyFromMnemonic = async (
+  keyType: KeyType,
+  mnemonicString: string,
+): Promise<PrivKey | undefined> => {
+  const privateKeyUint8Array = await createPrivateKeyFromMnemonic(mnemonicString);
+  if (!privateKeyUint8Array) {
+    return undefined;
+  }
+  const cosmosPrivateKey = await createCosmosPrivateKeyFromUint8Array(
+    keyType,
+    privateKeyUint8Array,
+  );
+  return cosmosPrivateKey;
+};
 
 export const createCosmosPrivateKeyFromUint8Array = (
   keyType: KeyType,

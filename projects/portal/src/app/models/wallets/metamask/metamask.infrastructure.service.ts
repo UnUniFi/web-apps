@@ -97,8 +97,6 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     return await this.getCosmosStoredWalletFromMetaMask();
   }
 
-  // Todo: bump @cosmos-client/core to 0.45.4 and change from cosmosJsonStringify to canonicalizeJsonStringify.
-  // Todo: some numbered value should be converted to string.
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
@@ -113,6 +111,8 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     // fix JSONstringify issue
     delete txJson.auth_info.signer_infos[0].mode_info.multi;
     txJson.auth_info.signer_infos[0].mode_info.single.mode = 'SIGN_MODE_DIRECT';
+    txJson.auth_info.fee.gas_limit = txJson.auth_info.fee.gas_limit.toString();
+
     console.log(txJson);
 
     const config = await this.configService.config$.pipe(take(1)).toPromise();
@@ -125,11 +125,11 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
       body: txJson.body,
       auth_info: txJson.auth_info,
       chain_id: chainId,
-      account_number: signerBaseAccount.account_number,
+      account_number: signerBaseAccount.account_number.toString(10),
     };
     console.log(messageJson);
 
-    const messageToBeSigned = JSON.stringify(messageJson);
+    const messageToBeSigned = JSON.stringify(txBuilder.canonicalizeJSON(messageJson));
     console.log(messageToBeSigned);
 
     const signature = await this.personalSign(messageToBeSigned);
@@ -138,6 +138,18 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     console.log(signatureWithout0x);
     const signatureUint8Array = Uint8Array.from(Buffer.from(signatureWithout0x, 'hex'));
     txBuilder.addSignature(signatureUint8Array);
+
+    // Note: Debug only purpose implementation
+    const recoveredAddress = ethers.utils.verifyMessage(messageToBeSigned, signature);
+    console.log('recoveredAddress', recoveredAddress);
+    const digest = this.messageToDigest(messageToBeSigned);
+    const recoveredUncompressedPublicKey = ethers.utils.recoverPublicKey(digest, signature);
+    console.log('recoveredUncompressedPublicKey', recoveredUncompressedPublicKey);
+    const recoveredCompressedPublicKey = ethers.utils.computePublicKey(
+      recoveredUncompressedPublicKey,
+      true,
+    );
+    console.log('recoveredCompressedPublicKey', recoveredCompressedPublicKey);
 
     return txBuilder;
   }

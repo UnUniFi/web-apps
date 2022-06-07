@@ -6,6 +6,7 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
+/* for delegate & validator debug
 const domainCauchyEA = 'a.private-test.ununifi.cauchye.net';
 const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
 const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
@@ -13,6 +14,15 @@ const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
 const chainID = 'ununifi-8-private-test';
 const chainName = 'UnUnuFi (Private)';
+*/
+
+const domainCauchyEA = '45.76.96.57';
+const domainCauchyEB = '104.238.151.213';
+const domainCauchyEC = '45.63.121.67';
+const domainCauchyED = '207.148.89.195';
+
+const chainID = 'create-validator-debug';
+const chainName = 'UnUnuFi (create-validator-debug)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

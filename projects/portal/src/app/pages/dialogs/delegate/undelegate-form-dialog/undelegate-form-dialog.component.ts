@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063,
+  InlineResponse20072,
   InlineResponse20066Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
@@ -11,7 +12,7 @@ import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { UndelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
-import { combineLatest, Observable } from 'rxjs';
+import { of, combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -27,7 +28,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: InlineResponse20066Validators | undefined;
-  unbondingDelegation$: Observable<any>;
+  unbondingDelegation$: Observable<InlineResponse20072 | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -50,18 +51,22 @@ export class UndelegateFormDialogComponent implements OnInit {
     );
     this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
       mergeMap(([sdk, address]) => {
-        console.log(this.validator);
         const validatorAddress = this.validator?.operator_address;
-        const validatorAccAddress = cosmosclient.ValAddress.fromString(validatorAddress || '');
+        if (!validatorAddress) {
+          return of(undefined)
+        }
+        const validatorAccAddress = cosmosclient.ValAddress.fromString(validatorAddress);
         const unbondingDelegation = rest.staking.unbondingDelegation(
           sdk.rest,
           validatorAccAddress,
           address,
         );
-        console.log({ address, validatorAccAddress, unbondingDelegation });
-        return unbondingDelegation;
+        return unbondingDelegation
       }),
-      map((res) => res.data),
+      map((res) => {
+        if (!res) { return undefined }
+        return res.data
+      }),
     );
     this.delegateAmount$ = this.delegations$.pipe(
       map(

@@ -155,6 +155,7 @@ export class WalletApplicationService {
     const connectedStoredWallet = await this.keplrService.connectWallet();
     if (!connectedStoredWallet) {
       this.snackBar.open('Dialog was canceled!', 'Close');
+      return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
     await this.openConnectWalletCompletedDialog(connectedStoredWallet);

@@ -51,7 +51,7 @@
           <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
         </mat-list-item>
         <ng-container
-          *ngIf="(totalRewards?.total?.length || 0) > 0; then existTotalRewards; else emptyTotalRewards"
+          *ngIf="totalRewards != undefined; then existTotalRewards; else emptyTotalRewards"
         >
         </ng-container>
         <ng-template #emptyTotalRewards>
@@ -62,11 +62,10 @@
           </mat-list-item>
         </ng-template>
         <ng-template #existTotalRewards>
-          <mat-list-item *ngFor="let eachTotalReward of totalRewards?.total; last as last">
+          <mat-list-item>
             <span class="column-name">Claimable Delegator Reward</span>
             <span class="flex-auto"></span>
-            <span>{{ eachTotalReward.amount | number: '1.6-6' }}</span>
-            <span>{{ eachTotalReward.denom }}</span>
+            <span>{{ totalRewards?.amount }}{{ totalRewards?.denom }}</span>
           </mat-list-item>
         </ng-template>
       </mat-list>

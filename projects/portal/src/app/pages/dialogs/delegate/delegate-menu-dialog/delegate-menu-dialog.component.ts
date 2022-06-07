@@ -6,7 +6,7 @@ import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063,
   InlineResponse20066Validators,
-  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  InlineResponse20041Pool,
   InlineResponse20063Delegation,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
@@ -29,9 +29,7 @@ export class DelegateMenuDialogComponent implements OnInit {
   delegation$: Observable<InlineResponse20063Delegation | null | undefined>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
-  totalRewards$: Observable<
-    CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
-  >;
+  totalRewards$: Observable<InlineResponse20041Pool | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -111,7 +109,14 @@ export class DelegateMenuDialogComponent implements OnInit {
         }
         return rest.distribution
           .delegationTotalRewards(sdk.rest, accAddress)
-          .then((res) => res.data);
+          .then((res) => res.data.total?.slice(-1)[0]);
+      }),
+      map((res) => {
+        if (res?.amount == undefined) {
+          return undefined;
+        }
+        res.amount = Math.floor(Number(res?.amount)).toString(); // 切り捨て
+        return res;
       }),
     );
   }

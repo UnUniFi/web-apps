@@ -34,10 +34,7 @@ export class BlockComponent implements OnInit {
       mergeMap(([sdk, height, block]) =>
         rest.tx
           .getTxsEvent(sdk.rest, [`tx.height=${height}`], undefined, undefined, undefined, true)
-          .then((res) => {
-            console.log('res', res);
-            return res.data;
-          })
+          .then((res) => res.data)
           .catch((error) => {
             console.error(error);
             return undefined;
@@ -90,5 +87,5 @@ export class BlockComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -119,8 +119,8 @@ export class TxsComponent implements OnInit {
         // Note: This is strange. This is temporary workaround way.
         const temporaryWorkaroundPageSize =
           txsTotalCount === BigInt(1) &&
-          modifiedPageOffset === BigInt(1) &&
-          modifiedPageSize === BigInt(1)
+            modifiedPageOffset === BigInt(1) &&
+            modifiedPageSize === BigInt(1)
             ? modifiedPageSize + BigInt(1)
             : modifiedPageSize;
 
@@ -145,10 +145,9 @@ export class TxsComponent implements OnInit {
       }),
       map((latestTxs) => latestTxs?.reverse()),
     );
-    this.txs$.subscribe((a) => console.log(a));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.router.navigate([], {

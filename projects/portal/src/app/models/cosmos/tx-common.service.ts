@@ -1,6 +1,6 @@
 import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { createCosmosPrivateKeyFromString } from '../../utils/key';
-import { validatePrivateStoredWallet } from '../../utils/validater';
+import { validatePrivateStoredWallet } from '../../utils/validation';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { KeyType } from '../keys/key.model';
 import { KeplrService } from '../wallets/keplr/keplr.service';

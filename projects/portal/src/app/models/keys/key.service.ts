@@ -37,7 +37,7 @@ export class KeyService {
   }
 
   getPrivateKeyFromMnemonic(mnemonic: string) {
-    const mnemonicWithNoWhitespace = mnemonic.trim();
+    const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s+/g, ' ');
     return this.iKeyInfrastructure.getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace);
   }
 

@@ -1,3 +1,4 @@
+import { validatePrivateStoredWallet } from '../../../../../utils/validation';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -6,6 +7,10 @@ import { cosmosclient } from '@cosmos-client/core';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from 'projects/portal/src/app/utils/key';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { validatePrivateStoredWallet } from './../../../../../utils/validater';

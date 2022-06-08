@@ -50,6 +50,8 @@
           <span class="flex-auto"></span>
           <span class="column-value">{{ delegateAmount?.amount | number:'1.0-0' }} {{ delegateAmount?.denom }}</span>
         </mat-list-item>
+      </mat-list>
+      <mat-list class="w-full">
         <ng-container
           *ngIf="(totalRewards?.total?.length || 0) > 0; then existTotalRewards; else emptyTotalRewards"        >
         </ng-container>

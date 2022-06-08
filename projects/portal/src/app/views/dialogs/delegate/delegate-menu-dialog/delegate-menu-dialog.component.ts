@@ -3,6 +3,7 @@ import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
   InlineResponse20066Validators,
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
 } from '@cosmos-client/core/esm/openapi/api';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -23,6 +24,8 @@ export class DelegateMenuDialogComponent implements OnInit {
   delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   isDelegated?: boolean | null;
+  @Input()
+  totalRewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
 
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;
@@ -31,12 +34,15 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Output()
   appUndelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()
+  appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
+  @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
+    this.appWithdrawDelegatorReward = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -70,6 +76,13 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appUndelegate.emit(this.selectedValidator);
+  }
+
+  onClickWithdrawDelegatorRewardButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appWithdrawDelegatorReward.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

@@ -4,8 +4,10 @@
   [delegations]="delegations$ | async"
   [delegateAmount]="delegateAmount$ | async"
   [isDelegated]="isDelegated$ | async"
+  [totalRewards]="totalRewards$ | async"
   (appDelegate)="onSubmitDelegate($event)"
   (appRedelegate)="onSubmitRedelegate($event)"
   (appUndelegate)="onSubmitUndelegate($event)"
+  (appWithdrawDelegatorReward)="onSubmitWithdrawDelegatorReward($event)"
   (appDetail)="onSubmitDetail($event)"
 ></view-delegate-menu-dialog>

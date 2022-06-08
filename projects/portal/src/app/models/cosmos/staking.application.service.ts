@@ -3,7 +3,7 @@ import { DelegateMenuDialogComponent } from '../../pages/dialogs/delegate/delega
 import { RedelegateFormDialogComponent } from '../../pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
 import { UndelegateFormDialogComponent } from '../../pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
-import { validatePrivateStoredWallet } from '../../utils/validater';
+import { validatePrivateStoredWallet } from '../../utils/validation';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';

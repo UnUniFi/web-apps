@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Connect Your Wallet</div>
     <div class="text-base m-3">Start earning high yield on your crypto</div>
     <ng-container *ngIf="privateWallet$ | async as privateWallet">
@@ -35,7 +35,14 @@
 
           <mat-form-field class="w-full">
             <mat-label>Key Type</mat-label>
-            <mat-select #keyTypeRef [(ngModel)]="privateWallet.key_type" name="keyType" matInput required disabled >
+            <mat-select
+              #keyTypeRef
+              [(ngModel)]="privateWallet.key_type"
+              name="keyType"
+              matInput
+              required
+              disabled
+            >
               <mat-option [value]="'secp256k1'">Secp256k1</mat-option>
               <mat-option [value]="'ed25519'" disabled>Ed25519</mat-option>
               <mat-option [value]="'sr25519'" disabled>Sr25519</mat-option>
@@ -47,12 +54,13 @@
             <textarea
               #mnemonicRef
               name="mnemonic"
-              [(ngModel)]="privateWallet.mnemonic"
+              ngModel
               (input)="onChangeIdAndMnemonic(idRef.value, mnemonicRef.value)"
               matInput
               rows="3"
               style="resize: none"
-              required pattern="^[a-z\s]+$"
+              required
+              pattern="^[a-z\s]+$"
             ></textarea>
             <button mat-button type="button" matSuffix (click)="copyClipboard(mnemonicRef.value)">
               <mat-icon>content_copy</mat-icon>
@@ -72,33 +80,22 @@
               required
               autocomplete="new-password"
             />
-            <button
-              mat-button
-              type="button"
-              matSuffix
-              (click)="togglePasswordVisibility()"
-            >
+            <button mat-button type="button" matSuffix (click)="togglePasswordVisibility()">
               <mat-icon>
                 {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
               </mat-icon>
             </button>
-            <button
-              mat-button
-              type="button"
-              matSuffix
-              (click)="copyClipboard(privateKeyRef.value)"
-            >
+            <button mat-button type="button" matSuffix (click)="copyClipboard(privateKeyRef.value)">
               <mat-icon>content_copy</mat-icon>
               <span>copy</span>
             </button>
             <mat-hint>
-              You must save this private key as a password using password manager built in the web browser.
+              You must save this private key as a password using password manager built in the web
+              browser.
             </mat-hint>
           </mat-form-field>
 
-          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">
-            Next
-          </button>
+          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">Next</button>
         </form>
       </ng-container>
     </ng-container>

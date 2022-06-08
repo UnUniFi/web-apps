@@ -13,11 +13,6 @@ import {
 } from 'projects/portal/src/app/utils/key';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { validatePrivateStoredWallet } from './../../../../../utils/validater';
-import {
-  createCosmosPrivateKeyFromString,
-  createPrivateKeyStringFromMnemonic,
-} from 'projects/portal/src/app/utils/key';
 
 @Component({
   selector: 'view-ununifi-import-wallet-with-mnemonic-form-dialog',

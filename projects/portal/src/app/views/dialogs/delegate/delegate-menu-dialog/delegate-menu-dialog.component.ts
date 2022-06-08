@@ -36,6 +36,8 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Output()
   appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
   @Output()
+  appWithdrawValidatorCommission: EventEmitter<InlineResponse20066Validators>;
+  @Output()
   appDetail: EventEmitter<InlineResponse20066Validators>;
 
   constructor() {
@@ -43,6 +45,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
     this.appWithdrawDelegatorReward = new EventEmitter();
+    this.appWithdrawValidatorCommission = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
@@ -83,6 +86,13 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appWithdrawDelegatorReward.emit(this.selectedValidator);
+  }
+
+  onClickWithdrawValidatorCommissionButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appWithdrawValidatorCommission.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

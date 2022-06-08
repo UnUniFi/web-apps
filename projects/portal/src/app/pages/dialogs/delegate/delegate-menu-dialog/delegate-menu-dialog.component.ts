@@ -138,6 +138,11 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
+  onSubmitWithdrawValidatorCommission(validator: InlineResponse20066Validators) {
+    this.matDialogRef.close();
+    this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
+  }
+
   onSubmitDetail(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
     this.router.navigate(['delegate', 'validators', validator.operator_address]);

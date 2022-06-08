@@ -7,6 +7,7 @@ import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-m
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
 import { AppWithdrawDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.module';
+import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
@@ -71,6 +72,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppRedelegateFormDialogModule,
     AppUndelegateFormDialogModule,
     AppWithdrawDelegatorRewardFormDialogModule,
+    AppWithdrawValidatorCommissionFormDialogModule,
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     GraphQLModule,

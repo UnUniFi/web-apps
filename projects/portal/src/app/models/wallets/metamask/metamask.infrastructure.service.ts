@@ -103,8 +103,6 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
   ): Promise<cosmosclient.TxBuilder> {
     const txJson = txBuilder.toProtoJSON() as any;
 
-    // TODO: fix JSONstringify issue
-    delete txJson.auth_info.signer_infos[0].mode_info.multi;
     // TODO: The reason of below procedures is that, `instance of Long` condition isn't working because of different instance version of Long
     txJson.body.timeout_height = txJson.body.timeout_height.toString();
     txJson.auth_info.signer_infos[0].sequence =

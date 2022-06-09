@@ -192,9 +192,9 @@ export class TxCommonService {
 
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.protoJSONStringify());
+    const txForSimulation = txBuilder.toProtoJSON() as any;
     console.log(txForSimulation);
-    // fix JSONstringify issue
+    // TODO: fix JSONstringify issue
     delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
 
     // set dummy signature for simulate

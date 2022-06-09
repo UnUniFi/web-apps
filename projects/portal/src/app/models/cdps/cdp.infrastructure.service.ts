@@ -87,7 +87,13 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     // get account info
     const account = await rest.auth
       .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -105,12 +111,12 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateCdp)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgCreateCdp)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -195,7 +201,13 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     // get account info
     const account = await rest.auth
       .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -211,12 +223,12 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgDrawDebt)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgDrawDebt)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -301,7 +313,13 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     // get account info
     const account = await rest.auth
       .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -317,12 +335,12 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgRepayDebt)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgRepayDebt)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -412,7 +430,13 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     // get account info
     const account = await rest.auth
       .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -430,12 +454,12 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgDepositCDP)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgDepositCDP)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -525,7 +549,13 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     // get account info
     const account = await rest.auth
       .account(sdk.rest, sender)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -543,12 +573,12 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgWithdraw)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgWithdraw)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,

@@ -32,8 +32,8 @@ export class GentxService {
     const publicKey = new proto.cosmos.crypto.ed25519.PubKey({
       key: base64DecodedPublicKey,
     });
-    const packAnyPublicKey = cosmosclient.codec.packAny(publicKey);
-    console.log('packAnyPublicKey', packAnyPublicKey);
+    const instanceToProtoAnyPublicKey = cosmosclient.codec.instanceToProtoAny(publicKey);
+    console.log('instanceToProtoAnyPublicKey', instanceToProtoAnyPublicKey);
 
     // build tx
     const createValidatorTxData = {
@@ -52,7 +52,7 @@ export class GentxService {
       min_self_delegation: gentxData.min_self_delegation,
       delegator_address: gentxData.delegator_address,
       validator_address: gentxData.validator_address,
-      pubkey: packAnyPublicKey,
+      pubkey: instanceToProtoAnyPublicKey,
       value: {
         denom: gentxData.denom,
         amount: gentxData.amount,
@@ -65,7 +65,7 @@ export class GentxService {
     console.log('msgCreateValidator', msgCreateValidator);
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateValidator)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${gentxData.node_id}@${gentxData.ip}:26656`,
       timeout_height: cosmosclient.Long.fromString('0'),
       extension_options: [],
@@ -76,7 +76,7 @@ export class GentxService {
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -100,7 +100,7 @@ export class GentxService {
     console.log('hex', Buffer.from(signDocBytes).toString('hex')); // ここのconsole.logを正規表現置換したものをデバッグ用にgentx-proto-binary.txtに書き出した
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
-    const txBodyJsonString = txBuilder.cosmosJSONStringify();
+    const txBodyJsonString = txBuilder.protoJSONStringify();
     console.log('txBodyJsonString', txBodyJsonString);
     const txBodyJson = JSON.parse(txBodyJsonString);
     console.log('txBodyJson', txBodyJson);

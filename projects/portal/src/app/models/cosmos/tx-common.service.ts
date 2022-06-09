@@ -32,7 +32,13 @@ export class TxCommonService {
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const account = await rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
     const baseAccount = convertUnknownAccountToBaseAccount(account);
     if (!baseAccount) {
@@ -50,7 +56,7 @@ export class TxCommonService {
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const packedAnyMessages: proto.google.protobuf.IAny[] = messages.map((message) =>
-      cosmosclient.codec.packAny(message),
+      cosmosclient.codec.instanceToProtoAny(message),
     );
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
       messages: packedAnyMessages,
@@ -58,7 +64,7 @@ export class TxCommonService {
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(cosmosPublicKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(cosmosPublicKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -186,7 +192,8 @@ export class TxCommonService {
 
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());
+    const txForSimulation = JSON.parse(txBuilder.protoJSONStringify());
+    console.log(txForSimulation);
     // fix JSONstringify issue
     delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
 

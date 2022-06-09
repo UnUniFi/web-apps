@@ -5,6 +5,7 @@
   [delegateAmount]="delegateAmount$ | async"
   [isDelegated]="isDelegated$ | async"
   [totalRewards]="totalRewards$ | async"
+  [commission]="commission$ | async"
   (appDelegate)="onSubmitDelegate($event)"
   (appRedelegate)="onSubmitRedelegate($event)"
   (appUndelegate)="onSubmitUndelegate($event)"

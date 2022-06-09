@@ -8,6 +8,7 @@ import {
   InlineResponse20066Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   InlineResponse20063Delegation,
+  QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
@@ -31,6 +32,10 @@ export class DelegateMenuDialogComponent implements OnInit {
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<
     CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
+  >;
+  commission$: Observable<
+    | QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod
+    | undefined
   >;
 
   constructor(
@@ -112,6 +117,14 @@ export class DelegateMenuDialogComponent implements OnInit {
         return rest.distribution
           .delegationTotalRewards(sdk.rest, accAddress)
           .then((res) => res.data);
+      }),
+    );
+    this.commission$ = combined$.pipe(
+      mergeMap(([sdk, accAddress, valAddress]) => {
+        if (accAddress === undefined || valAddress === undefined) {
+          return of(undefined);
+        }
+        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
       }),
     );
   }

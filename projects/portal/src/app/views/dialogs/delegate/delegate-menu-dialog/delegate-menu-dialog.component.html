@@ -72,6 +72,33 @@
       </mat-list>
     </ng-container>
 
+    <ng-container>
+      <mat-list class="w-full">
+        <ng-container
+          *ngIf="
+            (commission?.commission?.commission?.length || 0) > 0;
+            then existCommission;
+            else emptyCommission
+          "
+        >
+        </ng-container>
+        <ng-template #emptyCommission>
+          <mat-list-item>
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>*This account has no commission</span>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #existCommission>
+          <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>{{ commission.amount | number:'1.0-0' }} {{ commission.denom }}</span>
+          </mat-list-item>
+        </ng-template>
+      </mat-list>
+    </ng-container>
+
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"

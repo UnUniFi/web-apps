@@ -51,14 +51,14 @@ export class UndelegateFormDialogComponent implements OnInit {
     );
     this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
       mergeMap(([sdk, address]) => {
-        const validatorAddress = this.validator?.operator_address;
-        if (!validatorAddress) {
+        const valAddressString = this.validator?.operator_address;
+        if (!valAddressString) {
           return of(undefined)
         }
-        const validatorAccAddress = cosmosclient.ValAddress.fromString(validatorAddress);
+        const valAddress = cosmosclient.ValAddress.fromString(valAddressString);
         const unbondingDelegation = rest.staking.unbondingDelegation(
           sdk.rest,
-          validatorAccAddress,
+          valAddress,
           address,
         );
         return unbondingDelegation

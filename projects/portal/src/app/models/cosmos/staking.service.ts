@@ -102,12 +102,10 @@ export class StakingService {
     // get account info
     const account = await rest.auth
       .account(sdk, accAddress)
-      .then(
-        (res) =>
-          res.data.account &&
-          cosmosclient.codec.protoJSONToInstance(
-            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
-          ),
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
       )
       .catch((_) => undefined);
 

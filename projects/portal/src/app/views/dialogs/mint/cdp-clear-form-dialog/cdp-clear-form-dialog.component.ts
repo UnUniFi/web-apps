@@ -41,6 +41,9 @@ export class CdpClearFormDialogComponent implements OnInit {
   @Input()
   balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
 
+  @Input()
+  principalLimit?: number | null;
+
   @Output()
   appSubmit: EventEmitter<ClearCdpOnSubmitEvent>;
 

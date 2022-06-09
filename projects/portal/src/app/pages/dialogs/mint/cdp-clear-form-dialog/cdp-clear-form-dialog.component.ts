@@ -6,8 +6,10 @@ import { ConfigService } from 'projects/explorer/src/app/models/config.service';
 import { CosmosSDKService, CdpApplicationService } from 'projects/portal/src/app/models';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { getCreateLimit } from 'projects/portal/src/app/utils/function';
+import { getLiquidationPriceStream } from 'projects/portal/src/app/utils/stream';
 import { ClearCdpOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/mint/cdp-clear-form-dialog/cdp-clear-form-dialog.component';
-import { Observable, combineLatest, timer, of, async } from 'rxjs';
+import { Observable, combineLatest, timer, of, async, BehaviorSubject } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { ununifi, rest } from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
@@ -20,6 +22,7 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
 export class CdpClearFormDialogComponent implements OnInit {
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   cdp: InlineResponse2004Cdp1;
+  cdpParams$: Observable<ununifi.cdp.IParams>;
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
@@ -29,6 +32,10 @@ export class CdpClearFormDialogComponent implements OnInit {
   address$: Observable<cosmosclient.AccAddress | undefined>;
   balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
+  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  principalLimit$: Observable<number>;
+  collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public readonly data: InlineResponse2004Cdp1,
@@ -86,6 +93,26 @@ export class CdpClearFormDialogComponent implements OnInit {
           (balances) => balances.denom === repaymentDenom,
         );
         return repaymentDenomWithBalance;
+      }),
+    );
+
+    this.cdpParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      map((param) => param.data.params!),
+    );
+    // get principal limit
+
+    this.liquidationPrice$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.cdpParams$)),
+    );
+    this.principalLimit$ = combineLatest([
+      this.collateralType$,
+      this.cdpParams$,
+      this.liquidationPrice$,
+      this.collateralInputValue.asObservable(),
+    ]).pipe(
+      map(([collateralType, params, liquidationPrice, collateralAmount]) => {
+        return getCreateLimit(params, collateralAmount, collateralType, liquidationPrice);
       }),
     );
 

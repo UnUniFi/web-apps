@@ -6,7 +6,6 @@ import { ConfigService } from 'projects/explorer/src/app/models/config.service';
 import { CosmosSDKService, CdpApplicationService } from 'projects/portal/src/app/models';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { ClearCdpOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/mint/cdp-clear-form-dialog/cdp-clear-form-dialog.component';
 import { Observable, combineLatest, timer, of, async } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -19,13 +18,8 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/cjs/openapi';
   styleUrls: ['./cdp-clear-form-dialog.component.css'],
 })
 export class CdpClearFormDialogComponent implements OnInit {
-  // currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  // coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  // collateralBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   cdp: InlineResponse2004Cdp1;
-
-  // cdp$: Observable<InlineResponse2004Cdp1>;
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
@@ -40,31 +34,12 @@ export class CdpClearFormDialogComponent implements OnInit {
     public readonly data: InlineResponse2004Cdp1,
     public matDialogRef: MatDialogRef<CdpClearFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
-    // private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly cdpApplicationService: CdpApplicationService,
-
     private readonly route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
   ) {
     this.cdp = data;
-    // this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    // const address$ = this.currentStoredWallet$.pipe(
-    //   filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-    //   map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    // );
-
-    // this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-    //   mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
-    //   map((result) => result.data.balances),
-    // );
-    // this.collateralBalance$ = this.coins$.pipe(
-    //   map((coins) => {
-    //     const balance = coins?.find((coin) => coin.denom == this.cdp.cdp?.collateral?.denom);
-    //     return balance ? balance.amount! : '0';
-    //   }),
-    // );
-
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
@@ -97,17 +72,6 @@ export class CdpClearFormDialogComponent implements OnInit {
       mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
       map((data) => data.data.params!),
     );
-
-    // this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-    //   mergeMap(([ownerAddr, collateralType, sdk]) =>
-    //     rest.ununifi.cdp.cdp(
-    //       sdk.rest,
-    //       cosmosclient.AccAddress.fromString(ownerAddr),
-    //       collateralType,
-    //     ),
-    //   ),
-    //   map((res) => res.data.cdp!),
-    // );
 
     this.repaymentDenomString$ = this.params$.pipe(
       map((params) =>

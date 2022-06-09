@@ -71,7 +71,13 @@ export class GovService {
     // get account info
     const account = await rest.auth
       .account(sdk, fromAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then(
+        (res) =>
+          res.data.account &&
+          cosmosclient.codec.protoJSONToInstance(
+            cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+          ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -88,12 +94,12 @@ export class GovService {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgProposal)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgProposal)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,

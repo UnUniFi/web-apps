@@ -44,7 +44,7 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@apollo/client": "^3.0.0",
-    "@cosmos-client/core": "^0.45.4",
+    "@cosmos-client/core": "^0.45.7",
     "@metamask/detect-provider": "^1.2.0",
     "@ngneat/tailwind": "^7.0.3",
     "@ngrx/effects": "^12.4.0",

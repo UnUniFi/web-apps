@@ -6,6 +6,7 @@ import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/open
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
+import { txParseMsgDelegate } from "./../../../utils/tx-parser"
 
 @Component({
   selector: 'app-block',
@@ -46,6 +47,8 @@ export class BlockComponent implements OnInit {
         if (!txs?.txs) {
           return undefined;
         }
+        console.log("in blk txs", txs)
+        txParseMsgDelegate(txs)
         const txTypeList = txs?.txs?.map((tx) => {
           if (!tx.body?.messages) {
             return '';
@@ -61,6 +64,8 @@ export class BlockComponent implements OnInit {
           });
           return txTypes.join();
         });
+
+
         return txTypeList;
       }),
     );

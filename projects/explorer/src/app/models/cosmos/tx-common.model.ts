@@ -7,3 +7,11 @@ export type SimulatedTxResultResponse = {
   estimatedGasUsedWithMargin: proto.cosmos.base.v1beta1.ICoin;
   estimatedFeeWithMargin: proto.cosmos.base.v1beta1.ICoin;
 };
+
+export type txTitle = {
+  txHash: string,
+  txType: string,
+  fromAddress: string,
+  toAddress: string,
+  amount: string
+}

@@ -62,19 +62,11 @@ export class CdpClearFormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(
-    privateKeyString: string,
-    ownerAddr: string,
-    collateralType: string,
-    repaymentDenom: string,
-    repaymentAmount: string,
-    minimumGasPrice: string,
-  ) {
-    if (this.selectedGasPrice === undefined) {
+  onSubmit(privateKeyString: string, ownerAddr: string) {
+    console.log(this.selectedGasPrice);
+    if (!this.selectedGasPrice || !this.cdp?.cdp?.owner || !this.cdp.cdp.type) {
       return;
     }
-    this.selectedGasPrice.amount = minimumGasPrice;
-
     if (!this.balances) {
       console.error('clear-balances', this.balances);
       return;
@@ -88,10 +80,10 @@ export class CdpClearFormDialogComponent implements OnInit {
       key: this.key!,
       privateKey,
       ownerAddr: cosmosclient.AccAddress.fromString(ownerAddr),
-      collateralType: collateralType,
+      collateralType: this.cdp.cdp.type,
       repayment: {
-        denom: repaymentDenom,
-        amount: repaymentAmount,
+        denom: this.repaymentDenom?.denom,
+        amount: this.repaymentDenom?.amount,
       },
       minimumGasPrice: this.selectedGasPrice,
       balances: this.balances,

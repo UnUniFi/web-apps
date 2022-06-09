@@ -16,10 +16,7 @@
     (submit)="
       onSubmit(
         privateKeyRef.value,
-        ownerRef.value,
-        repaymentDenomRef.value,
-        repaymentAmountRef.value,
-        minimumGasPriceRef.value
+        ownerRef.value
       )
     "
   >
@@ -27,7 +24,6 @@
       <mat-form-field class="flex-auto">
         <mat-label>Repayment Denom</mat-label>
         <input
-          #repaymentDenomRef
           [(ngModel)]="repaymentDenom && repaymentDenom.denom"
           name="repayment-denom"
           matInput
@@ -39,7 +35,7 @@
       <mat-form-field class="flex-auto">
         <mat-label>Repayment Amount</mat-label>
         <input
-          #repaymentAmountRef
+
           [(ngModel)]="repayment_amount"
           name="repayment-amount"
           matInput

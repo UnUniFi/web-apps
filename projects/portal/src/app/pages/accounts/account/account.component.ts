@@ -49,12 +49,10 @@ export class AccountComponent implements OnInit {
         }
         return rest.auth
           .account(sdk.rest, address)
-          .then(
-            (res) =>
-              res.data &&
-              cosmosclient.codec.protoJSONToInstance(
-                cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
-              ),
+          .then((res) =>
+            cosmosclient.codec.protoJSONToInstance(
+              cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+            ),
           )
           .catch((error) => {
             console.error(error);

@@ -192,8 +192,6 @@ export class TxCommonService {
     // restore json from txBuilder
     const txForSimulation = txBuilder.toProtoJSON() as any;
     console.log(txForSimulation);
-    // TODO: fix JSONstringify issue
-    delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
 
     // set dummy signature for simulate
     const uint8Array = new Uint8Array(64);

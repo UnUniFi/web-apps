@@ -1,6 +1,6 @@
 import { KeyBackupDialogService } from '../../../models/keys/key-backup-dialog.service';
 import { KeyBackupResult } from '../../../models/keys/key.model';
-import { KeyService } from '../../../models/keys/key.service';
+import { createPrivateKeyStringFromMnemonic } from '../../../utils/key';
 import { CreateOnSubmitEvent } from '../../../views/keys/create/create.component';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,12 +14,11 @@ import { KeyApplicationService } from 'projects/portal/src/app/models/keys/key.a
 })
 export class CreateComponent implements OnInit {
   mnemonic: string;
-  privateKey: string;
+  privateKey?: string;
   keyBackupResult?: KeyBackupResult;
 
   constructor(
     private readonly keyApplication: KeyApplicationService,
-    private readonly key: KeyService,
     private readonly keyBackupDialog: KeyBackupDialogService,
     private readonly snackBar: MatSnackBar,
   ) {
@@ -48,7 +47,7 @@ and store them safely and confidentially without disclosing them to others.\
     if (!mnemonic) {
       return;
     }
-    this.privateKey = await this.key.getPrivateKeyFromMnemonic(mnemonic);
+    this.privateKey = await createPrivateKeyStringFromMnemonic(mnemonic);
     this.keyBackupResult = undefined;
   }
 

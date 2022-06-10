@@ -3,19 +3,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
 import { reducers, metaReducers } from './reducers';
-import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
-import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
-import { KeplrImportWalletDialogModule } from './views/dialogs/wallets/keplr/keplr-import-wallet-dialog/keplr-import-wallet-dialog.module';
-import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
-import { UnunifiCreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
-import { UnunifiImportWalletWithMnemonicFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.module';
-import { UnunifiKeyFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.module';
-import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
-import { UnunifiSelectWalletDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
-import { KeyBackupDialogModule } from './views/keys/key-backup-dialog/key-backup-dialog.module';
-import { KeyDeleteConfirmDialogModule } from './views/keys/key-delete-confirm-dialog/key-delete-confirm-dialog.module';
-import { KeyDeleteDialogModule } from './views/keys/key-delete-dialog/key-delete-dialog.module';
-import { KeySelectDialogModule } from './views/keys/key-select-dialog/key-select-dialog.module';
 import { ToolbarModule } from './views/toolbar/toolbar.module';
 import { ViewModule } from './views/view.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,6 +15,18 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingDialogModule } from 'ng-loading-dialog';
+import { ConnectWalletCompletedDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
+import { ConnectWalletStartDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
+import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
+import { UnunifiCreateWalletFormDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
+import { UnunifiImportWalletWithMnemonicFormDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.module';
+import { UnunifiKeyFormDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.module';
+import { UnunifiSelectCreateImportDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
+import { UnunifiSelectWalletDialogModule } from 'projects/portal/src/app/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
+import { KeyBackupDialogModule } from 'projects/portal/src/app/views/keys/key-backup-dialog/key-backup-dialog.module';
+import { KeyDeleteConfirmDialogModule } from 'projects/portal/src/app/views/keys/key-delete-confirm-dialog/key-delete-confirm-dialog.module';
+import { KeyDeleteDialogModule } from 'projects/portal/src/app/views/keys/key-delete-dialog/key-delete-dialog.module';
+import { KeySelectDialogModule } from 'projects/portal/src/app/views/keys/key-select-dialog/key-select-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -56,7 +55,6 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
     UnunifiKeyFormDialogModule,
-    KeplrImportWalletDialogModule,
     GraphQLModule,
   ],
   providers: [],

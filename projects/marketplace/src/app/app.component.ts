@@ -1,10 +1,10 @@
-import { Config, ConfigService } from './models/config.service';
-import { CosmosSDKService } from './models/cosmos-sdk.service';
-import { WalletApplicationService } from './models/wallets/wallet.application.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
+import { Config, ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
+import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 

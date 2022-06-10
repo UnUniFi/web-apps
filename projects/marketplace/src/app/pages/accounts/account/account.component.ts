@@ -1,8 +1,8 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 

@@ -1,9 +1,9 @@
-import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
+import { WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 @Component({
   selector: 'view-balance',

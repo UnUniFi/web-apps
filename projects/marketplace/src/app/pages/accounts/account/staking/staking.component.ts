@@ -6,7 +6,7 @@ import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorDelegationsResponseIsResponseTypeForTheQueryValidatorDelegationsRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/marketplace/src/app/models/cosmos-sdk.service';
+import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 

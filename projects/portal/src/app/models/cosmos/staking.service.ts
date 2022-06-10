@@ -1,8 +1,7 @@
 import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { Key, KeyType } from '../keys/key.model';
-import { KeyService } from '../keys/key.service';
+import { KeyType } from '../keys/key.model';
 import { CosmosWallet } from '../wallets/wallet.model';
 import { CreateValidatorData } from './staking.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -18,9 +17,8 @@ import BigNumber from 'bignumber.js';
 export class StakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   // Create Validator
   async createValidator(

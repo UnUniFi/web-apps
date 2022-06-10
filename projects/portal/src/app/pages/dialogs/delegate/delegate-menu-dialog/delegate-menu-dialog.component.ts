@@ -8,6 +8,7 @@ import {
   InlineResponse20066Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   InlineResponse20063Delegation,
+  QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
@@ -32,6 +33,11 @@ export class DelegateMenuDialogComponent implements OnInit {
   totalRewards$: Observable<
     CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
   >;
+  commission$: Observable<
+    | QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod
+    | undefined
+  >;
+  isValidator$: Observable<boolean | undefined> | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -114,6 +120,22 @@ export class DelegateMenuDialogComponent implements OnInit {
           .then((res) => res.data);
       }),
     );
+    this.commission$ = combined$.pipe(
+      mergeMap(([sdk, accAddress, valAddress]) => {
+        if (accAddress === undefined || valAddress === undefined) {
+          return of(undefined);
+        }
+        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+      }),
+    );
+    this.isValidator$ = valAddress$.pipe(
+      map((valAddress) => {
+        if (valAddress === undefined) {
+          return undefined;
+        }
+        return valAddress.toString() == this.selectedValidator?.operator_address;
+      }),
+    );
   }
 
   ngOnInit() {}
@@ -136,6 +158,11 @@ export class DelegateMenuDialogComponent implements OnInit {
   onSubmitWithdrawDelegatorReward(validator: InlineResponse20066Validators) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
+  }
+
+  onSubmitWithdrawValidatorCommission(validator: InlineResponse20066Validators) {
+    this.matDialogRef.close();
+    this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
   }
 
   onSubmitDetail(validator: InlineResponse20066Validators) {

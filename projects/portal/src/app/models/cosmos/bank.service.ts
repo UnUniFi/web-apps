@@ -15,8 +15,66 @@ export class BankService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
+  canonicalizeAccAddress(address: string) {
+    const canonicalized = address.replace(/\s+/g, '');
+    return cosmosclient.AccAddress.fromString(canonicalized);
+  }
+
+  validateBalanceBeforeSimulation(
+    amount: proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
+  ) {
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempAmountToSend = amount.find((amount) => amount.denom === feeDenom)?.amount;
+    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
+    const tempBalance = balances.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+
+    return {
+      feeDenom,
+      amountToSend,
+      balance,
+      simulationFeeAmount,
+      validity: amountToSend + simulationFeeAmount <= balance,
+    };
+  }
+
+  async simulateToSend(
+    fromAddress: cosmosclient.AccAddress,
+    toAddress: cosmosclient.AccAddress,
+    amount: proto.cosmos.base.v1beta1.ICoin[],
+    cosmosPublicKey: cosmosclient.PubKey,
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+  ): Promise<SimulatedTxResultResponse> {
+    const fromAccount = await this.txCommonService.getBaseAccountFromAddress(fromAddress);
+    if (!fromAccount) {
+      throw Error('Unsupported account type.');
+    }
+    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const simulatedTxBuilder = await this.buildSendTxBuilder(
+      fromAccount,
+      toAddress,
+      amount,
+      cosmosPublicKey,
+      dummyGas,
+      dummyFee,
+    );
+    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
+  }
+
   async send(
-    toAddress: string,
+    fromAddress: cosmosclient.AccAddress,
+    toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
@@ -24,14 +82,24 @@ export class BankService {
     privateKey?: string,
   ): Promise<InlineResponse20075> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
-    const txBuilder = await this.buildSendTxBuilder(toAddress, amount, cosmosPublicKey, gas, fee);
-    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!signerBaseAccount) {
-      throw Error('Unsupported Account!');
+
+    const fromAccount = await this.txCommonService.getBaseAccountFromAddress(fromAddress);
+    if (!fromAccount) {
+      throw Error('Unsupported account type.');
     }
+
+    const txBuilder = await this.buildSendTxBuilder(
+      fromAccount,
+      toAddress,
+      amount,
+      cosmosPublicKey,
+      gas,
+      fee,
+    );
+
     const signedTxBuilder = await this.txCommonService.signTx(
       txBuilder,
-      signerBaseAccount,
+      fromAccount,
       currentCosmosWallet,
       privateKey,
     );
@@ -42,53 +110,23 @@ export class BankService {
     return txResult;
   }
 
-  async simulateToSend(
-    toAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-    cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const simulatedTxBuilder = await this.buildSendTxBuilder(
-      toAddress,
-      amount,
-      cosmosPublicKey,
-      dummyGas,
-      dummyFee,
-    );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
-  }
-
   async buildSendTxBuilder(
-    toAddress: string,
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     cosmosPublicKey: cosmosclient.PubKey,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
-    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!baseAccount) {
-      throw Error('Unused Account or Unsupported Account Type!');
-    }
-    const fromAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    // remove unintentional whitespace
-    const toAddressWithNoWhitespace = toAddress.replace(/\s+/g, '');
+    const fromAddress = cosmosclient.AccAddress.fromString(fromAccount.address);
 
-    const msgSend = this.buildMsgSend(fromAddress.toString(), toAddressWithNoWhitespace, amount);
+    const msgSend = this.buildMsgSend(fromAddress, toAddress, amount);
 
     // build tx
     const txBuilder = await this.txCommonService.buildTxBuilder(
       [msgSend],
       cosmosPublicKey,
-      baseAccount,
+      fromAccount,
       gas,
       fee,
     );
@@ -97,13 +135,13 @@ export class BankService {
   }
 
   buildMsgSend(
-    fromAddress: string,
-    toAddress: string,
+    fromAddress: cosmosclient.AccAddress,
+    toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
   ): proto.cosmos.bank.v1beta1.MsgSend {
     const msgSend = new proto.cosmos.bank.v1beta1.MsgSend({
-      from_address: fromAddress,
-      to_address: toAddress,
+      from_address: fromAddress.toString(),
+      to_address: toAddress.toString(),
       amount,
     });
     return msgSend;

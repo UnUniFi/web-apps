@@ -18,7 +18,9 @@ export class ValidatorComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges() {
-    const pubKey = cosmosclient.codec.unpackCosmosAny(this.validator?.consensus_pubkey);
+    const pubKey = cosmosclient.codec.protoJSONToInstance(
+      cosmosclient.codec.castProtoJSONOfProtoAny(this.validator?.consensus_pubkey),
+    );
 
     if (!(pubKey instanceof proto.cosmos.crypto.ed25519.PubKey)) {
       return;

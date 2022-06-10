@@ -104,7 +104,17 @@ export class BalanceComponent implements OnInit {
         }
         return rest.auth
           .account(sdk.rest, cosmosAccAddress)
-          .then((res) => res.data && cosmosclient.codec.unpackCosmosAny(res.data.account))
+          .then((res) => {
+            console.log(res.data.account);
+            return res;
+          })
+          .then(
+            (res) =>
+              res.data &&
+              cosmosclient.codec.protoJSONToInstance(
+                cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+              ),
+          )
           .catch((error) => {
             console.error(error);
             return undefined;

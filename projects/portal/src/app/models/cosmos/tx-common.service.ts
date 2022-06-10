@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,11 @@ export class TxCommonService {
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const account = await rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
     const baseAccount = convertUnknownAccountToBaseAccount(account);
     if (!baseAccount) {
@@ -50,15 +55,16 @@ export class TxCommonService {
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const packedAnyMessages: proto.google.protobuf.IAny[] = messages.map((message) =>
-      cosmosclient.codec.packAny(message),
+      cosmosclient.codec.instanceToProtoAny(message),
     );
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
       messages: packedAnyMessages,
     });
+
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(cosmosPublicKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(cosmosPublicKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -69,7 +75,7 @@ export class TxCommonService {
       ],
       fee: {
         amount: fee?.amount && fee.amount !== '0' ? [fee] : [],
-        gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas?.amount ? gas.amount : '1000000'),
       },
     });
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
@@ -186,9 +192,8 @@ export class TxCommonService {
 
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());
-    // fix JSONstringify issue
-    delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
+    const txForSimulation = txBuilder.toProtoJSON() as any;
+    console.log(txForSimulation);
 
     // set dummy signature for simulate
     const uint8Array = new Uint8Array(64);

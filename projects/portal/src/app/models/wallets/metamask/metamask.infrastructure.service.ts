@@ -101,17 +101,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    txBuilder.signDocBytes(signerBaseAccount.account_number);
-    const txJsonString = txBuilder.cosmosJSONStringify();
-    if (!txBuilder) {
-      throw Error('Failed to txBuilder');
-    }
-    const txJson = JSON.parse(txJsonString);
-
-    // fix JSONstringify issue
-    delete txJson.auth_info.signer_infos[0].mode_info.multi;
-    txJson.auth_info.signer_infos[0].mode_info.single.mode = 'SIGN_MODE_DIRECT';
-    txJson.auth_info.fee.gas_limit = txJson.auth_info.fee.gas_limit.toString();
+    const txJson = txBuilder.toProtoJSON() as any;
 
     console.log(txJson);
 
@@ -129,7 +119,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     };
     console.log(messageJson);
 
-    const messageToBeSigned = JSON.stringify(txBuilder.canonicalizeJSON(messageJson));
+    const messageToBeSigned = JSON.stringify(messageJson);
     console.log(messageToBeSigned);
 
     const signature = await this.personalSign(messageToBeSigned);

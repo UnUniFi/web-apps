@@ -20,7 +20,7 @@ export class TxComponent implements OnInit {
 
   unpackMsg(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value);
+      return cosmosclient.codec.protoJSONToInstance(value);
     } catch {
       return null;
     }
@@ -28,7 +28,7 @@ export class TxComponent implements OnInit {
 
   unpackKey(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value) as cosmosclient.PubKey;
+      return cosmosclient.codec.protoJSONToInstance(value) as cosmosclient.PubKey;
     } catch {
       return null;
     }

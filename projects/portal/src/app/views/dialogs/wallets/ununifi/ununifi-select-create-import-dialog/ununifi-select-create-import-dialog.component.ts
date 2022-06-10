@@ -8,7 +8,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class UnunifiSelectCreateImportDialogComponent implements OnInit {
   options: {
-    value: 'select' | 'import' | 'create';
+    value: 'select' | 'import' | 'importWithPrivateKey' | 'create';
     name: string;
   }[] = [
     {
@@ -17,7 +17,11 @@ export class UnunifiSelectCreateImportDialogComponent implements OnInit {
     },
     {
       value: 'import',
-      name: 'Import Account',
+      name: 'Import Account with Mnemonic',
+    },
+    {
+      value: 'importWithPrivateKey',
+      name: 'Import Account with Private Key',
     },
     {
       value: 'create',
@@ -29,7 +33,7 @@ export class UnunifiSelectCreateImportDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClickButton(value: 'select' | 'import' | 'create'): void {
+  onClickButton(value: 'select' | 'import' | 'importWithPrivateKey' | 'create'): void {
     this.matDialogRef.close(value);
   }
 }

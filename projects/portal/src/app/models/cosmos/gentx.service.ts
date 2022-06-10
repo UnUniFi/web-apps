@@ -4,6 +4,7 @@ import { KeyService } from '../keys/key.service';
 import { GentxData } from './gentx.model';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -67,7 +68,7 @@ export class GentxService {
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${gentxData.node_id}@${gentxData.ip}:26656`,
-      timeout_height: cosmosclient.Long.fromString('0'),
+      timeout_height: Long.fromString('0'),
       extension_options: [],
       non_critical_extension_options: [],
     });
@@ -82,12 +83,12 @@ export class GentxService {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: cosmosclient.Long.fromString('0'),
+          sequence: Long.fromString('0'),
         },
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString('200000'),
+        gas_limit: Long.fromString('200000'),
         payer: '',
         granter: '',
       },
@@ -96,7 +97,7 @@ export class GentxService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(cosmosclient.Long.fromString('0'));
+    const signDocBytes = txBuilder.signDocBytes(Long.fromString('0'));
     console.log('hex', Buffer.from(signDocBytes).toString('hex')); // ここのconsole.logを正規表現置換したものをデバッグ用にgentx-proto-binary.txtに書き出した
     txBuilder.addSignature(privKey.sign(signDocBytes));
 

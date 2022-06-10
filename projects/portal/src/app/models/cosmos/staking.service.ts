@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import BigNumber from 'bignumber.js';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -173,7 +174,7 @@ export class StakingService {
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 

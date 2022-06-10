@@ -7,6 +7,7 @@ import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import Long from 'long';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { ununifi } from 'ununifi-client';
 
@@ -125,7 +126,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '300000'),
       },
     });
 
@@ -235,7 +236,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '300000'),
       },
     });
 
@@ -345,7 +346,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '300000'),
       },
     });
 
@@ -462,7 +463,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '300000'),
       },
     });
 
@@ -579,7 +580,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '300000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '300000'),
       },
     });
 

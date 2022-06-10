@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +60,7 @@ export class TxCommonService {
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
       messages: packedAnyMessages,
     });
+
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
@@ -73,7 +75,7 @@ export class TxCommonService {
       ],
       fee: {
         amount: fee?.amount && fee.amount !== '0' ? [fee] : [],
-        gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas?.amount ? gas.amount : '1000000'),
       },
     });
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);

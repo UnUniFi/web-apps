@@ -57,6 +57,8 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+import Long from 'long';
+import * as $protobuf from 'protobufjs/minimal';
 import 'zone.js';
 
 // Included with Angular CLI.
@@ -66,3 +68,6 @@ import 'zone.js';
  */
 (window as any).global = window;
 global.Buffer = global.Buffer || require('buffer').Buffer;
+
+$protobuf.util.Long = Long;
+$protobuf.configure();

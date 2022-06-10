@@ -15,14 +15,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/accounts/accounts.module').then((m) => m.AppAccountsModule),
   },
   {
-    path: 'txs',
-    loadChildren: () => import('./pages/txs/txs.module').then((m) => m.AppTxsModule),
-  },
-  {
-    path: 'keys',
-    loadChildren: () => import('./pages/keys/keys.module').then((m) => m.AppKeysModule),
-  },
-  {
     path: 'assets',
     loadChildren: () => import('./pages/assets/assets.module').then((m) => m.AppAssetsModule),
   },

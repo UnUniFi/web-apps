@@ -72,7 +72,7 @@
       </mat-list>
     </ng-container>
 
-    <ng-container>
+    <ng-container *ngIf="isValidator">
       <mat-list class="w-full">
         <ng-container
           *ngIf="
@@ -137,12 +137,14 @@
         <span class="text-black">Withdraw delegator reward</span>
       </button>
     </ng-container>
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickWithdrawValidatorCommissionButton()"
-    >
-      <span class="text-black">Withdraw validator commission</span>
-    </button>
-  </div>
+    <ng-container *ngIf="isValidator">
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickWithdrawValidatorCommissionButton()"
+      >
+        <span class="text-black">Withdraw validator commission</span>
+      </button>
+    </ng-container>
+</div>
 </mat-dialog-content>

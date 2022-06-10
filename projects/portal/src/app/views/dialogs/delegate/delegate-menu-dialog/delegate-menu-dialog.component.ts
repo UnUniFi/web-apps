@@ -29,6 +29,8 @@ export class DelegateMenuDialogComponent implements OnInit {
   totalRewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
   @Input()
   commission?: QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod | null;
+  @Input()
+  isValidator?: boolean | null;
   @Output()
   appDelegate: EventEmitter<InlineResponse20066Validators>;
   @Output()

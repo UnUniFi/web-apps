@@ -37,6 +37,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     | QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod
     | undefined
   >;
+  isValidator$: Observable<boolean | undefined> | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -125,6 +126,14 @@ export class DelegateMenuDialogComponent implements OnInit {
           return of(undefined);
         }
         return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+      }),
+    );
+    this.isValidator$ = valAddress$.pipe(
+      map((valAddress) => {
+        if (valAddress === undefined) {
+          return undefined;
+        }
+        return valAddress.toString() == this.selectedValidator?.operator_address;
       }),
     );
   }

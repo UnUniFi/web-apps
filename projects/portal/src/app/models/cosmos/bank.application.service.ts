@@ -31,7 +31,7 @@ export class BankApplicationService {
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    coins: proto.cosmos.base.v1beta1.ICoin[],
+    balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
@@ -40,28 +40,20 @@ export class BankApplicationService {
     if (!currentCosmosWallet) {
       throw Error('Current connected wallet is invalid!');
     }
+    const fromAddress = currentCosmosWallet.address;
+    const _toAddress = this.bank.canonicalizeAccAddress(toAddress);
     const cosmosPublicKey = currentCosmosWallet.public_key;
     if (!cosmosPublicKey) {
       throw Error('Invalid public key!');
     }
 
     // simulate
-    let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
-    // confirm whether amount has fee for simulation
-    const feeDenom = minimumGasPrice.denom;
-    const simulationFeeAmount = 1;
-    const tempAmountToSend = amount.find(
-      (amount) => amount.denom === minimumGasPrice.denom,
-    )?.amount;
-    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
-    const tempBalance = coins.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
-    const balance = tempBalance ? parseInt(tempBalance) : 0;
-    if (amountToSend + simulationFeeAmount > balance) {
+    const { feeDenom, amountToSend, balance, simulationFeeAmount, validity } =
+      this.bank.validateBalanceBeforeSimulation(amount, minimumGasPrice, balances);
+
+    if (!validity) {
       this.snackBar.open(
         `Insufficient fee margin for simulation!\nAmount to send: ${amountToSend}${feeDenom} + Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
         'Close',
@@ -70,9 +62,14 @@ export class BankApplicationService {
       return;
     }
 
+    let simulatedResultData: SimulatedTxResultResponse;
+    let gas: proto.cosmos.base.v1beta1.ICoin;
+    let fee: proto.cosmos.base.v1beta1.ICoin;
+
     try {
       simulatedResultData = await this.bank.simulateToSend(
-        toAddress,
+        fromAddress,
+        _toAddress,
         amount,
         cosmosPublicKey,
         minimumGasPrice,
@@ -120,7 +117,14 @@ export class BankApplicationService {
     let txhash: string | undefined;
 
     try {
-      const res = await this.bank.send(toAddress, amount, currentCosmosWallet, gas, fee);
+      const res = await this.bank.send(
+        fromAddress,
+        _toAddress,
+        amount,
+        currentCosmosWallet,
+        gas,
+        fee,
+      );
       txhash = res.tx_response?.txhash;
       if (txhash === undefined) {
         throw Error('Invalid txhash!');

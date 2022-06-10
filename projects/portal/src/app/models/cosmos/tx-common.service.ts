@@ -46,6 +46,25 @@ export class TxCommonService {
     return baseAccount;
   }
 
+  async getBaseAccountFromAddress(
+    address: cosmosclient.AccAddress,
+  ): Promise<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const account = await rest.auth
+      .account(sdk, address)
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
+      .catch((_) => undefined);
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
+    }
+    return baseAccount;
+  }
+
   async buildTxBuilder(
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,

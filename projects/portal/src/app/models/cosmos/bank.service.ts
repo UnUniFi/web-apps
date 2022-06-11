@@ -15,44 +15,14 @@ export class BankService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
-  canonicalizeAccAddress(address: string) {
-    const canonicalized = address.replace(/\s+/g, '');
-    return cosmosclient.AccAddress.fromString(canonicalized);
-  }
-
-  validateBalanceBeforeSimulation(
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
-  ) {
-    const feeDenom = minimumGasPrice.denom;
-    const simulationFeeAmount = 1;
-    const tempAmountToSend = amount.find((amount) => amount.denom === feeDenom)?.amount;
-    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
-    const tempBalance = balances.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
-    const balance = tempBalance ? parseInt(tempBalance) : 0;
-
-    return {
-      feeDenom,
-      amountToSend,
-      balance,
-      simulationFeeAmount,
-      validity: amountToSend + simulationFeeAmount <= balance,
-    };
-  }
-
   async simulateToSend(
-    fromAddress: cosmosclient.AccAddress,
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const fromAccount = await this.txCommonService.getBaseAccountFromAddress(fromAddress);
-    if (!fromAccount) {
-      throw Error('Unsupported account type.');
-    }
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
@@ -73,7 +43,7 @@ export class BankService {
   }
 
   async send(
-    fromAddress: cosmosclient.AccAddress,
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     currentCosmosWallet: CosmosWallet,
@@ -82,11 +52,6 @@ export class BankService {
     privateKey?: string,
   ): Promise<InlineResponse20075> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
-
-    const fromAccount = await this.txCommonService.getBaseAccountFromAddress(fromAddress);
-    if (!fromAccount) {
-      throw Error('Unsupported account type.');
-    }
 
     const txBuilder = await this.buildSendTxBuilder(
       fromAccount,

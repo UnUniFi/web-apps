@@ -1,11 +1,8 @@
-import { convertHexStringToUint8Array } from '../../utils/converter';
-import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { WalletApplicationService } from '../wallets/wallet.application.service';
-import { StoredWallet } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { BankService } from './bank.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,6 +22,7 @@ export class BankApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly walletService: WalletService,
+    private readonly txCommon: TxCommonService,
   ) {}
 
   async send(
@@ -34,6 +32,7 @@ export class BankApplicationService {
     balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
+    // TODO: firstValueFrom
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))
       .toPromise();
@@ -41,17 +40,22 @@ export class BankApplicationService {
       throw Error('Current connected wallet is invalid!');
     }
     const fromAddress = currentCosmosWallet.address;
-    const _toAddress = this.bank.canonicalizeAccAddress(toAddress);
+    const _toAddress = this.txCommon.canonicalizeAccAddress(toAddress);
     const cosmosPublicKey = currentCosmosWallet.public_key;
     if (!cosmosPublicKey) {
       throw Error('Invalid public key!');
+    }
+
+    const fromAccount = await this.txCommon.getBaseAccountFromAddress(fromAddress);
+    if (!fromAccount) {
+      throw Error('Unsupported account type.');
     }
 
     // simulate
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     const { feeDenom, amountToSend, balance, simulationFeeAmount, validity } =
-      this.bank.validateBalanceBeforeSimulation(amount, minimumGasPrice, balances);
+      this.txCommon.validateBalanceBeforeSimulation(amount, minimumGasPrice, balances);
 
     if (!validity) {
       this.snackBar.open(
@@ -68,7 +72,7 @@ export class BankApplicationService {
 
     try {
       simulatedResultData = await this.bank.simulateToSend(
-        fromAddress,
+        fromAccount,
         _toAddress,
         amount,
         cosmosPublicKey,
@@ -118,7 +122,7 @@ export class BankApplicationService {
 
     try {
       const res = await this.bank.send(
-        fromAddress,
+        fromAccount,
         _toAddress,
         amount,
         currentCosmosWallet,

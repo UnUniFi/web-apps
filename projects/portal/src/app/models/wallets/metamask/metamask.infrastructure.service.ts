@@ -82,8 +82,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     if (!cosmosPublicKey) {
       throw Error('Invalid public key!');
     }
-    const addressBytes = new Uint8Array(Buffer.from(ethAddress.slice(2), 'hex'));
-    const accAddress = new cosmosclient.AccAddress(addressBytes);
+    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const storedWallet: StoredWallet = {
       id: ethAddress,
       type: WalletType.metaMask,

@@ -26,6 +26,32 @@ export class TxCommonService {
     private readonly metaMaskService: MetaMaskService,
   ) {}
 
+  canonicalizeAccAddress(address: string) {
+    const canonicalized = address.replace(/\s+/g, '');
+    return cosmosclient.AccAddress.fromString(canonicalized);
+  }
+
+  validateBalanceBeforeSimulation(
+    usageAmount: proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
+  ) {
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempAmountToSend = usageAmount.find((amount) => amount.denom === feeDenom)?.amount;
+    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
+    const tempBalance = balances.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+
+    return {
+      feeDenom,
+      amountToSend,
+      balance,
+      simulationFeeAmount,
+      validity: amountToSend + simulationFeeAmount <= balance,
+    };
+  }
+
   async getBaseAccount(
     cosmosPublicKey: cosmosclient.PubKey,
   ): Promise<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {

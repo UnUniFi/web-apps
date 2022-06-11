@@ -1,12 +1,8 @@
 <div class="flex flex-row items-end">
   <h2 class="mb-0">Block #{{ block?.block?.header?.height }}</h2>
   <span class="flex-auto"></span>
-  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary"
-    >navigate_before</mat-icon
-  >
-  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary"
-    >navigate_next</mat-icon
-  >
+  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary">navigate_before</mat-icon>
+  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary">navigate_next</mat-icon>
 </div>
 <h3 class="ml-4 mb-0">Block details</h3>
 <mat-card class="mb-4">
@@ -42,7 +38,7 @@
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-xs sm:text-base">{{
         block?.block?.header?.proposer_address
-      }}</span>
+        }}</span>
     </mat-list-item>
   </mat-list>
 </mat-card>
@@ -51,26 +47,19 @@
 <mat-card class="mb-2">
   <mat-list>
     <mat-list-item>
-      <span class="break-all truncate">Hash</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">Type</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">From</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate pr-10">To</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">Total Amount</span>
-
+      <span class="w-1/12 truncate pl-2">Hash</span>
+      <span class="w-3/12 truncate pl-2">Type</span>
+      <span class="w-3/12 truncate pl-2">From</span>
+      <span class="w-3/12 truncate pl-2">To</span>
+      <span class="w-2/12 truncate pl-2">Total Amount</span>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
-  <ng-container
-    *ngIf="
+  <ng-container *ngIf="
       (transactions?.tx_responses?.length || 0) > 0;
       then existTransactions;
       else emptyTransactions
-    "
-  >
+    ">
   </ng-container>
 
   <ng-template #emptyTransactions>
@@ -79,49 +68,13 @@
 
   <ng-template #existTransactions>
     <mat-nav-list>
-      <mat-list-item
-        routerLink="/txs/{{ tx.txhash }}"
-        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
-      >
-        <span class="pr-2 w-1/12 text-sm truncate">{{ tx.txhash }}</span>
-        <span class="flex-auto"></span>
-
-        <span class="w-1/6 truncate">{{ txTypes?.[i] }}</span>
-        <span class="flex-auto"></span>
-
-        <ng-container *ngIf="tx.logs?.[0]?.events?.[1]?.type === 'oracle_updated_price' ">
-          <span
-            class="w-1/5 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[0]?.attributes?.[2]?.value }}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/5 break-all truncate"
-            >{{tx.logs?.[0]?.events?.[1]?.attributes?.[0]?.value}}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/6 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[1]?.attributes?.[2]?.value }}</span
-          >
-        </ng-container>
-
-        <ng-container *ngIf="tx.logs?.[0]?.events?.[3]?.type  == 'transfer'">
-          <span
-            class="w-1/5 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/5 break-all truncate"
-            >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/6 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
-          >
-        </ng-container>
+      <mat-list-item routerLink="/txs/{{ tx.txhash }}"
+        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last">
+        <span class="w-1/12 truncate text-sm">{{ tx.txhash }}</span>
+        <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
+        <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
+        <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress }}</span>
+        <span class="w-2/12 truncate text-sm pl-2">{{ txTitles?.[i]?.amount }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>
@@ -129,7 +82,6 @@
 </mat-card>
 
 <!--
-
 <h3>Msgs</h3>
 <ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
   <ng-container *ngIf="unpackMsg(message) as msg">

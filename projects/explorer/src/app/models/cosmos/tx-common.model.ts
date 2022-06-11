@@ -9,7 +9,6 @@ export type SimulatedTxResultResponse = {
 };
 
 export type txTitle = {
-  txHash: string,
   txType: string,
   fromAddress: string,
   toAddress: string,

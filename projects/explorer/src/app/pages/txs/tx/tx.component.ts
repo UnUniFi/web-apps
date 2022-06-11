@@ -20,7 +20,6 @@ export class TxComponent implements OnInit {
     this.tx$ = combineLatest([this.cosmosSDK.sdk$, this.txHash$]).pipe(
       mergeMap(([sdk, hash]) => rest.tx.getTx(sdk.rest, hash).then((res) => res.data)),
     );
-    this.tx$.subscribe((x) => console.log(x));
     this.txType$ = this.tx$.pipe(
       map((tx) => {
         if (!tx?.tx?.body?.messages) {
@@ -34,10 +33,7 @@ export class TxComponent implements OnInit {
         });
       }),
     );
-
-    //debug
-    this.txType$.subscribe((x) => console.log('A', x));
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

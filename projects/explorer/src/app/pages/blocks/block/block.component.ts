@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { InlineResponse20036, } from '@cosmos-client/core/esm/openapi';
+import { rest } from '@cosmos-client/core';
+import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
-import { txParseMsg, } from "./../../../utils/tx-parser"
-import { rest } from '@cosmos-client/core';
+import { txParseMsg } from "./../../../utils/tx-parser"
 import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({

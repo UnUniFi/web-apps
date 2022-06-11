@@ -1,5 +1,5 @@
 import { txTitle } from './../models/cosmos/tx-common.model';
-import { CosmosTxV1beta1GetTxsEventResponse, CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
+import { CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
 import { cosmosclient, proto, } from '@cosmos-client/core';
 
 
@@ -36,9 +36,6 @@ export const txParseMsg = (tx: CosmosTxV1beta1Tx): txTitle => {
     amount: ""
   };
 }
-
-
-
 const parseMsgDelegate = (instance: proto.cosmos.staking.v1beta1.MsgDelegate): txTitle => {
   const denomAmount = instance.amount?.amount
   const denom = instance.amount?.denom
@@ -116,7 +113,6 @@ const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted
     amount
   }
 }
-
 const parseMsgVote = (instance: proto.cosmos.gov.v1beta1.MsgVote): txTitle => {
   const denomAmount = instance.option.toString()
   const amount = denomAmount!
@@ -173,7 +169,6 @@ const parseMsgWithdrawValidatorCommission = (instance: proto.cosmos.distribution
     amount: "------",
   }
 }
-
 const parseMsgSend = (instance: proto.cosmos.bank.v1beta1.MsgSend): txTitle => {
   const denomAmount = instance.amount?.[0].amount
   const denom = instance.amount?.[0].denom
@@ -185,7 +180,6 @@ const parseMsgSend = (instance: proto.cosmos.bank.v1beta1.MsgSend): txTitle => {
     amount
   }
 }
-
 const parseMsgCreateVestingAccount = (instance: proto.cosmos.vesting.v1beta1.MsgCreateVestingAccount): txTitle => {
   const denomAmount = instance.amount?.[0].amount
   const denom = instance.amount?.[0].denom

@@ -71,6 +71,9 @@ export const createCosmosPrivateKeyFromString = (
   if (!privateKeyUint8Array) {
     return undefined;
   }
+  if (privateKeyUint8Array.length != 32) {
+    return undefined;
+  }
   return createCosmosPrivateKeyFromUint8Array(keyType, privateKeyUint8Array);
 };
 

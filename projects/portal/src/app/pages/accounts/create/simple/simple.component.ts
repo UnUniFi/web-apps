@@ -50,5 +50,5 @@ export class SimpleComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -30,9 +30,7 @@ export class CreateCdpFormDialogComponent implements OnInit {
   address$: Observable<cosmosclient.AccAddress>;
   balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
-
   collateralLimit$: Observable<number>;
-
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
   liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;

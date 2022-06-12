@@ -1,3 +1,4 @@
+import { CdpClearFormDialogComponent } from '../../pages/dialogs/mint/cdp-clear-form-dialog/cdp-clear-form-dialog.component';
 import { CdpDepositFormDialogComponent } from '../../pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.component';
 import { CdpMenuDialogComponent } from '../../pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.component';
 import { CollateralMenuDialogComponent } from '../../pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.component';
@@ -64,8 +65,11 @@ export class CdpApplicationService {
   }
 
   async openCdpClearFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
-    // WIP
-    // await this.dialog.open(CdpClearFormDialogComponent, { data: cdp }).afterClosed().toPromise();
+    const txHash = await this.dialog
+      .open(CdpClearFormDialogComponent, { data: cdp })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
   }
 
   async openCdpDepositFormDialog(cdp: InlineResponse2004Cdp1): Promise<void> {
@@ -375,7 +379,7 @@ export class CdpApplicationService {
     }
     const dialogRef = this.loadingDialog.open('Sending...');
 
-    let txhash: string | undefined;
+    let txHash: string | undefined;
     try {
       const res: InlineResponse20075 = await this.cdp.repayCDP(
         key,
@@ -385,8 +389,8 @@ export class CdpApplicationService {
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = res.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('invalid txhash!');
       }
     } catch (error) {
@@ -402,8 +406,9 @@ export class CdpApplicationService {
       duration: 6000,
     });
 
-    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txhash}`;
+    const redirectUrl = `${location.protocol}//${location.hostname}/txs/${txHash}`;
     window.location.href = redirectUrl;
+    return txHash;
   }
 
   async depositCDP(

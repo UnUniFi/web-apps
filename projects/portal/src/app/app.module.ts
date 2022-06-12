@@ -5,6 +5,7 @@ import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-f
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
+import { AppCdpClearFormDialogModule } from './pages/dialogs/mint/cdp-clear-form-dialog/cdp-clear-form-dialog.module';
 import { AppCdpDepositFormDialogModule } from './pages/dialogs/mint/cdp-deposit-form-dialog/cdp-deposit-form-dialog.module';
 import { AppCdpMenuDialogModule } from './pages/dialogs/mint/cdp-menu-dialog/cdp-menu-dialog.module';
 import { AppCollateralMenuDialogModule } from './pages/dialogs/mint/collateral-menu-dialog/collateral-menu-dialog.module';
@@ -82,6 +83,7 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     AppDebtMenuDialogModule,
     AppCdpMenuDialogModule,
     AppCdpDepositFormDialogModule,
+    AppCdpClearFormDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

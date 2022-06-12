@@ -11,15 +11,7 @@
     </mat-list-item>
   </mat-list>
 
-  <form
-    #formRef="ngForm"
-    (submit)="
-      onSubmit(
-        privateKeyRef.value,
-        ownerRef.value
-      )
-    "
-  >
+  <form #formRef="ngForm" (submit)="onSubmit(privateKeyRef.value, ownerRef.value)">
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
         <mat-label>Repayment Denom</mat-label>
@@ -35,7 +27,6 @@
       <mat-form-field class="flex-auto">
         <mat-label>Repayment Amount</mat-label>
         <input
-
           [(ngModel)]="repayment_amount"
           name="repayment-amount"
           matInput

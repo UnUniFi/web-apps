@@ -16,12 +16,13 @@
       <mat-form-field class="flex-auto">
         <mat-label>Repayment Denom</mat-label>
         <input
-          [(ngModel)]="repaymentDenom && repaymentDenom.denom"
+          [(ngModel)]="cdp && cdp.cdp && cdp.cdp.collateral && cdp.cdp.collateral.denom"
           name="repayment-denom"
           matInput
           type="text"
           required
           readonly
+          disabled
         />
       </mat-form-field>
       <mat-form-field class="flex-auto">
@@ -37,6 +38,21 @@
           required
         />
       </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Balance</mat-label>
+        <input
+          [(ngModel)]="cdp && cdp.cdp && cdp.cdp.collateral && cdp.cdp.collateral.amount"
+          name="repayment-balance"
+          matInput
+          type="number"
+          pattern="^\d+$"
+          required
+          readonly
+          disabled
+        />
+      </mat-form-field>
+    </div>
+    <div>
       <mat-form-field class="flex-auto">
         <mat-label>Owner</mat-label>
         <input #ownerRef [(ngModel)]="owner" name="owner" matInput readonly required />

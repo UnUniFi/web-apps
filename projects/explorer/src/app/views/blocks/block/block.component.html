@@ -47,11 +47,16 @@
 <mat-card class="mb-2">
   <mat-list>
     <mat-list-item>
+      <span class="w-4/12 truncate pl-2">Hash</span>
+      <span class="w-4/12 truncate pl-2">Type</span>
+      <span class="w-4/12 truncate pl-2">From</span>
+      <!--
       <span class="w-1/12 truncate pl-2">Hash</span>
       <span class="w-3/12 truncate pl-2">Type</span>
       <span class="w-3/12 truncate pl-2">From</span>
       <span class="w-3/12 truncate pl-2">To</span>
       <span class="w-2/12 truncate pl-2">Total Amount</span>
+      -->
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
@@ -70,11 +75,16 @@
     <mat-nav-list>
       <mat-list-item routerLink="/txs/{{ tx.txhash }}"
         *ngFor="let tx of transactions?.tx_responses; let i = index; last as last">
+        <span class="w-4/12 truncate text-sm">{{ tx.txhash }}</span>
+        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
+        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
+        <!--
         <span class="w-1/12 truncate text-sm">{{ tx.txhash }}</span>
         <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
         <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
         <span class="w-3/12 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress }}</span>
         <span class="w-2/12 truncate text-sm pl-2">{{ txTitles?.[i]?.amount }}</span>
+        -->
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>

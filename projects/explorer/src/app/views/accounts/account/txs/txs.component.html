@@ -5,22 +5,32 @@
   <ng-template #exist>
     <mat-list>
       <mat-list-item>
+        <span class="w-4/12 truncate pl-4">Type</span>
+        <span class="w-4/12 truncate pl-4">To</span>
+        <span class="w-4/12 truncate pl-4">When</span>
+        <!--
         <span class="w-1/5 truncate pl-4">Type</span>
         <span class="w-1/5 truncate pl-4">From</span>
         <span class="w-1/5 truncate pl-4">To</span>
         <span class="w-1/5 truncate pl-4">Total Amount</span>
         <span class="w-1/5 truncate pl-4">When</span>
+        -->
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
     <mat-nav-list>
       <ng-container *ngFor="let tx of txsWithPagination?.tx_responses; let i = index; last as last">
         <mat-list-item routerLink="/txs/{{ tx.txhash }}">
+          <span class="w-3/12 truncate text-sm">{{ txTitles?.[i]?.txType }}</span>
+          <span class="w-5/12 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress}}</span>
+          <span class="w-4/12 break-all text-sm">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+          <!--
           <span class="w-1/5 truncate text-sm">{{ txTitles?.[i]?.txType }}</span>
           <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
           <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress}}</span>
           <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.amount }}</span>
           <span class="w-1/5 break-all text-sm">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+          -->
           <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
       </ng-container>

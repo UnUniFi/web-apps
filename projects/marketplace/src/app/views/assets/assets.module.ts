@@ -3,11 +3,10 @@ import { AssetsComponent } from './assets.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MaterialModule as PortalMaterialModule } from 'projects/portal/src/app/views/material.module';
 
 @NgModule({
   declarations: [AssetsComponent],
-  imports: [CommonModule, RouterModule, MaterialModule, PortalMaterialModule],
+  imports: [CommonModule, RouterModule, MaterialModule],
   exports: [AssetsComponent],
 })
 export class AssetsModule {}

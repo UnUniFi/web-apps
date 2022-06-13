@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MaterialModule as PortalMaterialModule } from 'projects/portal/src/app/views/material.module';
 
 @NgModule({
   declarations: [ToolbarComponent],
-  imports: [CommonModule, RouterModule, FormsModule, MaterialModule, PortalMaterialModule],
+  imports: [CommonModule, RouterModule, FormsModule, MaterialModule],
   exports: [ToolbarComponent],
 })
 export class ToolbarModule {}

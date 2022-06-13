@@ -12,8 +12,7 @@ const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
 const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
 const chainID = 'ununifi-8-private-test'
-const chainName = 'UnUnuFi (Private)';
-
+const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -170,7 +169,7 @@ const configs = [
       'http',
       'ws',
     )}//${domainCauchyEC}:${websocketPort}`,
-    chainID: 'ununifi-8-private-test',
+    chainID,
     bech32Prefix,
     minimumGasPrices: [
       {

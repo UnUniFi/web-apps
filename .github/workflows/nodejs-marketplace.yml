@@ -26,7 +26,7 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm i -g npm
       - run: npm ci
-      - run: npm run build --if-present -- --project=marketplace
+      - run: npm run build:marketplace
       - run: npm run test -- --project=marketplace
         env:
           CI: true

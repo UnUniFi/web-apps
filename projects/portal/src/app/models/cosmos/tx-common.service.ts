@@ -4,6 +4,7 @@ import { validatePrivateStoredWallet } from '../../utils/validation';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { KeyType } from '../keys/key.model';
 import { KeplrService } from '../wallets/keplr/keplr.service';
+import { MetaMaskService } from '../wallets/metamask/metamask.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -11,6 +12,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,34 @@ export class TxCommonService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
+    private readonly metaMaskService: MetaMaskService,
   ) {}
+
+  canonicalizeAccAddress(address: string) {
+    const canonicalized = address.replace(/\s+/g, '');
+    return cosmosclient.AccAddress.fromString(canonicalized);
+  }
+
+  validateBalanceBeforeSimulation(
+    usageAmount: proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    balances: proto.cosmos.base.v1beta1.ICoin[],
+  ) {
+    const feeDenom = minimumGasPrice.denom;
+    const simulationFeeAmount = 1;
+    const tempAmountToSend = usageAmount.find((amount) => amount.denom === feeDenom)?.amount;
+    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
+    const tempBalance = balances.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
+    const balance = tempBalance ? parseInt(tempBalance) : 0;
+
+    return {
+      feeDenom,
+      amountToSend,
+      balance,
+      simulationFeeAmount,
+      validity: amountToSend + simulationFeeAmount <= balance,
+    };
+  }
 
   async getBaseAccount(
     cosmosPublicKey: cosmosclient.PubKey,
@@ -30,7 +59,30 @@ export class TxCommonService {
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const account = await rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
+      .catch((_) => undefined);
+    const baseAccount = convertUnknownAccountToBaseAccount(account);
+    if (!baseAccount) {
+      throw Error('Unused Account or Unsupported Account Type!');
+    }
+    return baseAccount;
+  }
+
+  async getBaseAccountFromAddress(
+    address: cosmosclient.AccAddress,
+  ): Promise<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const account = await rest.auth
+      .account(sdk, address)
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
     const baseAccount = convertUnknownAccountToBaseAccount(account);
     if (!baseAccount) {
@@ -48,15 +100,16 @@ export class TxCommonService {
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const packedAnyMessages: proto.google.protobuf.IAny[] = messages.map((message) =>
-      cosmosclient.codec.packAny(message),
+      cosmosclient.codec.instanceToProtoAny(message),
     );
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
       messages: packedAnyMessages,
     });
+
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(cosmosPublicKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(cosmosPublicKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -67,7 +120,7 @@ export class TxCommonService {
       ],
       fee: {
         amount: fee?.amount && fee.amount !== '0' ? [fee] : [],
-        gas_limit: cosmosclient.Long.fromString(gas?.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas?.amount ? gas.amount : '1000000'),
       },
     });
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
@@ -91,6 +144,9 @@ export class TxCommonService {
     }
     if (currentCosmosWallet.type === WalletType.keyStation) {
       return this.signTxWithKeyStation(txBuilder, signerBaseAccount);
+    }
+    if (currentCosmosWallet.type === WalletType.metaMask) {
+      return this.signTxWithMetaMask(txBuilder, signerBaseAccount);
     }
     throw Error('Unsupported wallet type!');
   }
@@ -152,6 +208,14 @@ export class TxCommonService {
     throw Error('Currently signing with KeyStation is not supported!');
   }
 
+  async signTxWithMetaMask(
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signedTxBuilder = await this.metaMaskService.signTx(txBuilder, signerBaseAccount);
+    return signedTxBuilder;
+  }
+
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
@@ -170,11 +234,11 @@ export class TxCommonService {
         },
       };
     }
+
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());
-    // fix JSONstringify issue
-    delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
+    const txForSimulation = txBuilder.toProtoJSON() as any;
+    console.log(txForSimulation);
 
     // set dummy signature for simulate
     const uint8Array = new Uint8Array(64);
@@ -228,6 +292,7 @@ export class TxCommonService {
 
   async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20075> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    console.log(txBuilder);
 
     // broadcast tx
     const result = await rest.tx.broadcastTx(sdk, {

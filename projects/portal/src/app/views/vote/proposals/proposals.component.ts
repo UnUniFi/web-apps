@@ -34,7 +34,7 @@ export class ProposalsComponent implements OnInit {
 
   unpackContent(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value) as ProposalContent;
+      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
     } catch {
       return null;
     }

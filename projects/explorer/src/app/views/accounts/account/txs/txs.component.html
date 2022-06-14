@@ -8,13 +8,6 @@
         <span class="w-4/12 truncate pl-4">Type</span>
         <span class="w-4/12 truncate pl-4">To</span>
         <span class="w-4/12 truncate pl-4">When</span>
-        <!--
-        <span class="w-1/5 truncate pl-4">Type</span>
-        <span class="w-1/5 truncate pl-4">From</span>
-        <span class="w-1/5 truncate pl-4">To</span>
-        <span class="w-1/5 truncate pl-4">Total Amount</span>
-        <span class="w-1/5 truncate pl-4">When</span>
-        -->
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
@@ -23,23 +16,14 @@
         <mat-list-item routerLink="/txs/{{ tx.txhash }}">
           <span class="w-3/12 truncate text-sm">{{ txTitles?.[i]?.txType }}</span>
           <span class="w-5/12 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress}}</span>
-          <span class="w-4/12 break-all text-sm">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
-          <!--
-          <span class="w-1/5 truncate text-sm">{{ txTitles?.[i]?.txType }}</span>
-          <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
-          <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress}}</span>
-          <span class="w-1/5 truncate text-sm pl-2">{{ txTitles?.[i]?.amount }}</span>
-          <span class="w-1/5 break-all text-sm">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
-          -->
+          <span class="w-4/12 break-all text-sm pl-2">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
           <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
       </ng-container>
     </mat-nav-list>
   </ng-template>
-  <mat-paginator [length]="pageLength"
-                 [pageSize]="pageInfo ? pageInfo.pageSize : 5"
-                 [pageIndex]="pageInfo ? pageInfo.pageNumber - 1 : 0"
-                 [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-                 (page)="onPaginationChange($event)">
+  <mat-paginator [length]="pageLength" [pageSize]="pageInfo ? pageInfo.pageSize : 5"
+    [pageIndex]="pageInfo ? pageInfo.pageNumber - 1 : 0" [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+    (page)="onPaginationChange($event)">
   </mat-paginator>
 </mat-card>

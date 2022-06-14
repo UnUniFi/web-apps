@@ -6,7 +6,7 @@ import { cosmosclient, proto, } from '@cosmos-client/core';
 export const txParseMsg = (tx: CosmosTxV1beta1Tx): txTitle => {
 
   const message = tx.body?.messages?.[0]
-  const instance = cosmosclient.codec.unpackCosmosAny(message);
+  const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
 
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)

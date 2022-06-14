@@ -1,17 +1,17 @@
+import { ConnectWalletCompletedDialogComponent } from '../../../lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
+import { ConnectWalletStartDialogComponent } from '../../../lib/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
+import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
+import { UnunifiCreateWalletFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
+import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.component';
+import { UnunifiKeyFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
+import { UnunifiSelectCreateImportDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
+import { UnunifiSelectWalletDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+import { KeplrService } from './keplr/keplr.service';
+import { WalletType, StoredWallet } from './wallet.model';
+import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { KeplrService } from 'projects/shared/src/lib/models/wallets/keplr/keplr.service';
-import { WalletType, StoredWallet } from 'projects/shared/src/lib/models/wallets/wallet.model';
-import { WalletService } from 'projects/shared/src/lib/models/wallets/wallet.service';
-import { ConnectWalletCompletedDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
-import { ConnectWalletStartDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
-import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
-import { UnunifiCreateWalletFormDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
-import { UnunifiImportWalletWithMnemonicFormDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.component';
-import { UnunifiKeyFormDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
-import { UnunifiSelectCreateImportDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
-import { UnunifiSelectWalletDialogComponent } from 'projects/shared/src/lib/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 
 @Injectable({
   providedIn: 'root',

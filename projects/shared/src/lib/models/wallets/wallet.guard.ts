@@ -1,3 +1,6 @@
+import { WalletApplicationService } from './wallet.application.service';
+import { StoredWallet } from './wallet.model';
+import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -6,9 +9,6 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { WalletApplicationService } from 'projects/shared/src/lib/models/wallets/wallet.application.service';
-import { StoredWallet } from 'projects/shared/src/lib/models/wallets/wallet.model';
-import { WalletService } from 'projects/shared/src/lib/models/wallets/wallet.service';
 
 @Injectable({
   providedIn: 'root',

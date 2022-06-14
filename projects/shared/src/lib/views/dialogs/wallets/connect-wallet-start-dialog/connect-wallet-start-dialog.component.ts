@@ -1,6 +1,6 @@
+import { WalletType } from '../../../../../lib/models/wallets/wallet.model';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { WalletType } from 'projects/shared/src/lib/models/wallets/wallet.model';
 
 @Component({
   selector: 'app-connect-wallet-start-dialog',

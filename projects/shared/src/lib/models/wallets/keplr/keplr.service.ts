@@ -1,7 +1,7 @@
+import { KeplrInfrastructureService } from '../../wallets/keplr/keplr.infrastructure.service';
+import { StoredWallet } from '../../wallets/wallet.model';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { KeplrInfrastructureService } from 'projects/shared/src/lib/models/wallets/keplr/keplr.infrastructure.service';
-import { StoredWallet } from 'projects/shared/src/lib/models/wallets/wallet.model';
 
 export interface IKeplrInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;

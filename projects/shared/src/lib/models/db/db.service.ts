@@ -1,9 +1,9 @@
+import { KeyType } from '../keys/key.model';
+import { WalletType } from '../wallets/wallet.model';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import Dexie from 'dexie';
-import { KeyType } from 'projects/shared/src/lib/models/keys/key.model';
-import { WalletType } from 'projects/shared/src/lib/models/wallets/wallet.model';
 
 @Injectable({
   providedIn: 'root',

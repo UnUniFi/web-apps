@@ -1,15 +1,10 @@
+import { DbService } from '../db/db.service';
+import { KeyType } from '../keys/key.model';
+import { CosmosWallet, StoredWallet, Wallet, WalletType } from './wallet.model';
+import { IWalletInfrastructure } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
 import Dexie from 'dexie';
-import { DbService } from 'projects/shared/src/lib/models/db/db.service';
-import { KeyType } from 'projects/shared/src/lib/models/keys/key.model';
-import {
-  CosmosWallet,
-  StoredWallet,
-  Wallet,
-  WalletType,
-} from 'projects/shared/src/lib/models/wallets/wallet.model';
-import { IWalletInfrastructure } from 'projects/shared/src/lib/models/wallets/wallet.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

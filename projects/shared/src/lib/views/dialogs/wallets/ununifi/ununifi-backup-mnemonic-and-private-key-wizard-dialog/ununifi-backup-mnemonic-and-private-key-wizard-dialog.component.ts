@@ -1,8 +1,8 @@
+import { StoredWallet } from '../../../../../../lib/models/wallets/wallet.model';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StoredWallet } from 'projects/shared/src/lib/models/wallets/wallet.model';
 
 @Component({
   selector: 'view-ununifi-backup-mnemonic-and-private-key-wizard-dialog',

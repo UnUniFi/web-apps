@@ -1,6 +1,6 @@
+import { Config, ConfigService } from '../config/config.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
-import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
 import { combineLatest, Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 

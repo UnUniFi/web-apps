@@ -1,16 +1,16 @@
+import { KeyType } from '../../../../../../lib/models/keys/key.model';
+import { StoredWallet, WalletType } from '../../../../../../lib/models/wallets/wallet.model';
+import { WalletService } from '../../../../../../lib/models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from '../../../../../../lib/utils/key';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
 import * as bip39 from 'bip39';
-import { KeyType } from 'projects/shared/src/lib/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/shared/src/lib/models/wallets/wallet.model';
-import { WalletService } from 'projects/shared/src/lib/models/wallets/wallet.service';
-import {
-  createCosmosPrivateKeyFromString,
-  createPrivateKeyStringFromMnemonic,
-} from 'projects/shared/src/lib/utils/key';
 
 @Component({
   selector: 'view-ununifi-create-wallet-form-dialog',

@@ -1,16 +1,16 @@
+import { KeyType } from '../../../../../../lib/models/keys/key.model';
+import { StoredWallet, WalletType } from '../../../../../../lib/models/wallets/wallet.model';
+import { WalletService } from '../../../../../../lib/models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from '../../../../../../lib/utils/key';
+import { validatePrivateStoredWallet } from '../../../../../../lib/utils/validation';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
-import { KeyType } from 'projects/shared/src/lib/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/shared/src/lib/models/wallets/wallet.model';
-import { WalletService } from 'projects/shared/src/lib/models/wallets/wallet.service';
-import {
-  createCosmosPrivateKeyFromString,
-  createPrivateKeyStringFromMnemonic,
-} from 'projects/shared/src/lib/utils/key';
-import { validatePrivateStoredWallet } from 'projects/shared/src/lib/utils/validation';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 

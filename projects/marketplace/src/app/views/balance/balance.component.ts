@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
-import { WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletType } from 'shared';
 
 @Component({
   selector: 'view-balance',

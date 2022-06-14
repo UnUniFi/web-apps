@@ -42,3 +42,5 @@ export * from './lib/views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mn
 export * from './lib/views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
 export * from './lib/views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 export * from './lib/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+
+export * from './lib/views/material.module';

@@ -23,20 +23,26 @@
       </div>
     </mat-list-item>
   </mat-list>
+  <ng-container *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding">
+  </ng-container>
 
-  <mat-list>
-    <mat-label>Unbonding Date</mat-label>
-    <mat-list-item>
-      <ng-container *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding">
-      </ng-container>
-      <ng-template #unbonding>
+  <ng-template #unbonding>
+    <mat-list>
+      <mat-label>Unbonding Date</mat-label>
+      <mat-list-item>
         <span>{{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-M-d a h:mm:ss z'}}</span>
-      </ng-template>
-      <ng-template #beforeUnbonding>
-        <span class="text-sm">Tokens will be returned 2 weeks after removing this delegate. </span>
-      </ng-template>
-    </mat-list-item>
-  </mat-list>
+      </mat-list-item>
+    </mat-list>
+  </ng-template>
+
+  <ng-template #beforeUnbonding>
+    <mat-list>
+      <mat-label>Unbonding Date (estimated.)</mat-label>
+      <mat-list-item>
+        <span>{{estimatedUnbondingData| date: 'yyyy-M-d a h:mm:ss z'}}</span>
+      </mat-list-item>
+    </mat-list>
+  </ng-template>
 
   <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
     <div class="flex flex-col content-content lg:flex-row">

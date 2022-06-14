@@ -60,12 +60,11 @@ export class UndelegateFormDialogComponent implements OnInit {
           sdk.rest,
           valAddress,
           address,
-        );
+        ).then(res => res.data
+        ).catch((error) => {
+          console.error(error.message); return undefined
+        })
         return unbondingDelegation
-      }),
-      map((res) => {
-        if (!res) { return undefined }
-        return res.data
       }),
     );
     this.delegateAmount$ = this.delegations$.pipe(

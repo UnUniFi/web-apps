@@ -45,12 +45,17 @@ export class UndelegateFormDialogComponent implements OnInit {
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
+  estimatedUnbondingData: string = ""
+  now = new Date();
+
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
     this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
+    this.now.setDate(this.now.getDate() + 14);
+    this.estimatedUnbondingData = this.now.toString()
   }
 
   ngOnChanges(): void {

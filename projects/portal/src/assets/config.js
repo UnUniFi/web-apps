@@ -108,6 +108,7 @@ const configs = [
       'ws',
     )}//${domainCauchyEB}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {
@@ -167,6 +168,7 @@ const configs = [
       'ws',
     )}//${domainCauchyEC}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {
@@ -226,6 +228,7 @@ const configs = [
       'ws',
     )}//${domainCauchyED}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {

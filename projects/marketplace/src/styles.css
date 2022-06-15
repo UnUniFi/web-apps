@@ -29,6 +29,57 @@ mat-progress-spinner {
   margin: 1em auto;
 }
 
+/* Todo: Current color system is very bad... */
 mat-dialog-container {
   background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step {
+  background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step-text-label {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step-header {
+  background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-empty {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-infix {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-autofill-control {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-label {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-underline {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-hint {
+  color: white !important;
 }

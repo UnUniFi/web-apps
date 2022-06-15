@@ -1,8 +1,8 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
-    <div class="font-bold text-xl m-3">Connect Your Wallet</div>
-    <div class="text-base m-3">Start earning high yield on your crypto</div>
+    <div class="font-bold text-white text-xl m-3">Connect Your Wallet</div>
+    <div class="text-base text-white m-3">Start earning high yield on your crypto</div>
     <ng-container *ngIf="privateWallet$ | async as privateWallet">
       <ng-container *ngIf="privateWallet">
         <form #formRef="ngForm" (submit)="onClickButton(idRef.value)">
@@ -17,7 +17,7 @@
               pattern="^[a-z_][a-z_0-9]*$"
               autocomplete="username"
             />
-            <mat-error>^[a-z_][a-z_0-9]*$</mat-error>
+            <mat-error>Only lowercase alphanumeric characters and underscores can be input.</mat-error>
           </mat-form-field>
 
           <mat-form-field class="w-full">
@@ -92,7 +92,7 @@
               <span>copy</span>
             </button>
             <mat-hint>
-              You must save this private key as a password using password manager built in the web browser.
+              You need to save this private key as a password using password manager built in the web browser.
             </mat-hint>
           </mat-form-field>
 

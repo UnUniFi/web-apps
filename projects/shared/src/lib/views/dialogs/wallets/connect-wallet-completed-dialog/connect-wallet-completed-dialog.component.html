@@ -1,18 +1,18 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
-    <div class="font-bold text-xl m-3">Connect Your Wallet</div>
-    <div class="text-base m-3">Start earning high yield on your crypto</div>
-    <div class="text-base">Connect wallet completed.</div>
-    <div class="text-base">Following account is set.</div>
+    <div class="font-bold text-white text-xl m-3">Connect Your Wallet</div>
+    <div class="text-base text-white m-3">Start earning high yield on your crypto</div>
+    <div class="text-base text-white">Connect wallet completed.</div>
+    <div class="text-base text-white">Following account is set.</div>
     <mat-list>
       <mat-list-item>
         <mat-icon matListIcon [ngStyle]="{ color: getColorCode(data) }">circle</mat-icon>
         <div mat-line>
-          <span>{{ data.id }}</span>
+          <span class="text-white">{{ data.id }}</span>
         </div>
         <div mat-line>
-          <span>{{ data.address }}</span>
+          <span class="text-white">{{ data.address }}</span>
         </div>
       </mat-list-item>
     </mat-list>

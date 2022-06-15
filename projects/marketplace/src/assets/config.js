@@ -6,13 +6,13 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'a.private-test.ununifi.cauchye.net';
-const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
-const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
-const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
+const domainCauchyEA = 'ununifi-alpha-test-v1.cauchye.net';
+const domainCauchyEB = 'ununifi-alpha-test-v1.cauchye.net';
+const domainCauchyEC = 'ununifi-alpha-test-v1.cauchye.net';
+const domainCauchyED = 'ununifi-alpha-test-v1.cauchye.net';
 
-const chainID = 'ununifi-8-private-test';
-const chainName = 'UnUnuFi (Private)';
+const chainID = 'ununifi-alpha-test-v1';
+const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -105,6 +105,7 @@ const configs = [
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {
@@ -160,7 +161,8 @@ const configs = [
     id: domainCauchyEC,
     restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
-    chainID: 'ununifi-8-private-test',
+    chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {
@@ -217,6 +219,7 @@ const configs = [
     restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {

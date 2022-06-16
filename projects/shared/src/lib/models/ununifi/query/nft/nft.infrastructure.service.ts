@@ -1,6 +1,6 @@
 import { NFTS, NFT_CLASSES } from './nft';
-import { NFTClass, NFT } from './nft.model';
-import { INFTInfrastructureService } from './nft.service';
+import { NftClass, Nft } from './nft.model';
+import { INftInfrastructureService } from './nft.service';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -48,12 +48,12 @@ type OpenSeaAsset = {
 @Injectable({
   providedIn: 'root',
 })
-export class NFTInfrastructureService implements INFTInfrastructureService {
+export class NftInfrastructureService implements INftInfrastructureService {
   constructor(private http: HttpClient) {}
 
   // Todo: This is for dummy data only. We need to remove this after implementation.
-  private convertOpenSeaAssetToNFTClass(openSeaAsset: OpenSeaAsset): NFTClass {
-    const nftClass: NFTClass = {
+  private convertOpenSeaAssetToNFTClass(openSeaAsset: OpenSeaAsset): NftClass {
+    const nftClass: NftClass = {
       id: openSeaAsset.asset_contract.address ?? '',
       name: openSeaAsset.asset_contract.name ?? '',
       symbol: openSeaAsset.asset_contract.symbol ?? '',
@@ -76,9 +76,9 @@ export class NFTInfrastructureService implements INFTInfrastructureService {
   }
 
   // Todo: This is for dummy data only. We need to remove this after implementation.
-  private convertOpenSeaAssetToNFT(openSeaAsset: OpenSeaAsset): NFT {
-    const nftClass: NFTClass = this.convertOpenSeaAssetToNFTClass(openSeaAsset);
-    const nft: NFT = {
+  private convertOpenSeaAssetToNFT(openSeaAsset: OpenSeaAsset): Nft {
+    const nftClass: NftClass = this.convertOpenSeaAssetToNFTClass(openSeaAsset);
+    const nft: Nft = {
       nft_class: nftClass,
       id: openSeaAsset.token_id ?? '',
       uri: openSeaAsset.token_metadata ?? '',
@@ -107,7 +107,8 @@ export class NFTInfrastructureService implements INFTInfrastructureService {
     return array[randomIndex];
   }
 
-  getAllNFTClasses$(): Observable<NFTClass[]> {
+  getAllNftClasses$(): Observable<NftClass[]> {
+    // Note: 1stly, I tried these implementation, but it seems that test data is so random.
     // const params = new HttpParams().set('format', 'json');
     // return this.http
     //   .get<OpenSeaAssetsResponse>('https://testnets-api.opensea.io/api/v1/assets', { params })
@@ -124,17 +125,18 @@ export class NFTInfrastructureService implements INFTInfrastructureService {
     return of(NFT_CLASSES);
   }
 
-  getAllNFTClassesByAddress$(address: string): Observable<NFTClass[]> {
-    return this.getAllNFTClasses$();
+  getAllNftClassesByAddress$(address: string): Observable<NftClass[]> {
+    return this.getAllNftClasses$();
   }
 
-  getNFTClassByNFTClassID$(nftClassID: string): Observable<NFTClass | undefined> {
-    return this.getAllNFTClasses$().pipe(
+  getNftClassByNftClassId$(nftClassId: string): Observable<NftClass | undefined> {
+    return this.getAllNftClasses$().pipe(
       map((nftClasses) => this.getRandomElementFromArray(nftClasses)),
     );
   }
 
-  getAllNFTs$(): Observable<NFT[]> {
+  getAllNfts$(): Observable<Nft[]> {
+    // Note: 1stly, I tried these implementation, but it seems that test data is so random.
     // const params = new HttpParams().set('format', 'json');
     // return this.http
     //   .get<OpenSeaAssetsResponse>('https://testnets-api.opensea.io/api/v1/assets', { params })
@@ -151,11 +153,11 @@ export class NFTInfrastructureService implements INFTInfrastructureService {
     return of(NFTS);
   }
 
-  getAllNFTsByAddress$(address: string): Observable<NFT[]> {
-    return this.getAllNFTs$();
+  getAllNftsByAddress$(address: string): Observable<Nft[]> {
+    return this.getAllNfts$();
   }
 
-  getNFTByNFTClassIDAndNFTID$(nftClassID: string, nftID: string): Observable<NFT | undefined> {
-    return this.getAllNFTs$().pipe(map((nfts) => this.getRandomElementFromArray(nfts)));
+  getNftByNftClassIDAndNftId$(nftClassId: string, nftId: string): Observable<Nft | undefined> {
+    return this.getAllNfts$().pipe(map((nfts) => this.getRandomElementFromArray(nfts)));
   }
 }

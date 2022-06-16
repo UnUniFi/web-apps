@@ -1,4 +1,4 @@
-import { NFT } from '../../models/cosmos/nfts/nft.model';
+import { Nft } from '../../models/ununifi/query/nft/nft.model';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./nfts.component.css'],
 })
 export class LibViewNftsComponent implements OnInit {
-  @Input() nfts?: NFT[] | null;
+  @Input() nfts?: Nft[] | null;
 
   constructor() {}
 

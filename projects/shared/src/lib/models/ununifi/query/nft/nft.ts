@@ -1,7 +1,7 @@
-import { NFT, NFTClass } from './nft.model';
+import { Nft, NftClass } from './nft.model';
 
 // Todo: This is dummy data.
-export const NFT_CLASSES: NFTClass[] = [
+export const NFT_CLASSES: NftClass[] = [
   {
     id: '0x23581767a106ae21c074b2276D25e5C3e136a68b',
     name: 'Good Monkeys',
@@ -125,7 +125,7 @@ export const NFT_CLASSES: NFTClass[] = [
 ];
 
 // Todo: This is dummy data.
-export const NFTS: NFT[] = [
+export const NFTS: Nft[] = [
   {
     nft_class: NFT_CLASSES[0],
     id: '1',

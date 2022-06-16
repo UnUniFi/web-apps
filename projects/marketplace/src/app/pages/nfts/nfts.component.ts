@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NFT } from 'projects/shared/src/lib/models/cosmos/nfts/nft.model';
-import { NFTService } from 'projects/shared/src/lib/models/cosmos/nfts/nft.service';
+import { Nft } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { NftService } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./nfts.component.css'],
 })
 export class NftsComponent implements OnInit {
-  nfts$: Observable<NFT[]>;
+  nfts$: Observable<Nft[]>;
 
-  constructor(private readonly nftService: NFTService) {
-    this.nfts$ = this.nftService.getAllNFTs$();
+  constructor(private readonly nftService: NftService) {
+    this.nfts$ = this.nftService.getAllNfts$();
   }
 
   ngOnInit(): void {

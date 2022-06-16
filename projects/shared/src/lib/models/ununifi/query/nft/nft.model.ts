@@ -1,5 +1,5 @@
 // Note: https://github.com/cosmos/cosmos-sdk/blob/main/docs/architecture/adr-043-nft-module.md
-export type NFTClass = {
+export type NftClass = {
   id: string;
   name: string;
   symbol: string;
@@ -9,8 +9,8 @@ export type NFTClass = {
   data?: Metadata;
 };
 
-export type NFT = {
-  nft_class: NFTClass;
+export type Nft = {
+  nft_class: NftClass;
   id: string;
   uri: string;
   uri_hash: string;

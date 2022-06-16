@@ -2,17 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { Config, ConfigService } from 'shared';
-import { CosmosSDKService } from 'shared';
-import { CosmosWallet, StoredWallet, WalletType } from 'shared';
-import { WalletService } from 'shared';
+import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
+import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
+import {
+  CosmosWallet,
+  StoredWallet,
+  WalletType,
+} from 'projects/shared/src/lib/models/wallets/wallet.model';
+import { WalletService } from 'projects/shared/src/lib/models/wallets/wallet.service';
 import {
   convertTypedAccountToTypedName,
   convertUnknownAccountToBaseAccount,
   convertUnknownAccountToTypedAccount,
-} from 'shared';
+} from 'projects/shared/src/lib/utils/converter';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-balance',

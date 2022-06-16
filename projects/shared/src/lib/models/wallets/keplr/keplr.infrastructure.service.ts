@@ -1,8 +1,8 @@
 import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { ConfigService } from '../../config/config.service';
 import { KeyType } from '../../keys/key.model';
-import { IKeplrInfrastructureService } from '../../wallets/keplr/keplr.service';
-import { StoredWallet, WalletType } from '../../wallets/wallet.model';
+import { StoredWallet, WalletType } from '../wallet.model';
+import { IKeplrInfrastructureService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto } from '@cosmos-client/core';

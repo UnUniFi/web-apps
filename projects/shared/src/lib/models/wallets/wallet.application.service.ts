@@ -1,17 +1,14 @@
-import { ConnectWalletCompletedDialogComponent } from '../../../lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
-import { ConnectWalletStartDialogComponent } from '../../../lib/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
-import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
-import { UnunifiCreateWalletFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.component';
-import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.component';
-import { UnunifiKeyFormDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
-import { UnunifiSelectCreateImportDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
-import { UnunifiSelectWalletDialogComponent } from '../../../lib/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
+import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
 import { KeplrService } from './keplr/keplr.service';
+import { MetaMaskService } from './metamask/metamask.service';
+import { UnunifiWalletService } from './ununifi-wallet/ununifi-wallet.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +17,11 @@ export class WalletApplicationService {
   constructor(
     private readonly walletService: WalletService,
     private readonly keplrService: KeplrService,
+    private readonly metaMaskService: MetaMaskService,
+    private readonly ununifiWalletService: UnunifiWalletService,
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private loadingDialog: LoadingDialogService,
   ) {}
 
   async connectWalletDialog(): Promise<void> {
@@ -38,47 +38,12 @@ export class WalletApplicationService {
       return;
     }
 
-    if (
-      selectedWalletType !== WalletType.ununifi &&
-      selectedWalletType !== WalletType.keplr &&
-      selectedWalletType !== WalletType.keyStation &&
-      selectedWalletType !== WalletType.ledger
-    ) {
-      this.snackBar.open('Invalid wallet type!', 'Close');
-      return;
-    }
-
     if (selectedWalletType === WalletType.ununifi) {
-      const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
-
-      if (!selectOrImportOrCreate) {
-        this.snackBar.open('Dialog was canceled!', 'Close');
-        return;
+      const isSuccessConnected = await this.ununifiConnectWallet();
+      if (isSuccessConnected) {
+        window.location.reload();
       }
-
-      if (selectOrImportOrCreate === 'select') {
-        const isSuccessSelect = await this.ununifiSelectWallet();
-        if (isSuccessSelect) {
-          window.location.reload();
-        }
-        return;
-      }
-
-      if (selectOrImportOrCreate === 'import') {
-        const isSuccessImport = await this.ununifiImportWallet();
-        if (isSuccessImport) {
-          window.location.reload();
-        }
-        return;
-      }
-
-      if (selectOrImportOrCreate === 'create') {
-        const isSuccessCreate = await this.ununifiCreateWallet();
-        if (isSuccessCreate) {
-          window.location.reload();
-        }
-        return;
-      }
+      return;
     }
 
     if (selectedWalletType === WalletType.keplr) {
@@ -88,71 +53,37 @@ export class WalletApplicationService {
       }
       return;
     }
+
+    if (selectedWalletType === WalletType.metaMask) {
+      await this.metaMaskConnectWallet();
+      return;
+    }
+
+    this.snackBar.open('Invalid wallet type!', 'Close');
+    return;
   }
 
-  async ununifiSelectWallet(): Promise<boolean> {
-    const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
-    if (!selectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
-      return false;
-    }
-    await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
-    await this.openConnectWalletCompletedDialog(selectedStoredWallet);
-    return true;
-  }
-
-  async ununifiImportWallet(): Promise<boolean> {
-    const privateWallet = await this.openUnunifiImportWalletWithMnemonicDialog();
-    if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
-      return false;
-    }
-    const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
-    if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
-      return false;
-    }
-    const storedWallet = {
-      id: privateWallet.id,
-      type: privateWallet.type,
-      key_type: privateWallet.key_type,
-      public_key: privateWallet.public_key,
-      address: privateWallet.address,
-    };
-    await this.walletService.setStoredWallet(storedWallet);
-    await this.walletService.setCurrentStoredWallet(storedWallet);
-    await this.openConnectWalletCompletedDialog(storedWallet);
-    return true;
-  }
-
-  async ununifiCreateWallet(): Promise<boolean> {
-    const privateWallet = await this.openUnunifiCreateWalletDialog();
-    if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
-      return false;
-    }
-    const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
-    if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
-      return false;
-    }
-    const storedWallet = {
-      id: privateWallet.id,
-      type: privateWallet.type,
-      key_type: privateWallet.key_type,
-      public_key: privateWallet.public_key,
-      address: privateWallet.address,
-    };
-    await this.walletService.setStoredWallet(storedWallet);
-    await this.walletService.setCurrentStoredWallet(storedWallet);
-    await this.openConnectWalletCompletedDialog(storedWallet);
-    return true;
+  async ununifiConnectWallet(): Promise<boolean> {
+    return await this.ununifiWalletService.connectWallet();
   }
 
   async keplrConnectWallet(): Promise<boolean> {
     const connectedStoredWallet = await this.keplrService.connectWallet();
     if (!connectedStoredWallet) {
       this.snackBar.open('Dialog was canceled!', 'Close');
+      return false;
+    }
+    await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
+    await this.openConnectWalletCompletedDialog(connectedStoredWallet);
+    return true;
+  }
+
+  async metaMaskConnectWallet(): Promise<boolean> {
+    const loadingDialogRef = this.loadingDialog.open('Connecting to MetaMask...');
+    const connectedStoredWallet = await this.metaMaskService.connectWallet();
+    loadingDialogRef.close();
+    if (!connectedStoredWallet) {
+      this.snackBar.open('Connecting MetaMask was failed!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
@@ -168,72 +99,10 @@ export class WalletApplicationService {
     return selectedWalletType;
   }
 
-  async openUnunifiSelectCreateImportDialog(): Promise<'select' | 'import' | 'create' | undefined> {
-    const selectedResult: 'select' | 'import' | 'create' | undefined = await this.dialog
-      .open(UnunifiSelectCreateImportDialogComponent)
-      .afterClosed()
-      .toPromise();
-    return selectedResult;
-  }
-
-  async openUnunifiSelectWalletDialog(): Promise<StoredWallet | undefined> {
-    const selectedStoredWallet: StoredWallet | undefined = await this.dialog
-      .open(UnunifiSelectWalletDialogComponent)
-      .afterClosed()
-      .toPromise();
-    return selectedStoredWallet;
-  }
-
-  async openUnunifiCreateWalletDialog(): Promise<
-    (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
-  > {
-    const privateWallet: StoredWallet & { mnemonic: string; privateKey: string } = await this.dialog
-      .open(UnunifiCreateWalletFormDialogComponent)
-      .afterClosed()
-      .toPromise();
-    return privateWallet;
-  }
-
-  async openUnunifiImportWalletWithMnemonicDialog(): Promise<
-    (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
-  > {
-    const privateWallet: StoredWallet & { mnemonic: string; privateKey: string } = await this.dialog
-      .open(UnunifiImportWalletWithMnemonicFormDialogComponent)
-      .afterClosed()
-      .toPromise();
-    return privateWallet;
-  }
-
-  async openUnunifiBackupMnemonicAndPrivateKeyDialog(
-    privateWallet: StoredWallet & { mnemonic: string; privateKey: string },
-  ): Promise<
-    | (StoredWallet & { mnemonic: string; privateKey: string; checked: boolean; saved: boolean })
-    | undefined
-  > {
-    const backupResult: StoredWallet & {
-      mnemonic: string;
-      privateKey: string;
-      checked: boolean;
-      saved: boolean;
-    } = await this.dialog
-      .open(UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent, { data: privateWallet })
-      .afterClosed()
-      .toPromise();
-    return backupResult;
-  }
-
   async openConnectWalletCompletedDialog(connectedStoredWallet: StoredWallet): Promise<void> {
     await this.dialog
       .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
       .afterClosed()
       .toPromise();
-  }
-
-  async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {
-    const privateKey = await this.dialog
-      .open(UnunifiKeyFormDialogComponent)
-      .afterClosed()
-      .toPromise();
-    return privateKey;
   }
 }

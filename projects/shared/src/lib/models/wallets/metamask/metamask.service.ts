@@ -1,9 +1,9 @@
 import { StoredWallet } from '../wallet.model';
-import { KeplrInfrastructureService } from './keplr.infrastructure.service';
+import { MetaMaskInfrastructureService } from './metamask.infrastructure.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
 
-export interface IKeplrInfrastructureService {
+export interface IMetaMaskInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
   signTx: (
     txBuilder: cosmosclient.TxBuilder,
@@ -14,21 +14,21 @@ export interface IKeplrInfrastructureService {
 @Injectable({
   providedIn: 'root',
 })
-export class KeplrService {
-  private readonly iKeplrInfrastructureService: IKeplrInfrastructureService;
+export class MetaMaskService {
+  private readonly iMetaMaskInfrastructureService: IMetaMaskInfrastructureService;
 
-  constructor(readonly keplrInfrastructureService: KeplrInfrastructureService) {
-    this.iKeplrInfrastructureService = this.keplrInfrastructureService;
+  constructor(readonly metaMaskInfrastructureService: MetaMaskInfrastructureService) {
+    this.iMetaMaskInfrastructureService = this.metaMaskInfrastructureService;
   }
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {
-    return await this.iKeplrInfrastructureService.connectWallet();
+    return await this.iMetaMaskInfrastructureService.connectWallet();
   }
 
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    return await this.iKeplrInfrastructureService.signTx(txBuilder, signerBaseAccount);
+    return await this.iMetaMaskInfrastructureService.signTx(txBuilder, signerBaseAccount);
   }
 }

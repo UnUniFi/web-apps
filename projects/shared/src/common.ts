@@ -44,3 +44,9 @@ export * from './lib/views/dialogs/wallets/ununifi/ununifi-select-create-import-
 export * from './lib/views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 
 export * from './lib/views/material.module';
+
+export * from './lib/views/nfts/nft/nft.module';
+export * from './lib/views/nfts/nfts.module';
+
+export * from './lib/views/nfts/nft/nft.component';
+export * from './lib/views/nfts/nfts.component';

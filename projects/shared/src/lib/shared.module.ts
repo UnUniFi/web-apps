@@ -8,6 +8,7 @@ import { UnunifiKeyFormDialogModule } from './views/dialogs/wallets/ununifi/unun
 import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
 import { UnunifiSelectWalletDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
 import { MaterialModule } from './views/material.module';
+import { LibViewNftsModule } from './views/nfts/nfts.module';
 import { NgModule } from '@angular/core';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { NgModule } from '@angular/core';
     UnunifiKeyFormDialogModule,
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
+    LibViewNftsModule,
   ],
   exports: [SharedComponent],
 })

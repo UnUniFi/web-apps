@@ -1,4 +1,5 @@
 import { SharedComponent } from './shared.component';
+import { TxFeeConfirmDialogModule } from './views/dialogs/cosmos/tx/common/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
@@ -32,6 +33,7 @@ import { NgModule } from '@angular/core';
     LibViewNftsModule,
     LibWidgetNftMenuDialogModule,
     LibWidgetListNftFormDialogModule,
+    TxFeeConfirmDialogModule,
   ],
   exports: [SharedComponent],
 })

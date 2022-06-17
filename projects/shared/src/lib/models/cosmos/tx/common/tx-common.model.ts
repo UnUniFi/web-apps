@@ -7,3 +7,8 @@ export type SimulatedTxResultResponse = {
   estimatedGasUsedWithMargin: proto.cosmos.base.v1beta1.ICoin;
   estimatedFeeWithMargin: proto.cosmos.base.v1beta1.ICoin;
 };
+
+export type GasSetting = {
+  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  gasRatio: number;
+};

@@ -10,9 +10,11 @@ import { Observable } from 'rxjs';
 })
 export class MyPageComponent implements OnInit {
   nfts$: Observable<Nft[]>;
+  menuEnabled: boolean;
 
   constructor(private readonly nftService: NftService) {
     this.nfts$ = this.nftService.getAllNfts$();
+    this.menuEnabled = true;
   }
 
   ngOnInit(): void {}

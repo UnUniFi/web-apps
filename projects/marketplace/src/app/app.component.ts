@@ -2,11 +2,11 @@ import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
+import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
+import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
+import { WalletApplicationService } from 'projects/shared/src/lib/models/wallets/wallet.application.service';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { Config, ConfigService } from 'shared';
-import { CosmosSDKService } from 'shared';
-import { WalletApplicationService } from 'shared';
 
 @Component({
   selector: 'app-root',

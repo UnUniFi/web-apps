@@ -2,7 +2,7 @@ import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
-import { Config } from 'projects/portal/src/app/models/config.service';
+import { Config } from 'projects/shared/src/lib/models/config/config.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({

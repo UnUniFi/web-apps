@@ -1,6 +1,10 @@
 <ng-container *ngIf="nfts?.length; else invalid;">
   <div class="flex flex-wrap">
-    <lib-view-nft *ngFor="let nft of nfts" [nft]="nft"></lib-view-nft>
+    <lib-view-nft
+      *ngFor="let nft of nfts"
+      [nft]="nft"
+      [menuEnabled]="menuEnabled"
+    ></lib-view-nft>
   </div>
 </ng-container>
 

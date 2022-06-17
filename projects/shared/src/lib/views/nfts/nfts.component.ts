@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class LibViewNftsComponent implements OnInit {
   @Input() nfts?: Nft[] | null;
+  @Input() menuEnabled?: boolean;
 
   constructor() {}
 

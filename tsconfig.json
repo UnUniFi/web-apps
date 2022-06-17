@@ -18,6 +18,10 @@
         "dist/shared/shared",
         "dist/shared"
       ],
+      "shared/*": [
+        "dist/shared/shared/*",
+        "dist/shared/*"
+      ],
       "crypto": [
         "./node_modules/crypto-browserify"
       ],

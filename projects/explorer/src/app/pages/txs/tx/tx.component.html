@@ -1,1 +1,10 @@
-<view-tx [tx]="tx$ | async" [txType]="txType$ | async"></view-tx>
+<view-tx [tx]="tx$ | async" [txDetail]=" txDetail$ | async"></view-tx>
+
+<ng-container [ngSwitch]="txType">
+  <view-msg-undelegate *ngSwitchCase="'MsgUndelegate'" [txDetail]=" txDetail$ | async"></view-msg-undelegate>
+  <view-msg-delegate *ngSwitchCase="'MsgDelegate'" [txDetail]=" txDetail$ | async"></view-msg-delegate>
+  <view-msg-send *ngSwitchCase="'MsgSend'" [txDetail]=" txDetail$ | async"></view-msg-send>
+  <div *ngSwitchDefault>this is default test</div>
+</ng-container>
+
+<view-tx-signature [txSignature]=" txSignature$ | async"></view-tx-signature>

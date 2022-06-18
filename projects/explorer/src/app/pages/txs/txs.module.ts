@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TxsComponent } from './txs.component';
 import { TxsModule } from '../../views/txs/txs.module';
+import { TxCommonModule } from '../../views/txs/tx/tx-common/tx-common.module';
 
 
 @NgModule({
   declarations: [TxComponent, TxsComponent],
-  imports: [CommonModule, TxsRoutingModule, TxsModule, TxModule],
+  imports: [CommonModule, TxsRoutingModule, TxsModule, TxModule, TxCommonModule],
 })
 export class AppTxsModule { }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
+import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'view-tx',
@@ -12,33 +13,9 @@ export class TxComponent implements OnInit {
   tx?: CosmosTxV1beta1GetTxResponse | null;
 
   @Input()
-  txType?: string[] | null;
+  txDetail?: txTitle | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
-
-  unpackMsg(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value);
-    } catch {
-      return null;
-    }
-  }
-
-  unpackKey(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as cosmosclient.PubKey;
-    } catch {
-      return null;
-    }
-  }
-
-  constructorName(instance: any) {
-    return instance.constructor.name;
-  }
-
-  entries(value: unknown) {
-    return Object.entries(value as any);
-  }
+  ngOnInit(): void { }
 }

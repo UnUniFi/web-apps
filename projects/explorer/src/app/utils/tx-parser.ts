@@ -2,12 +2,10 @@ import { txTitle } from './../models/cosmos/tx-common.model';
 import { CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
 import { cosmosclient, proto, } from '@cosmos-client/core';
 
-
 export const txParseMsg = (tx: CosmosTxV1beta1Tx): txTitle => {
 
   const message = tx.body?.messages?.[0]
   const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
-
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgCreateValidator) return parseMsgCreateValidator(instance)
@@ -37,9 +35,9 @@ export const txParseMsg = (tx: CosmosTxV1beta1Tx): txTitle => {
   };
 }
 const parseMsgDelegate = (instance: proto.cosmos.staking.v1beta1.MsgDelegate): txTitle => {
-  const denomAmount = instance.amount?.amount
+  const denomAmount = instance.amount?.amount || ""
   const denom = instance.amount?.denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,
@@ -59,9 +57,9 @@ const parseMsgEditValidator = (instance: proto.cosmos.staking.v1beta1.MsgEditVal
   }
 }
 const parseMsgCreateValidator = (instance: proto.cosmos.staking.v1beta1.MsgCreateValidator): txTitle => {
-  const denomAmount = instance.value?.amount
+  const denomAmount = instance.value?.amount || ""
   const denom = instance.value?.denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,
@@ -70,20 +68,20 @@ const parseMsgCreateValidator = (instance: proto.cosmos.staking.v1beta1.MsgCreat
   }
 }
 const parseMsgUndelegate = (instance: proto.cosmos.staking.v1beta1.MsgUndelegate): txTitle => {
-  const denomAmount = instance.amount?.amount
+  const denomAmount = instance.amount?.amount || ""
   const denom = instance.amount?.denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
-    fromAddress: instance.delegator_address,
-    toAddress: instance.validator_address,
-    amount
+    fromAddress: instance.validator_address,
+    toAddress: instance.delegator_address,
+    amount,
   }
 }
 const parseMsgBeginRedelegate = (instance: proto.cosmos.staking.v1beta1.MsgBeginRedelegate): txTitle => {
-  const denomAmount = instance.amount?.amount
+  const denomAmount = instance.amount?.amount || ""
   const denom = instance.amount?.denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,
@@ -92,9 +90,9 @@ const parseMsgBeginRedelegate = (instance: proto.cosmos.staking.v1beta1.MsgBegin
   }
 }
 const parseMsgSubmitProposal = (instance: proto.cosmos.gov.v1beta1.MsgSubmitProposal): txTitle => {
-  const denomAmount = instance.initial_deposit?.[0].amount
+  const denomAmount = instance.initial_deposit?.[0].amount || ""
   const denom = instance.initial_deposit?.[0].denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.proposer,
@@ -103,9 +101,9 @@ const parseMsgSubmitProposal = (instance: proto.cosmos.gov.v1beta1.MsgSubmitProp
   }
 }
 const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted): txTitle => {
-  const denomAmount = instance.options?.[0].weight
+  const denomAmount = instance.options?.[0].weight || ""
   const denom = instance.options?.[0].weight
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.voter,
@@ -114,19 +112,17 @@ const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted
   }
 }
 const parseMsgVote = (instance: proto.cosmos.gov.v1beta1.MsgVote): txTitle => {
-  const denomAmount = instance.option.toString()
-  const amount = denomAmount!
   return {
     txType: instance.constructor.name,
     fromAddress: instance.voter,
     toAddress: instance.proposal_id.toString(),
-    amount
+    amount: instance.option.toString()
   }
 }
 const parseMsgDeposit = (instance: proto.cosmos.gov.v1beta1.MsgDeposit): txTitle => {
-  const denomAmount = instance.amount?.[0].amount
+  const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.depositor,
@@ -135,9 +131,9 @@ const parseMsgDeposit = (instance: proto.cosmos.gov.v1beta1.MsgDeposit): txTitle
   }
 }
 const parseMsgFundCommunityPool = (instance: proto.cosmos.distribution.v1beta1.MsgFundCommunityPool): txTitle => {
-  const denomAmount = instance.amount?.[0].amount
+  const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.depositor,
@@ -170,9 +166,9 @@ const parseMsgWithdrawValidatorCommission = (instance: proto.cosmos.distribution
   }
 }
 const parseMsgSend = (instance: proto.cosmos.bank.v1beta1.MsgSend): txTitle => {
-  const denomAmount = instance.amount?.[0].amount
+  const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.from_address,
@@ -181,9 +177,9 @@ const parseMsgSend = (instance: proto.cosmos.bank.v1beta1.MsgSend): txTitle => {
   }
 }
 const parseMsgCreateVestingAccount = (instance: proto.cosmos.vesting.v1beta1.MsgCreateVestingAccount): txTitle => {
-  const denomAmount = instance.amount?.[0].amount
+  const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
-  const amount = denomAmount! + denom
+  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.from_address,

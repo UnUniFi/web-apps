@@ -9,8 +9,14 @@ export type SimulatedTxResultResponse = {
 };
 
 export type txTitle = {
-  txType: string,
-  fromAddress: string,
-  toAddress: string,
-  amount: string
+  txType: string;
+  fromAddress: string;
+  toAddress: string;
+  amount: string;
+}
+
+export type txSignature = {
+  publicKey: string;
+  accAddress: string;
+  type: string;
 }

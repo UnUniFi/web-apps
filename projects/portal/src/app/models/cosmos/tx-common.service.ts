@@ -146,9 +146,7 @@ export class TxCommonService {
       return this.signTxWithKeyStation(txBuilder, signerBaseAccount);
     }
     if (currentCosmosWallet.type === WalletType.metaMask) {
-      // Todo: Currently disabled MetaMask related features.
-      throw Error('Unsupported wallet type!');
-      // return this.signTxWithMetaMask(txBuilder, signerBaseAccount);
+      return this.signTxWithMetaMask(txBuilder, signerBaseAccount);
     }
     throw Error('Unsupported wallet type!');
   }

@@ -24,7 +24,7 @@ You can open [https://github.com/UnUniFi/web-apps/blob/main/projects/landing-pag
 
 You can check the interaction with all web-apps(= not only landing-page but also explorer and portal), with Node.js and Firebase Emulator.
 
-1. Install Node.js.
+1. Install Node.js. Currently, version 14 is recommended for this project.
 2. `npm install` on repository root directory.
 3. `npm run start:all` on repository root directory.
 4. Open `http://127.0.0.1:5000/` with browser.

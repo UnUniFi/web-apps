@@ -17,6 +17,8 @@
 
 ### Install Node.js
 
+Currently, version 14 is recommended for this project.
+
 [https://nodejs.org/](https://nodejs.org/)
 
 ### Install all dependencies

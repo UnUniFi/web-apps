@@ -18,11 +18,24 @@
         "dist/shared/shared",
         "dist/shared"
       ],
+      "shared/*": [
+        "dist/shared/shared/*",
+        "dist/shared/*"
+      ],
       "crypto": [
         "./node_modules/crypto-browserify"
       ],
+      "https": [
+        "./node_modules/https-browserify"
+      ],
+      "os": [
+        "./node_modules/os-browserify"
+      ],
       "stream": [
         "./node_modules/stream-browserify"
+      ],
+      "http": [
+        "./node_modules/stream-http"
       ],
       "path": [
         "./node_modules/path-browserify"

@@ -1,0 +1,8 @@
+<lib-view-list-nft-form-dialog
+  [nft]="nft"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [coins]="coins$ | async"
+  [uguuBalance]="uguuBalance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  (appSubmit)="onSubmit($event)"
+></lib-view-list-nft-form-dialog>

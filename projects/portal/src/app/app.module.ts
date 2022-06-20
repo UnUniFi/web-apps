@@ -6,6 +6,8 @@ import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-f
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
+import { AppWithdrawDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.module';
+import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { reducers, metaReducers } from './reducers';
@@ -13,7 +15,6 @@ import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/t
 import { InactiveValidatorModule } from './views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
-import { KeplrImportWalletDialogModule } from './views/dialogs/wallets/keplr/keplr-import-wallet-dialog/keplr-import-wallet-dialog.module';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
 import { UnunifiBackupPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-private-key-wizard-dialog/ununifi-backup-private-key-wizard-dialog.module';
 import { UnunifiCreateWalletFormDialogModule } from './views/dialogs/wallets/ununifi/ununifi-create-wallet-form-dialog/ununifi-create-wallet-form-dialog.module';
@@ -69,12 +70,13 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
     UnunifiKeyFormDialogModule,
-    KeplrImportWalletDialogModule,
     InactiveValidatorModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,
     AppUndelegateFormDialogModule,
+    AppWithdrawDelegatorRewardFormDialogModule,
+    AppWithdrawValidatorCommissionFormDialogModule,
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     GraphQLModule,

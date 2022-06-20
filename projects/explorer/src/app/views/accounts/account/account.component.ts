@@ -33,7 +33,7 @@ export class AccountComponent implements OnInit, OnChanges {
     if (this.account instanceof proto.cosmos.auth.v1beta1.BaseAccount) {
       this.baseAccount = this.account;
       // Todo: fix pub_key zero issue and convert bech32 format
-      const publicKey = cosmosclient.codec.unpackAny(this.baseAccount.pub_key);
+      const publicKey = cosmosclient.codec.protoAnyToInstance(this.baseAccount.pub_key);
       if (!(publicKey instanceof proto.cosmos.crypto.secp256k1.PubKey)) {
         throw Error('Invalid public key!');
       }
@@ -47,7 +47,7 @@ export class AccountComponent implements OnInit, OnChanges {
         this.vestingAccount.base_vesting_account?.base_account,
       );
       // Todo: fix pub_key zero issue and convert bech32 format
-      const publicKey = cosmosclient.codec.unpackAny(this.baseAccount.pub_key);
+      const publicKey = cosmosclient.codec.protoAnyToInstance(this.baseAccount.pub_key);
       if (!(publicKey instanceof proto.cosmos.crypto.secp256k1.PubKey)) {
         throw Error('Invalid public key!');
       }

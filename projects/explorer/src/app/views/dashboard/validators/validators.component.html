@@ -1,6 +1,6 @@
 <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
   <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -20,13 +20,11 @@
     </div>
     <mat-list>
       <mat-list-item>
-        <span class="w-3/5 break-all text-xs truncate pl-8 pr-8">Validator</span>
+        <span class="w-6/12 lg:w-9/12 break-all text-base pl-8 pr-8">Validator</span>
         <span class="flex-auto"></span>
-        <span class="w-1/8 break-all text-xs truncate pr-4">Voting Power</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/8 break-all text-xs truncate pr-4">Tokens</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/8 break-all text-xs truncate">Commission</span>
+        <span class="w-2/12 lg:w-3/12 text-right break-words text-sm">Voting Power</span>
+        <span class="w-2/12 lg:w-3/12 text-right break-all text-sm">Tokens</span>
+        <span class="w-2/12 lg:hidden text-right break-all text-xs">Commission</span>
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
@@ -36,18 +34,21 @@
         *ngFor="let validator of validators; last as last"
         routerLink="/validators/{{ validator.val.operator_address }}"
       >
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }"> circle </mat-icon>
-        <span class="w-1/2 break-all text-sm truncate sm:text-base">{{
-          validator.val.description?.moniker
+        <span class="w-6/12 lg:w-9/12 flex content-center">
+          <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
+            circle
+          </mat-icon>
+          <span class="break-all text-base">{{ validator.val.description?.moniker }}</span>
+        </span>
+        <span class="flex-auto"></span>
+        <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
+          validator.share | percent: '1.2-2'
         }}</span>
         <span class="flex-auto"></span>
-        <span class="break-all text-sm sm:text-base">{{ validator.share | percent: '1.2-2' }}</span>
-        <span class="flex-auto"></span>
-        <span class="break-all text-sm sm:text-base">{{
+        <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
           validator.val.tokens | unitConversion
         }}</span>
-        <span class="flex-auto"></span>
-        <span class="break-all text-sm sm:text-base">{{
+        <span class="w-2/12 lg:hidden text-right break-all text-base">{{
           validator.val.commission?.commission_rates?.rate | percent: '1.0-0'
         }}</span>
         <mat-divider *ngIf="!last"></mat-divider>

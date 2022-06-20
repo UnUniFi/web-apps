@@ -1,0 +1,13 @@
+<view-app
+  [config]="config$ | async"
+  [configs]="configs"
+  [selectedConfig]="selectedConfig$ | async"
+  [navigations]="navigations$ | async"
+  [searchResult]="searchResult$ | async"
+  (appSubmitSearchResult)="onSubmitSearchResult($event)"
+  (appChangeInputValue)="onChangeInputValue($event)"
+  (appConnectWallet)="onConnectWallet($event)"
+  (appChangeConfig)="onChangeConfig($event)"
+>
+  <router-outlet></router-outlet>
+</view-app>

@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 import BigNumber from 'bignumber.js';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -100,7 +101,11 @@ export class StakingService {
     // get account info
     const account = await rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -119,7 +124,8 @@ export class StakingService {
 
     const pubKeyJson = JSON.parse(createValidatorData.pubkey);
     const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
-    const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
+    const packedAnyCosmosValConsPublicKey =
+      cosmosclient.codec.instanceToProtoAny(cosmosValConsPublicKey);
 
     const commission = this.makeCommissionValues({
       rate: createValidatorData.rate,
@@ -150,14 +156,14 @@ export class StakingService {
     );
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateValidator)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${createValidatorData.node_id}@${createValidatorData.ip}:26656`,
     });
 
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -168,7 +174,7 @@ export class StakingService {
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 

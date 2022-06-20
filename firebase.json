@@ -28,6 +28,10 @@
           "destination": "/portal/index.html"
         },
         {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -49,6 +53,10 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
+        },
+        {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -74,6 +82,10 @@
           "destination": "/portal/index.html"
         },
         {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -95,6 +107,10 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
+        },
+        {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -120,6 +136,10 @@
           "destination": "/portal/index.html"
         },
         {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -141,6 +161,10 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
+        },
+        {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",

@@ -1,0 +1,101 @@
+<mat-dialog-content>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <div class="font-bold text-xl m-3">Withdraw delegator reward</div>
+  </div>
+
+  <mat-list>
+    <mat-label>To. (Validator)</mat-label>
+    <mat-list-item>
+      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+        >circle</mat-icon
+      >
+      <div mat-line>
+        <span>{{ validator?.description?.moniker }}</span>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-list>
+    <mat-label>From. (Delegator)</mat-label>
+    <mat-list-item>
+      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+        >circle</mat-icon
+      >
+      <div mat-line>
+        <span>{{ currentStoredWallet?.id }}</span>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <form #formRef="ngForm" (submit)="onSubmit()">
+    <h3 class="pt-3">Gas Settings</h3>
+    <mat-form-field class="w-full">
+      <mat-label>Gas Ratio</mat-label>
+      <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
+    </mat-form-field>
+    <mat-button-toggle-group class="flex mb-4" value="low">
+      <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(0)"
+        >Low</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(1.1)"
+        >Middle</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(2)"
+        >High</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Advanced </mat-panel-title>
+          <mat-panel-description> Change Default Gas Price </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="flex flex-col content-content lg:flex-row">
+          <mat-form-field class="flex-auto">
+            <mat-label>Gas Denom</mat-label>
+            <mat-select
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+              name="minimum-gas-denom"
+              required
+              (valueChange)="onMinimumGasDenomChanged($event)"
+            >
+              <mat-option
+                *ngFor="let minimumGasPriceOption of minimumGasPrices"
+                [value]="minimumGasPriceOption.denom"
+              >
+                {{ minimumGasPriceOption.denom }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="flex-auto">
+            <mat-label>Gas Price</mat-label>
+            <input
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+              #minimumGasPriceRef
+              name="minimum-gas-price"
+              matInput
+              type="number"
+              [min]="0"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <mat-slider
+          class="w-full"
+          [max]="1"
+          [min]="0"
+          [step]="0.015"
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          name="minimum-gas-price-slider"
+        >
+        </mat-slider>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
+      Withdraw Delegator Reward
+    </button>
+  </form>
+</mat-dialog-content>

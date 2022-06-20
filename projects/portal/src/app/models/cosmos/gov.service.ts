@@ -8,7 +8,7 @@ import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { cosmos } from 'ununifi-client';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -71,7 +71,11 @@ export class GovService {
     // get account info
     const account = await rest.auth
       .account(sdk, fromAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -88,12 +92,12 @@ export class GovService {
     });
 
     const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgProposal)],
+      messages: [cosmosclient.codec.instanceToProtoAny(msgProposal)],
     });
     const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
               mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
@@ -104,7 +108,7 @@ export class GovService {
       ],
       fee: {
         amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 
@@ -204,7 +208,7 @@ export class GovService {
     voteOption: proto.cosmos.gov.v1beta1.VoteOption,
   ): proto.cosmos.gov.v1beta1.MsgVote {
     const msgVote = new proto.cosmos.gov.v1beta1.MsgVote({
-      proposal_id: cosmosclient.Long.fromNumber(proposalID),
+      proposal_id: Long.fromNumber(proposalID),
       voter: voterAddress,
       option: voteOption,
     });
@@ -301,7 +305,7 @@ export class GovService {
     amount: proto.cosmos.base.v1beta1.ICoin,
   ): proto.cosmos.gov.v1beta1.MsgDeposit {
     const msgDeposit = new proto.cosmos.gov.v1beta1.MsgDeposit({
-      proposal_id: cosmosclient.Long.fromNumber(proposalID),
+      proposal_id: Long.fromNumber(proposalID),
       depositor: depositerAddress,
       amount: [amount],
     });

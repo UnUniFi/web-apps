@@ -17,13 +17,15 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
   }
 
   getPrivKey(type: KeyType, privateKey: Uint8Array) {
-    const privKeyBuffer = Buffer.from(privateKey)
+    const privKeyBuffer = Buffer.from(privateKey);
     switch (type) {
       case KeyType.secp256k1:
         return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
       case KeyType.ed25519:
         throw Error('not supported yet');
       case KeyType.sr25519:
+        throw Error('not supported yet');
+      case KeyType.ethsecp256k1:
         throw Error('not supported yet');
     }
   }
@@ -36,6 +38,8 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
       case KeyType.ed25519:
         throw Error('not supported yet');
       case KeyType.sr25519:
+        throw Error('not supported yet');
+      case KeyType.ethsecp256k1:
         throw Error('not supported yet');
     }
   }

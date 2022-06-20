@@ -55,11 +55,8 @@ export class WalletApplicationService {
     }
 
     if (selectedWalletType === WalletType.metaMask) {
-      // Todo: Currently disabled MetaMask related features.
-      this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
+      await this.metaMaskConnectWallet();
       return;
-      // await this.metaMaskConnectWallet();
-      // return;
     }
 
     this.snackBar.open('Invalid wallet type!', 'Close');

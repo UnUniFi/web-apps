@@ -1,0 +1,9 @@
+{
+  "integrationFolder": "projects/marketplace/cypress/integration",
+  "supportFile": "projects/marketplace/cypress/support/index.ts",
+  "videosFolder": "projects/marketplace/cypress/videos",
+  "screenshotsFolder": "projects/marketplace/cypress/screenshots",
+  "pluginsFile": "projects/marketplace/cypress/plugins/index.ts",
+  "fixturesFolder": "projects/marketplace/cypress/fixtures",
+  "baseUrl": "http://localhost:4200"
+}

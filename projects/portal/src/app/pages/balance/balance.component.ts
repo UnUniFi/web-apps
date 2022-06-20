@@ -1,6 +1,6 @@
 import { CosmosSDKService } from '../../models';
 import { Config, ConfigService } from '../../models/config.service';
-import { CosmosWallet, StoredWallet } from '../../models/wallets/wallet.model';
+import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
 import {
   convertTypedAccountToTypedName,
@@ -24,6 +24,7 @@ export class BalanceComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   currentCosmosWallet$: Observable<CosmosWallet | null | undefined>;
   walletId$: Observable<string | null | undefined>;
+  walletType$: Observable<WalletType | null | undefined>;
   cosmosPublicKey$: Observable<PubKey | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   cosmosAccAddress$: Observable<cosmosclient.AccAddress | null | undefined>;
@@ -75,6 +76,9 @@ export class BalanceComponent implements OnInit {
     this.walletId$ = this.currentStoredWallet$.pipe(
       map((storedWallet) => (storedWallet ? storedWallet.id : storedWallet)),
     );
+    this.walletType$ = this.currentStoredWallet$.pipe(
+      map((storedWallet) => (storedWallet ? storedWallet.type : storedWallet)),
+    );
     this.cosmosPublicKey$ = this.currentCosmosWallet$.pipe(
       map((cosmosWallet) => (cosmosWallet ? cosmosWallet.public_key : cosmosWallet)),
     );
@@ -100,7 +104,17 @@ export class BalanceComponent implements OnInit {
         }
         return rest.auth
           .account(sdk.rest, cosmosAccAddress)
-          .then((res) => res.data && cosmosclient.codec.unpackCosmosAny(res.data.account))
+          .then((res) => {
+            console.log(res.data.account);
+            return res;
+          })
+          .then(
+            (res) =>
+              res.data &&
+              cosmosclient.codec.protoJSONToInstance(
+                cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
+              ),
+          )
           .catch((error) => {
             console.error(error);
             return undefined;

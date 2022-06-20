@@ -1,0 +1,85 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+mat-toolbar.toolbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.container {
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+mat-progress-spinner {
+  margin: 1em auto;
+}
+
+/* Todo: Current color system is very bad... */
+mat-dialog-container {
+  background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step {
+  background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step-text-label {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-step-header {
+  background: #3734B0 !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-empty {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-infix {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-autofill-control {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-label {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-form-field-underline {
+  color: white !important;
+}
+
+/* Todo: Current color system is very bad... */
+.mat-hint {
+  color: white !important;
+}

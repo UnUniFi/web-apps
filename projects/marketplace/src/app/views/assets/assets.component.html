@@ -1,0 +1,30 @@
+<h2 class="mb-0">Available Assets</h2>
+<div class="flex flex-wrap">
+  <mat-card
+    class="text-center hover:shadow-xl w-64 m-5"
+    style="padding: 0%"
+    *ngFor="let item of items"
+  >
+    <a routerLink="{{ item.id }}">
+      <img mat-card-image src="{{ item.image }}" class="object-cover h-3/5" style="margin: 0%" />
+    </a>
+    <div class="flex justify-center">
+      <img
+        src="{{ item.avatarUrl }}"
+        class="w-14 rounded-full border-4 border-white -mt-6 shadow-lg"
+      />
+    </div>
+    <mat-card-title class="py-1">{{ item.collectionName }}</mat-card-title>
+    <mat-card-subtitle class="font-semibold text-sm text-gray-500">
+      by
+      <a href="{{ item.createrUrl }}" class="text-blue-500 hover:text-blue-700">
+        {{ item.createrName }}
+      </a>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <p class="break-words text-gray-500 text-center mx-2">
+        {{ item.description }}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

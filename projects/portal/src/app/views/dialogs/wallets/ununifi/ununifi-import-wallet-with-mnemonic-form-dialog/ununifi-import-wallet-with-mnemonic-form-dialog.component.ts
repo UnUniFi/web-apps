@@ -1,11 +1,16 @@
+import { validatePrivateStoredWallet } from '../../../../../utils/validation';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient } from '@cosmos-client/core';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { KeyService } from 'projects/portal/src/app/models/keys/key.service';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from 'projects/portal/src/app/utils/key';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -21,13 +26,15 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   id$: Observable<string>;
   mnemonicSubject$: BehaviorSubject<string>;
   mnemonic$: Observable<string>;
+  wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
     private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithMnemonicFormDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
-    private keyService: KeyService,
+    private walletService: WalletService,
   ) {
+    this.wallets$ = this.walletService.storedWallets$;
     this.idSubject$ = new BehaviorSubject<string>('');
     this.idSubject$.next('');
     this.id$ = this.idSubject$.asObservable();
@@ -47,18 +54,25 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
             address: '',
           });
         }
-        const mnemonicWithNoWhitespace = mnemonic.trim();
-        return this.keyService
-          .getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace)
+        return createPrivateKeyStringFromMnemonic(mnemonic)
           .then((privateKey) => {
-            const cosmosPrivateKey = this.keyService.getPrivKey(
+            if (!privateKey) {
+              this.snackBar.open('Invalid mnemonic!', 'Close');
+              throw Error('Invalid mnemonic!');
+            }
+            const cosmosPrivateKey = createCosmosPrivateKeyFromString(
               KeyType.secp256k1,
-              Uint8Array.from(Buffer.from(privateKey, 'hex')),
+              privateKey,
             );
+            if (!cosmosPrivateKey) {
+              this.snackBar.open('Invalid privateKey!', 'Close');
+              throw Error('Invalid privateKey!');
+            }
             const cosmosPublicKey = cosmosPrivateKey.pubKey();
             const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
             const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
             const address = accAddress.toString();
+            const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s+/g, ' ');
             return {
               id,
               type: WalletType.ununifi,
@@ -85,7 +99,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
@@ -108,15 +122,34 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   }
 
   onClickButton(id: string) {
-    const subscription = this.privateWallet$.subscribe((privateWallet) => {
-      if (!privateWallet) {
-        this.snackBar.open('Invalid wallet!');
+    const subscription = combineLatest([this.privateWallet$, this.wallets$]).subscribe(
+      ([privateWallet, wallets]) => {
+        if (!privateWallet) {
+          this.snackBar.open('Invalid wallet!');
+          subscription.unsubscribe();
+          return;
+        }
+        console.log(id);
+        const sameWallet = wallets?.find((wallet) => wallet.id === id);
+        console.log(sameWallet);
+        if (sameWallet) {
+          this.snackBar.open(
+            'Same Wallet ID is already connected! You need to use another Wallet ID!',
+            'Close',
+          );
+          subscription.unsubscribe();
+          return;
+        }
+        privateWallet.id = id;
+
+        if (!validatePrivateStoredWallet(privateWallet)) {
+          this.snackBar.open('Invalid Wallet info!', 'Close');
+          subscription.unsubscribe();
+          return;
+        }
+        this.dialogRef.close(privateWallet);
         subscription.unsubscribe();
-        return;
-      }
-      privateWallet.id = id;
-      this.dialogRef.close(privateWallet);
-      subscription.unsubscribe();
-    });
+      },
+    );
   }
 }

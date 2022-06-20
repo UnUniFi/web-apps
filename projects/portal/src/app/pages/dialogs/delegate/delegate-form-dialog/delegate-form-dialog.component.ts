@@ -6,7 +6,7 @@ import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/a
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { DelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
 import { InactiveValidatorConfirmDialogComponent } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
@@ -81,12 +81,15 @@ export class DelegateFormDialogComponent implements OnInit {
         return;
       }
     }
-    const txHash = await this.stakingAppService.createDelegate(
+    let txHash: string | undefined;
+
+    txHash = await this.stakingAppService.createDelegate(
       this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,
       $event.gasRatio,
     );
+
     this.matDialogRef.close(txHash);
   }
 }

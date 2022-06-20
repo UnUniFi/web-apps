@@ -1,10 +1,9 @@
-import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { KeyType } from '../keys/key.model';
+import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
@@ -16,24 +15,12 @@ export class BankService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
-  async send(
-    keyType: KeyType,
-    toAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
-  ): Promise<InlineResponse20075> {
-    const txBuilder = await this.buildSendTx(keyType, toAddress, amount, gas, fee, privateKey);
-    return await this.txCommonService.announceTx(txBuilder);
-  }
-
   async simulateToSend(
-    keyType: KeyType,
-    toAddress: string,
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
+    cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
@@ -44,83 +31,84 @@ export class BankService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const simulatedTxBuilder = await this.buildSendTx(
-      keyType,
+    const simulatedTxBuilder = await this.buildSendTxBuilder(
+      fromAccount,
       toAddress,
       amount,
+      cosmosPublicKey,
       dummyGas,
       dummyFee,
-      privateKey,
     );
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
-  async buildSendTx(
-    keyType: KeyType,
-    toAddress: string,
+  async send(
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    toAddress: cosmosclient.AccAddress,
     amount: proto.cosmos.base.v1beta1.ICoin[],
+    currentCosmosWallet: CosmosWallet,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-    privateKey: Uint8Array,
+    privateKey?: string,
+  ): Promise<InlineResponse20075> {
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+
+    const txBuilder = await this.buildSendTxBuilder(
+      fromAccount,
+      toAddress,
+      amount,
+      cosmosPublicKey,
+      gas,
+      fee,
+    );
+
+    const signedTxBuilder = await this.txCommonService.signTx(
+      txBuilder,
+      fromAccount,
+      currentCosmosWallet,
+      privateKey,
+    );
+    if (!signedTxBuilder) {
+      throw Error('Failed to sign!');
+    }
+    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
+    return txResult;
+  }
+
+  async buildSendTxBuilder(
+    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    toAddress: cosmosclient.AccAddress,
+    amount: proto.cosmos.base.v1beta1.ICoin[],
+    cosmosPublicKey: cosmosclient.PubKey,
+    gas: proto.cosmos.base.v1beta1.ICoin,
+    fee: proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
-    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const privKey = createCosmosPrivateKeyFromUint8Array(keyType, privateKey);
-    if (!privKey) {
-      throw Error('privKey is falsy!');
-    }
-    const pubKey = privKey.pubKey();
-    const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
+    const fromAddress = cosmosclient.AccAddress.fromString(fromAccount.address);
 
-    // get account info
-    const account = await rest.auth
-      .account(sdk, fromAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
-      .catch((_) => undefined);
+    const msgSend = this.buildMsgSend(fromAddress, toAddress, amount);
 
-    if (!(account instanceof proto.cosmos.auth.v1beta1.BaseAccount)) {
-      throw Error('Address not found');
-    }
-
-    // remove unintentional whitespace
-    const toAddressWithNoWhitespace = toAddress.replace(/\s+/g, '');
-
-    // build MsgSend
-    const msgSend = new proto.cosmos.bank.v1beta1.MsgSend({
-      from_address: fromAddress.toString(),
-      to_address: toAddressWithNoWhitespace,
-      amount: amount,
-    });
-
-    // build TxBody
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgSend)],
-    });
-
-    // build AuthInfo
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
-      signer_infos: [
-        {
-          public_key: cosmosclient.codec.packAny(pubKey),
-          mode_info: {
-            single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
-            },
-          },
-          sequence: account.sequence,
-        },
-      ],
-      fee: {
-        amount: [fee],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '200000'),
-      },
-    });
-
-    // sign tx data
-    const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(account.account_number);
-    const signature = privKey.sign(signDocBytes);
-    txBuilder.addSignature(signature);
+    // build tx
+    const txBuilder = await this.txCommonService.buildTxBuilder(
+      [msgSend],
+      cosmosPublicKey,
+      fromAccount,
+      gas,
+      fee,
+    );
 
     return txBuilder;
+  }
+
+  buildMsgSend(
+    fromAddress: cosmosclient.AccAddress,
+    toAddress: cosmosclient.AccAddress,
+    amount: proto.cosmos.base.v1beta1.ICoin[],
+  ): proto.cosmos.bank.v1beta1.MsgSend {
+    const msgSend = new proto.cosmos.bank.v1beta1.MsgSend({
+      from_address: fromAddress.toString(),
+      to_address: toAddress.toString(),
+      amount,
+    });
+    return msgSend;
   }
 }

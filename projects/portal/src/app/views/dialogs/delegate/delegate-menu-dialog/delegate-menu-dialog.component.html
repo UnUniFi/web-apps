@@ -1,80 +1,150 @@
-<div class="flex flex-col items-center">
-  <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-  <div class="font-bold text-xl m-3">Delegate Menu</div>
+<mat-dialog-content>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <div class="font-bold text-xl m-3">Delegate Menu</div>
+    <mat-list class="w-full">
+      <mat-label>Validator</mat-label>
+      <mat-list-item>
+        <mat-icon
+          matListIcon
+          [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
+        >
+          circle
+        </mat-icon>
+        <div mat-line>
+          <span>{{ selectedValidator?.description?.moniker }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="column-name">Address</span>
+        <span class="flex-auto w-1/4"></span>
+        <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="column-name">Commission</span>
+        <span class="flex-auto"></span>
+        <span class="column-value">{{
+          selectedValidator?.commission?.commission_rates?.rate | percent
+        }}</span>
+      </mat-list-item>
+    </mat-list>
+    <ng-container *ngIf="selectedValidator?.description?.website; then existURL; else emptyURL">
+    </ng-container>
+    <ng-template #existURL>
+      <mat-nav-list class="w-full">
+        <a href="{{ selectedValidator?.description?.website }}" target="_blank">
+          <mat-list-item>
+            <span class="column-name"> Website </span>
+            <span class="flex-auto"></span>
+            <span class="column-value">{{ selectedValidator?.description?.website }}</span>
+          </mat-list-item>
+        </a>
+      </mat-nav-list>
+    </ng-template>
+    <ng-template #emptyURL> </ng-template>
 
-  <mat-nav-list class="w-full">
-    <mat-label>Validator</mat-label>
-    <mat-list-item>
-      <mat-icon
-        matListIcon
-        [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
-      >
-        circle
-      </mat-icon>
-      <span class="break-all truncate">{{ selectedValidator?.operator_address }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="column-name">Commission</span>
-      <span class="flex-auto"></span>
-      <span class="column-value">{{
-        selectedValidator?.commission?.commission_rates?.rate | percent
-      }}</span>
-    </mat-list-item>
-    <ng-container *ngIf="selectedValidator?.description?.website; then exist; else empty">
-    </ng-container>
-    <ng-template #exist>
-      <a href="{{ selectedValidator?.description?.website }}" target="_blank">
-        <mat-list-item>
-          <span class="column-name"> Website </span>
-          <span class="flex-auto"></span>
-          <span class="column-value">{{ selectedValidator?.description?.website }}</span>
-        </mat-list-item>
-      </a>
-    </ng-template>
-    <ng-template #empty>
-      <mat-list-item>
-        <span class="column-name"> Website </span>
-        <span class="flex-auto"></span>
-        <span class="column-value">{{ selectedValidator?.description?.website }}</span>
-      </mat-list-item>
-    </ng-template>
     <ng-container *ngIf="isDelegated">
-      <mat-list-item>
-        <span class="column-name">Delegated Amount</span>
-        <span class="flex-auto"></span>
-        <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
-      </mat-list-item>
+      <mat-list class="w-full">
+        <mat-list-item>
+          <span class="column-name">Delegated Amount</span>
+          <span class="flex-auto"></span>
+          <span class="column-value">{{ delegateAmount?.amount | number:'1.0-0' }} {{ delegateAmount?.denom }}</span>
+        </mat-list-item>
+      </mat-list>
+      <mat-list class="w-full">
+        <ng-container
+          *ngIf="(totalRewards?.total?.length || 0) > 0; then existTotalRewards; else emptyTotalRewards"        >
+        </ng-container>
+        <ng-template #emptyTotalRewards>
+          <mat-list-item>
+            <span class="column-name">Claimable Delegator Reward</span>
+            <span class="flex-auto"></span>
+            <span>*This account has no claimable delegator reward</span>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #existTotalRewards>
+          <mat-list-item *ngFor="let eachTotalReward of totalRewards?.total; last as last">
+            <span class="column-name">Claimable Delegator Reward</span>
+            <span class="flex-auto"></span>
+            <span>{{ eachTotalReward.amount | number:'1.0-0' }} {{ eachTotalReward.denom }}</span>
+          </mat-list-item>
+        </ng-template>
+      </mat-list>
     </ng-container>
-  </mat-nav-list>
-  <button
-    mat-flat-button
-    class="inline-flex justify-between items-center w-full m-3 bg-white"
-    (click)="onClickDetailButton()"
-  >
-    <span class="text-black">More information</span>
-    Details
-  </button>
-  <button
-    mat-flat-button
-    class="inline-flex justify-between items-center w-full m-3 bg-white"
-    (click)="onClickDelegateButton()"
-  >
-    <span class="text-black">Delegate to this validator</span>
-  </button>
-  <ng-container *ngIf="isDelegated">
+
+    <ng-container *ngIf="isValidator">
+      <mat-list class="w-full">
+        <ng-container
+          *ngIf="
+            (commission?.commission?.commission?.length || 0) > 0;
+            then existCommission;
+            else emptyCommission
+          "
+        >
+        </ng-container>
+        <ng-template #emptyCommission>
+          <mat-list-item>
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>*This account has no commission</span>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #existCommission>
+          <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>{{ commission.amount | number:'1.0-0' }} {{ commission.denom }}</span>
+          </mat-list-item>
+        </ng-template>
+      </mat-list>
+    </ng-container>
+
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickRedelegateButton()"
+      (click)="onClickDetailButton()"
     >
-      <span class="text-black">Redelegate to another validator</span>
+      <span class="text-black">More information</span>
+      Details
     </button>
     <button
       mat-flat-button
       class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickUndelegateButton()"
+      (click)="onClickDelegateButton()"
     >
-      <span class="text-black">Undelegate from this validator</span>
+      <span class="text-black">Delegate to this validator</span>
     </button>
-  </ng-container>
+    <ng-container *ngIf="isDelegated">
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickRedelegateButton()"
+      >
+        <span class="text-black">Redelegate to another validator</span>
+      </button>
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickUndelegateButton()"
+      >
+        <span class="text-black">Undelegate from this validator</span>
+      </button>
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickWithdrawDelegatorRewardButton()"
+      >
+        <span class="text-black">Withdraw delegator reward</span>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="isValidator">
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickWithdrawValidatorCommissionButton()"
+      >
+        <span class="text-black">Withdraw validator commission</span>
+      </button>
+    </ng-container>
 </div>
+</mat-dialog-content>

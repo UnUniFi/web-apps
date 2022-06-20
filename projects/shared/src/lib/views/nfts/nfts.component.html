@@ -1,0 +1,26 @@
+<ng-container *ngIf="nfts?.length; else invalid;">
+  <div class="flex flex-wrap">
+    <lib-view-nft
+      *ngFor="let nft of nfts"
+      [nft]="nft"
+      [menuEnabled]="menuEnabled"
+    ></lib-view-nft>
+  </div>
+</ng-container>
+
+<ng-template #invalid>
+  <!-- loading -->
+  <ng-container *ngIf="nfts === null">
+    <mat-spinner [diameter]="20"></mat-spinner>
+  </ng-container>
+
+  <!-- not exist -->
+  <ng-container *ngIf="nfts?.length === 0">
+    <div>Not exist</div>
+  </ng-container>
+
+  <!-- error -->
+  <ng-container *ngIf="nfts === undefined">
+    <div>Unknown error occur!</div>
+  </ng-container>
+</ng-template>

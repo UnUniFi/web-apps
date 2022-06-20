@@ -44,7 +44,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
-    this.gasRatio = 1.1;
+    this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
@@ -70,7 +70,7 @@ export class DepositFormDialogComponent implements OnInit {
 
   unpackContent(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value) as ProposalContent;
+      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
     } catch {
       return null;
     }

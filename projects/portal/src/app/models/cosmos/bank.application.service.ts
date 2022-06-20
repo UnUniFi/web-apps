@@ -1,16 +1,15 @@
-import { convertHexStringToUint8Array } from '../../utils/converter';
-import { validatePrivateStoredWallet } from '../../utils/validater';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { WalletApplicationService } from '../wallets/wallet.application.service';
-import { StoredWallet } from '../wallets/wallet.model';
+import { WalletService } from '../wallets/wallet.service';
 import { BankService } from './bank.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import { LoadingDialogService } from 'ng-loading-dialog';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -22,52 +21,43 @@ export class BankApplicationService {
     private readonly dialog: MatDialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
-    private readonly walletApplicationService: WalletApplicationService,
+    private readonly walletService: WalletService,
+    private readonly txCommon: TxCommonService,
   ) {}
 
   async send(
     toAddress: string,
     amount: proto.cosmos.base.v1beta1.ICoin[],
     minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    coins: proto.cosmos.base.v1beta1.ICoin[],
+    balances: proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
-    // Note: Open dialog and get Wallet info with privateKeyString
-    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
-      await this.walletApplicationService.openUnunifiKeyFormDialog();
-    if (!privateWallet || !privateWallet.privateKey) {
-      this.snackBar.open('Failed to get Wallet info from dialog!', 'Close');
-      return;
+    // TODO: firstValueFrom
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      throw Error('Current connected wallet is invalid!');
+    }
+    const fromAddress = currentCosmosWallet.address;
+    const _toAddress = this.txCommon.canonicalizeAccAddress(toAddress);
+    const cosmosPublicKey = currentCosmosWallet.public_key;
+    if (!cosmosPublicKey) {
+      throw Error('Invalid public key!');
     }
 
-    const privateKey = convertHexStringToUint8Array(privateWallet.privateKey);
-    if (!privateKey) {
-      this.snackBar.open('Invalid PrivateKey!', 'Close');
-      return;
-    }
-
-    if (!validatePrivateStoredWallet(privateWallet)) {
-      this.snackBar.open('Invalid Wallet info!', 'Close');
-      return;
+    const fromAccount = await this.txCommon.getBaseAccountFromAddress(fromAddress);
+    if (!fromAccount) {
+      throw Error('Unsupported account type.');
     }
 
     // simulate
-    let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
-
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
-    // confirm whether amount has fee for simulation
-    const feeDenom = minimumGasPrice.denom;
-    const simulationFeeAmount = 1;
-    const tempAmountToSend = amount.find(
-      (amount) => amount.denom === minimumGasPrice.denom,
-    )?.amount;
-    const amountToSend = tempAmountToSend ? parseInt(tempAmountToSend) : 0;
-    const tempBalance = coins.find((coin) => coin.denom === minimumGasPrice.denom)?.amount;
-    const balance = tempBalance ? parseInt(tempBalance) : 0;
-    if (amountToSend + simulationFeeAmount > balance) {
+    const { feeDenom, amountToSend, balance, simulationFeeAmount, validity } =
+      this.txCommon.validateBalanceBeforeSimulation(amount, minimumGasPrice, balances);
+
+    if (!validity) {
       this.snackBar.open(
         `Insufficient fee margin for simulation!\nAmount to send: ${amountToSend}${feeDenom} + Simulation fee: ${simulationFeeAmount}${feeDenom} > Balance: ${balance}${feeDenom}`,
         'Close',
@@ -76,13 +66,17 @@ export class BankApplicationService {
       return;
     }
 
+    let simulatedResultData: SimulatedTxResultResponse;
+    let gas: proto.cosmos.base.v1beta1.ICoin;
+    let fee: proto.cosmos.base.v1beta1.ICoin;
+
     try {
       simulatedResultData = await this.bank.simulateToSend(
-        privateWallet.key_type,
-        toAddress,
+        fromAccount,
+        _toAddress,
         amount,
+        cosmosPublicKey,
         minimumGasPrice,
-        privateKey,
         gasRatio,
       );
       gas = simulatedResultData.estimatedGasUsedWithMargin;
@@ -128,12 +122,12 @@ export class BankApplicationService {
 
     try {
       const res = await this.bank.send(
-        privateWallet.key_type,
-        toAddress,
+        fromAccount,
+        _toAddress,
         amount,
+        currentCosmosWallet,
         gas,
         fee,
-        privateKey,
       );
       txhash = res.tx_response?.txhash;
       if (txhash === undefined) {

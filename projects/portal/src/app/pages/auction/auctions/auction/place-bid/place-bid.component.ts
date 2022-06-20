@@ -41,7 +41,7 @@ export class PlaceBidComponent implements OnInit {
         const anyAuction = auction as {
           base_auction: { end_time: string; max_end_time: string };
         };
-        const parseAuction = (anyAuction: any): unknown => {
+        const parseAuction = (anyAuction: any): { type_url?: string; value?: string } => {
           anyAuction.base_auction.end_time = google.protobuf.Timestamp.fromObject({
             seconds: Date.parse(anyAuction.base_auction.end_time),
             nanos: 0,
@@ -52,7 +52,9 @@ export class PlaceBidComponent implements OnInit {
           });
           return anyAuction;
         };
-        const unpackAuction = cosmosclient.codec.unpackCosmosAny(parseAuction(anyAuction));
+        const unpackAuction = cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(parseAuction(anyAuction)),
+        );
         if (!(unpackAuction instanceof ununifi.auction.CollateralAuction)) {
           return;
         }
@@ -88,9 +90,7 @@ export class PlaceBidComponent implements OnInit {
 
   onSubmit($event: PlaceBidOnSubmitEvent) {
     this.auctionApplicationService.placeBid(
-      $event.key,
-      $event.privateKey,
-      $event.auctionID,
+      Number($event.auctionID),
       $event.amount,
       $event.minimumGasPrice,
       1.1,

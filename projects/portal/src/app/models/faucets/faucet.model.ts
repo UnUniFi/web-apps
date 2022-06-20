@@ -6,10 +6,7 @@ export type FaucetRequest = {
   }[];
 };
 
-export type FaucetResponse = {
-  transfers: {
-    coin: string;
-    status: string;
-    error?: string;
-  }[];
+export type FaucetResult = {
+  isSuccess: boolean;
+  errorMessage: string;
 };

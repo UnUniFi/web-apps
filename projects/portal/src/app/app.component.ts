@@ -1,13 +1,12 @@
-import { environment } from '../environments/environment';
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { WalletApplicationService } from './models/wallets/wallet.application.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
-import { mergeMap, map, filter } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -212,11 +211,14 @@ export class AppComponent implements OnInit {
 
   async onSubmitSearchResult(searchResult: SearchResult) {
     if (searchResult.type === 'address') {
-      await this.router.navigate(['accounts', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/accounts/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     } else if (searchResult.type === 'txHash') {
-      await this.router.navigate(['txs', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/txs/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     } else if (searchResult.type === 'block') {
-      await this.router.navigate(['explorer/blocks', searchResult.searchValue]);
+      const redirectUrl = `${location.protocol}//${location.host}/explorer/blocks/${searchResult.searchValue}`;
+      window.location.href = redirectUrl;
     }
   }
 
@@ -233,10 +235,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() {
-    // tracking
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
-  }
+  ngOnInit() {}
 }

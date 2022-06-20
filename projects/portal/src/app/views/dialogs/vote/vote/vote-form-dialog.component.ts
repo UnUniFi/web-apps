@@ -52,7 +52,7 @@ export class VoteFormDialogComponent implements OnInit {
     this.availableDenoms = ['uguu'];
 
     this.selectedAmount = { denom: 'uguu', amount: '0' };
-    this.gasRatio = 1.1;
+    this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
@@ -78,7 +78,7 @@ export class VoteFormDialogComponent implements OnInit {
 
   unpackContent(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value) as ProposalContent;
+      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
     } catch {
       return null;
     }
@@ -94,19 +94,22 @@ export class VoteFormDialogComponent implements OnInit {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
+    this.appSubmitNoWithVeto.emit({
+      minimumGasPrice: this.selectedGasPrice,
+      gasRatio: this.gasRatio,
+    });
   }
   onSubmitNo() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
+    this.appSubmitNo.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
   onSubmitAbstain() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.appSubmitYes.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
+    this.appSubmitAbstain.emit({ minimumGasPrice: this.selectedGasPrice, gasRatio: this.gasRatio });
   }
 
   onMinimumGasDenomChanged(denom: string): void {

@@ -22,9 +22,7 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: (string | undefined)[] | null;
-  @Input()
-  validatorsDetailList?: InlineResponse20066Validators[] | null;
+  validatorsList?: InlineResponse20066Validators[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -46,13 +44,13 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: string;
+  selectedValidator?: InlineResponse20066Validators;
   gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
-    this.gasRatio = 1.1;
+    this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
@@ -81,7 +79,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   }
 
   onSubmit(minimumGasPrice: string) {
-    if (!this.selectedValidator) {
+    if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
     if (!this.selectedAmount) {
@@ -90,15 +88,15 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.selectedGasPrice) {
       return;
     }
-    if (!this.validatorsDetailList) {
+    if (!this.validatorsList) {
       return;
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      destinationValidator: this.selectedValidator,
+      destinationValidator: this.selectedValidator.operator_address,
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
-      validatorList: this.validatorsDetailList,
+      validatorList: this.validatorsList,
       gasRatio: this.gasRatio,
     });
   }

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
-import { InlineResponse20052 } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20052FinalTallyResult,
+  InlineResponse20052Proposals,
+} from '@cosmos-client/core/esm/openapi';
 
 export interface ProposalContent {
   type: string;
@@ -15,7 +18,10 @@ export interface ProposalContent {
 })
 export class ProposalsComponent implements OnInit {
   @Input()
-  proposals?: InlineResponse20052 | null;
+  proposals?: InlineResponse20052Proposals[] | null;
+
+  @Input()
+  tallies?: (InlineResponse20052FinalTallyResult | undefined)[] | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
@@ -28,7 +34,7 @@ export class ProposalsComponent implements OnInit {
 
   unpackContent(value: any) {
     try {
-      return cosmosclient.codec.unpackCosmosAny(value) as ProposalContent;
+      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
     } catch {
       return null;
     }

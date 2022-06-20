@@ -1,12 +1,13 @@
-# Telescope
+# UnUniFi Web Apps
 
-## Run
+## Landing Page
 
-```bash
-mkdir telescope
-cd telescope
-curl -L https://raw.githubusercontent.com/CauchyE/telescope/main/projects/main/config.js.template -o config.js
-curl -O https://raw.githubusercontent.com/CauchyE/telescope/main/projects/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/CauchyE/telescope/main/projects/main/nginx.conf
-docker-compose up -d
-```
+[https://github.com/UnUniFi/web-apps/tree/main/projects/landing-page-html](https://github.com/UnUniFi/web-apps/tree/main/projects/landing-page-html)
+
+## Explorer
+
+[https://github.com/UnUniFi/web-apps/tree/main/projects/explorer](https://github.com/UnUniFi/web-apps/tree/main/projects/explorer)
+
+## Portal
+
+[https://github.com/UnUniFi/web-apps/tree/main/projects/portal](https://github.com/UnUniFi/web-apps/tree/main/projects/portal)

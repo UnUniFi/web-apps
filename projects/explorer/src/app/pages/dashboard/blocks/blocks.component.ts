@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import { cosmosclient, rest } from '@cosmos-client/core';
 import { InlineResponse20035, InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable, of, zip, timer, combineLatest, BehaviorSubject } from 'rxjs';
@@ -129,6 +129,30 @@ export class BlocksComponent implements OnInit {
         console.error(error);
         return of(undefined);
       }),
+    );
+
+    const validatorsList$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
+      map((result) => result.data),
+    );
+
+    this.blocks$ = combineLatest([this.blocks$, validatorsList$]).pipe(
+      map(([blocks, valList]) =>
+        blocks?.map((block) => {
+          console.log(block.block?.header?.proposer_address!);
+          const base64Decoded = Uint8Array.from(
+            Buffer.from(block.block?.header?.proposer_address!, 'base64'),
+          );
+          const proposer = new cosmosclient.ValAddress(base64Decoded);
+          const moniker = valList.validators?.find(
+            (val) => val.operator_address == proposer.toString(),
+          )?.description?.moniker;
+          if (block && block.block && block.block.header) {
+            block.block.header.proposer_address = moniker ? moniker : proposer.toString();
+          }
+          return block;
+        }),
+      ),
     );
   }
 

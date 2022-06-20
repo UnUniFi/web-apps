@@ -12,6 +12,12 @@ export class BlockComponent implements OnInit {
   block?: InlineResponse20036 | null;
 
   @Input()
+  blockHash?: string | null;
+
+  @Input()
+  proposer?: string | null;
+
+  @Input()
   nextBlock?: number | null;
 
   @Input()

@@ -13,6 +13,15 @@ export type txTitle = {
   fromAddress: string;
   toAddress: string;
   amount: string;
+
+  proposal?: string;
+  minimumSelfDelegation?: string;
+  editedCommissionRate?: string;
+  description?: proto.cosmos.staking.v1beta1.IDescription | null;
+  commission?: proto.cosmos.staking.v1beta1.ICommissionRates | null;
+
+  validatorDestinationAddress?: string
+  validatorSourceAddress?: string
 }
 
 export type txSignature = {

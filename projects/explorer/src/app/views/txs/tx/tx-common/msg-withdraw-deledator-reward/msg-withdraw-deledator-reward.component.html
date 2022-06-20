@@ -6,21 +6,15 @@
     </mat-chip-list>
     <mat-list>
       <mat-list-item>
-        <span class="break-words">Delegator address (From.):</span>
+        <span class="break-words">Delegator address:</span>
         <span class="flex-auto"></span>
         <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.fromAddress }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
-        <span class="break-words">Validator address (To.):</span>
+        <span class="break-words">Validator address:</span>
         <span class="flex-auto"></span>
         <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Amount:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.amount }}</span>
       </mat-list-item>
     </mat-list>
   </mat-card>

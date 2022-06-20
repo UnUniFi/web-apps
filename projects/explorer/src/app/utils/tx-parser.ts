@@ -53,7 +53,10 @@ const parseMsgEditValidator = (instance: proto.cosmos.staking.v1beta1.MsgEditVal
     txType: instance.constructor.name,
     fromAddress: accAddress,
     toAddress: instance.validator_address,
-    amount: "------"
+    amount: "------",
+    description: instance.description,
+    minimumSelfDelegation: instance.min_self_delegation,
+    editedCommissionRate: instance.commission_rate
   }
 }
 const parseMsgCreateValidator = (instance: proto.cosmos.staking.v1beta1.MsgCreateValidator): txTitle => {
@@ -64,7 +67,10 @@ const parseMsgCreateValidator = (instance: proto.cosmos.staking.v1beta1.MsgCreat
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,
     toAddress: instance.validator_address,
-    amount
+    amount,
+    description: instance.description,
+    minimumSelfDelegation: instance.min_self_delegation,
+    commission: instance.commission
   }
 }
 const parseMsgUndelegate = (instance: proto.cosmos.staking.v1beta1.MsgUndelegate): txTitle => {
@@ -81,12 +87,13 @@ const parseMsgUndelegate = (instance: proto.cosmos.staking.v1beta1.MsgUndelegate
 const parseMsgBeginRedelegate = (instance: proto.cosmos.staking.v1beta1.MsgBeginRedelegate): txTitle => {
   const denomAmount = instance.amount?.amount || ""
   const denom = instance.amount?.denom
-  const amount = denomAmount + " " + denom
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,
     toAddress: instance.validator_dst_address,
-    amount
+    validatorDestinationAddress: instance.validator_dst_address,
+    validatorSourceAddress: instance.validator_src_address,
+    amount: denomAmount + " " + denom
   }
 }
 const parseMsgSubmitProposal = (instance: proto.cosmos.gov.v1beta1.MsgSubmitProposal): txTitle => {
@@ -150,6 +157,7 @@ const parseMsgSetWithdrawAddress = (instance: proto.cosmos.distribution.v1beta1.
   }
 }
 const parseMsgWithdrawDelegatorReward = (instance: proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward): txTitle => {
+  console.log(instance)
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,

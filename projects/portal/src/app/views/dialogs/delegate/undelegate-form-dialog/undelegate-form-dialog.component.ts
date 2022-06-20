@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
+  InlineResponse20072,
   InlineResponse20066Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -32,6 +33,8 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
+  unbondingDelegation?: InlineResponse20072 | null;
+  @Input()
   validator?: InlineResponse20066Validators | null;
 
   @Output()
@@ -42,12 +45,17 @@ export class UndelegateFormDialogComponent implements OnInit {
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
+  estimatedUnbondingData: string = ""
+  now = new Date();
+
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
     this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
+    this.now.setDate(this.now.getDate() + 14);
+    this.estimatedUnbondingData = this.now.toString()
   }
 
   ngOnChanges(): void {
@@ -56,7 +64,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getColorCode(address: string) {
     const hash = crypto

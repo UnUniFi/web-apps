@@ -17,6 +17,8 @@ import { cosmos } from 'ununifi-client';
 export class BlockComponent implements OnInit {
   blockHeight$: Observable<string>;
   block$: Observable<InlineResponse20036>;
+  blockHash$: Observable<string>;
+  proposer$: Observable<string>;
   nextBlock$: Observable<number>;
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;
@@ -30,23 +32,20 @@ export class BlockComponent implements OnInit {
         rest.tendermint.getBlockByHeight(sdk.rest, BigInt(height)).then((res) => res.data),
       ),
     );
-    const blockHash$ = this.block$.pipe(
+    this.blockHash$ = this.block$.pipe(
       map((block) => {
         const base64Decoded = Uint8Array.from(Buffer.from(block.block_id?.hash!, 'base64'));
         return Buffer.from(base64Decoded).toString('hex');
       }),
     );
-    const proposer$ = this.block$.pipe(
+    this.proposer$ = this.block$.pipe(
       map((block) => {
         console.log(block.block?.header?.proposer_address!);
         const base64Decoded = Uint8Array.from(
           Buffer.from(block.block?.header?.proposer_address!, 'base64'),
         );
-        const publicKey = new proto.cosmos.crypto.ed25519.PubKey({
-          key: base64Decoded,
-        });
-        const accAddress = cosmosclient.AccAddress.fromPublicKey(publicKey);
-        return accAddress.toString();
+        const proposer = new cosmosclient.ValAddress(base64Decoded);
+        return proposer.toString();
       }),
     );
 

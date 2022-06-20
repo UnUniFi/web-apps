@@ -1,5 +1,7 @@
 <view-block
   [block]="block$ | async"
+  [blockHash]="blockHash$ | async"
+  [proposer]="proposer$ | async"
   [nextBlock]="nextBlock$ | async"
   [previousBlock]="previousBlock$ | async"
   [transactions]="txs$ | async"

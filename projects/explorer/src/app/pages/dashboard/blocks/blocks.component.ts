@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { rest } from '@cosmos-client/core';
-import { InlineResponse20035, InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20035, InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable, of, zip, timer, combineLatest, BehaviorSubject } from 'rxjs';
 import { filter, catchError, map, switchMap, mergeMap } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class BlocksComponent implements OnInit {
   latestBlock$: Observable<InlineResponse20035 | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   firstBlockHeight$: Observable<bigint | undefined>;
-  blocks$: Observable<InlineResponse20036[] | undefined>;
+  blocks$: Observable<InlineResponse20011[] | undefined>;
 
   autoEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isFirstAccess: boolean;

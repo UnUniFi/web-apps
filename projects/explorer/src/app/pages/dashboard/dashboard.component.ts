@@ -4,7 +4,7 @@ import { rest } from '@cosmos-client/core';
 import { pool } from '@cosmos-client/core/cjs/rest/staking/module';
 import {
   CosmosMintV1beta1QueryInflationResponse,
-  InlineResponse20035,
+  InlineResponse20010,
   InlineResponse20069,
   InlineResponse20070,
   QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod,
@@ -19,7 +19,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   pollingInterval = 30 * 60;
-  latestBlock$: Observable<InlineResponse20035 | undefined>;
+  latestBlock$: Observable<InlineResponse20010 | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   totalSupply$: Observable<number | undefined>;
   stakedTokens$: Observable<number | undefined>;

@@ -5,7 +5,7 @@ import { rest } from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse, } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { txParseMsg, } from "./../../../utils/tx-parser"
+import { txParseMsgs, } from "./../../../utils/tx-parser"
 import { txTitle, txSignature } from './../../../models/cosmos/tx-common.model';
 import { cosmosclient, proto, } from '@cosmos-client/core';
 
@@ -17,25 +17,25 @@ import { cosmosclient, proto, } from '@cosmos-client/core';
 export class TxComponent implements OnInit {
   txHash$: Observable<string>;
   tx$: Observable<CosmosTxV1beta1GetTxResponse>;
-  txDetail$: Observable<txTitle | undefined>;
+  txDetails$: Observable<txTitle[] | undefined>;
   txSignature$: Observable<txSignature | undefined>;
-  txType: string = ""
+  txTypes: string[] | undefined = []
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.txHash$ = this.route.params.pipe(map((params) => params.tx_hash));
     this.tx$ = combineLatest([this.cosmosSDK.sdk$, this.txHash$]).pipe(
       mergeMap(([sdk, hash]) => rest.tx.getTx(sdk.rest, hash).then((res) => res.data)),
     );
-    this.txDetail$ = this.tx$.pipe(
+    this.txDetails$ = this.tx$.pipe(
       map(x => {
         const tx = x?.tx
         if (!tx) return undefined
-        const parsedTx = txParseMsg(tx)
-        this.txType = parsedTx.txType
+        const parsedTx = txParseMsgs(tx)
+        this.txTypes = parsedTx?.map(tx => tx.txType)
         return parsedTx
       })
     )
-    this.txDetail$.subscribe(x => console.log("debug_tx_comp", x))
+    this.txDetails$.subscribe(x => console.log("debug_tx_comp", x))
     this.txSignature$ = this.tx$.pipe(
       map(tx => {
         const publicKeyInfo = tx.tx?.auth_info?.signer_infos?.[0].public_key

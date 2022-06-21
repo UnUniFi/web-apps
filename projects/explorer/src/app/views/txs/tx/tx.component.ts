@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
-import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'view-tx',
@@ -11,9 +9,6 @@ import { txTitle } from '../../../models/cosmos/tx-common.model';
 export class TxComponent implements OnInit {
   @Input()
   tx?: CosmosTxV1beta1GetTxResponse | null;
-
-  @Input()
-  txDetail?: txTitle | null;
 
   constructor() { }
 

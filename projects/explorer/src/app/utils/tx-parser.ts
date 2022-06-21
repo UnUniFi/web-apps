@@ -1,11 +1,19 @@
 import { txTitle } from './../models/cosmos/tx-common.model';
 import { CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
 import { cosmosclient, proto, } from '@cosmos-client/core';
+import { InlineResponse20025Accounts } from '@cosmos-client/core/esm/openapi';
+import { ProposalContent } from './../views/proposals/proposals.component';
 
-export const txParseMsg = (tx: CosmosTxV1beta1Tx): txTitle => {
+export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
+  return tx.body?.messages?.map(message => txParseMsg(message))
+}
 
-  const message = tx.body?.messages?.[0]
+export const txParseMsg = (message: InlineResponse20025Accounts): txTitle => {
+
+  console.log("txParseMsgs1", message)
   const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
+  console.log("txParseMsgs", instance, typeof (instance))
+
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgCreateValidator) return parseMsgCreateValidator(instance)
@@ -97,14 +105,30 @@ const parseMsgBeginRedelegate = (instance: proto.cosmos.staking.v1beta1.MsgBegin
   }
 }
 const parseMsgSubmitProposal = (instance: proto.cosmos.gov.v1beta1.MsgSubmitProposal): txTitle => {
+  console.log("prop", instance)
   const denomAmount = instance.initial_deposit?.[0].amount || ""
   const denom = instance.initial_deposit?.[0].denom
   const amount = denomAmount + denom
+  const A = instance.content as any
+  const content = cosmosclient.codec.protoJSONToInstance(A)
+  const B = cosmosclient.codec.protoJSONToInstance(A) as ProposalContent;
+  if (content instanceof proto.cosmos.gov.v1beta1.TextProposal) {
+    return {
+      txType: instance.constructor.name,
+      fromAddress: instance.proposer,
+      toAddress: "---------",
+      amount,
+      amounts: instance.initial_deposit,
+      content: content
+    }
+  }
   return {
     txType: instance.constructor.name,
     fromAddress: instance.proposer,
     toAddress: "---------",
-    amount
+    amount,
+    amounts: instance.initial_deposit,
+    proposalComponent: B
   }
 }
 const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted): txTitle => {
@@ -119,11 +143,13 @@ const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted
   }
 }
 const parseMsgVote = (instance: proto.cosmos.gov.v1beta1.MsgVote): txTitle => {
+  const option = proto.cosmos.gov.v1beta1.VoteOption[instance.option]
   return {
     txType: instance.constructor.name,
     fromAddress: instance.voter,
     toAddress: instance.proposal_id.toString(),
-    amount: instance.option.toString()
+    amount: "",
+    voteOption: option
   }
 }
 const parseMsgDeposit = (instance: proto.cosmos.gov.v1beta1.MsgDeposit): txTitle => {
@@ -134,18 +160,21 @@ const parseMsgDeposit = (instance: proto.cosmos.gov.v1beta1.MsgDeposit): txTitle
     txType: instance.constructor.name,
     fromAddress: instance.depositor,
     toAddress: instance.proposal_id.toString(),
-    amount
+    amount,
+    amounts: instance.amount
   }
 }
 const parseMsgFundCommunityPool = (instance: proto.cosmos.distribution.v1beta1.MsgFundCommunityPool): txTitle => {
   const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
   const amount = denomAmount + " " + denom
+  const coins = instance.amount
   return {
     txType: instance.constructor.name,
     fromAddress: instance.depositor,
     toAddress: "------",
-    amount
+    amount,
+    amounts: coins
   }
 }
 const parseMsgSetWithdrawAddress = (instance: proto.cosmos.distribution.v1beta1.MsgSetWithdrawAddress): txTitle => {
@@ -157,7 +186,6 @@ const parseMsgSetWithdrawAddress = (instance: proto.cosmos.distribution.v1beta1.
   }
 }
 const parseMsgWithdrawDelegatorReward = (instance: proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward): txTitle => {
-  console.log(instance)
   return {
     txType: instance.constructor.name,
     fromAddress: instance.delegator_address,

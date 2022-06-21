@@ -1,5 +1,6 @@
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20074 } from '@cosmos-client/core/esm/openapi';
+import { ProposalContent } from './../../views/proposals/proposals.component';
 
 export type SimulatedTxResultResponse = {
   simulatedResultData: InlineResponse20074;
@@ -22,6 +23,13 @@ export type txTitle = {
 
   validatorDestinationAddress?: string
   validatorSourceAddress?: string
+
+  amounts?: proto.cosmos.base.v1beta1.ICoin[]
+
+  content?: proto.cosmos.gov.v1beta1.TextProposal
+  proposalComponent?: ProposalContent
+
+  voteOption?: string
 }
 
 export type txSignature = {

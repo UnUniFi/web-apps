@@ -48,7 +48,7 @@ export class BlockComponent implements OnInit {
         if (!txs?.txs) {
           return undefined;
         }
-        const txTypeList = txs?.txs?.map((tx) => txParseMsg(tx));
+        const txTypeList = txs?.txs?.map((tx) => txParseMsg(tx.body?.messages?.[0]!));
         return txTypeList;
       }),
     );

@@ -1,14 +1,7 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { rest } from '@cosmos-client/core';
-import { pool } from '@cosmos-client/core/cjs/rest/staking/module';
-import {
-  CosmosMintV1beta1QueryInflationResponse,
-  InlineResponse20010,
-  InlineResponse20069,
-  InlineResponse20070,
-  QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod,
-} from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 

@@ -1,16 +1,16 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { InlineResponse20014Validators } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
-  val: InlineResponse20014Validators;
+  val: InlineResponse20041Validators;
   share: number;
   inList: boolean;
   rank: number;
 };
 
 export type validatorWithShareType = {
-  val: InlineResponse20014Validators;
+  val: InlineResponse20041Validators;
   share: number;
 };
 
@@ -36,10 +36,10 @@ export class ValidatorsComponent implements OnInit {
     }, 5000);
   }
 
-  getColorCode(validator: InlineResponse20014Validators) {
+  getColorCode(validator: InlineResponse20041Validators) {
     const hash = crypto
       .createHash('sha256')
-      .update(Buffer.from(validator.address ?? ''))
+      .update(Buffer.from(validator.operator_address ?? ''))
       .digest()
       .toString('hex');
 

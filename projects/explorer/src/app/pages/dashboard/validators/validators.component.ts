@@ -43,11 +43,12 @@ export class ValidatorsComponent implements OnInit {
           return [];
         }
         // calculate validator share
-        const validatorsWithShare = validators.validators?.map((validator) => {
-          const val = validator;
-          const share = Number(validator.tokens) / allTokens;
-          return { val, share };
-        });
+        const validatorsWithShare: validatorWithShareType[] | undefined =
+          validators.validators?.map((validator) => {
+            const val = validator;
+            const share = Number(validator.tokens) / allTokens;
+            return { val, share };
+          });
         // sort by share
         const validatorsWithSort = validatorsWithShare?.sort((x, y) => y.share - x.share);
 

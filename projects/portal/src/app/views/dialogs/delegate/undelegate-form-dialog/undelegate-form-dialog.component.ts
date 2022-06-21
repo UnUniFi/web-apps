@@ -3,7 +3,7 @@ import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
   InlineResponse20072,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -35,7 +35,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   unbondingDelegation?: InlineResponse20072 | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: InlineResponse20014Validators | null;
 
   @Output()
   appSubmit: EventEmitter<UndelegateOnSubmitEvent>;
@@ -45,7 +45,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
-  estimatedUnbondingData: string = ""
+  estimatedUnbondingData: string = '';
   now = new Date();
 
   constructor() {
@@ -55,7 +55,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
     this.now.setDate(this.now.getDate() + 14);
-    this.estimatedUnbondingData = this.now.toString()
+    this.estimatedUnbondingData = this.now.toString();
   }
 
   ngOnChanges(): void {
@@ -64,7 +64,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -16,7 +16,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
-  selectedValidator?: InlineResponse20066Validators | null;
+  selectedValidator?: InlineResponse20014Validators | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -32,17 +32,17 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   isValidator?: boolean | null;
   @Output()
-  appDelegate: EventEmitter<InlineResponse20066Validators>;
+  appDelegate: EventEmitter<InlineResponse20014Validators>;
   @Output()
-  appRedelegate: EventEmitter<InlineResponse20066Validators>;
+  appRedelegate: EventEmitter<InlineResponse20014Validators>;
   @Output()
-  appUndelegate: EventEmitter<InlineResponse20066Validators>;
+  appUndelegate: EventEmitter<InlineResponse20014Validators>;
   @Output()
-  appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawDelegatorReward: EventEmitter<InlineResponse20014Validators>;
   @Output()
-  appWithdrawValidatorCommission: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawValidatorCommission: EventEmitter<InlineResponse20014Validators>;
   @Output()
-  appDetail: EventEmitter<InlineResponse20066Validators>;
+  appDetail: EventEmitter<InlineResponse20014Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();

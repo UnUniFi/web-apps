@@ -2,20 +2,20 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import {
   InlineResponse20063DelegationResponses,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
   InlineResponse20072,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
-  val: InlineResponse20066Validators;
+  val: InlineResponse20014Validators;
   share: number;
   inList: boolean;
   rank: number;
 };
 
 export type validatorWithShareType = {
-  val: InlineResponse20066Validators;
+  val: InlineResponse20014Validators;
   share: number;
 };
 
@@ -32,7 +32,7 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   delegations?: InlineResponse20063DelegationResponses[] | null;
   @Input()
-  delegatedValidators?: (InlineResponse20066Validators | undefined)[] | null;
+  delegatedValidators?: (InlineResponse20014Validators | undefined)[] | null;
   @Input()
   unbondingDelegations?: (InlineResponse20072 | undefined)[] | null;
 
@@ -40,7 +40,7 @@ export class ValidatorsComponent implements OnInit {
   toggleActiveChange: EventEmitter<boolean>;
 
   @Output()
-  appClickValidator: EventEmitter<InlineResponse20066Validators>;
+  appClickValidator: EventEmitter<InlineResponse20014Validators>;
 
   constructor() {
     this.toggleActiveChange = new EventEmitter();
@@ -52,7 +52,6 @@ export class ValidatorsComponent implements OnInit {
       console.log('validators', this.validators);
       console.log('unbonding', this.unbondingDelegations);
     }, 5000);
-
   }
 
   getColorCode(valAddress: string) {
@@ -78,7 +77,7 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
-  onClickValidator(validator: InlineResponse20066Validators) {
+  onClickValidator(validator: InlineResponse20014Validators) {
     this.appClickValidator.emit(validator);
   }
 }

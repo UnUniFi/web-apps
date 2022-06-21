@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20014Validators } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-validator',
@@ -9,7 +9,7 @@ import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
 })
 export class ValidatorComponent implements OnInit, OnChanges {
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: InlineResponse20014Validators | null;
 
   publicKey?: string;
 
@@ -19,7 +19,7 @@ export class ValidatorComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     const pubKey = cosmosclient.codec.protoJSONToInstance(
-      cosmosclient.codec.castProtoJSONOfProtoAny(this.validator?.consensus_pubkey),
+      cosmosclient.codec.castProtoJSONOfProtoAny(this.validator?.pub_key),
     );
 
     if (!(pubKey instanceof proto.cosmos.crypto.ed25519.PubKey)) {

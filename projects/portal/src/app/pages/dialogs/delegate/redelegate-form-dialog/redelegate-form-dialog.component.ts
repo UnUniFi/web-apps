@@ -4,7 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
+  InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -22,18 +23,18 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
 export class RedelegateFormDialogComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
+  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20063>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
+  validator: InlineResponse20014Validators | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
+    public readonly data: InlineResponse20014Validators,
     public matDialogRef: MatDialogRef<RedelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
@@ -85,7 +86,7 @@ export class RedelegateFormDialogComponent implements OnInit {
 
   async onSubmit($event: RedelegateOnSubmitEvent) {
     const validatorStatus = $event.validatorList.find(
-      (val) => val.operator_address == $event.destinationValidator,
+      (val) => val.address == $event.destinationValidator,
     )?.status;
     if (validatorStatus != 'BOND_STATUS_BONDED') {
       const inactiveValidatorResult = await this.dialog
@@ -102,7 +103,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     }
 
     const txHash = await this.stakingAppService.Redelegate(
-      this.validator?.operator_address!,
+      this.validator?.address!,
       $event.destinationValidator,
       $event.amount,
       $event.minimumGasPrice,

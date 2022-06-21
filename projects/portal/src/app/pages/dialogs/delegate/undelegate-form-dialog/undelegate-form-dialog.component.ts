@@ -4,7 +4,7 @@ import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063,
   InlineResponse20072,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -27,12 +27,12 @@ export class UndelegateFormDialogComponent implements OnInit {
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
+  validator: InlineResponse20014Validators | undefined;
   unbondingDelegation$: Observable<InlineResponse20072 | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
+    public readonly data: InlineResponse20014Validators,
     public matDialogRef: MatDialogRef<UndelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
@@ -51,28 +51,26 @@ export class UndelegateFormDialogComponent implements OnInit {
     );
     this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
       mergeMap(([sdk, address]) => {
-        const valAddressString = this.validator?.operator_address;
+        const valAddressString = this.validator?.address;
         if (!valAddressString) {
-          return of(undefined)
+          return of(undefined);
         }
         const valAddress = cosmosclient.ValAddress.fromString(valAddressString);
-        const unbondingDelegation = rest.staking.unbondingDelegation(
-          sdk.rest,
-          valAddress,
-          address,
-        ).then(res => res.data
-        ).catch((error) => {
-          console.error(error.message); return undefined
-        })
-        return unbondingDelegation
+        const unbondingDelegation = rest.staking
+          .unbondingDelegation(sdk.rest, valAddress, address)
+          .then((res) => res.data)
+          .catch((error) => {
+            console.error(error.message);
+            return undefined;
+          });
+        return unbondingDelegation;
       }),
     );
     this.delegateAmount$ = this.delegations$.pipe(
       map(
         (delegations) =>
           delegations.delegation_responses?.find(
-            (response) =>
-              response.delegation?.validator_address == this.validator?.operator_address,
+            (response) => response.delegation?.validator_address == this.validator?.address,
           )?.balance,
       ),
     );
@@ -91,11 +89,11 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: UndelegateOnSubmitEvent) {
     const txHash = await this.stakingAppService.undelegate(
-      this.validator?.operator_address!,
+      this.validator?.address!,
       $event.amount,
       $event.minimumGasPrice,
       $event.gasRatio,

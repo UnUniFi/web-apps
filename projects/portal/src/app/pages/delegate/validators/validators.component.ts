@@ -10,7 +10,8 @@ import { Component, OnInit } from '@angular/core';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import {
   InlineResponse20063DelegationResponses,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
+  InlineResponse20041Validators,
   InlineResponse20072,
 } from '@cosmos-client/core/esm/openapi';
 import { of, Observable, BehaviorSubject, combineLatest, zip } from 'rxjs';
@@ -22,13 +23,13 @@ import { filter, map, mergeMap, concatMap, withLatestFrom } from 'rxjs/operators
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
+  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20063DelegationResponses[] | undefined>;
-  delegatedValidators$: Observable<(InlineResponse20066Validators | undefined)[] | undefined>;
+  delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
   totalDelegation$: Observable<number | undefined>;
   unbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
   filteredUnbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
@@ -132,42 +133,45 @@ export class ValidatorsComponent implements OnInit {
     this.unbondingDelegations$ = this.delegatedValidators$.pipe(
       withLatestFrom(this.cosmosSDK.sdk$, address$),
       concatMap(([validators, sdk, accAddress]) => {
-
         const valAddressList = validators?.map((validator) => {
-          if (!validator?.operator_address) return undefined
+          if (!validator?.operator_address) return undefined;
           try {
-            return cosmosclient.ValAddress.fromString(validator?.operator_address)
+            return cosmosclient.ValAddress.fromString(validator?.operator_address);
           } catch (error) {
             console.error(error);
             return undefined;
           }
-        })
-        if (!valAddressList) return []
+        });
+        if (!valAddressList) return [];
 
         const unbondingDelegationList = Promise.all(
           valAddressList.map((valAddress) => {
-            if (!valAddress) return undefined
-            return rest.staking.unbondingDelegation(sdk.rest, valAddress, accAddress
-            ).then(res => res && res.data
-            ).catch((err) => {
-              return undefined;
-            })
-          })
-        )
-        return unbondingDelegationList
+            if (!valAddress) return undefined;
+            return rest.staking
+              .unbondingDelegation(sdk.rest, valAddress, accAddress)
+              .then((res) => res && res.data)
+              .catch((err) => {
+                return undefined;
+              });
+          }),
+        );
+        return unbondingDelegationList;
       }),
-    )
+    );
     this.filteredUnbondingDelegations$ = this.unbondingDelegations$.pipe(
-      map(unbondingDelegations => unbondingDelegations.filter(unbondingDelegation => unbondingDelegation)))
+      map((unbondingDelegations) =>
+        unbondingDelegations.filter((unbondingDelegation) => unbondingDelegation),
+      ),
+    );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);
   }
 
-  onSelectValidator(validator: InlineResponse20066Validators) {
+  onSelectValidator(validator: InlineResponse20014Validators) {
     this.stakingAppService.openDelegateMenuDialog(validator);
   }
 }

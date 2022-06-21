@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -11,7 +11,7 @@ export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20066Validators[];
+  validatorList: InlineResponse20014Validators[];
   gasRatio: number;
 };
 
@@ -22,7 +22,7 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: InlineResponse20066Validators[] | null;
+  validatorsList?: InlineResponse20014Validators[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -36,7 +36,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: InlineResponse20014Validators | null;
 
   @Output()
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
@@ -44,7 +44,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: InlineResponse20066Validators;
+  selectedValidator?: InlineResponse20014Validators;
   gasRatio: number;
 
   constructor() {
@@ -79,7 +79,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   }
 
   onSubmit(minimumGasPrice: string) {
-    if (!this.selectedValidator || !this.selectedValidator.operator_address) {
+    if (!this.selectedValidator || !this.selectedValidator.address) {
       return;
     }
     if (!this.selectedAmount) {
@@ -93,7 +93,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      destinationValidator: this.selectedValidator.operator_address,
+      destinationValidator: this.selectedValidator.address,
       amount: this.selectedAmount,
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

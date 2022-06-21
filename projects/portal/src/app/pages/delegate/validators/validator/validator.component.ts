@@ -2,10 +2,13 @@ import { CosmosSDKService } from '../../../../models';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
-import { InlineResponse20066Validators, QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20014Validators,
+  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
+} from '@cosmos-client/core/esm/openapi';
+import { validatorType } from 'projects/portal/src/app/views/delegate/validators/validators.component';
 import { Observable, of, combineLatest } from 'rxjs';
 import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
-import { validatorType } from 'projects/portal/src/app/views/delegate/validators/validators.component';
 
 @Component({
   selector: 'app-validator',

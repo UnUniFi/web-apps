@@ -8,7 +8,7 @@ import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, rest, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import BigNumber from 'bignumber.js';
 import Long from 'long';
 
@@ -19,7 +19,7 @@ export class StakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // Create Validator
   async createValidator(
@@ -28,7 +28,7 @@ export class StakingService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildCreateValidator(
       keyType,
       createValidatorData,
@@ -194,7 +194,7 @@ export class StakingService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildCreateDelegateTxBuilder(
       validatorAddress,
@@ -291,7 +291,7 @@ export class StakingService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
 
     const txBuilder = await this.buildRedelegateTxBuilder(
@@ -402,7 +402,7 @@ export class StakingService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildUndelegateTxBuilder(
       validatorAddress,

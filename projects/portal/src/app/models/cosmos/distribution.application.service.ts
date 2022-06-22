@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20075,
+  InlineResponse20050,
   InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
@@ -112,7 +112,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -202,7 +202,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

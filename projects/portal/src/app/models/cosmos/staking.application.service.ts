@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20014Validators,
-  InlineResponse20075,
+  InlineResponse20050,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
@@ -241,7 +241,7 @@ export class StakingApplicationService {
 
     const dialogRef = this.loadingDialog.open('Loading...');
 
-    let createValidatorResult: InlineResponse20075 | undefined;
+    let createValidatorResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -334,7 +334,7 @@ export class StakingApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -430,7 +430,7 @@ export class StakingApplicationService {
     //send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -524,7 +524,7 @@ export class StakingApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let undelegateResult: InlineResponse20075 | undefined;
+    let undelegateResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

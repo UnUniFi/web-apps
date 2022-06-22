@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 
@@ -105,7 +105,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Loading...');
 
-    let submitProposalResult: InlineResponse20075 | undefined;
+    let submitProposalResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -197,7 +197,7 @@ export class GovApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let voteResult: InlineResponse20075 | undefined;
+    let voteResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -282,7 +282,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let depositResult: InlineResponse20075 | undefined;
+    let depositResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

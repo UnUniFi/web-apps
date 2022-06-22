@@ -6,7 +6,7 @@ import { KeyService } from '../keys/key.service';
 import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { ununifi } from 'ununifi-client';
@@ -29,7 +29,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     principal: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildCreateCDPTx(
       key,
       privateKey,
@@ -145,7 +145,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     principal: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildDrawCDPTx(
       key,
       privateKey,
@@ -255,7 +255,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     repayment: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildRepayCDPTx(
       key,
       privateKey,
@@ -366,7 +366,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBUilder = await this.buildDepositCDPTx(
       key,
       privateKey,
@@ -483,7 +483,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     collateral: proto.cosmos.base.v1beta1.ICoin,
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildWithdrawCDPTx(
       key,
       privateKey,

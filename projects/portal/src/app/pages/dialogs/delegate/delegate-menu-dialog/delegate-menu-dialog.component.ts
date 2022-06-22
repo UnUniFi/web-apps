@@ -4,10 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20014Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20063Delegation,
+  InlineResponse20038Delegation,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
@@ -26,8 +26,8 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class DelegateMenuDialogComponent implements OnInit {
   selectedValidator: InlineResponse20014Validators | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063>;
-  delegation$: Observable<InlineResponse20063Delegation | null | undefined>;
+  delegations$: Observable<InlineResponse20038>;
+  delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<

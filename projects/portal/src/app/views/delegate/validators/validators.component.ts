@@ -1,7 +1,7 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import {
-  InlineResponse20063DelegationResponses,
+  InlineResponse20038DelegationResponses,
   InlineResponse20041Validators,
   InlineResponse20072,
 } from '@cosmos-client/core/esm/openapi';
@@ -30,7 +30,7 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063DelegationResponses[] | null;
+  delegations?: InlineResponse20038DelegationResponses[] | null;
   @Input()
   delegatedValidators?: (InlineResponse20041Validators | undefined)[] | null;
   @Input()

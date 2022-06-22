@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';

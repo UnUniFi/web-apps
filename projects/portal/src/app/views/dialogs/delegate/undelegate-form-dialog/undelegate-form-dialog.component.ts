@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20072,
   InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
@@ -23,7 +23,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: InlineResponse20038 | null;
   @Input()
   delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()

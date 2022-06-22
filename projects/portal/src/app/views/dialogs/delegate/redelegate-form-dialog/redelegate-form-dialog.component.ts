@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -26,7 +26,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: InlineResponse20038 | null;
   @Input()
   delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()

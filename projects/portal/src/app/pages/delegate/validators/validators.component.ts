@@ -9,7 +9,7 @@ import {
 import { Component, OnInit } from '@angular/core';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import {
-  InlineResponse20063DelegationResponses,
+  InlineResponse20038DelegationResponses,
   InlineResponse20014Validators,
   InlineResponse20041Validators,
   InlineResponse20072,
@@ -28,7 +28,7 @@ export class ValidatorsComponent implements OnInit {
   validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063DelegationResponses[] | undefined>;
+  delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
   delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
   totalDelegation$: Observable<number | undefined>;
   unbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;

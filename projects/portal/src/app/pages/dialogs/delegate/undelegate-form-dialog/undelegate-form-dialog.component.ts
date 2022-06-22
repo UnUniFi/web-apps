@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20072,
   InlineResponse20014Validators,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -22,7 +22,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class UndelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063>;
+  delegations$: Observable<InlineResponse20038>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;

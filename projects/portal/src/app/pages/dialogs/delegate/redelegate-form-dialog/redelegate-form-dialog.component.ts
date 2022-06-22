@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
+  InlineResponse20038,
   InlineResponse20014Validators,
   InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -25,7 +25,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class RedelegateFormDialogComponent implements OnInit {
   validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063>;
+  delegations$: Observable<InlineResponse20038>;
   delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;

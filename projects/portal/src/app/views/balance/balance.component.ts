@@ -1,6 +1,6 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
@@ -10,7 +10,7 @@ import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.css'],
 })
-export class ViewBalanceComponent implements OnInit {
+export class ViewBalanceComponent implements OnInit, OnChanges {
   @Input() walletId?: string | null;
   @Input() walletType?: WalletType | null;
   @Input() accAddress?: string | null;
@@ -29,9 +29,25 @@ export class ViewBalanceComponent implements OnInit {
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
 
-  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
+  // Todo: This is temporal fix.
+  tempNodeInfo: any;
+
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
+    // Todo: This is temporal fix.
+    this.tempNodeInfo = this.nodeInfo as any;
+  }
 
   ngOnInit(): void {}
+
+  // Todo: This lifecycle methods is temporal fix.
+  // default_node_info in type definition of InlineResponse20012 is actually node_info.
+  // It should be resolved with UnUniFi/chain or @cosmos-client/core, I guess.
+  // But this is necessary for user to know which network is connected now.
+  // So, currently, I convert it as any.
+  // But this is not good.
+  ngOnChanges(): void {
+    this.tempNodeInfo = this.nodeInfo as any;
+  }
 
   copyClipboard(value: string) {
     if (value.length > 0) {

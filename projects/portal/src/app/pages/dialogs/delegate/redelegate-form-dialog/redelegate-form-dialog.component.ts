@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20038,
-  InlineResponse20014Validators,
   InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
@@ -30,11 +29,11 @@ export class RedelegateFormDialogComponent implements OnInit {
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20014Validators | undefined;
+  validator: InlineResponse20041Validators | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20014Validators,
+    public readonly data: InlineResponse20041Validators,
     public matDialogRef: MatDialogRef<RedelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
@@ -86,7 +85,7 @@ export class RedelegateFormDialogComponent implements OnInit {
 
   async onSubmit($event: RedelegateOnSubmitEvent) {
     const validatorStatus = $event.validatorList.find(
-      (val) => val.address == $event.destinationValidator,
+      (val) => val.operator_address == $event.destinationValidator,
     )?.status;
     if (validatorStatus != 'BOND_STATUS_BONDED') {
       const inactiveValidatorResult = await this.dialog
@@ -103,7 +102,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     }
 
     const txHash = await this.stakingAppService.Redelegate(
-      this.validator?.address!,
+      this.validator?.operator_address!,
       $event.destinationValidator,
       $event.amount,
       $event.minimumGasPrice,

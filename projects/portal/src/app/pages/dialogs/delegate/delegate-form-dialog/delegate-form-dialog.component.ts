@@ -27,11 +27,11 @@ export class DelegateFormDialogComponent implements OnInit {
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
-  validator: InlineResponse20014Validators | undefined;
+  validator: InlineResponse20041Validators | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20014Validators,
+    public readonly data: InlineResponse20041Validators,
     public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
@@ -69,12 +69,12 @@ export class DelegateFormDialogComponent implements OnInit {
 
   async onSubmit($event: DelegateOnSubmitEvent) {
     const validatorStatus = $event.validatorList.find(
-      (val) => val.address == this.validator?.address,
+      (val) => val.operator_address == this.validator?.operator_address,
     )?.status;
     if (validatorStatus != 'BOND_STATUS_BONDED') {
       const inactiveValidatorResult = await this.dialog
         .open(InactiveValidatorConfirmDialogComponent, {
-          data: { valAddress: this.validator?.address!, isConfirmed: false },
+          data: { valAddress: this.validator?.operator_address!, isConfirmed: false },
         })
         .afterClosed()
         .toPromise();
@@ -87,7 +87,7 @@ export class DelegateFormDialogComponent implements OnInit {
     let txHash: string | undefined;
 
     txHash = await this.stakingAppService.createDelegate(
-      this.validator?.address!,
+      this.validator?.operator_address!,
       $event.amount,
       $event.minimumGasPrice,
       $event.gasRatio,

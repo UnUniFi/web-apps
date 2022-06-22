@@ -10,9 +10,8 @@ import { Component, OnInit } from '@angular/core';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import {
   InlineResponse20038DelegationResponses,
-  InlineResponse20014Validators,
   InlineResponse20041Validators,
-  InlineResponse20072,
+  InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
 import { of, Observable, BehaviorSubject, combineLatest, zip } from 'rxjs';
 import { filter, map, mergeMap, concatMap, withLatestFrom } from 'rxjs/operators';
@@ -31,8 +30,8 @@ export class ValidatorsComponent implements OnInit {
   delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
   delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
   totalDelegation$: Observable<number | undefined>;
-  unbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
-  filteredUnbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
+  unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
+  filteredUnbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
 
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
@@ -171,7 +170,7 @@ export class ValidatorsComponent implements OnInit {
     this.activeEnabled.next(value);
   }
 
-  onSelectValidator(validator: InlineResponse20014Validators) {
+  onSelectValidator(validator: InlineResponse20041Validators) {
     this.stakingAppService.openDelegateMenuDialog(validator);
   }
 }

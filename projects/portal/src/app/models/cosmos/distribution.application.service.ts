@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20050,
-  InlineResponse20014Validators,
+  InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
@@ -31,7 +31,7 @@ export class DistributionApplicationService {
   ) {}
 
   async openWithdrawDelegatorRewardFormDialog(
-    validator: InlineResponse20014Validators,
+    validator: InlineResponse20041Validators,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
@@ -41,7 +41,7 @@ export class DistributionApplicationService {
   }
 
   async openWithdrawValidatorCommissionFormDialog(
-    validator: InlineResponse20014Validators,
+    validator: InlineResponse20041Validators,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawValidatorCommissionFormDialogComponent, { data: validator })

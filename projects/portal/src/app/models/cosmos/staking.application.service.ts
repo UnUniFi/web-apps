@@ -18,7 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20014Validators,
+  InlineResponse20041Validators,
   InlineResponse20050,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
@@ -48,14 +48,14 @@ export class StakingApplicationService {
     private readonly walletApplicationService: WalletApplicationService,
   ) {}
 
-  async openDelegateMenuDialog(validator: InlineResponse20014Validators): Promise<void> {
+  async openDelegateMenuDialog(validator: InlineResponse20041Validators): Promise<void> {
     await this.dialog
       .open(DelegateMenuDialogComponent, { data: validator })
       .afterClosed()
       .toPromise();
   }
 
-  async openDelegateFormDialog(validator: InlineResponse20014Validators): Promise<void> {
+  async openDelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
     const txHash = await this.dialog
       .open(DelegateFormDialogComponent, { data: validator })
       .afterClosed()
@@ -63,7 +63,7 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openRedelegateFormDialog(validator: InlineResponse20014Validators): Promise<void> {
+  async openRedelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
     const txHash = await this.dialog
       .open(RedelegateFormDialogComponent, { data: validator })
       .afterClosed()
@@ -71,7 +71,7 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openUndelegateFormDialog(validator: InlineResponse20014Validators): Promise<void> {
+  async openUndelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
     const txHash = await this.dialog
       .open(UndelegateFormDialogComponent, { data: validator })
       .afterClosed()

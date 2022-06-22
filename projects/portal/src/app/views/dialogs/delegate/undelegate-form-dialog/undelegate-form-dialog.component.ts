@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
   InlineResponse20038,
-  InlineResponse20072,
-  InlineResponse20014Validators,
+  InlineResponse20047,
+  InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -33,9 +33,9 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  unbondingDelegation?: InlineResponse20072 | null;
+  unbondingDelegation?: InlineResponse20047 | null;
   @Input()
-  validator?: InlineResponse20014Validators | null;
+  validator?: InlineResponse20041Validators | null;
 
   @Output()
   appSubmit: EventEmitter<UndelegateOnSubmitEvent>;

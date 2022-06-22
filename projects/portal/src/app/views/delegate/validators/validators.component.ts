@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import {
   InlineResponse20038DelegationResponses,
   InlineResponse20041Validators,
-  InlineResponse20072,
+  InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
@@ -34,7 +34,7 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   delegatedValidators?: (InlineResponse20041Validators | undefined)[] | null;
   @Input()
-  unbondingDelegations?: (InlineResponse20072 | undefined)[] | null;
+  unbondingDelegations?: (InlineResponse20047 | undefined)[] | null;
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;

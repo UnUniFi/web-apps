@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
 import {
   InlineResponse20038,
-  InlineResponse20014Validators,
+  InlineResponse20041Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   InlineResponse20038Delegation,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
@@ -24,7 +24,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./delegate-menu-dialog.component.css'],
 })
 export class DelegateMenuDialogComponent implements OnInit {
-  selectedValidator: InlineResponse20014Validators | undefined;
+  selectedValidator: InlineResponse20041Validators | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038>;
   delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
@@ -41,7 +41,7 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20014Validators,
+    public readonly data: InlineResponse20041Validators,
     private router: Router,
     public matDialogRef: MatDialogRef<DelegateMenuDialogComponent>,
     private readonly stakingAppService: StakingApplicationService,
@@ -140,33 +140,33 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmitDelegate(validator: InlineResponse20014Validators) {
+  onSubmitDelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openDelegateFormDialog(validator);
   }
 
-  onSubmitRedelegate(validator: InlineResponse20014Validators) {
+  onSubmitRedelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
-  onSubmitUndelegate(validator: InlineResponse20014Validators) {
+  onSubmitUndelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openUndelegateFormDialog(validator);
   }
 
-  onSubmitWithdrawDelegatorReward(validator: InlineResponse20014Validators) {
+  onSubmitWithdrawDelegatorReward(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
-  onSubmitWithdrawValidatorCommission(validator: InlineResponse20014Validators) {
+  onSubmitWithdrawValidatorCommission(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
   }
 
-  onSubmitDetail(validator: InlineResponse20014Validators) {
+  onSubmitDetail(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
-    this.router.navigate(['delegate', 'validators', validator.address]);
+    this.router.navigate(['delegate', 'validators', validator.operator_address]);
   }
 }

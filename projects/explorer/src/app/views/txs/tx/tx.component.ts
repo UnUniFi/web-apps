@@ -18,14 +18,6 @@ export class TxComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  unpackMsg(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value);
-    } catch {
-      return null;
-    }
-  }
-
   unpackKey(value: any) {
     try {
       return cosmosclient.codec.protoJSONToInstance(value) as cosmosclient.PubKey;

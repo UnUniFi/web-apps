@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
 import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
@@ -60,7 +60,7 @@ export class BalanceComponent implements OnInit {
       }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20037>;
+  nodeInfo$: Observable<InlineResponse20012>;
 
   constructor(
     private configService: ConfigService,

@@ -4,7 +4,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { ununifi } from 'ununifi-client';
 
@@ -21,7 +21,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildPlaceBidTxBuilder(
       auctionID,

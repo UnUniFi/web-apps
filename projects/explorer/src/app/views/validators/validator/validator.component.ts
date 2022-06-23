@@ -1,7 +1,7 @@
 import { validatorType } from '../validators.component';
 import { Component, OnInit, Input } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 @Component({
@@ -20,7 +20,7 @@ export class ValidatorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getColorCode(validator: InlineResponse20066Validators | undefined | null) {
+  getColorCode(validator: InlineResponse20041Validators | undefined | null) {
     const hash = crypto
       .createHash('sha256')
       .update(Buffer.from(validator?.operator_address ?? ''))

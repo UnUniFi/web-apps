@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20038,
+  InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -11,7 +11,7 @@ export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
   amount: proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20066Validators[];
+  validatorList: InlineResponse20041Validators[];
   gasRatio: number;
 };
 
@@ -22,11 +22,11 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: InlineResponse20066Validators[] | null;
+  validatorsList?: InlineResponse20041Validators[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: InlineResponse20038 | null;
   @Input()
   delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -36,7 +36,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: InlineResponse20041Validators | null;
 
   @Output()
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
@@ -44,7 +44,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: InlineResponse20066Validators;
+  selectedValidator?: InlineResponse20041Validators;
   gasRatio: number;
 
   constructor() {

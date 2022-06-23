@@ -9,7 +9,7 @@ import {
 } from '../../utils/converter';
 import { Component, OnInit } from '@angular/core';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -56,7 +56,7 @@ export class BalanceComponent implements OnInit {
       }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20037>;
+  nodeInfo$: Observable<InlineResponse20012>;
 
   constructor(
     private configService: ConfigService,

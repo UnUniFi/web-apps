@@ -1,7 +1,7 @@
 import { ProposalContent } from '../../../vote/proposals/proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20052Proposals } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -17,7 +17,7 @@ export type VoteOnSubmitEvent = {
 })
 export class VoteFormDialogComponent implements OnInit {
   @Input()
-  proposal?: InlineResponse20052Proposals | null;
+  proposal?: InlineResponse20027Proposals | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

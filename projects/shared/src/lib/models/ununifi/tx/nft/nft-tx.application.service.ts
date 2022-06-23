@@ -14,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 
@@ -110,7 +110,7 @@ export class NftTxApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

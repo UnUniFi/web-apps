@@ -17,8 +17,8 @@
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item *ngFor="let balance of txDetail?.amounts; let i = index; last as last">
-        <span *ngIf="txDetail?.amounts?.length == 1" class="break-words">Amount:</span>
-        <span *ngIf="txDetail?.amounts?.length != 1" class="break-words">Amount {{i+1}}:</span>
+        <span *ngIf="txDetail?.amounts?.length == 1" class="break-words">Deposit:</span>
+        <span *ngIf="txDetail?.amounts?.length != 1" class="break-words">Deposit {{i+1}}:</span>
         <span class="flex-auto"></span>
         <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
         <span>{{ balance.denom }}</span>

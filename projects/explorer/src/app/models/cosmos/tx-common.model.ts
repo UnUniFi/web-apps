@@ -1,6 +1,5 @@
 import { proto } from '@cosmos-client/core';
 import { InlineResponse20074 } from '@cosmos-client/core/esm/openapi';
-import { ProposalContent } from './../../views/proposals/proposals.component';
 
 export type SimulatedTxResultResponse = {
   simulatedResultData: InlineResponse20074;
@@ -13,23 +12,28 @@ export type txTitle = {
   txType: string;
   fromAddress: string;
   toAddress: string;
-  amount: string;
+  amount?: string;
 
-  proposal?: string;
+  //for edit/create validator
   minimumSelfDelegation?: string;
   editedCommissionRate?: string;
   description?: proto.cosmos.staking.v1beta1.IDescription | null;
   commission?: proto.cosmos.staking.v1beta1.ICommissionRates | null;
 
+  //for redelegate
   validatorDestinationAddress?: string
   validatorSourceAddress?: string
 
   amounts?: proto.cosmos.base.v1beta1.ICoin[]
 
+  //for proposal
   content?: proto.cosmos.gov.v1beta1.TextProposal
-  proposalComponent?: ProposalContent
+  voteOption?: proto.cosmos.gov.v1beta1.VoteOption
+  voteOptions?: proto.cosmos.gov.v1beta1.IWeightedVoteOption[]
 
-  voteOption?: string
+  //for create vesting account
+  vestingDelayed?: boolean
+  vestingEndTime?: string
 }
 
 export type txSignature = {

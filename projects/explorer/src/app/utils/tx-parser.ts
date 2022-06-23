@@ -2,7 +2,6 @@ import { txTitle } from './../models/cosmos/tx-common.model';
 import { CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
 import { cosmosclient, proto, } from '@cosmos-client/core';
 import { InlineResponse20025Accounts } from '@cosmos-client/core/esm/openapi';
-import { ProposalContent } from './../views/proposals/proposals.component';
 
 export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
   return tx.body?.messages?.map(message => txParseMsg(message))
@@ -10,9 +9,15 @@ export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
 
 export const txParseMsg = (message: InlineResponse20025Accounts): txTitle => {
 
-  console.log("txParseMsgs1", message)
-  const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
-  console.log("txParseMsgs", instance, typeof (instance))
+  const cast = cosmosclient.codec.castProtoJSONOfProtoAny(message)
+  const instance = cosmosclient.codec.protoJSONToInstance(cast)
+  console.log("txParseMsgsbefore", message, cast)
+
+  //const instance2 = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
+
+  //const instance = new proto.cosmos.vesting.v1beta1.MsgCreateVestingAccount
+  console.log("txParseMsgs", instance, typeof (instance), (instance as any).constructor.name)
+
 
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)
@@ -105,30 +110,25 @@ const parseMsgBeginRedelegate = (instance: proto.cosmos.staking.v1beta1.MsgBegin
   }
 }
 const parseMsgSubmitProposal = (instance: proto.cosmos.gov.v1beta1.MsgSubmitProposal): txTitle => {
-  console.log("prop", instance)
   const denomAmount = instance.initial_deposit?.[0].amount || ""
   const denom = instance.initial_deposit?.[0].denom
   const amount = denomAmount + denom
-  const A = instance.content as any
-  const content = cosmosclient.codec.protoJSONToInstance(A)
-  const B = cosmosclient.codec.protoJSONToInstance(A) as ProposalContent;
+  const content = cosmosclient.codec.protoAnyToInstance(instance.content)
   if (content instanceof proto.cosmos.gov.v1beta1.TextProposal) {
     return {
       txType: instance.constructor.name,
       fromAddress: instance.proposer,
-      toAddress: "---------",
+      toAddress: "--------",
       amount,
       amounts: instance.initial_deposit,
-      content: content
+      content
     }
   }
   return {
-    txType: instance.constructor.name,
-    fromAddress: instance.proposer,
-    toAddress: "---------",
-    amount,
-    amounts: instance.initial_deposit,
-    proposalComponent: B
+    txType: "",
+    fromAddress: "",
+    toAddress: "",
+    amount: ""
   }
 }
 const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted): txTitle => {
@@ -139,17 +139,17 @@ const parseMsgVoteWeighted = (instance: proto.cosmos.gov.v1beta1.MsgVoteWeighted
     txType: instance.constructor.name,
     fromAddress: instance.voter,
     toAddress: instance.proposal_id.toString(),
-    amount
+    amount,
+    voteOptions: instance.options
   }
 }
 const parseMsgVote = (instance: proto.cosmos.gov.v1beta1.MsgVote): txTitle => {
-  const option = proto.cosmos.gov.v1beta1.VoteOption[instance.option]
   return {
     txType: instance.constructor.name,
     fromAddress: instance.voter,
     toAddress: instance.proposal_id.toString(),
     amount: "",
-    voteOption: option
+    voteOption: instance.option
   }
 }
 const parseMsgDeposit = (instance: proto.cosmos.gov.v1beta1.MsgDeposit): txTitle => {
@@ -180,8 +180,8 @@ const parseMsgFundCommunityPool = (instance: proto.cosmos.distribution.v1beta1.M
 const parseMsgSetWithdrawAddress = (instance: proto.cosmos.distribution.v1beta1.MsgSetWithdrawAddress): txTitle => {
   return {
     txType: instance.constructor.name,
-    fromAddress: instance.withdraw_address,
-    toAddress: instance.delegator_address,
+    fromAddress: instance.delegator_address,
+    toAddress: instance.withdraw_address,
     amount: "------",
   }
 }
@@ -216,10 +216,14 @@ const parseMsgCreateVestingAccount = (instance: proto.cosmos.vesting.v1beta1.Msg
   const denomAmount = instance.amount?.[0].amount || ""
   const denom = instance.amount?.[0].denom
   const amount = denomAmount + " " + denom
+  const endTime = new Date(Number(instance.end_time.toString()) * 1000)
   return {
     txType: instance.constructor.name,
     fromAddress: instance.from_address,
     toAddress: instance.to_address,
-    amount
+    amount,
+    amounts: instance.amount,
+    vestingDelayed: instance.delayed,
+    vestingEndTime: endTime.toDateString()
   }
 }

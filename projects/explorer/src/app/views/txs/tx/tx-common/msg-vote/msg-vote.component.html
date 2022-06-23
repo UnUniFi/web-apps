@@ -19,7 +19,8 @@
       <mat-list-item>
         <span class="whitespace-nowrap">Vote option:</span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.voteOption }}</span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ options[txDetail.voteOption||0].replace('VOTE_OPTION_',
+          '')}}</span>
       </mat-list-item>
     </mat-list>
   </mat-card>

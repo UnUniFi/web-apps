@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { cosmosclient, rest } from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryValidatorSlashesResponse,
-  InlineResponse20047,
+  InlineResponse20022,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
@@ -21,7 +21,7 @@ export class DistributionComponent implements OnInit {
     | QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod
     | undefined
   >;
-  rewards$: Observable<InlineResponse20047 | undefined>;
+  rewards$: Observable<InlineResponse20022 | undefined>;
   slashes$: Observable<CosmosDistributionV1beta1QueryValidatorSlashesResponse | undefined>;
 
   constructor(

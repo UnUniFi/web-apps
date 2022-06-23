@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { rest } from '@cosmos-client/core';
-import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -16,7 +16,7 @@ import { txTitle } from '../../../models/cosmos/tx-common.model';
 })
 export class BlockComponent implements OnInit {
   blockHeight$: Observable<string>;
-  block$: Observable<InlineResponse20036>;
+  block$: Observable<InlineResponse20011>;
   nextBlock$: Observable<number>;
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;

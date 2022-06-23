@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20052Proposals } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -17,7 +17,7 @@ import { catchError, filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./deposit-form-dialog.component.css'],
 })
 export class DepositFormDialogComponent implements OnInit {
-  proposal$: Observable<InlineResponse20052Proposals | undefined>;
+  proposal$: Observable<InlineResponse20027Proposals | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;

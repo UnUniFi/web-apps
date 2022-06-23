@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { proto } from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20038,
+  InlineResponse20041Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -16,11 +16,11 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
-  selectedValidator?: InlineResponse20066Validators | null;
+  selectedValidator?: InlineResponse20041Validators | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: InlineResponse20038 | null;
   @Input()
   delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -32,17 +32,17 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   isValidator?: boolean | null;
   @Output()
-  appDelegate: EventEmitter<InlineResponse20066Validators>;
+  appDelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appRedelegate: EventEmitter<InlineResponse20066Validators>;
+  appRedelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appUndelegate: EventEmitter<InlineResponse20066Validators>;
+  appUndelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawDelegatorReward: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appWithdrawValidatorCommission: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawValidatorCommission: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appDetail: EventEmitter<InlineResponse20066Validators>;
+  appDetail: EventEmitter<InlineResponse20041Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();

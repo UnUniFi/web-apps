@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { rest } from '@cosmos-client/core';
 import {
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20052Proposals,
+  InlineResponse20027FinalTallyResult,
+  InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -15,8 +15,8 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<InlineResponse20052Proposals[]>;
-  tallies$: Observable<(InlineResponse20052FinalTallyResult | undefined)[]>;
+  proposals$: Observable<InlineResponse20027Proposals[]>;
+  tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
   constructor(
     private readonly route: ActivatedRoute,

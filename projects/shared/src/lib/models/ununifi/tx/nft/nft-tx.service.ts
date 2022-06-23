@@ -4,7 +4,7 @@ import { NftTxInfrastructureService } from './nft-tx.infrastructure.service';
 import { MsgListNftData } from './nft-tx.model';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 export interface INftTxInfrastructureService {
   simulateToListNft(
@@ -20,7 +20,7 @@ export interface INftTxInfrastructureService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075>;
+  ): Promise<InlineResponse20050>;
 }
 
 @Injectable({
@@ -40,7 +40,7 @@ export class NftTxService {
     gas: proto.cosmos.base.v1beta1.ICoin,
     fee: proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     return this.iNftTxInfrastructureService.listNft(
       msgListNftData,
       currentCosmosWallet,

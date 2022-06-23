@@ -2,7 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
+import {
+  InlineResponse20014Validators,
+  InlineResponse20041Validators,
+} from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
@@ -23,12 +26,12 @@ export class DelegateFormDialogComponent implements OnInit {
   coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
+  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
+  validator: InlineResponse20041Validators | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
+    public readonly data: InlineResponse20041Validators,
     public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,

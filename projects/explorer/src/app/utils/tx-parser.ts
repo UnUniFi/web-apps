@@ -1,23 +1,21 @@
 import { txTitle } from './../models/cosmos/tx-common.model';
 import { CosmosTxV1beta1Tx } from '@cosmos-client/core/esm/openapi/api';
 import { cosmosclient, proto, } from '@cosmos-client/core';
-import { InlineResponse20025Accounts } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse200Accounts } from '@cosmos-client/core/esm/openapi';
 
 export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
   return tx.body?.messages?.map(message => txParseMsg(message))
 }
 
-export const txParseMsg = (message: InlineResponse20025Accounts): txTitle => {
-
+export const txParseMsg = (message: InlineResponse200Accounts): txTitle => {
+  console.log("txParseMsgsbefore", message,)
   const cast = cosmosclient.codec.castProtoJSONOfProtoAny(message)
+  console.log("cast", cast)
   const instance = cosmosclient.codec.protoJSONToInstance(cast)
-  console.log("txParseMsgsbefore", message, cast)
 
-  //const instance2 = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
 
-  //const instance = new proto.cosmos.vesting.v1beta1.MsgCreateVestingAccount
-  console.log("txParseMsgs", instance, typeof (instance), (instance as any).constructor.name)
-
+  //debug
+  console.log("txParseMsgs", instance, cast)
 
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)

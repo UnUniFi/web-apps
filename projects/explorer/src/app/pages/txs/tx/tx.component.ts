@@ -19,7 +19,6 @@ export class TxComponent implements OnInit {
   tx$: Observable<CosmosTxV1beta1GetTxResponse>;
   txDetails$: Observable<txTitle[] | undefined>;
   txSignature$: Observable<txSignature | undefined>;
-  txTypes: string[] | undefined = []
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.txHash$ = this.route.params.pipe(map((params) => params.tx_hash));
@@ -31,7 +30,6 @@ export class TxComponent implements OnInit {
         const tx = x?.tx
         if (!tx) return undefined
         const parsedTx = txParseMsgs(tx)
-        this.txTypes = parsedTx?.map(tx => tx.txType)
         return parsedTx
       })
     )

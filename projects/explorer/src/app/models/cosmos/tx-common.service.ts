@@ -8,7 +8,7 @@ import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
   providedIn: 'root',
 })
 export class TxCommonService {
-  constructor(private readonly cosmosSDK: CosmosSDKService) {}
+  constructor(private readonly cosmosSDK: CosmosSDKService) { }
 
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
@@ -17,7 +17,7 @@ export class TxCommonService {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 
     // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());
+    const txForSimulation = JSON.parse(txBuilder.protoJSONStringify());
 
     // fix JSONstringify issue
     delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;

@@ -8,14 +8,10 @@ export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
 }
 
 export const txParseMsg = (message: InlineResponse200Accounts): txTitle => {
-  console.log("txParseMsgsbefore", message,)
-  const cast = cosmosclient.codec.castProtoJSONOfProtoAny(message)
-  console.log("cast", cast)
-  const instance = cosmosclient.codec.protoJSONToInstance(cast)
 
-
+  const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
   //debug
-  console.log("txParseMsgs", instance, cast)
+  console.log("txParseMsgs", instance)
 
   //staking module
   if (instance instanceof proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)

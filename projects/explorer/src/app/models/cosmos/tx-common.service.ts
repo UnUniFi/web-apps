@@ -16,7 +16,7 @@ export class TxCommonService {
   ): Promise<SimulatedTxResultResponse> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 
-    // restore json from txBuilder
+    // cosmosclient.rest ore json from txBuilder
     const txForSimulation = JSON.parse(txBuilder.protoJSONStringify());
 
     // fix JSONstringify issue

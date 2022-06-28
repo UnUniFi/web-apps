@@ -1,12 +1,12 @@
 import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CosmosTxV1beta1GetTxResponse, } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { txParseMsgs, } from "./../../../utils/tx-parser"
 import { txTitle, txSignature } from './../../../models/cosmos/tx-common.model';
-import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'app-transaction',

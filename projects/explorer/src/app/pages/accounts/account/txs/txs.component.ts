@@ -2,7 +2,7 @@ import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi';
 import { of, combineLatest, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class TxsComponent implements OnInit {
 
     this.txs$ = combineLatest([sdk$, this.address$]).pipe(
       mergeMap(([sdk, address]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.sender='${address}'`],
@@ -63,7 +63,7 @@ export class TxsComponent implements OnInit {
 
     this.txsTotalCount$ = combineLatest([sdk$, this.address$]).pipe(
       mergeMap(([sdk, address]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.sender='${address}'`],
@@ -123,7 +123,7 @@ export class TxsComponent implements OnInit {
           return [];
         }
 
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.sender='${address}'`],

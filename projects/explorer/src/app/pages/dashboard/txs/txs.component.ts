@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/explorer/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
@@ -60,7 +60,7 @@ export class TxsComponent implements OnInit {
 
     this.txsTotalCount$ = combineLatest([sdk$, this.selectedTxTypeChanged$]).pipe(
       switchMap(([sdk, selectedTxType]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -128,7 +128,7 @@ export class TxsComponent implements OnInit {
           return of([]);
         }
 
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],

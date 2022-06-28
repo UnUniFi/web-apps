@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   CosmosMintV1beta1QueryAnnualProvisionsResponse,
   CosmosMintV1beta1QueryInflationResponse,
@@ -23,12 +23,12 @@ export class MintComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
   ) {
     this.inflation$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.mint.inflation(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.mint.inflation(sdk.rest).then((res) => res.data)),
     );
     this.annualProvisions$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.mint.annualProvisions(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.mint.annualProvisions(sdk.rest).then((res) => res.data)),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

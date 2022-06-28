@@ -19,7 +19,7 @@
       <mat-list-item *ngFor="let voteOption of txDetail.voteOptions; last as last">
         <span class="break-words">{{options[voteOption.option||0].replace('VOTE_OPTION_', '')}}</span>
         <span class="flex-auto"></span>
-        <span class="mr-2">{{ voteOption.weight| number: '1.0-0' }}</span>
+        <span class="mr-2">{{ voteOption.weight | percent }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>

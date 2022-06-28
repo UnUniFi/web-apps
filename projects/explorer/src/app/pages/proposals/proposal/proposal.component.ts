@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import conmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027Proposals,
   InlineResponse20029Deposits,
@@ -34,7 +34,7 @@ export class ProposalComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.proposal(sdk.rest, address)),
+      mergeMap(([sdk, address]) => conmosclient.rest.gov.proposal(sdk.rest, address)),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);
@@ -51,7 +51,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.deposits$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.deposits(sdk.rest, address)),
+      mergeMap(([sdk, address]) => conmosclient.rest.gov.deposits(sdk.rest, address)),
       map((result) => result.data.deposits!),
       catchError((error) => {
         console.error(error);
@@ -60,12 +60,12 @@ export class ProposalComponent implements OnInit {
     );
 
     this.depositParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'deposit')),
+      mergeMap((sdk) => conmosclient.rest.gov.params(sdk.rest, 'deposit')),
       map((result) => result.data.deposit_params),
     );
 
     this.tally$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
+      mergeMap(([sdk, address]) => conmosclient.rest.gov.tallyresult(sdk.rest, address)),
       map((result) => result.data.tally!),
       catchError((error) => {
         console.error(error);
@@ -74,7 +74,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'tallying')),
+      mergeMap((sdk) => conmosclient.rest.gov.params(sdk.rest, 'tallying')),
       map((result) => result.data.tally_params),
       catchError((error) => {
         console.error(error);
@@ -83,7 +83,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votes$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
+      mergeMap(([sdk, address]) => conmosclient.rest.gov.votes(sdk.rest, address)),
       map((result) => result.data.votes!),
       catchError((error) => {
         console.error(error);
@@ -92,7 +92,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votingParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'voting')),
+      mergeMap((sdk) => conmosclient.rest.gov.params(sdk.rest, 'voting')),
       map((result) => result.data.voting_params),
       catchError((error) => {
         console.error(error);
@@ -101,5 +101,5 @@ export class ProposalComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

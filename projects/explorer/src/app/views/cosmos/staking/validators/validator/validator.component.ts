@@ -1,6 +1,6 @@
 import { validatorType } from './../../../../../views/cosmos/staking/validators/validators.component';
 import { Component, OnInit, Input } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20014Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
@@ -16,9 +16,9 @@ export class ValidatorComponent implements OnInit {
   @Input()
   accAddress?: cosmosclient.AccAddress | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getColorCode(validator: InlineResponse20014Validators | undefined | null) {
     const hash = crypto

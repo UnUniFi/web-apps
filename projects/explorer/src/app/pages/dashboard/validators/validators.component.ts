@@ -4,7 +4,7 @@ import {
   validatorWithShareType,
 } from '../../../views/dashboard/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class ValidatorsComponent implements OnInit {
 
   constructor(private cosmosSDK: CosmosSDKService) {
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
       map((result) => result.data),
     );
 
@@ -82,7 +82,7 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);

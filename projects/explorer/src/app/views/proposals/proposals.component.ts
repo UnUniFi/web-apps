@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
@@ -23,9 +23,9 @@ export class ProposalsComponent implements OnInit {
   @Input()
   tallies?: (InlineResponse20027FinalTallyResult | undefined)[] | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   unpackContent(value: any) {
     try {

@@ -3,22 +3,22 @@ import { CosmosWallet } from '../../../wallets/wallet.model';
 import { NftTxInfrastructureService } from './nft-tx.infrastructure.service';
 import { MsgListNftData } from './nft-tx.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 export interface INftTxInfrastructureService {
   simulateToListNft(
     msgListNftData: MsgListNftData,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse>;
 
   listNft(
     msgListNftData: MsgListNftData,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050>;
 }
@@ -37,8 +37,8 @@ export class NftTxService {
   async listNft(
     msgListNftData: MsgListNftData,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     return this.iNftTxInfrastructureService.listNft(
@@ -53,7 +53,7 @@ export class NftTxService {
   async simulateToListNft(
     msgListNftData: MsgListNftData,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     return await this.iNftTxInfrastructureService.simulateToListNft(

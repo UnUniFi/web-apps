@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
@@ -40,7 +40,7 @@ export class TxsComponent implements OnInit {
       this.selectedTxType$,
     ]).pipe(
       switchMap(([sdk, _pageNumber, _pageSize, selectedTxType]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -89,7 +89,7 @@ export class TxsComponent implements OnInit {
           return [];
         }
 
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -110,7 +110,7 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.selectedTxType$.next(selectedTxType);

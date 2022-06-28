@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import * as bip39 from 'bip39';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';

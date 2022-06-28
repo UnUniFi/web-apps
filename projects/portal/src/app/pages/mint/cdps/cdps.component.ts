@@ -2,7 +2,7 @@ import { CosmosSDKService, KeyService } from '../../../models/index';
 import { Key } from '../../../models/keys/key.model';
 import { KeyStoreService } from '../../../models/keys/key.store.service';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 import { rest } from 'ununifi-client';
@@ -48,5 +48,5 @@ export class CdpsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

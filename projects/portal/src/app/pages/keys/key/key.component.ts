@@ -4,7 +4,7 @@ import { Key } from '../../../models/keys/key.model';
 import { KeyService } from '../../../models/keys/key.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -19,15 +19,15 @@ export class KeyComponent implements OnInit {
   key$: Observable<Key | undefined>;
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
   valAddress$: Observable<cosmosclient.ValAddress | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[]>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   faucets$: Observable<
     | {
-        hasFaucet: boolean;
-        faucetURL: string;
-        denom: string;
-        creditAmount: number;
-        maxCredit: number;
-      }[]
+      hasFaucet: boolean;
+      faucetURL: string;
+      denom: string;
+      creditAmount: number;
+      maxCredit: number;
+    }[]
     | undefined
   >;
 
@@ -53,7 +53,7 @@ export class KeyComponent implements OnInit {
         if (address === undefined) {
           return [];
         }
-        return rest.bank
+        return cosmosclient.rest.bank
           .allBalances(sdk.rest, address)
           .then((res) => res.data.balances || [])
           .catch((_) => []);
@@ -82,5 +82,5 @@ export class KeyComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

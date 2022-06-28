@@ -5,7 +5,7 @@ import { getCreateLimit } from '../../../../utils/function';
 import { getLiquidationPriceStream } from '../../../../utils/stream';
 import { CreateCdpOnSubmitEvent } from '../../../../views/mint/cdps/create/create.component';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
 import { timer, of, combineLatest, BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -25,10 +25,10 @@ export class CreateComponent implements OnInit {
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
   selectedCollateralType$: Observable<string | null | undefined>;
   selectedCollateralParam$: Observable<ununifi.cdp.ICollateralParam | null | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   address$: Observable<cosmosclient.AccAddress>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   collateralType$: Observable<string>;
@@ -94,7 +94,7 @@ export class CreateComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
+        return cosmosclient.rest.bank
           .allBalances(sdk.rest, address)
           .then((res) => res.data.balances || []);
       }),
@@ -147,7 +147,7 @@ export class CreateComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit($event: CreateCdpOnSubmitEvent) {
     this.cdpApplicationService.createCDP(

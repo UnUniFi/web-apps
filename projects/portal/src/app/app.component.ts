@@ -4,7 +4,7 @@ import { WalletApplicationService } from './models/wallets/wallet.application.se
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -100,7 +100,7 @@ export class AppComponent implements OnInit {
           return of(false);
         }
         try {
-          return rest.tendermint.getLatestBlock(sdk.rest).then((res) => {
+          return cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => {
             return res.data &&
               res.data.block?.header?.height &&
               BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
@@ -144,7 +144,7 @@ export class AppComponent implements OnInit {
           return of(false);
         }
         try {
-          const tx = rest.tx
+          const tx = cosmosclient.rest.tx
             .getTx(sdk.rest, searchBoxInputValue)
             .then((res) => {
               console.log(res);
@@ -235,5 +235,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

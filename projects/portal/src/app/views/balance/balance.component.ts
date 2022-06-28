@@ -2,7 +2,7 @@ import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -17,15 +17,15 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() faucets?:
     | {
-        hasFaucet: boolean;
-        faucetURL: string;
-        denom: string;
-        creditAmount: number;
-        maxCredit: number;
-      }[]
+      hasFaucet: boolean;
+      faucetURL: string;
+      denom: string;
+      creditAmount: number;
+      maxCredit: number;
+    }[]
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
 
@@ -37,7 +37,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
     this.tempNodeInfo = this.nodeInfo as any;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   // Todo: This lifecycle methods is temporal fix.
   // default_node_info in type definition of InlineResponse20012 is actually node_info.

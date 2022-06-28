@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20038, InlineResponse20041 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -27,15 +27,15 @@ export class DelegatorComponent implements OnInit {
     const combined$ = combineLatest([this.cosmosSDK.sdk$, address$]);
 
     this.delegations$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
       map((res) => res.data),
     );
 
     this.validators$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorValidators(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorValidators(sdk.rest, address)),
       map((res) => res.data),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

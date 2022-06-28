@@ -10,7 +10,7 @@ import { CosmosWallet, StoredWallet, WalletType } from '../wallets/wallet.model'
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
@@ -24,7 +24,7 @@ export class TxCommonService {
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
-  ) {}
+  ) { }
 
   canonicalizeAccAddress(address: string) {
     const canonicalized = address.replace(/\s+/g, '');
@@ -32,9 +32,9 @@ export class TxCommonService {
   }
 
   validateBalanceBeforeSimulation(
-    usageAmount: proto.cosmos.base.v1beta1.ICoin[],
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    usageAmount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
   ) {
     const feeDenom = minimumGasPrice.denom;
     const simulationFeeAmount = 1;
@@ -54,10 +54,10 @@ export class TxCommonService {
 
   async getBaseAccount(
     cosmosPublicKey: cosmosclient.PubKey,
-  ): Promise<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
+  ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk, accAddress)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -74,9 +74,9 @@ export class TxCommonService {
 
   async getBaseAccountFromAddress(
     address: cosmosclient.AccAddress,
-  ): Promise<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
+  ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk, address)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -94,25 +94,25 @@ export class TxCommonService {
   async buildTxBuilder(
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
-    baseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
-    gas: proto.cosmos.base.v1beta1.ICoin | null | undefined,
-    fee: proto.cosmos.base.v1beta1.ICoin | null | undefined,
+    baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null | undefined,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null | undefined,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const packedAnyMessages: proto.google.protobuf.IAny[] = messages.map((message) =>
+    const packedAnyMessages: cosmosclient.proto.google.protobuf.IAny[] = messages.map((message) =>
       cosmosclient.codec.instanceToProtoAny(message),
     );
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: packedAnyMessages,
     });
 
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(cosmosPublicKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -129,7 +129,7 @@ export class TxCommonService {
 
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     currentCosmosWallet: CosmosWallet,
     privateKey?: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
@@ -155,7 +155,7 @@ export class TxCommonService {
 
   async signTxWithPrivateKey(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     privateKey?: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
     let cosmosPrivateKey: cosmosclient.PrivKey | undefined;
@@ -188,7 +188,7 @@ export class TxCommonService {
 
   async signTxWithKeplr(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const signedTxBuilder = await this.keplrService.signTx(txBuilder, signerBaseAccount);
     return signedTxBuilder;
@@ -197,7 +197,7 @@ export class TxCommonService {
   // Todo: This is dummy function and need to implement later.
   signTxWithLedger(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): cosmosclient.TxBuilder {
     throw Error('Currently signing with Ledger is not supported!');
   }
@@ -205,14 +205,14 @@ export class TxCommonService {
   // Todo: This is dummy function and need to implement later.
   signTxWithKeyStation(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): cosmosclient.TxBuilder {
     throw Error('Currently signing with KeyStation is not supported!');
   }
 
   async signTxWithMetaMask(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const signedTxBuilder = await this.metaMaskService.signTx(txBuilder, signerBaseAccount);
     return signedTxBuilder;
@@ -220,7 +220,7 @@ export class TxCommonService {
 
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
     if (minimumGasPrice.amount == '0' || !gasRatio) {
@@ -238,7 +238,7 @@ export class TxCommonService {
     }
 
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    // restore json from txBuilder
+    // cosmosclient.rest ore json from txBuilder
     const txForSimulation = txBuilder.toProtoJSON() as any;
     console.log(txForSimulation);
 
@@ -254,7 +254,7 @@ export class TxCommonService {
     }
 
     // simulate
-    const simulatedResult = await rest.tx.simulate(sdk, {
+    const simulatedResult = await cosmosclient.rest.tx.simulate(sdk, {
       tx: txForSimulation,
     });
     console.log('simulatedResult', simulatedResult);
@@ -297,9 +297,9 @@ export class TxCommonService {
     console.log(txBuilder);
 
     // broadcast tx
-    const result = await rest.tx.broadcastTx(sdk, {
+    const result = await cosmosclient.rest.tx.broadcastTx(sdk, {
       tx_bytes: txBuilder.txBytes(),
-      mode: rest.tx.BroadcastTxMode.Block,
+      mode: cosmosclient.rest.tx.BroadcastTxMode.Block,
     });
 
     // check broadcast tx error

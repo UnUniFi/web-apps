@@ -2,7 +2,7 @@ import { getWithdrawLimit, getIssueLimit } from '../../../../utils/function';
 import { getSpotPriceStream, getLiquidationPriceStream } from '../../../../utils/stream';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosSDKService } from 'projects/portal/src/app/models/index';
 import { combineLatest, Observable, zip } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -91,5 +91,5 @@ export class CdpComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

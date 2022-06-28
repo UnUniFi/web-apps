@@ -1,7 +1,7 @@
 import { KeyInfrastructureService } from './key.infrastructure.service';
 import { Key, KeyType } from './key.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 export interface IKeyInfrastructure {
   getPrivKey(type: KeyType, privateKey: Uint8Array): cosmosclient.PrivKey;

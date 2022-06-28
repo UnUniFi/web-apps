@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { proto } from '@cosmos-client/core';
 
 @Component({
   selector: 'app-view-inactive-validator-confirm-dialog',
@@ -15,9 +14,9 @@ export class InactiveValidatorConfirmDialogComponent implements OnInit {
       isConfirmed: boolean;
     },
     private readonly dialogRef: MatDialogRef<InactiveValidatorConfirmDialogComponent>,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   okToSendTx(): void {
     this.data.isConfirmed = true;

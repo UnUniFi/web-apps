@@ -2,7 +2,7 @@ import { getWithdrawLimit } from '../../../../../utils/function';
 import { getSpotPriceStream } from '../../../../../utils/stream';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/index';
 import { CdpApplicationService } from 'projects/portal/src/app/models/index';
@@ -31,8 +31,8 @@ export class WithdrawComponent implements OnInit {
   withdrawLimit$: Observable<number>;
 
   address$: Observable<cosmosclient.AccAddress | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   constructor(
@@ -76,7 +76,7 @@ export class WithdrawComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
+        return cosmosclient.rest.bank
           .allBalances(sdk.rest, address)
           .then((res) => res.data.balances || []);
       }),
@@ -104,7 +104,7 @@ export class WithdrawComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit($event: WithdrawCdpOnSubmitEvent) {
     this.cdpApplicationService.withdrawCDP(

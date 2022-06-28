@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { rest, ununifi, google } from 'ununifi-client';
@@ -113,7 +113,7 @@ export class AuctionsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.pageSize$.next(pageEvent.pageSize);

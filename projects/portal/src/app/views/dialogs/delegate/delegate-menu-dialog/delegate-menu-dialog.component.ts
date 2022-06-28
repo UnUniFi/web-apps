@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038,
   InlineResponse20041Validators,
@@ -22,7 +22,7 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   delegations?: InlineResponse20038 | null;
   @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   isDelegated?: boolean | null;
   @Input()
@@ -53,7 +53,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.appDetail = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getColorCode(address: string) {
     const hash = crypto

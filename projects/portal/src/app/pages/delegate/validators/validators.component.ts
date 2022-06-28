@@ -7,7 +7,7 @@ import {
   validatorWithShareType,
 } from '../../../views/delegate/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038DelegationResponses,
   InlineResponse20041Validators,
@@ -41,7 +41,7 @@ export class ValidatorsComponent implements OnInit {
     private readonly stakingAppService: StakingApplicationService,
   ) {
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
       map((result) => result.data.validators),
     );
 
@@ -105,7 +105,7 @@ export class ValidatorsComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, address$]);
     this.delegations$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
       map((result) => result.data.delegation_responses),
     );
 
@@ -146,7 +146,7 @@ export class ValidatorsComponent implements OnInit {
         const unbondingDelegationList = Promise.all(
           valAddressList.map((valAddress) => {
             if (!valAddress) return undefined;
-            return rest.staking
+            return cosmosclient.rest.staking
               .unbondingDelegation(sdk.rest, valAddress, accAddress)
               .then((res) => res && res.data)
               .catch((err) => {
@@ -164,7 +164,7 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);

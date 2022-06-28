@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { AuctionApplicationService } from 'projects/portal/src/app/models/auctions/auction.application.service';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
@@ -22,7 +22,7 @@ export class PlaceBidComponent implements OnInit {
   auction$: Observable<ununifi.auction.CollateralAuction | undefined>;
   endTime$: Observable<Date | undefined>;
   maxEndTime$: Observable<Date | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +86,7 @@ export class PlaceBidComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit($event: PlaceBidOnSubmitEvent) {
     this.auctionApplicationService.placeBid(

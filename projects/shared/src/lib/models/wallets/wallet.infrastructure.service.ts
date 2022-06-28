@@ -3,7 +3,7 @@ import { KeyType } from '../keys/key.model';
 import { CosmosWallet, StoredWallet, Wallet, WalletType } from './wallet.model';
 import { IWalletInfrastructure } from './wallet.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import Dexie from 'dexie';
 import { BehaviorSubject } from 'rxjs';
 
@@ -85,7 +85,7 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
   }
 
   convertStoredWalletToCosmosWallet(storedWallet: StoredWallet): CosmosWallet {
-    const public_key: CosmosWallet['public_key'] = new proto.cosmos.crypto.secp256k1.PubKey({
+    const public_key: CosmosWallet['public_key'] = new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
       key: Uint8Array.from(Buffer.from(storedWallet.public_key, 'hex')),
     });
     const address: cosmosclient.AccAddress = cosmosclient.AccAddress.fromString(

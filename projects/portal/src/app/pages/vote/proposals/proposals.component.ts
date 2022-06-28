@@ -1,7 +1,7 @@
 import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
@@ -25,14 +25,14 @@ export class ProposalsComponent implements OnInit {
     private readonly govAppService: GovApplicationService,
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
       map((result) => result.data.proposals!),
     );
     this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$]).pipe(
       mergeMap(([sdk, proposals]) =>
         Promise.all(
           proposals.map((proposal) =>
-            rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
+            cosmosclient.rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
               console.log(err);
               return;
             }),
@@ -43,7 +43,7 @@ export class ProposalsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onVoteProposal(proposalID: number) {
     this.govAppService.openVoteFormDialog(proposalID);

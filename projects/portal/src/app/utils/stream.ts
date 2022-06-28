@@ -1,4 +1,4 @@
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, filter } from 'rxjs/operators';
 import { ununifi, rest } from 'ununifi-client';

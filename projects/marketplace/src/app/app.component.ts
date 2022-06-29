@@ -217,5 +217,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

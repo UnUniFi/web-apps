@@ -71,12 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "explorer:build:production",
-              "baseHref": "/explorer/"
+              "browserTarget": "explorer:build:production"
             },
             "development": {
-              "browserTarget": "explorer:build:development",
-              "baseHref": "/explorer/"
+              "browserTarget": "explorer:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -267,12 +265,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "portal:build:production",
-              "baseHref": "/portal/"
+              "browserTarget": "portal:build:production"
             },
             "development": {
-              "browserTarget": "portal:build:development",
-              "baseHref": "/portal/"
+              "browserTarget": "portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -395,12 +391,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "marketplace:build:production",
-              "baseHref": "/marketplace/"
+              "browserTarget": "marketplace:build:production"
             },
             "development": {
-              "browserTarget": "marketplace:build:development",
-              "baseHref": "/marketplace/"
+              "browserTarget": "marketplace:build:development"
             }
           },
           "defaultConfiguration": "development"

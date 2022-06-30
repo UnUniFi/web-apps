@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -100,12 +100,15 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     auctionID: number,
     bidder: string,
     amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): ununifi.auction.MsgPlaceBid {
-    const msgPlaceBid = new ununifi.auction.MsgPlaceBid({
+  ): ununifi.proto.ununifi.auction.MsgPlaceBid {
+    //Todo: make auction.MsgPlaceBid
+    const msgPlaceBid: any = undefined
+    /*
+    const msgPlaceBid = new ununifi.rest.auction.MsgPlaceBid({
       auction_id: Long.fromNumber(auctionID),
       bidder: bidder,
       amount: amount,
-    });
+    }); */
     return msgPlaceBid;
   }
 }

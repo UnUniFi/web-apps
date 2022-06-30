@@ -10,7 +10,7 @@ import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
 import { timer, of, combineLatest, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ununifi, rest } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -20,11 +20,11 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 })
 export class CreateComponent implements OnInit {
   key$: Observable<Key | undefined>;
-  cdpParams$: Observable<ununifi.cdp.IParams>;
-  collateralParams$: Observable<ununifi.cdp.ICollateralParam[] | null | undefined>;
+  cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
+  collateralParams$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam[] | null | undefined>;
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
   selectedCollateralType$: Observable<string | null | undefined>;
-  selectedCollateralParam$: Observable<ununifi.cdp.ICollateralParam | null | undefined>;
+  selectedCollateralParam$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   address$: Observable<cosmosclient.AccAddress>;
@@ -35,7 +35,7 @@ export class CreateComponent implements OnInit {
   collateralLimit$: Observable<number>;
 
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
@@ -49,7 +49,7 @@ export class CreateComponent implements OnInit {
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.cdpParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((param) => param.data.params!),
     );
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
@@ -136,7 +136,7 @@ export class CreateComponent implements OnInit {
     // check cdp
     this.cdp$ = combineLatest([this.address$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
       mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
+        ununifi.rest.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
           console.error(err);
           return;
         }),

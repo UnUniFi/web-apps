@@ -9,7 +9,7 @@ import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.s
 import { DepositCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/deposit/deposit.component';
 import { timer, of, combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'app-deposit',
@@ -20,7 +20,7 @@ export class DepositComponent implements OnInit {
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
+  params$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   denom$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   address$: Observable<cosmosclient.AccAddress | undefined>;
   balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
@@ -38,7 +38,7 @@ export class DepositComponent implements OnInit {
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
     this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((data) => data.data.params!),
     );
 

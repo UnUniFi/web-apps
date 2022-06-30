@@ -9,7 +9,7 @@ import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.s
 import { ClearCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/clear/clear.component';
 import { timer, of, combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -21,7 +21,7 @@ export class ClearComponent implements OnInit {
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
+  params$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   repaymentDenomString$: Observable<string>;
   repaymentDenom$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
 
@@ -68,13 +68,13 @@ export class ClearComponent implements OnInit {
     );
 
     this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((data) => data.data.params!),
     );
 
     this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
       mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
+        ununifi.rest.cdp.cdp(
           sdk.rest,
           cosmosclient.AccAddress.fromString(ownerAddr),
           collateralType,

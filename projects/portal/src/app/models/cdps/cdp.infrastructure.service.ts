@@ -9,7 +9,7 @@ import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -102,12 +102,16 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgCreateCdp = new ununifi.cdp.MsgCreateCdp({
+    //Todo: make cdp.MsgCreateCdp
+    const msgCreateCdp: any = undefined
+    /*
+    const msgCreateCdp = new ununifi.rest.cdp.MsgCreateCdp({
       sender: sender.toString(),
       collateral,
       principal,
       collateral_type: collateralType,
     });
+    */
 
     const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgCreateCdp)],
@@ -213,11 +217,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       throw Error('Unused Account or Unsupported Account Type!');
     }
 
-    const msgDrawDebt = new ununifi.cdp.MsgDrawDebt({
+    //Todo: make cdp.msgDrawDebt
+    const msgDrawDebt: any = undefined
+    /*
+      const msgDrawDebt = new ununifi.rest.cdp.MsgDrawDebt({
       sender: sender.toString(),
       collateral_type: collateralType,
       principal,
-    });
+      });
+    */
 
     const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgDrawDebt)],
@@ -323,11 +331,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       throw Error('Unused Account or Unsupported Account Type!');
     }
 
-    const msgRepayDebt = new ununifi.cdp.MsgRepayDebt({
+    // Todo: make cdp.MsgRepayDebt
+    const msgRepayDebt: any = undefined
+    /*
+    const msgRepayDebt = new ununifi.rest.cdp.MsgRepayDebt({
       sender: sender.toString(),
       collateral_type: collateralType,
       payment: repayment,
     });
+    */
 
     const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgRepayDebt)],
@@ -439,12 +451,16 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgDepositCDP = new ununifi.cdp.MsgDeposit({
+    // Todo: make cdp.MsgDeposit
+    const msgDepositCDP: any = undefined
+    /*
+    const msgDepositCDP = new ununifi.rest.cdp.MsgDeposit({
       depositor: sender.toString(),
       owner: ownerAddr.toString(),
       collateral,
       collateral_type: collateralType,
     });
+    */
 
     const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgDepositCDP)],
@@ -556,12 +572,16 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgWithdraw = new ununifi.cdp.MsgWithdraw({
+    //To do: make cdp.MsgWithdraw
+    const msgWithdraw: any = undefined
+    /*
+    const msgWithdraw = new ununifi.rest.cdp.MsgWithdraw({
       depositor: sender.toString(),
       owner: ownerAddr.toString(),
       collateral,
       collateral_type: collateralType,
     });
+    */
 
     const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgWithdraw)],

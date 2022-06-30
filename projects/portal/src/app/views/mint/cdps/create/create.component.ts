@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 export type CreateCdpOnSubmitEvent = {
@@ -25,16 +25,16 @@ export class CreateComponent implements OnInit {
   key?: Key | null;
 
   @Input()
-  cdpParams?: ununifi.cdp.IParams | null;
+  cdpParams?: ununifi.proto.ununifi.cdp.IParams | null;
 
   @Input()
-  collateralParams?: ununifi.cdp.ICollateralParam[] | null;
+  collateralParams?: ununifi.proto.ununifi.cdp.ICollateralParam[] | null;
 
   @Input()
   selectedCollateralType?: string | null;
 
   @Input()
-  selectedCollateralParam?: ununifi.cdp.ICollateralParam | null;
+  selectedCollateralParam?: ununifi.proto.ununifi.cdp.ICollateralParam | null;
 
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;

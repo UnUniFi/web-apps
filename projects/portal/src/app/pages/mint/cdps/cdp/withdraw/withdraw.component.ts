@@ -11,7 +11,7 @@ import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.s
 import { WithdrawCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/withdraw/withdraw.component';
 import { timer, of, zip, combineLatest, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -23,11 +23,11 @@ export class WithdrawComponent implements OnInit {
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
+  params$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   denom$: Observable<string>;
 
   cdp$: Observable<InlineResponse2004Cdp1>;
-  spotPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  spotPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   withdrawLimit$: Observable<number>;
 
   address$: Observable<cosmosclient.AccAddress | undefined>;
@@ -46,7 +46,7 @@ export class WithdrawComponent implements OnInit {
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
     this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((data) => data.data.params!),
     );
     this.denom$ = combineLatest([this.collateralType$, this.params$]).pipe(
@@ -84,7 +84,7 @@ export class WithdrawComponent implements OnInit {
 
     this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
       mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
+        ununifi.rest.cdp.cdp(
           sdk.rest,
           cosmosclient.AccAddress.fromString(ownerAddr),
           collateralType,

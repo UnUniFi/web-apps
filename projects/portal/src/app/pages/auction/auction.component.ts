@@ -2,7 +2,7 @@ import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import cosmosclient from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2002Params } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -16,7 +16,7 @@ export class AuctionComponent implements OnInit {
     const timer$ = timer(0, 60 * 1000);
 
     this.params$ = combineLatest([this.cosmosSDK.sdk$, timer$]).pipe(
-      mergeMap(([sdk, _]) => cosmosclient.rest.ununifi.auction.params(sdk.rest)),
+      mergeMap(([sdk, _]) => ununifi.rest.auction.params(sdk.rest)),
       map((res) => res.data.params!),
     );
   }

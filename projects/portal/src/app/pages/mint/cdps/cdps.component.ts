@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
-import { rest } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -30,14 +30,14 @@ export class CdpsComponent implements OnInit {
     );
 
     const collateralTypes$ = this.cosmosSdk.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((res) => res.data?.params?.collateral_params?.map((p) => p.type!) || []),
     );
     this.cdps$ = combineLatest([address$, collateralTypes$, this.cosmosSdk.sdk$]).pipe(
       mergeMap(([address, collateralTypes, sdk]) =>
         Promise.all(
           collateralTypes.map((collateralType) =>
-            rest.ununifi.cdp.cdp(sdk.rest, address, collateralType).catch((err) => {
+            ununifi.rest.cdp.cdp(sdk.rest, address, collateralType).catch((err) => {
               console.log(err);
               return;
             }),

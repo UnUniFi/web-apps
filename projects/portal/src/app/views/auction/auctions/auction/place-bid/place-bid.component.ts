@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 export type PlaceBidOnSubmitEvent = {
   key: Key;
@@ -24,7 +24,7 @@ export class BidComponent implements OnInit {
   auctionID?: string | null;
 
   @Input()
-  auction?: ununifi.auction.CollateralAuction | null;
+  auction?: ununifi.proto.ununifi.auction.CollateralAuction | null;
 
   @Input()
   endTime?: Date | null;

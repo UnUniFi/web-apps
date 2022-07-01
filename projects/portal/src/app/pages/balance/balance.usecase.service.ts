@@ -2,6 +2,7 @@ import { Config, ConfigService } from '../../models/config.service';
 import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
+import { throughMap } from '../../utils/pipes';
 import {
   convertTypedAccountToTypedName,
   convertUnknownAccountToTypedAccount,
@@ -27,34 +28,30 @@ export class BalanceUsecaseService {
     this.config$ = this.configService.config$;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.currentCosmosWallet$ = this.currentStoredWallet$.pipe(
-      map((storedWallet) =>
-        storedWallet
-          ? this.walletService.convertStoredWalletToCosmosWallet(storedWallet)
-          : storedWallet,
+      throughMap((storedWallet) =>
+        this.walletService.convertStoredWalletToCosmosWallet(storedWallet),
       ),
     );
     this.cosmosAccAddress$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.address : cosmosWallet)),
+      throughMap((cosmosWallet) => cosmosWallet.address),
     );
   }
 
   get walletId$(): Observable<string | null | undefined> {
-    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.id : wallet)));
+    return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.id));
   }
   get walletType$(): Observable<WalletType | null | undefined> {
-    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.type : wallet)));
+    return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.type));
   }
   get accAddress$(): Observable<string | null | undefined> {
-    return this.currentCosmosWallet$.pipe(
-      map((wallet) => (wallet ? wallet.address.toString() : wallet)),
-    );
+    return this.currentCosmosWallet$.pipe(throughMap((wallet) => wallet.address.toString()));
   }
   get publicKey$(): Observable<string | null | undefined> {
-    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.public_key : wallet)));
+    return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.public_key));
   }
   get valAddress$(): Observable<string | null | undefined> {
     return this.currentCosmosWallet$.pipe(
-      map((wallet) => (wallet ? wallet.address.toValAddress().toString() : wallet)),
+      throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
   }
   get nodeInfo$(): Observable<InlineResponse20012> {

@@ -35,7 +35,7 @@ describe('BalanceUsecaseService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('すべてundefinedが返ってくる', (done) => {
+  it('all getters return undefined', (done) => {
     combineLatest([
       service.walletId$,
       service.walletType$,

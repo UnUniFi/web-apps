@@ -1,4 +1,5 @@
 import { Config, ConfigService } from '../../models/config.service';
+import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
@@ -7,7 +8,7 @@ import {
   convertUnknownAccountToTypedAccount,
 } from './../../utils/converter';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import { cosmosclient, proto } from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of } from 'rxjs';
@@ -25,6 +26,7 @@ export class BalanceUsecaseService {
     private configService: ConfigService,
     private cosmosSDK: CosmosSDKService,
     private walletService: WalletService,
+    private rest: CosmosRestService,
   ) {
     this.config$ = this.configService.config$;
     this.sdk$ = this.cosmosSDK.sdk$;
@@ -61,9 +63,7 @@ export class BalanceUsecaseService {
     );
   }
   get nodeInfo$(): Observable<InlineResponse20012> {
-    return this.sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
-    );
+    return this.sdk$.pipe(mergeMap((sdk) => this.rest.getNodeInfo(sdk.rest)));
   }
   get accountTypeName$(): Observable<string | null | undefined> {
     return combineLatest([this.sdk$, this.cosmosAccAddress$]).pipe(
@@ -71,23 +71,7 @@ export class BalanceUsecaseService {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return rest.auth
-          .account(sdk.rest, cosmosAccAddress)
-          .then((res) => {
-            console.log(res.data.account);
-            return res;
-          })
-          .then(
-            (res) =>
-              res.data &&
-              cosmosclient.codec.protoJSONToInstance(
-                cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
-              ),
-          )
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
+        return this.rest.getAccount(sdk.rest, cosmosAccAddress);
       }),
       map((cosmosUnknownAccount) => convertUnknownAccountToTypedAccount(cosmosUnknownAccount)),
       map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
@@ -99,13 +83,7 @@ export class BalanceUsecaseService {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return rest.bank
-          .allBalances(sdk.rest, cosmosAccAddress)
-          .then((res) => res.data.balances)
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
+        return this.rest.allBalances(sdk.rest, cosmosAccAddress);
       }),
     );
   }

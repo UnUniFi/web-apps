@@ -92,11 +92,16 @@ export class AppComponent implements OnInit {
         }
         try {
           return rest.tendermint.getLatestBlock(sdk.rest).then((res) => {
-            return res.data &&
-              res.data.block?.header?.height &&
-              BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
-              ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
-              : false;
+            try {
+              return res.data &&
+                res.data.block?.header?.height &&
+                BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
+                ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
+                : false;
+            }
+            catch (error) {
+              return false;
+            }
           });
         } catch (error) {
           return of(false);
@@ -218,5 +223,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

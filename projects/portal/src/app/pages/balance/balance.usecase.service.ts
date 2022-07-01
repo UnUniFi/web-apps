@@ -1,5 +1,5 @@
-import { CosmosSDKService } from '../../models';
 import { Config, ConfigService } from '../../models/config.service';
+import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
 import {

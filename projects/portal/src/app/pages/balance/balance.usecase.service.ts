@@ -16,9 +16,9 @@ import { map, mergeMap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class BalanceUsecaseService {
   private config$: Observable<Config | undefined>;
+  private sdk$: Observable<{ rest: CosmosSDK; websocket: CosmosSDK }>;
   private currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   private currentCosmosWallet$: Observable<CosmosWallet | null | undefined>;
-  private sdk$: Observable<{ rest: CosmosSDK; websocket: CosmosSDK }>;
   private cosmosAccAddress$: Observable<cosmosclient.AccAddress | null | undefined>;
 
   constructor(
@@ -42,25 +42,31 @@ export class BalanceUsecaseService {
   }
 
   get walletId$(): Observable<string | null | undefined> {
-    return this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.id : storedWallet)),
-    );
+    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.id : wallet)));
   }
   get walletType$(): Observable<WalletType | null | undefined> {
-    return this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.type : storedWallet)),
-    );
+    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.type : wallet)));
   }
   get accAddress$(): Observable<string | null | undefined> {
-    const cosmosAccAddress$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.address : cosmosWallet)),
+    return this.currentCosmosWallet$.pipe(
+      map((wallet) => (wallet ? wallet.address.toString() : wallet)),
     );
-    return cosmosAccAddress$.pipe(
-      map((accAddress) => (accAddress ? accAddress.toString() : accAddress)),
+  }
+  get publicKey$(): Observable<string | null | undefined> {
+    return this.currentStoredWallet$.pipe(map((wallet) => (wallet ? wallet.public_key : wallet)));
+  }
+  get valAddress$(): Observable<string | null | undefined> {
+    return this.currentCosmosWallet$.pipe(
+      map((wallet) => (wallet ? wallet.address.toValAddress().toString() : wallet)),
+    );
+  }
+  get nodeInfo$(): Observable<InlineResponse20012> {
+    return this.sdk$.pipe(
+      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
     );
   }
   get accountTypeName$(): Observable<string | null | undefined> {
-    const cosmosUnknownAccount$ = combineLatest([this.sdk$, this.cosmosAccAddress$]).pipe(
+    return combineLatest([this.sdk$, this.cosmosAccAddress$]).pipe(
       mergeMap(([sdk, cosmosAccAddress]) => {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
@@ -83,25 +89,8 @@ export class BalanceUsecaseService {
             return undefined;
           });
       }),
-    );
-    const cosmosAccount$ = cosmosUnknownAccount$.pipe(
       map((cosmosUnknownAccount) => convertUnknownAccountToTypedAccount(cosmosUnknownAccount)),
-    );
-    return cosmosAccount$.pipe(
       map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
-    );
-  }
-  get publicKey$(): Observable<string | null | undefined> {
-    return this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.public_key : storedWallet)),
-    );
-  }
-  get valAddress$(): Observable<string | null | undefined> {
-    const cosmosValAddress$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.address.toValAddress() : cosmosWallet)),
-    );
-    return cosmosValAddress$.pipe(
-      map((valAddress) => (valAddress ? valAddress.toString() : valAddress)),
     );
   }
   get balances$(): Observable<proto.cosmos.base.v1beta1.ICoin[] | null | undefined> {
@@ -161,11 +150,6 @@ export class BalanceUsecaseService {
           }
         });
       }),
-    );
-  }
-  get nodeInfo$(): Observable<InlineResponse20012> {
-    return this.sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
     );
   }
 }

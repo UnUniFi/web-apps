@@ -1,6 +1,5 @@
 import { Config, ConfigService } from '../../models/config.service';
 import { CosmosRestService } from '../../models/cosmos-rest.service';
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
 import {
@@ -9,7 +8,6 @@ import {
 } from './../../utils/converter';
 import { Injectable } from '@angular/core';
 import { cosmosclient, proto } from '@cosmos-client/core';
-import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -17,19 +15,16 @@ import { map, mergeMap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class BalanceUsecaseService {
   private config$: Observable<Config | undefined>;
-  private sdk$: Observable<{ rest: CosmosSDK; websocket: CosmosSDK }>;
   private currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   private currentCosmosWallet$: Observable<CosmosWallet | null | undefined>;
   private cosmosAccAddress$: Observable<cosmosclient.AccAddress | null | undefined>;
 
   constructor(
     private configService: ConfigService,
-    private cosmosSDK: CosmosSDKService,
     private walletService: WalletService,
     private rest: CosmosRestService,
   ) {
     this.config$ = this.configService.config$;
-    this.sdk$ = this.cosmosSDK.sdk$;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.currentCosmosWallet$ = this.currentStoredWallet$.pipe(
       map((storedWallet) =>
@@ -63,27 +58,27 @@ export class BalanceUsecaseService {
     );
   }
   get nodeInfo$(): Observable<InlineResponse20012> {
-    return this.sdk$.pipe(mergeMap((sdk) => this.rest.getNodeInfo(sdk.rest)));
+    return this.rest.getNodeInfo$();
   }
   get accountTypeName$(): Observable<string | null | undefined> {
-    return combineLatest([this.sdk$, this.cosmosAccAddress$]).pipe(
-      mergeMap(([sdk, cosmosAccAddress]) => {
+    return this.cosmosAccAddress$.pipe(
+      mergeMap((cosmosAccAddress) => {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return this.rest.getAccount(sdk.rest, cosmosAccAddress);
+        return this.rest.getAccount$(cosmosAccAddress);
       }),
       map((cosmosUnknownAccount) => convertUnknownAccountToTypedAccount(cosmosUnknownAccount)),
       map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
     );
   }
   get balances$(): Observable<proto.cosmos.base.v1beta1.ICoin[] | null | undefined> {
-    return combineLatest([this.sdk$, this.cosmosAccAddress$]).pipe(
-      mergeMap(([sdk, cosmosAccAddress]) => {
+    return this.cosmosAccAddress$.pipe(
+      mergeMap((cosmosAccAddress) => {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return this.rest.allBalances(sdk.rest, cosmosAccAddress);
+        return this.rest.allBalances$(cosmosAccAddress);
       }),
     );
   }

@@ -1,6 +1,5 @@
 import { ConfigService } from '../../models/config.service';
 import { CosmosRestService } from '../../models/cosmos-rest.service';
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { WalletService } from '../../models/wallets/wallet.service';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { TestBed } from '@angular/core/testing';
@@ -13,22 +12,18 @@ describe('BalanceUsecaseService', () => {
     const mockWalletService = {
       currentStoredWallet$: of(undefined),
     };
-    const mockCosmosSDKService = {
-      sdk$: of({ rest: undefined, websocket: undefined }),
-    };
     const mockConfigService = {
       config$: of(undefined),
     };
     const mockCosmosRestService = {
-      getAccount: jest.fn(() => of(undefined)),
-      allBalance: jest.fn(() => of(undefined)),
-      getNodeInfo: jest.fn(() => of(undefined)),
+      getAccount$: jest.fn(() => of(undefined)),
+      allBalance$: jest.fn(() => of(undefined)),
+      getNodeInfo$: jest.fn(() => of(undefined)),
     };
     TestBed.configureTestingModule({
       providers: [
         BalanceUsecaseService,
         { provide: ConfigService, useValue: mockConfigService },
-        { provide: CosmosSDKService, useValue: mockCosmosSDKService },
         { provide: WalletService, useValue: mockWalletService },
         { provide: CosmosRestService, useValue: mockCosmosRestService },
       ],

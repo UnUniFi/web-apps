@@ -1,14 +1,11 @@
 import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
+import { ProposalsUsecaseService } from './proposals.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-proposals',
@@ -20,27 +17,11 @@ export class ProposalsComponent implements OnInit {
   tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly govAppService: GovApplicationService,
+    private readonly usecase: ProposalsUsecaseService,
   ) {
-    this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!),
-    );
-    this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$]).pipe(
-      mergeMap(([sdk, proposals]) =>
-        Promise.all(
-          proposals.map((proposal) =>
-            rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
-              console.log(err);
-              return;
-            }),
-          ),
-        ),
-      ),
-      map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
-    );
+    this.proposals$ = this.usecase.proposals$;
+    this.tallies$ = this.usecase.tallies$;
   }
 
   ngOnInit(): void {}

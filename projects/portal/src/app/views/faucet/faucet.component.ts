@@ -1,4 +1,3 @@
-import { Config } from '../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -20,7 +19,7 @@ export type FaucetOnSubmitEvent = {
   styleUrls: ['./faucet.component.css'],
 })
 export class FaucetComponent implements OnInit {
-  @Input() config?: Config | null;
+  @Input() faucetURL?: string | null;
   @Input() denoms?: string[] | null;
   @Input() address?: string | null;
   @Input() denom?: string | null;
@@ -48,15 +47,12 @@ export class FaucetComponent implements OnInit {
       return;
     }
     const amountInt = parseInt(amount);
-    const faucetURL = this.config?.extension?.faucet?.find(
-      (faucet) => faucet.denom == this.denom,
-    )?.faucetURL;
-    if (amountInt > 0 && faucetURL) {
+    if (amountInt > 0 && this.faucetURL) {
       this.postFaucetRequested.emit({
         address: address,
         amount: amountInt,
         denom: this.denom,
-        url: faucetURL,
+        url: this.faucetURL,
       });
     } else {
       this.matSnackBar.open('No Claims! At least 1 amount must be plus number!', undefined, {

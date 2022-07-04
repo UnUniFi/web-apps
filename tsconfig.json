@@ -48,6 +48,10 @@
       "dom",
       "esnext.asynciterable"
     ],
+    "types": [
+      "node",
+      "jest"
+    ],
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {

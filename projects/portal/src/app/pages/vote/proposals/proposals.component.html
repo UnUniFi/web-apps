@@ -1,5 +1,3 @@
-<view-proposals
-  [proposals]="proposals$ | async"
-  [tallies]="tallies$ | async"
-  (appClickVote)="onVoteProposal($event)"
-></view-proposals>
+<view-proposals [proposals]="paginatedProposals$ | async" [tallies]="tallies$ | async" [pageSize]="pageSize$ | async"
+  [pageNumber]="pageNumber$ | async" [pageLength]="pageLength$ | async" [pageSizeOptions]="pageSizeOptions"
+  (paginationChange)="appPaginationChanged($event)" (appClickVote)="onVoteProposal($event)"></view-proposals>

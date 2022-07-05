@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmosclient } from '@cosmos-client/core';
+import { PageEvent } from '@angular/material/paginator';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
@@ -23,14 +24,31 @@ export class ProposalsComponent implements OnInit {
   @Input()
   tallies?: (InlineResponse20027FinalTallyResult | undefined)[] | null;
 
+  @Input()
+  pageSizeOptions?: number[] | null;
+
+  @Input()
+  pageSize?: number | null;
+
+  @Input()
+  pageNumber?: number | null;
+
+  @Input()
+  pageLength?: number | null;
+
+  @Output()
+  paginationChange: EventEmitter<PageEvent>;
+
+
   @Output()
   appClickVote: EventEmitter<number>;
 
   constructor() {
+    this.paginationChange = new EventEmitter();
     this.appClickVote = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   unpackContent(value: any) {
     try {
@@ -38,6 +56,10 @@ export class ProposalsComponent implements OnInit {
     } catch {
       return null;
     }
+  }
+
+  onPaginationChange(pageEvent: PageEvent): void {
+    this.paginationChange.emit(pageEvent);
   }
 
   onClickVote(proposalID: string) {

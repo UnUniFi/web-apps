@@ -28,7 +28,6 @@ export class ProposalsComponent implements OnInit {
   defaultPageSize = this.pageSizeOptions[1];
   defaultPageNumber = 1;
 
-
   constructor(
     private router: Router,
     private readonly route: ActivatedRoute,
@@ -89,8 +88,6 @@ export class ProposalsComponent implements OnInit {
       ),
       map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
     );
-    this.proposals$.subscribe(x => console.log(x))
-    this.tallies$.subscribe(x => console.log(x))
   }
 
   ngOnInit(): void { }
@@ -113,7 +110,6 @@ export class ProposalsComponent implements OnInit {
   getPaginatedProposals(proposals: InlineResponse20027Proposals[], pageNumber: number, pageSize: number): InlineResponse20027Proposals[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
-    console.log(min, max)
     return proposals.filter((_, i) => min <= i && i < max).reverse()
   }
 }

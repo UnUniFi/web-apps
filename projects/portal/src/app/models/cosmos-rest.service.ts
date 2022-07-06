@@ -35,6 +35,13 @@ export class CosmosRestService {
     );
   }
 
+  getSyncing$(): Observable<boolean> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getSyncing(sdk)),
+      map((res) => res.data.syncing || false),
+    );
+  }
+
   allBalances$(
     cosmosAccAddress: cosmosclient.AccAddress,
   ): Observable<InlineResponseBalances[] | undefined> {

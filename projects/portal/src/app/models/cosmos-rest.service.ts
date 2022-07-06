@@ -30,10 +30,7 @@ export class CosmosRestService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
       map((res) => res.data.balances),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
+      catchError(this._handleError),
     );
   }
 
@@ -46,10 +43,12 @@ export class CosmosRestService {
         const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
         return (account && protoJSONToInstance(castProtoJSONOfProtoAny(account))) as InlineResponse;
       }),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
+      catchError(this._handleError),
     );
+  }
+
+  private _handleError(error: any): Observable<undefined> {
+    console.error(error);
+    return of(undefined);
   }
 }

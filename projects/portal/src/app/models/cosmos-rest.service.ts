@@ -8,6 +8,7 @@ import {
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
   InlineResponse20012 as InlineResponse,
   InlineResponse20022,
+  InlineResponse20027Proposals,
   InlineResponse20038,
   InlineResponse2003Balances as InlineResponseBalances,
   InlineResponse20041,
@@ -162,6 +163,14 @@ export class CosmosRestService {
         ),
       ),
       map((res) => res.data),
+      catchError(this._handleError),
+    );
+  }
+
+  getProposal$(proposalId: string): Observable<InlineResponse20027Proposals | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk, proposalId)),
+      map((res) => res.data.proposal),
       catchError(this._handleError),
     );
   }

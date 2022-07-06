@@ -1,14 +1,11 @@
-import { CosmosSDKService } from '../../../../models';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import {
-  InlineResponse20014Validators,
-  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
-} from '@cosmos-client/core/esm/openapi';
+import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { validatorType } from 'projects/portal/src/app/views/delegate/validators/validators.component';
-import { Observable, of, combineLatest } from 'rxjs';
-import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-validator',
@@ -23,7 +20,7 @@ export class ValidatorComponent implements OnInit {
 
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
     const validatorAddress$ = this.route.params.pipe(
       map((params) => params.address),
       map((addr) => cosmosclient.ValAddress.fromString(addr)),
@@ -32,10 +29,7 @@ export class ValidatorComponent implements OnInit {
       map((validatorAddress) => validatorAddress.toAccAddress()),
     );
 
-    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
-      map((result) => result.data),
-    );
+    this.validatorsList$ = this.cosmosRest.getValidators$();
 
     this.allValidatorsTokens$ = this.validatorsList$.pipe(
       map((validators) =>
@@ -80,5 +74,5 @@ export class ValidatorComponent implements OnInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

@@ -4,9 +4,12 @@ import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse as DelegationTotalRewardsResponse,
+  CosmosDistributionV1beta1QueryValidatorSlashesResponse as ValidatorSlashesResponse,
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
   InlineResponse20012 as InlineResponse,
+  InlineResponse20022,
   InlineResponse2003Balances as InlineResponseBalances,
+  QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, pluck, tap } from 'rxjs/operators';
@@ -71,6 +74,47 @@ export class CosmosRestService {
   ): Observable<DelegationTotalRewardsResponse | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.distribution.delegationTotalRewards(sdk, accAddress)),
+      map((res) => res.data),
+      catchError(this._handleError),
+    );
+  }
+
+  getValidatorCommission$(
+    validatorAddress: cosmosclient.ValAddress,
+  ): Observable<ValidatorCommissionResponse | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.distribution.validatorCommission(sdk, validatorAddress)),
+      map((res) => res.data),
+      catchError(this._handleError),
+    );
+  }
+
+  getValidatorOutstandingRewards$(
+    valAddress: cosmosclient.ValAddress,
+  ): Observable<InlineResponse20022 | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        cosmosclient.rest.distribution.validatorOutstandingRewards(sdk, valAddress),
+      ),
+      map((res) => res.data),
+      catchError(this._handleError),
+    );
+  }
+
+  getValidatorSlashes$(
+    valAddress: cosmosclient.ValAddress,
+    startingHeight?: string,
+    endingHeight?: string,
+  ): Observable<ValidatorSlashesResponse | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        cosmosclient.rest.distribution.validatorSlashes(
+          sdk,
+          valAddress,
+          startingHeight,
+          endingHeight,
+        ),
+      ),
       map((res) => res.data),
       catchError(this._handleError),
     );

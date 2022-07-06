@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import {
-  CosmosTxV1beta1GetTxsEventResponse,
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse as DelegationTotalRewardsResponse,
+  CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
   InlineResponse20012 as InlineResponse,
   InlineResponse2003Balances as InlineResponseBalances,
 } from '@cosmos-client/core/esm/openapi';
@@ -48,7 +49,7 @@ export class CosmosRestService {
     );
   }
 
-  getAccountTxsEvent$(address: string): Observable<CosmosTxV1beta1GetTxsEventResponse | undefined> {
+  getAccountTxsEvent$(address: string): Observable<TxsEventResponse | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         cosmosclient.rest.tx.getTxsEvent(
@@ -60,6 +61,16 @@ export class CosmosRestService {
           true,
         ),
       ),
+      map((res) => res.data),
+      catchError(this._handleError),
+    );
+  }
+
+  getDelegationTotalRewards$(
+    accAddress: cosmosclient.AccAddress,
+  ): Observable<DelegationTotalRewardsResponse | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.distribution.delegationTotalRewards(sdk, accAddress)),
       map((res) => res.data),
       catchError(this._handleError),
     );

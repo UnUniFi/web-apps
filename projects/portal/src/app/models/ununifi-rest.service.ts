@@ -4,7 +4,11 @@ import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import { InlineResponse200, InlineResponse2002Params } from 'ununifi-client/esm/openapi';
+import {
+  InlineResponse200,
+  InlineResponse2002Params,
+  InlineResponse200Auctions,
+} from 'ununifi-client/esm/openapi';
 
 @Injectable({ providedIn: 'root' })
 export class UnunifiRestService {
@@ -30,6 +34,13 @@ export class UnunifiRestService {
         ununifi.rest.auction.allAuctions(sdk, undefined, paginationOffset, paginationLimit, true),
       ),
       map((res) => res.data),
+    );
+  }
+
+  getAuction$(id: string): Observable<InlineResponse200Auctions | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.auction.auction(sdk, id)),
+      map((res) => res.data.auction),
     );
   }
 }

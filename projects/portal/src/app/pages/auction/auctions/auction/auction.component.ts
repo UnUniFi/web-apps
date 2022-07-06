@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable } from 'rxjs';
+import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
+import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 
@@ -17,12 +17,11 @@ export class AuctionComponent implements OnInit {
   endTime$: Observable<Date | undefined>;
   maxEndTime$: Observable<Date | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private route: ActivatedRoute, private ununifiRest: UnunifiRestService) {
     this.auctionID$ = this.route.params.pipe(map((params) => params.auction_id));
-    this.auction$ = combineLatest([this.cosmosSDK.sdk$, this.auctionID$]).pipe(
-      mergeMap(([sdk, id]) =>
-        ununifi.rest.auction.auction(sdk.rest, id).then((res) => res.data.auction),
-      ),
+
+    this.auction$ = this.auctionID$.pipe(
+      mergeMap((id) => this.ununifiRest.getAuction$(id)),
       map((auction) => {
         const anyAuction = auction as {
           base_auction: { end_time: string; max_end_time: string };
@@ -32,10 +31,12 @@ export class AuctionComponent implements OnInit {
             seconds: Date.parse(anyAuction.base_auction.end_time),
             nanos: 0,
           });
-          anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
-            seconds: Date.parse(anyAuction.base_auction.max_end_time),
-            nanos: 0,
-          });
+          anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject(
+            {
+              seconds: Date.parse(anyAuction.base_auction.max_end_time),
+              nanos: 0,
+            },
+          );
           return anyAuction;
         };
         const unpackAuction = cosmosclient.codec.protoJSONToInstance(
@@ -71,5 +72,5 @@ export class AuctionComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

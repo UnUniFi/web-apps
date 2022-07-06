@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import {
+  CosmosTxV1beta1GetTxsEventResponse,
   InlineResponse20012 as InlineResponse,
   InlineResponse2003Balances as InlineResponseBalances,
 } from '@cosmos-client/core/esm/openapi';
@@ -43,6 +44,23 @@ export class CosmosRestService {
         const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
         return (account && protoJSONToInstance(castProtoJSONOfProtoAny(account))) as InlineResponse;
       }),
+      catchError(this._handleError),
+    );
+  }
+
+  getAccountTxsEvent$(address: string): Observable<CosmosTxV1beta1GetTxsEventResponse | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        cosmosclient.rest.tx.getTxsEvent(
+          sdk,
+          [`message.sender='${address}'`],
+          undefined,
+          undefined,
+          undefined,
+          true,
+        ),
+      ),
+      map((res) => res.data),
       catchError(this._handleError),
     );
   }

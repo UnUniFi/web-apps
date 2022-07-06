@@ -1,9 +1,8 @@
-import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -15,28 +14,17 @@ export class TxsComponent implements OnInit {
   address$: Observable<string | undefined>;
   txsWithPagination$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
     this.address$ = this.route.params.pipe(map((params) => params.address));
-    const sdk$ = this.cosmosSDK.sdk$;
-    this.txsWithPagination$ = combineLatest([sdk$, this.address$]).pipe(
-      mergeMap(([sdk, address]) => {
-        return cosmosclient.rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.sender='${address}'`],
-            undefined,
-            undefined,
-            undefined,
-            true,
-          )
-          .then((res) => res.data)
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
+    this.txsWithPagination$ = this.address$.pipe(
+      mergeMap((address) => {
+        if (address === undefined) {
+          return of(undefined);
+        }
+        return this.cosmosRest.getAccountTxsEvent$(address);
       }),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -8,7 +8,7 @@ import {
   validatePrivateStoredWallet,
   WalletType,
 } from '../../common';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 describe('validatePrivateStoredWallet', () => {
   const setup = async () => {

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { ununifi, google, rest } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'app-auction',
@@ -13,7 +13,7 @@ import { ununifi, google, rest } from 'ununifi-client';
 })
 export class AuctionComponent implements OnInit {
   auctionID$: Observable<string>;
-  auction$: Observable<ununifi.auction.CollateralAuction | undefined>;
+  auction$: Observable<ununifi.proto.ununifi.auction.CollateralAuction | undefined>;
   endTime$: Observable<Date | undefined>;
   maxEndTime$: Observable<Date | undefined>;
 
@@ -21,18 +21,18 @@ export class AuctionComponent implements OnInit {
     this.auctionID$ = this.route.params.pipe(map((params) => params.auction_id));
     this.auction$ = combineLatest([this.cosmosSDK.sdk$, this.auctionID$]).pipe(
       mergeMap(([sdk, id]) =>
-        rest.ununifi.auction.auction(sdk.rest, id).then((res) => res.data.auction),
+        ununifi.rest.auction.auction(sdk.rest, id).then((res) => res.data.auction),
       ),
       map((auction) => {
         const anyAuction = auction as {
           base_auction: { end_time: string; max_end_time: string };
         };
         const parseAuction = (anyAuction: any): { type_url?: string; value?: string } => {
-          anyAuction.base_auction.end_time = google.protobuf.Timestamp.fromObject({
+          anyAuction.base_auction.end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
             seconds: Date.parse(anyAuction.base_auction.end_time),
             nanos: 0,
           });
-          anyAuction.base_auction.max_end_time = google.protobuf.Timestamp.fromObject({
+          anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
             seconds: Date.parse(anyAuction.base_auction.max_end_time),
             nanos: 0,
           });
@@ -41,7 +41,7 @@ export class AuctionComponent implements OnInit {
         const unpackAuction = cosmosclient.codec.protoJSONToInstance(
           cosmosclient.codec.castProtoJSONOfProtoAny(parseAuction(anyAuction)),
         );
-        if (!(unpackAuction instanceof ununifi.auction.CollateralAuction)) {
+        if (!(unpackAuction instanceof ununifi.proto.ununifi.auction.CollateralAuction)) {
           return;
         }
         return unpackAuction;
@@ -71,5 +71,5 @@ export class AuctionComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class TxsComponent implements OnInit {
     const sdk$ = this.cosmosSDK.sdk$;
     this.txsWithPagination$ = combineLatest([sdk$, this.address$]).pipe(
       mergeMap(([sdk, address]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.sender='${address}'`],
@@ -38,5 +38,5 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'view-mint',
@@ -8,10 +8,10 @@ import { ununifi } from 'ununifi-client';
 })
 export class MintComponent implements OnInit {
   @Input()
-  collateralParams?: ununifi.cdp.ICollateralParam[] | null;
+  collateralParams?: ununifi.proto.ununifi.cdp.ICollateralParam[] | null;
   @Input()
-  debtParams?: ununifi.cdp.IDebtParam[] | null;
-  constructor() {}
+  debtParams?: ununifi.proto.ununifi.cdp.IDebtParam[] | null;
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

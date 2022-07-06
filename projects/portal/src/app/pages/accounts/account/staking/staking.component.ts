@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorDelegationsResponseIsResponseTypeForTheQueryValidatorDelegationsRPCMethod,
@@ -58,7 +58,7 @@ export class StakingComponent implements OnInit {
         if (accAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
+        return cosmosclient.rest.distribution
           .delegationTotalRewards(sdk.rest, accAddress)
           .then((res) => res.data);
       }),
@@ -66,11 +66,11 @@ export class StakingComponent implements OnInit {
 
     /*
     this.eachRewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => rest.cosmos.distribution.delegationRewards(sdk.rest, accAddress, valAddress)),
+      mergeMap(([sdk, accAddress, valAddress]) => cosmosclient.rest.cosmos.distribution.delegationRewards(sdk.rest, accAddress, valAddress)),
       map((res) => res.data),
     );
     */
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

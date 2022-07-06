@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../../../models';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20014Validators,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
@@ -33,7 +33,7 @@ export class ValidatorComponent implements OnInit {
     );
 
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
       map((result) => result.data),
     );
 
@@ -80,5 +80,5 @@ export class ValidatorComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

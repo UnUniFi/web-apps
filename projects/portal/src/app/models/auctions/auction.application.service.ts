@@ -6,7 +6,7 @@ import { AuctionService } from './auction.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
@@ -21,12 +21,12 @@ export class AuctionApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly auction: AuctionService,
     private readonly walletService: WalletService,
-  ) {}
+  ) { }
 
   async placeBid(
     auctionID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -43,8 +43,8 @@ export class AuctionApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 

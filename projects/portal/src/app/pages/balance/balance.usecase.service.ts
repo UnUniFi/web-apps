@@ -8,7 +8,7 @@ import {
   convertUnknownAccountToTypedAccount,
 } from './../../utils/converter';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -69,7 +69,7 @@ export class BalanceUsecaseService {
       map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
     );
   }
-  get balances$(): Observable<proto.cosmos.base.v1beta1.ICoin[] | null | undefined> {
+  get balances$(): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined> {
     return this.cosmosAccAddress$.pipe(
       mergeMap((cosmosAccAddress) => {
         if (!cosmosAccAddress) {
@@ -81,12 +81,12 @@ export class BalanceUsecaseService {
   }
   get faucets$(): Observable<
     | {
-        hasFaucet: boolean;
-        faucetURL: string;
-        denom: string;
-        creditAmount: number;
-        maxCredit: number;
-      }[]
+      hasFaucet: boolean;
+      faucetURL: string;
+      denom: string;
+      creditAmount: number;
+      maxCredit: number;
+    }[]
     | undefined
   > {
     return combineLatest([this.config$, this.balances$]).pipe(

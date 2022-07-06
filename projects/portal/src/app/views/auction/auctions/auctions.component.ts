@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'view-auctions',
@@ -9,7 +9,7 @@ import { ununifi } from 'ununifi-client';
 })
 export class AuctionsComponent implements OnInit {
   @Input()
-  auctions?: (ununifi.auction.CollateralAuction | undefined)[] | null;
+  auctions?: (ununifi.proto.ununifi.auction.CollateralAuction | undefined)[] | null;
 
   @Input()
   pageSizeOptions?: number[] | null;
@@ -27,7 +27,7 @@ export class AuctionsComponent implements OnInit {
     this.paginationChange = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onPaginationChange(pageEvent: PageEvent): void {
     this.paginationChange.emit(pageEvent);

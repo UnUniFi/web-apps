@@ -3,7 +3,7 @@ import { BankApplicationService } from '../../../../models/cosmos/bank.applicati
 import { SendOnSubmitEvent } from '../../../../views/cosmos/bank/send/send.component';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -17,9 +17,9 @@ import { map, mergeMap, filter } from 'rxjs/operators';
 })
 export class SendComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  amount$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  amount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
@@ -36,7 +36,7 @@ export class SendComponent implements OnInit {
     );
 
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
       map((result) => result.data.balances),
     );
 
@@ -52,7 +52,7 @@ export class SendComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmit($event: SendOnSubmitEvent) {
     if ($event.amount.length === 0) {

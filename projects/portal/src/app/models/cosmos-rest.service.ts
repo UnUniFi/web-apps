@@ -1,6 +1,6 @@
 import { CosmosSDKService } from './cosmos-sdk.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import {
   InlineResponse20012 as InlineResponse,
@@ -19,7 +19,7 @@ export class CosmosRestService {
 
   getNodeInfo$(): Observable<InlineResponse> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk)),
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getNodeInfo(sdk)),
       map((res) => res.data),
     );
   }
@@ -28,7 +28,7 @@ export class CosmosRestService {
     cosmosAccAddress: cosmosclient.AccAddress,
   ): Observable<InlineResponseBalances[] | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => rest.bank.allBalances(sdk, cosmosAccAddress)),
+      mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
       map((res) => res.data.balances),
       catchError((error) => {
         console.error(error);
@@ -39,7 +39,7 @@ export class CosmosRestService {
 
   getAccount$(cosmosAccAddress: cosmosclient.AccAddress): Observable<InlineResponse | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => rest.auth.account(sdk, cosmosAccAddress)),
+      mergeMap((sdk) => cosmosclient.rest.auth.account(sdk, cosmosAccAddress)),
       tap((res) => console.log(res.data.account)),
       map((res) => res.data.account),
       map((account) => {

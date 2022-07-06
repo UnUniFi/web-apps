@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
@@ -30,7 +30,7 @@ export class ProposalsComponent implements OnInit {
     this.appClickVote = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   unpackContent(value: any) {
     try {

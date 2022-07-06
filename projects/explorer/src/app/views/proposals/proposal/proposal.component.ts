@@ -1,6 +1,6 @@
 import { ProposalContent } from '../proposals.component';
 import { Component, Input, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027Proposals,
   InlineResponse20029Deposits,
@@ -34,9 +34,9 @@ export class ProposalComponent implements OnInit {
   @Input()
   votingParams?: InlineResponse20026VotingParams | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   unpackContent(value: any) {
     try {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryValidatorSlashesResponse,
   InlineResponse20022,
@@ -57,7 +57,7 @@ export class DistributionComponent implements OnInit {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+        return cosmosclient.rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
       }),
     );
 
@@ -66,7 +66,7 @@ export class DistributionComponent implements OnInit {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
+        return cosmosclient.rest.distribution
           .validatorOutstandingRewards(sdk.rest, valAddress)
           .then((res) => res.data);
       }),
@@ -77,12 +77,12 @@ export class DistributionComponent implements OnInit {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
+        return cosmosclient.rest.distribution
           .validatorSlashes(sdk.rest, valAddress, '1', '2') // Todo: '2' must be fixed to latest block height and add pagination support!
           .then((res) => res.data);
       }),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

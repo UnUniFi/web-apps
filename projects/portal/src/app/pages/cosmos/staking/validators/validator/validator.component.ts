@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 import { Observable, of, combineLatest } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class ValidatorComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, validatorAddress$]);
     this.validator$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.staking.validator(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.validator(sdk.rest, address)),
       map((result) => result.data.validator!),
       catchError((error) => {
         console.error(error);
@@ -32,5 +32,5 @@ export class ValidatorComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

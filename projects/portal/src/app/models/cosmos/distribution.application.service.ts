@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20050,
   InlineResponse20041Validators,
@@ -28,7 +28,7 @@ export class DistributionApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly distribution: DistributionService,
     private readonly walletService: WalletService,
-  ) {}
+  ) { }
 
   async openWithdrawDelegatorRewardFormDialog(
     validator: InlineResponse20041Validators,
@@ -52,7 +52,7 @@ export class DistributionApplicationService {
 
   async withdrawDelegatorReward(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -69,8 +69,8 @@ export class DistributionApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -142,7 +142,7 @@ export class DistributionApplicationService {
 
   async withdrawValidatorCommission(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -159,8 +159,8 @@ export class DistributionApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 

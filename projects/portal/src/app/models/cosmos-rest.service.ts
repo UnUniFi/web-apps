@@ -10,6 +10,7 @@ import {
   InlineResponse20022,
   InlineResponse2003Balances as InlineResponseBalances,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
+  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, pluck, tap } from 'rxjs/operators';
@@ -76,6 +77,13 @@ export class CosmosRestService {
       mergeMap((sdk) => cosmosclient.rest.distribution.delegationTotalRewards(sdk, accAddress)),
       map((res) => res.data),
       catchError(this._handleError),
+    );
+  }
+
+  getValidators$(): Observable<ValidatorsResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk)),
+      map((res) => res.data),
     );
   }
 

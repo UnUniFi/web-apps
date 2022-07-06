@@ -8,7 +8,9 @@ import {
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
   InlineResponse20012 as InlineResponse,
   InlineResponse20022,
+  InlineResponse20038,
   InlineResponse2003Balances as InlineResponseBalances,
+  InlineResponse20041,
   InlineResponse20041Validators as Validators,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
@@ -78,6 +80,20 @@ export class CosmosRestService {
       mergeMap((sdk) => cosmosclient.rest.distribution.delegationTotalRewards(sdk, accAddress)),
       map((res) => res.data),
       catchError(this._handleError),
+    );
+  }
+
+  getDelegatorDelegations$(address: cosmosclient.AccAddress): Observable<InlineResponse20038> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.delegatorDelegations(sdk, address)),
+      map((res) => res.data),
+    );
+  }
+
+  getDelegatorValidators$(address: cosmosclient.AccAddress): Observable<InlineResponse20041> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.delegatorValidators(sdk, address)),
+      map((res) => res.data),
     );
   }
 

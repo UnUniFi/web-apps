@@ -9,6 +9,7 @@ import {
   InlineResponse20012 as InlineResponse,
   InlineResponse20022,
   InlineResponse2003Balances as InlineResponseBalances,
+  InlineResponse20041Validators as Validators,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
 } from '@cosmos-client/core/esm/openapi';
@@ -84,6 +85,14 @@ export class CosmosRestService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk)),
       map((res) => res.data),
+    );
+  }
+
+  getValidator$(valAddress: cosmosclient.ValAddress): Observable<Validators | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.validator(sdk, valAddress)),
+      map((res) => res.data.validator),
+      catchError(this._handleError),
     );
   }
 

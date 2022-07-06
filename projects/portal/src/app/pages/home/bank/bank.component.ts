@@ -1,10 +1,8 @@
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import { QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable, timer } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bank',
@@ -14,16 +12,10 @@ import { map, mergeMap } from 'rxjs/operators';
 export class BankComponent implements OnInit {
   totalSupply$: Observable<QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod>;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
-  ) {
+  constructor(private readonly cosmosRest: CosmosRestService) {
     const timer$ = timer(0, 60 * 60 * 1000);
-    const combined$ = combineLatest([timer$, this.cosmosSDK.sdk$]).pipe(map(([_, sdk]) => sdk));
-    this.totalSupply$ = combined$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.bank.totalSupply(sdk.rest).then((res) => res.data)),
-    );
+    this.totalSupply$ = timer$.pipe(mergeMap(() => this.cosmosRest.getTotalSupply$()));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -3,9 +3,13 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import {
+  CosmosDistributionV1beta1QueryCommunityPoolResponse as CommunityPoolResponse,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse as DelegationTotalRewardsResponse,
   CosmosDistributionV1beta1QueryValidatorSlashesResponse as ValidatorSlashesResponse,
+  CosmosMintV1beta1QueryAnnualProvisionsResponse as AnnualProvisionsResponse,
+  CosmosMintV1beta1QueryInflationResponse as InflationResponse,
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
+  InlineResponse20010,
   InlineResponse20012 as InlineResponse,
   InlineResponse20022,
   InlineResponse20027Proposals,
@@ -14,6 +18,7 @@ import {
   InlineResponse20041,
   InlineResponse20041Validators as Validators,
   InlineResponse20047,
+  QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod as TotalSupplyResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
 } from '@cosmos-client/core/esm/openapi';
@@ -42,6 +47,13 @@ export class CosmosRestService {
     );
   }
 
+  getLatestBlock$(): Observable<InlineResponse20010> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk)),
+      map((res) => res.data),
+    );
+  }
+
   allBalances$(
     cosmosAccAddress: cosmosclient.AccAddress,
   ): Observable<InlineResponseBalances[] | undefined> {
@@ -49,6 +61,13 @@ export class CosmosRestService {
       mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
       map((res) => res.data.balances),
       catchError(this._handleError),
+    );
+  }
+
+  getTotalSupply$(): Observable<TotalSupplyResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.bank.totalSupply(sdk)),
+      map((res) => res.data),
     );
   }
 
@@ -79,6 +98,26 @@ export class CosmosRestService {
       ),
       map((res) => res.data),
       catchError(this._handleError),
+    );
+  }
+
+  getSelectedTxTypeEvent$(
+    selectedTxType: string,
+    paginationOffset?: bigint | undefined,
+    paginationLimit?: bigint | undefined,
+  ): Observable<TxsEventResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        cosmosclient.rest.tx.getTxsEvent(
+          sdk,
+          [`message.module='${selectedTxType}'`],
+          undefined,
+          paginationOffset,
+          paginationLimit,
+          true,
+        ),
+      ),
+      map((res) => res.data),
     );
   }
 
@@ -179,6 +218,26 @@ export class CosmosRestService {
       mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk, proposalId)),
       map((res) => res.data.proposal),
       catchError(this._handleError),
+    );
+  }
+
+  getAnnualProvisions$(): Observable<AnnualProvisionsResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.mint.annualProvisions(sdk)),
+      map((res) => res.data),
+    );
+  }
+  getInflation$(): Observable<InflationResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.mint.inflation(sdk)),
+      map((res) => res.data),
+    );
+  }
+
+  getCommunityPool$(): Observable<CommunityPoolResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.distribution.communityPool(sdk)),
+      map((res) => res.data),
     );
   }
 

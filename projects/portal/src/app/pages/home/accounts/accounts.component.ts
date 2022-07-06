@@ -1,9 +1,9 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Key } from '../../../models/keys/key.model';
 import { KeyService } from '../../../models/keys/key.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { combineLatest, from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -18,7 +18,7 @@ export class AccountsComponent implements OnInit {
   balances1$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   balances2$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
-  constructor(private readonly key: KeyService, private cosmosSDK: CosmosSDKService) {
+  constructor(private readonly key: KeyService, private cosmosRest: CosmosRestService) {
     this.keys$ = from(this.key.list());
     const pubKeys$ = this.keys$.pipe(
       filter((keys) => !!keys),
@@ -28,51 +28,33 @@ export class AccountsComponent implements OnInit {
       map((keys) => keys.map((key) => cosmosclient.AccAddress.fromPublicKey(key))),
     );
 
-    this.balances0$ = combineLatest([this.cosmosSDK.sdk$, this.accAddresses$]).pipe(
-      mergeMap(([sdk, addresses]) => {
-        if (addresses === undefined) {
+    this.balances0$ = this.accAddresses$.pipe(
+      mergeMap((addresses) => {
+        if (addresses === undefined || addresses.length === 0) {
           return [];
         }
-        if (addresses[0] === undefined) {
-          return [];
-        }
-        return cosmosclient.rest.bank
-          .allBalances(sdk.rest, addresses[0])
-          .then((res) => res.data.balances || [])
-          .catch((_) => []);
+        return this.cosmosRest.allBalances$(addresses[0]).pipe(map((res) => res || []));
       }),
     );
 
-    this.balances1$ = combineLatest([this.cosmosSDK.sdk$, this.accAddresses$]).pipe(
-      mergeMap(([sdk, addresses]) => {
-        if (addresses === undefined) {
+    this.balances1$ = this.accAddresses$.pipe(
+      mergeMap((addresses) => {
+        if (addresses === undefined || addresses[1] === undefined) {
           return [];
         }
-        if (addresses[1] === undefined) {
-          return [];
-        }
-        return cosmosclient.rest.bank
-          .allBalances(sdk.rest, addresses[1])
-          .then((res) => res.data.balances || [])
-          .catch((_) => []);
+        return this.cosmosRest.allBalances$(addresses[1]).pipe(map((res) => res || []));
       }),
     );
 
-    this.balances2$ = combineLatest([this.cosmosSDK.sdk$, this.accAddresses$]).pipe(
-      mergeMap(([sdk, addresses]) => {
-        if (addresses === undefined) {
+    this.balances2$ = this.accAddresses$.pipe(
+      mergeMap((addresses) => {
+        if (addresses === undefined || addresses[2] === undefined) {
           return [];
         }
-        if (addresses[2] === undefined) {
-          return [];
-        }
-        return cosmosclient.rest.bank
-          .allBalances(sdk.rest, addresses[2])
-          .then((res) => res.data.balances || [])
-          .catch((_) => []);
+        return this.cosmosRest.allBalances$(addresses[2]).pipe(map((res) => res || []));
       }),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

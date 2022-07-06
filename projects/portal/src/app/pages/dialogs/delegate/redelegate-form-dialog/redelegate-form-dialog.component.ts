@@ -6,14 +6,14 @@ import {
   InlineResponse20038,
   InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { InactiveValidatorConfirmDialogComponent } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
 import { RedelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -35,27 +35,23 @@ export class RedelegateFormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public readonly data: InlineResponse20041Validators,
     public matDialogRef: MatDialogRef<RedelegateFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
-    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
-      map((result) => result.data.validators),
-    );
+    this.validatorsList$ = this.cosmosRest.getValidators$().pipe(map((res) => res.validators));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
-    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((res) => res.data),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
     this.delegateAmount$ = this.delegations$.pipe(
       map(
@@ -66,11 +62,7 @@ export class RedelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.allBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');
@@ -81,7 +73,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: RedelegateOnSubmitEvent) {
     const validatorStatus = $event.validatorList.find(

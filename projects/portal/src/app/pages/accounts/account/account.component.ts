@@ -1,9 +1,9 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { combineLatest, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -19,12 +19,12 @@ export class AccountComponent implements OnInit {
     | unknown
     | undefined
   >;
-  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     private route: ActivatedRoute,
-    private cosmosSDK: CosmosSDKService,
     private snackBar: MatSnackBar,
+    private cosmosRest: CosmosRestService,
   ) {
     this.address$ = this.route.params.pipe(
       map((params) => params.address),
@@ -39,37 +39,23 @@ export class AccountComponent implements OnInit {
         }
       }),
     );
-
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, this.address$]);
-
-    this.account$ = combined$.pipe(
-      mergeMap(([sdk, address]) => {
+    this.account$ = this.address$.pipe(
+      mergeMap((address) => {
         if (address === undefined) {
           return of(undefined);
         }
-        return cosmosclient.rest.auth
-          .account(sdk.rest, address)
-          .then((res) =>
-            cosmosclient.codec.protoJSONToInstance(
-              cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
-            ),
-          )
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
+        return this.cosmosRest.getAccount$(address);
       }),
     );
-
-    this.balances$ = combined$.pipe(
-      mergeMap(([sdk, address]) => {
+    this.balances$ = this.address$.pipe(
+      mergeMap((address) => {
         if (address === undefined) {
           return of([]);
         }
-        return cosmosclient.rest.bank.allBalances(sdk.rest, address).then((res) => res.data.balances || []);
+        return this.cosmosRest.allBalances$(address).pipe(map((balances) => balances || []));
       }),
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

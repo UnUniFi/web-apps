@@ -20,7 +20,7 @@ export class ProposalsComponent implements OnInit {
   paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
   tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
-  pageSizeOptions = [1, 2, 3];
+  pageSizeOptions = [5, 10, 15];
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
   pageLength$: Observable<number | undefined>;

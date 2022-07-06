@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038,
   InlineResponse20041Validators,
@@ -25,10 +25,10 @@ export class RedelegateFormDialogComponent implements OnInit {
   validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038>;
-  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: InlineResponse20041Validators | undefined;
 
   constructor(
@@ -44,7 +44,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   ) {
     this.validator = data;
     this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk.rest)),
       map((result) => result.data.validators),
     );
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -54,7 +54,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     );
 
     this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
       map((res) => res.data),
     );
     this.delegateAmount$ = this.delegations$.pipe(
@@ -68,7 +68,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     );
 
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
       map((result) => result.data.balances),
     );
     this.uguuBalance$ = this.coins$.pipe(
@@ -81,7 +81,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmit($event: RedelegateOnSubmitEvent) {
     const validatorStatus = $event.validatorList.find(

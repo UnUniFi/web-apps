@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038,
   InlineResponse20041Validators,
@@ -28,7 +28,7 @@ export class DelegateMenuDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038>;
   delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
-  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
+  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<
     CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
@@ -57,7 +57,7 @@ export class DelegateMenuDialogComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
     this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
       map((res) => res.data),
     );
     this.delegateAmount$ = this.delegations$.pipe(
@@ -115,7 +115,7 @@ export class DelegateMenuDialogComponent implements OnInit {
         if (accAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
+        return cosmosclient.rest.distribution
           .delegationTotalRewards(sdk.rest, accAddress)
           .then((res) => res.data);
       }),
@@ -125,7 +125,7 @@ export class DelegateMenuDialogComponent implements OnInit {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+        return cosmosclient.rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
       }),
     );
     this.isValidator$ = valAddress$.pipe(
@@ -138,7 +138,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onSubmitDelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();

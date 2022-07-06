@@ -2,7 +2,7 @@ import { GovApplicationService } from '../../../models/cosmos/gov.application.se
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
@@ -36,7 +36,7 @@ export class ProposalsComponent implements OnInit {
     private readonly govAppService: GovApplicationService,
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
       map((result) => result.data.proposals!),
     );
     this.pageLength$ = this.proposals$.pipe(
@@ -80,7 +80,7 @@ export class ProposalsComponent implements OnInit {
       mergeMap(([sdk, proposals, pageNumber, pageSize]) =>
         Promise.all(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
-            rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
+            cosmosclient.rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
               console.log(err);
               return;
             }),

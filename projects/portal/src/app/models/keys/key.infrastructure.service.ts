@@ -3,7 +3,7 @@ import { DbService } from '../db.service';
 import { Key, KeyType } from './key.model';
 import { IKeyInfrastructure } from './key.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import Dexie from 'dexie';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
     const privKeyBuffer = Buffer.from(privateKey);
     switch (type) {
       case KeyType.secp256k1:
-        return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
+        return new cosmosclient.proto.cosmos.crypto.secp256k1.PrivKey({ key: privKeyBuffer });
       case KeyType.ed25519:
         throw Error('not supported yet');
       case KeyType.sr25519:
@@ -34,7 +34,7 @@ export class KeyInfrastructureService implements IKeyInfrastructure {
     const pubKeyBuffer = Buffer.from(publicKey, 'hex');
     switch (type) {
       case KeyType.secp256k1:
-        return new proto.cosmos.crypto.secp256k1.PubKey({ key: pubKeyBuffer });
+        return new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({ key: pubKeyBuffer });
       case KeyType.ed25519:
         throw Error('not supported yet');
       case KeyType.sr25519:

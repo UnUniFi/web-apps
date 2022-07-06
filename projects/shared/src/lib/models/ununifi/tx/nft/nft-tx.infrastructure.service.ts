@@ -5,7 +5,7 @@ import { CosmosWallet } from '../../../wallets/wallet.model';
 import { MsgListNftData } from './nft-tx.model';
 import { INftTxInfrastructureService } from './nft-tx.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
@@ -15,14 +15,14 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   // List NFT
   async listNft(
     msgListNftData: MsgListNftData,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -47,14 +47,14 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
   async simulateToListNft(
     msgListNftData: MsgListNftData,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -70,8 +70,8 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
   private async buildListNftTxBuilder(
     msgListNftData: MsgListNftData,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -92,11 +92,11 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
 
   private buildMsgListNft(
     msgListNftData: MsgListNftData,
-  ): proto.cosmos.staking.v1beta1.MsgDelegate {
+  ): cosmosclient.proto.cosmos.staking.v1beta1.MsgDelegate {
     // Todo: Currently dummy msgDelegate is created. Need to fix to ununifi.nftmarket.MsgListNft
     // Todo: After install new ununifi-client version, enable following implementation and remove current implementation.
     // const msgListNft = new ununifi.nftmarket.MsgListNft(msgListNftData);
-    const msgListNft = new proto.cosmos.staking.v1beta1.MsgDelegate({
+    const msgListNft = new cosmosclient.proto.cosmos.staking.v1beta1.MsgDelegate({
       delegator_address: '',
       validator_address: '',
       amount: {

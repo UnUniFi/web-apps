@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -19,9 +19,9 @@ import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 export class DepositFormDialogComponent implements OnInit {
   proposal$: Observable<InlineResponse20027Proposals | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   proposalID: number | undefined;
 
   constructor(
@@ -35,7 +35,7 @@ export class DepositFormDialogComponent implements OnInit {
   ) {
     this.proposalID = data;
     this.proposal$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposal(sdk.rest, String(this.proposalID))),
+      mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk.rest, String(this.proposalID))),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);
@@ -49,7 +49,7 @@ export class DepositFormDialogComponent implements OnInit {
     );
 
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
       map((result) => result.data.balances),
     );
     this.uguuBalance$ = this.coins$.pipe(
@@ -62,7 +62,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmit($event: DepositOnSubmitEvent) {
     if (!this.proposalID) {

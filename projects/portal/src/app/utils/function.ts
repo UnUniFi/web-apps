@@ -1,10 +1,10 @@
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp } from 'ununifi-client/esm/openapi';
 
 export const getWithdrawLimit = (
   cdp: InlineResponse2004Cdp,
-  cdpParams: ununifi.cdp.IParams,
-  spotPrice: ununifi.pricefeed.ICurrentPrice,
+  cdpParams: ununifi.proto.ununifi.cdp.IParams,
+  spotPrice: ununifi.proto.ununifi.pricefeed.ICurrentPrice,
 ) => {
   const collateralType = cdp.type;
   const currentCollateralAmount = Number.parseInt(cdp.collateral?.amount!);
@@ -35,8 +35,8 @@ export const getWithdrawLimit = (
 
 export const getIssueLimit = (
   cdp: InlineResponse2004Cdp,
-  cdpParams: ununifi.cdp.IParams,
-  liquidationPrice: ununifi.pricefeed.ICurrentPrice,
+  cdpParams: ununifi.proto.ununifi.cdp.IParams,
+  liquidationPrice: ununifi.proto.ununifi.pricefeed.ICurrentPrice,
 ) => {
   const currentCollateralAmount = Number.parseInt(cdp.collateral?.amount!);
   const currentPrincipalAmount = Number.parseInt(cdp.principal?.amount!);
@@ -69,10 +69,10 @@ export const getIssueLimit = (
 };
 
 export const getCreateLimit = (
-  cdpParams: ununifi.cdp.IParams,
+  cdpParams: ununifi.proto.ununifi.cdp.IParams,
   InputCollateralAmount: number,
   selectedCollateralType: string,
-  liquidationPrice: ununifi.pricefeed.ICurrentPrice,
+  liquidationPrice: ununifi.proto.ununifi.pricefeed.ICurrentPrice,
 ) => {
   const collateralParams = cdpParams.collateral_params?.find(
     (param) => param.type === selectedCollateralType,

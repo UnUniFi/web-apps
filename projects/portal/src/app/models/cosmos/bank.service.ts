@@ -3,7 +3,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
@@ -13,21 +13,21 @@ export class BankService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   async simulateToSend(
-    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -43,12 +43,12 @@ export class BankService {
   }
 
   async send(
-    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -76,12 +76,12 @@ export class BankService {
   }
 
   async buildSendTxBuilder(
-    fromAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const fromAddress = cosmosclient.AccAddress.fromString(fromAccount.address);
 
@@ -102,9 +102,9 @@ export class BankService {
   buildMsgSend(
     fromAddress: cosmosclient.AccAddress,
     toAddress: cosmosclient.AccAddress,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-  ): proto.cosmos.bank.v1beta1.MsgSend {
-    const msgSend = new proto.cosmos.bank.v1beta1.MsgSend({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+  ): cosmosclient.proto.cosmos.bank.v1beta1.MsgSend {
+    const msgSend = new cosmosclient.proto.cosmos.bank.v1beta1.MsgSend({
       from_address: fromAddress.toString(),
       to_address: toAddress.toString(),
       amount,

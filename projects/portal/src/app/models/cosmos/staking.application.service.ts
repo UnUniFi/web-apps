@@ -16,7 +16,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20041Validators,
   InlineResponse20050,
@@ -30,8 +30,8 @@ export interface InterfaceCreateValidatorSimpleOptions {
   disableSimulate?: boolean;
 }
 export interface InterfaceGasAndFee {
-  gas: proto.cosmos.base.v1beta1.ICoin;
-  fee: proto.cosmos.base.v1beta1.ICoin | null;
+  gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 }
 
 @Injectable({
@@ -46,7 +46,7 @@ export class StakingApplicationService {
     private readonly staking: StakingService,
     private readonly walletService: WalletService,
     private readonly walletApplicationService: WalletApplicationService,
-  ) {}
+  ) { }
 
   async openDelegateMenuDialog(validator: InlineResponse20041Validators): Promise<void> {
     await this.dialog
@@ -81,7 +81,7 @@ export class StakingApplicationService {
 
   async handleSimulateToCreateValidator(
     createValidatorData: CreateValidatorData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
     privateKey: Uint8Array,
     disableSimulate?: boolean,
@@ -116,7 +116,7 @@ export class StakingApplicationService {
 
   async createValidatorSimple(
     createValidatorData: CreateValidatorData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKeyString: string,
     gasRatio: number,
     options?: InterfaceCreateValidatorSimpleOptions,
@@ -175,7 +175,7 @@ export class StakingApplicationService {
 
   async createValidator(
     createValidatorData: CreateValidatorData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     const privateWallet: StoredWallet & { privateKey: string } =
@@ -199,8 +199,8 @@ export class StakingApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -272,8 +272,8 @@ export class StakingApplicationService {
 
   async createDelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -290,8 +290,8 @@ export class StakingApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -367,8 +367,8 @@ export class StakingApplicationService {
   async Redelegate(
     validatorAddressBefore: string,
     validatorAddressAfter: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -385,8 +385,8 @@ export class StakingApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -463,8 +463,8 @@ export class StakingApplicationService {
 
   async undelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -481,8 +481,8 @@ export class StakingApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 

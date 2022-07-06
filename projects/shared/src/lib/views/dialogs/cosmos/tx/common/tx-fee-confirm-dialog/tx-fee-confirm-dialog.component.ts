@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'lib-view-tx-fee-confirm-dialog',
@@ -11,13 +11,13 @@ export class TxFeeConfirmDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public readonly data: {
-      fee: proto.cosmos.base.v1beta1.ICoin;
+      fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
       isConfirmed: boolean;
     },
     private readonly dialogRef: MatDialogRef<TxFeeConfirmDialogComponent>,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   okToSendTx(): void {
     this.data.isConfirmed = true;

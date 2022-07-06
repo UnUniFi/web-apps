@@ -1,7 +1,7 @@
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
 import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
 import { WalletApplicationService } from 'projects/shared/src/lib/models/wallets/wallet.application.service';
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit {
           return of(false);
         }
         try {
-          return rest.tendermint.getLatestBlock(sdk.rest).then((res) => {
+          return cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => {
             try {
               return res.data &&
                 res.data.block?.header?.height &&
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
           return of(false);
         }
         try {
-          const tx = rest.tx
+          const tx = cosmosclient.rest.tx
             .getTx(sdk.rest, searchBoxInputValue)
             .then((res) => {
               console.log(res);

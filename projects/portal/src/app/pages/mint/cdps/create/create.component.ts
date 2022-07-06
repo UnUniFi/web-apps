@@ -5,12 +5,12 @@ import { getCreateLimit } from '../../../../utils/function';
 import { getLiquidationPriceStream } from '../../../../utils/stream';
 import { CreateCdpOnSubmitEvent } from '../../../../views/mint/cdps/create/create.component';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
 import { timer, of, combineLatest, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ununifi, rest } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -20,22 +20,22 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 })
 export class CreateComponent implements OnInit {
   key$: Observable<Key | undefined>;
-  cdpParams$: Observable<ununifi.cdp.IParams>;
-  collateralParams$: Observable<ununifi.cdp.ICollateralParam[] | null | undefined>;
+  cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
+  collateralParams$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam[] | null | undefined>;
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
   selectedCollateralType$: Observable<string | null | undefined>;
-  selectedCollateralParam$: Observable<ununifi.cdp.ICollateralParam | null | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  selectedCollateralParam$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam | null | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   address$: Observable<cosmosclient.AccAddress>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   collateralType$: Observable<string>;
   collateralLimit$: Observable<number>;
 
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
@@ -49,7 +49,7 @@ export class CreateComponent implements OnInit {
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.cdpParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
+      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
       map((param) => param.data.params!),
     );
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
@@ -94,7 +94,7 @@ export class CreateComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
+        return cosmosclient.rest.bank
           .allBalances(sdk.rest, address)
           .then((res) => res.data.balances || []);
       }),
@@ -136,7 +136,7 @@ export class CreateComponent implements OnInit {
     // check cdp
     this.cdp$ = combineLatest([this.address$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
       mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
+        ununifi.rest.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
           console.error(err);
           return;
         }),
@@ -147,7 +147,7 @@ export class CreateComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit($event: CreateCdpOnSubmitEvent) {
     this.cdpApplicationService.createCDP(

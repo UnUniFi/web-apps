@@ -1,6 +1,6 @@
 import { Key } from '../../../models/keys/key.model';
 import { Component, Input, OnInit } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-accounts',
@@ -13,13 +13,13 @@ export class AccountsComponent implements OnInit {
   @Input()
   accAddresses?: cosmosclient.AccAddress[] | null;
   @Input()
-  balances0?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances0?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  balances1?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances1?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  balances2?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances2?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

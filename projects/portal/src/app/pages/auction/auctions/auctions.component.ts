@@ -1,10 +1,10 @@
 import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
-import { rest, ununifi, google } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'app-auctions',
@@ -21,7 +21,7 @@ export class AuctionsComponent implements OnInit {
   auctionsPageOffset$: Observable<bigint>;
 
   pollingInterval = 30;
-  auctions$?: Observable<(ununifi.auction.CollateralAuction | undefined)[] | undefined>;
+  auctions$?: Observable<(ununifi.proto.ununifi.auction.CollateralAuction | undefined)[] | undefined>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
     const timer$ = timer(0, this.pollingInterval * 1000);
@@ -29,7 +29,7 @@ export class AuctionsComponent implements OnInit {
 
     this.auctionsTotalCount$ = combineLatest([sdk$, this.pageNumber$, this.pageSize$]).pipe(
       switchMap(([sdk, _pageNumber, _pageSize]) => {
-        return rest.ununifi.auction
+        return ununifi.rest.auction
           .allAuctions(sdk.rest, undefined, undefined, undefined, true)
           .then((res) =>
             res.data.pagination?.total ? BigInt(res.data.pagination?.total) : BigInt(0),
@@ -73,7 +73,7 @@ export class AuctionsComponent implements OnInit {
           return [];
         }
 
-        return rest.ununifi.auction
+        return ununifi.rest.auction
           .allAuctions(sdk.rest, undefined, modifiedPageOffset, modifiedPageSize, true)
           .then((res) => {
             return res.data.auctions;
@@ -89,11 +89,11 @@ export class AuctionsComponent implements OnInit {
             base_auction: { end_time: string; max_end_time: string };
           };
           const parseAuction = (anyAuction: any): { type_url?: string; value?: string } => {
-            anyAuction.base_auction.end_time = google.protobuf.Timestamp.fromObject({
+            anyAuction.base_auction.end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
               seconds: Date.parse(anyAuction.base_auction.end_time),
               nanos: 0,
             });
-            anyAuction.base_auction.max_end_time = google.protobuf.Timestamp.fromObject({
+            anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
               seconds: Date.parse(anyAuction.base_auction.max_end_time),
               nanos: 0,
             });
@@ -102,7 +102,7 @@ export class AuctionsComponent implements OnInit {
           const unpackValue = cosmosclient.codec.protoJSONToInstance(
             cosmosclient.codec.castProtoJSONOfProtoAny(parseAuction(anyAuction)),
           );
-          if (!(unpackValue instanceof ununifi.auction.CollateralAuction)) {
+          if (!(unpackValue instanceof ununifi.proto.ununifi.auction.CollateralAuction)) {
             console.log(unpackValue);
             return;
           }
@@ -113,7 +113,7 @@ export class AuctionsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.pageSize$.next(pageEvent.pageSize);

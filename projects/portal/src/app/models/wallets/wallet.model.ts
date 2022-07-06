@@ -1,5 +1,5 @@
 import { KeyType } from '../keys/key.model';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { PubKey } from '@cosmos-client/core/esm/types';
 
 // Note: Now, only ununifi is supported.

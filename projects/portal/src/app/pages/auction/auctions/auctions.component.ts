@@ -53,12 +53,13 @@ export class AuctionsComponent implements OnInit {
     );
 
     this.auctions$ = combineLatest([
+      timer$,
       this.pageSize$.asObservable(),
       this.auctionsPageOffset$,
       this.auctionsTotalCount$,
     ]).pipe(
-      filter(([_pageSize, _pageOffset, auctionTotalCount]) => auctionTotalCount !== BigInt(0)),
-      switchMap(([pageSize, pageOffset]) => {
+      filter(([_, _pageSize, _pageOffset, auctionTotalCount]) => auctionTotalCount !== BigInt(0)),
+      switchMap(([_, pageSize, pageOffset]) => {
         const modifiedPageOffset = pageOffset < 0 ? BigInt(0) : pageOffset;
         const modifiedPageSize = pageOffset < 0 ? pageOffset + BigInt(pageSize) : BigInt(pageSize);
 
@@ -66,13 +67,9 @@ export class AuctionsComponent implements OnInit {
           return [];
         }
 
-        return timer$.pipe(
-          mergeMap(() =>
-            this.ununifiRest
-              .getAllAuctions$(modifiedPageOffset, modifiedPageSize)
-              .pipe(map((res) => res.auctions)),
-          ),
-        );
+        return this.ununifiRest
+          .getAllAuctions$(modifiedPageOffset, modifiedPageSize)
+          .pipe(map((res) => res.auctions));
       }),
       map((latestAuctions) => {
         const unpackAuction = latestAuctions?.map((auction) => {

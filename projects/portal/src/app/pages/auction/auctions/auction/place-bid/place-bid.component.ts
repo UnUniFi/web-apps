@@ -34,7 +34,7 @@ export class PlaceBidComponent implements OnInit {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.auctionID$ = this.route.params.pipe(map((params) => params.auction_id));
     this.auction$ = this.auctionID$.pipe(
-      mergeMap(([id]) => this.ununifiRest.getAuction$(id)),
+      mergeMap((id) => this.ununifiRest.getAuction$(id)),
       map((auction) => {
         const anyAuction = auction as {
           base_auction: { end_time: string; max_end_time: string };

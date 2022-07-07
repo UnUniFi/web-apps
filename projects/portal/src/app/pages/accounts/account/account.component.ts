@@ -56,8 +56,9 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return this.cosmosRest.getAllBalances$(address).pipe(map((balances) => balances || []));
+        return this.cosmosRest.getAllBalances$(address);
       }),
+      map((balances) => balances || []),
     );
   }
 

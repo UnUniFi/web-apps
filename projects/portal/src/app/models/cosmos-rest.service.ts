@@ -8,6 +8,7 @@ import {
   CosmosDistributionV1beta1QueryValidatorSlashesResponse as ValidatorSlashesResponse,
   CosmosMintV1beta1QueryAnnualProvisionsResponse as AnnualProvisionsResponse,
   CosmosMintV1beta1QueryInflationResponse as InflationResponse,
+  CosmosTxV1beta1GetTxResponse as TxResponse,
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
   InlineResponse20010,
   InlineResponse20012 as InlineResponse,
@@ -50,6 +51,12 @@ export class CosmosRestService {
   getLatestBlock$(): Observable<InlineResponse20010> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk)),
+      map((res) => res.data),
+    );
+  }
+  getTx$(hash: string): Observable<TxResponse> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.tx.getTx(sdk, hash)),
       map((res) => res.data),
     );
   }

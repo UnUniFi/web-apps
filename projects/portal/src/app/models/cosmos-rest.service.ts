@@ -13,7 +13,13 @@ import {
   InlineResponse20010,
   InlineResponse20012 as InlineResponse,
   InlineResponse20022,
-  InlineResponse20027Proposals,
+  InlineResponse20026DepositParams as DepositParams,
+  InlineResponse20026TallyParams as TallyParams,
+  InlineResponse20026VotingParams as VotingParams,
+  InlineResponse20027FinalTallyResult as TallyResult,
+  InlineResponse20027Proposals as Proposals,
+  InlineResponse20029Deposits as Deposits,
+  InlineResponse20032Votes as Votes,
   InlineResponse20038,
   InlineResponse2003Balances as InlineResponseBalances,
   InlineResponse20041,
@@ -54,6 +60,7 @@ export class CosmosRestService {
       map((res) => res.data),
     );
   }
+
   getTx$(hash: string): Observable<TxResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.tx.getTx(sdk, hash)),
@@ -220,10 +227,66 @@ export class CosmosRestService {
     );
   }
 
-  getProposal$(proposalId: string): Observable<InlineResponse20027Proposals | undefined> {
+  getProposals$(): Observable<Proposals[] | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk)),
+      map((res) => res.data.proposals),
+      catchError(this._handleError),
+    );
+  }
+
+  getProposal$(proposalId: string): Observable<Proposals | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk, proposalId)),
       map((res) => res.data.proposal),
+      catchError(this._handleError),
+    );
+  }
+
+  getVotingParams$(): Observable<VotingParams | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk, 'voting')),
+      map((res) => res.data.voting_params),
+      catchError(this._handleError),
+    );
+  }
+
+  getTallyParams$(): Observable<TallyParams | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk, 'tally')),
+      map((res) => res.data.tally_params),
+      catchError(this._handleError),
+    );
+  }
+
+  getDepositParams$(): Observable<DepositParams | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk, 'deposit')),
+      map((res) => res.data.deposit_params),
+      catchError(this._handleError),
+    );
+  }
+
+  getDeposits$(proposalId: string): Observable<Deposits[] | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.deposits(sdk, proposalId)),
+      map((res) => res.data.deposits),
+      catchError(this._handleError),
+    );
+  }
+
+  getVotes$(proposalId: string): Observable<Votes[] | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.votes(sdk, proposalId)),
+      map((res) => res.data.votes),
+      catchError(this._handleError),
+    );
+  }
+
+  getTallyResult$(proposalId: string): Observable<TallyResult | undefined> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.tallyresult(sdk, proposalId)),
+      map((res) => res.data.tally),
       catchError(this._handleError),
     );
   }
@@ -234,6 +297,7 @@ export class CosmosRestService {
       map((res) => res.data),
     );
   }
+
   getInflation$(): Observable<InflationResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.mint.inflation(sdk)),

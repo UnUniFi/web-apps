@@ -1,21 +1,8 @@
+import { getCollateralParamsStream } from '../models/ununifi-rest.service';
 import cosmosclient from '@cosmos-client/core';
-import { Observable, zip } from 'rxjs';
-import { map, mergeMap, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-
-const getCollateralParamsStream = (
-  collateralType: Observable<string>,
-  cdpParams: Observable<ununifi.proto.ununifi.cdp.IParams>,
-) =>
-  zip(collateralType, cdpParams).pipe(
-    map(([collateralType, params]) => {
-      return params.collateral_params?.find((param) => param.type === collateralType);
-    }),
-    filter(
-      (collateralParams): collateralParams is ununifi.proto.ununifi.cdp.CollateralParam =>
-        collateralParams !== undefined,
-    ),
-  );
 
 export const getSpotPriceStream = (
   sdk: cosmosclient.CosmosSDK,

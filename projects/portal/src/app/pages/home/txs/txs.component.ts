@@ -1,11 +1,9 @@
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
-import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-txs',
@@ -22,41 +20,19 @@ export class TxsComponent implements OnInit {
   txsPageOffset$: Observable<bigint>;
   selectedTxType$: BehaviorSubject<string> = new BehaviorSubject('bank');
 
-  constructor(
-    private route: ActivatedRoute,
-    private cosmosSDK: CosmosSDKService,
-    private configService: ConfigService,
-  ) {
+  constructor(private configService: ConfigService, private cosmosRest: CosmosRestService) {
     this.txTypeOptions$ = this.configService.config$.pipe(
       map((config) => config?.extension?.messageModules),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
 
-    this.txsTotalCount$ = combineLatest([
-      sdk$,
-      this.pageNumber$,
-      this.pageSize$,
-      this.selectedTxType$,
-    ]).pipe(
-      switchMap(([sdk, _pageNumber, _pageSize, selectedTxType]) => {
-        return cosmosclient.rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.module='${selectedTxType}'`],
-            undefined,
-            undefined,
-            undefined,
-            true,
-          )
-          .then((res) =>
-            res.data.pagination?.total ? BigInt(res.data.pagination?.total) : BigInt(0),
-          )
-          .catch((error) => {
-            console.error(error);
-            return BigInt(0);
-          });
-      }),
+    this.txsTotalCount$ = combineLatest([timer$, this.selectedTxType$]).pipe(
+      switchMap(([_, selectedTxType]) =>
+        this.cosmosRest.getSelectedTxTypeEvent$(selectedTxType).pipe(
+          map((res) => res.pagination?.total),
+          map((total) => (total ? BigInt(total) : BigInt(0))),
+        ),
+      ),
     );
 
     this.txsPageOffset$ = combineLatest([
@@ -71,17 +47,16 @@ export class TxsComponent implements OnInit {
     );
 
     this.txs$ = combineLatest([
-      sdk$,
+      timer$,
       this.selectedTxType$,
       this.pageSize$.asObservable(),
       this.txsPageOffset$,
       this.txsTotalCount$,
     ]).pipe(
       filter(
-        ([_sdk, _selectedTxType, _pageSize, _pageOffset, txTotalCount]) =>
-          txTotalCount !== BigInt(0),
+        ([_, _selectedTxType, _pageSize, _pageOffset, txTotalCount]) => txTotalCount !== BigInt(0),
       ),
-      switchMap(([sdk, selectedTxType, pageSize, pageOffset, _txsTotalCount]) => {
+      switchMap(([_, selectedTxType, pageSize, pageOffset, _txsTotalCount]) => {
         const modifiedPageOffset = pageOffset < 1 ? BigInt(1) : pageOffset;
         const modifiedPageSize = pageOffset < 1 ? pageOffset + BigInt(pageSize) : BigInt(pageSize);
 
@@ -89,28 +64,15 @@ export class TxsComponent implements OnInit {
           return [];
         }
 
-        return cosmosclient.rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.module='${selectedTxType}'`],
-            undefined,
-            modifiedPageOffset,
-            modifiedPageSize,
-            true,
-          )
-          .then((res) => {
-            return res.data.tx_responses;
-          })
-          .catch((error) => {
-            console.error(error);
-            return [];
-          });
+        return this.cosmosRest
+          .getSelectedTxTypeEvent$(selectedTxType, modifiedPageOffset, modifiedPageSize)
+          .pipe(map((res) => res.tx_responses));
       }),
       map((txs) => txs?.reverse()),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.selectedTxType$.next(selectedTxType);

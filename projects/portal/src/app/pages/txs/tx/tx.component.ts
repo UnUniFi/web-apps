@@ -1,9 +1,8 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -15,12 +14,10 @@ export class TxComponent implements OnInit {
   txHash$: Observable<string>;
   tx$: Observable<CosmosTxV1beta1GetTxResponse>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
     this.txHash$ = this.route.params.pipe(map((params) => params.tx_hash));
-    this.tx$ = combineLatest([this.cosmosSDK.sdk$, this.txHash$]).pipe(
-      mergeMap(([sdk, hash]) => cosmosclient.rest.tx.getTx(sdk.rest, hash).then((res) => res.data)),
-    );
+    this.tx$ = this.txHash$.pipe(mergeMap((hash) => this.cosmosRest.getTx$(hash)));
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

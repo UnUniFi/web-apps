@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/index';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { CdpApplicationService } from 'projects/portal/src/app/models/index';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
 import { DepositCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/deposit/deposit.component';
-import { timer, of, combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { combineLatest, Observable, of, timer } from 'rxjs';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 
 @Component({
@@ -29,18 +30,16 @@ export class DepositComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly keyStore: KeyStoreService,
     private readonly cdpApplicationService: CdpApplicationService,
     private readonly configS: ConfigService,
+    private readonly ununifiRest: UnunifiRestService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
-    this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
-      map((data) => data.data.params!),
-    );
+    this.params$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
 
     //get account balance information
     this.address$ = this.owner$.pipe(
@@ -55,15 +54,15 @@ export class DepositComponent implements OnInit {
       }),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
-      mergeMap(([n, sdk, address]) => {
+    this.balances$ = timer$.pipe(
+      withLatestFrom(this.address$),
+      mergeMap(([_, address]) => {
         if (address === undefined) {
           return of([]);
         }
-        return cosmosclient.rest.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || []);
+        return this.cosmosRest.getAllBalances$(address);
       }),
+      map((balances) => balances ?? []),
     );
 
     this.denom$ = combineLatest([this.collateralType$, this.params$, this.balances$]).pipe(
@@ -86,7 +85,7 @@ export class DepositComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit($event: DepositCdpOnSubmitEvent) {
     this.cdpApplicationService.depositCDP(

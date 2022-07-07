@@ -28,7 +28,6 @@ import {
   InlineResponse200Accounts as Accounts,
   QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod as TotalSupplyResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
-  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, pluck, tap } from 'rxjs/operators';
@@ -170,10 +169,10 @@ export class CosmosRestService {
     );
   }
 
-  getValidators$(): Observable<ValidatorsResponse> {
+  getValidators$(): Observable<Validators[] | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.staking.validators(sdk)),
-      map((res) => res.data),
+      map((res) => res.data.validators),
     );
   }
 

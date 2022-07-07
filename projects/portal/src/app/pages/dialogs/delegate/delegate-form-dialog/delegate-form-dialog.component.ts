@@ -38,7 +38,7 @@ export class DelegateFormDialogComponent implements OnInit {
     private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
-    this.validatorsList$ = this.cosmosRest.getValidators$().pipe(map((res) => res.validators));
+    this.validatorsList$ = this.cosmosRest.getValidators$();
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),

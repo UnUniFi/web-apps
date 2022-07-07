@@ -40,7 +40,7 @@ export class ValidatorsComponent implements OnInit {
     private readonly stakingAppService: StakingApplicationService,
     private cosmosRest: CosmosRestService,
   ) {
-    this.validatorsList$ = this.cosmosRest.getValidators$().pipe(map((res) => res.validators));
+    this.validatorsList$ = this.cosmosRest.getValidators$();
 
     this.allValidatorsTokens$ = this.validatorsList$.pipe(
       map((validators) =>

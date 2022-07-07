@@ -1,8 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {
-  InlineResponse20041Validators,
-  QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod,
-} from '@cosmos-client/core/esm/openapi';
+import { Component, Input, OnInit } from '@angular/core';
+import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 @Component({
@@ -12,7 +9,7 @@ import * as crypto from 'crypto';
 })
 export class ValidatorsComponent implements OnInit {
   @Input()
-  validators?: QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod | null;
+  validators?: InlineResponse20041Validators[] | null;
 
   constructor() {}
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { validatorType } from 'projects/portal/src/app/views/delegate/validators/validators.component';
 import { combineLatest, Observable } from 'rxjs';
@@ -13,7 +12,6 @@ import { map, withLatestFrom } from 'rxjs/operators';
   styleUrls: ['./validator.component.css'],
 })
 export class ValidatorComponent implements OnInit {
-  validatorsList$: Observable<QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod>;
   allValidatorsTokens$: Observable<number | undefined>;
   OtherValidators$: Observable<validatorType[]>;
   validator$: Observable<validatorType | undefined>;
@@ -29,25 +27,25 @@ export class ValidatorComponent implements OnInit {
       map((validatorAddress) => validatorAddress.toAccAddress()),
     );
 
-    this.validatorsList$ = this.cosmosRest.getValidators$();
+    const validatorsList$ = this.cosmosRest.getValidators$();
 
-    this.allValidatorsTokens$ = this.validatorsList$.pipe(
+    this.allValidatorsTokens$ = validatorsList$.pipe(
       map((validators) =>
-        validators?.validators?.reduce((sum, validator) => {
+        validators?.reduce((sum, validator) => {
           return sum + Number(validator.tokens);
         }, 0),
       ),
     );
 
     this.OtherValidators$ = this.allValidatorsTokens$.pipe(
-      withLatestFrom(this.validatorsList$),
+      withLatestFrom(validatorsList$),
       map(([allTokens, validators]) => {
         if (!allTokens) {
           return [];
         }
 
         // sort by share (Token)
-        const validatorsWithSorted = validators.validators?.sort(
+        const validatorsWithSorted = validators?.sort(
           (x, y) => Number(y.tokens) - Number(x.tokens),
         );
 

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/index';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { CdpApplicationService } from 'projects/portal/src/app/models/index';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
 import { ClearCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/clear/clear.component';
-import { timer, of, combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { combineLatest, Observable, of, timer } from 'rxjs';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
@@ -36,8 +37,9 @@ export class ClearComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
     private readonly cdpApplicationService: CdpApplicationService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly cosmosRest: CosmosRestService,
+    private readonly ununifiRest: UnunifiRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
@@ -56,31 +58,23 @@ export class ClearComponent implements OnInit {
       }),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
-      mergeMap(([n, sdk, address]) => {
+    this.balances$ = timer$.pipe(
+      withLatestFrom(this.address$),
+      mergeMap(([_, address]) => {
         if (address === undefined) {
           return of([]);
         }
-        return cosmosclient.rest.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || []);
+        return this.cosmosRest.allBalances$(address).pipe(map((res) => res || []));
       }),
     );
 
-    this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
-      map((data) => data.data.params!),
-    );
+    this.params$ = this.ununifiRest.getCdpParams$();
 
-    this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        ununifi.rest.cdp.cdp(
-          sdk.rest,
-          cosmosclient.AccAddress.fromString(ownerAddr),
-          collateralType,
-        ),
+    this.cdp$ = combineLatest([this.owner$, this.collateralType$]).pipe(
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getCdp$(cosmosclient.AccAddress.fromString(ownerAddr), collateralType),
       ),
-      map((res) => res.data.cdp!),
+      map((res) => res!),
     );
 
     this.repaymentDenomString$ = combineLatest([this.params$, this.cdp$]).pipe(

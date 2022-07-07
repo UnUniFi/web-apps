@@ -1,11 +1,11 @@
-import { CosmosSDKService, KeyService } from '../../../models/index';
+import { KeyService } from '../../../models/index';
 import { Key } from '../../../models/keys/key.model';
 import { KeyStoreService } from '../../../models/keys/key.store.service';
+import { UnunifiRestService } from '../../../models/ununifi-rest.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
-import ununifi from 'ununifi-client';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -19,7 +19,7 @@ export class CdpsComponent implements OnInit {
   constructor(
     private readonly key: KeyService,
     private readonly keyStore: KeyStoreService,
-    private readonly cosmosSdk: CosmosSDKService,
+    private readonly ununifiRest: UnunifiRestService,
   ) {
     const key$ = this.keyStore.currentKey$.asObservable();
     const address$ = key$.pipe(
@@ -29,24 +29,20 @@ export class CdpsComponent implements OnInit {
       ),
     );
 
-    const collateralTypes$ = this.cosmosSdk.sdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.cdp.params(sdk.rest)),
-      map((res) => res.data?.params?.collateral_params?.map((p) => p.type!) || []),
-    );
-    this.cdps$ = combineLatest([address$, collateralTypes$, this.cosmosSdk.sdk$]).pipe(
-      mergeMap(([address, collateralTypes, sdk]) =>
-        Promise.all(
+    const collateralTypes$ = this.ununifiRest
+      .getCdpParams$()
+      .pipe(map((res) => res.collateral_params?.map((p) => p.type!) || []));
+
+    this.cdps$ = combineLatest([address$, collateralTypes$]).pipe(
+      mergeMap(([address, collateralTypes]) =>
+        combineLatest(
           collateralTypes.map((collateralType) =>
-            ununifi.rest.cdp.cdp(sdk.rest, address, collateralType).catch((err) => {
-              console.log(err);
-              return;
-            }),
+            this.ununifiRest.getCdp$(address, collateralType),
           ),
         ),
       ),
-      map((result) => result.map((res) => (res ? res.data.cdp! : undefined))),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

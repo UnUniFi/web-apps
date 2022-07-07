@@ -1,6 +1,6 @@
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
+import { UnunifiRestService } from '../../models/ununifi-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 
@@ -14,16 +14,12 @@ export class MintComponent implements OnInit {
   collateralParams$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam[] | null | undefined>;
   debtParams$: Observable<ununifi.proto.ununifi.cdp.IDebtParam[] | null | undefined>;
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(private ununifiRest: UnunifiRestService) {
     const timer$ = timer(0, 60 * 1000);
-
-    this.cdpParams$ = combineLatest([this.cosmosSDK.sdk$, timer$]).pipe(
-      mergeMap(([sdk, _]) => ununifi.rest.cdp.params(sdk.rest)),
-      map((res) => res.data.params!),
-    );
+    this.cdpParams$ = timer$.pipe(mergeMap(() => this.ununifiRest.getCdpParams$()));
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
     this.debtParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.debt_params));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

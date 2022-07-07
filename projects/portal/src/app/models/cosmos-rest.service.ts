@@ -69,7 +69,7 @@ export class CosmosRestService {
     );
   }
 
-  allBalances$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Balances[] | undefined> {
+  getAllBalances$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Balances[] | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
       map((res) => res.data.balances),

@@ -78,7 +78,7 @@ export class WithdrawComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return this.cosmosRest.allBalances$(address);
+        return this.cosmosRest.getAllBalances$(address);
       }),
     );
 

@@ -35,7 +35,7 @@ export class SendComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.allBalances$(address)));
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
 
     this.amount$ = this.coins$.pipe(
       map((amount) =>

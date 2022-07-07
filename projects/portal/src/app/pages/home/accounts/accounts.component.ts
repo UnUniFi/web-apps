@@ -33,7 +33,7 @@ export class AccountsComponent implements OnInit {
         if (addresses === undefined || addresses.length === 0) {
           return [];
         }
-        return this.cosmosRest.allBalances$(addresses[0]).pipe(map((res) => res || []));
+        return this.cosmosRest.getAllBalances$(addresses[0]).pipe(map((res) => res || []));
       }),
     );
 
@@ -42,7 +42,7 @@ export class AccountsComponent implements OnInit {
         if (addresses === undefined || addresses[1] === undefined) {
           return [];
         }
-        return this.cosmosRest.allBalances$(addresses[1]).pipe(map((res) => res || []));
+        return this.cosmosRest.getAllBalances$(addresses[1]).pipe(map((res) => res || []));
       }),
     );
 
@@ -51,7 +51,7 @@ export class AccountsComponent implements OnInit {
         if (addresses === undefined || addresses[2] === undefined) {
           return [];
         }
-        return this.cosmosRest.allBalances$(addresses[2]).pipe(map((res) => res || []));
+        return this.cosmosRest.getAllBalances$(addresses[2]).pipe(map((res) => res || []));
       }),
     );
   }

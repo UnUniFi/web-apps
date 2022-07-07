@@ -79,7 +79,7 @@ export class BalanceUsecaseService {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return this.rest.allBalances$(cosmosAccAddress);
+        return this.rest.getAllBalances$(cosmosAccAddress);
       }),
     );
   }

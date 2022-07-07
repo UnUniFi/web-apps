@@ -68,7 +68,7 @@ export class UndelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.allBalances$(address)));
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');

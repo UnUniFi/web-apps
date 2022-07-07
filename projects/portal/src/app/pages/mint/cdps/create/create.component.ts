@@ -55,7 +55,7 @@ export class CreateComponent implements OnInit {
     private readonly cosmosRest: CosmosRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
-    this.cdpParams$ = this.ununifiRest.getCdpParams$();
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
 
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
     this.selectedCollateralTypeSubject = new Subject();

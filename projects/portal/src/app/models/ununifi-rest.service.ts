@@ -35,10 +35,10 @@ export class UnunifiRestService {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
 
-  getCdpParams$(): Observable<ununifi.proto.ununifi.cdp.IParams> {
+  getCdpParams$(): Observable<ununifi.proto.ununifi.cdp.IParams | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.cdp.params(sdk)),
-      map((res) => res.data.params!),
+      map((res) => res.data.params),
     );
   }
 

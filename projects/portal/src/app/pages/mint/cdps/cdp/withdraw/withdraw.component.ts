@@ -49,7 +49,7 @@ export class WithdrawComponent implements OnInit {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
-    this.cdpParams$ = this.ununifiRest.getCdpParams$();
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
     this.denom$ = combineLatest([this.collateralType$, this.cdpParams$]).pipe(
       map(([collateralType, params]) => {
         const matchedDenoms = params.collateral_params?.filter(

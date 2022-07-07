@@ -50,7 +50,7 @@ export class IssueComponent implements OnInit {
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
 
-    this.cdpParams$ = this.ununifiRest.getCdpParams$();
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
     //get account balance information
     this.address$ = this.owner$.pipe(
       map((address) => {
@@ -70,7 +70,7 @@ export class IssueComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return this.cosmosRest.getAllBalances$(address);
+        return this.cosmosRest.getAllBalances$(address).pipe((res) => res ?? []);
       }),
     );
 

@@ -39,7 +39,7 @@ export class DepositComponent implements OnInit {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
-    this.params$ = this.ununifiRest.getCdpParams$();
+    this.params$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
 
     //get account balance information
     this.address$ = this.owner$.pipe(
@@ -62,6 +62,7 @@ export class DepositComponent implements OnInit {
         }
         return this.cosmosRest.getAllBalances$(address);
       }),
+      map((balances) => balances ?? []),
     );
 
     this.denom$ = combineLatest([this.collateralType$, this.params$, this.balances$]).pipe(

@@ -68,7 +68,7 @@ export class ClearComponent implements OnInit {
       }),
     );
 
-    this.params$ = this.ununifiRest.getCdpParams$();
+    this.params$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
 
     this.cdp$ = combineLatest([this.owner$, this.collateralType$]).pipe(
       mergeMap(([ownerAddr, collateralType]) =>

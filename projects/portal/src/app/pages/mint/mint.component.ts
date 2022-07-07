@@ -16,7 +16,9 @@ export class MintComponent implements OnInit {
 
   constructor(private ununifiRest: UnunifiRestService) {
     const timer$ = timer(0, 60 * 1000);
-    this.cdpParams$ = timer$.pipe(mergeMap(() => this.ununifiRest.getCdpParams$()));
+    this.cdpParams$ = timer$.pipe(
+      mergeMap(() => this.ununifiRest.getCdpParams$().pipe(map((res) => res!))),
+    );
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
     this.debtParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.debt_params));
   }

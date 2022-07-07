@@ -31,7 +31,7 @@ export class CdpsComponent implements OnInit {
 
     const collateralTypes$ = this.ununifiRest
       .getCdpParams$()
-      .pipe(map((res) => res.collateral_params?.map((p) => p.type!) || []));
+      .pipe(map((res) => res?.collateral_params?.map((p) => p.type!) || []));
 
     this.cdps$ = combineLatest([address$, collateralTypes$]).pipe(
       mergeMap(([address, collateralTypes]) =>

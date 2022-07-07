@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20032Votes,
   InlineResponse20026DepositParams,
   InlineResponse20026TallyParams,
   InlineResponse20026VotingParams,
+  InlineResponse20027FinalTallyResult,
+  InlineResponse20027Proposals,
+  InlineResponse20029Deposits,
+  InlineResponse20032Votes,
 } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
-import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-proposal',
@@ -32,20 +31,12 @@ export class ProposalComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private cosmosSDK: CosmosSDKService,
     private readonly govAppService: GovApplicationService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
-    const proposalID$ = this.route.params.pipe(map((params) => params.id));
+    const proposalID$ = this.route.params.pipe(map((params) => params.id as string));
 
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
-    this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, id]) => cosmosclient.rest.gov.proposal(sdk.rest, id)),
-      map((result) => result.data.proposal!),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
+    this.proposal$ = proposalID$.pipe(mergeMap((id) => this.cosmosRest.getProposal$(id)));
 
     this.proposalType$ = this.proposal$.pipe(
       map((proposal) => {
@@ -55,58 +46,19 @@ export class ProposalComponent implements OnInit {
       }),
     );
 
-    this.deposits$ = combined$.pipe(
-      mergeMap(([sdk, proposalID]) => cosmosclient.rest.gov.deposits(sdk.rest, proposalID)),
-      map((result) => result.data.deposits!),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
+    this.deposits$ = proposalID$.pipe(mergeMap((id) => this.cosmosRest.getDeposits$(id)));
+    this.depositParams$ = this.cosmosRest.getDepositParams$();
 
-    this.depositParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'deposit')),
-      map((result) => result.data.deposit_params),
+    this.tally$ = proposalID$.pipe(
+      mergeMap((proposalId) => this.cosmosRest.getTallyResult$(proposalId)),
     );
+    this.tallyParams$ = this.cosmosRest.getTallyParams$();
 
-    this.tally$ = combined$.pipe(
-      mergeMap(([sdk, proposalID]) => cosmosclient.rest.gov.tallyresult(sdk.rest, proposalID)),
-      map((result) => result.data.tally!),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
-
-    this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'tallying')),
-      map((result) => result.data.tally_params),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
-
-    this.votes$ = combined$.pipe(
-      mergeMap(([sdk, proposalID]) => cosmosclient.rest.gov.votes(sdk.rest, proposalID)),
-      map((result) => result.data.votes!),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
-
-    this.votingParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'voting')),
-      map((result) => result.data.voting_params),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
+    this.votes$ = proposalID$.pipe(mergeMap((proposalId) => this.cosmosRest.getVotes$(proposalId)));
+    this.votingParams$ = this.cosmosRest.getVotingParams$();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onVoteProposal(proposalID: number) {
     this.govAppService.openVoteFormDialog(proposalID);

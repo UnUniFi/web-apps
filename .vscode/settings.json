@@ -5,5 +5,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "ngschematics.schematics": ["./node_modules/angular-firebase-schematics/src/collection.json"]
+  "ngschematics.schematics": ["./node_modules/angular-firebase-schematics/src/collection.json"],
+  "jest.jestCommandLine": "ng test"
 }

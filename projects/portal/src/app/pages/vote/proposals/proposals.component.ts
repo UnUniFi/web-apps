@@ -1,13 +1,12 @@
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -31,13 +30,10 @@ export class ProposalsComponent implements OnInit {
   constructor(
     private router: Router,
     private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly govAppService: GovApplicationService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
-    this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!),
-    );
+    this.proposals$ = this.cosmosRest.getProposals$().pipe(map((res) => res!));
     this.pageLength$ = this.proposals$.pipe(
       map((proposals) =>
         proposals.length ? proposals.length : undefined,
@@ -74,20 +70,14 @@ export class ProposalsComponent implements OnInit {
       this.pageSize$]).pipe(
         map(([proposals, pageNumber, pageSize]) => this.getPaginatedProposals(proposals, pageNumber, pageSize))
       )
-    this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$, this.pageNumber$,
-    this.pageSize$]).pipe(
-      mergeMap(([sdk, proposals, pageNumber, pageSize]) =>
-        Promise.all(
-          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
-            cosmosclient.rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
-              console.log(err);
-              return;
-            }),
+    this.tallies$ = combineLatest([
+      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
+        mergeMap(([proposals, pageNumber, pageSize]) =>
+          combineLatest(
+            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => this.cosmosRest.getTallyResult$(proposal.proposal_id!)),
           ),
         ),
-      ),
-      map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
-    );
+      );
   }
 
   ngOnInit(): void { }

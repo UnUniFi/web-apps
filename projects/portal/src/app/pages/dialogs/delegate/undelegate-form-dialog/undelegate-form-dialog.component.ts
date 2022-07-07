@@ -3,16 +3,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038,
-  InlineResponse20047,
   InlineResponse20041Validators,
+  InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { UndelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
-import { of, combineLatest, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -34,10 +34,10 @@ export class UndelegateFormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public readonly data: InlineResponse20041Validators,
     public matDialogRef: MatDialogRef<UndelegateFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -45,25 +45,18 @@ export class UndelegateFormDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((res) => res.data),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
-    this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => {
+
+    this.unbondingDelegation$ = address$.pipe(
+      mergeMap((address) => {
         const valAddressString = this.validator?.operator_address;
         if (!valAddressString) {
           return of(undefined);
         }
         const valAddress = cosmosclient.ValAddress.fromString(valAddressString);
-        const unbondingDelegation = cosmosclient.rest.staking
-          .unbondingDelegation(sdk.rest, valAddress, address)
-          .then((res) => res.data)
-          .catch((error) => {
-            console.error(error.message);
-            return undefined;
-          });
-        return unbondingDelegation;
+        return this.cosmosRest.getUnbondingDelegation$(valAddress, address);
       }),
     );
     this.delegateAmount$ = this.delegations$.pipe(
@@ -75,11 +68,7 @@ export class UndelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');
@@ -90,7 +79,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: UndelegateOnSubmitEvent) {
     const txHash = await this.stakingAppService.undelegate(

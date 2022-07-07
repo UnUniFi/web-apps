@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { AuctionApplicationService } from 'projects/portal/src/app/models/auctions/auction.application.service';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
 import { PlaceBidOnSubmitEvent } from 'projects/portal/src/app/views/auction/auctions/auction/place-bid/place-bid.component';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 
@@ -27,16 +27,14 @@ export class PlaceBidComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
-    private cosmosSDK: CosmosSDKService,
     private readonly auctionApplicationService: AuctionApplicationService,
     private readonly configS: ConfigService,
+    private ununifiRest: UnunifiRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.auctionID$ = this.route.params.pipe(map((params) => params.auction_id));
-    this.auction$ = combineLatest([this.cosmosSDK.sdk$, this.auctionID$]).pipe(
-      mergeMap(([sdk, id]) =>
-        ununifi.rest.auction.auction(sdk.rest, id).then((res) => res.data.auction),
-      ),
+    this.auction$ = this.auctionID$.pipe(
+      mergeMap((id) => this.ununifiRest.getAuction$(id)),
       map((auction) => {
         const anyAuction = auction as {
           base_auction: { end_time: string; max_end_time: string };
@@ -46,10 +44,12 @@ export class PlaceBidComponent implements OnInit {
             seconds: Date.parse(anyAuction.base_auction.end_time),
             nanos: 0,
           });
-          anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
-            seconds: Date.parse(anyAuction.base_auction.max_end_time),
-            nanos: 0,
-          });
+          anyAuction.base_auction.max_end_time = ununifi.proto.google.protobuf.Timestamp.fromObject(
+            {
+              seconds: Date.parse(anyAuction.base_auction.max_end_time),
+              nanos: 0,
+            },
+          );
           return anyAuction;
         };
         const unpackAuction = cosmosclient.codec.protoJSONToInstance(
@@ -86,7 +86,7 @@ export class PlaceBidComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit($event: PlaceBidOnSubmitEvent) {
     this.auctionApplicationService.placeBid(

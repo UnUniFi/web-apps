@@ -2,14 +2,14 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { DepositOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/vote/deposit/deposit-form-dialog.component';
-import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-deposit-form-dialog',
@@ -28,30 +28,19 @@ export class DepositFormDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public readonly data: number,
     public matDialogRef: MatDialogRef<DepositFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly govAppService: GovApplicationService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.proposalID = data;
-    this.proposal$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk.rest, String(this.proposalID))),
-      map((result) => result.data.proposal!),
-      catchError((error) => {
-        console.error(error);
-        return of(undefined);
-      }),
-    );
+    this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');
@@ -62,7 +51,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: DepositOnSubmitEvent) {
     if (!this.proposalID) {

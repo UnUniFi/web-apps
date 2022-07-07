@@ -46,6 +46,10 @@ export class AccountComponent implements OnInit {
         }
         return this.cosmosRest.getAccount$(address);
       }),
+      map((account) => {
+        const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
+        return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
+      }),
     );
     this.balances$ = this.address$.pipe(
       mergeMap((address) => {

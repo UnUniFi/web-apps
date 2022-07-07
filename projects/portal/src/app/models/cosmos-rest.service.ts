@@ -10,9 +10,9 @@ import {
   CosmosMintV1beta1QueryInflationResponse as InflationResponse,
   CosmosTxV1beta1GetTxResponse as TxResponse,
   CosmosTxV1beta1GetTxsEventResponse as TxsEventResponse,
-  InlineResponse20010,
-  InlineResponse20012 as InlineResponse,
-  InlineResponse20022,
+  InlineResponse20010 as BlockResponse,
+  InlineResponse20012 as NodeInfoResponse,
+  InlineResponse20022 as RewardsResponse,
   InlineResponse20026DepositParams as DepositParams,
   InlineResponse20026TallyParams as TallyParams,
   InlineResponse20026VotingParams as VotingParams,
@@ -20,11 +20,12 @@ import {
   InlineResponse20027Proposals as Proposals,
   InlineResponse20029Deposits as Deposits,
   InlineResponse20032Votes as Votes,
-  InlineResponse20038,
-  InlineResponse2003Balances as InlineResponseBalances,
-  InlineResponse20041,
+  InlineResponse20038 as DelegatorDelegationsResponse,
+  InlineResponse2003Balances as Balances,
+  InlineResponse20041 as DelegatorValidatorsResponse,
   InlineResponse20041Validators as Validators,
-  InlineResponse20047,
+  InlineResponse20047 as UnboundingDelegationResponse,
+  InlineResponse200Accounts as Accounts,
   QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod as TotalSupplyResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
   QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod as ValidatorsResponse,
@@ -40,7 +41,7 @@ export class CosmosRestService {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
 
-  getNodeInfo$(): Observable<InlineResponse> {
+  getNodeInfo$(): Observable<NodeInfoResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.tendermint.getNodeInfo(sdk)),
       map((res) => res.data),
@@ -54,7 +55,7 @@ export class CosmosRestService {
     );
   }
 
-  getLatestBlock$(): Observable<InlineResponse20010> {
+  getLatestBlock$(): Observable<BlockResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk)),
       map((res) => res.data),
@@ -68,9 +69,7 @@ export class CosmosRestService {
     );
   }
 
-  allBalances$(
-    cosmosAccAddress: cosmosclient.AccAddress,
-  ): Observable<InlineResponseBalances[] | undefined> {
+  allBalances$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Balances[] | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
       map((res) => res.data.balances),
@@ -85,15 +84,11 @@ export class CosmosRestService {
     );
   }
 
-  getAccount$(cosmosAccAddress: cosmosclient.AccAddress): Observable<InlineResponse | undefined> {
+  getAccount$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Accounts | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.auth.account(sdk, cosmosAccAddress)),
       tap((res) => console.log(res.data.account)),
       map((res) => res.data.account),
-      map((account) => {
-        const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
-        return (account && protoJSONToInstance(castProtoJSONOfProtoAny(account))) as InlineResponse;
-      }),
       catchError(this._handleError),
     );
   }
@@ -145,14 +140,18 @@ export class CosmosRestService {
     );
   }
 
-  getDelegatorDelegations$(address: cosmosclient.AccAddress): Observable<InlineResponse20038> {
+  getDelegatorDelegations$(
+    address: cosmosclient.AccAddress,
+  ): Observable<DelegatorDelegationsResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.staking.delegatorDelegations(sdk, address)),
       map((res) => res.data),
     );
   }
 
-  getDelegatorValidators$(address: cosmosclient.AccAddress): Observable<InlineResponse20041> {
+  getDelegatorValidators$(
+    address: cosmosclient.AccAddress,
+  ): Observable<DelegatorValidatorsResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.staking.delegatorValidators(sdk, address)),
       map((res) => res.data),
@@ -162,7 +161,7 @@ export class CosmosRestService {
   getUnbondingDelegation$(
     validatorAddr: cosmosclient.ValAddress,
     delegatorAddr: cosmosclient.AccAddress,
-  ): Observable<InlineResponse20047> {
+  ): Observable<UnboundingDelegationResponse> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         cosmosclient.rest.staking.unbondingDelegation(sdk, validatorAddr, delegatorAddr),
@@ -198,7 +197,7 @@ export class CosmosRestService {
 
   getValidatorOutstandingRewards$(
     valAddress: cosmosclient.ValAddress,
-  ): Observable<InlineResponse20022 | undefined> {
+  ): Observable<RewardsResponse | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         cosmosclient.rest.distribution.validatorOutstandingRewards(sdk, valAddress),

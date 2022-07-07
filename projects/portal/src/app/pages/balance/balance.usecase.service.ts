@@ -65,6 +65,10 @@ export class BalanceUsecaseService {
         }
         return this.rest.getAccount$(cosmosAccAddress);
       }),
+      map((account) => {
+        const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
+        return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
+      }),
       map((cosmosUnknownAccount) => convertUnknownAccountToTypedAccount(cosmosUnknownAccount)),
       map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
     );
@@ -81,12 +85,12 @@ export class BalanceUsecaseService {
   }
   get faucets$(): Observable<
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | undefined
   > {
     return combineLatest([this.config$, this.balances$]).pipe(

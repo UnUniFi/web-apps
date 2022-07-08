@@ -91,8 +91,8 @@ export class TxsComponent implements OnInit {
     );
 
     this.txs$ = this.paginationInfoChanged$.pipe(
-      withLatestFrom(timer$, this.selectedTxType$, this.txsTotalCount$),
-      mergeMap(([paginationInfo, _, selectedTxType, txsTotalCount]) => {
+      withLatestFrom(this.selectedTxType$, this.txsTotalCount$),
+      mergeMap(([paginationInfo, selectedTxType, txsTotalCount]) => {
         const pageOffset =
           txsTotalCount - BigInt(paginationInfo.pageSize) * BigInt(paginationInfo.pageNumber);
         const modifiedPageOffset = pageOffset < 1 ? BigInt(1) : pageOffset;

@@ -6,12 +6,12 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-beta-test-v1.cauchye.net';
+const domainCauchyEA = 'ununifi-beta-test-v2.cauchye.net';
 // const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
 // const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
 // const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
-const chainID = 'ununifi-9-beta-test';
+const chainID = 'ununifi-beta-test-v2';
 const chainName = 'UnUnuFi (beta-test)';
 
 const bech32Prefix = {
@@ -58,41 +58,42 @@ const configs = [
     ],
     extension: {
       faucet: [
-        {
-          hasFaucet: false,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 100, // amount to credit in max request
-          maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: false,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000,
-          maxCredit: 1999999,
-        },
-        {
-          hasFaucet: false,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
-          denom: 'jpu',
-          creditAmount: 10,
-          maxCredit: 9,
-        },
-        {
-          hasFaucet: false,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
-          denom: 'ueth',
-          creditAmount: 1000,
-          maxCredit: 999,
-        },
-        {
-          hasFaucet: false,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
-          denom: 'euu',
-          creditAmount: 10,
-          maxCredit: 9,
-        },
+        // Todo: After setup faucet, enable the following faucet.
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+        //   denom: 'ubtc',
+        //   creditAmount: 100, // amount to credit in max request
+        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
+        // },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+        //   denom: 'uguu',
+        //   creditAmount: 2000000,
+        //   maxCredit: 1999999,
+        // },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
+        //   denom: 'jpu',
+        //   creditAmount: 10,
+        //   maxCredit: 9,
+        // },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
+        //   denom: 'ueth',
+        //   creditAmount: 1000,
+        //   maxCredit: 999,
+        // },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
+        //   denom: 'euu',
+        //   creditAmount: 10,
+        //   maxCredit: 9,
+        // },
       ],
       monitor: undefined,
       navigations: [],

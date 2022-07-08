@@ -1,8 +1,12 @@
+import { NftTxApplicationService } from '../../../models/ununifi/tx/nft/nft-tx.application.service';
 import { LibViewNftComponent } from './nft.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
+
+jest.mock('../../../models/ununifi/tx/nft/nft-tx.application.service');
 
 describe('LibViewNftComponent', () => {
   let component: LibViewNftComponent;
@@ -11,7 +15,8 @@ describe('LibViewNftComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LibViewNftComponent],
-      imports: [RouterTestingModule, MatSnackBarModule, MatDialogModule],
+      imports: [RouterTestingModule, MatSnackBarModule, MatDialogModule, MatCardModule],
+      providers: [NftTxApplicationService],
     }).compileComponents();
   });
 

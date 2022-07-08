@@ -1,17 +1,20 @@
 import { getIssueLimit } from '../../../../../utils/function';
-import { getLiquidationPriceStream } from '../../../../../utils/stream';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/index';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { CdpApplicationService } from 'projects/portal/src/app/models/index';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import {
+  getCollateralParamsStream,
+  UnunifiRestService,
+} from 'projects/portal/src/app/models/ununifi-rest.service';
 import { IssueCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/issue/issue.component';
-import { timer, of, zip, combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
+import { combineLatest, Observable, of, timer, zip } from 'rxjs';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -23,33 +26,31 @@ export class IssueComponent implements OnInit {
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
+  cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   principalDenom$: Observable<string>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   cdp$: Observable<InlineResponse2004Cdp1>;
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   issueLimit$: Observable<number>;
 
   address$: Observable<cosmosclient.AccAddress | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
     private readonly cdpApplicationService: CdpApplicationService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly ununifiRest: UnunifiRestService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
-    this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
-      map((data) => data.data.params!),
-    );
 
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
     //get account balance information
     this.address$ = this.owner$.pipe(
       map((address) => {
@@ -63,40 +64,37 @@ export class IssueComponent implements OnInit {
       }),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
-      mergeMap(([n, sdk, address]) => {
+    this.balances$ = timer$.pipe(
+      withLatestFrom(this.address$),
+      mergeMap(([_, address]) => {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || []);
+        return this.cosmosRest.getAllBalances$(address).pipe((res) => res ?? []);
       }),
     );
 
-    this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
-          sdk.rest,
-          cosmosclient.AccAddress.fromString(ownerAddr),
-          collateralType,
-        ),
+    this.cdp$ = combineLatest([this.owner$, this.collateralType$]).pipe(
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getCdp$(cosmosclient.AccAddress.fromString(ownerAddr), collateralType),
       ),
-      map((res) => res.data.cdp!),
+      map((res) => res!),
     );
 
-    this.principalDenom$ = combineLatest([this.params$, this.cdp$]).pipe(
+    this.principalDenom$ = combineLatest([this.cdpParams$, this.cdp$]).pipe(
       map(([params, cdp]) =>
         params.debt_params?.find((debtParam) => debtParam.denom == cdp.cdp?.principal?.denom),
       ),
       map((res) => res?.denom!),
     );
 
-    this.liquidationPrice$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.params$)),
+    this.liquidationPrice$ = getCollateralParamsStream(this.collateralType$, this.cdpParams$).pipe(
+      mergeMap((collateralParams) =>
+        this.ununifiRest.getPrice$(collateralParams.liquidation_market_id),
+      ),
     );
 
-    this.issueLimit$ = zip(this.cdp$, this.params$, this.liquidationPrice$).pipe(
+    this.issueLimit$ = zip(this.cdp$, this.cdpParams$, this.liquidationPrice$).pipe(
       map(([cdp, params, price]) => getIssueLimit(cdp.cdp!, params, price)),
     );
 

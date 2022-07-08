@@ -1,10 +1,10 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { UnunifiRestService } from '../../../models/ununifi-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { cosmosclient } from '@cosmos-client/core';
-import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
+import cosmosclient from '@cosmos-client/core';
+import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
-import { rest, ununifi, google } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'app-auctions',
@@ -21,24 +21,20 @@ export class AuctionsComponent implements OnInit {
   auctionsPageOffset$: Observable<bigint>;
 
   pollingInterval = 30;
-  auctions$?: Observable<(ununifi.auction.CollateralAuction | undefined)[] | undefined>;
+  auctions$?: Observable<
+    (ununifi.proto.ununifi.auction.CollateralAuction | undefined)[] | undefined
+  >;
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(private ununifiRest: UnunifiRestService) {
     const timer$ = timer(0, this.pollingInterval * 1000);
-    const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
 
-    this.auctionsTotalCount$ = combineLatest([sdk$, this.pageNumber$, this.pageSize$]).pipe(
-      switchMap(([sdk, _pageNumber, _pageSize]) => {
-        return rest.ununifi.auction
-          .allAuctions(sdk.rest, undefined, undefined, undefined, true)
-          .then((res) =>
-            res.data.pagination?.total ? BigInt(res.data.pagination?.total) : BigInt(0),
-          )
-          .catch((error) => {
-            console.error(error);
-            return BigInt(0);
-          });
-      }),
+    this.auctionsTotalCount$ = timer$.pipe(
+      mergeMap(() =>
+        this.ununifiRest.getAllAuctions$().pipe(
+          map((res) => res?.pagination?.total),
+          map((total) => (total ? BigInt(total) : BigInt(0))),
+        ),
+      ),
     );
 
     this.auctionsTotalCount$.subscribe((auctionsTotalCount) => {
@@ -57,15 +53,13 @@ export class AuctionsComponent implements OnInit {
     );
 
     this.auctions$ = combineLatest([
-      sdk$,
+      timer$,
       this.pageSize$.asObservable(),
       this.auctionsPageOffset$,
       this.auctionsTotalCount$,
     ]).pipe(
-      filter(
-        ([_sdk, _pageSize, _pageOffset, auctionTotalCount]) => auctionTotalCount !== BigInt(0),
-      ),
-      switchMap(([sdk, pageSize, pageOffset, _auctionTotalCount]) => {
+      filter(([_, _pageSize, _pageOffset, auctionTotalCount]) => auctionTotalCount !== BigInt(0)),
+      switchMap(([_, pageSize, pageOffset]) => {
         const modifiedPageOffset = pageOffset < 0 ? BigInt(0) : pageOffset;
         const modifiedPageSize = pageOffset < 0 ? pageOffset + BigInt(pageSize) : BigInt(pageSize);
 
@@ -73,15 +67,9 @@ export class AuctionsComponent implements OnInit {
           return [];
         }
 
-        return rest.ununifi.auction
-          .allAuctions(sdk.rest, undefined, modifiedPageOffset, modifiedPageSize, true)
-          .then((res) => {
-            return res.data.auctions;
-          })
-          .catch((error) => {
-            console.error(error);
-            return [];
-          });
+        return this.ununifiRest
+          .getAllAuctions$(modifiedPageOffset, modifiedPageSize)
+          .pipe(map((res) => res.auctions));
       }),
       map((latestAuctions) => {
         const unpackAuction = latestAuctions?.map((auction) => {
@@ -89,20 +77,21 @@ export class AuctionsComponent implements OnInit {
             base_auction: { end_time: string; max_end_time: string };
           };
           const parseAuction = (anyAuction: any): { type_url?: string; value?: string } => {
-            anyAuction.base_auction.end_time = google.protobuf.Timestamp.fromObject({
+            anyAuction.base_auction.end_time = ununifi.proto.google.protobuf.Timestamp.fromObject({
               seconds: Date.parse(anyAuction.base_auction.end_time),
               nanos: 0,
             });
-            anyAuction.base_auction.max_end_time = google.protobuf.Timestamp.fromObject({
-              seconds: Date.parse(anyAuction.base_auction.max_end_time),
-              nanos: 0,
-            });
+            anyAuction.base_auction.max_end_time =
+              ununifi.proto.google.protobuf.Timestamp.fromObject({
+                seconds: Date.parse(anyAuction.base_auction.max_end_time),
+                nanos: 0,
+              });
             return anyAuction;
           };
           const unpackValue = cosmosclient.codec.protoJSONToInstance(
             cosmosclient.codec.castProtoJSONOfProtoAny(parseAuction(anyAuction)),
           );
-          if (!(unpackValue instanceof ununifi.auction.CollateralAuction)) {
+          if (!(unpackValue instanceof ununifi.proto.ununifi.auction.CollateralAuction)) {
             console.log(unpackValue);
             return;
           }

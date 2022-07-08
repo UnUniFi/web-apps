@@ -1,29 +1,29 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TxCommonService {
-  constructor(private readonly cosmosSDK: CosmosSDKService) {}
+  constructor(private readonly cosmosSDK: CosmosSDKService) { }
 
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<SimulatedTxResultResponse> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 
-    // restore json from txBuilder
-    const txForSimulation = JSON.parse(txBuilder.cosmosJSONStringify());
+    // cosmosclient.rest ore json from txBuilder
+    const txForSimulation = JSON.parse(txBuilder.protoJSONStringify());
 
     // fix JSONstringify issue
     delete txForSimulation.auth_info.signer_infos[0].mode_info.multi;
 
     // simulate
-    const simulatedResult = await rest.tx.simulate(sdk, {
+    const simulatedResult = await cosmosclient.rest.tx.simulate(sdk, {
       tx: txForSimulation,
       tx_bytes: txBuilder.txBytes(),
     });
@@ -62,13 +62,13 @@ export class TxCommonService {
     };
   }
 
-  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20075> {
+  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20050> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 
     // broadcast tx
-    const result = await rest.tx.broadcastTx(sdk, {
+    const result = await cosmosclient.rest.tx.broadcastTx(sdk, {
       tx_bytes: txBuilder.txBytes(),
-      mode: rest.tx.BroadcastTxMode.Block,
+      mode: cosmosclient.rest.tx.BroadcastTxMode.Block,
     });
 
     window.alert(`Copy the following txHash for AirDrop!\n${result.data.tx_response?.txhash}`);

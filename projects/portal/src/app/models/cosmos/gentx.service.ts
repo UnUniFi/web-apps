@@ -3,14 +3,14 @@ import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { GentxData } from './gentx.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GentxService {
-  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) {}
+  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) { }
 
   async gentx(key: Key, gentxData: GentxData): Promise<{ [k: string]: any }> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -30,7 +30,7 @@ export class GentxService {
     console.log('gentxData.pubkey', gentxData.pubkey);
     const base64DecodedPublicKey = Uint8Array.from(Buffer.from(gentxData.pubkey, 'base64'));
     console.log('base64DecodedPublicKey', base64DecodedPublicKey);
-    const publicKey = new proto.cosmos.crypto.ed25519.PubKey({
+    const publicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({
       key: base64DecodedPublicKey,
     });
     const instanceToProtoAnyPublicKey = cosmosclient.codec.instanceToProtoAny(publicKey);
@@ -60,12 +60,12 @@ export class GentxService {
       },
     };
     console.log('createValidatorTxData', createValidatorTxData);
-    const msgCreateValidator = new proto.cosmos.staking.v1beta1.MsgCreateValidator(
+    const msgCreateValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgCreateValidator(
       createValidatorTxData,
     );
     console.log('msgCreateValidator', msgCreateValidator);
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${gentxData.node_id}@${gentxData.ip}:26656`,
       timeout_height: Long.fromString('0'),
@@ -74,13 +74,13 @@ export class GentxService {
     });
     console.log('txBody', txBody);
 
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: Long.fromString('0'),

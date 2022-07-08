@@ -14,41 +14,20 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "paths": {
-      "shared": [
-        "dist/shared/shared",
-        "dist/shared"
-      ],
-      "shared/*": [
-        "dist/shared/shared/*",
-        "dist/shared/*"
-      ],
-      "crypto": [
-        "./node_modules/crypto-browserify"
-      ],
-      "https": [
-        "./node_modules/https-browserify"
-      ],
-      "os": [
-        "./node_modules/os-browserify"
-      ],
-      "stream": [
-        "./node_modules/stream-browserify"
-      ],
-      "http": [
-        "./node_modules/stream-http"
-      ],
-      "path": [
-        "./node_modules/path-browserify"
-      ]
+      "shared": ["dist/shared/shared", "dist/shared"],
+      "shared/*": ["dist/shared/shared/*", "dist/shared/*"],
+      "crypto": ["./node_modules/crypto-browserify"],
+      "https": ["./node_modules/https-browserify"],
+      "os": ["./node_modules/os-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "http": ["./node_modules/stream-http"],
+      "path": ["./node_modules/path-browserify"]
     },
     "target": "es2017",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom",
-      "esnext.asynciterable"
-    ],
-    "allowSyntheticDefaultImports": true
+    "lib": ["es2020", "dom", "esnext.asynciterable"],
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "jest"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

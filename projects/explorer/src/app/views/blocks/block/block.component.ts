@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 
 @Component({
@@ -9,7 +9,7 @@ import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/open
 })
 export class BlockComponent implements OnInit {
   @Input()
-  block?: InlineResponse20036 | null;
+  block?: InlineResponse20011 | null;
 
   @Input()
   nextBlock?: number | null;

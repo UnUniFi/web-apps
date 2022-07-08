@@ -54,7 +54,7 @@
 
     <h3 class="mb-0 ml-2">Messages</h3>
     <ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
-      <ng-container *ngIf="unpackMsg(message) as msg">
+      <ng-container *ngIf="message as msg">
         <mat-card class="mb-2">
           <mat-list>
             <mat-list-item>

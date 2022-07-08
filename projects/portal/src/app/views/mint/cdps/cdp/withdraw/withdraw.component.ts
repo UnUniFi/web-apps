@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 
 export type WithdrawCdpOnSubmitEvent = {
@@ -7,9 +7,9 @@ export type WithdrawCdpOnSubmitEvent = {
   privateKey: Uint8Array;
   ownerAddr: cosmosclient.AccAddress;
   collateralType: string;
-  collateral: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  balances: proto.cosmos.base.v1beta1.ICoin[];
+  collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[];
 };
 
 @Component({
@@ -34,16 +34,16 @@ export class WithdrawComponent implements OnInit {
   withdrawLimit?: number | null;
 
   @Input()
-  balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<WithdrawCdpOnSubmitEvent>;
 
   public collateral_amount: string;
-  public selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  public selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -56,7 +56,7 @@ export class WithdrawComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(
     privateKeyString: string,

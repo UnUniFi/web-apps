@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosDistributionV1beta1QueryCommunityPoolResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable } from 'rxjs';
@@ -19,9 +19,9 @@ export class DistributionComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
   ) {
     this.communityPool$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.distribution.communityPool(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.distribution.communityPool(sdk.rest).then((res) => res.data)),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

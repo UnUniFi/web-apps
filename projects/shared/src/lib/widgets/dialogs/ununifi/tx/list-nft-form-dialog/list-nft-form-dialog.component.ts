@@ -8,7 +8,7 @@ import { MsgListNftFormData } from '../../../../../views/dialogs/ununifi/tx/nft/
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -21,9 +21,9 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
   nft: Nft;
 
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -44,7 +44,7 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
     this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.bank.allBalances(sdk.rest, address)),
       map((result) => result.data.balances),
     );
     this.uguuBalance$ = this.coins$.pipe(
@@ -56,7 +56,7 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmit($event: MsgListNftFormData): Promise<void> {
     let txHash: string | undefined;

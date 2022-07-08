@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
-import { InlineResponse20036 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import { map, filter, mergeMap } from 'rxjs/operators';
 })
 export class BlockComponent implements OnInit {
   blockHeight$: Observable<string>;
-  block$: Observable<InlineResponse20036>;
+  block$: Observable<InlineResponse20011>;
   nextBlock$: Observable<number>;
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;
@@ -25,14 +25,14 @@ export class BlockComponent implements OnInit {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
     this.block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$]).pipe(
       mergeMap(([sdk, height]) =>
-        rest.tendermint.getBlockByHeight(sdk.rest, BigInt(height)).then((res) => res.data),
+        cosmosclient.rest.tendermint.getBlockByHeight(sdk.rest, BigInt(height)).then((res) => res.data),
       ),
     );
 
     this.txs$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$, this.block$]).pipe(
       filter(([sdk, height, block]) => (block.block?.data?.txs?.length || 0) > 0),
       mergeMap(([sdk, height, block]) =>
-        rest.tx
+        cosmosclient.rest.tx
           .getTxsEvent(sdk.rest, [`tx.height=${height}`], undefined, undefined, undefined, true)
           .then((res) => {
             console.log('res', res);
@@ -69,7 +69,7 @@ export class BlockComponent implements OnInit {
     );
 
     this.latestBlockHeight$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
       map((block) => block.block?.header?.height || ''),
     );
 
@@ -90,5 +90,5 @@ export class BlockComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

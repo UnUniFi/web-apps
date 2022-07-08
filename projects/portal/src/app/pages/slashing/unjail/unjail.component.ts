@@ -4,7 +4,7 @@ import { WalletService } from '../../../models/wallets/wallet.service';
 import { createCosmosPublicKeyFromString } from '../../../utils/key';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class UnjailComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegator_address$: Observable<string>;
   validator_address$: Observable<string>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -99,11 +99,11 @@ export class UnjailComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async appSubmitUnjail(unjailData: {
     validator_address: string;
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   }): Promise<void> {
     const gasRatio = 1.1;
     await this.slashingApplicationService.unjail(

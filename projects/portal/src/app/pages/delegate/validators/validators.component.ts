@@ -1,4 +1,4 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -7,14 +7,14 @@ import {
   validatorWithShareType,
 } from '../../../views/delegate/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063DelegationResponses,
-  InlineResponse20066Validators,
-  InlineResponse20072,
+  InlineResponse20038DelegationResponses,
+  InlineResponse20041Validators,
+  InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
-import { of, Observable, BehaviorSubject, combineLatest, zip } from 'rxjs';
-import { filter, map, mergeMap, concatMap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { concatMap, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-validators',
@@ -22,28 +22,25 @@ import { filter, map, mergeMap, concatMap, withLatestFrom } from 'rxjs/operators
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
+  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
   allValidatorsTokens$: Observable<number | undefined>;
   validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063DelegationResponses[] | undefined>;
-  delegatedValidators$: Observable<(InlineResponse20066Validators | undefined)[] | undefined>;
+  delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
+  delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
   totalDelegation$: Observable<number | undefined>;
-  unbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
-  filteredUnbondingDelegations$: Observable<(InlineResponse20072 | undefined)[]>;
+  unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
+  filteredUnbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
 
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly stakingAppService: StakingApplicationService,
+    private cosmosRest: CosmosRestService,
   ) {
-    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
-      map((result) => result.data.validators),
-    );
+    this.validatorsList$ = this.cosmosRest.getValidators$();
 
     this.allValidatorsTokens$ = this.validatorsList$.pipe(
       map((validators) =>
@@ -103,10 +100,9 @@ export class ValidatorsComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, address$]);
-    this.delegations$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((result) => result.data.delegation_responses),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
+      map((result) => result.delegation_responses),
     );
 
     this.delegatedValidators$ = combineLatest([this.validatorsList$, this.delegations$]).pipe(
@@ -130,44 +126,42 @@ export class ValidatorsComponent implements OnInit {
     );
 
     this.unbondingDelegations$ = this.delegatedValidators$.pipe(
-      withLatestFrom(this.cosmosSDK.sdk$, address$),
-      concatMap(([validators, sdk, accAddress]) => {
-
+      withLatestFrom(address$),
+      concatMap(([validators, accAddress]) => {
         const valAddressList = validators?.map((validator) => {
-          if (!validator?.operator_address) return undefined
+          if (!validator?.operator_address) return undefined;
           try {
-            return cosmosclient.ValAddress.fromString(validator?.operator_address)
+            return cosmosclient.ValAddress.fromString(validator?.operator_address);
           } catch (error) {
             console.error(error);
             return undefined;
           }
-        })
-        if (!valAddressList) return []
+        });
+        if (!valAddressList) return [];
 
         const unbondingDelegationList = Promise.all(
           valAddressList.map((valAddress) => {
-            if (!valAddress) return undefined
-            return rest.staking.unbondingDelegation(sdk.rest, valAddress, accAddress
-            ).then(res => res && res.data
-            ).catch((err) => {
-              return undefined;
-            })
-          })
-        )
-        return unbondingDelegationList
+            if (!valAddress) return undefined;
+            return this.cosmosRest.getUnbondingDelegation$(valAddress, accAddress).toPromise();
+          }),
+        );
+        return unbondingDelegationList;
       }),
-    )
+    );
     this.filteredUnbondingDelegations$ = this.unbondingDelegations$.pipe(
-      map(unbondingDelegations => unbondingDelegations.filter(unbondingDelegation => unbondingDelegation)))
+      map((unbondingDelegations) =>
+        unbondingDelegations.filter((unbondingDelegation) => unbondingDelegation),
+      ),
+    );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);
   }
 
-  onSelectValidator(validator: InlineResponse20066Validators) {
+  onSelectValidator(validator: InlineResponse20041Validators) {
     this.stakingAppService.openDelegateMenuDialog(validator);
   }
 }

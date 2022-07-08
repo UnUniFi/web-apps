@@ -3,7 +3,7 @@ import { Nft } from '../../../../../../models/ununifi/query/nft/nft.model';
 import { MsgListNftData } from '../../../../../../models/ununifi/tx/nft/nft-tx.model';
 import { StoredWallet } from '../../../../../../models/wallets/wallet.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import * as crypto from 'crypto';
 import Long from 'long';
 
@@ -21,15 +21,15 @@ export class LibViewListNftFormDialogComponent implements OnInit {
   @Input() nft?: Nft | null;
 
   @Input() currentStoredWallet?: StoredWallet | null;
-  @Input() coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() uguuBalance?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() appSubmit: EventEmitter<MsgListNftFormData>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
   listingType: string;
@@ -54,7 +54,7 @@ export class LibViewListNftFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getColorCode(address: string) {
     const hash = crypto

@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type SendOnSubmitEvent = {
   currentStoredWallet: StoredWallet;
   toAddress: string;
-  amount: proto.cosmos.base.v1beta1.ICoin[];
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  coins: proto.cosmos.base.v1beta1.ICoin[];
+  amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[];
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[];
 };
 
 @Component({
@@ -20,18 +20,18 @@ export class SendComponent implements OnInit {
   currentStoredWallet?: StoredWallet | null;
 
   @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  amount?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  amount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<SendOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -43,7 +43,7 @@ export class SendComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(toAddress: string, minimumGasPrice: string) {
     if (!this.currentStoredWallet) {

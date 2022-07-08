@@ -2,7 +2,7 @@ import { CreateValidatorData } from '../../../models/cosmos/staking.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'app-view-create-validator',
@@ -27,17 +27,17 @@ export class CreateValidatorComponent implements OnInit {
   @Input() ip?: string | null;
   @Input() node_id?: string | null;
   @Input() pubkey?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitCreateValidator = new EventEmitter<
     CreateValidatorData & {
-      minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+      minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     }
   >();
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) { }
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -45,7 +45,7 @@ export class CreateValidatorComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmitCreateValidator(
     moniker: string,

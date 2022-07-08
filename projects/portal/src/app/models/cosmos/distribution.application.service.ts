@@ -9,10 +9,10 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20075,
-  InlineResponse20066Validators,
+  InlineResponse20050,
+  InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
@@ -28,10 +28,10 @@ export class DistributionApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly distribution: DistributionService,
     private readonly walletService: WalletService,
-  ) {}
+  ) { }
 
   async openWithdrawDelegatorRewardFormDialog(
-    validator: InlineResponse20066Validators,
+    validator: InlineResponse20041Validators,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
@@ -41,7 +41,7 @@ export class DistributionApplicationService {
   }
 
   async openWithdrawValidatorCommissionFormDialog(
-    validator: InlineResponse20066Validators,
+    validator: InlineResponse20041Validators,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
@@ -52,7 +52,7 @@ export class DistributionApplicationService {
 
   async withdrawDelegatorReward(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -69,8 +69,8 @@ export class DistributionApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -112,7 +112,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -142,7 +142,7 @@ export class DistributionApplicationService {
 
   async withdrawValidatorCommission(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -159,8 +159,8 @@ export class DistributionApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -202,7 +202,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

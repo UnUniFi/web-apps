@@ -1,7 +1,7 @@
 import { validatorType } from './../../../../../views/cosmos/staking/validators/validators.component';
 import { Component, OnInit, Input } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20014Validators } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 @Component({
@@ -16,14 +16,14 @@ export class ValidatorComponent implements OnInit {
   @Input()
   accAddress?: cosmosclient.AccAddress | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  getColorCode(validator: InlineResponse20066Validators | undefined | null) {
+  getColorCode(validator: InlineResponse20014Validators | undefined | null) {
     const hash = crypto
       .createHash('sha256')
-      .update(Buffer.from(validator?.operator_address ?? ''))
+      .update(Buffer.from(validator?.address ?? ''))
       .digest()
       .toString('hex');
 

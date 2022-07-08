@@ -16,7 +16,7 @@ import { IUnunifiWalletInfrastructureService } from './ununifi-wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
-  ) {}
+  ) { }
 
   private async ununifiSelectWallet(): Promise<boolean> {
     const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
@@ -246,7 +246,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
 
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.openUnunifiKeyFormDialog();
@@ -277,7 +277,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
 
   async signTxWithPrivateKey(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     privateKey: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
     const cosmosPrivateKey: cosmosclient.PrivKey | undefined = createCosmosPrivateKeyFromString(

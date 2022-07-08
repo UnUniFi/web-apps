@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20052Proposals,
+  InlineResponse20027FinalTallyResult,
+  InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -15,22 +15,22 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<InlineResponse20052Proposals[]>;
-  tallies$: Observable<(InlineResponse20052FinalTallyResult | undefined)[]>;
+  proposals$: Observable<InlineResponse20027Proposals[]>;
+  tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly cosmosSDK: CosmosSDKService,
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
       map((result) => result.data.proposals!),
     );
     this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$]).pipe(
       mergeMap(([sdk, proposals]) =>
         Promise.all(
           proposals.map((proposal) =>
-            rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
+            cosmosclient.rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
               console.log(err);
               return;
             }),
@@ -41,5 +41,5 @@ export class ProposalsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

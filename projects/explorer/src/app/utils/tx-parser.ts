@@ -7,12 +7,18 @@ export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
   return tx.body?.messages?.map(message => txParseMsg(message))
 }
 
+export const txParseProposalContent = (message: InlineResponse200Accounts)
+  : cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined => {
+  const content = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
+  if (content instanceof cosmosclient.proto.cosmos.gov.v1beta1.TextProposal) {
+    return content
+  } else {
+    return undefined
+  }
+}
+
 export const txParseMsg = (message: InlineResponse200Accounts): txTitle => {
-
   const instance = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(message))
-  //debug
-  console.log("txParseMsgs", instance)
-
   //staking module
   if (instance instanceof cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator) return parseMsgEditValidator(instance)
   if (instance instanceof cosmosclient.proto.cosmos.staking.v1beta1.MsgCreateValidator) return parseMsgCreateValidator(instance)

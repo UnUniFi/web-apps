@@ -5,8 +5,10 @@ import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi/api';
-import { combineLatest, Observable } from 'rxjs';
+import cosmosclient from '@cosmos-client/core';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposals',
@@ -15,6 +17,7 @@ import { map, mergeMap } from 'rxjs/operators';
 })
 export class ProposalsComponent implements OnInit {
   proposals$: Observable<InlineResponse20027Proposals[]>;
+  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
   constructor(
@@ -29,9 +32,16 @@ export class ProposalsComponent implements OnInit {
         ),
       ),
     );
+    this.proposalContents$ = this.proposals$.pipe(
+      mergeMap((proposals) =>
+        combineLatest(
+          proposals.map((proposal) => of(txParseProposalContent(proposal.content!)))
+        ),
+      ),
+    );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onVoteProposal(proposalID: number) {
     this.govAppService.openVoteFormDialog(proposalID);

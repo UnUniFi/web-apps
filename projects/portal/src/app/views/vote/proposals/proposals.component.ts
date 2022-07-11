@@ -17,14 +17,11 @@ export interface ProposalContent {
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  @Input()
-  proposals?: InlineResponse20027Proposals[] | null;
 
-  @Input()
-  tallies?: (InlineResponse20027FinalTallyResult | undefined)[] | null;
-
-  @Output()
-  appClickVote: EventEmitter<number>;
+  @Input() proposals?: InlineResponse20027Proposals[] | null;
+  @Input() tallies?: (InlineResponse20027FinalTallyResult | undefined)[] | null;
+  @Input() proposalContents?: (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[] | null;
+  @Output() appClickVote: EventEmitter<number>;
 
   constructor() {
     this.appClickVote = new EventEmitter();
@@ -32,6 +29,7 @@ export class ProposalsComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  /*
   unpackContent(value: any) {
     try {
       return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
@@ -39,6 +37,7 @@ export class ProposalsComponent implements OnInit {
       return null;
     }
   }
+  */
 
   onClickVote(proposalID: string) {
     this.appClickVote.emit(Number(proposalID));

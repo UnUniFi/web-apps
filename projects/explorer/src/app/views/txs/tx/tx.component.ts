@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -17,20 +16,4 @@ export class TxComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void { }
-
-  unpackKey(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as cosmosclient.PubKey;
-    } catch {
-      return null;
-    }
-  }
-
-  constructorName(instance: any) {
-    return instance.constructor.name;
-  }
-
-  entries(value: unknown) {
-    return Object.entries(value as any);
-  }
 }

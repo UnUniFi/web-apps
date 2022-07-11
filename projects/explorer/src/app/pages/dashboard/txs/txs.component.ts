@@ -145,7 +145,6 @@ export class TxsComponent implements OnInit {
       }),
       map((latestTxs) => latestTxs?.reverse()),
     );
-    this.txs$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void { }

@@ -321,7 +321,8 @@
           "options": {
             "devServerTarget": "portal:serve",
             "watch": true,
-            "headless": false
+            "headless": false,
+            "configFile": "projects/portal/cypress.json"
           },
           "configurations": {
             "production": {

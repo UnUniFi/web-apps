@@ -5,5 +5,5 @@
   "screenshotsFolder": "projects/portal/cypress/screenshots",
   "pluginsFile": "projects/portal/cypress/plugins/index.ts",
   "fixturesFolder": "projects/portal/cypress/fixtures",
-  "baseUrl": "http://localhost:4200"
+  "baseUrl": "http://localhost:4200/portal/"
 }

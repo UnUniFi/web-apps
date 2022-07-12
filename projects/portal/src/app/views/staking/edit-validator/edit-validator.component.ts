@@ -2,7 +2,7 @@ import { EditValidatorData } from '../../../models/cosmos/staking.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-edit-validator',
@@ -20,19 +20,19 @@ export class ViewEditValidatorComponent implements OnInit {
   @Input() min_self_delegation?: string | null;
   @Input() delegator_address?: string | null;
   @Input() validator_address?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitEditValidator = new EventEmitter<
     EditValidatorData & {
-      minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+      minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     }
   >();
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmitEditValidator(
     moniker: string,

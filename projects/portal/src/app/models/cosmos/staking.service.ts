@@ -190,10 +190,10 @@ export class StakingService {
   async editValidator(
     editValidatorData: EditValidatorData,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin | null,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildEditValidator(editValidatorData, gas, fee, cosmosPublicKey);
 
@@ -219,15 +219,15 @@ export class StakingService {
 
   async simulateToEditValidator(
     editValidatorData: EditValidatorData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -243,8 +243,8 @@ export class StakingService {
 
   async buildEditValidator(
     editValidatorData: EditValidatorData,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin | null,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     cosmosPublicKey: cosmosclient.PubKey,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -252,9 +252,13 @@ export class StakingService {
     const valAddress = cosmosclient.ValAddress.fromPublicKey(cosmosPublicKey);
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -284,7 +288,7 @@ export class StakingService {
       commission_rate: `${editValidatorData.rate}${'0000000000000000'}`,
       min_self_delegation: editValidatorData.min_self_delegation,
     };
-    const msgEditValidator = new proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
+    const msgEditValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
 
     const txBuilder = await this.txCommonService.buildTxBuilder(
       [msgEditValidator],

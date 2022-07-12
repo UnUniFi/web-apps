@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-edit-validator-simple',
@@ -31,24 +31,24 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
   @Input() denom?: string | null;
   @Input() amount?: string | null;
   @Input() pubkey?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitEditValidator = new EventEmitter<
     EditValidatorData & {
-      minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+      minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
       privateKey: string;
     }
   >();
 
   @ViewChild('fileInputRef') fileInputRef?: ElementRef;
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   file: File | null;
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-        privateKey: string;
-      })
+      privateKey: string;
+    })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -62,7 +62,7 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.minimumGasPrice = this.minimumGasPrices[0];
     }
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onChangeFile($event: Event): Promise<void> {
     if ($event === null || $event.target === null) {

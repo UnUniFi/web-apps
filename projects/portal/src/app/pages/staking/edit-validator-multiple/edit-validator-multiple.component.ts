@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GraphQLErrors, NetworkError } from '@apollo/client/errors';
 import { ErrorLink } from '@apollo/client/link/error';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Apollo, gql } from 'apollo-angular';
 import { GraphQLError } from 'graphql';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -14,7 +14,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 
 export type InterfaceEditValidatorsDataItem = EditValidatorData & {
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   privateKey: string;
 };
 
@@ -41,7 +41,7 @@ export class EditValidatorMultipleComponent implements OnInit {
   success: boolean = false;
   loading: boolean = true;
   error: string = '';
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   redirectUrls: string[] = [];
   constructor(
     private readonly route: ActivatedRoute,

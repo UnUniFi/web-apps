@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { RejectedFile } from 'ngx-dropzone/lib/ngx-dropzone.service';
 
@@ -48,17 +48,17 @@ export class ViewEditValidatorMultipleComponent implements OnInit {
   @Input() error?: string;
   @Input() setError?: (error: string) => void;
   @Input() success?: boolean;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() redirectUrls?: string[];
   @Output() submitCreateValidators = new EventEmitter<InterfaceCreateValidatorsData>();
 
   @ViewChild('fileInputRef') fileInputRef?: ElementRef;
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
   templateToRender: InterfaceTemplateToRender = 'loading';
 
-  constructor(private readonly snackBar: MatSnackBar, public dialog: MatDialog) {}
+  constructor(private readonly snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   openDialog() {
     this.dialog.open(ValidatorDialog, {
@@ -99,7 +99,7 @@ export class ViewEditValidatorMultipleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   checkInput(input: any) {
     if (!input) {
@@ -289,5 +289,5 @@ export class ViewEditValidatorMultipleComponent implements OnInit {
   templateUrl: 'validator-dialog.html',
 })
 export class ValidatorDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { redirectUrls: string[] | undefined }) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { redirectUrls: string[] | undefined }) { }
 }

@@ -27,10 +27,6 @@ const routes: Routes = [
     component: EditValidatorSimpleComponent,
   },
   {
-    path: 'edit-validator/multiple',
-    component: EditValidatorMultipleComponent,
-  },
-  {
     path: 'edit-validator',
     component: EditValidatorComponent,
     canActivate: [WalletGuard],
@@ -41,4 +37,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class StakingRoutingModule {}
+export class StakingRoutingModule { }

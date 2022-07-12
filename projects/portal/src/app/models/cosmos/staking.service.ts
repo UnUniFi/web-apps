@@ -1,16 +1,16 @@
 import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { createCosmosPrivateKeyFromUint8Array } from '../../utils/key';
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { Key, KeyType } from '../keys/key.model';
-import { KeyService } from '../keys/key.service';
+import { KeyType } from '../keys/key.model';
 import { CosmosWallet } from '../wallets/wallet.model';
 import { CreateValidatorData, EditValidatorData } from './staking.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import BigNumber from 'bignumber.js';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
@@ -18,18 +18,17 @@ import BigNumber from 'bignumber.js';
 export class StakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   // Create Validator
   async createValidator(
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin | null,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildCreateValidator(
       keyType,
       createValidatorData,
@@ -44,15 +43,15 @@ export class StakingService {
   async simulateToCreateValidator(
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -68,8 +67,8 @@ export class StakingService {
   }
 
   private makeCommissionValues(
-    commission: proto.cosmos.staking.v1beta1.ICommissionRates,
-  ): proto.cosmos.staking.v1beta1.ICommissionRates {
+    commission: cosmosclient.proto.cosmos.staking.v1beta1.ICommissionRates,
+  ): cosmosclient.proto.cosmos.staking.v1beta1.ICommissionRates {
     const pairs: [string, string][] = Object.entries(commission).map((pair: [string, string]) => {
       const [key, value] = pair;
       const bnValue = new BigNumber(value);
@@ -86,8 +85,8 @@ export class StakingService {
   async buildCreateValidator(
     keyType: KeyType,
     createValidatorData: CreateValidatorData,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin | null,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -100,9 +99,13 @@ export class StakingService {
     const valAddress = cosmosclient.ValAddress.fromPublicKey(pubKey);
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk, accAddress)
-      .then((res) => res.data.account && cosmosclient.codec.unpackCosmosAny(res.data.account))
+      .then((res) =>
+        cosmosclient.codec.protoJSONToInstance(
+          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
+        ),
+      )
       .catch((_) => undefined);
 
     const baseAccount = convertUnknownAccountToBaseAccount(account);
@@ -120,8 +123,9 @@ export class StakingService {
     }
 
     const pubKeyJson = JSON.parse(createValidatorData.pubkey);
-    const cosmosValConsPublicKey = new proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
-    const packedAnyCosmosValConsPublicKey = cosmosclient.codec.packAny(cosmosValConsPublicKey);
+    const cosmosValConsPublicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
+    const packedAnyCosmosValConsPublicKey =
+      cosmosclient.codec.instanceToProtoAny(cosmosValConsPublicKey);
 
     const commission = this.makeCommissionValues({
       rate: createValidatorData.rate,
@@ -147,22 +151,22 @@ export class StakingService {
         amount: createValidatorData.amount,
       },
     };
-    const msgCreateValidator = new proto.cosmos.staking.v1beta1.MsgCreateValidator(
+    const msgCreateValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgCreateValidator(
       createValidatorTxData,
     );
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateValidator)],
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
+      messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${createValidatorData.node_id}@${createValidatorData.ip}:26656`,
     });
 
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -170,7 +174,7 @@ export class StakingService {
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString(gas.amount ? gas.amount : '1000000'),
+        gas_limit: Long.fromString(gas.amount ? gas.amount : '1000000'),
       },
     });
 
@@ -295,12 +299,12 @@ export class StakingService {
   // Create Delegate
   async createDelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildCreateDelegateTxBuilder(
       validatorAddress,
@@ -328,16 +332,16 @@ export class StakingService {
 
   async simulateToCreateDelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -353,10 +357,10 @@ export class StakingService {
 
   async buildCreateDelegateTxBuilder(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -378,9 +382,9 @@ export class StakingService {
   buildMsgDelegate(
     delegatorAddress: string,
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-  ): proto.cosmos.staking.v1beta1.MsgDelegate {
-    const msgDelegate = new proto.cosmos.staking.v1beta1.MsgDelegate({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): cosmosclient.proto.cosmos.staking.v1beta1.MsgDelegate {
+    const msgDelegate = new cosmosclient.proto.cosmos.staking.v1beta1.MsgDelegate({
       delegator_address: delegatorAddress,
       validator_address: validatorAddress,
       amount,
@@ -392,12 +396,12 @@ export class StakingService {
   async redelegate(
     validatorAddressBefore: string,
     validatorAddressAfter: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
 
     const txBuilder = await this.buildRedelegateTxBuilder(
@@ -428,16 +432,16 @@ export class StakingService {
   async simulateToRedelegate(
     validatorAddressBefore: string,
     validatorAddressAfter: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -455,10 +459,10 @@ export class StakingService {
   async buildRedelegateTxBuilder(
     validatorAddressBefore: string,
     validatorAddressAfter: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -489,9 +493,9 @@ export class StakingService {
     delegatorAddress: string,
     validatorAddressBefore: string,
     validatorAddressAfter: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-  ): proto.cosmos.staking.v1beta1.MsgBeginRedelegate {
-    const msgRedelegate = new proto.cosmos.staking.v1beta1.MsgBeginRedelegate({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): cosmosclient.proto.cosmos.staking.v1beta1.MsgBeginRedelegate {
+    const msgRedelegate = new cosmosclient.proto.cosmos.staking.v1beta1.MsgBeginRedelegate({
       delegator_address: delegatorAddress,
       validator_src_address: validatorAddressBefore,
       validator_dst_address: validatorAddressAfter,
@@ -503,12 +507,12 @@ export class StakingService {
   //  Delete Delegate
   async undelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildUndelegateTxBuilder(
       validatorAddress,
@@ -536,16 +540,16 @@ export class StakingService {
 
   async simulateToUndelegate(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -561,10 +565,10 @@ export class StakingService {
 
   async buildUndelegateTxBuilder(
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -586,9 +590,9 @@ export class StakingService {
   buildMsgUndelegate(
     delegatorAddress: string,
     validatorAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-  ): proto.cosmos.staking.v1beta1.MsgUndelegate {
-    const msgUndelegate = new proto.cosmos.staking.v1beta1.MsgUndelegate({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): cosmosclient.proto.cosmos.staking.v1beta1.MsgUndelegate {
+    const msgUndelegate = new cosmosclient.proto.cosmos.staking.v1beta1.MsgUndelegate({
       delegator_address: delegatorAddress,
       validator_address: validatorAddress,
       amount,

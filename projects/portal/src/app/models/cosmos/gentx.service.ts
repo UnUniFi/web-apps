@@ -3,13 +3,14 @@ import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { GentxData } from './gentx.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
+import Long from 'long';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GentxService {
-  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) {}
+  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) { }
 
   async gentx(key: Key, gentxData: GentxData): Promise<{ [k: string]: any }> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -29,11 +30,11 @@ export class GentxService {
     console.log('gentxData.pubkey', gentxData.pubkey);
     const base64DecodedPublicKey = Uint8Array.from(Buffer.from(gentxData.pubkey, 'base64'));
     console.log('base64DecodedPublicKey', base64DecodedPublicKey);
-    const publicKey = new proto.cosmos.crypto.ed25519.PubKey({
+    const publicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({
       key: base64DecodedPublicKey,
     });
-    const packAnyPublicKey = cosmosclient.codec.packAny(publicKey);
-    console.log('packAnyPublicKey', packAnyPublicKey);
+    const instanceToProtoAnyPublicKey = cosmosclient.codec.instanceToProtoAny(publicKey);
+    console.log('instanceToProtoAnyPublicKey', instanceToProtoAnyPublicKey);
 
     // build tx
     const createValidatorTxData = {
@@ -52,42 +53,42 @@ export class GentxService {
       min_self_delegation: gentxData.min_self_delegation,
       delegator_address: gentxData.delegator_address,
       validator_address: gentxData.validator_address,
-      pubkey: packAnyPublicKey,
+      pubkey: instanceToProtoAnyPublicKey,
       value: {
         denom: gentxData.denom,
         amount: gentxData.amount,
       },
     };
     console.log('createValidatorTxData', createValidatorTxData);
-    const msgCreateValidator = new proto.cosmos.staking.v1beta1.MsgCreateValidator(
+    const msgCreateValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgCreateValidator(
       createValidatorTxData,
     );
     console.log('msgCreateValidator', msgCreateValidator);
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
-      messages: [cosmosclient.codec.packAny(msgCreateValidator)],
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
+      messages: [cosmosclient.codec.instanceToProtoAny(msgCreateValidator)],
       memo: `${gentxData.node_id}@${gentxData.ip}:26656`,
-      timeout_height: cosmosclient.Long.fromString('0'),
+      timeout_height: Long.fromString('0'),
       extension_options: [],
       non_critical_extension_options: [],
     });
     console.log('txBody', txBody);
 
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
-          public_key: cosmosclient.codec.packAny(pubKey),
+          public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
-          sequence: cosmosclient.Long.fromString('0'),
+          sequence: Long.fromString('0'),
         },
       ],
       fee: {
         amount: [],
-        gas_limit: cosmosclient.Long.fromString('200000'),
+        gas_limit: Long.fromString('200000'),
         payer: '',
         granter: '',
       },
@@ -96,11 +97,11 @@ export class GentxService {
 
     // sign
     const txBuilder = new cosmosclient.TxBuilder(sdk, txBody, authInfo);
-    const signDocBytes = txBuilder.signDocBytes(cosmosclient.Long.fromString('0'));
+    const signDocBytes = txBuilder.signDocBytes(Long.fromString('0'));
     console.log('hex', Buffer.from(signDocBytes).toString('hex')); // ここのconsole.logを正規表現置換したものをデバッグ用にgentx-proto-binary.txtに書き出した
     txBuilder.addSignature(privKey.sign(signDocBytes));
 
-    const txBodyJsonString = txBuilder.cosmosJSONStringify();
+    const txBodyJsonString = txBuilder.protoJSONStringify();
     console.log('txBodyJsonString', txBodyJsonString);
     const txBodyJson = JSON.parse(txBodyJsonString);
     console.log('txBodyJson', txBodyJson);

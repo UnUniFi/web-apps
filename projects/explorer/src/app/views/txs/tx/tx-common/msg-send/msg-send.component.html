@@ -1,0 +1,26 @@
+<ng-container *ngIf="txDetail">
+  <mat-card class="mb-2">
+    <mat-chip-list>
+      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
+    </mat-chip-list>
+    <mat-list>
+      <mat-list-item>
+        <span class="break-words">Address (from.):</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.fromAddress }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Address (To.):</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Amount:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.amount }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</ng-container>

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import * as bip39 from 'bip39';
-import { KeyService } from 'projects/portal/src/app/models';
 import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from 'projects/portal/src/app/utils/key';
 
 @Component({
   selector: 'app-simple',
@@ -14,13 +17,16 @@ export class SimpleComponent implements OnInit {
   privateWallet$: Promise<StoredWallet & { mnemonic: string; privateKey: string }>;
   now = new Date();
 
-  constructor(private keyService: KeyService) {
+  constructor() {
     const mnemonic = bip39.generateMnemonic();
-    this.privateWallet$ = this.keyService.getPrivateKeyFromMnemonic(mnemonic).then((privateKey) => {
-      const cosmosPrivateKey = this.keyService.getPrivKey(
-        KeyType.secp256k1,
-        Uint8Array.from(Buffer.from(privateKey, 'hex')),
-      );
+    this.privateWallet$ = createPrivateKeyStringFromMnemonic(mnemonic).then((privateKey) => {
+      if (!privateKey) {
+        throw Error('Invalid mnemonic!');
+      }
+      const cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
+      if (!cosmosPrivateKey) {
+        throw Error('Invalid privateKey!');
+      }
       const cosmosPublicKey = cosmosPrivateKey.pubKey();
       const public_key = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
       const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
@@ -44,5 +50,5 @@ export class SimpleComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

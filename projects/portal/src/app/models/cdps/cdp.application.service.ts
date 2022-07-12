@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
@@ -22,16 +22,16 @@ export class CdpApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly cdp: CdpService,
     private readonly key: KeyService,
-  ) {}
+  ) { }
 
   async createCDP(
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // validation
@@ -42,8 +42,8 @@ export class CdpApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -111,7 +111,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.createCDP(
+      const res: InlineResponse20050 = await this.cdp.createCDP(
         key,
         privateKey,
         collateralType,
@@ -145,9 +145,9 @@ export class CdpApplicationService {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // validation
@@ -158,8 +158,8 @@ export class CdpApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -226,7 +226,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.drawCDP(
+      const res: InlineResponse20050 = await this.cdp.drawCDP(
         key,
         privateKey,
         collateralType,
@@ -259,9 +259,9 @@ export class CdpApplicationService {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    repayment: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // validation
@@ -272,8 +272,8 @@ export class CdpApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -339,7 +339,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.repayCDP(
+      const res: InlineResponse20050 = await this.cdp.repayCDP(
         key,
         privateKey,
         collateralType,
@@ -373,9 +373,9 @@ export class CdpApplicationService {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // validation
@@ -386,8 +386,8 @@ export class CdpApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -455,7 +455,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.depositCDP(
+      const res: InlineResponse20050 = await this.cdp.depositCDP(
         key,
         privateKey,
         ownerAddr,
@@ -490,9 +490,9 @@ export class CdpApplicationService {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // validation
@@ -503,8 +503,8 @@ export class CdpApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
     // confirm whether account has enough gas denom for simulation
@@ -572,7 +572,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20075 = await this.cdp.withdrawCDP(
+      const res: InlineResponse20050 = await this.cdp.withdrawCDP(
         key,
         privateKey,
         ownerAddr,

@@ -8,7 +8,7 @@
 </div>
 <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
   <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -26,31 +26,24 @@
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
-
     <mat-nav-list>
-      <mat-list-item
-        *ngFor="let validator of validators; last as last"
-        (click)="onClickValidator(validator.val)"
-      >
-        <mat-icon
-          matListIcon
-          [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
-        >
+      <mat-list-item *ngFor="let validator of validators; last as last" (click)="onClickValidator(validator.val)">
+        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }">
           circle
         </mat-icon>
         <span class="w-1/2 break-all text-sm sm:text-base">{{
           validator.val.description?.moniker
-        }}</span>
+          }}</span>
         <span class="flex-auto"></span>
         <span class="w-2/12 text-right break-all text-sm sm:text-base">{{
           validator.share | percent: '1.2-2'
-        }}</span>
+          }}</span>
         <span class="w-2/12 text-right break-all text-sm sm:text-base">{{
           validator.val.tokens | unitConversion
-        }}</span>
+          }}</span>
         <span class="w-2/12 text-right break-all text-sm sm:text-base">{{
           validator.val.commission?.commission_rates?.rate | percent: '1.0-0'
-        }}</span>
+          }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>
@@ -63,47 +56,32 @@
 <h2 class="mb-0">Delegations</h2>
 <ng-container *ngIf="delegations === null; then loading; else loadedDelegations"> </ng-container>
 <ng-template #loadedDelegations>
-  <ng-container
-    *ngIf="(delegations?.length || 0) > 0; then existDelegations; else emptyDelegations"
-  >
+  <ng-container *ngIf="(delegations?.length || 0) > 0; then existDelegations; else emptyDelegations">
   </ng-container>
 </ng-template>
 <ng-template #existDelegations>
   <mat-card class="mb-4">
-    <mat-nav-list>
+    <mat-list>
       <mat-list-item>
-        <span class="w-2/3 break-all truncate pl-8 pr-8">Validator</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/6 break-all truncate pr-4">Amount</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/6 break-all truncate pr-4">Shares</span>
+        <span class="w-6/12 truncate pl-8 pr-8">Validator</span>
+        <span class="w-3/12 truncate text-right pr-4">Amount</span>
+        <span class="w-3/12 truncate text-right pr-4">Shares</span>
         <mat-divider></mat-divider>
       </mat-list-item>
+    </mat-list>
+    <mat-nav-list>
       <ng-container *ngFor="let delegation of delegations; last as last">
         <ng-container *ngFor="let validator of delegatedValidators">
-          <mat-list-item
-            *ngIf="delegation.delegation?.validator_address == validator?.operator_address"
-            (click)="onClickValidator(validator!)"
-          >
-            <mat-icon
-              matListIcon
-              [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
-            >
+          <mat-list-item *ngIf="delegation.delegation?.validator_address == validator?.operator_address"
+            (click)="onClickValidator(validator!)">
+            <mat-icon matListIcon [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }">
               circle
             </mat-icon>
-
-            <span class="w-3/5 break-all text-sm sm:text-base"
-              >{{ validator?.description?.moniker }}
-            </span>
-
-            <span class="flex-auto"></span>
-            <span class="w-1/6 break-all text-sm sm:text-base"
-              >{{ delegation.balance?.amount }} {{ delegation.balance?.denom }}
-            </span>
-            <span class="flex-auto"></span>
-            <span class="w-1/6 break-all text-sm sm:text-base"
-              >{{ toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}
-            </span>
+            <span class="w-6/12 break-all text-sm sm:text-base">{{ validator?.description?.moniker }} </span>
+            <span class="w-3/12 break-all text-sm sm:text-base text-right pl-4">{{
+              delegation.balance?.amount }} {{ delegation.balance?.denom }} </span>
+            <span class="w-3/12 break-all text-sm sm:text-base text-right pl-4">{{
+              toNumber(delegation.delegation?.shares ?? '0') }} {{ delegation.balance?.denom }}</span>
           </mat-list-item>
         </ng-container>
         <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
@@ -113,4 +91,41 @@
 </ng-template>
 <ng-template #emptyDelegations>
   <p>There is no delegations.</p>
+</ng-template>
+
+<ng-container *ngIf="(unbondingDelegations?.length || 0) > 0; then unbonding; else beforeUnbonding">
+</ng-container>
+<ng-template #unbonding>
+  <h2 class="mb-0">OnGoing Unbonding</h2>
+  <mat-card class="mb-4">
+    <mat-list>
+      <mat-list-item>
+        <span class="w-6/12 break-all truncate pl-8 pr-8">Validator</span>
+        <span class="w-4/12 break-all truncate text-center">Date</span>
+        <span class="w-2/12 break-all truncate text-right pl-2">Amount</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+    <mat-nav-list>
+      <ng-container *ngFor="let unbondingDelegation of unbondingDelegations; last as last">
+        <ng-container *ngFor="let validator of delegatedValidators">
+          <mat-list-item *ngIf="unbondingDelegation?.unbond?.validator_address == validator?.operator_address"
+            (click)="onClickValidator(validator!)">
+            <mat-icon matListIcon
+              [ngStyle]="{ color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '') }">
+              circle
+            </mat-icon>
+            <span class="w-6/12 break-all text-sm sm:text-base">{{ validator?.description?.moniker }} </span>
+            <span class="w-4/12 break-all text-sm sm:text-base text-right pr-2">{{
+              unbondingDelegation?.unbond?.entries?.[0]?.completion_time | date : 'yyyy-M-d a h:mm:ss z'}} </span>
+            <span class="w-2/12 break-all text-sm sm:text-base text-right pr-2">{{
+              unbondingDelegation?.unbond?.entries?.[0]?.balance }}</span>
+          </mat-list-item>
+        </ng-container>
+        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+  </mat-card>
+</ng-template>
+<ng-template #beforeUnbonding>
 </ng-template>

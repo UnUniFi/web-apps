@@ -1,11 +1,10 @@
-import { CosmosSDKService } from '../../../../models';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
-import { InlineResponse20066Validators, QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
-import { Observable, of, combineLatest } from 'rxjs';
-import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import cosmosclient from '@cosmos-client/core';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { validatorType } from 'projects/portal/src/app/views/delegate/validators/validators.component';
+import { combineLatest, Observable } from 'rxjs';
+import { map, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-validator',
@@ -13,14 +12,13 @@ import { validatorType } from 'projects/portal/src/app/views/delegate/validators
   styleUrls: ['./validator.component.css'],
 })
 export class ValidatorComponent implements OnInit {
-  validatorsList$: Observable<QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod>;
   allValidatorsTokens$: Observable<number | undefined>;
   OtherValidators$: Observable<validatorType[]>;
   validator$: Observable<validatorType | undefined>;
 
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
     const validatorAddress$ = this.route.params.pipe(
       map((params) => params.address),
       map((addr) => cosmosclient.ValAddress.fromString(addr)),
@@ -29,28 +27,25 @@ export class ValidatorComponent implements OnInit {
       map((validatorAddress) => validatorAddress.toAccAddress()),
     );
 
-    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
-      map((result) => result.data),
-    );
+    const validatorsList$ = this.cosmosRest.getValidators$();
 
-    this.allValidatorsTokens$ = this.validatorsList$.pipe(
+    this.allValidatorsTokens$ = validatorsList$.pipe(
       map((validators) =>
-        validators?.validators?.reduce((sum, validator) => {
+        validators?.reduce((sum, validator) => {
           return sum + Number(validator.tokens);
         }, 0),
       ),
     );
 
     this.OtherValidators$ = this.allValidatorsTokens$.pipe(
-      withLatestFrom(this.validatorsList$),
+      withLatestFrom(validatorsList$),
       map(([allTokens, validators]) => {
         if (!allTokens) {
           return [];
         }
 
         // sort by share (Token)
-        const validatorsWithSorted = validators.validators?.sort(
+        const validatorsWithSorted = validators?.sort(
           (x, y) => Number(y.tokens) - Number(x.tokens),
         );
 

@@ -1,7 +1,7 @@
 import { KeyInfrastructureService } from './key.infrastructure.service';
 import { Key, KeyType } from './key.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 export interface IKeyInfrastructure {
   getPrivKey(type: KeyType, privateKey: Uint8Array): cosmosclient.PrivKey;
@@ -37,7 +37,7 @@ export class KeyService {
   }
 
   getPrivateKeyFromMnemonic(mnemonic: string) {
-    const mnemonicWithNoWhitespace = mnemonic.trim();
+    const mnemonicWithNoWhitespace = mnemonic.trim().replace(/\s+/g, ' ');
     return this.iKeyInfrastructure.getPrivateKeyFromMnemonic(mnemonicWithNoWhitespace);
   }
 

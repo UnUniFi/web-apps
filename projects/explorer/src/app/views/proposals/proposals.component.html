@@ -3,7 +3,7 @@
 </div>
 <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
   <ng-container *ngIf="(proposals?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -17,8 +17,7 @@
             <div matLine class="flex mb-2">
               <span class="w-2/12"># {{ proposal.proposal_id }}</span>
               <span class="w-7/12 text-center truncate">{{ content.title }}</span>
-              <span class="w-3/12 text-right truncate"
-                >{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+              <span class="w-3/12 text-right truncate">{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
               </span>
             </div>
             <div matLine class="flex">
@@ -43,6 +42,9 @@
           <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
         </ng-container>
       </ng-container>
+      <mat-paginator [length]="pageLength" [pageSize]="pageSize" [pageIndex]="pageNumber ? pageNumber - 1 : 0"
+        [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []" (page)="onPaginationChange($event)">
+      </mat-paginator>
     </mat-nav-list>
   </mat-card>
 </ng-template>

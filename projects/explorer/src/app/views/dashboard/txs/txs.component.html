@@ -1,6 +1,6 @@
 <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
-  <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'"></mat-progress-spinner>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
   <mat-card>
@@ -12,8 +12,7 @@
       <span class="flex-auto"></span>
       <mat-form-field>
         <mat-select [(value)]="selectedTxType" (valueChange)="onSelectedTxTypeChanged($event)">
-          <mat-option *ngFor="let txType of txTypeOptions" [value]="txType"
-            >{{ txType }}
+          <mat-option *ngFor="let txType of txTypeOptions" [value]="txType">{{ txType }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -35,8 +34,7 @@
           <mat-list-item routerLink="/txs/{{ tx.txhash }}">
             <span class="pr-4 font-mono truncate">{{ tx.txhash }}</span>
             <span class="flex-auto"></span>
-            <span class="break-all truncate font-mono"
-              >{{ tx.timestamp | date: 'yy/MM/dd H:mm' }}
+            <span class="break-all truncate font-mono">{{ tx.timestamp | date: 'yy/MM/dd H:mm' }}
             </span>
             <mat-divider *ngIf="!last"></mat-divider>
           </mat-list-item>
@@ -44,7 +42,7 @@
       </mat-nav-list>
     </ng-template>
     <ng-template #empty>
-      <p>There is no traction.</p>
+      <p>There is no transaction.</p>
     </ng-template>
   </mat-card>
 </ng-template>

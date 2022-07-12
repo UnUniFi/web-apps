@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
+  InlineResponse20038,
+  InlineResponse20041Validators,
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -14,33 +16,44 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
-  selectedValidator?: InlineResponse20066Validators | null;
+  selectedValidator?: InlineResponse20041Validators | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: InlineResponse20038 | null;
   @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   isDelegated?: boolean | null;
-
+  @Input()
+  totalRewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
+  @Input()
+  commission?: QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod | null;
+  @Input()
+  isValidator?: boolean | null;
   @Output()
-  appDelegate: EventEmitter<InlineResponse20066Validators>;
+  appDelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appRedelegate: EventEmitter<InlineResponse20066Validators>;
+  appRedelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appUndelegate: EventEmitter<InlineResponse20066Validators>;
+  appUndelegate: EventEmitter<InlineResponse20041Validators>;
   @Output()
-  appDetail: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawDelegatorReward: EventEmitter<InlineResponse20041Validators>;
+  @Output()
+  appWithdrawValidatorCommission: EventEmitter<InlineResponse20041Validators>;
+  @Output()
+  appDetail: EventEmitter<InlineResponse20041Validators>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
+    this.appWithdrawDelegatorReward = new EventEmitter();
+    this.appWithdrawValidatorCommission = new EventEmitter();
     this.appDetail = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getColorCode(address: string) {
     const hash = crypto
@@ -70,6 +83,20 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appUndelegate.emit(this.selectedValidator);
+  }
+
+  onClickWithdrawDelegatorRewardButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appWithdrawDelegatorReward.emit(this.selectedValidator);
+  }
+
+  onClickWithdrawValidatorCommissionButton() {
+    if (!this.selectedValidator) {
+      return;
+    }
+    this.appWithdrawValidatorCommission.emit(this.selectedValidator);
   }
 
   onClickDetailButton() {

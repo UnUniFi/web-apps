@@ -1,8 +1,7 @@
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
+import { UnunifiRestService } from '../../models/ununifi-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, timer } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { rest } from 'ununifi-client';
+import { Observable, timer } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { InlineResponse2002Params } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -12,13 +11,8 @@ import { InlineResponse2002Params } from 'ununifi-client/esm/openapi';
 })
 export class AuctionComponent implements OnInit {
   params$: Observable<InlineResponse2002Params>;
-  constructor(private cosmosSDK: CosmosSDKService) {
-    const timer$ = timer(0, 60 * 1000);
-
-    this.params$ = combineLatest([this.cosmosSDK.sdk$, timer$]).pipe(
-      mergeMap(([sdk, _]) => rest.ununifi.auction.params(sdk.rest)),
-      map((res) => res.data.params!),
-    );
+  constructor(private ununifiRest: UnunifiRestService) {
+    this.params$ = timer(0, 60 * 1000).pipe(mergeMap(() => this.ununifiRest.getAuctionParams$()));
   }
 
   ngOnInit(): void {}

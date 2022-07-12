@@ -1,7 +1,7 @@
 import { KeyType } from './keys/key.model';
 import { WalletType } from './wallets/wallet.model';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import Dexie from 'dexie';
 
@@ -34,7 +34,7 @@ export class DbService {
           let cosmosPublicKey: PubKey;
           switch (key_type) {
             case KeyType.secp256k1:
-              cosmosPublicKey = new proto.cosmos.crypto.secp256k1.PubKey({
+              cosmosPublicKey = new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
                 key: Uint8Array.from(Buffer.from(public_key, 'hex')),
               });
               break;

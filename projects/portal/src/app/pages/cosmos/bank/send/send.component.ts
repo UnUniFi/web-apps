@@ -1,14 +1,14 @@
-import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
 import { BankApplicationService } from '../../../../models/cosmos/bank.application.service';
 import { SendOnSubmitEvent } from '../../../../views/cosmos/bank/send/send.component';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { combineLatest, Observable } from 'rxjs';
-import { map, mergeMap, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-send',
@@ -17,16 +17,16 @@ import { map, mergeMap, filter } from 'rxjs/operators';
 })
 export class SendComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  amount$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  amount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly bankApplication: BankApplicationService,
     private readonly snackBar: MatSnackBar,
     private readonly configS: ConfigService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
 
@@ -35,10 +35,7 @@ export class SendComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
 
     this.amount$ = this.coins$.pipe(
       map((amount) =>

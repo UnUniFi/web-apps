@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/index';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { CdpApplicationService } from 'projects/portal/src/app/models/index';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
+import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
 import { ClearCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/cdp/clear/clear.component';
-import { timer, of, combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
+import { combineLatest, Observable, of, timer } from 'rxjs';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -21,23 +22,24 @@ export class ClearComponent implements OnInit {
   key$: Observable<Key | undefined>;
   owner$: Observable<string>;
   collateralType$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
+  params$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   repaymentDenomString$: Observable<string>;
-  repaymentDenom$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
+  repaymentDenom$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
 
   cdp$: Observable<InlineResponse2004Cdp1>;
 
   address$: Observable<cosmosclient.AccAddress | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly keyStore: KeyStoreService,
     private readonly cdpApplicationService: CdpApplicationService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly cosmosRest: CosmosRestService,
+    private readonly ununifiRest: UnunifiRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
@@ -56,31 +58,23 @@ export class ClearComponent implements OnInit {
       }),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
-      mergeMap(([n, sdk, address]) => {
+    this.balances$ = timer$.pipe(
+      withLatestFrom(this.address$),
+      mergeMap(([_, address]) => {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || []);
+        return this.cosmosRest.getAllBalances$(address).pipe(map((res) => res || []));
       }),
     );
 
-    this.params$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
-      map((data) => data.data.params!),
-    );
+    this.params$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
 
-    this.cdp$ = combineLatest([this.owner$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
-          sdk.rest,
-          cosmosclient.AccAddress.fromString(ownerAddr),
-          collateralType,
-        ),
+    this.cdp$ = combineLatest([this.owner$, this.collateralType$]).pipe(
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getCdp$(cosmosclient.AccAddress.fromString(ownerAddr), collateralType),
       ),
-      map((res) => res.data.cdp!),
+      map((res) => res!),
     );
 
     this.repaymentDenomString$ = combineLatest([this.params$, this.cdp$]).pipe(

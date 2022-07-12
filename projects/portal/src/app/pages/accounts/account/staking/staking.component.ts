@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
-import {
-  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  QueryValidatorDelegationsResponseIsResponseTypeForTheQueryValidatorDelegationsRPCMethod,
-} from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable, of } from 'rxjs';
+import cosmosclient from '@cosmos-client/core';
+import { CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse } from '@cosmos-client/core/esm/openapi/api';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -23,8 +20,8 @@ export class StakingComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private snackBar: MatSnackBar,
+    private cosmosRest: CosmosRestService,
   ) {
     const accAddress$ = this.route.params.pipe(
       map((params) => params.address),
@@ -39,6 +36,21 @@ export class StakingComponent implements OnInit {
         }
       }),
     );
+
+    /*
+    delegationTotalRewardsで報酬の合計値、Valaddress毎の報酬の両方を取得可能
+    Valaddress指定で取得するAPI delegationRewardsは現状コメントアウト
+    */
+    this.totalRewards$ = accAddress$.pipe(
+      mergeMap((accAddress) => {
+        if (accAddress === undefined) {
+          return of(undefined);
+        }
+        return this.cosmosRest.getDelegationTotalRewards$(accAddress);
+      }),
+    );
+
+    /*
     const valAddress$ = accAddress$.pipe(
       map((accAddress) => {
         if (accAddress === undefined) {
@@ -48,25 +60,8 @@ export class StakingComponent implements OnInit {
       }),
     );
     const combined$ = combineLatest([this.cosmosSDK.sdk$, accAddress$, valAddress$]);
-
-    /*
-    delegationTotalRewardsで報酬の合計値、Valaddress毎の報酬の両方を取得可能
-    Valaddress指定で取得するAPI delegationRewardsは現状コメントアウト
-    */
-    this.totalRewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress]) => {
-        if (accAddress === undefined) {
-          return of(undefined);
-        }
-        return rest.distribution
-          .delegationTotalRewards(sdk.rest, accAddress)
-          .then((res) => res.data);
-      }),
-    );
-
-    /*
     this.eachRewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => rest.cosmos.distribution.delegationRewards(sdk.rest, accAddress, valAddress)),
+      mergeMap(([sdk, accAddress, valAddress]) => cosmosclient.rest.cosmos.distribution.delegationRewards(sdk.rest, accAddress, valAddress)),
       map((res) => res.data),
     );
     */

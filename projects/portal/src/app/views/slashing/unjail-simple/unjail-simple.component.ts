@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'app-view-unjail-simple',
@@ -20,23 +20,23 @@ export class UnjailSimpleComponent implements OnInit {
   @Input() currentStoredWallet?: StoredWallet | null;
   @Input() delegator_address?: string | null;
   @Input() validator_address?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitUnjail = new EventEmitter<{
     validator_address: string;
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     privateKey: string;
   }>();
 
   @ViewChild('fileInputRef') fileInputRef?: ElementRef;
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   file: File | null;
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-        privateKey: string;
-      })
+      privateKey: string;
+    })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -51,7 +51,7 @@ export class UnjailSimpleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onChangeFile($event: Event): Promise<void> {
     console.log('onChangeFile');

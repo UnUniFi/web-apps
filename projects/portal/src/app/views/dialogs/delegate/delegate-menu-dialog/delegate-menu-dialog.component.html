@@ -48,8 +48,54 @@
         <mat-list-item>
           <span class="column-name">Delegated Amount</span>
           <span class="flex-auto"></span>
-          <span class="column-value">{{ delegateAmount?.amount }}{{ delegateAmount?.denom }}</span>
+          <span class="column-value">{{ delegateAmount?.amount | number:'1.0-0' }} {{ delegateAmount?.denom }}</span>
         </mat-list-item>
+      </mat-list>
+      <mat-list class="w-full">
+        <ng-container
+          *ngIf="(totalRewards?.total?.length || 0) > 0; then existTotalRewards; else emptyTotalRewards"        >
+        </ng-container>
+        <ng-template #emptyTotalRewards>
+          <mat-list-item>
+            <span class="column-name">Claimable Delegator Reward</span>
+            <span class="flex-auto"></span>
+            <span>*This account has no claimable delegator reward</span>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #existTotalRewards>
+          <mat-list-item *ngFor="let eachTotalReward of totalRewards?.total; last as last">
+            <span class="column-name">Claimable Delegator Reward</span>
+            <span class="flex-auto"></span>
+            <span>{{ eachTotalReward.amount | number:'1.0-0' }} {{ eachTotalReward.denom }}</span>
+          </mat-list-item>
+        </ng-template>
+      </mat-list>
+    </ng-container>
+
+    <ng-container *ngIf="isValidator">
+      <mat-list class="w-full">
+        <ng-container
+          *ngIf="
+            (commission?.commission?.commission?.length || 0) > 0;
+            then existCommission;
+            else emptyCommission
+          "
+        >
+        </ng-container>
+        <ng-template #emptyCommission>
+          <mat-list-item>
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>*This account has no commission</span>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #existCommission>
+          <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
+            <span class="column-name">Claimable Validator Commission</span>
+            <span class="flex-auto"></span>
+            <span>{{ commission.amount | number:'1.0-0' }} {{ commission.denom }}</span>
+          </mat-list-item>
+        </ng-template>
       </mat-list>
     </ng-container>
 
@@ -83,6 +129,22 @@
       >
         <span class="text-black">Undelegate from this validator</span>
       </button>
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickWithdrawDelegatorRewardButton()"
+      >
+        <span class="text-black">Withdraw delegator reward</span>
+      </button>
     </ng-container>
-  </div>
+    <ng-container *ngIf="isValidator">
+      <button
+        mat-flat-button
+        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        (click)="onClickWithdrawValidatorCommissionButton()"
+      >
+        <span class="text-black">Withdraw validator commission</span>
+      </button>
+    </ng-container>
+</div>
 </mat-dialog-content>

@@ -71,26 +71,27 @@ export class UnjailSimpleComponent implements OnInit {
     if (!this.privateWallet?.privateKey) {
       this.snackBar.open(
         `Error: PrivateKey does not contained! Need to drag and drop correct wallet backup file!`,
+        'Close',
       );
       return;
     }
     if (this.privateWallet?.address && this.privateWallet?.address !== this.delegator_address) {
-      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`);
+      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`, 'Close');
       return;
     }
     console.log(this.minimumGasPrice?.amount);
     if (!this.minimumGasPrice?.amount) {
-      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`);
+      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`, 'Close');
       return;
     }
     console.log(this.delegator_address);
     if (!this.delegator_address) {
-      this.snackBar.open(`Error: delegator_address is invalid!`);
+      this.snackBar.open(`Error: delegator_address is invalid!`, 'Close');
       return;
     }
     console.log(this.validator_address);
     if (!this.validator_address) {
-      this.snackBar.open(`Error: validator_address is invalid!`);
+      this.snackBar.open(`Error: validator_address is invalid!`, 'Close');
       return;
     }
     this.onSubmitUnjail(
@@ -111,7 +112,7 @@ export class UnjailSimpleComponent implements OnInit {
     }
 
     if (this.minimumGasPrice === undefined) {
-      this.snackBar.open('Invalid gas fee!');
+      this.snackBar.open('Invalid gas fee!', 'Close');
       return;
     }
 

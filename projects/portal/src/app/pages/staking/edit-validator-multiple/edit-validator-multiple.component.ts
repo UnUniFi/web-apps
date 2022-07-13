@@ -1,5 +1,5 @@
 import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
-import { CreateValidatorData } from '../../../models/cosmos/staking.model';
+import { EditValidatorData } from '../../../models/cosmos/staking.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,12 +13,12 @@ import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 
-export type InterfaceCreateValidatorsDataItem = CreateValidatorData & {
+export type InterfaceEditValidatorsDataItem = EditValidatorData & {
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   privateKey: string;
 };
 
-export type InterfaceCreateValidatorsData = InterfaceCreateValidatorsDataItem[];
+export type InterfaceEditValidatorsData = InterfaceEditValidatorsDataItem[];
 const getUserNodesQuery = () => gql`
   query getNodes($getNodesInput: GetNodesInput!) {
     getNodes(getNodesInput: $getNodesInput) {
@@ -31,11 +31,11 @@ const getUserNodesQuery = () => gql`
 `;
 
 @Component({
-  selector: 'app-create-validator-multiple',
-  templateUrl: './create-validator-multiple.component.html',
-  styleUrls: ['./create-validator-multiple.component.css'],
+  selector: 'app-edit-validator-multiple',
+  templateUrl: './edit-validator-multiple.component.html',
+  styleUrls: ['./edit-validator-multiple.component.css'],
 })
-export class CreateValidatorMultipleComponent implements OnInit {
+export class EditValidatorMultipleComponent implements OnInit {
   userId: string | null;
   nodes$: Observable<any[]>;
   success: boolean = false;
@@ -114,16 +114,14 @@ export class CreateValidatorMultipleComponent implements OnInit {
     );
   }
 
-  async appSubmitCreateValidators(
-    createValidatorsData: InterfaceCreateValidatorsData,
-  ): Promise<void> {
+  async appSubmitEditValidators(editValidatorsData: InterfaceEditValidatorsData): Promise<void> {
     const gasRatio = 1.1;
     const results = (await Promise.all(
-      createValidatorsData.map(async (createValidatorData) => {
-        return this.stakingApplicationService.createValidatorSimple(
-          createValidatorData,
-          createValidatorData.minimumGasPrice,
-          createValidatorData.privateKey,
+      editValidatorsData.map(async (editValidatorData) => {
+        return this.stakingApplicationService.editValidatorSimple(
+          editValidatorData,
+          editValidatorData.minimumGasPrice,
+          editValidatorData.privateKey,
           gasRatio,
           { disableRedirect: true, disableErrorSnackBar: true, disableSimulate: true },
         );
@@ -131,9 +129,9 @@ export class CreateValidatorMultipleComponent implements OnInit {
     )) as (string | undefined)[];
     const success = results.length > 0 && results.every((result: string | undefined) => !!result);
     if (success) {
-      this.redirectUrls = createValidatorsData.map(
-        (createValidatorData) =>
-          `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`,
+      this.redirectUrls = editValidatorsData.map(
+        (editValidatorData) =>
+          `${location.protocol}//${location.host}/explorer/validators/${editValidatorData.validator_address}`,
       );
       this.setSuccess(true);
     } else {

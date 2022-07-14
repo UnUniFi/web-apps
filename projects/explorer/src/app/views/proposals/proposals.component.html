@@ -11,7 +11,7 @@
 <ng-template #exist>
   <mat-card>
     <mat-nav-list>
-      <ng-container *ngFor="let proposal of proposals?.reverse(); let i = index; last as last">
+      <ng-container *ngFor="let proposal of proposals; let i = index; last as last">
         <ng-container *ngIf="unpackContent(proposal.content) as content">
           <mat-list-item routerLink="{{ proposal.proposal_id }}">
             <div matLine class="flex mb-2">
@@ -42,6 +42,9 @@
           <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
         </ng-container>
       </ng-container>
+      <mat-paginator [length]="pageLength" [pageSize]="pageSize" [pageIndex]="pageNumber ? pageNumber - 1 : 0"
+        [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []" (page)="onPaginationChange($event)">
+      </mat-paginator>
     </mat-nav-list>
   </mat-card>
 </ng-template>

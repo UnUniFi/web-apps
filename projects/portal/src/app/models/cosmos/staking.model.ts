@@ -16,3 +16,15 @@ export type CreateValidatorData = {
   node_id: string;
   pubkey: string;
 };
+
+export type EditValidatorData = {
+  rate: string;
+  details?: string;
+  identity?: string;
+  min_self_delegation: string;
+  moniker: string;
+  security_contact?: string;
+  website?: string;
+  delegator_address: string;
+  validator_address: string;
+};

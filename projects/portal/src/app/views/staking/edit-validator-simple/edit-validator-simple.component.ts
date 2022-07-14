@@ -1,4 +1,4 @@
-import { CreateValidatorData } from '../../../models/cosmos/staking.model';
+import { EditValidatorData } from '../../../models/cosmos/staking.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import {
   Component,
@@ -13,11 +13,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 
 @Component({
-  selector: 'app-view-create-validator-simple',
-  templateUrl: './create-validator-simple.component.html',
-  styleUrls: ['./create-validator-simple.component.css'],
+  selector: 'view-edit-validator-simple',
+  templateUrl: './edit-validator-simple.component.html',
+  styleUrls: ['./edit-validator-simple.component.css'],
 })
-export class CreateValidatorSimpleComponent implements OnInit {
+export class ViewEditValidatorSimpleComponent implements OnInit {
   @Input() currentStoredWallet?: StoredWallet | null;
   @Input() moniker?: string | null;
   @Input() identity?: string | null;
@@ -25,20 +25,16 @@ export class CreateValidatorSimpleComponent implements OnInit {
   @Input() security_contact?: string | null;
   @Input() details?: string | null;
   @Input() rate?: string | null;
-  @Input() max_rate?: string | null;
-  @Input() max_change_rate?: string | null;
   @Input() min_self_delegation?: string | null;
   @Input() delegator_address?: string | null;
   @Input() validator_address?: string | null;
   @Input() denom?: string | null;
   @Input() amount?: string | null;
-  @Input() ip?: string | null;
-  @Input() node_id?: string | null;
   @Input() pubkey?: string | null;
   @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
-  @Output() submitCreateValidator = new EventEmitter<
-    CreateValidatorData & {
+  @Output() submitEditValidator = new EventEmitter<
+    EditValidatorData & {
       minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
       privateKey: string;
     }
@@ -66,7 +62,6 @@ export class CreateValidatorSimpleComponent implements OnInit {
       this.minimumGasPrice = this.minimumGasPrices[0];
     }
   }
-
   ngOnInit(): void { }
 
   async onChangeFile($event: Event): Promise<void> {
@@ -93,16 +88,14 @@ export class CreateValidatorSimpleComponent implements OnInit {
       return;
     }
     if (!this.minimumGasPrice?.amount) {
-      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`, 'Close');
+      this.snackBar.open(`Error: minmumGasPrice.amount is invalid!`, 'Close');
       return;
     }
     if (!this.moniker) {
-      this.snackBar.open(`Error: moniker is invalid!`, 'Close');
-      return;
+      this.moniker = '';
     }
     if (!this.identity) {
-      this.snackBar.open(`Error: identity is invalid!`, 'Close');
-      return;
+      this.identity = '';
     }
     if (!this.website) {
       this.website = '';
@@ -114,20 +107,10 @@ export class CreateValidatorSimpleComponent implements OnInit {
       this.details = '';
     }
     if (!this.rate) {
-      this.snackBar.open(`Error: rate is invalid!`, 'Close');
-      return;
-    }
-    if (!this.max_rate) {
-      this.snackBar.open(`Error: max_rate is invalid!`, 'Close');
-      return;
-    }
-    if (!this.max_change_rate) {
-      this.snackBar.open(`Error: max_change_rate is invalid!`, 'Close');
-      return;
+      this.rate = '';
     }
     if (!this.min_self_delegation) {
-      this.snackBar.open(`Error: min_self_delegation is invalid!`, 'Close');
-      return;
+      this.min_self_delegation = '';
     }
     if (!this.delegator_address) {
       this.snackBar.open(`Error: delegator_address is invalid!`, 'Close');
@@ -137,65 +120,31 @@ export class CreateValidatorSimpleComponent implements OnInit {
       this.snackBar.open(`Error: validator_address is invalid!`, 'Close');
       return;
     }
-    if (!this.denom) {
-      this.snackBar.open(`Error: denom is invalid!`, 'Close');
-      return;
-    }
-    if (!this.amount) {
-      this.snackBar.open(`Error: amount is invalid!`, 'Close');
-      return;
-    }
-    if (!this.ip) {
-      this.snackBar.open(`Error: ip is invalid!`, 'Close');
-      return;
-    }
-    if (!this.node_id) {
-      this.snackBar.open(`Error: node_id is invalid!`, 'Close');
-      return;
-    }
-    if (!this.pubkey) {
-      this.snackBar.open(`Error: pubkey is invalid!`, 'Close');
-      return;
-    }
-    await this.onSubmitCreateValidator(
+    await this.onSubmitEditValidator(
       this.moniker,
       this.identity,
       this.website,
       this.security_contact,
       this.details,
       this.rate,
-      this.max_rate,
-      this.max_change_rate,
       this.min_self_delegation,
       this.delegator_address,
       this.validator_address,
-      this.denom,
-      this.amount,
-      this.ip,
-      this.node_id,
-      this.pubkey,
       this.minimumGasPrice?.amount,
       this.privateWallet.privateKey,
     );
   }
 
-  async onSubmitCreateValidator(
+  async onSubmitEditValidator(
     moniker: string,
     identity: string,
     website: string,
     security_contact: string,
     details: string,
     rate: string,
-    max_rate: string,
-    max_change_rate: string,
     min_self_delegation: string,
     delegator_address: string,
     validator_address: string,
-    denom: string,
-    amount: string,
-    ip: string,
-    node_id: string,
-    pubkey: string,
     minimumGasPriceAmount: string,
     privateKey: string,
   ): Promise<void> {
@@ -208,24 +157,16 @@ export class CreateValidatorSimpleComponent implements OnInit {
       this.snackBar.open('Invalid gas fee!', 'Close');
       return;
     }
-
-    this.submitCreateValidator.emit({
+    this.submitEditValidator.emit({
       moniker,
       identity,
       website,
       security_contact,
       details,
       rate,
-      max_rate,
-      max_change_rate,
       min_self_delegation,
       delegator_address,
       validator_address,
-      denom,
-      amount,
-      ip,
-      node_id,
-      pubkey,
       minimumGasPrice: {
         denom: this.minimumGasPrice.denom,
         amount: minimumGasPriceAmount,
@@ -234,15 +175,8 @@ export class CreateValidatorSimpleComponent implements OnInit {
     });
   }
 
-  onMinimumGasDenomChanged(denom: string): void {
-    this.minimumGasPrice = this.minimumGasPrices?.find(
-      (minimumGasPrice) => minimumGasPrice.denom === denom,
-    );
-  }
-
-  onMinimumGasAmountSliderChanged(amount: string): void {
-    if (this.minimumGasPrice) {
-      this.minimumGasPrice.amount = amount;
-    }
+  onClickInputForm() {
+    const fileInputForm: HTMLElement | null = document.getElementById('fileInputForm');
+    if (fileInputForm) fileInputForm.click();
   }
 }

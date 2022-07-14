@@ -7,8 +7,10 @@ import {
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
+
 
 @Component({
   selector: 'app-proposals',
@@ -18,6 +20,7 @@ import { map, mergeMap } from 'rxjs/operators';
 export class ProposalsComponent implements OnInit {
   proposals$: Observable<InlineResponse20027Proposals[]>;
   paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
+  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
 
   pageSizeOptions = [5, 10, 15];
@@ -88,6 +91,14 @@ export class ProposalsComponent implements OnInit {
       ),
       map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
     );
+    this.proposalContents$ = combineLatest([
+      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
+        mergeMap(([proposals, pageNumber, pageSize]) =>
+          combineLatest(
+            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => of(txParseProposalContent(proposal.content!)))
+          ),
+        ),
+      );
   }
 
   ngOnInit(): void { }

@@ -6,12 +6,6 @@ import {
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi';
 
-export interface ProposalContent {
-  type: string;
-  title: string;
-  description: string;
-}
-
 @Component({
   selector: 'view-proposals',
   templateUrl: './proposals.component.html',

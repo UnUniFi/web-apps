@@ -36,16 +36,6 @@ export class ProposalsComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  /*
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
-    }
-  }
-  */
-
   onPaginationChange(pageEvent: PageEvent): void {
     this.paginationChange.emit(pageEvent);
   }

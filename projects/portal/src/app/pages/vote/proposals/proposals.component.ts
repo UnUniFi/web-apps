@@ -42,13 +42,6 @@ export class ProposalsComponent implements OnInit {
         proposals.length ? proposals.length : undefined,
       ),
     );
-    this.proposalContents$ = this.proposals$.pipe(
-      mergeMap((proposals) =>
-        combineLatest(
-          proposals.map((proposal) => of(txParseProposalContent(proposal.content!)))
-        ),
-      ),
-    );
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
         const pageSize = Number(params.perPage);
@@ -85,6 +78,14 @@ export class ProposalsComponent implements OnInit {
         mergeMap(([proposals, pageNumber, pageSize]) =>
           combineLatest(
             this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => this.cosmosRest.getTallyResult$(proposal.proposal_id!)),
+          ),
+        ),
+      );
+    this.proposalContents$ = combineLatest([
+      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
+        mergeMap(([proposals, pageNumber, pageSize]) =>
+          combineLatest(
+            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => of(txParseProposalContent(proposal.content!)))
           ),
         ),
       );

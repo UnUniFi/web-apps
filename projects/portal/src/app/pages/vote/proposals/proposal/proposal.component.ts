@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20026DepositParams,
   InlineResponse20026TallyParams,
@@ -13,6 +14,7 @@ import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.se
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposal',
@@ -22,6 +24,7 @@ import { map, mergeMap } from 'rxjs/operators';
 export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20027Proposals | undefined>;
   proposalType$: Observable<string | undefined>;
+  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
   deposits$: Observable<InlineResponse20029Deposits[] | undefined>;
   depositParams$: Observable<InlineResponse20026DepositParams | undefined>;
   tally$: Observable<InlineResponse20027FinalTallyResult | undefined>;
@@ -52,13 +55,16 @@ export class ProposalComponent implements OnInit {
     this.tally$ = proposalID$.pipe(
       mergeMap((proposalId) => this.cosmosRest.getTallyResult$(proposalId)),
     );
+    this.proposalContent$ = this.proposal$.pipe(
+      map((proposal) => txParseProposalContent(proposal?.content!))
+    );
     this.tallyParams$ = this.cosmosRest.getTallyParams$();
 
     this.votes$ = proposalID$.pipe(mergeMap((proposalId) => this.cosmosRest.getVotes$(proposalId)));
     this.votingParams$ = this.cosmosRest.getVotingParams$();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onVoteProposal(proposalID: number) {
     this.govAppService.openVoteFormDialog(proposalID);

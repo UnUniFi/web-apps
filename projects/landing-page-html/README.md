@@ -6,12 +6,12 @@
 
 ## Environments
 
-| environment | url | branch |
-| - | - | - |
-| alpha-test | [https://alpha-test.ununifi.io/](https://alpha-test.ununifi.io/) | develop(latest) |
-| beta-test | [https://beta-test.ununifi.io/](https://beta-test.ununifi.io/) | release(latest) |
-| test | in preparation | main(latest) |
-| main(beta) | [https://ununifi.io/](https://ununifi.io/) | main |
+| environment | url                                                              | branch          |
+| ----------- | ---------------------------------------------------------------- | --------------- |
+| alpha-test  | [https://alpha-test.ununifi.io/](https://alpha-test.ununifi.io/) | develop(latest) |
+| beta-test   | [https://beta-test.ununifi.io/](https://beta-test.ununifi.io/)   | release(latest) |
+| test        | [https://test.ununifi.io/](https://test.ununifi.io/)             | main(latest)    |
+| main(beta)  | [https://ununifi.io/](https://ununifi.io/)                       | main            |
 
 ## Debug
 

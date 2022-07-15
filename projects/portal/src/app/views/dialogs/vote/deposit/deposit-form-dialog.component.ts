@@ -1,4 +1,3 @@
-import { ProposalContent } from '../../../vote/proposals/proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
@@ -29,6 +28,8 @@ export class DepositFormDialogComponent implements OnInit {
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   proposalID?: number | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appSubmit: EventEmitter<DepositOnSubmitEvent>;
@@ -66,14 +67,6 @@ export class DepositFormDialogComponent implements OnInit {
 
   changeGasRatio(ratio: number) {
     this.gasRatio = ratio;
-  }
-
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
-    }
   }
 
   onSubmit() {

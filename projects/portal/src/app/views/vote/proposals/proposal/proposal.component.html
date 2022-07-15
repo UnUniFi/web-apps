@@ -3,14 +3,14 @@
   <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <ng-container *ngIf="unpackContent(proposal?.content) as content">
+  <ng-container *ngIf="proposalContent">
     <div class="flex flex-row">
-      <h2># {{ proposal?.proposal_id }} {{ content.title }}</h2>
+      <h2># {{ proposal?.proposal_id }} {{ proposalContent.title }}</h2>
       <span class="flex-auto"></span>
       <mat-chip-list>
         <mat-chip color="primary" selected>{{
           proposal?.status?.replace('PROPOSAL_STATUS_', '')
-        }}</mat-chip>
+          }}</mat-chip>
       </mat-chip-list>
     </div>
 
@@ -23,7 +23,7 @@
             <span class="flex-auto"></span>
             <span>{{
               proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
-            }}</span>
+              }}</span>
           </mat-list-item>
           <mat-divider [inset]="true"></mat-divider>
           <mat-list-item>
@@ -56,7 +56,7 @@
     <h3>Description</h3>
     <mat-card class="mb-4">
       <mat-card-content>
-        <span class="break-all">{{ content.description }}</span>
+        <span class="break-all">{{ proposalContent.description }}</span>
       </mat-card-content>
     </mat-card>
   </ng-container>
@@ -126,12 +126,7 @@
     </mat-card-content>
   </mat-card>
 
-  <button
-    class="w-full mb-4"
-    mat-flat-button
-    color="primary"
-    (click)="onClickVote(proposal?.proposal_id!)"
-  >
+  <button class="w-full mb-4" mat-flat-button color="primary" (click)="onClickVote(proposal?.proposal_id!)">
     <mat-icon>how_to_vote</mat-icon>
     <span>Vote</span>
   </button>
@@ -185,12 +180,7 @@
     </mat-list>
   </mat-card>
 
-  <button
-    class="w-full mb-4"
-    mat-flat-button
-    color="primary"
-    (click)="onClickDeposit(proposal?.proposal_id!)"
-  >
+  <button class="w-full mb-4" mat-flat-button color="primary" (click)="onClickDeposit(proposal?.proposal_id!)">
     <mat-icon>add</mat-icon>
     <span>Deposit</span>
   </button>

@@ -12,11 +12,11 @@
   <mat-card>
     <mat-nav-list>
       <ng-container *ngFor="let proposal of proposals; let i = index; last as last">
-        <ng-container *ngIf="unpackContent(proposal.content) as content">
+        <ng-container *ngIf="(proposalContents?.length||0) > 0">
           <mat-list-item routerLink="{{ proposal.proposal_id }}">
             <div matLine class="flex mb-2">
               <span class="w-2/12"># {{ proposal.proposal_id }}</span>
-              <span class="w-7/12 text-center truncate">{{ content.title }}</span>
+              <span class="w-7/12 text-center truncate">{{ proposalContents?.[i]?.title }}</span>
               <span class="w-3/12 text-right truncate">{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
               </span>
             </div>

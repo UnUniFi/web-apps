@@ -13,6 +13,7 @@ import {
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposal',
@@ -22,6 +23,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20027Proposals | undefined>;
   proposalType$: Observable<string | undefined>;
+  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
   deposits$: Observable<InlineResponse20029Deposits[] | undefined>;
   depositParams$: Observable<InlineResponse20026DepositParams | undefined>;
   tally$: Observable<InlineResponse20027FinalTallyResult | undefined>;
@@ -48,6 +50,10 @@ export class ProposalComponent implements OnInit {
           return (proposal.content as any)['@type'];
         }
       }),
+    );
+
+    this.proposalContent$ = this.proposal$.pipe(
+      map((proposal) => txParseProposalContent(proposal?.content!))
     );
 
     this.deposits$ = combined$.pipe(

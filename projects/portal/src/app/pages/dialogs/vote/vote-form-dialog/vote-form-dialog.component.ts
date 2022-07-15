@@ -10,6 +10,7 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { VoteOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/vote/vote/vote-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-vote-form-dialog',
@@ -23,6 +24,7 @@ export class VoteFormDialogComponent implements OnInit {
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   proposalID: number | undefined;
+  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -35,6 +37,9 @@ export class VoteFormDialogComponent implements OnInit {
   ) {
     this.proposalID = data;
     this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
+    this.proposalContent$ = this.proposal$.pipe(
+      map((proposal) => txParseProposalContent(proposal?.content!))
+    );
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -53,7 +58,7 @@ export class VoteFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onSubmitYes($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {

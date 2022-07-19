@@ -6,7 +6,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
@@ -18,13 +18,13 @@ export class GovService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   // WIP Submit Proposal
   async SubmitProposal(
     keyType: KeyType,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
   ): Promise<InlineResponse20050> {
     const txBuilder = await this.buildSubmitProposal(keyType, gas, fee, privateKey);
@@ -33,15 +33,15 @@ export class GovService {
 
   async simulateToSubmitProposal(
     keyType: KeyType,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -56,8 +56,8 @@ export class GovService {
 
   async buildSubmitProposal(
     keyType: KeyType,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
@@ -69,7 +69,7 @@ export class GovService {
     const fromAddress = cosmosclient.AccAddress.fromPublicKey(pubKey);
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk, fromAddress)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -85,22 +85,22 @@ export class GovService {
     }
 
     // build tx
-    const msgProposal = new proto.cosmos.gov.v1beta1.MsgSubmitProposal({
+    const msgProposal = new cosmosclient.proto.cosmos.gov.v1beta1.MsgSubmitProposal({
       content: null,
       initial_deposit: [],
       proposer: fromAddress.toString(),
     });
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgProposal)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -123,10 +123,10 @@ export class GovService {
   // Vote
   async Vote(
     proposalID: number,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -156,16 +156,16 @@ export class GovService {
 
   async simulateToVote(
     proposalID: number,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -181,10 +181,10 @@ export class GovService {
 
   async buildVoteTxBuilder(
     proposalID: number,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -205,9 +205,9 @@ export class GovService {
   buildMsgVote(
     proposalID: number,
     voterAddress: string,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
-  ): proto.cosmos.gov.v1beta1.MsgVote {
-    const msgVote = new proto.cosmos.gov.v1beta1.MsgVote({
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
+  ): cosmosclient.proto.cosmos.gov.v1beta1.MsgVote {
+    const msgVote = new cosmosclient.proto.cosmos.gov.v1beta1.MsgVote({
       proposal_id: Long.fromNumber(proposalID),
       voter: voterAddress,
       option: voteOption,
@@ -218,10 +218,10 @@ export class GovService {
   // Deposit
   async Deposit(
     proposalID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -251,16 +251,16 @@ export class GovService {
 
   async simulateToDeposit(
     proposalID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -276,10 +276,10 @@ export class GovService {
 
   async buildDepositTxBuilder(
     proposalID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -302,9 +302,9 @@ export class GovService {
   buildMsgDeposit(
     proposalID: number,
     depositerAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-  ): proto.cosmos.gov.v1beta1.MsgDeposit {
-    const msgDeposit = new proto.cosmos.gov.v1beta1.MsgDeposit({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): cosmosclient.proto.cosmos.gov.v1beta1.MsgDeposit {
+    const msgDeposit = new cosmosclient.proto.cosmos.gov.v1beta1.MsgDeposit({
       proposal_id: Long.fromNumber(proposalID),
       depositor: depositerAddress,
       amount: [amount],

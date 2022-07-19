@@ -1,6 +1,5 @@
-import { ProposalContent } from '../proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027Proposals,
   InlineResponse20029Deposits,
@@ -33,6 +32,8 @@ export class ProposalComponent implements OnInit {
   votes?: InlineResponse20032Votes[] | null;
   @Input()
   votingParams?: InlineResponse20026VotingParams | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
@@ -44,15 +45,7 @@ export class ProposalComponent implements OnInit {
     this.appClickDeposit = new EventEmitter();
   }
 
-  ngOnInit(): void {}
-
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
-    }
-  }
+  ngOnInit(): void { }
 
   toNumber(str: string) {
     return Number(str);

@@ -1,9 +1,4 @@
-<view-deposit-form-dialog
-  [proposal]="proposal$ | async"
-  [currentStoredWallet]="currentStoredWallet$ | async"
-  [coins]="coins$ | async"
-  [uguuBalance]="uguuBalance$ | async"
-  [minimumGasPrices]="minimumGasPrices$ | async"
-  [proposalID]="proposalID"
-  (appSubmit)="onSubmit($event)"
-></view-deposit-form-dialog>
+<view-deposit-form-dialog [proposal]="proposal$ | async" [proposalContent]="proposalContent$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async" [coins]="coins$ | async" [uguuBalance]="uguuBalance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async" [proposalID]="proposalID" (appSubmit)="onSubmit($event)">
+</view-deposit-form-dialog>

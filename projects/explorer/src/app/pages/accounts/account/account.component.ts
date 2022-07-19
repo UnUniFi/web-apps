@@ -2,7 +2,7 @@ import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -14,12 +14,12 @@ import { map, mergeMap } from 'rxjs/operators';
 export class AccountComponent implements OnInit {
   address$: Observable<cosmosclient.AccAddress | undefined>;
   account$: Observable<
-    | proto.cosmos.auth.v1beta1.BaseAccount
-    | proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
+    | cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
     | unknown
     | undefined
   >;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,7 +47,7 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of(undefined);
         }
-        return rest.auth
+        return cosmosclient.rest.auth
           .account(sdk.rest, address)
           .then((res) =>
             cosmosclient.codec.protoJSONToInstance(
@@ -66,10 +66,10 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return rest.bank.allBalances(sdk.rest, address).then((res) => res.data.balances || []);
+        return cosmosclient.rest.bank.allBalances(sdk.rest, address).then((res) => res.data.balances || []);
       }),
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

@@ -1,16 +1,20 @@
-import { CdpApplicationService, CosmosSDKService } from '../../../../models/index';
+import { CdpApplicationService } from '../../../../models/index';
 import { Key } from '../../../../models/keys/key.model';
 import { KeyService } from '../../../../models/keys/key.service';
 import { getCreateLimit } from '../../../../utils/function';
-import { getLiquidationPriceStream } from '../../../../utils/stream';
 import { CreateCdpOnSubmitEvent } from '../../../../views/mint/cdps/create/create.component';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, proto, rest as restCosmos } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { KeyStoreService } from 'projects/portal/src/app/models/keys/key.store.service';
-import { timer, of, combineLatest, BehaviorSubject, Observable, Subject } from 'rxjs';
+import {
+  getCollateralParamsStream,
+  UnunifiRestService,
+} from 'projects/portal/src/app/models/ununifi-rest.service';
+import { BehaviorSubject, combineLatest, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ununifi, rest } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -20,22 +24,24 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 })
 export class CreateComponent implements OnInit {
   key$: Observable<Key | undefined>;
-  cdpParams$: Observable<ununifi.cdp.IParams>;
-  collateralParams$: Observable<ununifi.cdp.ICollateralParam[] | null | undefined>;
+  cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
+  collateralParams$: Observable<ununifi.proto.ununifi.cdp.ICollateralParam[] | null | undefined>;
   selectedCollateralTypeSubject: Subject<string | null | undefined>;
   selectedCollateralType$: Observable<string | null | undefined>;
-  selectedCollateralParam$: Observable<ununifi.cdp.ICollateralParam | null | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  selectedCollateralParam$: Observable<
+    ununifi.proto.ununifi.cdp.ICollateralParam | null | undefined
+  >;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   address$: Observable<cosmosclient.AccAddress>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   pollingInterval = 30;
 
   collateralType$: Observable<string>;
   collateralLimit$: Observable<number>;
 
   collateralInputValue: BehaviorSubject<number> = new BehaviorSubject(0);
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
   cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
@@ -44,14 +50,13 @@ export class CreateComponent implements OnInit {
     private readonly key: KeyService,
     private readonly keyStore: KeyStoreService,
     private readonly cdpApplicationService: CdpApplicationService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
+    private readonly ununifiRest: UnunifiRestService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.key$ = this.keyStore.currentKey$.asObservable();
-    this.cdpParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
-      map((param) => param.data.params!),
-    );
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
+
     this.collateralParams$ = this.cdpParams$.pipe(map((cdpParams) => cdpParams?.collateral_params));
     this.selectedCollateralTypeSubject = new Subject();
     this.collateralParams$.subscribe((collateralParams) => {
@@ -89,14 +94,12 @@ export class CreateComponent implements OnInit {
       ),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    this.balances$ = combineLatest([timer$, this.cosmosSDK.sdk$, this.address$]).pipe(
-      mergeMap(([n, sdk, address]) => {
+    this.balances$ = combineLatest([timer$, this.address$]).pipe(
+      mergeMap(([_, address]) => {
         if (address === undefined) {
           return of([]);
         }
-        return restCosmos.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || []);
+        return this.cosmosRest.getAllBalances$(address);
       }),
     );
 
@@ -119,9 +122,12 @@ export class CreateComponent implements OnInit {
     // get principal limit
     this.collateralType$ = this.selectedCollateralType$.pipe(map((type) => (type ? type : '')));
 
-    this.liquidationPrice$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.cdpParams$)),
+    this.liquidationPrice$ = getCollateralParamsStream(this.collateralType$, this.cdpParams$).pipe(
+      mergeMap((collateralParams) =>
+        this.ununifiRest.getPrice$(collateralParams.liquidation_market_id),
+      ),
     );
+
     this.principalLimit$ = combineLatest([
       this.collateralType$,
       this.cdpParams$,
@@ -134,14 +140,10 @@ export class CreateComponent implements OnInit {
     );
 
     // check cdp
-    this.cdp$ = combineLatest([this.address$, this.collateralType$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(sdk.rest, ownerAddr, collateralType).catch((err) => {
-          console.error(err);
-          return;
-        }),
+    this.cdp$ = combineLatest([this.address$, this.collateralType$]).pipe(
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getCdp$(ownerAddr, collateralType),
       ),
-      map((res) => (res ? res.data.cdp : undefined)),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

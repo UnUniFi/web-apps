@@ -1,9 +1,7 @@
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
-import { InlineResponse20011, InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { Observable, of, zip, timer } from 'rxjs';
+import { InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
+import { Observable, of, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -18,13 +16,10 @@ export class BlocksComponent implements OnInit {
   //latestBlocks$: Observable<InlineResponse20011[] | undefined>;
   latestBlocks$: Observable<bigint[] | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(private cosmosRest: CosmosRestService) {
     const timer$ = timer(0, this.pollingInterval * 1000);
     // eslint-disable-next-line no-unused-vars
-    const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
-    this.latestBlock$ = sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
-    );
+    this.latestBlock$ = timer$.pipe(mergeMap((_) => this.cosmosRest.getLatestBlock$()));
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       // eslint-disable-next-line no-undef
       map((latestBlock) =>
@@ -51,7 +46,7 @@ export class BlocksComponent implements OnInit {
           ...blockHeights.map((blockHeight) =>
             this.cosmosSDK.sdk$.pipe(
               mergeMap((sdk) =>
-                rest.tendermint.getBlockByHeight(sdk.rest, blockHeight).then((res) => res.data),
+                cosmosclient.rest.tendermint.getBlockByHeight(sdk.rest, blockHeight).then((res) => res.data),
               ),
             ),
           ),

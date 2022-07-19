@@ -2,15 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  InlineResponse20038,
   InlineResponse20038Delegation,
+  InlineResponse20041Validators,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -28,7 +28,7 @@ export class DelegateMenuDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038>;
   delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
-  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
+  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<
     CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
@@ -47,8 +47,8 @@ export class DelegateMenuDialogComponent implements OnInit {
     private readonly stakingAppService: StakingApplicationService,
     private readonly distributionAppService: DistributionApplicationService,
     private readonly walletService: WalletService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly snackBar: MatSnackBar,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.selectedValidator = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -56,9 +56,8 @@ export class DelegateMenuDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((res) => res.data),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
     this.delegateAmount$ = this.delegations$.pipe(
       map(
@@ -109,23 +108,21 @@ export class DelegateMenuDialogComponent implements OnInit {
         return address.toValAddress();
       }),
     );
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, accAddress$, valAddress$]);
-    this.totalRewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress]) => {
+    const combined$ = combineLatest([accAddress$, valAddress$]);
+    this.totalRewards$ = accAddress$.pipe(
+      mergeMap((accAddress) => {
         if (accAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
-          .delegationTotalRewards(sdk.rest, accAddress)
-          .then((res) => res.data);
+        return this.cosmosRest.getDelegationTotalRewards$(accAddress);
       }),
     );
     this.commission$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => {
+      mergeMap(([accAddress, valAddress]) => {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+        return this.cosmosRest.getValidatorCommission$(valAddress);
       }),
     );
     this.isValidator$ = valAddress$.pipe(

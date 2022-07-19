@@ -1,0 +1,62 @@
+<ng-container *ngIf="txDetail">
+  <mat-card class="mb-2">
+    <mat-chip-list>
+      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
+    </mat-chip-list>
+    <mat-list>
+      <mat-list-item>
+        <span class="break-words">Validator address:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Minimum self delegate:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.minimumSelfDelegation }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Moniker:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.moniker }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Identity:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.identity }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Commission rate:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.editedCommissionRate | percent }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Details:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.details }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="break-words">Contact:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.security_contact }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+    </mat-list>
+    <mat-nav-list>
+      <mat-list-item>
+        <span class="break-words">Website:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-xs sm:text-base">
+          <a target="_blank" rel="noopener noreferrer" href="{{ txDetail.description?.website }}">{{
+            txDetail.description?.website }}</a>
+        </span>
+      </mat-list-item>
+    </mat-nav-list>
+
+  </mat-card>
+</ng-container>

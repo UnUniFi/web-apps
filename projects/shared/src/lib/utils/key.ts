@@ -1,6 +1,6 @@
 import { KeyType } from '../models/keys/key.model';
 import { convertHexStringToUint8Array, convertUint8ArrayToHexString } from './converter';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { PrivKey, PubKey } from '@cosmos-client/core/esm/types';
 
 export const createPrivateKeyFromMnemonic = async (
@@ -51,9 +51,9 @@ export const createCosmosPrivateKeyFromUint8Array = (
   try {
     switch (keyType) {
       case KeyType.secp256k1:
-        return new proto.cosmos.crypto.secp256k1.PrivKey({ key: privateKeyUint8Array });
+        return new cosmosclient.proto.cosmos.crypto.secp256k1.PrivKey({ key: privateKeyUint8Array });
       case KeyType.ed25519:
-        return new proto.cosmos.crypto.ed25519.PrivKey({ key: privateKeyUint8Array });
+        return new cosmosclient.proto.cosmos.crypto.ed25519.PrivKey({ key: privateKeyUint8Array });
       default:
         return undefined;
     }
@@ -81,9 +81,9 @@ export const createCosmosPublicKeyFromUint8Array = (
   try {
     switch (keyType) {
       case KeyType.secp256k1:
-        return new proto.cosmos.crypto.secp256k1.PubKey({ key: publicKeyUint8Array });
+        return new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({ key: publicKeyUint8Array });
       case KeyType.ed25519:
-        return new proto.cosmos.crypto.ed25519.PubKey({ key: publicKeyUint8Array });
+        return new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({ key: publicKeyUint8Array });
       default:
         return undefined;
     }

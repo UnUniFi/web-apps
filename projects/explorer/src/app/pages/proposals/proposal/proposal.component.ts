@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027Proposals,
   InlineResponse20029Deposits,
@@ -13,6 +13,7 @@ import {
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposal',
@@ -22,6 +23,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 export class ProposalComponent implements OnInit {
   proposal$: Observable<InlineResponse20027Proposals | undefined>;
   proposalType$: Observable<string | undefined>;
+  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
   deposits$: Observable<InlineResponse20029Deposits[] | undefined>;
   depositParams$: Observable<InlineResponse20026DepositParams | undefined>;
   tally$: Observable<InlineResponse20027FinalTallyResult | undefined>;
@@ -34,7 +36,7 @@ export class ProposalComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.proposal(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.proposal(sdk.rest, address)),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);
@@ -50,8 +52,12 @@ export class ProposalComponent implements OnInit {
       }),
     );
 
+    this.proposalContent$ = this.proposal$.pipe(
+      map((proposal) => txParseProposalContent(proposal?.content!))
+    );
+
     this.deposits$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.deposits(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.deposits(sdk.rest, address)),
       map((result) => result.data.deposits!),
       catchError((error) => {
         console.error(error);
@@ -60,12 +66,12 @@ export class ProposalComponent implements OnInit {
     );
 
     this.depositParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'deposit')),
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'deposit')),
       map((result) => result.data.deposit_params),
     );
 
     this.tally$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.tallyresult(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.tallyresult(sdk.rest, address)),
       map((result) => result.data.tally!),
       catchError((error) => {
         console.error(error);
@@ -74,7 +80,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'tallying')),
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'tallying')),
       map((result) => result.data.tally_params),
       catchError((error) => {
         console.error(error);
@@ -83,7 +89,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votes$ = combined$.pipe(
-      mergeMap(([sdk, address]) => rest.gov.votes(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.votes(sdk.rest, address)),
       map((result) => result.data.votes!),
       catchError((error) => {
         console.error(error);
@@ -92,7 +98,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votingParams$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.params(sdk.rest, 'voting')),
+      mergeMap((sdk) => cosmosclient.rest.gov.params(sdk.rest, 'voting')),
       map((result) => result.data.voting_params),
       catchError((error) => {
         console.error(error);
@@ -101,5 +107,5 @@ export class ProposalComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 
 export type DepositCdpOnSubmitEvent = {
@@ -7,9 +7,9 @@ export type DepositCdpOnSubmitEvent = {
   privateKey: Uint8Array;
   ownerAddr: cosmosclient.AccAddress;
   collateralType: string;
-  collateral: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  balances: proto.cosmos.base.v1beta1.ICoin[];
+  collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[];
 };
 
 @Component({
@@ -28,26 +28,26 @@ export class DepositComponent implements OnInit {
   collateralType?: string | null;
 
   @Input()
-  denom?: proto.cosmos.base.v1beta1.ICoin | null;
+  denom?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<DepositCdpOnSubmitEvent>;
 
   public collateral_amount: string;
-  public selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  public selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
   constructor() {
     this.appSubmit = new EventEmitter();
     this.collateral_amount = '';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {

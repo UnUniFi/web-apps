@@ -9,7 +9,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import * as bip39 from 'bip39';
 
 @Component({
@@ -56,7 +56,7 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

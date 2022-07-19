@@ -1,7 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { WalletType } from 'projects/shared/src/lib/models/wallets/wallet.model';
 
@@ -17,21 +17,21 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() faucets?:
     | {
-        hasFaucet: boolean;
-        faucetURL: string;
-        denom: string;
-        creditAmount: number;
-        maxCredit: number;
-      }[]
+      hasFaucet: boolean;
+      faucetURL: string;
+      denom: string;
+      creditAmount: number;
+      maxCredit: number;
+    }[]
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
 
-  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   copyClipboard(value: string) {
     if (value.length > 0) {

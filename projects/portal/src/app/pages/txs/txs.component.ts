@@ -1,12 +1,11 @@
+import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { of, combineLatest, Observable, timer } from 'rxjs';
-import { map, mergeMap, switchMap, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, Observable, of, timer } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 
 export type PaginationInfo = {
   pageSize: number;
@@ -38,14 +37,13 @@ export class TxsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
+    private cosmosRest: CosmosRestService,
   ) {
     this.txTypeOptions$ = this.configService.config$.pipe(
       map((config) => config?.extension?.messageModules),
     );
     const timer$ = timer(0, this.pollingInterval * 1000);
-    const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
 
     this.selectedTxType$ = combineLatest([this.txTypeOptions$, this.route.queryParams]).pipe(
       map(([options, params]) =>
@@ -58,25 +56,11 @@ export class TxsComponent implements OnInit {
       map((txType) => txType),
     );
 
-    this.txsTotalCount$ = combineLatest([sdk$, this.selectedTxTypeChanged$]).pipe(
-      switchMap(([sdk, selectedTxType]) => {
-        return rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.module='${selectedTxType}'`],
-            undefined,
-            undefined,
-            undefined,
-            true,
-          )
-          .then((res) =>
-            res.data.pagination?.total ? BigInt(res.data.pagination?.total) : BigInt(0),
-          )
-          .catch((error) => {
-            console.error(error);
-            return BigInt(0);
-          });
-      }),
+    this.txsTotalCount$ = timer$.pipe(
+      withLatestFrom(this.selectedTxType$),
+      switchMap(([_, selectedTxType]) => this.cosmosRest.getSelectedTxTypeEvent$(selectedTxType)),
+      map((res) => res.pagination?.total),
+      map((total) => (total ? BigInt(total) : BigInt(0))),
     );
 
     this.pageLength$ = this.txsTotalCount$.pipe(
@@ -107,8 +91,8 @@ export class TxsComponent implements OnInit {
     );
 
     this.txs$ = this.paginationInfoChanged$.pipe(
-      withLatestFrom(sdk$, this.selectedTxType$, this.txsTotalCount$),
-      mergeMap(([paginationInfo, sdk, selectedTxType, txsTotalCount]) => {
+      withLatestFrom(timer$, this.selectedTxType$, this.txsTotalCount$),
+      mergeMap(([paginationInfo, _, selectedTxType, txsTotalCount]) => {
         const pageOffset =
           txsTotalCount - BigInt(paginationInfo.pageSize) * BigInt(paginationInfo.pageNumber);
         const modifiedPageOffset = pageOffset < 1 ? BigInt(1) : pageOffset;
@@ -128,21 +112,13 @@ export class TxsComponent implements OnInit {
           return [];
         }
 
-        return rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.module='${selectedTxType}'`],
-            undefined,
-            modifiedPageOffset,
-            temporaryWorkaroundPageSize,
-            true,
-          )
-          .then((res) => res.data.tx_responses)
-          .catch((error) => {
-            console.error(error);
-            return [];
-          });
+        return this.cosmosRest.getSelectedTxTypeEvent$(
+          selectedTxType,
+          modifiedPageOffset,
+          temporaryWorkaroundPageSize,
+        );
       }),
+      map((res) => res.tx_responses),
       map((latestTxs) => latestTxs?.reverse()),
     );
   }

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
+import { txParseMsg } from "./../../../utils/tx-parser"
+import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'app-block',
@@ -19,57 +21,40 @@ export class BlockComponent implements OnInit {
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;
   txs$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
-  txTypes$: Observable<string[] | undefined>;
+  txTitles$: Observable<txTitle[] | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
     this.block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$]).pipe(
       mergeMap(([sdk, height]) =>
-        rest.tendermint.getBlockByHeight(sdk.rest, BigInt(height)).then((res) => res.data),
+        cosmosclient.rest.tendermint.getBlockByHeight(sdk.rest, BigInt(height)).then((res) => res.data),
       ),
     );
 
     this.txs$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$, this.block$]).pipe(
       filter(([sdk, height, block]) => (block.block?.data?.txs?.length || 0) > 0),
       mergeMap(([sdk, height, block]) =>
-        rest.tx
+        cosmosclient.rest.tx
           .getTxsEvent(sdk.rest, [`tx.height=${height}`], undefined, undefined, undefined, true)
-          .then((res) => {
-            console.log('res', res);
-            return res.data;
-          })
+          .then((res) => res.data)
           .catch((error) => {
             console.error(error);
             return undefined;
           }),
       ),
     );
-    this.txTypes$ = this.txs$.pipe(
+    this.txTitles$ = this.txs$.pipe(
       map((txs) => {
         if (!txs?.txs) {
           return undefined;
         }
-        const txTypeList = txs?.txs?.map((tx) => {
-          if (!tx.body?.messages) {
-            return '';
-          }
-          const txTypes = tx.body?.messages.map((message) => {
-            if (!message) {
-              return [];
-            }
-            const txTypeRaw = (message as any)['@type'] as string;
-            const startLength = txTypeRaw.lastIndexOf('.');
-            const txType = txTypeRaw.substring(startLength + 1, txTypeRaw.length);
-            return txType;
-          });
-          return txTypes.join();
-        });
+        const txTypeList = txs?.txs?.map((tx) => txParseMsg(tx.body?.messages?.[0]!));
         return txTypeList;
       }),
     );
 
     this.latestBlockHeight$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
       map((block) => block.block?.header?.height || ''),
     );
 
@@ -90,5 +75,5 @@ export class BlockComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

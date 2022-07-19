@@ -6,7 +6,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -86,7 +86,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

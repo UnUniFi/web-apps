@@ -27,6 +27,7 @@
     "build:all:prod:ununifi-alpha-test": "npm run build:all:prod && node copy-config ununifi-alpha-test",
     "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-8-private-test": "npm run build:all:prod && node copy-config ununifi-8-private-test",
+    "build:all:prod:ununifi-test": "npm run build:all:prod && node copy-config ununifi-test",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:explorer": "ng test --project explorer",
@@ -51,7 +52,7 @@
     "@angular/platform-browser-dynamic": "~14.0.4",
     "@angular/router": "~14.0.4",
     "@apollo/client": "^3.0.0",
-    "@cosmos-client/core": "^0.46.0-rc2",
+    "@cosmos-client/core": "0.46.0-rc7",
     "@metamask/detect-provider": "^1.2.0",
     "@ngneat/tailwind": "^7.0.3",
     "apollo-angular": "^3.0.1",
@@ -75,7 +76,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tslib": "^2.3.0",
-    "ununifi-client": "^0.46.0-rc2",
+    "ununifi-client": "0.46.0-rc4",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

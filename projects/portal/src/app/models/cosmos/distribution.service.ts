@@ -4,7 +4,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, rest, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
@@ -15,14 +15,14 @@ export class DistributionService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) {}
+  ) { }
 
   // Withdraw Delegator Reward
   async withdrawDelegatorReward(
     validatorAddress: string,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -52,14 +52,14 @@ export class DistributionService {
   async simulateToWithdrawDelegatorReward(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -75,8 +75,8 @@ export class DistributionService {
   async buildWithdrawDelegatorRewardTxBuilder(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -101,9 +101,9 @@ export class DistributionService {
   buildMsgWithdrawDelegatorReward(
     delegatorAddress: string,
     validatorAddress: string,
-  ): proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward {
+  ): cosmosclient.proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward {
     const msgWithdrawDelegatorReward =
-      new proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward({
+      new cosmosclient.proto.cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward({
         delegator_address: delegatorAddress,
         validator_address: validatorAddress,
       });
@@ -114,8 +114,8 @@ export class DistributionService {
   async withdrawValidatorCommission(
     validatorAddress: string,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
@@ -145,14 +145,14 @@ export class DistributionService {
   async simulateToWithdrawValidatorCommission(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -168,8 +168,8 @@ export class DistributionService {
   async buildWithdrawValidatorCommissionTxBuilder(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -190,9 +190,9 @@ export class DistributionService {
 
   buildMsgWithdrawValidatorCommission(
     validatorAddress: string,
-  ): proto.cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission {
+  ): cosmosclient.proto.cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission {
     const msgWithdrawValidatorCommission =
-      new proto.cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission({
+      new cosmosclient.proto.cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission({
         validator_address: validatorAddress,
       });
     return msgWithdrawValidatorCommission;

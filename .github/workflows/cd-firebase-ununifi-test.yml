@@ -3,7 +3,7 @@ name: CD Firebase ununifi-test
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   workflow_dispatch:
 
 jobs:
@@ -27,6 +27,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: npm i -g npm
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run build:all:prod:ununifi-test
       - run: npx firebase deploy --only hosting:ununifi-test --project=default --token=${{ secrets.FIREBASE_TOKEN }}

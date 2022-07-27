@@ -13,11 +13,7 @@
     {
       "target": "ununifi-alpha-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -40,11 +36,7 @@
     {
       "target": "ununifi-beta-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -67,11 +59,7 @@
     {
       "target": "ununifi-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -94,11 +82,7 @@
     {
       "target": "ununifi",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -121,11 +105,7 @@
     {
       "target": "ununifi-8-private-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -148,11 +128,7 @@
     {
       "target": "ununifi-9-beta-test-v1",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -187,7 +163,7 @@
       "port": 8080
     },
     "hosting": {
-      "port": 5000
+      "port": 5010
     },
     "pubsub": {
       "port": 8085

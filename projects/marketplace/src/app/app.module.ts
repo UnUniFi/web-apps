@@ -1,8 +1,6 @@
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
-import { reducers, metaReducers } from './reducers';
 import { ToolbarModule } from './views/toolbar/toolbar.module';
 import { ViewModule } from './views/view.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -11,9 +9,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingDialogModule } from 'ng-loading-dialog';
 import { TxFeeConfirmDialogModule } from 'projects/shared/src/lib/views/dialogs/cosmos/tx/common/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from 'projects/shared/src/lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
@@ -34,9 +29,6 @@ import { LibWidgetNftMenuDialogModule } from 'projects/shared/src/lib/widgets/di
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([]),
     BrowserAnimationsModule,
     LoadingDialogModule,
     MatDialogModule,

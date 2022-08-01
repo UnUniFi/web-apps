@@ -1,11 +1,10 @@
 import { FaucetApplicationService } from '../../models/faucets/faucet.application.service';
 import { FaucetOnSubmitEvent } from '../../views/faucet/faucet.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Config, ConfigService } from 'projects/portal/src/app/models/config.service';
+import { FaucetUseCaseService } from "./faucet.usecase.service"
+import { Config } from 'projects/portal/src/app/models/config.service';
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-faucet',
@@ -22,43 +21,19 @@ export class FaucetComponent implements OnInit {
   maxCredit$: Observable<number>;
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private configS: ConfigService,
+    private usecase: FaucetUseCaseService,
     private faucetApplication: FaucetApplicationService,
   ) {
-    this.config$ = this.configS.config$;
-    this.denoms$ = this.config$.pipe(
-      map((config) => config?.extension?.faucet?.map((faucet) => faucet.denom)),
-    );
-
-    this.address$ = this.route.queryParams.pipe(map((queryParams) => queryParams.address));
-    this.amount$ = this.route.queryParams.pipe(map((queryParams) => queryParams.amount));
-    this.denom$ = new BehaviorSubject('');
-    this.route.queryParams
-      .pipe(first())
-      .toPromise()
-      .then((params) => this.denom$?.next(params.denom));
-    this.creditAmount$ = combineLatest([this.config$, this.denom$?.asObservable()]).pipe(
-      map(([config, denom]) => {
-        const faucet = config?.extension?.faucet
-          ? config.extension.faucet.find((faucet) => faucet.denom === denom)
-          : undefined;
-        const creditAmount = faucet ? faucet.creditAmount : 0;
-        return creditAmount;
-      }),
-    );
-    this.maxCredit$ = combineLatest([this.config$, this.denom$.asObservable()]).pipe(
-      map(([config, denom]) => {
-        const faucet = config?.extension?.faucet
-          ? config.extension.faucet.find((faucet) => faucet.denom === denom)
-          : undefined;
-        const maxCredit = faucet ? faucet.maxCredit : 0;
-        return maxCredit;
-      }),
-    );
+    this.config$ = this.usecase.config$;
+    this.denoms$ = this.usecase.denoms$;
+    this.address$ = this.usecase.address$;
+    this.denom$ = this.usecase.denom$;
+    this.amount$ = this.usecase.amount$;
+    this.creditAmount$ = this.usecase.creditAmount$;
+    this.maxCredit$ = this.usecase.maxCredit$;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   appPostFaucetRequested($event: FaucetOnSubmitEvent): void {
     const faucetURL = $event.url;

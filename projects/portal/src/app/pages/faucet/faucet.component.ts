@@ -4,7 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FaucetUseCaseService } from "./faucet.usecase.service"
 import { Config } from 'projects/portal/src/app/models/config.service';
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-faucet',
@@ -14,21 +15,23 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FaucetComponent implements OnInit {
   config$: Observable<Config | undefined>;
   denoms$: Observable<string[] | undefined>;
-  address$: Observable<string>;
-  denom$: BehaviorSubject<string>;
-  amount$: Observable<number>;
+  address$: Observable<string | undefined>;
+  denom$: Observable<string | undefined>;
+  amount$: Observable<number | undefined>;
   creditAmount$: Observable<number>;
   maxCredit$: Observable<number>;
 
   constructor(
     private usecase: FaucetUseCaseService,
     private faucetApplication: FaucetApplicationService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.config$ = this.usecase.config$;
     this.denoms$ = this.usecase.denoms$;
     this.address$ = this.usecase.address$;
-    this.denom$ = this.usecase.denom$;
     this.amount$ = this.usecase.amount$;
+    this.denom$ = this.usecase.denom$;
     this.creditAmount$ = this.usecase.creditAmount$;
     this.maxCredit$ = this.usecase.maxCredit$;
   }
@@ -50,6 +53,12 @@ export class FaucetComponent implements OnInit {
   }
 
   appSelectedDenomChange(selectedDenom: string): void {
-    this.denom$?.next(selectedDenom);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        denom: selectedDenom,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

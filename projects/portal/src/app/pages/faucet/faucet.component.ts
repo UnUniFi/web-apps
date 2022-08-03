@@ -16,9 +16,9 @@ import { map } from 'rxjs/operators';
 export class FaucetComponent implements OnInit {
   faucetURL$: Observable<string | undefined>;
   denoms$: Observable<string[] | undefined>;
-  address$: Observable<string | undefined>;
-  denom$: Observable<string | undefined>;
-  amount$: Observable<number | undefined>;
+  address$: Observable<string>;
+  denom$: Observable<string>;
+  amount$: Observable<number>;
   creditAmount$: Observable<number>;
   maxCredit$: Observable<number>;
 
@@ -28,9 +28,9 @@ export class FaucetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.address$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.address ? queryParams.address : undefined));
-    this.amount$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.amount ? queryParams.amount : undefined));
-    this.denom$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.denom ? queryParams.denom : undefined));
+    this.address$ = this.route.queryParams.pipe(map((queryParams) => queryParams.address));
+    this.amount$ = this.route.queryParams.pipe(map((queryParams) => queryParams.amount));
+    this.denom$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.denom));
 
     this.denoms$ = this.usecase.denoms$;
     this.faucetURL$ = this.usecase.faucetURL$(this.denom$);
@@ -38,7 +38,7 @@ export class FaucetComponent implements OnInit {
     this.maxCredit$ = this.usecase.maxCredit$(this.denom$);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPostFaucetRequested($event: FaucetOnSubmitEvent): void {
     const faucetURL = $event.url;

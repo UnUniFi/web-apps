@@ -1,11 +1,12 @@
 import { FaucetApplicationService } from '../../models/faucets/faucet.application.service';
 import { FaucetOnSubmitEvent } from '../../views/faucet/faucet.component';
 import { Component, OnInit } from '@angular/core';
-import { FaucetUseCaseService } from "./faucet.usecase.service"
+import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from 'projects/portal/src/app/models/config.service';
+import { FaucetUseCaseService } from "./faucet.usecase.service"
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
 import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-faucet',
@@ -13,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./faucet.component.css'],
 })
 export class FaucetComponent implements OnInit {
-  config$: Observable<Config | undefined>;
+  faucetURL$: Observable<string | undefined>;
   denoms$: Observable<string[] | undefined>;
   address$: Observable<string | undefined>;
   denom$: Observable<string | undefined>;
@@ -27,13 +28,14 @@ export class FaucetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.config$ = this.usecase.config$;
+    this.address$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.address ? queryParams.address : undefined));
+    this.amount$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.amount ? queryParams.amount : undefined));
+    this.denom$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.denom ? queryParams.denom : undefined));
+
     this.denoms$ = this.usecase.denoms$;
-    this.address$ = this.usecase.address$;
-    this.amount$ = this.usecase.amount$;
-    this.denom$ = this.usecase.denom$;
-    this.creditAmount$ = this.usecase.creditAmount$;
-    this.maxCredit$ = this.usecase.maxCredit$;
+    this.faucetURL$ = this.usecase.faucetURL$(this.denom$);
+    this.creditAmount$ = this.usecase.creditAmount$(this.denom$);
+    this.maxCredit$ = this.usecase.maxCredit$(this.denom$);
   }
 
   ngOnInit(): void { }

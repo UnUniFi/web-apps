@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class FaucetUseCaseService {
-  config$: Observable<Config | undefined>
+  private config$: Observable<Config | undefined>
 
   constructor(
     private configService: ConfigService) {

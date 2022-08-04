@@ -41,9 +41,9 @@ export const validatePrivateStoredWallet = (
 export const validateAccAddress = (address: string): boolean => {
   try {
     const accAddress = cosmosclient.AccAddress.fromString(address);
-    return true
+    return true;
   } catch (error) {
     console.error(error);
     return false;
   }
-}
+};

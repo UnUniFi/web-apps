@@ -1,6 +1,6 @@
+import { validateAccAddress } from '../../utils/validation';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { validateAccAddress } from '../../utils/validation';
 
 export type Amount = {
   amount: number;

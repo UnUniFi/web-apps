@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
 import { Config, ConfigService } from '../../models/config.service';
+import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class FaucetUseCaseService {
-  private config$: Observable<Config | undefined>
+  private config$: Observable<Config | undefined>;
 
-  constructor(
-    private configService: ConfigService) {
-    this.config$ = this.configService.config$
+  constructor(private configService: ConfigService) {
+    this.config$ = this.configService.config$;
   }
   get denoms$(): Observable<string[] | undefined> {
     return this.config$.pipe(
@@ -19,9 +18,7 @@ export class FaucetUseCaseService {
   faucetURL$(denom$: Observable<string | undefined>): Observable<string | undefined> {
     return combineLatest([this.config$, denom$]).pipe(
       map(([config, denom]) => {
-        return config?.extension?.faucet?.find(
-          (faucet) => faucet.denom == denom,
-        )?.faucetURL;
+        return config?.extension?.faucet?.find((faucet) => faucet.denom == denom)?.faucetURL;
       }),
     );
   }

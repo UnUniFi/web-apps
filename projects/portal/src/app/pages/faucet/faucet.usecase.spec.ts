@@ -1,11 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { FaucetUseCaseService } from './faucet.usecase.service';
-import { combineLatest, of } from 'rxjs';
 import { ConfigService } from '../../models/config.service';
+import { FaucetUseCaseService } from './faucet.usecase.service';
+import { TestBed } from '@angular/core/testing';
+import { combineLatest, of } from 'rxjs';
 
-const setup = (props?: {
-  mockConfigService?: any;
-}) => {
+const setup = (props?: { mockConfigService?: any }) => {
   // Mock Values
   const mockConfig = {
     extension: {
@@ -28,7 +26,7 @@ const setup = (props?: {
         },
       ],
     },
-  }
+  };
 
   // Mock Service
   const mockConfigService = {
@@ -51,8 +49,6 @@ const setup = (props?: {
   };
 };
 
-
-
 describe('FaucetUseCaseService when ConfigService returns a valid value', () => {
   it('should be created', () => {
     const { service } = setup();
@@ -62,41 +58,37 @@ describe('FaucetUseCaseService when ConfigService returns a valid value', () => 
   test('denoms$ getter return a valid value', (done) => {
     const { service } = setup();
     service.denoms$.subscribe((values) => {
-      expect(values?.every((v) => v.includes("test_denom"))).toBeTruthy();
+      expect(values?.every((v) => v.includes('test_denom'))).toBeTruthy();
       done();
     });
   });
 
   it('faucetURL$ method return a valid value', (done) => {
     const { service, mockConfig } = setup();
-    service.faucetURL$(of(mockConfig.extension.faucet[0].denom))
-      .subscribe((value) => {
-        expect(value).toBe(mockConfig.extension.faucet[0].faucetURL);
-        done();
-      });
+    service.faucetURL$(of(mockConfig.extension.faucet[0].denom)).subscribe((value) => {
+      expect(value).toBe(mockConfig.extension.faucet[0].faucetURL);
+      done();
+    });
   });
 
   it('creditAmount$ method return a valid value', (done) => {
     const { service, mockConfig } = setup();
-    service.creditAmount$(of(mockConfig.extension.faucet[0].denom))
-      .subscribe((value) => {
-        console.log("creditAmount$", value)
-        expect(value).toBe(mockConfig.extension.faucet[0].creditAmount);
-        done();
-      });
+    service.creditAmount$(of(mockConfig.extension.faucet[0].denom)).subscribe((value) => {
+      console.log('creditAmount$', value);
+      expect(value).toBe(mockConfig.extension.faucet[0].creditAmount);
+      done();
+    });
   });
 
   it('maxCredit$ method return a valid value', (done) => {
     const { service, mockConfig } = setup();
-    service.maxCredit$(of(mockConfig.extension.faucet[0].denom))
-      .subscribe((value) => {
-        console.log("maxCredit$", value)
-        expect(value).toBe(mockConfig.extension.faucet[0].maxCredit);
-        done();
-      });
+    service.maxCredit$(of(mockConfig.extension.faucet[0].denom)).subscribe((value) => {
+      console.log('maxCredit$', value);
+      expect(value).toBe(mockConfig.extension.faucet[0].maxCredit);
+      done();
+    });
   });
-
-})
+});
 
 const setupUndefinedEnv = () => {
   const mockConfigService = {
@@ -111,7 +103,6 @@ const setupUndefinedEnv = () => {
 };
 
 describe('FaucetUseCaseService when configService return undefined', () => {
-
   it('should be created', () => {
     const { service } = setupUndefinedEnv();
     expect(service).toBeTruthy();
@@ -119,10 +110,7 @@ describe('FaucetUseCaseService when configService return undefined', () => {
 
   it('all getters return undefined', (done) => {
     const { service } = setupUndefinedEnv();
-    combineLatest([
-      service.faucetURL$(of(undefined)),
-      service.denoms$,
-    ]).subscribe((values) => {
+    combineLatest([service.faucetURL$(of(undefined)), service.denoms$]).subscribe((values) => {
       expect(values.every((v) => v === undefined)).toBeTruthy();
       done();
     });
@@ -138,5 +126,4 @@ describe('FaucetUseCaseService when configService return undefined', () => {
       done();
     });
   });
-
 });

@@ -1,8 +1,8 @@
 import { FaucetApplicationService } from '../../models/faucets/faucet.application.service';
 import { FaucetOnSubmitEvent } from '../../views/faucet/faucet.component';
+import { FaucetUseCaseService } from './faucet.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FaucetUseCaseService } from "./faucet.usecase.service"
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

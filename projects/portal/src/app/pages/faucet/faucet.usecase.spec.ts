@@ -58,7 +58,7 @@ describe('FaucetUseCaseService when ConfigService returns a valid value', () => 
   test('denoms$ getter return a valid value', (done) => {
     const { service } = setup();
     service.denoms$.subscribe((values) => {
-      expect(values?.every((v) => v.includes('test_denom'))).toBeTruthy();
+      expect(values).toStrictEqual(['test_denom1', 'test_denom2']);
       done();
     });
   });
@@ -74,7 +74,6 @@ describe('FaucetUseCaseService when ConfigService returns a valid value', () => 
   it('creditAmount$ method return a valid value', (done) => {
     const { service, mockConfig } = setup();
     service.creditAmount$(of(mockConfig.extension.faucet[0].denom)).subscribe((value) => {
-      console.log('creditAmount$', value);
       expect(value).toBe(mockConfig.extension.faucet[0].creditAmount);
       done();
     });
@@ -83,7 +82,6 @@ describe('FaucetUseCaseService when ConfigService returns a valid value', () => 
   it('maxCredit$ method return a valid value', (done) => {
     const { service, mockConfig } = setup();
     service.maxCredit$(of(mockConfig.extension.faucet[0].denom)).subscribe((value) => {
-      console.log('maxCredit$', value);
       expect(value).toBe(mockConfig.extension.faucet[0].maxCredit);
       done();
     });

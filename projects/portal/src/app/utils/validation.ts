@@ -37,3 +37,13 @@ export const validatePrivateStoredWallet = (
     return false;
   }
 };
+
+export const validateAccAddress = (address: string): boolean => {
+  try {
+    const accAddress = cosmosclient.AccAddress.fromString(address);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

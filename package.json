@@ -31,7 +31,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:explorer": "ng test --project explorer",
-    "test:landing-page": "ng test --project landing-page",
+    "test:portal": "ng test --project portal",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "cypress:open": "cypress open",

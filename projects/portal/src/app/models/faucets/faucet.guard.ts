@@ -10,15 +10,13 @@ import { map } from 'rxjs/operators';
 export class FaucetGuard implements CanActivate {
   denom?: string;
 
-  constructor(public configS: ConfigService) {}
+  constructor(private configS: ConfigService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     this.denom = route.queryParams.denom ? route.queryParams.denom : undefined;
-    console.log('{route,state}', { route, state });
-    console.log('denom', this.denom);
 
     return this.configS.config$.pipe(
       map((config) => {

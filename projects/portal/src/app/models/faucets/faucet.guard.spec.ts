@@ -1,10 +1,7 @@
 import { ConfigService } from './../config.service';
 import { FaucetGuard } from './faucet.guard';
 import { TestBed } from '@angular/core/testing';
-//import { Router } from '@angular/router';
 import { UrlTree } from '@angular/router';
-//import { Observable } from '@apollo/client';
-//import { doesNotReject } from 'assert';
 import { of } from 'rxjs';
 
 const setup = (props?: { mockConfigService?: any }, query?: {}) => {
@@ -63,9 +60,6 @@ const setup = (props?: { mockConfigService?: any }, query?: {}) => {
     routerStateMock,
   };
 };
-
-// denom OK --> faucet has matching denom
-// denom NG --> faucet OK
 
 describe('FaucetUseCaseService when ConfigService returns a valid value', () => {
   it('should be created', () => {

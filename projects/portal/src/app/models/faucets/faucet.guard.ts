@@ -16,7 +16,7 @@ export class FaucetGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    this.denom = route.queryParams.denom ? route.queryParams.denom : undefined;
+    this.denom = route?.queryParams?.denom ? route.queryParams.denom : undefined;
 
     return this.configS.config$.pipe(
       map((config) => {

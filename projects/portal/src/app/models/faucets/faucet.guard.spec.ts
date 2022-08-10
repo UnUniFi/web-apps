@@ -1,10 +1,13 @@
 import { ConfigService } from './../config.service';
 import { FaucetGuard } from './faucet.guard';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { combineLatest, of } from 'rxjs';
+//import { Router } from '@angular/router';
+import { UrlTree } from '@angular/router';
+//import { Observable } from '@apollo/client';
+//import { doesNotReject } from 'assert';
+import { of } from 'rxjs';
 
-const setup = (props?: { mockConfigService?: any }) => {
+const setup = (props?: { mockConfigService?: any }, query?: {}) => {
   // Mock Values
   const mockConfig = {
     extension: {
@@ -29,24 +32,20 @@ const setup = (props?: { mockConfigService?: any }) => {
     },
   };
 
-  // Mock Service
-  const mockConfigService = {
-    config$: of(mockConfig),
-  };
-
-  let routerMock: any = {
-    //navigate: jasmine.createSpy('navigate')
-    navigate: jest.fn(() => of(undefined)),
+  const routerMock: any = {
     queryParams: {
-      address: 'ununifi13uaskveualnc8kkfwrk6g7dmkcggxn3ts04s24',
       amount: '100',
-      denom: 'ubtc',
     },
   };
 
-  let routerStateMock: any = {
+  const routerStateMock: any = {
     snapshot: {},
-    url: '/forbidden',
+    url: '/faucet?address= &denom= &amount= ',
+  };
+
+  // Mock Service
+  const mockConfigService = {
+    config$: of(mockConfig),
   };
 
   // Setup TestBed
@@ -54,22 +53,19 @@ const setup = (props?: { mockConfigService?: any }) => {
     providers: [
       FaucetGuard,
       { provide: ConfigService, useValue: { ...mockConfigService, ...props?.mockConfigService } },
-      //{ provide: UserProvider, useValue: userProvider},
-      { provide: Router, useValue: routerMock },
-      //AuthenticationErrorHandler,
-      //AuthenticationErrorCommunicator,
     ],
   });
   const service = TestBed.inject(FaucetGuard);
 
   return {
     service,
-    //mockConfigService,
-    mockConfig,
     routerMock,
     routerStateMock,
   };
 };
+
+// denom OK --> faucet has matching denom
+// denom NG --> faucet OK
 
 describe('FaucetUseCaseService when ConfigService returns a valid value', () => {
   it('should be created', () => {
@@ -77,48 +73,93 @@ describe('FaucetUseCaseService when ConfigService returns a valid value', () => 
     expect(service).toBeTruthy();
   });
 
-  test('denoms Xgetter return a valid value', (done) => {
-    const { service } = setup();
-    /*
-    service.denom.subscribe((values) => {
-      expect(values).toStrictEqual(['test_denom1', 'test_denom2']);
+  it('returns TRUE when the config faucets and the queryParams have same denom', (done) => {
+    const { service, routerMock, routerStateMock } = setup();
+    const res = service.canActivate(routerMock, routerStateMock);
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+
+    res.subscribe((res) => {
+      expect(res).toBe(true);
       done();
     });
-    */
-
-    console.log('configs', service.configS);
-    console.log('configs$', service.configS.config$);
-    service.configS.config$.subscribe((x) => console.log(x));
-
-    expect(service.denom).toStrictEqual('test_denom1');
-    //service.denom?
   });
 
-  it('canActive method return a valid value', () => {
-    const { service, mockConfig, routerMock, routerStateMock } = setup();
-    //service.canActivate()
-    expect(service.canActivate(routerMock, routerStateMock)).toStrictEqual(true);
-    expect(service.denom).toStrictEqual('test_denom1');
+  it('returns False when the config faucets and queryParams dose not have same denom', (done) => {
+    const { service, routerStateMock } = setup();
+    const routerMock: any = {
+      queryParams: {
+        denom: 'test_denom3',
+      },
+    };
+    const res = service.canActivate(routerMock, routerStateMock);
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+
+    res.subscribe((res) => {
+      expect(res).toBe(false);
+      done();
+    });
+  });
+
+  it('returns TRUE when config is defined, the queryParam is not defined', (done) => {
+    const { service, routerStateMock } = setup();
+    const routerMock: any = undefined;
+    const res = service.canActivate(routerMock, routerStateMock);
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+
+    res.subscribe((res) => {
+      expect(res).toBe(true);
+      done();
+    });
   });
 });
 
-/*
-  it('all getters return undefined', (done) => {
+const setupUndefinedEnv = () => {
+  const mockConfigService = {
+    config$: of(undefined),
+  };
+  const { service } = setup({
+    mockConfigService,
+  });
+  return {
+    service,
+  };
+};
+
+describe('FaucetUseCaseService when ConfigService is undefined', () => {
+  it('should be created', () => {
     const { service } = setupUndefinedEnv();
-    combineLatest([service.faucetURL$(of(undefined)), service.denoms$]).subscribe((values) => {
-      expect(values.every((v) => v === undefined)).toBeTruthy();
-      done();
-    });
+    expect(service).toBeTruthy();
   });
 
-  it('all methods return 0', (done) => {
-    const { service } = setupUndefinedEnv();
-    combineLatest([
-      service.creditAmount$(of(undefined)),
-      service.maxCredit$(of(undefined)),
-    ]).subscribe((values) => {
-      expect(values.every((v) => v === 0)).toBeTruthy();
-      done();
+  describe('CanActive method returns False regardless of the queryParam', () => {
+    it('returns False when the queryParam is defined', (done) => {
+      const { service } = setupUndefinedEnv();
+      const routerMock: any = {
+        queryParams: {
+          denom: 'test_denom3',
+        },
+      };
+      const routerStateMock: any = undefined;
+      const res = service.canActivate(routerMock, routerStateMock);
+      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+
+      res.subscribe((res) => {
+        expect(res).toBe(false);
+        done();
+      });
+    });
+
+    it('returns False when the queryParam is undefined', (done) => {
+      const { service } = setupUndefinedEnv();
+      const routerMock: any = undefined;
+      const routerStateMock: any = undefined;
+      const res = service.canActivate(routerMock, routerStateMock);
+      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+
+      res.subscribe((res) => {
+        expect(res).toBe(false);
+        done();
+      });
     });
   });
-  */
+});

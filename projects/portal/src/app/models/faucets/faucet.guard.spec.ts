@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { UrlTree } from '@angular/router';
 import { of } from 'rxjs';
 
-const setup = (props?: { mockConfigService?: any }, query?: {}) => {
+const setup = (props?: { mockConfigService?: any }) => {
   // Mock Values
   const mockConfig = {
     extension: {
@@ -61,7 +61,7 @@ const setup = (props?: { mockConfigService?: any }, query?: {}) => {
   };
 };
 
-describe('FaucetUseCaseService when ConfigService returns a valid value', () => {
+describe('FaucetGuard when ConfigService returns a valid value', () => {
   it('should be created', () => {
     const { service } = setup();
     expect(service).toBeTruthy();
@@ -119,7 +119,7 @@ const setupUndefinedEnv = () => {
   };
 };
 
-describe('FaucetUseCaseService when ConfigService is undefined', () => {
+describe('FaucetGuard when ConfigService is undefined', () => {
   it('should be created', () => {
     const { service } = setupUndefinedEnv();
     expect(service).toBeTruthy();

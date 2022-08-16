@@ -80,7 +80,7 @@ describe('Key-Select-Guard when dialog could open', () => {
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(res).toBeTruthy();
+      expect(res).toBe(true);
       done();
     });
   });
@@ -111,7 +111,7 @@ describe('Key-Select-Guard with no keys', () => {
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
       expect(routerMock.navigate).toBeCalledWith(['keys', 'create']);
-      expect(res).toBeTruthy;
+      expect(res).toBe(true);
       done();
     });
   });
@@ -145,7 +145,7 @@ describe('Key-Select-Guard when dialog is undefined', () => {
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(res).toBeFalsy;
+      expect(res).toBe(false);
       expect(mockKeySelectDialogService.open).toBeCalledTimes(2);
       done();
     });

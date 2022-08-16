@@ -28,13 +28,12 @@ const setup = (props?: { mockConfigService?: any }) => {
       ],
     },
   };
-
   const routerMock: any = {
     queryParams: {
+      denom: 'test_denom1',
       amount: '100',
     },
   };
-
   const routerStateMock: any = {
     snapshot: {},
     url: '/faucet?address= &denom= &amount= ',
@@ -71,35 +70,33 @@ describe('FaucetGuard when ConfigService returns a valid value', () => {
     const { service, routerMock, routerStateMock } = setup();
     const res = service.canActivate(routerMock, routerStateMock);
     if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
-
     res.subscribe((res) => {
       expect(res).toBe(true);
       done();
     });
   });
 
-  it('returns False when the config faucets and queryParams dose not have same denom', (done) => {
+  it('returns False when the config faucets and the queryParams dose not have same denom', (done) => {
     const { service, routerStateMock } = setup();
-    const routerMock: any = {
+    const routerMock3: any = {
       queryParams: {
         denom: 'test_denom3',
+        amount: '100',
       },
     };
-    const res = service.canActivate(routerMock, routerStateMock);
+    const res = service.canActivate(routerMock3, routerStateMock);
     if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
-
     res.subscribe((res) => {
       expect(res).toBe(false);
       done();
     });
   });
 
-  it('returns TRUE when config is defined, the queryParam is not defined', (done) => {
+  it('returns TRUE when the config is defined, but the queryParam is not defined', (done) => {
     const { service, routerStateMock } = setup();
     const routerMock: any = undefined;
     const res = service.canActivate(routerMock, routerStateMock);
     if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
-
     res.subscribe((res) => {
       expect(res).toBe(true);
       done();
@@ -136,7 +133,6 @@ describe('FaucetGuard when ConfigService is undefined', () => {
       const routerStateMock: any = undefined;
       const res = service.canActivate(routerMock, routerStateMock);
       if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
-
       res.subscribe((res) => {
         expect(res).toBe(false);
         done();
@@ -149,7 +145,6 @@ describe('FaucetGuard when ConfigService is undefined', () => {
       const routerStateMock: any = undefined;
       const res = service.canActivate(routerMock, routerStateMock);
       if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
-
       res.subscribe((res) => {
         expect(res).toBe(false);
         done();

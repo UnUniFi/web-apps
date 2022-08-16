@@ -66,7 +66,7 @@ describe('WalletGuard when a wallet stored', () => {
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
       expect(mockWalletService.getCurrentStoredWallet).toHaveBeenCalled;
-      expect(res).toBeTruthy();
+      expect(res).toBe(true);
       done();
     });
   });
@@ -98,7 +98,7 @@ describe('WalletGuard when wallet is not stored', () => {
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
       expect(mockWalletAppService.connectWalletDialog).toHaveBeenCalledTimes(2);
-      expect(res).toBeTruthy;
+      expect(res).toBe(true);
       done();
     });
   });

@@ -15,12 +15,8 @@ const setup = (props?: {
   mockKeyStoreService?: any;
   mockKeySelectDialogService?: any;
 }) => {
-  const routerMock: any = {
-    queryParams: {
-      amount: '100',
-    },
-    //navigator: jest.spyOn(routerMock,"navigate")
-    //navigator: jest.fn<Promise<boolean>, [string]>(() => Promise.resolve(true)),
+  const routerMock = {
+    navigate: jest.fn<Promise<boolean>, [string]>(() => Promise.resolve(true)),
   };
   const test_key1 = {
     id: 'test1',
@@ -67,9 +63,9 @@ const setup = (props?: {
     ],
   });
   const service = TestBed.inject(KeySelectGuard);
-
   return {
     service,
+    routerMock,
   };
 };
 
@@ -84,7 +80,7 @@ describe('Key-Select-Guard when dialog could open', () => {
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(res).toBe(true);
+      expect(res).toBeTruthy();
       done();
     });
   });
@@ -94,11 +90,12 @@ const setupNoKeysEnv = () => {
   const mockKeyService = {
     list: jest.fn(() => []),
   };
-  const { service } = setup({
+  const { service, routerMock } = setup({
     mockKeyService,
   });
   return {
     service,
+    routerMock,
   };
 };
 
@@ -109,11 +106,12 @@ describe('Key-Select-Guard with no keys', () => {
   });
 
   it('returns True when there are no keys', (done) => {
-    const { service } = setupNoKeysEnv();
+    const { service, routerMock } = setupNoKeysEnv();
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(res).toBe(false);
+      expect(routerMock.navigate).toBeCalledWith(['keys', 'create']);
+      expect(res).toBeTruthy;
       done();
     });
   });
@@ -132,6 +130,7 @@ const setupUndefinedEnv = () => {
   });
   return {
     service,
+    mockKeySelectDialogService,
   };
 };
 
@@ -141,12 +140,13 @@ describe('Key-Select-Guard when dialog is undefined', () => {
     expect(service).toBeTruthy();
   });
 
-  it('returns False when KeySelectDialog could not open, after try one time', (done) => {
-    const { service } = setupUndefinedEnv();
+  it('returns False when KeySelectDialog could not open, after try one more time', (done) => {
+    const { service, mockKeySelectDialogService } = setupUndefinedEnv();
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(res).toBe(false);
+      expect(res).toBeFalsy;
+      expect(mockKeySelectDialogService.open).toBeCalledTimes(2);
       done();
     });
   });

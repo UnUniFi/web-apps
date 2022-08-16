@@ -69,7 +69,7 @@ const setup = (props?: {
   };
 };
 
-describe('Key-Select-Guard when dialog could open', () => {
+describe('Key-Select-Guard when the dialog can open', () => {
   it('should be created', () => {
     const { service } = setup();
     expect(service).toBeTruthy();
@@ -99,13 +99,13 @@ const setupNoKeysEnv = () => {
   };
 };
 
-describe('Key-Select-Guard with no keys', () => {
+describe('Key-Select-Guard when the keys is not saved', () => {
   it('should be created', () => {
     const { service } = setupNoKeysEnv();
     expect(service).toBeTruthy();
   });
 
-  it('returns True when there are no keys', (done) => {
+  it('returns True and jump to keys/create page, when the keys is not saved', (done) => {
     const { service, routerMock } = setupNoKeysEnv();
     const route: any = undefined;
     const state: any = undefined;

@@ -1,7 +1,7 @@
+import { StoredWallet } from './../../../../models/wallets/wallet.model';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as crypto from 'crypto';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 @Component({
   selector: 'view-connect-wallet-completed-dialog',

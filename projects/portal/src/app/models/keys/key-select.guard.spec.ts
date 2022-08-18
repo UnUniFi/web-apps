@@ -7,7 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
-window.alert = jest.fn();
+jest.spyOn(window, 'alert').mockImplementation(() => {});
 
 const setup = (props?: {
   mockRouter?: any;

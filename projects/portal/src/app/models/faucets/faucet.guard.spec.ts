@@ -69,7 +69,9 @@ describe('FaucetGuard when ConfigService returns a valid value', () => {
   it('returns TRUE when the config faucets and the queryParams have same denom', (done) => {
     const { service, routerMock, routerStateMock } = setup();
     const res = service.canActivate(routerMock, routerStateMock);
-    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) {
+      throw new Error('should return an Observable');
+    }
     res.subscribe((res) => {
       expect(res).toBe(true);
       done();
@@ -85,7 +87,9 @@ describe('FaucetGuard when ConfigService returns a valid value', () => {
       },
     };
     const res = service.canActivate(routerMock3, routerStateMock);
-    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) {
+      throw new Error('should return an Observable');
+    }
     res.subscribe((res) => {
       expect(res).toBe(false);
       done();
@@ -96,7 +100,9 @@ describe('FaucetGuard when ConfigService returns a valid value', () => {
     const { service, routerStateMock } = setup();
     const routerMock: any = undefined;
     const res = service.canActivate(routerMock, routerStateMock);
-    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+    if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) {
+      throw new Error('should return an Observable');
+    }
     res.subscribe((res) => {
       expect(res).toBe(true);
       done();
@@ -132,7 +138,9 @@ describe('FaucetGuard when ConfigService is undefined', () => {
       };
       const routerStateMock: any = undefined;
       const res = service.canActivate(routerMock, routerStateMock);
-      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) {
+        throw new Error('should return an Observable');
+      }
       res.subscribe((res) => {
         expect(res).toBe(false);
         done();
@@ -144,7 +152,9 @@ describe('FaucetGuard when ConfigService is undefined', () => {
       const routerMock: any = undefined;
       const routerStateMock: any = undefined;
       const res = service.canActivate(routerMock, routerStateMock);
-      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) return;
+      if (typeof res == 'boolean' || res instanceof UrlTree || res instanceof Promise) {
+        throw new Error('should return an Observable');
+      }
       res.subscribe((res) => {
         expect(res).toBe(false);
         done();

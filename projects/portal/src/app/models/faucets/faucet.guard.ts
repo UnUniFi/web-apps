@@ -1,6 +1,6 @@
+import { ConfigService } from '../../models/config.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class FaucetGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    this.denom = route.queryParams.denom ? route.queryParams.denom : undefined;
+    this.denom = route?.queryParams?.denom ? route.queryParams.denom : undefined;
 
     return this.configS.config$.pipe(
       map((config) => {

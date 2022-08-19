@@ -12,7 +12,7 @@ const domainCauchyEC = 'ununifi.mainnet.lcd-01.neukind.network';
 const domainCauchyED = 'ununifi.mainnet.lcd-02.neukind.network';
 
 const chainID = 'ununifi-test-v2';
-const chainName = 'UnUnuFi';
+const chainName = 'UnUniFi';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

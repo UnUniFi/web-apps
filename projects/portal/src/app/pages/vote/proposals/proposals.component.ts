@@ -1,16 +1,15 @@
-import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
+import { ProposalsUseCaseService } from './proposals.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20027FinalTallyResult,
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi/api';
-import cosmosclient from '@cosmos-client/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-proposals',
@@ -32,16 +31,12 @@ export class ProposalsComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private usecase: ProposalsUseCaseService,
     private readonly route: ActivatedRoute,
     private readonly govAppService: GovApplicationService,
-    private readonly cosmosRest: CosmosRestService,
   ) {
-    this.proposals$ = this.cosmosRest.getProposals$().pipe(map((res) => res!));
-    this.pageLength$ = this.proposals$.pipe(
-      map((proposals) =>
-        proposals.length ? proposals.length : undefined,
-      ),
-    );
+    this.proposals$ = this.usecase.proposals$;
+    this.pageLength$ = this.usecase.pageLength$;
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
         const pageSize = Number(params.perPage);
@@ -67,31 +62,13 @@ export class ProposalsComponent implements OnInit {
         return pages;
       }),
     );
-    this.paginatedProposals$ = combineLatest([
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$]).pipe(
-        map(([proposals, pageNumber, pageSize]) => this.getPaginatedProposals(proposals, pageNumber, pageSize))
-      )
-    this.tallies$ = combineLatest([
-      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
-        mergeMap(([proposals, pageNumber, pageSize]) =>
-          combineLatest(
-            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => this.cosmosRest.getTallyResult$(proposal.proposal_id!)),
-          ),
-        ),
-      );
-    this.proposalContents$ = combineLatest([
-      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
-        mergeMap(([proposals, pageNumber, pageSize]) =>
-          combineLatest(
-            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => of(txParseProposalContent(proposal.content!)))
-          ),
-        ),
-      );
+
+    this.paginatedProposals$ = this.usecase.paginatedProposals$(this.pageNumber$, this.pageSize$);
+    this.tallies$ = this.usecase.tallies$(this.pageNumber$, this.pageSize$);
+    this.proposalContents$ = this.usecase.proposalContents$(this.pageNumber$, this.pageSize$);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.router.navigate([], {
@@ -108,9 +85,13 @@ export class ProposalsComponent implements OnInit {
     this.govAppService.openVoteFormDialog(proposalID);
   }
 
-  getPaginatedProposals(proposals: InlineResponse20027Proposals[], pageNumber: number, pageSize: number): InlineResponse20027Proposals[] {
+  getPaginatedProposals(
+    proposals: InlineResponse20027Proposals[],
+    pageNumber: number,
+    pageSize: number,
+  ): InlineResponse20027Proposals[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
-    return proposals.filter((_, i) => min <= i && i < max).reverse()
+    return proposals.filter((_, i) => min <= i && i < max).reverse();
   }
 }

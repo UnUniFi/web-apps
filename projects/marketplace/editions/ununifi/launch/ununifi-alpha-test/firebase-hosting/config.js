@@ -9,7 +9,7 @@ const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
 
 const chainID = 'ununifi-alpha-test-v3';
-const chainName = 'UnUnuFi (alpha-test)';
+const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

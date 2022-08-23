@@ -19,26 +19,26 @@ export class ProposalsUseCaseService {
   get proposals$(): Observable<InlineResponse20027Proposals[]> {
     return this.cosmosRest.getProposals$().pipe(map((res) => res!));
   }
-  get pageLength$() {
-    return this.proposals$.pipe(
-      map((proposals) => (proposals.length ? proposals.length : undefined)),
-    );
+  pageLength$(proposals$: Observable<InlineResponse20027Proposals[]>) {
+    return proposals$.pipe(map((proposals) => (proposals.length ? proposals.length : undefined)));
   }
   paginatedProposals$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<InlineResponse20027Proposals[]> {
-    return combineLatest([this.proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       map(([proposals, pageNumber, pageSize]) =>
         this.getPaginatedProposals(proposals, pageNumber, pageSize),
       ),
     );
   }
   proposalContents$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]> {
-    return combineLatest([this.proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
@@ -49,10 +49,11 @@ export class ProposalsUseCaseService {
     );
   }
   tallies$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(InlineResponse20027FinalTallyResult | undefined)[]> {
-    return combineLatest([this.proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>

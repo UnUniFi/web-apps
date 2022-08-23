@@ -1,46 +1,18 @@
-import { ConfigService } from './../../../models/config.service';
 import { CosmosRestService } from './../../../models/cosmos-rest.service';
-import { CosmosSDKService } from './../../../models/cosmos-sdk.service';
 import { ProposalsUseCaseService } from './proposals.usecase.service';
 import { TestBed } from '@angular/core/testing';
+import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, of } from 'rxjs';
 
 const setup = (props?: { mockCosmosRestService?: any }) => {
   // Mock Values
-  const mockConfig = {
-    extension: {
-      faucet: [
-        {
-          denom: 'test_denom1',
-          network: 'test_network',
-          faucetURL: 'www/test.url',
-          hasFaucet: true,
-          creditAmount: 1200,
-          maxCredit: 1500,
-        },
-        {
-          denom: 'test_denom2',
-          network: 'test_network',
-          faucetURL: 'www/test.url',
-          hasFaucet: true,
-          creditAmount: 800,
-          maxCredit: 1000,
-        },
-      ],
-    },
-  };
-
-  // Mock Service
-  const mockConfigService: any = { config$: of(mockConfig) };
-
-  const mockCosmosSDKService = new CosmosSDKService(mockConfigService);
-
-  //const mockCosmosRestService = new CosmosRestService(mockCosmosSDKService);
-
+  const mockProposal1: InlineResponse20027Proposals = { proposal_id: '1' };
+  const mockProposal2: InlineResponse20027Proposals = { proposal_id: '2' };
+  const mockProposal3: InlineResponse20027Proposals = { proposal_id: '3' };
   const mockCosmosRestService = {
-    getDepositParams$: jest.fn(),
-    getTallyParams$: jest.fn(),
-    getVotingParams$: jest.fn(),
+    getProposals$: jest.fn(() => of(undefined)),
+    getTallyResult$: jest.fn(() => of(undefined)),
+    proposals: of([mockProposal1, mockProposal2, mockProposal3]),
   };
 
   // Setup TestBed
@@ -57,7 +29,6 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
 
   return {
     service,
-    mockConfig,
     mockCosmosRestService,
   };
 };
@@ -68,17 +39,43 @@ describe('ProposalsUseCaseService', () => {
     expect(service).toBeTruthy();
   });
 
-  /*
-  proposals$: Observable<InlineResponse20027Proposals[]>;
-  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
-  paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
-  tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
-  */
-  test.todo('proposal$ returns original proposals');
+  test('proposal$ calls getProposals$ in CosmosRestService', (done) => {
+    const { service, mockCosmosRestService } = setup();
+    service.proposals$.subscribe(() => {
+      expect(mockCosmosRestService.getProposals$).toHaveBeenCalled();
+      done();
+    });
+  });
 
-  test.todo('paginatedProposals$ returns proposal with pagination');
+  test('pageLength$ returns number of proposals', (done) => {
+    const { service, mockCosmosRestService } = setup();
+    combineLatest([
+      service.pageLength$(mockCosmosRestService.proposals),
+      mockCosmosRestService.proposals,
+    ]).subscribe(([pageLength, proposals]) => {
+      expect(pageLength).toBe(proposals.length);
+      done();
+    });
+  });
+
+  test('paginatedProposals$ returns proposal with pagination', (done) => {
+    const { service, mockCosmosRestService } = setup();
+    combineLatest([
+      service.paginatedProposals$(mockCosmosRestService.proposals, of(1), of(2)),
+      mockCosmosRestService.proposals,
+    ]).subscribe(([paginatedProposals, proposals]) => {
+      expect(paginatedProposals).toStrictEqual(proposals.slice(1, 3).reverse());
+      done();
+    });
+  });
 
   test.todo('proposalContents$ returns paginated proposal contents');
 
-  test.todo('tallies$ returns paginated tallies');
+  test('tallies$ calls getTallyResult$ in CosmosRestService, number of pagesize', (done) => {
+    const { service, mockCosmosRestService } = setup();
+    service.tallies$(mockCosmosRestService.proposals, of(1), of(2)).subscribe(() => {
+      expect(mockCosmosRestService.getTallyResult$).toHaveBeenCalledTimes(2);
+      done();
+    });
+  });
 });

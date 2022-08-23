@@ -21,7 +21,7 @@ export class ProposalUseCaseService {
   constructor(private readonly cosmosRest: CosmosRestService) {}
 
   proposal$(proposalID$: Observable<string>): Observable<InlineResponse20027Proposals | undefined> {
-    console.log('cosmosRest', this.cosmosRest); //----> for debug
+    //console.log('cosmosRest', this.cosmosRest); //----> for debug
     return proposalID$.pipe(mergeMap((id) => this.cosmosRest.getProposal$(id)));
   }
   proposalType$(
@@ -29,6 +29,7 @@ export class ProposalUseCaseService {
   ): Observable<string | undefined> {
     return proposal$.pipe(
       map((proposal) => {
+        //console.log('prop_debug', proposal);
         if (proposal && proposal.content) {
           return (proposal.content as any)['@type'];
         }

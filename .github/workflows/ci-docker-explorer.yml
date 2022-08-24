@@ -1,9 +1,11 @@
 name: CI Explorer Docker image
 on:
-  pull_request:
-    paths:
-      - 'projects/explorer/**'
-      - 'projects/shared/**'
+  workflow_dispatch:
+  ## disable Github Action related to Docker.
+  # pull_request:
+  #   paths:
+  #     - 'projects/explorer/**'
+  #     - 'projects/shared/**'
 jobs:
   push_to_registry:
     name: Build Docker image

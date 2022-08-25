@@ -36,7 +36,7 @@ export class ProposalsComponent implements OnInit {
     private readonly govAppService: GovApplicationService,
   ) {
     this.proposals$ = this.usecase.proposals$;
-    this.pageLength$ = this.usecase.pageLength$(this.proposals$);
+    this.pageLength$ = this.usecase.pageLength$;
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
         const pageSize = Number(params.perPage);
@@ -62,18 +62,9 @@ export class ProposalsComponent implements OnInit {
         return pages;
       }),
     );
-
-    this.paginatedProposals$ = this.usecase.paginatedProposals$(
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    );
-    this.proposalContents$ = this.usecase.proposalContents$(
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    );
-    this.tallies$ = this.usecase.tallies$(this.proposals$, this.pageNumber$, this.pageSize$);
+    this.paginatedProposals$ = this.usecase.paginatedProposals$(this.pageNumber$, this.pageSize$);
+    this.proposalContents$ = this.usecase.proposalContents$(this.pageNumber$, this.pageSize$);
+    this.tallies$ = this.usecase.tallies$(this.pageNumber$, this.pageSize$);
   }
 
   ngOnInit(): void {}

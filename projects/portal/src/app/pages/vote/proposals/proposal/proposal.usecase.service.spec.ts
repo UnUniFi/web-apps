@@ -1,18 +1,11 @@
+import * as txParser from './../../../../../../../explorer/src/app/utils/tx-parser';
 import { CosmosRestService } from './../../../../models/cosmos-rest.service';
-import { CosmosSDKService } from './../../../../models/cosmos-sdk.service';
 import { ProposalUseCaseService } from './proposal.usecase.service';
 import { TestBed } from '@angular/core/testing';
-import {
-  InlineResponse20026DepositParams,
-  InlineResponse20026TallyParams,
-  InlineResponse20026VotingParams,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20032Votes,
-  InlineResponse200Accounts,
-} from '@cosmos-client/core/esm/openapi';
+import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
 import { of } from 'rxjs';
+
+jest.spyOn(txParser, 'txParseProposalContent');
 
 const setup = (props?: { mockCosmosRestService?: any }) => {
   // Mock Values
@@ -24,6 +17,17 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
     getDeposits$: jest.fn(() => of(undefined)),
     getTallyResult$: jest.fn(() => of(undefined)),
     getVotes$: jest.fn(() => of(undefined)),
+  };
+
+  //const mockContent: InlineResponse200Accounts
+  const mockContent: any = {
+    '@type': 'test_type',
+    type_url: 'test_url',
+    value: 'test_value',
+  };
+  const mockProposal: InlineResponse20027Proposals = {
+    proposal_id: 'string',
+    content: mockContent,
   };
 
   // Setup TestBed
@@ -41,6 +45,7 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
   return {
     service,
     mockCosmosRestService,
+    mockProposal,
   };
 };
 
@@ -50,8 +55,8 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
     expect(service).toBeTruthy();
   });
 
-  describe('3 getters return valid values', () => {
-    test('depositParams$ getter calls the getDepositParams$ in CosmosRestService', (done) => {
+  describe('Three getters', () => {
+    test('depositParams$ getter calls the getDepositParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.depositsParams$.subscribe(() => {
         expect(mockCosmosRestService.getDepositParams$).toBeCalled();
@@ -59,7 +64,7 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
 
-    test('tallyParams$ getter calls the getTallyParams$ in CosmosRestService', (done) => {
+    test('tallyParams$ getter calls the getTallyParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.tallyParams$.subscribe(() => {
         expect(mockCosmosRestService.getTallyParams$).toBeCalled();
@@ -67,7 +72,7 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
 
-    test('votingParams$ getter calls the getVotingParams$ in CosmosRestService', (done) => {
+    test('votingParams$ getter calls the getVotingParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.votingParams$.subscribe(() => {
         expect(mockCosmosRestService.getVotingParams$).toBeCalled();
@@ -76,45 +81,26 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
     });
   });
 
-  describe('2 methods input proposal return valid values', () => {
-    test.todo('proposalType$ method return a valid value from proposal$'); /*, (done) => {
-      const { service } = setup();
-      const mockContent: InlineResponse200Accounts = {
-        //@type: ""
-        type_url: 'test_url',
-        value: 'test_value',
-      };
-      const mockProposal: InlineResponse20027Proposals = {
-        proposal_id: 'string',
-        content: mockContent,
-      };
+  describe('Two methods with proposal$ as arguments', () => {
+    test('proposalType$ method returns @type value', (done) => {
+      const { service, mockProposal } = setup();
       service.proposalType$(of(mockProposal)).subscribe((value) => {
-        expect(value).toBe('test_values');
+        expect(value).toBe((mockProposal?.content as any)['@type']);
         done();
       });
     });
-    */
 
-    test.todo('proposalContent$ method return a valid value from proposal$'); /*, (done) => {
-      const { service } = setup();
-      const mockContent: InlineResponse200Accounts = {
-        //@type: ""
-        type_url: 'test_url',
-        value: 'test_value',
-      };
-      const mockProposal: InlineResponse20027Proposals = {
-        proposal_id: 'string',
-        content: mockContent,
-      };
-      service.proposalContent$(of(mockProposal)).subscribe((value) => {
-        expect(value).toBe('test_values2');
+    test('proposalContent$ method calls txParseProposalContent with proposal.content as argument', (done) => {
+      const { service, mockProposal } = setup();
+      service.proposalContent$(of(mockProposal)).subscribe(() => {
+        expect(txParser.txParseProposalContent).toBeCalledWith(mockProposal.content);
         done();
       });
-    });*/
+    });
   });
 
-  describe('4 methods input proposalID return valid values', () => {
-    test('proposal$ returns proposal', (done) => {
+  describe('Four methods with proposalID$ as argument', () => {
+    test('proposal$ calls the getProposal$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.proposal$(of('1')).subscribe(() => {
         expect(mockCosmosRestService.getProposal$).toHaveBeenCalledWith('1');
@@ -122,7 +108,7 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
 
-    test('deposit$ returns deposit', (done) => {
+    test('deposit$ calls the getDeposits$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.deposits$(of('2')).subscribe(() => {
         expect(mockCosmosRestService.getDeposits$).toHaveBeenCalledWith('2');
@@ -130,7 +116,7 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
 
-    test('tally$ returns tally', (done) => {
+    test('tally$ calls the getTallyResult$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.tally$(of('3')).subscribe(() => {
         expect(mockCosmosRestService.getTallyResult$).toHaveBeenCalledWith('3');
@@ -138,7 +124,7 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
 
-    test('vote$ returns votes', (done) => {
+    test('vote$ calls the getVotes$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.votes$(of('4')).subscribe(() => {
         expect(mockCosmosRestService.getVotes$).toHaveBeenCalledWith('4');

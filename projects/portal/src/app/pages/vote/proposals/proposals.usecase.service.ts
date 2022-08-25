@@ -14,31 +14,34 @@ import { map, mergeMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProposalsUseCaseService {
-  constructor(private readonly cosmosRest: CosmosRestService) {}
+  private proposalsInService$: Observable<InlineResponse20027Proposals[]>;
+  constructor(private readonly cosmosRest: CosmosRestService) {
+    this.proposalsInService$ = this.cosmosRest.getProposals$().pipe(map((res) => res!));
+  }
 
   get proposals$(): Observable<InlineResponse20027Proposals[]> {
-    return this.cosmosRest.getProposals$().pipe(map((res) => res!));
+    return this.proposalsInService$;
   }
-  pageLength$(proposals$: Observable<InlineResponse20027Proposals[]>) {
-    return proposals$.pipe(map((proposals) => (proposals.length ? proposals.length : undefined)));
+  get pageLength$() {
+    return this.proposalsInService$.pipe(
+      map((proposals) => (proposals?.length ? proposals.length : undefined)),
+    );
   }
   paginatedProposals$(
-    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<InlineResponse20027Proposals[]> {
-    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
       map(([proposals, pageNumber, pageSize]) =>
         this.getPaginatedProposals(proposals, pageNumber, pageSize),
       ),
     );
   }
   proposalContents$(
-    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]> {
-    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
@@ -49,11 +52,10 @@ export class ProposalsUseCaseService {
     );
   }
   tallies$(
-    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(InlineResponse20027FinalTallyResult | undefined)[]> {
-    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
@@ -69,8 +71,12 @@ export class ProposalsUseCaseService {
     pageNumber: number,
     pageSize: number,
   ): InlineResponse20027Proposals[] {
-    const max = proposals.length - (pageNumber - 1) * pageSize;
-    const min = max - pageSize;
-    return proposals.filter((_, i) => min <= i && i < max).reverse();
+    if ((proposals?.length || 0) > 0) {
+      const max = proposals.length - (pageNumber - 1) * pageSize;
+      const min = max - pageSize;
+      return proposals.filter((_, i) => min <= i && i < max).reverse();
+    } else {
+      return [];
+    }
   }
 }

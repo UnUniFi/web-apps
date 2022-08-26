@@ -16,7 +16,7 @@
           <div matLine class="flex mb-2">
             <span class="w-2/12"># {{ proposal.proposal_id }}</span>
             <span class="w-7/12 text-center truncate">{{
-              unpackContent(proposal.content)?.title
+              unpackContent(proposal.content).title
             }}</span>
             <span class="w-3/12 text-right truncate"
               >{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}

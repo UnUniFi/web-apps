@@ -43,7 +43,7 @@ export class ProposalComponent implements OnInit {
       return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
     } catch (error) {
       console.error(error);
-      return undefined;
+      return value as ProposalContent;
     }
   }
 

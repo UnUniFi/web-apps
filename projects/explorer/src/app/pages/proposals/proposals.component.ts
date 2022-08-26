@@ -24,7 +24,7 @@ export class ProposalsComponent implements OnInit {
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!),
+      map((result) => result.data.proposals!.reverse()),
     );
     this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$]).pipe(
       mergeMap(([sdk, proposals]) =>

@@ -11,7 +11,7 @@
 <ng-template #exist>
   <mat-card>
     <mat-nav-list>
-      <ng-container *ngFor="let proposal of proposals?.reverse(); let i = index; last as last">
+      <ng-container *ngFor="let proposal of proposals; let i = index; last as last">
         <mat-list-item routerLink="{{ proposal.proposal_id }}">
           <div matLine class="flex mb-2">
             <span class="w-2/12"># {{ proposal.proposal_id }}</span>

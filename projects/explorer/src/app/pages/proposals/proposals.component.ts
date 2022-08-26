@@ -37,7 +37,7 @@ export class ProposalsComponent implements OnInit {
           ),
         ),
       ),
-      map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
+      map((result) => result.map((res) => res?.data.tally)),
     );
   }
 

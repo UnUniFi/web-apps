@@ -3,63 +3,61 @@
   <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <ng-container *ngIf="unpackContent(proposal?.content) as content">
-    <div class="flex flex-row">
-      <h2># {{ proposal?.proposal_id }} {{ content.title }}</h2>
-      <span class="flex-auto"></span>
-      <mat-chip-list>
-        <mat-chip color="primary" selected>{{
-          proposal?.status?.replace('PROPOSAL_STATUS_', '')
-        }}</mat-chip>
-      </mat-chip-list>
-    </div>
+  <div class="flex flex-row">
+    <h2># {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}</h2>
+    <span class="flex-auto"></span>
+    <mat-chip-list>
+      <mat-chip color="primary" selected>{{
+        proposal?.status?.replace('PROPOSAL_STATUS_', '')
+      }}</mat-chip>
+    </mat-chip-list>
+  </div>
 
-    <h3>Details</h3>
-    <mat-card class="mb-4">
-      <mat-card-content>
-        <mat-list>
-          <mat-list-item>
-            <span>Type </span>
-            <span class="flex-auto"></span>
-            <span>{{
-              proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
-            }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>
-            <span>Submitted: </span>
-            <span class="flex-auto"></span>
-            <span>{{ proposal?.submit_time }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>
-            <span>Start Voting: </span>
-            <span class="flex-auto"></span>
-            <span>{{ proposal?.voting_start_time }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>
-            <span>End Voting: </span>
-            <span class="flex-auto"></span>
-            <span>{{ proposal?.voting_end_time }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-list-item>
-            <span>Deposit End Time: </span>
-            <span class="flex-auto"></span>
-            <span>{{ proposal?.deposit_end_time }}</span>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
+  <h3>Details</h3>
+  <mat-card class="mb-4">
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <span>Type </span>
+          <span class="flex-auto"></span>
+          <span>{{
+            proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
+          }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          <span>Submitted: </span>
+          <span class="flex-auto"></span>
+          <span>{{ proposal?.submit_time }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          <span>Start Voting: </span>
+          <span class="flex-auto"></span>
+          <span>{{ proposal?.voting_start_time }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          <span>End Voting: </span>
+          <span class="flex-auto"></span>
+          <span>{{ proposal?.voting_end_time }}</span>
+        </mat-list-item>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-list-item>
+          <span>Deposit End Time: </span>
+          <span class="flex-auto"></span>
+          <span>{{ proposal?.deposit_end_time }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 
-    <h3>Description</h3>
-    <mat-card class="mb-4">
-      <mat-card-content>
-        <span class="break-all">{{ content.description }}</span>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+  <h3>Description</h3>
+  <mat-card class="mb-4">
+    <mat-card-content>
+      <span class="break-all">{{ unpackContent(proposal?.content).description }}</span>
+    </mat-card-content>
+  </mat-card>
 
   <h3>Votes</h3>
   <mat-card class="mb-4">

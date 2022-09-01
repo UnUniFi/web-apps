@@ -1,4 +1,3 @@
-//import { Config, ConfigService } from '../../models/config.service';
 import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { txParseProposalContent } from './../../../../../../explorer/src/app/utils/tx-parser';
 import { Injectable } from '@angular/core';
@@ -14,53 +13,51 @@ import { map, mergeMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProposalsUseCaseService {
-  private proposalsInService$: Observable<InlineResponse20027Proposals[]>;
-  constructor(private readonly cosmosRest: CosmosRestService) {
-    this.proposalsInService$ = this.cosmosRest.getProposals$().pipe(map((res) => res!));
-  }
+  constructor(private readonly cosmosRest: CosmosRestService) {}
 
   get proposals$(): Observable<InlineResponse20027Proposals[]> {
-    return this.proposalsInService$;
+    return this.cosmosRest.getProposals$().pipe(map((res) => res!));
   }
-  get pageLength$() {
-    return this.proposalsInService$.pipe(
-      map((proposals) => (proposals?.length ? proposals.length : undefined)),
-    );
+  pageLength$(proposals$: Observable<InlineResponse20027Proposals[]>) {
+    return proposals$.pipe(map((proposals) => (proposals?.length ? proposals.length : undefined)));
   }
   paginatedProposals$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<InlineResponse20027Proposals[]> {
-    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       map(([proposals, pageNumber, pageSize]) =>
         this.getPaginatedProposals(proposals, pageNumber, pageSize),
       ),
     );
   }
   proposalContents$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]> {
-    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
-          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
-            of(txParseProposalContent(proposal.content!)),
-          ),
+          this.getPaginatedProposals(proposals, pageNumber, pageSize)?.map((proposal) => {
+            return of(txParseProposalContent(proposal.content!));
+          }),
         ),
       ),
     );
   }
   tallies$(
+    proposals$: Observable<InlineResponse20027Proposals[]>,
     pageNumber$: Observable<number>,
     pageSize$: Observable<number>,
   ): Observable<(InlineResponse20027FinalTallyResult | undefined)[]> {
-    return combineLatest([this.proposalsInService$, pageNumber$, pageSize$]).pipe(
+    return combineLatest([proposals$, pageNumber$, pageSize$]).pipe(
       mergeMap(([proposals, pageNumber, pageSize]) =>
         combineLatest(
-          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
-            this.cosmosRest.getTallyResult$(proposal.proposal_id!),
-          ),
+          this.getPaginatedProposals(proposals, pageNumber, pageSize)?.map((proposal) => {
+            return this.cosmosRest.getTallyResult$(proposal.proposal_id!);
+          }),
         ),
       ),
     );

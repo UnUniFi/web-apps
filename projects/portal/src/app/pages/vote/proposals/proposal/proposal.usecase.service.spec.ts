@@ -54,7 +54,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
     const { service } = setup();
     expect(service).toBeTruthy();
   });
-
   describe('Three getters', () => {
     test('depositParams$ getter calls the getDepositParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
@@ -63,7 +62,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('tallyParams$ getter calls the getTallyParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.tallyParams$.subscribe(() => {
@@ -71,7 +69,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('votingParams$ getter calls the getVotingParams$ from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.votingParams$.subscribe(() => {
@@ -80,7 +77,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
   });
-
   describe('Two methods with proposal$ as arguments', () => {
     test('proposalType$ method returns @type value', (done) => {
       const { service, mockProposal } = setup();
@@ -89,7 +85,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('proposalContent$ method calls txParseProposalContent with proposal.content as argument', (done) => {
       const { service, mockProposal } = setup();
       service.proposalContent$(of(mockProposal)).subscribe(() => {
@@ -98,7 +93,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
       });
     });
   });
-
   describe('Four methods with proposalID$ as argument', () => {
     test('proposal$ calls the getProposal$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
@@ -107,7 +101,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('deposit$ calls the getDeposits$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.deposits$(of('2')).subscribe(() => {
@@ -115,7 +108,6 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('tally$ calls the getTallyResult$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.tally$(of('3')).subscribe(() => {
@@ -123,13 +115,97 @@ describe('ProposalUseCaseService when CosmosRestService returns a valid value', 
         done();
       });
     });
-
     test('vote$ calls the getVotes$ with same number as argument, from CosmosRestService', (done) => {
       const { service, mockCosmosRestService } = setup();
       service.votes$(of('4')).subscribe(() => {
         expect(mockCosmosRestService.getVotes$).toHaveBeenCalledWith('4');
         done();
       });
+    });
+  });
+});
+
+const setupUndefinedEnv = () => {
+  const mockCosmosRestService = {
+    getProposals$: jest.fn(() => of(undefined)),
+  };
+  const { service, mockProposal } = setup({
+    mockCosmosRestService,
+  });
+  return {
+    service,
+    mockCosmosRestService,
+    mockProposal,
+  };
+};
+
+describe('ProposalUseCaseService when no CosmosRestService', () => {
+  it('should be created', () => {
+    const { service } = setupUndefinedEnv();
+    expect(service).toBeTruthy();
+  });
+  test('depositParams$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.depositsParams$.subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('tallyParams$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.tallyParams$.subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('votingParams$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.votingParams$.subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('proposalType$  returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.proposalType$(of(undefined)).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('proposalContent$ returns undefined', (done) => {
+    const { service, mockProposal } = setupUndefinedEnv();
+    service.proposalContent$(of(mockProposal)).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+
+  test('proposal$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.proposal$(of('1')).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('deposit$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.deposits$(of('2')).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('tally$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.tally$(of('3')).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
+    });
+  });
+  test('vote$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.votes$(of('4')).subscribe((v) => {
+      expect(v).toEqual(undefined);
+      done();
     });
   });
 });

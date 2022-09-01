@@ -3,7 +3,7 @@ import { CosmosRestService } from './../../../models/cosmos-rest.service';
 import { ProposalsUseCaseService } from './proposals.usecase.service';
 import { TestBed } from '@angular/core/testing';
 import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
-import { combineLatest, of } from 'rxjs';
+import { of } from 'rxjs';
 
 jest.spyOn(txParser, 'txParseProposalContent');
 
@@ -54,7 +54,7 @@ describe('ProposalsUseCaseService', () => {
 
   test('pageLength$ returns number of proposals', (done) => {
     const { service, mockProposalArray } = setup();
-    service.pageLength$.subscribe((value) => {
+    service.pageLength$(service.proposals$).subscribe((value) => {
       expect(value).toBe(mockProposalArray.length);
       done();
     });
@@ -62,7 +62,7 @@ describe('ProposalsUseCaseService', () => {
 
   test('paginatedProposals$ returns paginated proposal', (done) => {
     const { service, mockProposalArray } = setup();
-    service.paginatedProposals$(of(1), of(2)).subscribe((value) => {
+    service.paginatedProposals$(service.proposals$, of(1), of(2)).subscribe((value) => {
       expect(value).toStrictEqual(mockProposalArray.slice(1, 3).reverse());
       done();
     });
@@ -70,7 +70,7 @@ describe('ProposalsUseCaseService', () => {
 
   test('proposalContents$ calls txParseProposalContent for the number of pagesize', (done) => {
     const { service } = setup();
-    service.proposalContents$(of(1), of(2)).subscribe(() => {
+    service.proposalContents$(service.proposals$, of(1), of(2)).subscribe(() => {
       expect(txParser.txParseProposalContent).toBeCalledTimes(2);
       done();
     });
@@ -78,7 +78,7 @@ describe('ProposalsUseCaseService', () => {
 
   test('tallies$ calls getTallyResult$ for number of pagesize from CosmosRestService', (done) => {
     const { service, mockCosmosRestService } = setup();
-    service.tallies$(of(1), of(2)).subscribe(() => {
+    service.tallies$(service.proposals$, of(1), of(2)).subscribe(() => {
       expect(mockCosmosRestService.getTallyResult$).toBeCalledTimes(2);
       done();
     });
@@ -114,7 +114,7 @@ describe('ProposalsUseCaseService when getProposals$ return undefined', () => {
 
   test('pageLength$ returns undefined', (done) => {
     const { service } = setupUndefinedEnv();
-    service.pageLength$.subscribe((value) => {
+    service.pageLength$(service.proposals$).subscribe((value) => {
       expect(value).toBe(undefined);
       done();
     });
@@ -122,23 +122,7 @@ describe('ProposalsUseCaseService when getProposals$ return undefined', () => {
 
   test('paginatedProposals$ returns an empty array', (done) => {
     const { service } = setupUndefinedEnv();
-    service.paginatedProposals$(of(1), of(2)).subscribe((value) => {
-      expect(value).toEqual([]);
-      done();
-    });
-  });
-
-  test('proposalContents$ returns an empty array', (done) => {
-    const { service } = setupUndefinedEnv();
-    service.proposalContents$(of(1), of(2)).subscribe((value) => {
-      expect(value).toEqual([]);
-      done();
-    });
-  });
-
-  test('tallies$ returns an empty array', (done) => {
-    const { service } = setupUndefinedEnv();
-    service.tallies$(of(1), of(2)).subscribe((value) => {
+    service.paginatedProposals$(service.proposals$, of(1), of(2)).subscribe((value) => {
       expect(value).toEqual([]);
       done();
     });

@@ -39,7 +39,6 @@ export class ProposalUseCaseService {
   ): Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined> {
     return proposal$.pipe(
       map((proposal) => {
-        console.log(proposal);
         return txParseProposalContent(proposal?.content!);
       }),
     );

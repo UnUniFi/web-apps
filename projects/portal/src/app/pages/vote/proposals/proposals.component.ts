@@ -17,17 +17,17 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<InlineResponse20027Proposals[]>;
-  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
   tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
-
-  pageSizeOptions = [5, 10, 15];
+  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
   pageLength$: Observable<number | undefined>;
-  defaultPageSize = this.pageSizeOptions[1];
-  defaultPageNumber = 1;
+  pageSizeOptions = [5, 10, 15];
+
+  private proposals$: Observable<InlineResponse20027Proposals[]>;
+  private defaultPageSize = this.pageSizeOptions[1];
+  private defaultPageNumber = 1;
 
   constructor(
     private router: Router,
@@ -36,7 +36,7 @@ export class ProposalsComponent implements OnInit {
     private readonly govAppService: GovApplicationService,
   ) {
     this.proposals$ = this.usecase.proposals$;
-    this.pageLength$ = this.usecase.pageLength$;
+    this.pageLength$ = this.usecase.pageLength$(this.proposals$);
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
         const pageSize = Number(params.perPage);
@@ -62,9 +62,17 @@ export class ProposalsComponent implements OnInit {
         return pages;
       }),
     );
-    this.paginatedProposals$ = this.usecase.paginatedProposals$(this.pageNumber$, this.pageSize$);
-    this.proposalContents$ = this.usecase.proposalContents$(this.pageNumber$, this.pageSize$);
-    this.tallies$ = this.usecase.tallies$(this.pageNumber$, this.pageSize$);
+    this.paginatedProposals$ = this.usecase.paginatedProposals$(
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    );
+    this.proposalContents$ = this.usecase.proposalContents$(
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    );
+    this.tallies$ = this.usecase.tallies$(this.proposals$, this.pageNumber$, this.pageSize$);
   }
 
   ngOnInit(): void {}

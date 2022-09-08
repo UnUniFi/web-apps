@@ -1,3 +1,4 @@
+import { LoadingDialogService } from '../../../../components/loading-dialog';
 import { TxFeeConfirmDialogComponent } from '../../../../views/dialogs/cosmos/tx/common/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { LibViewListNftFormDialogComponent } from '../../../../views/dialogs/ununifi/tx/nft/list-nft-form-dialog/list-nft-form-dialog.component';
 import { LibViewNftMenuDialogComponent } from '../../../../views/dialogs/ununifi/tx/nft/nft-menu-dialog/nft-menu-dialog.component';
@@ -15,7 +16,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class NftTxApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: NftTxInfrastructureService,
     private readonly walletService: WalletService,
-  ) { }
+  ) {}
 
   async openNftMenuDialog(nft: Nft): Promise<void> {
     await this.dialog

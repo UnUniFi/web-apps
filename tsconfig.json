@@ -14,8 +14,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "paths": {
-      "shared": ["dist/shared/shared", "dist/shared"],
-      "shared/*": ["dist/shared/shared/*", "dist/shared/*"],
+      "@ununifi/shared": ["projects/shared/src/common"],
       "crypto": ["./node_modules/crypto-browserify"],
       "https": ["./node_modules/https-browserify"],
       "os": ["./node_modules/os-browserify"],

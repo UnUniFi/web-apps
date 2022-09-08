@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class BankApplicationService {
     private readonly bank: BankService,
     private readonly walletService: WalletService,
     private readonly txCommon: TxCommonService,
-  ) { }
+  ) {}
 
   async send(
     toAddress: string,

@@ -10,7 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoadingDialogModule } from 'ng-loading-dialog';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +17,6 @@ import { LoadingDialogModule } from 'ng-loading-dialog';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    LoadingDialogModule,
     MatDialogModule,
     MatSnackBarModule,
     ViewModule,

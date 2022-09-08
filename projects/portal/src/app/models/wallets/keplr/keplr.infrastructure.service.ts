@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 export interface signKeplr {
   authInfoBytes: Uint8Array;
@@ -17,7 +17,7 @@ export interface signKeplr {
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow { }
+  interface Window extends KeplrWindow {}
 }
 
 @Injectable({
@@ -28,7 +28,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     private readonly loadingDialog: LoadingDialogService,
     private snackBar: MatSnackBar,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
   private async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {

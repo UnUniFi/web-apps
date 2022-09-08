@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoadingDialogModule } from 'ng-loading-dialog';
+import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-dialog';
 import { TxFeeConfirmDialogModule } from 'projects/shared/src/lib/views/dialogs/cosmos/tx/common/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from 'projects/shared/src/lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from 'projects/shared/src/lib/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';

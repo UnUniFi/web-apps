@@ -33,7 +33,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoadingDialogModule } from 'ng-loading-dialog';
+import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-dialog';
 
 @NgModule({
   declarations: [AppComponent],

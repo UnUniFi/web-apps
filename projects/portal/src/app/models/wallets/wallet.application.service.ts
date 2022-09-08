@@ -15,7 +15,7 @@ import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
   providedIn: 'root',

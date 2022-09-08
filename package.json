@@ -65,8 +65,6 @@
     "firebase": "^9.6.10",
     "graphql": "^16",
     "https-browserify": "^1.0.0",
-    "ng-loading-dialog": "^12.0.6",
-    "ng-min-max": "^12.0.5",
     "ngx-dropzone": "^3.1.0",
     "ngx-skeleton-loader": "^5.0.0",
     "os-browserify": "^0.3.0",

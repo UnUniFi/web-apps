@@ -24,6 +24,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: npm i -g npm
-      - run: npm ci --force
+      - run: npm ci
       - run: npm run build:all:prod:ununifi
       - run: npx firebase deploy --only hosting:ununifi --project=default --token=${{ secrets.FIREBASE_TOKEN }}

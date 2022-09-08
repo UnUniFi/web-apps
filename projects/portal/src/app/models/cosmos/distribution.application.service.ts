@@ -14,7 +14,7 @@ import {
   InlineResponse20050,
   InlineResponse20041Validators,
 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class DistributionApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly distribution: DistributionService,
     private readonly walletService: WalletService,
-  ) { }
+  ) {}
 
   async openWithdrawDelegatorRewardFormDialog(
     validator: InlineResponse20041Validators,

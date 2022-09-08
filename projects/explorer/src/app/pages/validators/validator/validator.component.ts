@@ -1,9 +1,9 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { validatorType } from '../../../views/validators/validators.component';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { QueryValidatorsResponseIsResponseTypeForTheQueryValidatorsRPCMethod } from '@cosmos-client/core/esm/openapi';
+import { CosmosSDKService } from '@ununifi/shared';
 import { Observable, combineLatest } from 'rxjs';
 import { map, withLatestFrom, mergeMap } from 'rxjs/operators';
 
@@ -77,5 +77,5 @@ export class ValidatorComponent implements OnInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

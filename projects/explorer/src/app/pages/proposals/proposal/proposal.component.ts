@@ -10,10 +10,10 @@ import {
   InlineResponse20026TallyParams,
   InlineResponse20026VotingParams,
 } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { CosmosSDKService } from '@ununifi/shared';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposal',
@@ -53,7 +53,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.proposalContent$ = this.proposal$.pipe(
-      map((proposal) => txParseProposalContent(proposal?.content!))
+      map((proposal) => txParseProposalContent(proposal?.content!)),
     );
 
     this.deposits$ = combined$.pipe(
@@ -107,5 +107,5 @@ export class ProposalComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

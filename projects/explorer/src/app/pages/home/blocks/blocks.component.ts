@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20011, InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { CosmosSDKService } from '@ununifi/shared';
 import { Observable, of, zip, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -23,7 +23,9 @@ export class BlocksComponent implements OnInit {
     // eslint-disable-next-line no-unused-vars
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
     this.latestBlock$ = sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) =>
+        cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data),
+      ),
     );
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       // eslint-disable-next-line no-undef
@@ -65,5 +67,5 @@ export class BlocksComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

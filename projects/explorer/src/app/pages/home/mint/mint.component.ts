@@ -5,7 +5,7 @@ import {
   CosmosMintV1beta1QueryAnnualProvisionsResponse,
   CosmosMintV1beta1QueryInflationResponse,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { CosmosSDKService } from '@ununifi/shared';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -30,5 +30,5 @@ export class MintComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

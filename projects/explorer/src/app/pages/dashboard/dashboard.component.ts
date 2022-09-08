@@ -1,7 +1,7 @@
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
+import { CosmosSDKService } from '@ununifi/shared';
 import { combineLatest, Observable, of, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -24,7 +24,9 @@ export class DashboardComponent implements OnInit {
     // eslint-disable-next-line no-unused-vars
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
     this.latestBlock$ = sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) =>
+        cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data),
+      ),
     );
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       map((latestBlock) =>
@@ -56,5 +58,5 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

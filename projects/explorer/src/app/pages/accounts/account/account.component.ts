@@ -1,8 +1,8 @@
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { CosmosSDKService } from '@ununifi/shared';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -66,10 +66,12 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return cosmosclient.rest.bank.allBalances(sdk.rest, address).then((res) => res.data.balances || []);
+        return cosmosclient.rest.bank
+          .allBalances(sdk.rest, address)
+          .then((res) => res.data.balances || []);
       }),
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

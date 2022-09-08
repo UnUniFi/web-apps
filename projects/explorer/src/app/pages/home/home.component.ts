@@ -1,7 +1,7 @@
-import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import { CosmosSDKService } from '@ununifi/shared';
 import { combineLatest, Observable, timer } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

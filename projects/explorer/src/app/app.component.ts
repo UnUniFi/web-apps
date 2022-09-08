@@ -1,8 +1,8 @@
-import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { CosmosSDKService } from '@ununifi/shared';
 import { Config, ConfigService } from '@ununifi/shared';
 import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';

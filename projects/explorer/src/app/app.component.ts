@@ -1,9 +1,9 @@
-import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { Config, ConfigService } from '@ununifi/shared';
 import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -98,8 +98,7 @@ export class AppComponent implements OnInit {
                 BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 : false;
-            }
-            catch (error) {
+            } catch (error) {
               return false;
             }
           });
@@ -223,5 +222,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

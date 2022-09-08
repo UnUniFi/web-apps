@@ -1,6 +1,6 @@
-import { ConfigService } from './config.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConfigService } from '@ununifi/shared';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 

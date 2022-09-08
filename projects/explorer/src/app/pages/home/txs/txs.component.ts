@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
-import { ConfigService } from 'projects/explorer/src/app/models/config.service';
+import { ConfigService } from '@ununifi/shared';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
@@ -110,7 +110,7 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.selectedTxType$.next(selectedTxType);

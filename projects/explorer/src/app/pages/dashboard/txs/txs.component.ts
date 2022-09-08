@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
-import { ConfigService } from 'projects/explorer/src/app/models/config.service';
+import { ConfigService } from '@ununifi/shared';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { of, combineLatest, Observable, timer } from 'rxjs';
 import { map, mergeMap, switchMap, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
@@ -119,8 +119,8 @@ export class TxsComponent implements OnInit {
         // Note: This is strange. This is temporary workaround way.
         const temporaryWorkaroundPageSize =
           txsTotalCount === BigInt(1) &&
-            modifiedPageOffset === BigInt(1) &&
-            modifiedPageSize === BigInt(1)
+          modifiedPageOffset === BigInt(1) &&
+          modifiedPageSize === BigInt(1)
             ? modifiedPageSize + BigInt(1)
             : modifiedPageSize;
 
@@ -147,7 +147,7 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.router.navigate([], {

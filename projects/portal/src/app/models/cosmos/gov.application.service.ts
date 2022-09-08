@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class GovApplicationService {
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
     private readonly walletService: WalletService,
-  ) { }
+  ) {}
 
   async openVoteFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
@@ -47,7 +47,10 @@ export class GovApplicationService {
   }
 
   // WIP
-  async submitProposal(minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin, gasRatio: number) {
+  async submitProposal(
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+  ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {

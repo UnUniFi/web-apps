@@ -21,7 +21,7 @@ import {
   InlineResponse20041Validators,
   InlineResponse20050,
 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 export interface InterfaceValidatorSimpleOptions {
@@ -46,7 +46,7 @@ export class StakingApplicationService {
     private readonly staking: StakingService,
     private readonly walletService: WalletService,
     private readonly walletApplicationService: WalletApplicationService,
-  ) { }
+  ) {}
 
   async openDelegateMenuDialog(validator: InlineResponse20041Validators): Promise<void> {
     await this.dialog

@@ -29,6 +29,7 @@ export * from './lib/pipes/unit-conversion.pipe';
 export * from './lib/utils/converter';
 export * from './lib/utils/key';
 export * from './lib/utils/validation';
+export * from './lib/utils/toHashHex';
 
 export * from './lib/views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 export * from './lib/views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';

@@ -21,6 +21,11 @@ export * from './lib/models/wallets/wallet.guard';
 export * from './lib/models/wallets/wallet.model';
 export * from './lib/models/wallets/wallet.service';
 
+export * from './lib/pipes/decimals.pipe';
+export * from './lib/pipes/floor.pipe';
+export * from './lib/pipes/pipes.module';
+export * from './lib/pipes/unit-conversion.pipe';
+
 export * from './lib/utils/converter';
 export * from './lib/utils/key';
 export * from './lib/utils/validation';

@@ -1,9 +1,9 @@
 import { MaterialModule } from '../../../material.module';
-import { PipesModule } from './../../../../pipes/pipes.module';
 import { ValidatorsComponent } from './validators.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { PipesModule } from '@ununifi/shared';
 
 @NgModule({
   declarations: [ValidatorsComponent],

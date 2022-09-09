@@ -5,6 +5,15 @@ import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 import { of } from 'rxjs';
 
+cosmosclient.config.setBech32Prefix({
+  accAddr: 'ununifi',
+  accPub: 'ununifipub',
+  valAddr: 'ununifivaloper',
+  valPub: 'ununifivaloperpub',
+  consAddr: 'ununifivalcons',
+  consPub: 'ununifivalconspub',
+});
+
 const setup = (props?: { mockCosmosRestService?: any }) => {
   // Mock Values
   const mockValidator1: InlineResponse20041Validators = {
@@ -41,6 +50,7 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
   });
   const service = TestBed.inject(ValidatorUseCaseService);
 
+  //
   const accAddress = cosmosclient.AccAddress.fromString(
     'ununifi167wfxxmlqphp5kl7dw4vh0aw9ymne7k0d879zu',
   );
@@ -62,15 +72,6 @@ describe('ValidatorUseCaseService when CosmosRestService returns a valid value',
     expect(service).toBeTruthy();
   });
 
-  cosmosclient.config.setBech32Prefix({
-    accAddr: 'ununifi',
-    accPub: 'ununifipub',
-    valAddr: 'ununifivaloper',
-    valPub: 'ununifivaloperpub',
-    consAddr: 'ununifivalcons',
-    consPub: 'ununifivalconspub',
-  });
-
   test('accAddress$ method returns accAddress from validatorAddress', (done) => {
     const { service, validatorAddress$, accAddress } = setup();
     service.accAddress$(validatorAddress$).subscribe((value) => {
@@ -79,11 +80,50 @@ describe('ValidatorUseCaseService when CosmosRestService returns a valid value',
     });
   });
 
-  test('validator$ method returns validatorType from validatorAddress', (done) => {
+  test('validator$ method looks up the entered Validator in the validator list', (done) => {
     const { service, mockValidators } = setup();
     const valAddr = cosmosclient.ValAddress.fromString(mockValidators[0].operator_address!);
+    const checkVal = mockValidators[0];
     service.validator$(of(valAddr)).subscribe((value) => {
-      expect(value?.val).toBe(mockValidators.reverse()[0]);
+      expect(value?.val).toBe(checkVal);
+      done();
+    });
+  });
+});
+
+const setupUndefinedEnv = () => {
+  const mockCosmosRestService = {
+    getValidators$: jest.fn(() => of(undefined)),
+  };
+
+  const { service, validatorAddress$, accAddress, mockValidators } = setup({
+    mockCosmosRestService,
+  });
+  return {
+    service,
+    validatorAddress$,
+    accAddress,
+    mockValidators,
+  };
+};
+
+describe('ValidatorUseCaseService when CosmosRestService returns undefined', () => {
+  it('should be created', () => {
+    const { service } = setupUndefinedEnv();
+    expect(service).toBeTruthy();
+  });
+  test('accAddress$ method returns accAddress from validatorAddress regardless of CosmosRestService', (done) => {
+    const { service, validatorAddress$, accAddress } = setupUndefinedEnv();
+    service.accAddress$(validatorAddress$).subscribe((value) => {
+      expect(value).toEqual(accAddress);
+      done();
+    });
+  });
+  test('validator$ method return undefined because there is not validator list', (done) => {
+    const { service, mockValidators } = setupUndefinedEnv();
+    const valAddr = cosmosclient.ValAddress.fromString(mockValidators[0].operator_address!);
+    service.validator$(of(valAddr)).subscribe((value) => {
+      expect(value).toBe(undefined);
       done();
     });
   });

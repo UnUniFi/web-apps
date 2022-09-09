@@ -68,7 +68,7 @@ export class ValidatorsUseCaseService {
 
     this.delegationsInService$ = this.accAddress$.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
-      map((result) => result.delegation_responses),
+      map((result) => (result?.delegation_responses ? result.delegation_responses : undefined)),
     );
     this.totalDelegation$ = this.delegationsInService$.pipe(
       map((delegations) =>
@@ -95,15 +95,25 @@ export class ValidatorsUseCaseService {
     this.unbondingDelegations$ = this.delegatedValidatorsInService$.pipe(
       withLatestFrom(this.accAddress$),
       concatMap(([validators, accAddress]) => {
-        const valAddressList = validators?.map((validator) => {
-          if (!validator?.operator_address) return undefined;
-          try {
-            return cosmosclient.ValAddress.fromString(validator?.operator_address);
-          } catch (error) {
-            console.error(error);
-            return undefined;
-          }
-        });
+        if (!validators) {
+          console.log('0');
+          return [];
+        }
+
+        const valAddressList: (cosmosclient.ValAddress | undefined)[] = validators.map(
+          (validator) => {
+            if (!validator?.operator_address) {
+              console.log('1');
+              return undefined;
+            }
+            try {
+              return cosmosclient.ValAddress.fromString(validator?.operator_address);
+            } catch (error) {
+              console.error(error);
+              return undefined;
+            }
+          },
+        );
         if (!valAddressList) return [];
 
         const unbondingDelegationList = Promise.all(

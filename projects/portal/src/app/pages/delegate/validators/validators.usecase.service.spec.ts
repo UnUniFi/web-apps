@@ -98,7 +98,6 @@ describe('ValidatorsUseCaseService when CosmosRestService returns a valid value'
     const { service } = setup();
     expect(service).toBeTruthy();
   });
-
   test('validators$ method get only enable validators from all validator', (done) => {
     const { service, mockValidators } = setup();
     const acticveEnabled = new BehaviorSubject(true);
@@ -109,7 +108,6 @@ describe('ValidatorsUseCaseService when CosmosRestService returns a valid value'
       done();
     });
   });
-
   test('currentStoredWallet$ getter gets currentStoresWallet$', (done) => {
     const { service, mockWallet } = setup();
     service.currentStoredWallet$.subscribe((value) => {
@@ -117,7 +115,6 @@ describe('ValidatorsUseCaseService when CosmosRestService returns a valid value'
       done();
     });
   });
-
   test('delegatedValidators$ returns the validators found in the delegator_response', (done) => {
     const { service, mockValidators } = setup();
     service.delegatedValidators$.subscribe((value) => {
@@ -125,13 +122,89 @@ describe('ValidatorsUseCaseService when CosmosRestService returns a valid value'
       done();
     });
   });
-
   test('filteredUnbondingDelegations$ calls getUnbondingDelegation$ from CosmosRestService for number of delegator_responses', (done) => {
     const { service, mockCosmosRestService, mockDelegationResponses } = setup();
     service.filteredUnbondingDelegations$.subscribe(() => {
       expect(mockCosmosRestService.getUnbondingDelegation$).toBeCalledTimes(
         mockDelegationResponses.delegation_responses?.length || 99,
       );
+      done();
+    });
+  });
+});
+
+const setupUndefinedEnv = () => {
+  const mockCosmosRestService = {
+    getValidators$: jest.fn(() => of(undefined)),
+    getDelegatorDelegations$: jest.fn(() => of(undefined)),
+    getUnbondingDelegation$: jest.fn(() => of(undefined)),
+  };
+  const mockWalletService = {
+    currentStoredWallet$: of(undefined),
+  };
+  const { service, mockWallet, mockValidators, mockDelegationResponses } = setup({
+    mockCosmosRestService,
+    mockWalletService,
+  });
+  return {
+    service,
+    mockWallet,
+    mockValidators,
+    mockCosmosRestService,
+    mockDelegationResponses,
+  };
+};
+
+describe('ValidatorUseCaseService when no CosmosRestService and no CurrentWallet', () => {
+  it('should be created', () => {
+    const { service } = setupUndefinedEnv();
+    expect(service).toBeTruthy();
+  });
+  test('validators$ method return void array because there is not validator list', (done) => {
+    const { service } = setupUndefinedEnv();
+    const acticveEnabled = new BehaviorSubject(true);
+    service.validators$(acticveEnabled).subscribe((value) => {
+      expect(value).toEqual([]);
+      done();
+    });
+  });
+  test('currentStoredWallet$ getter returns undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.currentStoredWallet$.subscribe((value) => {
+      expect(value).toEqual(undefined);
+      done();
+    });
+  });
+});
+
+const setupUndefinedEnvWithWallet = () => {
+  const mockCosmosRestService = {
+    getValidators$: jest.fn(() => of(undefined)),
+    getDelegatorDelegations$: jest.fn(() => of(undefined)),
+    getUnbondingDelegation$: jest.fn(() => of(undefined)),
+  };
+  const { service, mockWallet, mockValidators, mockDelegationResponses } = setup({
+    mockCosmosRestService,
+  });
+  return {
+    service,
+    mockWallet,
+    mockValidators,
+    mockCosmosRestService,
+    mockDelegationResponses,
+  };
+};
+
+describe('ValidatorUseCaseService when no CosmosRestService', () => {
+  it('should be created', () => {
+    const { service } = setupUndefinedEnv();
+    expect(service).toBeTruthy();
+  });
+  test('delegatedValidators$ returns undefined', (done) => {
+    const { service } = setupUndefinedEnvWithWallet();
+    console.log('time out');
+    service.delegatedValidators$.subscribe((v) => {
+      expect(v).toBe(undefined);
       done();
     });
   });

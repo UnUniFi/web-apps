@@ -2,8 +2,8 @@ name: Node.js CI marketplace
 on:
   pull_request:
     paths:
-      - "projects/marketplace/**"
-      - "projects/shared/**"
+      - 'projects/marketplace/**'
+      - 'projects/shared/**'
 jobs:
   build:
     runs-on: ubuntu-latest

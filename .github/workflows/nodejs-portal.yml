@@ -2,8 +2,8 @@ name: Node.js CI portal
 on:
   pull_request:
     paths:
-      - "projects/portal/**"
-      - "projects/shared/**"
+      - 'projects/portal/**'
+      - 'projects/shared/**'
 jobs:
   build:
     runs-on: ubuntu-latest

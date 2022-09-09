@@ -3,7 +3,7 @@ name: Node.js CI shared
 on:
   pull_request:
     paths:
-      - "projects/shared/**"
+      - 'projects/shared/**'
 
 jobs:
   build:

@@ -3,8 +3,8 @@ name: Node.js CI explorer
 on:
   pull_request:
     paths:
-      - "projects/explorer/**"
-      - "projects/shared/**"
+      - 'projects/explorer/**'
+      - 'projects/shared/**'
 
 jobs:
   build:

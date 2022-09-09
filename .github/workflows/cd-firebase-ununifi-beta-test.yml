@@ -3,7 +3,7 @@ name: CD Firebase ununifi-beta-test
 on:
   push:
     branches:
-      - "release"
+      - 'release'
   workflow_dispatch:
 
 jobs:

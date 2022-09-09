@@ -1,4 +1,4 @@
-
+import { ProposalContent } from '../proposals.component';
 import { Component, Input, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
@@ -36,11 +36,20 @@ export class ProposalComponent implements OnInit {
   @Input()
   proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  unpackContent(value: any) {
+    try {
+      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
+    } catch (error) {
+      console.error(error);
+      return value as ProposalContent;
+    }
+  }
 
   toNumber(str: string) {
     return Number(str);
   }
+
+  ngOnInit(): void {}
 }

@@ -50,4 +50,6 @@ export class ProposalComponent implements OnInit {
   toNumber(str: string) {
     return Number(str);
   }
+
+  ngOnInit(): void {}
 }

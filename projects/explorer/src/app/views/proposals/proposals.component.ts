@@ -43,4 +43,8 @@ export class ProposalsComponent implements OnInit {
       return value as ProposalContent;
     }
   }
+
+  onPaginationChange(pageEvent: PageEvent): void {
+    this.paginationChange.emit(pageEvent);
+  }
 }

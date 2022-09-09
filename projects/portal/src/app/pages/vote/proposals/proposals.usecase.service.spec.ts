@@ -107,7 +107,7 @@ describe('ProposalsUseCaseService when getProposals$ return undefined', () => {
   test('proposal$ returns undefined', (done) => {
     const { service } = setupUndefinedEnv();
     service.proposals$.subscribe((value) => {
-      expect(value).toBe(undefined);
+      expect(value).toStrictEqual([]);
       done();
     });
   });

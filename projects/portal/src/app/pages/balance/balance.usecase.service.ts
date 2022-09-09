@@ -36,6 +36,9 @@ export class BalanceUsecaseService {
       throughMap((cosmosWallet) => cosmosWallet.address),
     );
   }
+  get nodeInfo$(): Observable<InlineResponse20012> {
+    return this.rest.getNodeInfo$();
+  }
 
   get walletId$(): Observable<string | null | undefined> {
     return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.id));
@@ -43,20 +46,19 @@ export class BalanceUsecaseService {
   get walletType$(): Observable<WalletType | null | undefined> {
     return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.type));
   }
-  get accAddress$(): Observable<string | null | undefined> {
-    return this.currentCosmosWallet$.pipe(throughMap((wallet) => wallet.address.toString()));
-  }
   get publicKey$(): Observable<string | null | undefined> {
     return this.currentStoredWallet$.pipe(throughMap((wallet) => wallet.public_key));
+  }
+
+  get accAddress$(): Observable<string | null | undefined> {
+    return this.currentCosmosWallet$.pipe(throughMap((wallet) => wallet.address.toString()));
   }
   get valAddress$(): Observable<string | null | undefined> {
     return this.currentCosmosWallet$.pipe(
       throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
   }
-  get nodeInfo$(): Observable<InlineResponse20012> {
-    return this.rest.getNodeInfo$();
-  }
+
   get accountTypeName$(): Observable<string | null | undefined> {
     return this.cosmosAccAddress$.pipe(
       mergeMap((cosmosAccAddress) => {
@@ -98,30 +100,26 @@ export class BalanceUsecaseService {
         if (!config?.extension?.faucet?.length) {
           return [];
         }
-        const allFaucets = config.extension.faucet.filter((faucet) => faucet.hasFaucet);
         if (balances === null) {
+          // loading...
           return [];
         }
-        if (balances === undefined) {
+        const allFaucets = config.extension.faucet.filter((faucet) => faucet.hasFaucet);
+        if (balances === undefined || balances.length === 0) {
           return allFaucets;
         }
-        if (balances.length === 0) {
-          return allFaucets;
-        }
-        return allFaucets?.filter((faucet) => {
-          const isNotFoundFaucetDenomBalance =
-            balances.find((balance) => balance.denom === faucet.denom) === undefined;
-          const faucetDenomBalanceAmount = balances.find(
-            (balance) => balance.denom === faucet.denom,
-          )?.amount;
-          const isLessThanMaxCreditFaucetDenomBalance = faucetDenomBalanceAmount
-            ? parseInt(faucetDenomBalanceAmount) <= faucet.maxCredit
-            : false;
-          if (isNotFoundFaucetDenomBalance || isLessThanMaxCreditFaucetDenomBalance) {
+        return allFaucets.filter((faucet) => {
+          const balance = balances.find((balance) => balance.denom === faucet.denom);
+          if (!balance || !balance.amount) {
+            // Faucet that has never been withdrawn.
             return true;
-          } else {
-            return false;
           }
+          if (parseInt(balance.amount) <= faucet.maxCredit) {
+            // Not withdrawn up to the maximum amount that can be withdrawn
+            return true;
+          }
+          // Excluding Faucet, which has withdrawn up to the maximum limit
+          return false;
         });
       }),
     );

@@ -25,5 +25,14 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm i -g npm
       - run: npm ci
-      - run: npm run build:all:prod:ununifi
+
+      - name: Build
+        run: |
+          npm run init:dist
+          npm run build:landing-page
+          npm run build:portal
+          npm run build:explorer
+          npm run build:marketplace
+          node bundle
+
       - run: npx firebase deploy --only hosting:ununifi --project=default --token=${{ secrets.FIREBASE_TOKEN }}

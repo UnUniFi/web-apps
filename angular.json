@@ -464,21 +464,13 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
               ],
               "fileReplacements": [
                 {
                   "replace": "projects/marketplace/src/environments/environment.ts",
-                  "with": "projects/marketplace/src/environments/environment.prod.ts"
+                  "with": "projects/marketplace/src/environments/environment.main-net.ts"
                 }
               ],
               "outputHashing": "all",
@@ -491,6 +483,62 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
+              "baseHref": "/marketplace/"
+            },
+            "alpha": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/marketplace/src/environments/environment.ts",
+                  "with": "projects/marketplace/src/environments/environment.alpha.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/marketplace/"
+            },
+            "beta": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/marketplace/src/environments/environment.ts",
+                  "with": "projects/marketplace/src/environments/environment.beta.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/marketplace/"
+            },
+            "test-net": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/marketplace/src/environments/environment.ts",
+                  "with": "projects/marketplace/src/environments/environment.test-net.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/marketplace/"
+            },
+            "ununifi-8-private-test": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/marketplace/src/environments/environment.ts",
+                  "with": "projects/marketplace/src/environments/environment.ununifi-8-private-test.ts"
+                }
+              ],
+              "outputHashing": "all",
               "baseHref": "/marketplace/"
             }
           },

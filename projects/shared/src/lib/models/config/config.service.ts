@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+type Denom = 'uguu' | 'ubtc' | 'jpu' | 'ueth' | 'euu';
 
 export type Config = {
   id: string;
@@ -16,14 +19,14 @@ export type Config = {
     consPub: string;
   };
   minimumGasPrices: {
-    denom: string;
+    denom: Denom;
     amount: string;
   }[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
       faucetURL: string;
-      denom: string;
+      denom: Denom;
       creditAmount: number;
       maxCredit: number;
     }[];
@@ -39,25 +42,66 @@ export type Config = {
   };
 };
 
-declare const configs: Config[];
+type PortMap = {
+  rest: number;
+  websocket: number;
+  ubtc: number;
+  uguu: number;
+  jpu: number;
+  ueth: number;
+  euu: number;
+};
+
+type Port = Record<'http:' | 'https:', PortMap>;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
+  private configSubject$: BehaviorSubject<Config>;
   configs: Config[];
-  config$: Observable<Config | undefined>;
-  configSubject$: BehaviorSubject<Config | undefined>;
-  constructor() {
+
+  get config$(): Observable<Config> {
+    return this.configSubject$.asObservable().pipe(map((config) => convert(config, this.port)));
+  }
+
+  constructor(@Inject('configs') configs: Config[], @Inject('port') private port: Port) {
     this.configs = configs;
-    this.configSubject$ = new BehaviorSubject<Config | undefined>(undefined);
-    const randomConfig = configs[Math.floor(Math.random() * configs.length)];
-    this.configSubject$.next(randomConfig);
-    this.config$ = this.configSubject$.asObservable();
+    const randomConfig = this.configs[Math.floor(Math.random() * this.configs.length)];
+    this.configSubject$ = new BehaviorSubject<Config>(randomConfig);
   }
 
   async setCurrentConfig(configID: string) {
     const selectedConfig = this.configs.find((config) => config.id == configID);
+    if (!selectedConfig) {
+      throw new Error(`Config with id ${configID} not found`);
+    }
     this.configSubject$.next(selectedConfig);
   }
+}
+
+function convert(config: Config, port: Port): Config {
+  // @ts-ignore
+  const portMap = port[location.protocol];
+  const protocols =
+    location.protocol === 'https:' ? { http: 'https:', ws: 'wss:' } : { http: 'http:', ws: 'ws:' };
+
+  const restURL = config.restURL.replace(/^https?:/, protocols.http);
+  const websocketURL = config.websocketURL.replace(/^wss?:/, protocols.ws);
+
+  const faucet =
+    config.extension?.faucet?.map((f) => {
+      const faucetURL = f.faucetURL.replace(/^https?:/, protocols.http);
+      return {
+        ...f,
+        faucetURL: faucetURL + `:${portMap[f.denom]}`,
+      };
+    }) ?? [];
+
+  return {
+    ...config,
+    restURL: restURL + `:${portMap.rest}`,
+    websocketURL: websocketURL + `:${portMap.websocket}`,
+    extension: config.extension ? { ...config.extension, faucet } : undefined,
+  };
 }

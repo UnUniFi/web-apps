@@ -6,13 +6,13 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyEB = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyEC = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyED = 'ununifi-alpha-test-v3.cauchye.net';
+const domainCauchyEA = 'a.private-test.ununifi.cauchye.net';
+const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
+const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
+const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
-const chainID = 'ununifi-alpha-test-v3';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'ununifi-8-private-test';
+const chainName = 'UnUniFi (ununifi-8-private-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -53,7 +53,6 @@ export const environment = {
         'ws',
       )}//${domainCauchyEA}:${websocketPort}`,
       chainID,
-      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -74,30 +73,30 @@ export const environment = {
             hasFaucet: true,
             faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
             denom: 'uguu',
-            creditAmount: 100,
-            maxCredit: 99,
+            creditAmount: 2000000,
+            maxCredit: 1999999,
           },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
-          //   denom: 'jpu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
-          // {
-          //   hasFaucet: true,
-          //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
-          //   denom: 'ueth',
-          //   creditAmount: 1000,
-          //   maxCredit: 999,
-          // },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
-          //   denom: 'euu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
+            denom: 'jpu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
+          {
+            hasFaucet: true,
+            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
+            denom: 'ueth',
+            creditAmount: 1000,
+            maxCredit: 999,
+          },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
+            denom: 'euu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
         ],
         monitor: undefined,
         navigations: [],
@@ -113,7 +112,6 @@ export const environment = {
         'ws',
       )}//${domainCauchyEB}:${websocketPort}`,
       chainID,
-      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -134,30 +132,30 @@ export const environment = {
             hasFaucet: true,
             faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
             denom: 'uguu',
-            creditAmount: 100,
-            maxCredit: 99,
+            creditAmount: 2000000,
+            maxCredit: 1999999,
           },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetJpuPort}`,
-          //   denom: 'jpu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
-          // {
-          //   hasFaucet: true,
-          //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
-          //   denom: 'ueth',
-          //   creditAmount: 1000,
-          //   maxCredit: 999,
-          // },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetEuuPort}`,
-          //   denom: 'euu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetJpuPort}`,
+            denom: 'jpu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
+          {
+            hasFaucet: true,
+            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
+            denom: 'ueth',
+            creditAmount: 1000,
+            maxCredit: 999,
+          },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetEuuPort}`,
+            denom: 'euu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
         ],
         monitor: undefined,
         navigations: [],
@@ -172,8 +170,7 @@ export const environment = {
         'http',
         'ws',
       )}//${domainCauchyEC}:${websocketPort}`,
-      chainID,
-      chainName,
+      chainID: 'ununifi-8-private-test',
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -194,30 +191,30 @@ export const environment = {
             hasFaucet: true,
             faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
             denom: 'uguu',
-            creditAmount: 100,
-            maxCredit: 99,
+            creditAmount: 2000000,
+            maxCredit: 1999999,
           },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetJpuPort}`,
-          //   denom: 'jpu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
-          // {
-          //   hasFaucet: true,
-          //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
-          //   denom: 'ueth',
-          //   creditAmount: 1000,
-          //   maxCredit: 999,
-          // },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetEuuPort}`,
-          //   denom: 'euu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetJpuPort}`,
+            denom: 'jpu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
+          {
+            hasFaucet: true,
+            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
+            denom: 'ueth',
+            creditAmount: 1000,
+            maxCredit: 999,
+          },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetEuuPort}`,
+            denom: 'euu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
         ],
         monitor: undefined,
         navigations: [],
@@ -233,7 +230,6 @@ export const environment = {
         'ws',
       )}//${domainCauchyED}:${websocketPort}`,
       chainID,
-      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -254,30 +250,30 @@ export const environment = {
             hasFaucet: true,
             faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
             denom: 'uguu',
-            creditAmount: 100,
-            maxCredit: 99,
+            creditAmount: 2000000,
+            maxCredit: 1999999,
           },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetJpuPort}`,
-          //   denom: 'jpu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
-          // {
-          //   hasFaucet: true,
-          //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
-          //   denom: 'ueth',
-          //   creditAmount: 1000,
-          //   maxCredit: 999,
-          // },
-          // {
-          //   hasFaucet: false,
-          //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetEuuPort}`,
-          //   denom: 'euu',
-          //   creditAmount: 10,
-          //   maxCredit: 9,
-          // },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetJpuPort}`,
+            denom: 'jpu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
+          {
+            hasFaucet: true,
+            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
+            denom: 'ueth',
+            creditAmount: 1000,
+            maxCredit: 999,
+          },
+          {
+            hasFaucet: false,
+            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetEuuPort}`,
+            denom: 'euu',
+            creditAmount: 10,
+            maxCredit: 9,
+          },
         ],
         monitor: undefined,
         navigations: [],

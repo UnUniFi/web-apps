@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Config = {
@@ -39,25 +39,28 @@ export type Config = {
   };
 };
 
-declare const configs: Config[];
-
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
+  private configSubject$: BehaviorSubject<Config>;
   configs: Config[];
-  config$: Observable<Config | undefined>;
-  configSubject$: BehaviorSubject<Config | undefined>;
-  constructor() {
+
+  get config$(): Observable<Config> {
+    return this.configSubject$.asObservable();
+  }
+
+  constructor(@Inject('configs') configs: Config[]) {
     this.configs = configs;
-    this.configSubject$ = new BehaviorSubject<Config | undefined>(undefined);
-    const randomConfig = configs[Math.floor(Math.random() * configs.length)];
-    this.configSubject$.next(randomConfig);
-    this.config$ = this.configSubject$.asObservable();
+    const randomConfig = this.configs[Math.floor(Math.random() * this.configs.length)];
+    this.configSubject$ = new BehaviorSubject<Config>(randomConfig);
   }
 
   async setCurrentConfig(configID: string) {
     const selectedConfig = this.configs.find((config) => config.id == configID);
+    if (!selectedConfig) {
+      throw new Error(`Config with id ${configID} not found`);
+    }
     this.configSubject$.next(selectedConfig);
   }
 }

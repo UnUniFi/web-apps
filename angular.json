@@ -36,21 +36,13 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "5mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
               ],
               "fileReplacements": [
                 {
                   "replace": "projects/explorer/src/environments/environment.ts",
-                  "with": "projects/explorer/src/environments/environment.prod.ts"
+                  "with": "projects/explorer/src/environments/environment.main-net.ts"
                 }
               ],
               "outputHashing": "all",
@@ -64,6 +56,62 @@
               "sourceMap": true,
               "namedChunks": true,
               "baseHref": "/explorer/"
+            },
+            "alpha": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/explorer/src/environments/environment.ts",
+                  "with": "projects/explorer/src/environments/environment.alpha.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/explorer/"
+            },
+            "beta": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/explorer/src/environments/environment.ts",
+                  "with": "projects/explorer/src/environments/environment.beta.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/explorer/"
+            },
+            "test-net": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/explorer/src/environments/environment.ts",
+                  "with": "projects/explorer/src/environments/environment.test-net.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/explorer/"
+            },
+            "ununifi-8-private-test": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "5mb", "maximumError": "10mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/explorer/src/environments/environment.ts",
+                  "with": "projects/explorer/src/environments/environment.ununifi-8-private-test.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/explorer/"
             }
           },
           "defaultConfiguration": "production"
@@ -76,6 +124,18 @@
             },
             "development": {
               "browserTarget": "explorer:build:development"
+            },
+            "alpha": {
+              "browserTarget": "explorer:build:alpha"
+            },
+            "beta": {
+              "browserTarget": "explorer:build:beta"
+            },
+            "test-net": {
+              "browserTarget": "explorer:build:test-net"
+            },
+            "ununifi-8-private-test": {
+              "browserTarget": "explorer:build:ununifi-8-private-test"
             }
           },
           "defaultConfiguration": "development"

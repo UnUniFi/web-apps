@@ -24,7 +24,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     TxFeeConfirmDialogModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'configs',
+      useValue: environment.configs,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

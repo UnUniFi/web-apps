@@ -1,3 +1,4 @@
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
@@ -73,7 +74,16 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     AppDepositFormDialogModule,
     GraphQLModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'configs',
+      useValue: environment.configs,
+    },
+    {
+      provide: 'port',
+      useValue: environment.port,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

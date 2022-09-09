@@ -64,7 +64,6 @@ export class ValidatorsUseCaseService {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    accAddress$.subscribe((x) => console.log(x.toString()));
     return accAddress$?.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
       map((result) => (result?.delegation_responses ? result.delegation_responses : undefined)),

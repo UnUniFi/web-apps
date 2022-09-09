@@ -30,7 +30,7 @@ export class ValidatorUseCaseService {
       ),
     );
 
-    const OtherValidators$ = combineLatest([allValidatorsTokens$, validatorsList$]).pipe(
+    const otherValidators$ = combineLatest([allValidatorsTokens$, validatorsList$]).pipe(
       map(([allTokens, validators]) => {
         if (!allTokens) {
           return [];
@@ -52,7 +52,7 @@ export class ValidatorUseCaseService {
       }),
     );
 
-    return combineLatest([validatorAddress$, OtherValidators$]).pipe(
+    return combineLatest([validatorAddress$, otherValidators$]).pipe(
       map(([validatorAddress, OtherValidators]) =>
         OtherValidators.find(
           (validator) => validator.val.operator_address === validatorAddress.toString(),

@@ -1,31 +1,32 @@
 import { CosmosRestService } from './../../../../models/cosmos-rest.service';
-import { validatorType } from './../../../../views/delegate/validators/validators.component';
 import { ValidatorUseCaseService } from './validator.usecase.service';
-import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import cosmosclient from '@cosmos-client/core';
-import {
-  InlineResponse20038DelegationResponses,
-  InlineResponse20041Validators,
-  InlineResponse20047,
-} from '@cosmos-client/core/esm/openapi';
-import { setBech32Prefix } from '@cosmos-client/core/esm/types/address/config';
-import { combineLatest, of } from 'rxjs';
-import { Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import { of } from 'rxjs';
 
 const setup = (props?: { mockCosmosRestService?: any }) => {
   // Mock Values
-  const mockValidator1: InlineResponse20041Validators = { tokens: '100' };
-  const mockValidator2: InlineResponse20041Validators = { tokens: '300' };
-  const mockValidator3: InlineResponse20041Validators = { tokens: '200' };
+  const mockValidator1: InlineResponse20041Validators = {
+    tokens: '100',
+    status: 'BOND_STATUS_BONDED',
+    operator_address: 'ununifivaloper1tu06z57hgfhen4s565zvnr5aqxnzrtfv53ztvq',
+  };
+  const mockValidator2: InlineResponse20041Validators = {
+    tokens: '200',
+    status: 'BOND_STATUS_BONDED',
+    operator_address: 'ununifivaloper13uaskveualnc8kkfwrk6g7dmkcggxn3t9nqhu6',
+  };
+  const mockValidator3: InlineResponse20041Validators = {
+    tokens: '300',
+    status: 'BOND_STATUS_UNBONDED',
+    operator_address: 'test_address3',
+  };
   const mockValidators = [mockValidator1, mockValidator2, mockValidator3];
 
   // Mock Services
   const mockCosmosRestService = {
-    //getValidators$: jest.fn(() => jest.fn(() => of(mockValidators))),
     getValidators$: jest.fn(() => of(mockValidators)),
-    //getValidators$: of(mockValidators),
   };
 
   // Setup TestBed
@@ -40,15 +41,18 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
   });
   const service = TestBed.inject(ValidatorUseCaseService);
 
-  const validatorAddress = cosmosclient.ValAddress.fromString(
-    'ununifivaloper167wfxxmlqphp5kl7dw4vh0aw9ymne7k0cmtz5n',
+  const accAddress = cosmosclient.AccAddress.fromString(
+    'ununifi167wfxxmlqphp5kl7dw4vh0aw9ymne7k0d879zu',
   );
-  const validatorAddress$ = of(validatorAddress);
+  const valAddress = accAddress.toValAddress();
+  const validatorAddress$ = of(valAddress);
 
   return {
     service,
     mockCosmosRestService,
+    mockValidators,
     validatorAddress$,
+    accAddress,
   };
 };
 
@@ -58,7 +62,7 @@ describe('ValidatorUseCaseService when CosmosRestService returns a valid value',
     expect(service).toBeTruthy();
   });
 
-  setBech32Prefix({
+  cosmosclient.config.setBech32Prefix({
     accAddr: 'ununifi',
     accPub: 'ununifipub',
     valAddr: 'ununifivaloper',
@@ -68,18 +72,18 @@ describe('ValidatorUseCaseService when CosmosRestService returns a valid value',
   });
 
   test('accAddress$ method returns accAddress from validatorAddress', (done) => {
-    const { service, mockCosmosRestService, validatorAddress$ } = setup();
-
+    const { service, validatorAddress$, accAddress } = setup();
     service.accAddress$(validatorAddress$).subscribe((value) => {
-      expect(value).toBe('ununifi167wfxxmlqphp5kl7dw4vh0aw9ymne7k0d879zu');
+      expect(value).toEqual(accAddress);
       done();
     });
   });
 
   test('validator$ method returns validatorType from validatorAddress', (done) => {
-    const { service, mockCosmosRestService, validatorAddress$ } = setup();
-    service.validator$(validatorAddress$).subscribe((value) => {
-      expect(value).toBe('');
+    const { service, mockValidators } = setup();
+    const valAddr = cosmosclient.ValAddress.fromString(mockValidators[0].operator_address!);
+    service.validator$(of(valAddr)).subscribe((value) => {
+      expect(value?.val).toBe(mockValidators.reverse()[0]);
       done();
     });
   });

@@ -24,12 +24,14 @@ export class ValidatorsUseCaseService {
   private validatorsWithShare$: Observable<validatorWithShareType[]>;
   private accAddress$: Observable<cosmosclient.AccAddress>;
   private delegationsInService$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
+  private delegatedValidatorsInService$: Observable<
+    (InlineResponse20041Validators | undefined)[] | undefined
+  >;
   private totalDelegation$: Observable<number | undefined>;
   private unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
 
   constructor(
     private readonly walletService: WalletService,
-    //private readonly stakingAppService: StakingApplicationService,
     private readonly cosmosRest: CosmosRestService,
   ) {
     this.validatorsList$ = this.cosmosRest.getValidators$();
@@ -77,7 +79,20 @@ export class ValidatorsUseCaseService {
         ),
       ),
     );
-    this.unbondingDelegations$ = this.delegatedValidators$.pipe(
+    this.delegatedValidatorsInService$ = combineLatest([
+      this.validatorsList$,
+      this.delegationsInService$,
+    ]).pipe(
+      map(([validators, delegations]) =>
+        delegations?.map((delegation) =>
+          validators?.find(
+            (validator) => validator.operator_address == delegation.delegation?.validator_address,
+          ),
+        ),
+      ),
+    );
+
+    this.unbondingDelegations$ = this.delegatedValidatorsInService$.pipe(
       withLatestFrom(this.accAddress$),
       concatMap(([validators, accAddress]) => {
         const valAddressList = validators?.map((validator) => {
@@ -104,24 +119,15 @@ export class ValidatorsUseCaseService {
 
   validators$(activeEnabled: BehaviorSubject<boolean>): Observable<validatorType[]> {
     return combineLatest([this.validatorsWithShare$, activeEnabled]).pipe(
-      map(([validatorWithShare, activeEnabled]) =>
+      map(([validatorWithShare, isActive]) =>
         validatorWithShare
           .map((validatorWithShare, index) => {
-            if (activeEnabled) {
-              const val = validatorWithShare.val;
-              const share = validatorWithShare.share;
-              const rank = index + 1;
-              const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
-              const inList = statusBonded && rank <= 50;
-              return { val, share, inList, rank };
-            } else {
-              const val = validatorWithShare.val;
-              const share = validatorWithShare.share;
-              const rank = index + 1;
-              const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
-              const inList = !(statusBonded && rank <= 50);
-              return { val, share, inList, rank };
-            }
+            const val = validatorWithShare.val;
+            const share = validatorWithShare.share;
+            const rank = index + 1;
+            const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
+            const inList = isActive ? statusBonded && rank <= 50 : statusBonded && rank > 50;
+            return { val, share, inList, rank };
           })
           .filter((validator) => validator.inList),
       ),
@@ -138,15 +144,7 @@ export class ValidatorsUseCaseService {
   get delegatedValidators$(): Observable<
     (InlineResponse20041Validators | undefined)[] | undefined
   > {
-    return combineLatest([this.validatorsList$, this.delegationsInService$]).pipe(
-      map(([validators, delegations]) =>
-        delegations?.map((delegation) =>
-          validators?.find(
-            (validator) => validator.operator_address == delegation.delegation?.validator_address,
-          ),
-        ),
-      ),
-    );
+    return this.delegatedValidatorsInService$;
   }
   get filteredUnbondingDelegations$(): Observable<(InlineResponse20047 | undefined)[]> {
     return this.unbondingDelegations$.pipe(

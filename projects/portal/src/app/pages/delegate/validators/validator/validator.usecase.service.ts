@@ -3,26 +3,34 @@ import { validatorType } from './../../../../views/delegate/validators/validator
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ValidatorUseCaseService {
-  private allValidatorsTokens$: Observable<number | undefined>;
-  private OtherValidators$: Observable<validatorType[]>;
+  constructor(private cosmosRest: CosmosRestService) {}
 
-  constructor(private cosmosRest: CosmosRestService) {
+  accAddress$(
+    validatorAddress$: Observable<cosmosclient.ValAddress>,
+  ): Observable<cosmosclient.AccAddress | undefined> {
+    return validatorAddress$.pipe(map((validatorAddress) => validatorAddress.toAccAddress()));
+  }
+
+  validator$(
+    validatorAddress$: Observable<cosmosclient.ValAddress>,
+  ): Observable<validatorType | undefined> {
     const validatorsList$ = this.cosmosRest.getValidators$();
-    this.allValidatorsTokens$ = validatorsList$.pipe(
+
+    const allValidatorsTokens$ = validatorsList$.pipe(
       map((validators) =>
         validators?.reduce((sum, validator) => {
           return sum + Number(validator.tokens);
         }, 0),
       ),
     );
-    this.OtherValidators$ = this.allValidatorsTokens$.pipe(
-      withLatestFrom(validatorsList$),
+
+    const OtherValidators$ = combineLatest([allValidatorsTokens$, validatorsList$]).pipe(
       map(([allTokens, validators]) => {
         if (!allTokens) {
           return [];
@@ -38,23 +46,13 @@ export class ValidatorUseCaseService {
           const share = Number(validator.tokens) / allTokens;
           const statusBonded = validator.status === 'BOND_STATUS_BONDED';
           const inList = statusBonded && rank <= 50;
-          return { val, share, inList, rank };
+          return { val, share, inList, rank } as validatorType;
         });
         return validatorsWitSd || [];
       }),
     );
-  }
 
-  accAddress$(
-    validatorAddress$: Observable<cosmosclient.ValAddress>,
-  ): Observable<cosmosclient.AccAddress | undefined> {
-    return validatorAddress$.pipe(map((validatorAddress) => validatorAddress.toAccAddress()));
-  }
-
-  validator$(
-    validatorAddress$: Observable<cosmosclient.ValAddress>,
-  ): Observable<validatorType | undefined> {
-    return combineLatest([validatorAddress$, this.OtherValidators$]).pipe(
+    return combineLatest([validatorAddress$, OtherValidators$]).pipe(
       map(([validatorAddress, OtherValidators]) =>
         OtherValidators.find(
           (validator) => validator.val.operator_address === validatorAddress.toString(),

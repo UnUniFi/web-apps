@@ -9,9 +9,7 @@ import {
   InlineResponse20041Validators,
   InlineResponse20038,
 } from '@cosmos-client/core/esm/openapi';
-import { of } from 'rxjs';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { concatMap, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, of } from 'rxjs';
 
 cosmosclient.config.setBech32Prefix({
   accAddr: 'ununifi',
@@ -110,7 +108,6 @@ describe('ValidatorsUseCaseService when CosmosRest & WalletService returns a val
     const { service } = setup();
     expect(service).toBeTruthy();
   });
-
   describe('Getters returns a valid value', () => {
     test('currentStoredWallet$ returns a valid value', (done) => {
       const { service, mockWallet } = setup();
@@ -119,58 +116,35 @@ describe('ValidatorsUseCaseService when CosmosRest & WalletService returns a val
         done();
       });
     });
-    test('validatorsList$() returns a valid value', (done) => {
-      const { service, mockValidators } = setup();
-      service.validatorsList$.subscribe((value) => {
-        expect(value).toEqual(mockValidators);
-        done();
-      });
-    });
-    test('accAddress$() returns a valid value', (done) => {
-      const { service, mockWallet } = setup();
-      service.accAddress$.subscribe((value) => {
-        expect(value.toString()).toEqual(mockWallet.address);
+    test('delegations$ returns the delegation responses', (done) => {
+      const { service, mockDelegationResponses } = setup();
+      service.delegations$.subscribe((value) => {
+        expect(value).toEqual(mockDelegationResponses.delegation_responses);
         done();
       });
     });
   });
-
   test('validators$ method get only enable validators from all validator', (done) => {
     const { service, mockValidators } = setup();
     const activeEnabled = new BehaviorSubject(true);
-    service.validators$(service.validatorsList$, activeEnabled).subscribe((value) => {
+    service.validators$(activeEnabled).subscribe((value) => {
       expect(value.map((e) => e.val)).toEqual(
         mockValidators.filter((v) => v.status == 'BOND_STATUS_BONDED').reverse(),
       );
       done();
     });
   });
-
-  test('delegations$ returns the delegation responses', (done) => {
-    const { service, mockDelegationResponses } = setup();
-    service.delegations$(service.accAddress$).subscribe((value) => {
-      expect(value).toEqual(mockDelegationResponses.delegation_responses);
+  test('delegatedValidators$ returns the delegated validators', (done) => {
+    const { service, mockValidators } = setup();
+    service.delegatedValidators$(service.delegations$).subscribe((value) => {
+      expect(value).toEqual([mockValidators[0], mockValidators[1]]);
       done();
     });
   });
-
-  test('delegatedValidators$ returns the delegated validators', (done) => {
-    const { service, mockValidators } = setup();
-    service
-      .delegatedValidators$(service.validatorsList$, service.delegations$(service.accAddress$))
-      .subscribe((value) => {
-        expect(value).toEqual([mockValidators[0], mockValidators[1]]);
-        done();
-      });
-  });
-
   test('unbondingDelegations$ calls getUnbondingDelegation$ from CosmosRestService for number of delegator_responses', (done) => {
     const { service, mockCosmosRestService, mockDelegationResponses } = setup();
-    const delegatedValidators = service.delegatedValidators$(
-      service.validatorsList$,
-      service.delegations$(service.accAddress$),
-    );
-    service.unbondingDelegations$(delegatedValidators, service.accAddress$).subscribe(() => {
+    const delegatedValidators = service.delegatedValidators$(service.delegations$);
+    service.unbondingDelegations$(delegatedValidators).subscribe(() => {
       expect(mockCosmosRestService.getUnbondingDelegation$).toBeCalledTimes(
         mockDelegationResponses.delegation_responses?.length || 99,
       );
@@ -180,111 +154,6 @@ describe('ValidatorsUseCaseService when CosmosRest & WalletService returns a val
 });
 
 const setupUndefinedEnv = () => {
-  const mockCosmosRestService = {
-    getValidators$: jest.fn(() => of(undefined)),
-    getDelegatorDelegations$: jest.fn(() => of(undefined)),
-    getUnbondingDelegation$: jest.fn(() => of(undefined)),
-  };
-  const mockWalletService = {
-    currentStoredWallet$: of(undefined),
-  };
-  const { service, mockWallet, mockValidators, mockDelegationResponses } = setup({
-    mockCosmosRestService,
-    mockWalletService,
-  });
-  return {
-    service,
-    mockWallet,
-    mockValidators,
-    mockCosmosRestService,
-    mockDelegationResponses,
-  };
-};
-
-describe('ValidatorUseCaseService when no CosmosRestService and no CurrentWallet', () => {
-  it('should be created', () => {
-    const { service } = setupUndefinedEnv();
-    expect(service).toBeTruthy();
-  });
-
-  test('All Getters return undefined', (done) => {
-    const { service } = setupUndefinedEnv();
-    combineLatest([
-      service.currentStoredWallet$,
-      service.validatorsList$,
-      service.accAddress$,
-    ]).subscribe((values) => {
-      expect(values.every((v) => v === undefined)).toBeTruthy();
-      done();
-    });
-  });
-
-  test('All Getters return undefined c', (done) => {
-    const { service } = setupUndefinedEnv();
-    combineLatest([service.currentStoredWallet$]).subscribe((values) => {
-      expect(values.every((v) => v === undefined)).toBeTruthy();
-      done();
-    });
-  });
-
-  test('All Getters return undefined v', (done) => {
-    const { service } = setupUndefinedEnv();
-    combineLatest([service.validatorsList$]).subscribe((values) => {
-      expect(values.every((v) => v === undefined)).toBeTruthy();
-      done();
-    });
-  });
-
-  test('All Getters return undefined a', (done) => {
-    const { service } = setupUndefinedEnv();
-    combineLatest([service.accAddress$]).subscribe((values) => {
-      expect(values.every((v) => v === undefined)).toBeTruthy();
-      done();
-    });
-  });
-
-  test('validators$ method returns void array', (done) => {
-    const { service } = setupUndefinedEnv();
-    const activeEnabled = new BehaviorSubject(true);
-    service.validators$(service.validatorsList$, activeEnabled).subscribe((value) => {
-      expect(value).toEqual([]);
-      done();
-    });
-  });
-
-  test('delegations$ method returns undefined', (done) => {
-    const { service } = setupUndefinedEnv();
-    service.delegations$(service.accAddress$).subscribe((value) => {
-      expect(value).toEqual(undefined);
-      done();
-    });
-  });
-
-  test('delegatedValidators$ returns undefined', (done) => {
-    const { service, mockValidators } = setupUndefinedEnv();
-    service
-      .delegatedValidators$(service.validatorsList$, service.delegations$(service.accAddress$))
-      .subscribe((value) => {
-        expect(value).toEqual(undefined);
-        done();
-      });
-  });
-
-  test('unbondingDelegations$ method returns void value', (done) => {
-    const { service, mockCosmosRestService, mockDelegationResponses } = setupUndefinedEnv();
-    const delegatedValidators = service.delegatedValidators$(
-      service.validatorsList$,
-      service.delegations$(service.accAddress$),
-    );
-    service.unbondingDelegations$(delegatedValidators, service.accAddress$).subscribe((value) => {
-      expect(value).toEqual([]);
-      done();
-    });
-  });
-});
-
-/*
-const setupUndefinedEnvWithWallet = () => {
   const mockCosmosRestService = {
     getValidators$: jest.fn(() => of(undefined)),
     getDelegatorDelegations$: jest.fn(() => of(undefined)),
@@ -307,13 +176,37 @@ describe('ValidatorUseCaseService when no CosmosRestService', () => {
     const { service } = setupUndefinedEnv();
     expect(service).toBeTruthy();
   });
+
+  test('currentStoredWallet$ Getters return undefined', (done) => {
+    const { service, mockWallet } = setupUndefinedEnv();
+    service.currentStoredWallet$.subscribe((values) => {
+      expect(values).toEqual(mockWallet);
+      done();
+    });
+  });
+
+  test('delegations$ Getters return undefined', (done) => {
+    const { service } = setupUndefinedEnv();
+    service.delegations$.subscribe((values) => {
+      expect(values).toEqual(undefined);
+      done();
+    });
+  });
+
+  test('validators$ method returns void array', (done) => {
+    const { service } = setupUndefinedEnv();
+    const activeEnabled = new BehaviorSubject(true);
+    service.validators$(activeEnabled).subscribe((value) => {
+      expect(value).toEqual([]);
+      done();
+    });
+  });
+
   test('delegatedValidators$ returns undefined', (done) => {
-    const { service } = setupUndefinedEnvWithWallet();
-    console.log('time out');
-    service.delegatedValidators$.subscribe((v) => {
-      expect(v).toBe(undefined);
+    const { service, mockValidators } = setupUndefinedEnv();
+    service.delegatedValidators$(service.delegations$).subscribe((value) => {
+      expect(value).toEqual(undefined);
       done();
     });
   });
 });
-*/

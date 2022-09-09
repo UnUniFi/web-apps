@@ -10,7 +10,7 @@ import {
   InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { concatMap, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -23,19 +23,8 @@ export class ValidatorsUseCaseService {
   get currentStoredWallet$(): Observable<StoredWallet | null | undefined> {
     return this.walletService.currentStoredWallet$;
   }
-  get validatorsList$(): Observable<InlineResponse20041Validators[] | undefined> {
-    return this.cosmosRest.getValidators$();
-  }
-  get accAddress$(): Observable<cosmosclient.AccAddress> {
-    return this.walletService.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-  }
-  validators$(
-    validatorsList$: Observable<InlineResponse20041Validators[] | undefined>,
-    activeEnabled: BehaviorSubject<boolean>,
-  ): Observable<validatorType[]> {
+  validators$(activeEnabled: BehaviorSubject<boolean>): Observable<validatorType[]> {
+    const validatorsList$ = this.cosmosRest.getValidators$();
     const allValidatorsTokens$ = validatorsList$.pipe(
       map((validators) =>
         validators?.reduce((sum, validator) => {
@@ -49,7 +38,7 @@ export class ValidatorsUseCaseService {
           return [];
         }
         // calculate validator share
-        const validatorsWithShare = validators.map((validator) => {
+        const validatorsWithShare: validatorType[] = validators.map((validator) => {
           const val = validator;
           const share = Number(validator.tokens) / allTokens;
           return { val, share };
@@ -64,49 +53,55 @@ export class ValidatorsUseCaseService {
             const rank = index + 1;
             const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
             const inList = isActive ? statusBonded && rank <= 50 : statusBonded && rank > 50;
-            return { val, share, inList, rank };
+            return { val, share, inList, rank } as validatorType;
           })
           .filter((validator) => validator.inList);
       }),
     );
   }
-  delegations$(
-    accAddress$: Observable<cosmosclient.AccAddress>,
-  ): Observable<InlineResponse20038DelegationResponses[] | undefined> {
-    return accAddress$.pipe(
+  get delegations$(): Observable<InlineResponse20038DelegationResponses[] | undefined> {
+    const accAddress$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    );
+    accAddress$.subscribe((x) => console.log(x.toString()));
+    return accAddress$?.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
       map((result) => (result?.delegation_responses ? result.delegation_responses : undefined)),
     );
   }
   delegatedValidators$(
-    validatorsList$: Observable<InlineResponse20041Validators[] | undefined>,
     delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>,
   ): Observable<(InlineResponse20041Validators | undefined)[] | undefined> {
-    return combineLatest([validatorsList$, delegations$]).pipe(
-      map(([validators, delegations]) =>
-        delegations?.map((delegation) =>
-          validators?.find(
-            (validator) => validator.operator_address == delegation.delegation?.validator_address,
-          ),
-        ),
-      ),
+    return combineLatest([this.cosmosRest.getValidators$(), delegations$]).pipe(
+      map(([validators, delegations]) => {
+        if (!validators || !delegations) {
+          return undefined;
+        } else {
+          return delegations?.map((delegation) =>
+            validators?.find(
+              (validator) => validator.operator_address == delegation.delegation?.validator_address,
+            ),
+          );
+        }
+      }),
     );
   }
   unbondingDelegations$(
     delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>,
-    accAddress$: Observable<cosmosclient.AccAddress>,
   ): Observable<(InlineResponse20047 | undefined)[]> {
-    return delegatedValidators$.pipe(
-      withLatestFrom(accAddress$),
-      concatMap(([validators, accAddress]) => {
-        if (!validators) {
-          console.log('0');
+    const accAddress$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    );
+    return combineLatest([delegatedValidators$, accAddress$]).pipe(
+      mergeMap(([validators, accAddress]) => {
+        if (!validators || !accAddress) {
           return [];
         }
         const valAddressList: (cosmosclient.ValAddress | undefined)[] = validators.map(
           (validator) => {
             if (!validator?.operator_address) {
-              console.log('1');
               return undefined;
             }
             try {

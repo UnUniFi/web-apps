@@ -20,18 +20,18 @@ export class ViewBalanceComponent implements OnInit {
   @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() faucets?:
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
 
-  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) { }
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   copyClipboard(value: string) {
     if (value.length > 0) {

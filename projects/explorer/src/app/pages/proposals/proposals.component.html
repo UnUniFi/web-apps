@@ -1,4 +1,11 @@
-<view-proposals [proposals]="paginatedProposals$ | async" [pageSize]="pageSize$ | async"
-  [proposalContents]="proposalContents$ | async" [pageNumber]="pageNumber$ | async" [pageLength]="pageLength$ | async"
-  [pageSizeOptions]="pageSizeOptions" (paginationChange)="appPaginationChanged($event)" [tallies]="tallies$ | async">
+<view-proposals
+  [proposals]="paginatedProposals$ | async"
+  [pageSize]="pageSize$ | async"
+  [proposalContents]="proposalContents$ | async"
+  [pageNumber]="pageNumber$ | async"
+  [pageLength]="pageLength$ | async"
+  [pageSizeOptions]="pageSizeOptions"
+  (paginationChange)="appPaginationChanged($event)"
+  [tallies]="tallies$ | async"
+>
 </view-proposals>

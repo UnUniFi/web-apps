@@ -19,4 +19,4 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [MonitorComponent],
 })
-export class MonitorModule { }
+export class MonitorModule {}

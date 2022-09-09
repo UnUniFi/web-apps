@@ -39,7 +39,7 @@ export class CreateComponent implements OnInit {
     this.appSubmit = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickCreateMnemonic() {
     this.appClickCreateMnemonic.emit();
@@ -53,8 +53,8 @@ export class CreateComponent implements OnInit {
     this.isPasswordVisible = false;
 
     const privateKeyWithNoWhitespace = privateKeyString.replace(/\s+/g, '');
-    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex')
-    const privateKey = Uint8Array.from(privateKeyBuffer)
+    const privateKeyBuffer = Buffer.from(privateKeyWithNoWhitespace, 'hex');
+    const privateKey = Uint8Array.from(privateKeyBuffer);
 
     this.appSubmit.emit({ id, type, privateKey, mnemonic });
   }

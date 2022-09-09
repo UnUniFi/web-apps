@@ -1,10 +1,7 @@
+import { LoadingDialogComponent, LoadingDialogComponentData } from './loading-dialog.component';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
-import {
-  LoadingDialogComponent,
-  LoadingDialogComponentData,
-} from './loading-dialog.component';
 
 @Injectable({
   providedIn: 'root',

@@ -18,7 +18,7 @@ export class GovService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // WIP Submit Proposal
   async SubmitProposal(

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Key } from './key.model';
-import Dexie from 'dexie';
-import { KeyService } from './key.service';
 import { DbService } from '../db.service';
+import { Key } from './key.model';
+import { KeyService } from './key.service';
+import { Injectable } from '@angular/core';
+import Dexie from 'dexie';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,9 @@ export class KeyStoreService {
 
   async init() {
     try {
-      const currentKey: { key_id: string } = await this.db.table('current_keys').get({ id: 'current_key' });
+      const currentKey: { key_id: string } = await this.db
+        .table('current_keys')
+        .get({ id: 'current_key' });
       if (!currentKey) {
         return;
       }
@@ -49,7 +51,7 @@ export class KeyStoreService {
       await this.db.table('current_keys').put({ id: 'current_key', key_id: key.id });
       this.currentKey$.next(key);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 

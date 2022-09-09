@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center overflow-y-auto">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl text-white m-3">Connect Your Wallet</div>
     <div class="text-base text-white m-3">Start earning high yield on your crypto</div>
     <ng-container *ngIf="storedWallets$ | async as storedWallets">
@@ -8,7 +8,9 @@
         <mat-nav-list>
           <ng-container *ngFor="let storedWallet of storedWallets">
             <mat-list-item (click)="onClickWallet(storedWallet)">
-              <mat-icon matListIcon [ngStyle]="{ color: getColorCode(storedWallet) }">circle</mat-icon>
+              <mat-icon matListIcon [ngStyle]="{ color: getColorCode(storedWallet) }"
+                >circle</mat-icon
+              >
               <div mat-line>
                 <span class="text-white">{{ storedWallet.id }}</span>
                 <ng-container *ngIf="currentStoredWallet$ | async as currentStoredWallet">

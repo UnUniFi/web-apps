@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -10,7 +11,6 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { DepositOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/vote/deposit/deposit-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-deposit-form-dialog',
@@ -38,7 +38,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.proposalID = data;
     this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
     this.proposalContent$ = this.proposal$.pipe(
-      map((proposal) => txParseProposalContent(proposal?.content!))
+      map((proposal) => txParseProposalContent(proposal?.content!)),
     );
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
@@ -56,7 +56,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: DepositOnSubmitEvent) {
     if (!this.proposalID) {

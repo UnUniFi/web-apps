@@ -43,7 +43,7 @@ export class SendComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(toAddress: string, minimumGasPrice: string) {
     if (!this.currentStoredWallet) {

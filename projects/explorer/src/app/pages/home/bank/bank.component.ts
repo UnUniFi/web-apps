@@ -25,5 +25,5 @@ export class BankComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

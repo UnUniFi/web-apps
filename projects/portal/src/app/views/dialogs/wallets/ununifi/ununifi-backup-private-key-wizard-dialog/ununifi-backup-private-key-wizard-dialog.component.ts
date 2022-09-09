@@ -29,9 +29,9 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
     public readonly data: StoredWallet & { mnemonic: string; privateKey: string },
     public matDialogRef: MatDialogRef<UnunifiBackupPrivateKeyWizardDialogComponent>,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickSubmit(): void {
     const walletBackupResult: StoredWallet & {

@@ -22,10 +22,7 @@
   </mat-list>
 
   <h4 class="pt-6 pb-0">Sending Form</h4>
-  <form
-    #formRef="ngForm"
-    (submit)="onSubmit(toAddressRef.value, minimumGasPriceRef.value)"
-  >
+  <form #formRef="ngForm" (submit)="onSubmit(toAddressRef.value, minimumGasPriceRef.value)">
     <mat-form-field class="w-full">
       <mat-label>To address</mat-label>
       <input #toAddressRef ngModel name="to-address" matInput required />

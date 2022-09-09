@@ -9,4 +9,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, MaterialModule],
   exports: [KeySelectDialogComponent],
 })
-export class KeySelectDialogModule { }
+export class KeySelectDialogModule {}

@@ -13,7 +13,7 @@ import { take } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureService {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   private messageToDigest(message: string): Uint8Array {
     const messageHash = ethers.utils.hashMessage(message);

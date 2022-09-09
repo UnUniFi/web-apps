@@ -15,9 +15,9 @@ export class TxFeeConfirmDialogComponent implements OnInit {
       isConfirmed: boolean;
     },
     private readonly dialogRef: MatDialogRef<TxFeeConfirmDialogComponent>,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   okToSendTx(): void {
     this.data.isConfirmed = true;

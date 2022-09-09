@@ -24,7 +24,7 @@ export class TxCommonService {
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
-  ) { }
+  ) {}
 
   canonicalizeAccAddress(address: string) {
     const canonicalized = address.replace(/\s+/g, '');

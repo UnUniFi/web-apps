@@ -23,9 +23,9 @@ export class AccountComponent implements OnInit, OnChanges {
 
   txColumnKeys = ['height', 'txhash', 'timestamp', 'gas_wanted', 'gas_used'];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     delete this.baseAccount;
@@ -38,7 +38,9 @@ export class AccountComponent implements OnInit, OnChanges {
         throw Error('Invalid public key!');
       }
       this.publicKey = Buffer.from(publicKey.key).toString('hex');
-    } else if (this.account instanceof cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount) {
+    } else if (
+      this.account instanceof cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
+    ) {
       this.vestingAccount = this.account;
       if (this.vestingAccount.base_vesting_account?.base_account === null) {
         throw Error('Invalid vesting account!');

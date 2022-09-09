@@ -19,7 +19,7 @@ export class TxCommonService {
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
     private readonly ununifiWalletService: UnunifiWalletService,
-  ) { }
+  ) {}
 
   canonicalizeAccAddress(address: string) {
     const canonicalized = address.replace(/\s+/g, '');

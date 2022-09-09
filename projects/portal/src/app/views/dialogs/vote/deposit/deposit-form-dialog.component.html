@@ -16,7 +16,9 @@
   <mat-list>
     <mat-label>Depositor</mat-label>
     <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">circle</mat-icon>
+      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+        >circle</mat-icon
+      >
       <div mat-line>
         <span>{{ currentStoredWallet?.address }}</span>
       </div>
@@ -27,18 +29,39 @@
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
         <mat-label>Deposit Denom</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.denom" name="deposit-denom" matInput type="text" required
-          readonly />
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.denom"
+          name="deposit-denom"
+          matInput
+          type="text"
+          required
+          readonly
+        />
       </mat-form-field>
       <mat-form-field class="flex-auto">
         <mat-label>Deposit Amount</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.amount" name="deposit-amount" matInput type="number"
-          pattern="^\d+$" [min]="0" required />
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.amount"
+          name="deposit-amount"
+          matInput
+          type="number"
+          pattern="^\d+$"
+          [min]="0"
+          required
+        />
       </mat-form-field>
       <mat-form-field class="flex-auto">
         <mat-label>Balance</mat-label>
-        <input [(ngModel)]="uguuBalance" name="deposit-balance" matInput type="number" pattern="^\d+$" [min]="0"
-          required readonly />
+        <input
+          [(ngModel)]="uguuBalance"
+          name="deposit-balance"
+          matInput
+          type="number"
+          pattern="^\d+$"
+          [min]="0"
+          required
+          readonly
+        />
       </mat-form-field>
     </div>
 
@@ -48,9 +71,15 @@
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
     </mat-form-field>
     <mat-button-toggle-group class="flex mb-4" value="low">
-      <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(0)">Low</mat-button-toggle>
-      <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(1.1)">Middle</mat-button-toggle>
-      <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(2)">High</mat-button-toggle>
+      <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(0)"
+        >Low</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(1.1)"
+        >Middle</mat-button-toggle
+      >
+      <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(2)"
+        >High</mat-button-toggle
+      >
     </mat-button-toggle-group>
 
     <mat-accordion>
@@ -62,21 +91,41 @@
         <div class="flex flex-col content-content lg:flex-row">
           <mat-form-field class="flex-auto">
             <mat-label>Minimum Gas Denom</mat-label>
-            <mat-select [(ngModel)]="selectedGasPrice && selectedGasPrice.denom" name="minimum-gas-denom" required
-              (valueChange)="onMinimumGasDenomChanged($event)">
-              <mat-option *ngFor="let minimumGasPriceOption of minimumGasPrices" [value]="minimumGasPriceOption.denom">
+            <mat-select
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+              name="minimum-gas-denom"
+              required
+              (valueChange)="onMinimumGasDenomChanged($event)"
+            >
+              <mat-option
+                *ngFor="let minimumGasPriceOption of minimumGasPrices"
+                [value]="minimumGasPriceOption.denom"
+              >
                 {{ minimumGasPriceOption.denom }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="flex-auto">
             <mat-label>Minimum Gas Price</mat-label>
-            <input [(ngModel)]="selectedGasPrice && selectedGasPrice.amount" #minimumGasPriceRef
-              name="minimum-gas-price" matInput type="number" [min]="0" required />
+            <input
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+              #minimumGasPriceRef
+              name="minimum-gas-price"
+              matInput
+              type="number"
+              [min]="0"
+              required
+            />
           </mat-form-field>
         </div>
-        <mat-slider class="w-full" [max]="1" [min]="0" [step]="0.015"
-          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount" name="minimum-gas-price-slider">
+        <mat-slider
+          class="w-full"
+          [max]="1"
+          [min]="0"
+          [step]="0.015"
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          name="minimum-gas-price-slider"
+        >
         </mat-slider>
       </mat-expansion-panel>
     </mat-accordion>

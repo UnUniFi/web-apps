@@ -16,9 +16,9 @@ export class ValidatorComponent implements OnInit {
   @Input()
   accAddress?: cosmosclient.AccAddress | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(validator: InlineResponse20041Validators | undefined | null) {
     const hash = crypto

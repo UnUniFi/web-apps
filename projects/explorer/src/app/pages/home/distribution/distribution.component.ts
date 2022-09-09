@@ -19,9 +19,11 @@ export class DistributionComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
   ) {
     this.communityPool$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.distribution.communityPool(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) =>
+        cosmosclient.rest.distribution.communityPool(sdk.rest).then((res) => res.data),
+      ),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

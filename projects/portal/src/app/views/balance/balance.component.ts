@@ -20,12 +20,12 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input() faucets?:
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
 
@@ -37,7 +37,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
     this.tempNodeInfo = this.nodeInfo as any;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   // Todo: This lifecycle methods is temporal fix.
   // default_node_info in type definition of InlineResponse20012 is actually node_info.

@@ -44,7 +44,9 @@ export class BlocksComponent implements OnInit {
     );
 
     this.latestBlock$ = combineLatest([timerWithEnable$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([n, sdk]) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap(([n, sdk]) =>
+        cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data),
+      ),
     );
 
     this.latestBlockHeight$ = this.latestBlock$.pipe(
@@ -119,7 +121,9 @@ export class BlocksComponent implements OnInit {
           ...blockHeights.map((blockHeight) =>
             this.cosmosSDK.sdk$.pipe(
               mergeMap((sdk) =>
-                cosmosclient.rest.tendermint.getBlockByHeight(sdk.rest, blockHeight).then((res) => res.data),
+                cosmosclient.rest.tendermint
+                  .getBlockByHeight(sdk.rest, blockHeight)
+                  .then((res) => res.data),
               ),
             ),
           ),
@@ -132,7 +136,7 @@ export class BlocksComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.router.navigate([], {

@@ -9,7 +9,7 @@ import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
   providedIn: 'root',
 })
 export class SlashingService {
-  constructor(private readonly txCommonService: TxCommonService) { }
+  constructor(private readonly txCommonService: TxCommonService) {}
 
   async unjail(
     validatorAddress: string,

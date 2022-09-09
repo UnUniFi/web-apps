@@ -14,7 +14,7 @@ const config = {
     {
       denom: 'ujcbn',
       amount: 0.015,
-    }
+    },
   ],
   extension: {
     faucet: [
@@ -38,7 +38,7 @@ const config = {
         denom: 'jpyx',
         creditAmount: 10,
         maxCredit: 9,
-      }
+      },
     ],
     monitor: {
       monitorURL: `${location.protocol}//${location.hostname}:9000`,

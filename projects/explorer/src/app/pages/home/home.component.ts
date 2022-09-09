@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

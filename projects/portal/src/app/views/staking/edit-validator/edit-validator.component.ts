@@ -30,9 +30,9 @@ export class ViewEditValidatorComponent implements OnInit {
 
   minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) { }
+  constructor(private readonly snackBar: MatSnackBar) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmitEditValidator(
     moniker: string,

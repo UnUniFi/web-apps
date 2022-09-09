@@ -1,12 +1,7 @@
 <h2>Unjail</h2>
 <form
   #formRef="ngForm"
-  (submit)="
-    onSubmitUnjail(
-      validatorAddressRef.value,
-      minimumGasPriceRef.value
-    )
-  "
+  (submit)="onSubmitUnjail(validatorAddressRef.value, minimumGasPriceRef.value)"
 >
   <mat-accordion>
     <mat-expansion-panel>

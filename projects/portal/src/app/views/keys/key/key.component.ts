@@ -21,17 +21,17 @@ export class KeyComponent implements OnInit {
   @Input()
   faucets?:
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | null;
 
-  constructor(private readonly keyDeleteDialogService: KeyDeleteDialogService) { }
+  constructor(private readonly keyDeleteDialogService: KeyDeleteDialogService) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   openDeleteDialog(id: string) {
     this.keyDeleteDialogService.openKeyDeleteDialog(id);

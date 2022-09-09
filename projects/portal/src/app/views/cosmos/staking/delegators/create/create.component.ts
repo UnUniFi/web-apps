@@ -31,7 +31,7 @@ export class CreateComponent implements OnInit {
     this.appSubmit = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(validatorAddress: string, amount: string, privateKey: string) {
     this.appSubmit.emit({

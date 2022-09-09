@@ -82,7 +82,7 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);

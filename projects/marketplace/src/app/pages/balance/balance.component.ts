@@ -47,17 +47,19 @@ export class BalanceComponent implements OnInit {
     | null
     | undefined
   >;
-  cosmosBaseAccount$: Observable<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined>;
+  cosmosBaseAccount$: Observable<
+    cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined
+  >;
   accountTypeName$: Observable<string | null | undefined>;
   balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
   faucets$: Observable<
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | undefined
   >;
   nodeInfo$: Observable<InlineResponse20012>;
@@ -181,5 +183,5 @@ export class BalanceComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

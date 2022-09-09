@@ -9,4 +9,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, MaterialModule],
   exports: [StakingComponent],
 })
-export class StakingModule { }
+export class StakingModule {}

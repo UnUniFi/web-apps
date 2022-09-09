@@ -13,7 +13,7 @@ export class BankService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   async simulateToSend(
     fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,

@@ -10,7 +10,7 @@ import Long from 'long';
   providedIn: 'root',
 })
 export class GentxService {
-  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) { }
+  constructor(private readonly cosmosSDK: CosmosSDKService, private readonly key: KeyService) {}
 
   async gentx(key: Key, gentxData: GentxData): Promise<{ [k: string]: any }> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);

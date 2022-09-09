@@ -19,7 +19,7 @@ export class StakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // Create Validator
   async createValidator(
@@ -123,7 +123,9 @@ export class StakingService {
     }
 
     const pubKeyJson = JSON.parse(createValidatorData.pubkey);
-    const cosmosValConsPublicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
+    const cosmosValConsPublicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({
+      key: pubKeyJson.key,
+    });
     const packedAnyCosmosValConsPublicKey =
       cosmosclient.codec.instanceToProtoAny(cosmosValConsPublicKey);
 
@@ -288,7 +290,9 @@ export class StakingService {
       commission_rate: `${editValidatorData.rate}${'0000000000000000'}`,
       min_self_delegation: editValidatorData.min_self_delegation,
     };
-    const msgEditValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
+    const msgEditValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator(
+      editValidatorTxData,
+    );
 
     const txBuilder = await this.txCommonService.buildTxBuilder(
       [msgEditValidator],

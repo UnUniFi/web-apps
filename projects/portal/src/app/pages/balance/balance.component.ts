@@ -20,12 +20,12 @@ export class BalanceComponent implements OnInit {
   balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
   faucets$: Observable<
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | undefined
   >;
   nodeInfo$: Observable<InlineResponse20012>;
@@ -42,5 +42,5 @@ export class BalanceComponent implements OnInit {
     this.accountTypeName$ = this.usecase.accountTypeName$;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -1,18 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BankComponent } from './bank.component';
-import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../material.module';
+import { BankComponent } from './bank.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    BankComponent
-  ],
-  imports: [
-    CommonModule, RouterModule, MaterialModule
-  ],
-  exports: [
-    BankComponent
-  ],
+  declarations: [BankComponent],
+  imports: [CommonModule, RouterModule, MaterialModule],
+  exports: [BankComponent],
 })
-export class BankModule { }
+export class BankModule {}

@@ -54,7 +54,7 @@ export class DelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

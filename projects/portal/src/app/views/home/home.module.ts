@@ -10,4 +10,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, FormsModule, MaterialModule],
   exports: [HomeComponent],
 })
-export class HomeModule { }
+export class HomeModule {}

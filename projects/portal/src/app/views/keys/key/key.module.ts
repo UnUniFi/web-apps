@@ -9,4 +9,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, MaterialModule],
   exports: [KeyComponent],
 })
-export class KeyModule { }
+export class KeyModule {}

@@ -11,9 +11,9 @@ export class TxComponent implements OnInit {
   @Input()
   tx?: CosmosTxV1beta1GetTxResponse | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   unpackMsg(value: any) {
     try {

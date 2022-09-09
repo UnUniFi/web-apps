@@ -53,7 +53,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.appDetail = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

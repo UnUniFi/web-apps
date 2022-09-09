@@ -51,8 +51,8 @@ export class CreateValidatorSimpleComponent implements OnInit {
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-      privateKey: string;
-    })
+        privateKey: string;
+      })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -67,7 +67,7 @@ export class CreateValidatorSimpleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onChangeFile($event: Event): Promise<void> {
     if ($event === null || $event.target === null) {

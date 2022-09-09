@@ -53,7 +53,7 @@ export class ClearComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(
     privateKeyString: string,

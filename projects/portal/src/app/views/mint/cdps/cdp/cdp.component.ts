@@ -38,7 +38,7 @@ export class CdpComponent implements OnInit {
   @Input()
   issueLimit?: number | null;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     setTimeout(() => {

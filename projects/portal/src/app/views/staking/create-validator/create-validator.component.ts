@@ -37,7 +37,7 @@ export class CreateValidatorComponent implements OnInit {
 
   minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) { }
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -45,7 +45,7 @@ export class CreateValidatorComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmitCreateValidator(
     moniker: string,

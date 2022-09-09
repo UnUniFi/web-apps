@@ -10,4 +10,4 @@ import { MatStepperModule } from '@angular/material/stepper';
   imports: [CommonModule, MaterialModule, FormsModule, MatStepperModule],
   exports: [KeyBackupDialogComponent],
 })
-export class KeyBackupDialogModule { }
+export class KeyBackupDialogModule {}

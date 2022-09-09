@@ -50,7 +50,7 @@ export class BidComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(privateKeyString: string, Denom: string, Amount: string, minimumGasPrice: string) {
     if (!this.auctionID) {

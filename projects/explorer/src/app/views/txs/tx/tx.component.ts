@@ -13,7 +13,7 @@ export class TxComponent implements OnInit {
   @Input()
   txType?: string[] | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -56,7 +56,7 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: MsgListNftFormData): Promise<void> {
     let txHash: string | undefined;

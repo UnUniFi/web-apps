@@ -47,7 +47,7 @@ export class DepositComponent implements OnInit {
     this.collateral_amount = '';
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {

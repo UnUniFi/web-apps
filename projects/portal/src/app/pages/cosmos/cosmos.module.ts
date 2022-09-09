@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { CosmosRoutingModule } from './cosmos-routing.module';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [],

@@ -66,10 +66,12 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return cosmosclient.rest.bank.allBalances(sdk.rest, address).then((res) => res.data.balances || []);
+        return cosmosclient.rest.bank
+          .allBalances(sdk.rest, address)
+          .then((res) => res.data.balances || []);
       }),
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

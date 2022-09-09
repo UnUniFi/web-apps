@@ -1,4 +1,6 @@
 import { CosmosSDKService } from '../../../../models/cosmos-sdk.service';
+import { txTitle } from '../../../../models/cosmos/tx-common.model';
+import { txParseMsg } from './../../../../utils/tx-parser';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,8 +8,6 @@ import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi';
 import { of, combineLatest, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
-import { txParseMsg, } from "./../../../../utils/tx-parser"
-import { txTitle } from '../../../../models/cosmos/tx-common.model';
 
 export type PaginationInfo = {
   pageSize: number;
@@ -151,7 +151,7 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.router.navigate([], {

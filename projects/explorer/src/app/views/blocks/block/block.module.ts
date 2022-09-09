@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BlockComponent } from './block.component';
 import { MaterialModule } from '../../material.module';
+import { BlockComponent } from './block.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -9,4 +9,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, MaterialModule],
   exports: [BlockComponent],
 })
-export class BlockModule { }
+export class BlockModule {}

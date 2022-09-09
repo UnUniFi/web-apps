@@ -1,4 +1,4 @@
-import { PipesModule } from '../../pipes/pipes.module'
+import { PipesModule } from '../../pipes/pipes.module';
 import { MaterialModule } from '../material.module';
 import { MintComponent } from './mint.component';
 import { CommonModule } from '@angular/common';

@@ -74,7 +74,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(
     collateralType: string,

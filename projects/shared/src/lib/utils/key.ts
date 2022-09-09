@@ -51,7 +51,9 @@ export const createCosmosPrivateKeyFromUint8Array = (
   try {
     switch (keyType) {
       case KeyType.secp256k1:
-        return new cosmosclient.proto.cosmos.crypto.secp256k1.PrivKey({ key: privateKeyUint8Array });
+        return new cosmosclient.proto.cosmos.crypto.secp256k1.PrivKey({
+          key: privateKeyUint8Array,
+        });
       case KeyType.ed25519:
         return new cosmosclient.proto.cosmos.crypto.ed25519.PrivKey({ key: privateKeyUint8Array });
       default:

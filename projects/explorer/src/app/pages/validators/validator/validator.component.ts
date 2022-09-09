@@ -77,5 +77,5 @@ export class ValidatorComponent implements OnInit {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

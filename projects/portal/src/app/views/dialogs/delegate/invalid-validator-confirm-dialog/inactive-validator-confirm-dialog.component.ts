@@ -14,9 +14,9 @@ export class InactiveValidatorConfirmDialogComponent implements OnInit {
       isConfirmed: boolean;
     },
     private readonly dialogRef: MatDialogRef<InactiveValidatorConfirmDialogComponent>,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   okToSendTx(): void {
     this.data.isConfirmed = true;

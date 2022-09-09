@@ -136,7 +136,7 @@ export class EditValidatorComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async appSubmitEditValidator(
     editValidatorData: EditValidatorData & {

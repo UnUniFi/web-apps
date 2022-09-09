@@ -30,5 +30,5 @@ export class MintComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

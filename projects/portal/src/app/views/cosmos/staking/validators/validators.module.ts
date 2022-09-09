@@ -9,4 +9,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule, MaterialModule],
   exports: [ValidatorsComponent],
 })
-export class ValidatorsModule { }
+export class ValidatorsModule {}

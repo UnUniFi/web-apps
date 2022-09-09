@@ -26,7 +26,7 @@ export class TxsComponent implements OnInit {
     this.paginationChange = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onPaginationChange(pageEvent: PageEvent): void {
     this.paginationChange.emit(pageEvent);

@@ -56,7 +56,7 @@ export class WithdrawComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(
     privateKeyString: string,

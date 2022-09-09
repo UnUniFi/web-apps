@@ -1,6 +1,8 @@
 <h3 class="mb-0 ml-2">Transactions</h3>
 <mat-card>
-  <ng-container *ngIf="txsWithPagination?.tx_responses === undefined || null; then empty; else exist"></ng-container>
+  <ng-container
+    *ngIf="txsWithPagination?.tx_responses === undefined || null; then empty; else exist"
+  ></ng-container>
   <ng-template #empty></ng-template>
   <ng-template #exist>
     <mat-list>
@@ -16,14 +18,20 @@
         <mat-list-item routerLink="/txs/{{ tx.txhash }}">
           <span class="w-3/12 truncate text-sm">{{ txTitles?.[i]?.txType }}</span>
           <span class="w-5/12 truncate text-sm pl-2">{{ txTitles?.[i]?.toAddress}}</span>
-          <span class="w-4/12 break-all text-sm pl-2">{{ tx.timestamp | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+          <span class="w-4/12 break-all text-sm pl-2">{{
+            tx.timestamp | date: 'yyyy-M-d a h:mm:ss z'
+          }}</span>
           <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
       </ng-container>
     </mat-nav-list>
   </ng-template>
-  <mat-paginator [length]="pageLength" [pageSize]="pageInfo ? pageInfo.pageSize : 5"
-    [pageIndex]="pageInfo ? pageInfo.pageNumber - 1 : 0" [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-    (page)="onPaginationChange($event)">
+  <mat-paginator
+    [length]="pageLength"
+    [pageSize]="pageInfo ? pageInfo.pageSize : 5"
+    [pageIndex]="pageInfo ? pageInfo.pageNumber - 1 : 0"
+    [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+    (page)="onPaginationChange($event)"
+  >
   </mat-paginator>
 </mat-card>

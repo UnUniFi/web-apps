@@ -15,7 +15,7 @@ export class AuctionComponent implements OnInit {
   @Input()
   maxEndTime?: Date | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

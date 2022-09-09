@@ -85,9 +85,10 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
   }
 
   convertStoredWalletToCosmosWallet(storedWallet: StoredWallet): CosmosWallet {
-    const public_key: CosmosWallet['public_key'] = new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
-      key: Uint8Array.from(Buffer.from(storedWallet.public_key, 'hex')),
-    });
+    const public_key: CosmosWallet['public_key'] =
+      new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
+        key: Uint8Array.from(Buffer.from(storedWallet.public_key, 'hex')),
+      });
     const address: cosmosclient.AccAddress = cosmosclient.AccAddress.fromString(
       storedWallet.address,
     );

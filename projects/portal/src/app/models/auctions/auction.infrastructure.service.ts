@@ -12,7 +12,7 @@ import ununifi from 'ununifi-client';
   providedIn: 'root',
 })
 export class AuctionInfrastructureService implements IAuctionInfrastructure {
-  constructor(private readonly txCommonService: TxCommonService) { }
+  constructor(private readonly txCommonService: TxCommonService) {}
 
   async placeBid(
     auctionID: number,
@@ -102,7 +102,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): ununifi.proto.ununifi.auction.MsgPlaceBid {
     //Todo: make auction.MsgPlaceBid
-    const msgPlaceBid: any = undefined
+    const msgPlaceBid: any = undefined;
     /*
     const msgPlaceBid = new ununifi.rest.auction.MsgPlaceBid({
       auction_id: Long.fromNumber(auctionID),

@@ -86,7 +86,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

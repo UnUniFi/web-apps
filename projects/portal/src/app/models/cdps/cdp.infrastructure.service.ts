@@ -19,7 +19,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly keyService: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   async createCDP(
     key: Key,
@@ -103,7 +103,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
 
     // build tx
     //Todo: make cdp.MsgCreateCdp
-    const msgCreateCdp: any = undefined
+    const msgCreateCdp: any = undefined;
     /*
     const msgCreateCdp = new ununifi.rest.cdp.MsgCreateCdp({
       sender: sender.toString(),
@@ -218,7 +218,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     //Todo: make cdp.msgDrawDebt
-    const msgDrawDebt: any = undefined
+    const msgDrawDebt: any = undefined;
     /*
       const msgDrawDebt = new ununifi.rest.cdp.MsgDrawDebt({
       sender: sender.toString(),
@@ -332,7 +332,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // Todo: make cdp.MsgRepayDebt
-    const msgRepayDebt: any = undefined
+    const msgRepayDebt: any = undefined;
     /*
     const msgRepayDebt = new ununifi.rest.cdp.MsgRepayDebt({
       sender: sender.toString(),
@@ -452,7 +452,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
 
     // build tx
     // Todo: make cdp.MsgDeposit
-    const msgDepositCDP: any = undefined
+    const msgDepositCDP: any = undefined;
     /*
     const msgDepositCDP = new ununifi.rest.cdp.MsgDeposit({
       depositor: sender.toString(),
@@ -573,7 +573,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
 
     // build tx
     //To do: make cdp.MsgWithdraw
-    const msgWithdraw: any = undefined
+    const msgWithdraw: any = undefined;
     /*
     const msgWithdraw = new ununifi.rest.cdp.MsgWithdraw({
       depositor: sender.toString(),

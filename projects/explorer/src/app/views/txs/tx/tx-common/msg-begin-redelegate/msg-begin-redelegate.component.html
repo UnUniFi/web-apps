@@ -1,7 +1,7 @@
 <ng-container *ngIf="txDetail">
   <mat-card class="mb-2">
     <mat-chip-list>
-      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
+      <mat-chip color="primary" selected> {{ txDetail.txType }} </mat-chip>
     </mat-chip-list>
     <mat-list>
       <mat-list-item>
@@ -13,13 +13,17 @@
       <mat-list-item>
         <span class="break-words">Validator address (dst.):</span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.validatorDestinationAddress }}</span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{
+          txDetail.validatorDestinationAddress
+        }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
         <span class="break-words">Validator address (src.):</span>
         <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.validatorSourceAddress }}</span>
+        <span class="ml-2 break-all text-xs sm:text-base">{{
+          txDetail.validatorSourceAddress
+        }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>

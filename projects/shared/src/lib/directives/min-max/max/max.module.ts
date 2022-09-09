@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MaxDirective } from './max.directive';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [MaxDirective],

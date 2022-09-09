@@ -8,7 +8,7 @@ import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
   providedIn: 'root',
 })
 export class TxCommonService {
-  constructor(private readonly cosmosSDK: CosmosSDKService) { }
+  constructor(private readonly cosmosSDK: CosmosSDKService) {}
 
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,

@@ -99,7 +99,7 @@ export class UnjailComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async appSubmitUnjail(unjailData: {
     validator_address: string;

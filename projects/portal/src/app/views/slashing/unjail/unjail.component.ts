@@ -21,7 +21,7 @@ export class UnjailComponent implements OnInit {
 
   minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) { }
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -29,7 +29,7 @@ export class UnjailComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmitUnjail(validator_address: string, minimumGasPriceAmount: string): Promise<void> {
     if (!this.currentStoredWallet) {

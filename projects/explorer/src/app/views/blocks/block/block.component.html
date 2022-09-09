@@ -1,8 +1,12 @@
 <div class="flex flex-row items-end">
   <h2 class="mb-0">Block #{{ block?.block?.header?.height }}</h2>
   <span class="flex-auto"></span>
-  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary">navigate_before</mat-icon>
-  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary">navigate_next</mat-icon>
+  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary"
+    >navigate_before</mat-icon
+  >
+  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary"
+    >navigate_next</mat-icon
+  >
 </div>
 <h3 class="ml-4 mb-0">Block details</h3>
 <mat-card class="mb-4">
@@ -38,7 +42,7 @@
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-xs sm:text-base">{{
         block?.block?.header?.proposer_address
-        }}</span>
+      }}</span>
     </mat-list-item>
   </mat-list>
 </mat-card>
@@ -53,11 +57,13 @@
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
-  <ng-container *ngIf="
+  <ng-container
+    *ngIf="
       (transactions?.tx_responses?.length || 0) > 0;
       then existTransactions;
       else emptyTransactions
-    ">
+    "
+  >
   </ng-container>
 
   <ng-template #emptyTransactions>
@@ -66,8 +72,10 @@
 
   <ng-template #existTransactions>
     <mat-nav-list>
-      <mat-list-item routerLink="/txs/{{ tx.txhash }}"
-        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last">
+      <mat-list-item
+        routerLink="/txs/{{ tx.txhash }}"
+        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
+      >
         <span class="w-4/12 truncate text-sm">{{ tx.txhash }}</span>
         <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
         <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>

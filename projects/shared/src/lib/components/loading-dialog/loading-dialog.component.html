@@ -1,10 +1,7 @@
 <mat-dialog-content class="dialog">
   <div class="flex flex-row justify-center content-center items-center">
     <div class="w-16 h-16 overflow-hidden">
-      <mat-progress-spinner
-        [diameter]="64"
-        [mode]="'indeterminate'"
-      ></mat-progress-spinner>
+      <mat-progress-spinner [diameter]="64" [mode]="'indeterminate'"></mat-progress-spinner>
     </div>
     <p class="flex-auto m-4">
       {{ message$ | async }}

@@ -6,7 +6,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   styleUrls: ['./bank.component.css'],
 })
 export class BankComponent implements OnInit {
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

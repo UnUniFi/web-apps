@@ -110,7 +110,7 @@ export class TxsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appSelectedTxTypeChanged(selectedTxType: string): void {
     this.selectedTxType$.next(selectedTxType);

@@ -15,7 +15,7 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // List NFT
   async listNft(

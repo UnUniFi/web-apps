@@ -1,7 +1,7 @@
+import { txTitle } from '../../../models/cosmos/tx-common.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
-import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'view-block',
@@ -24,7 +24,7 @@ export class BlockComponent implements OnInit {
   @Input()
   txTitles?: txTitle[] | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

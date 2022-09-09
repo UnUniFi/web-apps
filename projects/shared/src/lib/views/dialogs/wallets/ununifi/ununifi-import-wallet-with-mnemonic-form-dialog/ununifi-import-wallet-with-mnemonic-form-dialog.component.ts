@@ -99,7 +99,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

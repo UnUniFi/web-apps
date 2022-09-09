@@ -89,8 +89,7 @@ export class AppComponent implements OnInit {
                 BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 : false;
-            }
-            catch (error) {
+            } catch (error) {
               return false;
             }
           });
@@ -222,5 +221,5 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

@@ -13,10 +13,10 @@
   <mat-step [completed]="checked">
     <form #formRef="ngForm" (submit)="checkSaveMnemonic(inputMnemonic)">
       <ng-template matStepLabel>Check</ng-template>
-      <p>Input {{ordinal(requiredMnemonicNumber)}} mnemonic</p>
+      <p>Input {{ ordinal(requiredMnemonicNumber) }} mnemonic</p>
       <mat-form-field appearance="fill">
         <mat-label>mnemonic</mat-label>
-        <input matInput required name="mnemonic" [(ngModel)]="inputMnemonic">
+        <input matInput required name="mnemonic" [(ngModel)]="inputMnemonic" />
       </mat-form-field>
       <div class="mb-2">
         <button mat-flat-button class="w-full" color="accent">Check</button>
@@ -32,7 +32,13 @@
     <div class="mb-2 flex justify-start">
       <button mat-flat-button matStepperPrevious>Back</button>
     </div>
-    <button mat-flat-button class="w-full" color="accent" [disabled]="!checked || !saved" (click)="onClickSubmit()">
+    <button
+      mat-flat-button
+      class="w-full"
+      color="accent"
+      [disabled]="!checked || !saved"
+      (click)="onClickSubmit()"
+    >
       Submit
     </button>
   </mat-step>

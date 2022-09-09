@@ -15,7 +15,7 @@ export class DistributionService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // Withdraw Delegator Reward
   async withdrawDelegatorReward(

@@ -23,7 +23,9 @@ export class BlocksComponent implements OnInit {
     // eslint-disable-next-line no-unused-vars
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
     this.latestBlock$ = sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) =>
+        cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data),
+      ),
     );
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       // eslint-disable-next-line no-undef
@@ -65,5 +67,5 @@ export class BlocksComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

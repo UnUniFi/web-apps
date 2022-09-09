@@ -57,7 +57,7 @@ export class CreateValidatorMultipleComponent implements OnInit {
 
   templateToRender: InterfaceTemplateToRender = 'loading';
 
-  constructor(private readonly snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private readonly snackBar: MatSnackBar, public dialog: MatDialog) {}
 
   openDialog() {
     this.dialog.open(ValidatorDialog, {
@@ -98,7 +98,7 @@ export class CreateValidatorMultipleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   checkInput(input: any) {
     if (!input) {
@@ -288,5 +288,5 @@ export class CreateValidatorMultipleComponent implements OnInit {
   templateUrl: 'validator-dialog.html',
 })
 export class ValidatorDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { redirectUrls: string[] | undefined }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { redirectUrls: string[] | undefined }) {}
 }

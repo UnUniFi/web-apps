@@ -29,8 +29,10 @@
     <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
     <ng-template #exist>
       <mat-nav-list>
-        <mat-list-item *ngFor="let validator of validators; last as last"
-          routerLink="/validators/{{ validator.val.operator_address }}">
+        <mat-list-item
+          *ngFor="let validator of validators; last as last"
+          routerLink="/validators/{{ validator.val.operator_address }}"
+        >
           <span class="w-6/12 lg:w-9/12 flex">
             <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
               circle
@@ -40,23 +42,21 @@
           <span class="flex-auto"></span>
           <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
             validator.share | percent: '1.2-2'
-            }}</span>
+          }}</span>
           <span class="flex-auto"></span>
           <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
             validator.val.tokens | unitConversion
-            }}</span>
+          }}</span>
           <span class="w-2/12 lg:hidden text-right break-all text-base">{{
             validator.val.commission?.commission_rates?.rate | percent: '1.0-0'
-            }}</span>
+          }}</span>
           <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
       </mat-nav-list>
     </ng-template>
     <ng-template #empty>
       <mat-list>
-        <mat-list-item>
-          There is no validator.
-        </mat-list-item>
+        <mat-list-item> There is no validator. </mat-list-item>
       </mat-list>
     </ng-template>
   </mat-card>

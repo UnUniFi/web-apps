@@ -2,8 +2,7 @@
   <h2>Latest Transactions</h2>
   <mat-form-field appearance="fill">
     <mat-select [(value)]="selectedTxType" (valueChange)="onSelectedTxTypeChanged($event)">
-      <mat-option *ngFor="let txType of txTypeOptions" [value]="txType">{{txType}}
-      </mat-option>
+      <mat-option *ngFor="let txType of txTypeOptions" [value]="txType">{{ txType }} </mat-option>
     </mat-select>
   </mat-form-field>
 </div>

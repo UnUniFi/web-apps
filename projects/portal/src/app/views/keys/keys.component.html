@@ -8,21 +8,17 @@
     </button>
   </div>
   <mat-divider></mat-divider>
-  <ng-container *ngIf="keys === null; then loading; else loaded">
-  </ng-container>
+  <ng-container *ngIf="keys === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
   </ng-template>
   <ng-template #loaded>
-    <ng-container *ngIf="(keys?.length || 0) > 0; then exist; else empty">
-    </ng-container>
+    <ng-container *ngIf="(keys?.length || 0) > 0; then exist; else empty"> </ng-container>
   </ng-template>
   <ng-template #exist>
     <ng-container *ngFor="let key of keys">
       <mat-list-item routerLink="/keys/{{ key.id }}">
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(key) }">
-          circle
-        </mat-icon>
+        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(key) }"> circle </mat-icon>
         <span>{{ key.id }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>

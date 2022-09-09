@@ -1,20 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SignComponent } from './sign.component';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material.module';
+import { SignComponent } from './sign.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    SignComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    MaterialModule
-  ],
-  exports: [SignComponent]
+  declarations: [SignComponent],
+  imports: [CommonModule, RouterModule, FormsModule, MaterialModule],
+  exports: [SignComponent],
 })
-export class SignModule { }
+export class SignModule {}

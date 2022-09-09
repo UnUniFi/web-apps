@@ -19,7 +19,7 @@ export class AccountsComponent implements OnInit {
   @Input()
   balances2?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

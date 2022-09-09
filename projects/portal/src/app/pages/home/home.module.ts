@@ -1,9 +1,11 @@
+import { AccountsModule } from '../../views/home/accounts/accounts.module';
 import { BankModule } from '../../views/home/bank/bank.module';
 import { BlocksModule } from '../../views/home/blocks/blocks.module';
 import { DistributionModule } from '../../views/home/distribution/distribution.module';
 import { HomeModule } from '../../views/home/home.module';
 import { MintModule } from '../../views/home/mint/mint.module';
 import { TxsModule } from '../../views/home/txs/txs.module';
+import { AccountsComponent } from './accounts/accounts.component';
 import { BankComponent } from './bank/bank.component';
 import { BlocksComponent } from './blocks/blocks.component';
 import { DistributionComponent } from './distribution/distribution.component';
@@ -13,8 +15,6 @@ import { MintComponent } from './mint/mint.component';
 import { TxsComponent } from './txs/txs.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AccountsComponent } from './accounts/accounts.component';
-import { AccountsModule } from '../../views/home/accounts/accounts.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { AccountsModule } from '../../views/home/accounts/accounts.module';
     DistributionModule,
     MintModule,
     TxsModule,
-    AccountsModule
+    AccountsModule,
   ],
 })
 export class AppHomeModule {}

@@ -35,8 +35,8 @@ export class UnjailSimpleComponent implements OnInit {
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-      privateKey: string;
-    })
+        privateKey: string;
+      })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -51,7 +51,7 @@ export class UnjailSimpleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onChangeFile($event: Event): Promise<void> {
     console.log('onChangeFile');

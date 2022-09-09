@@ -26,7 +26,7 @@ export class CreateComponent implements OnInit {
     this.privateKey = '';
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickCreateMnemonic() {
     this.mnemonic = bip39.generateMnemonic();

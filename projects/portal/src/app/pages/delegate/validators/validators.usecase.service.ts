@@ -9,7 +9,7 @@ import {
   InlineResponse20041Validators,
   InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
@@ -20,10 +20,12 @@ export class ValidatorsUseCaseService {
     private readonly walletService: WalletService,
     private readonly cosmosRest: CosmosRestService,
   ) {}
+
   get currentStoredWallet$(): Observable<StoredWallet | null | undefined> {
     return this.walletService.currentStoredWallet$;
   }
-  validators$(activeEnabled: BehaviorSubject<boolean>): Observable<validatorType[]> {
+
+  validators$(activeEnabled: Observable<boolean>): Observable<validatorType[]> {
     const validatorsList$ = this.cosmosRest.getValidators$();
     const allValidatorsTokens$ = validatorsList$.pipe(
       map((validators) =>
@@ -38,7 +40,7 @@ export class ValidatorsUseCaseService {
           return [];
         }
         // calculate validator share
-        const validatorsWithShare: validatorType[] = validators.map((validator) => {
+        const validatorsWithShare = validators.map((validator) => {
           const val = validator;
           const share = Number(validator.tokens) / allTokens;
           return { val, share };
@@ -53,22 +55,20 @@ export class ValidatorsUseCaseService {
             const rank = index + 1;
             const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
             const inList = isActive ? statusBonded && rank <= 50 : statusBonded && rank > 50;
-            return { val, share, inList, rank } as validatorType;
+            return { val, share, inList, rank };
           })
           .filter((validator) => validator.inList);
       }),
     );
   }
+
   get delegations$(): Observable<InlineResponse20038DelegationResponses[] | undefined> {
-    const accAddress$ = this.walletService.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-    return accAddress$?.pipe(
+    return this.accAddress$?.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
       map((result) => (result?.delegation_responses ? result.delegation_responses : undefined)),
     );
   }
+
   delegatedValidators$(
     delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>,
   ): Observable<(InlineResponse20041Validators | undefined)[] | undefined> {
@@ -86,14 +86,11 @@ export class ValidatorsUseCaseService {
       }),
     );
   }
+
   unbondingDelegations$(
     delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>,
   ): Observable<(InlineResponse20047 | undefined)[]> {
-    const accAddress$ = this.walletService.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-    return combineLatest([delegatedValidators$, accAddress$]).pipe(
+    return combineLatest([delegatedValidators$, this.accAddress$]).pipe(
       mergeMap(([validators, accAddress]) => {
         if (!validators || !accAddress) {
           return [];
@@ -123,6 +120,13 @@ export class ValidatorsUseCaseService {
       map((unbondingDelegations) =>
         unbondingDelegations.filter((unbondingDelegation) => unbondingDelegation),
       ),
+    );
+  }
+
+  private get accAddress$() {
+    return this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
   }
 }

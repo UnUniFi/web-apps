@@ -2,7 +2,10 @@ import { WalletType } from '../../models/wallets/wallet.model';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import {
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  InlineResponse20012,
+} from '@cosmos-client/core/esm/openapi';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -18,14 +21,17 @@ export class BalanceComponent implements OnInit {
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
   balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
+  rewards$: Observable<
+    CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null | undefined
+  >;
   faucets$: Observable<
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | undefined
   >;
   nodeInfo$: Observable<InlineResponse20012>;
@@ -37,10 +43,11 @@ export class BalanceComponent implements OnInit {
     this.publicKey$ = this.usecase.publicKey$;
     this.valAddress$ = this.usecase.valAddress$;
     this.balances$ = this.usecase.balances$;
+    this.rewards$ = this.usecase.rewards$;
     this.faucets$ = this.usecase.faucets$;
     this.nodeInfo$ = this.usecase.nodeInfo$;
     this.accountTypeName$ = this.usecase.accountTypeName$;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

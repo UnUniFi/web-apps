@@ -1,20 +1,14 @@
-import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { StakingApplicationService } from '../../../models/cosmos/staking.application.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
-import { WalletService } from '../../../models/wallets/wallet.service';
-import {
-  validatorType,
-  validatorWithShareType,
-} from '../../../views/delegate/validators/validators.component';
+import { validatorType } from '../../../views/delegate/validators/validators.component';
+import { ValidatorsUseCaseService } from './validators.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038DelegationResponses,
   InlineResponse20041Validators,
   InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { concatMap, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-validators',
@@ -22,137 +16,23 @@ import { concatMap, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
-  allValidatorsTokens$: Observable<number | undefined>;
-  validatorsWithShare$: Observable<validatorWithShareType[]>;
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
   delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
-  totalDelegation$: Observable<number | undefined>;
   unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
-  filteredUnbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
 
-  activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private readonly walletService: WalletService,
     private readonly stakingAppService: StakingApplicationService,
-    private cosmosRest: CosmosRestService,
+    private usecase: ValidatorsUseCaseService,
   ) {
-    this.validatorsList$ = this.cosmosRest.getValidators$();
-
-    this.allValidatorsTokens$ = this.validatorsList$.pipe(
-      map((validators) =>
-        validators?.reduce((sum, validator) => {
-          return sum + Number(validator.tokens);
-        }, 0),
-      ),
-    );
-
-    this.validatorsWithShare$ = this.allValidatorsTokens$.pipe(
-      withLatestFrom(this.validatorsList$),
-      map(([allTokens, validators]) => {
-        if (!allTokens) {
-          return [];
-        }
-        // calculate validator share
-        const validatorsWithShare = validators?.map((validator) => {
-          const val = validator;
-          const share = Number(validator.tokens) / allTokens;
-          return { val, share };
-        });
-        // sort by share
-        const validatorsWithSort = validatorsWithShare?.sort((x, y) => y.share - x.share);
-
-        return validatorsWithSort || [];
-      }),
-    );
-
-    // select listing validators by checking status and rank
-    this.validators$ = combineLatest([this.validatorsWithShare$, this.activeEnabled]).pipe(
-      map(([validatorWithShare, activeEnabled]) =>
-        validatorWithShare
-          .map((validatorWithShare, index) => {
-            if (activeEnabled) {
-              const val = validatorWithShare.val;
-              const share = validatorWithShare.share;
-              const rank = index + 1;
-              const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
-              const inList = statusBonded && rank <= 50;
-              return { val, share, inList, rank };
-            } else {
-              const val = validatorWithShare.val;
-              const share = validatorWithShare.share;
-              const rank = index + 1;
-              const statusBonded = validatorWithShare.val.status === 'BOND_STATUS_BONDED';
-              const inList = !(statusBonded && rank <= 50);
-              return { val, share, inList, rank };
-            }
-          })
-          .filter((validator) => validator.inList),
-      ),
-    );
-
-    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    const address$ = this.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-
-    this.delegations$ = address$.pipe(
-      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
-      map((result) => result.delegation_responses),
-    );
-
-    this.delegatedValidators$ = combineLatest([this.validatorsList$, this.delegations$]).pipe(
-      map(([validators, delegations]) =>
-        delegations?.map((delegation) =>
-          validators?.find(
-            (validator) => validator.operator_address == delegation.delegation?.validator_address,
-          ),
-        ),
-      ),
-    );
-
-    this.totalDelegation$ = this.delegations$.pipe(
-      map((delegations) =>
-        delegations?.reduce(
-          (sum, element) =>
-            element.balance?.denom == 'uguu' ? sum + Number(element.balance?.amount) : sum,
-          0,
-        ),
-      ),
-    );
-
-    this.unbondingDelegations$ = this.delegatedValidators$.pipe(
-      withLatestFrom(address$),
-      concatMap(([validators, accAddress]) => {
-        const valAddressList = validators?.map((validator) => {
-          if (!validator?.operator_address) return undefined;
-          try {
-            return cosmosclient.ValAddress.fromString(validator?.operator_address);
-          } catch (error) {
-            console.error(error);
-            return undefined;
-          }
-        });
-        if (!valAddressList) return [];
-
-        const unbondingDelegationList = Promise.all(
-          valAddressList.map((valAddress) => {
-            if (!valAddress) return undefined;
-            return this.cosmosRest.getUnbondingDelegation$(valAddress, accAddress).toPromise();
-          }),
-        );
-        return unbondingDelegationList;
-      }),
-    );
-    this.filteredUnbondingDelegations$ = this.unbondingDelegations$.pipe(
-      map((unbondingDelegations) =>
-        unbondingDelegations.filter((unbondingDelegation) => unbondingDelegation),
-      ),
-    );
+    this.currentStoredWallet$ = this.usecase.currentStoredWallet$;
+    this.validators$ = this.usecase.validators$(this.activeEnabled);
+    this.delegations$ = this.usecase.delegations$;
+    this.delegatedValidators$ = this.usecase.delegatedValidators$(this.delegations$);
+    this.unbondingDelegations$ = this.usecase.unbondingDelegations$(this.delegatedValidators$);
   }
 
   ngOnInit() {}
@@ -160,7 +40,6 @@ export class ValidatorsComponent implements OnInit {
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);
   }
-
   onSelectValidator(validator: InlineResponse20041Validators) {
     this.stakingAppService.openDelegateMenuDialog(validator);
   }

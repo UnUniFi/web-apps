@@ -36,7 +36,7 @@ export class ProposalsComponent implements OnInit {
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!.reverse()),
+      map((result) => result.data.proposals!),
     );
 
     this.pageLength$ = this.proposals$.pipe(

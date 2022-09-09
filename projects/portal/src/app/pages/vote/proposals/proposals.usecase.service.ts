@@ -16,7 +16,7 @@ export class ProposalsUseCaseService {
   constructor(private readonly cosmosRest: CosmosRestService) {}
 
   get proposals$(): Observable<InlineResponse20027Proposals[]> {
-    return this.cosmosRest.getProposals$().pipe(map((res) => res?.reverse() ?? []));
+    return this.cosmosRest.getProposals$().pipe(map((res) => res ?? []));
   }
   pageLength$(proposals$: Observable<InlineResponse20027Proposals[]>) {
     return proposals$.pipe(map((proposals) => (proposals?.length ? proposals.length : undefined)));

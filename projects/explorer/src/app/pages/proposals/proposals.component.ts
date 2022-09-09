@@ -7,10 +7,9 @@ import {
   InlineResponse20027Proposals,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
-
 
 @Component({
   selector: 'app-proposals',
@@ -37,14 +36,11 @@ export class ProposalsComponent implements OnInit {
   ) {
     this.proposals$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!),
+      map((result) => result.data.proposals!.reverse()),
     );
 
-
     this.pageLength$ = this.proposals$.pipe(
-      map((proposals) =>
-        proposals.length ? proposals.length : undefined,
-      ),
+      map((proposals) => (proposals.length ? proposals.length : undefined)),
     );
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
@@ -74,11 +70,18 @@ export class ProposalsComponent implements OnInit {
     this.paginatedProposals$ = combineLatest([
       this.proposals$,
       this.pageNumber$,
-      this.pageSize$]).pipe(
-        map(([proposals, pageNumber, pageSize]) => this.getPaginatedProposals(proposals, pageNumber, pageSize))
-      )
-    this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$, this.pageNumber$,
-    this.pageSize$]).pipe(
+      this.pageSize$,
+    ]).pipe(
+      map(([proposals, pageNumber, pageSize]) =>
+        this.getPaginatedProposals(proposals, pageNumber, pageSize),
+      ),
+    );
+    this.tallies$ = combineLatest([
+      this.cosmosSDK.sdk$,
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    ]).pipe(
       mergeMap(([sdk, proposals, pageNumber, pageSize]) =>
         Promise.all(
           this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
@@ -89,19 +92,24 @@ export class ProposalsComponent implements OnInit {
           ),
         ),
       ),
-      map((result) => result.map((res) => (res ? res.data.tally! : undefined))),
+      map((result) => result.map((res) => res?.data.tally)),
     );
     this.proposalContents$ = combineLatest([
-      this.proposals$, this.pageNumber$, this.pageSize$]).pipe(
-        mergeMap(([proposals, pageNumber, pageSize]) =>
-          combineLatest(
-            this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) => of(txParseProposalContent(proposal.content!)))
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    ]).pipe(
+      mergeMap(([proposals, pageNumber, pageSize]) =>
+        combineLatest(
+          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
+            of(txParseProposalContent(proposal.content!)),
           ),
         ),
-      );
+      ),
+    );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.router.navigate([], {
@@ -114,9 +122,13 @@ export class ProposalsComponent implements OnInit {
     });
   }
 
-  getPaginatedProposals(proposals: InlineResponse20027Proposals[], pageNumber: number, pageSize: number): InlineResponse20027Proposals[] {
+  getPaginatedProposals(
+    proposals: InlineResponse20027Proposals[],
+    pageNumber: number,
+    pageSize: number,
+  ): InlineResponse20027Proposals[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
-    return proposals.filter((_, i) => min <= i && i < max).reverse()
+    return proposals.filter((_, i) => min <= i && i < max).reverse();
   }
 }

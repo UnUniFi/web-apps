@@ -11,7 +11,7 @@ const domainCauchyEA = 'ununifi-beta-test-v2.cauchye.net';
 // const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
 // const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
 
-const chainID = 'ununifi-beta-test-v2';
+const chainID = 'ununifi-9-beta-test';
 const chainName = 'UnUniFi (beta-test)';
 
 const bech32Prefix = {

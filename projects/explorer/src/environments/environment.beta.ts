@@ -1,11 +1,3 @@
-const restPort = location.protocol === 'https:' ? 1318 : 1317;
-const websocketPort = location.protocol === 'https:' ? 26658 : 26657;
-const faucetUbtcPort = location.protocol === 'https:' ? 8001 : 8000;
-const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
-const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
-const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
-const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-
 const domainCauchyEA = 'ununifi-beta-test-v2.cauchye.net';
 // const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
 // const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
@@ -42,17 +34,35 @@ const messageModules = [
 ];
 
 export const environment = {
-  production: false,
+  production: true,
+  port: {
+    'http:': {
+      rest: 1317,
+      websocket: 26657,
+      ubtc: 8000,
+      uguu: 8002,
+      jpu: 8004,
+      ueth: 8006,
+      euu: 8008,
+    },
+    'https:': {
+      rest: 1318,
+      websocket: 26658,
+      ubtc: 8001,
+      uguu: 8003,
+      jpu: 8005,
+      ueth: 8007,
+      euu: 8009,
+    },
+  },
   configs: [
     // CauchyE A node without Monitor
     {
       id: domainCauchyEA,
-      restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyEA}:${websocketPort}`,
+      restURL: `https://${domainCauchyEA}`,
+      websocketURL: `wss://${domainCauchyEA}`,
       chainID,
+      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {

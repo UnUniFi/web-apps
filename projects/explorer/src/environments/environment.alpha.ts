@@ -1,11 +1,3 @@
-const restPort = location.protocol === 'https:' ? 1318 : 1317;
-const websocketPort = location.protocol === 'https:' ? 26658 : 26657;
-const faucetUbtcPort = location.protocol === 'https:' ? 8001 : 8000;
-const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
-const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
-const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
-const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-
 const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
 
 const chainID = 'ununifi-alpha-test-v3';
@@ -40,15 +32,32 @@ const messageModules = [
 
 export const environment = {
   production: true,
+  port: {
+    'http:': {
+      rest: 1317,
+      websocket: 26657,
+      ubtc: 8000,
+      uguu: 8002,
+      jpu: 8004,
+      ueth: 8006,
+      euu: 8008,
+    },
+    'https:': {
+      rest: 1318,
+      websocket: 26658,
+      ubtc: 8001,
+      uguu: 8003,
+      jpu: 8005,
+      ueth: 8007,
+      euu: 8009,
+    },
+  },
   configs: [
     // CauchyE A node without Monitor
     {
       id: domainCauchyEA,
-      restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyEA}:${websocketPort}`,
+      restURL: `https://${domainCauchyEA}`,
+      websocketURL: `wss://${domainCauchyEA}`,
       chainID,
       chainName,
       bech32Prefix,
@@ -62,14 +71,14 @@ export const environment = {
         faucet: [
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'ubtc',
             creditAmount: 100, // amount to credit in max request
             maxCredit: 99, // account has already maxCredit balance cannot claim anymore
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'uguu',
             creditAmount: 100,
             maxCredit: 99,

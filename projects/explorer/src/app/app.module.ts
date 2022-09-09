@@ -29,6 +29,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       provide: 'configs',
       useValue: environment.configs,
     },
+    {
+      provide: 'port',
+      useValue: environment.port,
+    },
   ],
   bootstrap: [AppComponent],
 })

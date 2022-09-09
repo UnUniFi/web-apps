@@ -1,11 +1,3 @@
-const restPort = location.protocol === 'https:' ? 1318 : 1317;
-const websocketPort = location.protocol === 'https:' ? 26658 : 26657;
-const faucetUbtcPort = location.protocol === 'https:' ? 8001 : 8000;
-const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
-const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
-const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
-const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-
 const domainCauchyEA = 'a.private-test.ununifi.cauchye.net';
 const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
 const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
@@ -42,17 +34,35 @@ const messageModules = [
 ];
 
 export const environment = {
-  production: false,
+  production: true,
+  port: {
+    'http:': {
+      rest: 1317,
+      websocket: 26657,
+      ubtc: 8000,
+      uguu: 8002,
+      jpu: 8004,
+      ueth: 8006,
+      euu: 8008,
+    },
+    'https:': {
+      rest: 1318,
+      websocket: 26658,
+      ubtc: 8001,
+      uguu: 8003,
+      jpu: 8005,
+      ueth: 8007,
+      euu: 8009,
+    },
+  },
   configs: [
     // CauchyE A node without Monitor
     {
       id: domainCauchyEA,
-      restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyEA}:${websocketPort}`,
+      restURL: `https://${domainCauchyEA}`,
+      websocketURL: `wss://${domainCauchyEA}`,
       chainID,
+      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -64,35 +74,35 @@ export const environment = {
         faucet: [
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'ubtc',
             creditAmount: 100, // amount to credit in max request
             maxCredit: 99, // account has already maxCredit balance cannot claim anymore
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'uguu',
             creditAmount: 2000000,
             maxCredit: 1999999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'jpu',
             creditAmount: 10,
             maxCredit: 9,
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'ueth',
             creditAmount: 1000,
             maxCredit: 999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
+            faucetURL: `https://${domainCauchyEA}`,
             denom: 'euu',
             creditAmount: 10,
             maxCredit: 9,
@@ -106,12 +116,10 @@ export const environment = {
     // CauchyE B node without Monitor
     {
       id: domainCauchyEB,
-      restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyEB}:${websocketPort}`,
+      restURL: `https://${domainCauchyEB}`,
+      websocketURL: `wss://${domainCauchyEB}`,
       chainID,
+      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -123,35 +131,35 @@ export const environment = {
         faucet: [
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
+            faucetURL: `https://${domainCauchyEB}`,
             denom: 'ubtc',
             creditAmount: 100, // amount to credit in max request
             maxCredit: 99, // account has already maxCredit balance cannot claim anymore
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
+            faucetURL: `https://${domainCauchyEB}`,
             denom: 'uguu',
             creditAmount: 2000000,
             maxCredit: 1999999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetJpuPort}`,
+            faucetURL: `https:${domainCauchyEB}`,
             denom: 'jpu',
             creditAmount: 10,
             maxCredit: 9,
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
+            faucetURL: `https:${domainCauchyEB}`,
             denom: 'ueth',
             creditAmount: 1000,
             maxCredit: 999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetEuuPort}`,
+            faucetURL: `https:${domainCauchyEB}`,
             denom: 'euu',
             creditAmount: 10,
             maxCredit: 9,
@@ -165,12 +173,10 @@ export const environment = {
     // CauchyE C node without Monitor
     {
       id: domainCauchyEC,
-      restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyEC}:${websocketPort}`,
-      chainID: 'ununifi-8-private-test',
+      restURL: `https://${domainCauchyEC}`,
+      websocketURL: `wss://${domainCauchyEC}`,
+      chainID,
+      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -182,35 +188,35 @@ export const environment = {
         faucet: [
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
+            faucetURL: `https://${domainCauchyEC}`,
             denom: 'ubtc',
             creditAmount: 100, // amount to credit in max request
             maxCredit: 99, // account has already maxCredit balance cannot claim anymore
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
+            faucetURL: `https://${domainCauchyEC}`,
             denom: 'uguu',
             creditAmount: 2000000,
             maxCredit: 1999999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetJpuPort}`,
+            faucetURL: `https://${domainCauchyEC}`,
             denom: 'jpu',
             creditAmount: 10,
             maxCredit: 9,
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
+            faucetURL: `https://${domainCauchyEC}`,
             denom: 'ueth',
             creditAmount: 1000,
             maxCredit: 999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetEuuPort}`,
+            faucetURL: `https://${domainCauchyEC}`,
             denom: 'euu',
             creditAmount: 10,
             maxCredit: 9,
@@ -224,12 +230,10 @@ export const environment = {
     // CauchyE D node without Monitor
     {
       id: domainCauchyED,
-      restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-      websocketURL: `${location.protocol.replace(
-        'http',
-        'ws',
-      )}//${domainCauchyED}:${websocketPort}`,
+      restURL: `https://${domainCauchyED}`,
+      websocketURL: `wss://${domainCauchyED}`,
       chainID,
+      chainName,
       bech32Prefix,
       minimumGasPrices: [
         {
@@ -241,35 +245,35 @@ export const environment = {
         faucet: [
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
+            faucetURL: `https://${domainCauchyED}`,
             denom: 'ubtc',
             creditAmount: 100, // amount to credit in max request
             maxCredit: 99, // account has already maxCredit balance cannot claim anymore
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
+            faucetURL: `https://${domainCauchyED}`,
             denom: 'uguu',
             creditAmount: 2000000,
             maxCredit: 1999999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetJpuPort}`,
+            faucetURL: `https://${domainCauchyED}`,
             denom: 'jpu',
             creditAmount: 10,
             maxCredit: 9,
           },
           {
             hasFaucet: true,
-            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
+            faucetURL: `https://${domainCauchyED}`,
             denom: 'ueth',
             creditAmount: 1000,
             maxCredit: 999,
           },
           {
             hasFaucet: false,
-            faucetURL: `${location.protocol}//${domainCauchyED}:${faucetEuuPort}`,
+            faucetURL: `https://${domainCauchyED}`,
             denom: 'euu',
             creditAmount: 10,
             maxCredit: 9,

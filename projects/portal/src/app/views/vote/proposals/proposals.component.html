@@ -13,35 +13,43 @@
   <mat-card>
     <mat-nav-list>
       <ng-container *ngFor="let proposal of proposals; let i = index; last as last">
-        <ng-container *ngIf="unpackContent(proposal.content) as content">
-          <mat-list-item routerLink="{{ proposal.proposal_id }}">
-            <span class="w-2/12"># {{ proposal.proposal_id }}</span>
-            <span class="w-7/12 text-center truncate">{{ content.title }}</span>
-            <span class="w-3/12 text-right truncate"
-              >{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
-            </span>
-          </mat-list-item>
-          <mat-list-item (click)="onClickVote(proposal.proposal_id!)">
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
-              <span class="truncate">{{ tallies![i]?.yes }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
-              <span class="truncate">{{ tallies![i]?.no_with_veto }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
-              <span class="truncate">{{ tallies![i]?.no }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2">subtitles_off</mat-icon>
-              <span class="truncate">{{ tallies![i]?.abstain }}</span>
-            </span>
-          </mat-list-item>
-          <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
-        </ng-container>
+        <mat-list-item routerLink="{{ proposal.proposal_id }}">
+          <span class="w-2/12"># {{ proposal.proposal_id }}</span>
+          <span class="w-7/12 text-center truncate">{{
+            unpackContent(proposal?.content).title
+          }}</span>
+          <span class="w-3/12 text-right truncate"
+            >{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+          </span>
+        </mat-list-item>
+        <mat-list-item (click)="onClickVote(proposal.proposal_id!)">
+          <span class="flex w-1/4 justify-start content-start">
+            <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
+            <span class="truncate">{{ tallies![i]?.yes }}</span>
+          </span>
+          <span class="flex w-1/4 justify-start content-start">
+            <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
+            <span class="truncate">{{ tallies![i]?.no_with_veto }}</span>
+          </span>
+          <span class="flex w-1/4 justify-start content-start">
+            <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
+            <span class="truncate">{{ tallies![i]?.no }}</span>
+          </span>
+          <span class="flex w-1/4 justify-start content-start">
+            <mat-icon class="mr-2">subtitles_off</mat-icon>
+            <span class="truncate">{{ tallies![i]?.abstain }}</span>
+          </span>
+        </mat-list-item>
+        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
       </ng-container>
+      <mat-paginator
+        [length]="pageLength"
+        [pageSize]="pageSize"
+        [pageIndex]="pageNumber ? pageNumber - 1 : 0"
+        [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+        (page)="onPaginationChange($event)"
+      >
+      </mat-paginator>
     </mat-nav-list>
   </mat-card>
 </ng-template>

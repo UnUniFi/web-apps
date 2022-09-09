@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class CdpApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly cdp: CdpService,
     private readonly key: KeyService,
-  ) { }
+  ) {}
 
   async createCDP(
     key: Key,

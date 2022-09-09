@@ -33,6 +33,8 @@ export class ProposalComponent implements OnInit {
   votes?: InlineResponse20032Votes[] | null;
   @Input()
   votingParams?: InlineResponse20026VotingParams | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
@@ -44,13 +46,14 @@ export class ProposalComponent implements OnInit {
     this.appClickDeposit = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   unpackContent(value: any) {
     try {
       return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
+    } catch (error) {
+      console.error(error);
+      return value as ProposalContent;
     }
   }
 

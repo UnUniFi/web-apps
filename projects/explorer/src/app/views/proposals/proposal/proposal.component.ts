@@ -33,20 +33,23 @@ export class ProposalComponent implements OnInit {
   votes?: InlineResponse20032Votes[] | null;
   @Input()
   votingParams?: InlineResponse20026VotingParams | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
-  constructor() { }
-
-  ngOnInit(): void { }
+  constructor() {}
 
   unpackContent(value: any) {
     try {
       return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
+    } catch (error) {
+      console.error(error);
+      return value as ProposalContent;
     }
   }
 
   toNumber(str: string) {
     return Number(str);
   }
+
+  ngOnInit(): void {}
 }

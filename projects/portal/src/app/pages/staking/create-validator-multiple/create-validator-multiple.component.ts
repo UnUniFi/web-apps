@@ -131,11 +131,10 @@ export class CreateValidatorMultipleComponent implements OnInit {
     )) as (string | undefined)[];
     const success = results.length > 0 && results.every((result: string | undefined) => !!result);
     if (success) {
-      this.redirectUrls = createValidatorsData.map((createValidatorData) => {
-        return location.port === '80' || location.port === '443' || location.port === ''
-          ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
-          : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
-      });
+      this.redirectUrls = createValidatorsData.map(
+        (createValidatorData) =>
+          `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`,
+      );
       this.setSuccess(true);
     } else {
       this.setError('Error: something went wrong. Reload and try again or contact us');

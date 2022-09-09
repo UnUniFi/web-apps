@@ -5,7 +5,10 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["projects/marketplace/tsconfig.app.json", "projects/marketplace/tsconfig.spec.json"],
+        "project": [
+          "projects/marketplace/tsconfig.app.json",
+          "projects/marketplace/tsconfig.spec.json"
+        ],
         "createDefaultProgram": true
       },
       "rules": {
@@ -21,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": ["app", "view"],
             "style": "kebab-case"
           }
         ]

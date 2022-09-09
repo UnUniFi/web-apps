@@ -1,0 +1,82 @@
+.creat-val-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.create-val-dropzone {
+  display: flex;
+  justify-content: center;
+  border: 3px dashed #c2185b;
+  border-radius: 40px;
+  width: 100%;
+  height: 220px;
+}
+
+.create-val-dropzone-lable {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.create-val-desc {
+  margin: 16px 0 0 0;
+  color: #161516;
+}
+
+.create-val-card {
+  width: 640px;
+  height: 350px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: white;
+  border-radius: 40px;
+}
+
+.create-val-file-type {
+  color: #161516;
+}
+
+.create-val-icon {
+  font-size: 50px;
+  height: auto;
+  width: auto;
+}
+
+.create-val-btn {
+  margin: 16px 0 0 0;
+}
+.create-val-btn-disabled {
+  color: rgba(0, 0, 0, 0.26) !important;
+  box-shadow: none !important;
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+.creat-val-success {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  /* border: 3px dashed #c2185b; */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-val-success-icon {
+  font-size: 80px;
+  height: auto;
+  width: auto;
+  color: rgb(0, 255, 55);
+}
+.crate-val-success-text {
+  color: #161516;
+}

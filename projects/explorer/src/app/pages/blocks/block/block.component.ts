@@ -6,6 +6,8 @@ import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/open
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
+import { txParseMsg } from "./../../../utils/tx-parser"
+import { txTitle } from '../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'app-block',
@@ -19,7 +21,7 @@ export class BlockComponent implements OnInit {
   previousBlock$: Observable<number>;
   latestBlockHeight$: Observable<string>;
   txs$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
-  txTypes$: Observable<string[] | undefined>;
+  txTitles$: Observable<txTitle[] | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
@@ -34,36 +36,19 @@ export class BlockComponent implements OnInit {
       mergeMap(([sdk, height, block]) =>
         cosmosclient.rest.tx
           .getTxsEvent(sdk.rest, [`tx.height=${height}`], undefined, undefined, undefined, true)
-          .then((res) => {
-            console.log('res', res);
-            return res.data;
-          })
+          .then((res) => res.data)
           .catch((error) => {
             console.error(error);
             return undefined;
           }),
       ),
     );
-    this.txTypes$ = this.txs$.pipe(
+    this.txTitles$ = this.txs$.pipe(
       map((txs) => {
         if (!txs?.txs) {
           return undefined;
         }
-        const txTypeList = txs?.txs?.map((tx) => {
-          if (!tx.body?.messages) {
-            return '';
-          }
-          const txTypes = tx.body?.messages.map((message) => {
-            if (!message) {
-              return [];
-            }
-            const txTypeRaw = (message as any)['@type'] as string;
-            const startLength = txTypeRaw.lastIndexOf('.');
-            const txType = txTypeRaw.substring(startLength + 1, txTypeRaw.length);
-            return txType;
-          });
-          return txTypes.join();
-        });
+        const txTypeList = txs?.txs?.map((tx) => txParseMsg(tx.body?.messages?.[0]!));
         return txTypeList;
       }),
     );

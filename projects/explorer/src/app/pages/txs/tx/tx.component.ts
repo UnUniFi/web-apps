@@ -5,6 +5,8 @@ import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { txParseMsgs, } from "./../../../utils/tx-parser"
+import { txTitle, txSignature } from './../../../models/cosmos/tx-common.model';
 
 @Component({
   selector: 'app-transaction',
@@ -14,29 +16,43 @@ import { map, mergeMap } from 'rxjs/operators';
 export class TxComponent implements OnInit {
   txHash$: Observable<string>;
   tx$: Observable<CosmosTxV1beta1GetTxResponse>;
-  txType$: Observable<string[] | undefined>;
+  txDetails$: Observable<txTitle[] | undefined>;
+  txSignature$: Observable<txSignature | undefined>;
+
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     this.txHash$ = this.route.params.pipe(map((params) => params.tx_hash));
     this.tx$ = combineLatest([this.cosmosSDK.sdk$, this.txHash$]).pipe(
       mergeMap(([sdk, hash]) => cosmosclient.rest.tx.getTx(sdk.rest, hash).then((res) => res.data)),
     );
-    this.tx$.subscribe((x) => console.log(x));
-    this.txType$ = this.tx$.pipe(
-      map((tx) => {
-        if (!tx?.tx?.body?.messages) {
-          return;
+    this.txDetails$ = this.tx$.pipe(
+      map(x => {
+        const tx = x?.tx
+        if (!tx) return undefined
+        const parsedTx = txParseMsgs(tx)
+        return parsedTx
+      })
+    )
+    this.txDetails$.subscribe(x => console.log("debug_tx_comp", x))
+    this.txSignature$ = this.tx$.pipe(
+      map(tx => {
+        const publicKeyInfo = tx.tx?.auth_info?.signer_infos?.[0].public_key
+        const publicKey = cosmosclient.codec.protoJSONToInstance(cosmosclient.codec.castProtoJSONOfProtoAny(publicKeyInfo))
+        if (publicKey instanceof cosmosclient.proto.cosmos.crypto.secp256k1.PubKey) {
+          const address = cosmosclient.AccAddress.fromPublicKey(publicKey)
+          return {
+            publicKey: publicKey.accPubkey(),
+            accAddress: address.toString(),
+            type: publicKey.constructor.name
+          }
+        } else {
+          return {
+            publicKey: "",
+            accAddress: "",
+            type: ""
+          }
         }
-        return tx?.tx?.body?.messages.map((message) => {
-          const txTypeRaw = (message as any)['@type'] as string;
-          const startLength = txTypeRaw.lastIndexOf('.');
-          const txType = txTypeRaw.substring(startLength + 1, txTypeRaw.length);
-          return txType;
-        });
-      }),
-    );
-
-    //debug
-    this.txType$.subscribe((x) => console.log('A', x));
+      })
+    )
   }
 
   ngOnInit() { }

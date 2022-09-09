@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
     "analytics": "275ee8c7-d031-45f9-ad28-6a789fcbb579",
-    "defaultCollection": "@ngrx/schematics"
+    "defaultCollection": "@angular-eslint/schematics"
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -72,12 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "explorer:build:production",
-              "baseHref": "/explorer/"
+              "browserTarget": "explorer:build:production"
             },
             "development": {
-              "browserTarget": "explorer:build:development",
-              "baseHref": "/explorer/"
+              "browserTarget": "explorer:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -268,12 +266,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "portal:build:production",
-              "baseHref": "/portal/"
+              "browserTarget": "portal:build:production"
             },
             "development": {
-              "browserTarget": "portal:build:development",
-              "baseHref": "/portal/"
+              "browserTarget": "portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -396,12 +392,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "marketplace:build:production",
-              "baseHref": "/marketplace/"
+              "browserTarget": "marketplace:build:production"
             },
             "development": {
-              "browserTarget": "marketplace:build:development",
-              "baseHref": "/marketplace/"
+              "browserTarget": "marketplace:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -459,6 +453,5 @@
         }
       }
     }
-  },
-  "defaultProject": "explorer"
+  }
 }

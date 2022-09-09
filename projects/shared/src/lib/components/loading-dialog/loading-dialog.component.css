@@ -1,0 +1,43 @@
+.dialog {
+  width: 180px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.m-4 {
+  margin: 16px;
+}
+
+.justify-center	{
+  justify-content: center;
+}
+
+.content-center {
+  align-content: center;
+}
+
+.items-center {
+  align-items: center;
+}

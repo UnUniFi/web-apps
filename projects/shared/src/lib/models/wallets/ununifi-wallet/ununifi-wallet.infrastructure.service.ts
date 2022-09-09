@@ -1,3 +1,4 @@
+import { LoadingDialogService } from '../../../components/loading-dialog';
 import { createCosmosPrivateKeyFromString } from '../../../utils/key';
 import { validatePrivateStoredWallet } from '../../../utils/validation';
 import { ConnectWalletCompletedDialogComponent } from '../../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
@@ -17,7 +18,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
     private readonly dialog: MatDialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
-  ) { }
+  ) {}
 
   private async ununifiSelectWallet(): Promise<boolean> {
     const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();

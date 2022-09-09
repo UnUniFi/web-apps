@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MinModule } from 'ng-min-max';
+import { MinModule } from 'projects/shared/src/lib/directives/min-max';
 
 @NgModule({
   declarations: [CreateComponent],
   imports: [CommonModule, RouterModule, FormsModule, MaterialModule, MinModule],
   exports: [CreateComponent],
 })
-export class CreateModule { }
+export class CreateModule {}

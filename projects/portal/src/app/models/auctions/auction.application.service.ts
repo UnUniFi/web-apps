@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class AuctionApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly auction: AuctionService,
     private readonly walletService: WalletService,
-  ) { }
+  ) {}
 
   async placeBid(
     auctionID: number,

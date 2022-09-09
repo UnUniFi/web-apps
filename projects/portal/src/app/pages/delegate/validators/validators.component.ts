@@ -3,6 +3,7 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { validatorType } from '../../../views/delegate/validators/validators.component';
 import { ValidatorsUseCaseService } from './validators.usecase.service';
 import { Component, OnInit } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   InlineResponse20038DelegationResponses,
   InlineResponse20041Validators,
@@ -16,22 +17,35 @@ import { BehaviorSubject, Observable } from 'rxjs';
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
+  private validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
+  private accAddress$: Observable<cosmosclient.AccAddress>;
+
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
   delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
-  filteredUnbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
+  unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
+
   activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
     private readonly stakingAppService: StakingApplicationService,
     private usecase: ValidatorsUseCaseService,
   ) {
-    this.validators$ = this.usecase.validators$(this.activeEnabled);
     this.currentStoredWallet$ = this.usecase.currentStoredWallet$;
-    this.delegations$ = this.usecase.delegations$;
-    this.delegatedValidators$ = this.usecase.delegatedValidators$;
-    this.filteredUnbondingDelegations$ = this.usecase.filteredUnbondingDelegations$;
+    this.validatorsList$ = this.usecase.validatorsList$;
+    this.accAddress$ = this.usecase.accAddress$;
+
+    this.validators$ = this.usecase.validators$(this.validatorsList$, this.activeEnabled);
+    this.delegations$ = this.usecase.delegations$(this.accAddress$);
+    this.delegatedValidators$ = this.usecase.delegatedValidators$(
+      this.validatorsList$,
+      this.delegations$,
+    );
+    this.unbondingDelegations$ = this.usecase.unbondingDelegations$(
+      this.delegatedValidators$,
+      this.accAddress$,
+    );
   }
 
   ngOnInit() {}

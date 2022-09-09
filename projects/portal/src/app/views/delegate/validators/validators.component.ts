@@ -10,14 +10,15 @@ import * as crypto from 'crypto';
 export type validatorType = {
   val: InlineResponse20041Validators;
   share: number;
-  inList: boolean;
-  rank: number;
+  inList?: boolean;
+  rank?: number;
 };
 
+/*
 export type validatorWithShareType = {
   val: InlineResponse20041Validators;
   share: number;
-};
+};*/
 
 @Component({
   selector: 'view-validators',

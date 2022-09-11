@@ -57,8 +57,6 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
         ),
       ),
     );
-
-    this.delegations$.subscribe((r) => console.log(r));
   }
 
   ngOnInit(): void {}

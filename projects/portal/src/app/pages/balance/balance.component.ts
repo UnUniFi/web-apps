@@ -1,3 +1,4 @@
+import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
 import { WalletType } from '../../models/wallets/wallet.model';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
@@ -36,7 +37,10 @@ export class BalanceComponent implements OnInit {
   >;
   nodeInfo$: Observable<InlineResponse20012>;
 
-  constructor(private usecase: BalanceUsecaseService) {
+  constructor(
+    private usecase: BalanceUsecaseService,
+    private readonly distributionAppService: DistributionApplicationService,
+  ) {
     this.walletId$ = this.usecase.walletId$;
     this.walletType$ = this.usecase.walletType$;
     this.accAddress$ = this.usecase.accAddress$;
@@ -50,4 +54,8 @@ export class BalanceComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onSubmitWithdrawAllDelegatorReward() {
+    this.distributionAppService.openWithdrawAllDelegatorRewardFormDialog();
+  }
 }

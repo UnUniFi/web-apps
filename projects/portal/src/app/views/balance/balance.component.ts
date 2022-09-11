@@ -1,6 +1,6 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import {
@@ -32,6 +32,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
       }[]
     | null;
   @Input() nodeInfo?: InlineResponse20012 | null;
+  @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
   // Todo: This is temporal fix.
   tempNodeInfo: any;
@@ -39,6 +40,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
     // Todo: This is temporal fix.
     this.tempNodeInfo = this.nodeInfo as any;
+    this.appWithdrawAllDelegatorReward = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -61,5 +63,9 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
       });
     }
     return false;
+  }
+
+  onClickWithdrawAllDelegatorRewardButton() {
+    this.appWithdrawAllDelegatorReward.emit();
   }
 }

@@ -1,3 +1,4 @@
+import { WithdrawAllDelegatorRewardFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-all-delegator-reward-form-dialog/withdraw-all-delegator-reward-form-dialog.component';
 import { WithdrawDelegatorRewardFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.component';
 import { WithdrawValidatorCommissionFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
@@ -35,6 +36,14 @@ export class DistributionApplicationService {
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
+      .afterClosed()
+      .toPromise();
+    await this.router.navigate(['txs', txHash]);
+  }
+
+  async openWithdrawAllDelegatorRewardFormDialog(): Promise<void> {
+    const txHash = await this.dialog
+      .open(WithdrawAllDelegatorRewardFormDialogComponent)
       .afterClosed()
       .toPromise();
     await this.router.navigate(['txs', txHash]);

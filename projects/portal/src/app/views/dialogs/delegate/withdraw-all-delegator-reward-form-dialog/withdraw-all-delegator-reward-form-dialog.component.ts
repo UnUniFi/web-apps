@@ -1,10 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import {
+  InlineResponse20038DelegationResponses,
+  InlineResponse20041Validators,
+} from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
-export type WithdrawDelegatorRewardOnSubmitEvent = {
+export type WithdrawAllDelegatorRewardOnSubmitEvent = {
+  validators: string[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
@@ -21,9 +25,13 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   validator?: InlineResponse20041Validators | null;
+  @Input()
+  delegations?: InlineResponse20038DelegationResponses[] | null;
+  @Input()
+  delegatedValidators?: (InlineResponse20041Validators | undefined)[] | null;
 
   @Output()
-  appSubmit: EventEmitter<WithdrawDelegatorRewardOnSubmitEvent>;
+  appSubmit: EventEmitter<WithdrawAllDelegatorRewardOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
@@ -41,7 +49,7 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto
@@ -56,11 +64,22 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
+  toNumber(str: string) {
+    return Number(str);
+  }
+
   onSubmit() {
     if (this.selectedGasPrice === undefined) {
       return;
     }
+    if (!this.delegatedValidators) {
+      return;
+    }
+    const validatorAddresses = this.delegatedValidators
+      .map((validator) => validator?.operator_address)
+      .filter((validator): validator is string => typeof validator == 'string');
     this.appSubmit.emit({
+      validators: validatorAddresses,
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

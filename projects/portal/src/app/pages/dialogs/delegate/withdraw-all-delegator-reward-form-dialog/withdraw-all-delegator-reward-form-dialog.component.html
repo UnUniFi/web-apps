@@ -2,5 +2,7 @@
   [currentStoredWallet]="currentStoredWallet$ | async"
   [minimumGasPrices]="minimumGasPrices$ | async"
   [validator]="validator"
+  [delegations]="delegations$ | async"
+  [delegatedValidators]="delegatedValidators$ | async"
   (appSubmit)="onSubmit($event)"
 ></view-withdraw-all-delegator-reward-form-dialog>

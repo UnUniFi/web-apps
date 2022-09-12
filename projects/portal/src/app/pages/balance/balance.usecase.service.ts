@@ -9,7 +9,10 @@ import {
 } from './../../utils/converter';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import {
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  InlineResponse20012,
+} from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -80,6 +83,18 @@ export class BalanceUsecaseService {
           return of(cosmosAccAddress);
         }
         return this.rest.getAllBalances$(cosmosAccAddress);
+      }),
+    );
+  }
+  get rewards$(): Observable<
+    CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null | undefined
+  > {
+    return this.cosmosAccAddress$.pipe(
+      mergeMap((cosmosAccAddress) => {
+        if (!cosmosAccAddress) {
+          return of(cosmosAccAddress);
+        }
+        return this.rest.getDelegationTotalRewards$(cosmosAccAddress);
       }),
     );
   }

@@ -5,6 +5,7 @@ import { AppDelegateFormDialogModule } from './pages/dialogs/delegate/delegate-f
 import { AppDelegateMenuDialogModule } from './pages/dialogs/delegate/delegate-menu-dialog/delegate-menu-dialog.module';
 import { AppRedelegateFormDialogModule } from './pages/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.module';
 import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.module';
+import { AppWithdrawAllDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-all-delegator-reward-form-dialog/withdraw-all-delegator-reward-form-dialog.module';
 import { AppWithdrawDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.module';
 import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
@@ -68,6 +69,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     AppRedelegateFormDialogModule,
     AppUndelegateFormDialogModule,
     AppWithdrawDelegatorRewardFormDialogModule,
+    AppWithdrawAllDelegatorRewardFormDialogModule,
     AppWithdrawValidatorCommissionFormDialogModule,
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,

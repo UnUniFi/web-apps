@@ -14,11 +14,6 @@ export type validatorType = {
   rank: number;
 };
 
-export type validatorWithShareType = {
-  val: InlineResponse20041Validators;
-  share: number;
-};
-
 @Component({
   selector: 'view-validators',
   templateUrl: './validators.component.html',

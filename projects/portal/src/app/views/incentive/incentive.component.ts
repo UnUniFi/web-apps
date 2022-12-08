@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 
 @Component({
@@ -7,13 +7,20 @@ import cosmosclient from '@cosmos-client/core';
   styleUrls: ['./incentive.component.css'],
 })
 export class IncentiveComponent implements OnInit {
-  tokens: { id: string }[] | undefined;
-  rewards: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined;
+  @Input()
+  tokens?: { id: string }[] | null;
+  @Input()
+  rewards?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Output()
+  appClickCreate: EventEmitter<{}>;
 
   constructor() {
-    this.tokens = [{ id: 'ununifi-incentive-test01' }, { id: 'ununifi-incentive-test02' }];
-    this.rewards = [{ denom: 'uguu', amount: '20000000' }];
+    this.appClickCreate = new EventEmitter();
   }
 
   ngOnInit(): void {}
+
+  onClickCreate() {
+    this.appClickCreate.emit();
+  }
 }

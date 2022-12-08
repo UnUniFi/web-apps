@@ -1,1 +1,5 @@
-<view-incentive (appClickCreate)="onClickCreate()"></view-incentive>
+<view-incentive
+  [tokens]="tokens$ | async"
+  [rewards]="rewards$ | async"
+  (appClickCreate)="onClickCreate()"
+></view-incentive>

@@ -1,4 +1,4 @@
-import { CreateTokenFormDialogComponent } from '../../views/dialogs/incentive/create-token-form-dialog/create-token-form-dialog.component';
+import { CreateTokenFormDialogComponent } from '../../pages/dialogs/incentive/create-token-form-dialog/create-token-form-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { WalletService } from '../wallets/wallet.service';
 import { Injectable } from '@angular/core';
@@ -20,8 +20,11 @@ export class IncentiveApplicationService {
     private readonly walletService: WalletService,
   ) {}
 
-  async openCreateTokenFormDialog(): Promise<void> {
-    const txHash = await this.dialog.open(CreateTokenFormDialogComponent).afterClosed().toPromise();
+  async openCreateTokenFormDialog(address: string): Promise<void> {
+    const txHash = await this.dialog
+      .open(CreateTokenFormDialogComponent, { data: address })
+      .afterClosed()
+      .toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

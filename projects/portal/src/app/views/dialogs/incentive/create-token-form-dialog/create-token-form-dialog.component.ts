@@ -1,14 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
-import * as crypto from 'crypto';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type CreateIncentiveTokenOnSubmitEvent = {
   walletType: WalletType;
-  recipient: { address: string; dist_rate: string }[];
+  recipient: { address: string; distRate: string }[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
+};
+export type IncentiveDist = {
+  address: string;
+  distRate: number;
 };
 
 @Component({
@@ -31,12 +33,14 @@ export class CreateTokenFormDialogComponent implements OnInit {
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedRecipients?: { address: string; dist_rate: string }[];
+  firstRecipient?: IncentiveDist;
+  recipients: IncentiveDist[];
   gasRatio: number;
 
   constructor() {
+    this.firstRecipient = { address: '', distRate: 0 };
+    this.recipients = [];
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
 
     this.gasRatio = 0;
@@ -54,13 +58,36 @@ export class CreateTokenFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
+  onClickAddRecipient() {
+    this.recipients.push({ address: '', distRate: 0 });
+  }
+
+  onClickDeleteRecipient(index: number) {
+    this.recipients.splice(index, 1);
+  }
+
   onSubmit() {
-    if (!this.selectedRecipients || !this.currentStoredWallet || !this.selectedGasPrice) {
+    if (
+      !this.firstRecipient ||
+      !this.recipients ||
+      !this.currentStoredWallet ||
+      !this.selectedGasPrice
+    ) {
       return;
     }
+    const sumDist =
+      Math.floor(this.firstRecipient.distRate * 10) / 10 +
+      this.recipients.reduce((prev, curr) => prev + Math.floor(curr.distRate * 10) / 10, 0);
+    if (sumDist != 100) {
+      alert('Please make the total of the percentages 100%');
+      return;
+    }
+    const listRecipients = [this.firstRecipient].concat(this.recipients).map((rec) => {
+      return { address: rec.address, distRate: rec.distRate.toFixed(1) };
+    });
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
-      recipient: this.selectedRecipients,
+      recipient: listRecipients,
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

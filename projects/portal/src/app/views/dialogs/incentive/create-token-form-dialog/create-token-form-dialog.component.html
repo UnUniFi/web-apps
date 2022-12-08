@@ -1,71 +1,65 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Delegate to this validator</div>
+    <div class="font-bold text-xl m-3">Create new incentive token</div>
   </div>
-  <mat-list>
-    <mat-label>To. (Validator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ validator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
 
-  <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ currentStoredWallet?.id }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
-
-  <form #formRef="ngForm" (submit)="onSubmit()">
+  <form *ngIf="firstRecipient" #formRef="ngForm" (submit)="onSubmit()">
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
-        <mat-label>Delegate Denom</mat-label>
+        <mat-label>Distribution Rate (%)</mat-label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.denom"
-          name="delegate-denom"
-          matInput
-          type="text"
-          required
-          readonly
-        />
-      </mat-form-field>
-      <mat-form-field class="flex-auto">
-        <mat-label>Delegate Amount</mat-label>
-        <input
-          [(ngModel)]="selectedAmount && selectedAmount.amount"
+          [(ngModel)]="firstRecipient.distRate"
           name="delegate-amount"
           matInput
           type="number"
-          pattern="^\d+$"
-          [min]="0"
+          step="0.1"
           required
         />
       </mat-form-field>
       <mat-form-field class="flex-auto">
-        <mat-label>Balance</mat-label>
+        <mat-label>Recipient Address</mat-label>
         <input
-          [(ngModel)]="uguuBalance"
-          name="delegate-balance"
+          [(ngModel)]="firstRecipient.address"
+          name="token-address"
           matInput
-          type="number"
-          pattern="^\d+$"
-          [min]="0"
+          type="text"
           required
-          readonly
         />
       </mat-form-field>
     </div>
+
+    <!-- Recipients Array  -->
+    <div
+      class="flex flex-col content-content lg:flex-row"
+      *ngFor="let recipient of recipients; let i = index"
+    >
+      <mat-form-field class="flex-auto">
+        <mat-label>Distribution Rate (%)</mat-label>
+        <input
+          [(ngModel)]="recipient.distRate"
+          name="delegate-amount"
+          matInput
+          type="number"
+          step="0.1"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Recipient Address</mat-label>
+        <input [(ngModel)]="recipient.address" name="token-address" matInput type="text" required />
+      </mat-form-field>
+      <button (click)="onClickDeleteRecipient(i)"><mat-icon>delete</mat-icon></button>
+    </div>
+    <button
+      type="button"
+      mat-stroked-button
+      class="w-full"
+      color="accent"
+      (click)="onClickAddRecipient()"
+    >
+      <mat-icon>add</mat-icon> Add Recipient
+    </button>
 
     <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
@@ -133,7 +127,7 @@
     </mat-accordion>
 
     <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
-      Delegate
+      Create
     </button>
   </form>
 </mat-dialog-content>

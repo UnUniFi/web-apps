@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
-export type CreateIncentiveTokenOnSubmitEvent = {
+export type CreateIncentiveUnitOnSubmitEvent = {
   walletType: WalletType;
   recipient: { address: string; distRate: string }[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
@@ -14,11 +14,11 @@ export type IncentiveDist = {
 };
 
 @Component({
-  selector: 'view-create-token-form-dialog',
-  templateUrl: './create-token-form-dialog.component.html',
-  styleUrls: ['./create-token-form-dialog.component.css'],
+  selector: 'view-create-unit-form-dialog',
+  templateUrl: './create-unit-form-dialog.component.html',
+  styleUrls: ['./create-unit-form-dialog.component.css'],
 })
-export class CreateTokenFormDialogComponent implements OnInit {
+export class CreateUnitFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -29,7 +29,7 @@ export class CreateTokenFormDialogComponent implements OnInit {
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
-  appSubmit: EventEmitter<CreateIncentiveTokenOnSubmitEvent>;
+  appSubmit: EventEmitter<CreateIncentiveUnitOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];

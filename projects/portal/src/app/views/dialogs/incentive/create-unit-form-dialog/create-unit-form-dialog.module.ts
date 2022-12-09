@@ -1,12 +1,12 @@
 import { MaterialModule } from '../../../material.module';
-import { CreateTokenFormDialogComponent } from './create-token-form-dialog.component';
+import { CreateUnitFormDialogComponent } from './create-unit-form-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [CreateTokenFormDialogComponent],
+  declarations: [CreateUnitFormDialogComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule],
-  exports: [CreateTokenFormDialogComponent],
+  exports: [CreateUnitFormDialogComponent],
 })
-export class CreateTokenFormDialogModule {}
+export class CreateUnitFormDialogModule {}

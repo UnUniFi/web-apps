@@ -2,21 +2,20 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { CreateIncentiveTokenOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/create-token-form-dialog/create-token-form-dialog.component';
+import { CreateIncentiveUnitOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-create-token-form-dialog',
-  templateUrl: './create-token-form-dialog.component.html',
-  styleUrls: ['./create-token-form-dialog.component.css'],
+  selector: 'app-create-unit-form-dialog',
+  templateUrl: './create-unit-form-dialog.component.html',
+  styleUrls: ['./create-unit-form-dialog.component.css'],
 })
-export class CreateTokenFormDialogComponent implements OnInit {
+export class CreateUnitFormDialogComponent implements OnInit {
   address: string | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
@@ -26,7 +25,7 @@ export class CreateTokenFormDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public readonly data: string,
-    public matDialogRef: MatDialogRef<CreateTokenFormDialogComponent>,
+    public matDialogRef: MatDialogRef<CreateUnitFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly snackBar: MatSnackBar,
@@ -53,7 +52,7 @@ export class CreateTokenFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   // WIP
-  async onSubmit($event: CreateIncentiveTokenOnSubmitEvent) {
+  async onSubmit($event: CreateIncentiveUnitOnSubmitEvent) {
     // const validatorStatus = $event.validatorList.find(
     //   (val) => val.operator_address == this.validator?.operator_address,
     // )?.status;

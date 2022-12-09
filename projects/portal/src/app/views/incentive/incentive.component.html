@@ -3,18 +3,18 @@
 <h3 class="mb-0 ml-2">Existing Incentive Tokens</h3>
 <div class="flex flex-col">
   <mat-card class="mb-4">
-    <mat-list>
-      <mat-list-item *ngIf="tokens === undefined"> No Tokens! </mat-list-item>
-      <mat-list-item *ngIf="tokens && tokens.length === 0"> No Tokens! </mat-list-item>
-      <ng-container *ngIf="tokens && tokens.length > 0">
-        <ng-container *ngFor="let token of tokens; last as last">
-          <mat-list-item routerLink="/incentive/{{ token.id }} }}">
-            <span>{{ token.id }}</span>
+    <mat-nav-list>
+      <mat-list-item *ngIf="units === undefined"> No Tokens! </mat-list-item>
+      <mat-list-item *ngIf="units && units.length === 0"> No Tokens! </mat-list-item>
+      <ng-container *ngIf="units && units.length > 0">
+        <ng-container *ngFor="let unit of units; last as last">
+          <mat-list-item routerLink="/incentive/units/{{ unit.id }}">
+            <span>{{ unit.id }}</span>
             <mat-divider *ngIf="!last"></mat-divider>
           </mat-list-item>
         </ng-container>
       </ng-container>
-    </mat-list>
+    </mat-nav-list>
   </mat-card>
 
   <button class="mb-4" mat-flat-button color="accent" (click)="onClickCreate()">

@@ -13,7 +13,7 @@ import { filter, map } from 'rxjs/operators';
 })
 export class IncentiveComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  tokens$: Observable<{ id: string }[]>;
+  units$: Observable<{ id: string }[]>;
   rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
@@ -26,13 +26,13 @@ export class IncentiveComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
     // Dummy data
-    this.tokens$ = of([{ id: 'ununifi-incentive-test01' }, { id: 'ununifi-incentive-test02' }]);
+    this.units$ = of([{ id: 'incentiveUnitId1' }, { id: 'incentiveUnitId2' }]);
     this.rewards$ = of([{ denom: 'uguu', amount: '20000000' }]);
   }
 
   ngOnInit(): void {}
 
   onClickCreate() {
-    this.incentiveApp.openCreateTokenFormDialog('');
+    this.incentiveApp.openCreateUnitFormDialog('');
   }
 }

@@ -8,7 +8,7 @@ import cosmosclient from '@cosmos-client/core';
 })
 export class IncentiveComponent implements OnInit {
   @Input()
-  tokens?: { id: string }[] | null;
+  units?: { id: string }[] | null;
   @Input()
   rewards?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Output()

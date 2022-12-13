@@ -14,7 +14,7 @@
     <mat-card-content>
       <mat-list>
         <mat-list-item>
-          <span class="break-words">{{ unit?.txMemo }}</span>
+          <span class="break-words">{{ unit }}</span>
           <span class="flex-auto"></span>
           <button mat-button type="button" matSuffix (click)="copyClipboard(unit?.txMemo!)">
             <mat-icon>content_copy</mat-icon>
@@ -28,11 +28,11 @@
   <mat-card class="mb-4">
     <mat-card-content>
       <mat-list>
-        <ng-container *ngFor="let recipient of unit?.recipients; last as last">
+        <ng-container *ngFor="let subject of unit?.subject_info_lists; last as last">
           <mat-list-item>
-            <span class="whitespace-nowrap">{{ recipient.address }}:</span>
+            <span class="whitespace-nowrap">{{ subject.subject_addr }}:</span>
             <span class="flex-auto"></span>
-            <span class="ml-1 break-all">{{ recipient.weight }}</span>
+            <span class="ml-1 break-all">{{ subject.weight }}</span>
           </mat-list-item>
           <mat-divider *ngIf="!last"></mat-divider>
         </ng-container>
@@ -40,7 +40,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="mb-4">
+  <!-- <mat-card class="mb-4">
     <mat-card-content>
       <mat-list>
         <mat-list-item>
@@ -50,7 +50,7 @@
         </mat-list-item>
       </mat-list>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 </ng-template>
 
 <ng-template #notFound>

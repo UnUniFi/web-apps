@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 export type CreateCdpOnSubmitEvent = {
   key: Key;
@@ -49,7 +49,7 @@ export class CreateComponent implements OnInit {
   collateralLimit?: number | null;
 
   @Input()
-  cdp?: InlineResponse2004Cdp1 | null;
+  cdp?: CdpAll200ResponseCdpInner | null;
 
   @Output()
   appSubmit: EventEmitter<CreateCdpOnSubmitEvent>;
@@ -74,7 +74,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(
     collateralType: string,

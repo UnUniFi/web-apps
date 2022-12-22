@@ -9,7 +9,10 @@ import {
 import { combineLatest, Observable, zip } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp1, InlineResponse2006Deposits } from 'ununifi-client/esm/openapi';
+import {
+  CdpAll200ResponseCdpInner,
+  DepositAll200ResponseDepositsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-cdp',
@@ -21,8 +24,8 @@ export class CdpComponent implements OnInit {
   collateralType$: Observable<string>;
   denom$: Observable<string>;
   cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
-  cdp$: Observable<InlineResponse2004Cdp1>;
-  deposits$: Observable<InlineResponse2006Deposits[]>;
+  cdp$: Observable<CdpAll200ResponseCdpInner>;
+  deposits$: Observable<DepositAll200ResponseDepositsInner[]>;
 
   spotPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;

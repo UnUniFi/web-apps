@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as crypto from 'crypto';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-cdps',
@@ -9,13 +9,13 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
 })
 export class CdpsComponent implements OnInit {
   @Input()
-  cdps?: (InlineResponse2004Cdp1 | undefined)[] | null;
+  cdps?: (CdpAll200ResponseCdpInner | undefined)[] | null;
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  getColorCode(cdp: InlineResponse2004Cdp1) {
+  getColorCode(cdp: CdpAll200ResponseCdpInner) {
     const hash = crypto
       .createHash('sha256')
       .update(Buffer.from(`${cdp.cdp!.owner}/${cdp.cdp!.collateral!.denom}`))

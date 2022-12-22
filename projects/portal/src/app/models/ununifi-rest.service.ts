@@ -6,14 +6,14 @@ import { Observable, zip } from 'rxjs';
 import { filter, map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
+  AuctionAll200Response,
+  AuctionAll200ResponseAuctionsInner,
+  AuctionParams200ResponseParams,
+  CdpAll200ResponseCdpInner,
   CdpAll200ResponseCdpInnerCdpCollateral,
   EcosystemincentiveParams200ResponseParams,
   IncentiveUnit200ResponseIncentiveUnit,
-  InlineResponse200,
-  InlineResponse20013Price,
-  InlineResponse2002Params,
-  InlineResponse2004Cdp1,
-  InlineResponse200Auctions,
+  Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
 
 export const getCollateralParamsStream = (
@@ -48,7 +48,7 @@ export class UnunifiRestService {
   getCdp$(
     address: AccAddress,
     collateralType: string,
-  ): Observable<InlineResponse2004Cdp1 | undefined> {
+  ): Observable<CdpAll200ResponseCdpInner | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.cdp.cdp(sdk, address, collateralType)),
       map((res) => res.data.cdp || undefined),
@@ -62,7 +62,7 @@ export class UnunifiRestService {
     );
   }
 
-  getAuctionParams$(): Observable<InlineResponse2002Params> {
+  getAuctionParams$(): Observable<AuctionParams200ResponseParams> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.auction.params(sdk)),
       map((res) => res.data.params!),
@@ -72,7 +72,7 @@ export class UnunifiRestService {
   getAllAuctions$(
     paginationOffset?: bigint | undefined,
     paginationLimit?: bigint | undefined,
-  ): Observable<InlineResponse200> {
+  ): Observable<AuctionAll200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         ununifi.rest.auction.allAuctions(sdk, undefined, paginationOffset, paginationLimit, true),
@@ -81,14 +81,14 @@ export class UnunifiRestService {
     );
   }
 
-  getAuction$(id: string): Observable<InlineResponse200Auctions | undefined> {
+  getAuction$(id: string): Observable<AuctionAll200ResponseAuctionsInner | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.auction.auction(sdk, id)),
       map((res) => res.data.auction),
     );
   }
 
-  getPrice$(marketID: string): Observable<InlineResponse20013Price> {
+  getPrice$(marketID: string): Observable<Price200ResponsePrice> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.pricefeed.price(sdk, marketID)),
       map((res) => res.data.price!),

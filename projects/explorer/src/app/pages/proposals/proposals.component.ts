@@ -3,8 +3,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Proposals200ResponseProposalsInner,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
@@ -17,10 +17,10 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<InlineResponse20027Proposals[]>;
-  paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
+  proposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
   proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
-  tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
+  tallies$: Observable<(Proposals200ResponseProposalsInnerFinalTallyResult | undefined)[]>;
 
   pageSizeOptions = [5, 10, 15];
   pageSize$: Observable<number>;
@@ -123,10 +123,10 @@ export class ProposalsComponent implements OnInit {
   }
 
   getPaginatedProposals(
-    proposals: InlineResponse20027Proposals[],
+    proposals: Proposals200ResponseProposalsInner[],
     pageNumber: number,
     pageSize: number,
-  ): InlineResponse20027Proposals[] {
+  ): Proposals200ResponseProposalsInner[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
     return proposals.filter((_, i) => min <= i && i < max).reverse();

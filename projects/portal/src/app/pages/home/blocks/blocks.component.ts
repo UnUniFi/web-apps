@@ -1,6 +1,6 @@
 import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
+import { GetLatestBlock200Response } from '@cosmos-client/core/esm/openapi';
 import { Observable, of, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class BlocksComponent implements OnInit {
   pollingInterval = 30 * 60;
-  latestBlock$: Observable<InlineResponse20010 | undefined>;
+  latestBlock$: Observable<GetLatestBlock200Response | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   //latestBlocks$: Observable<InlineResponse20011[] | undefined>;
   latestBlocks$: Observable<bigint[] | undefined>;

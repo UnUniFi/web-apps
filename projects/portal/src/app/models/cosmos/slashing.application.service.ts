@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
@@ -86,7 +86,7 @@ export class SlashingApplicationService {
 
     // send tx
     const dialogRef = this.loadingDialog.open('Sending...');
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
     try {
       txResult = await this.slashingService.unjail(validatorAddress, currentCosmosWallet, gas, fee);

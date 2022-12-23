@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20012,
+  GetNodeInfo200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable } from 'rxjs';
 
@@ -35,7 +35,7 @@ export class BalanceComponent implements OnInit {
       }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20012>;
+  nodeInfo$: Observable<GetNodeInfo200Response>;
 
   constructor(
     private usecase: BalanceUsecaseService,

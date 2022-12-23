@@ -3,7 +3,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { AuctionInfrastructureService } from './auction.infrastructure.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 
 export interface IAuctionInfrastructure {
   placeBid(
@@ -12,7 +12,7 @@ export interface IAuctionInfrastructure {
     currentCosmosWallet: CosmosWallet,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToPlaceBid(
     auction_id: number,
@@ -38,7 +38,7 @@ export class AuctionService {
     currentCosmosWallet: CosmosWallet,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iAuctionInfrastructure.placeBid(auctionID, amount, currentCosmosWallet, gas, fee);
   }
 

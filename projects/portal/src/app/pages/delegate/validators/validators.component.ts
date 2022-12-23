@@ -4,9 +4,9 @@ import { validatorType } from '../../../views/delegate/validators/validators.com
 import { ValidatorsUseCaseService } from './validators.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import {
-  InlineResponse20038DelegationResponses,
-  InlineResponse20041Validators,
-  InlineResponse20047,
+  DelegatorDelegations200ResponseDelegationResponsesInner,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  UnbondingDelegation200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -18,9 +18,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ValidatorsComponent implements OnInit {
   validators$: Observable<validatorType[]>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
-  delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
-  unbondingDelegations$: Observable<(InlineResponse20047 | undefined)[]>;
+  delegations$: Observable<DelegatorDelegations200ResponseDelegationResponsesInner[] | undefined>;
+  delegatedValidators$: Observable<
+    (StakingDelegatorValidators200ResponseValidatorsInner | undefined)[] | undefined
+  >;
+  unbondingDelegations$: Observable<(UnbondingDelegation200Response | undefined)[]>;
 
   private activeEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
@@ -40,7 +42,7 @@ export class ValidatorsComponent implements OnInit {
   onToggleChange(value: boolean) {
     this.activeEnabled.next(value);
   }
-  onSelectValidator(validator: InlineResponse20041Validators) {
+  onSelectValidator(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.stakingAppService.openDelegateMenuDialog(validator);
   }
 }

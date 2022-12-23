@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
-  InlineResponse20047,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  UnbondingDelegation200Response,
 } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
@@ -22,17 +22,17 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class UndelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20038>;
+  delegations$: Observable<DelegatorDelegations200Response>;
   delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20041Validators | undefined;
-  unbondingDelegation$: Observable<InlineResponse20047 | undefined>;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
+  unbondingDelegation$: Observable<UnbondingDelegation200Response | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
     public matDialogRef: MatDialogRef<UndelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,

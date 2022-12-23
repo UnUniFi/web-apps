@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -16,11 +16,11 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
-  selectedValidator?: InlineResponse20041Validators | null;
+  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20038 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
   delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -32,17 +32,17 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   isValidator?: boolean | null;
   @Output()
-  appDelegate: EventEmitter<InlineResponse20041Validators>;
+  appDelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appRedelegate: EventEmitter<InlineResponse20041Validators>;
+  appRedelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appUndelegate: EventEmitter<InlineResponse20041Validators>;
+  appUndelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appWithdrawDelegatorReward: EventEmitter<InlineResponse20041Validators>;
+  appWithdrawDelegatorReward: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appWithdrawValidatorCommission: EventEmitter<InlineResponse20041Validators>;
+  appWithdrawValidatorCommission: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appDetail: EventEmitter<InlineResponse20041Validators>;
+  appDetail: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
 
   constructor() {
     this.appDelegate = new EventEmitter();
@@ -53,7 +53,7 @@ export class DelegateMenuDialogComponent implements OnInit {
     this.appDetail = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

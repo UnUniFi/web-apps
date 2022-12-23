@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20026DepositParams,
-  InlineResponse20026TallyParams,
-  InlineResponse20026VotingParams,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20032Votes,
+  Deposits200ResponseDepositsInner,
+  GovParams200ResponseDepositParams,
+  GovParams200ResponseTallyParams,
+  GovParams200ResponseVotingParams,
+  Proposals200ResponseProposalsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -22,15 +22,15 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./proposal.component.css'],
 })
 export class ProposalComponent implements OnInit {
-  proposal$: Observable<InlineResponse20027Proposals | undefined>;
+  proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
   proposalType$: Observable<string | undefined>;
   proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
-  deposits$: Observable<InlineResponse20029Deposits[] | undefined>;
-  depositParams$: Observable<InlineResponse20026DepositParams | undefined>;
-  tally$: Observable<InlineResponse20027FinalTallyResult | undefined>;
-  tallyParams$: Observable<InlineResponse20026TallyParams | undefined>;
-  votes$: Observable<InlineResponse20032Votes[] | undefined>;
-  votingParams$: Observable<InlineResponse20026VotingParams | undefined>;
+  deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
+  depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
+  tally$: Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined>;
+  tallyParams$: Observable<GovParams200ResponseTallyParams | undefined>;
+  votes$: Observable<Votes200ResponseVotesInner[] | undefined>;
+  votingParams$: Observable<GovParams200ResponseVotingParams | undefined>;
 
   constructor(
     private route: ActivatedRoute,

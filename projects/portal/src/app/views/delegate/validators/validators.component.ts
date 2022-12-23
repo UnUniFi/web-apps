@@ -1,14 +1,14 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import {
-  InlineResponse20038DelegationResponses,
-  InlineResponse20041Validators,
-  InlineResponse20047,
+  DelegatorDelegations200ResponseDelegationResponsesInner,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  UnbondingDelegation200Response,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
-  val: InlineResponse20041Validators;
+  val: StakingDelegatorValidators200ResponseValidatorsInner;
   share: number;
   inList: boolean;
   rank: number;
@@ -25,17 +25,17 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20038DelegationResponses[] | null;
+  delegations?: DelegatorDelegations200ResponseDelegationResponsesInner[] | null;
   @Input()
-  delegatedValidators?: (InlineResponse20041Validators | undefined)[] | null;
+  delegatedValidators?: (StakingDelegatorValidators200ResponseValidatorsInner | undefined)[] | null;
   @Input()
-  unbondingDelegations?: (InlineResponse20047 | undefined)[] | null;
+  unbondingDelegations?: (UnbondingDelegation200Response | undefined)[] | null;
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
 
   @Output()
-  appClickValidator: EventEmitter<InlineResponse20041Validators>;
+  appClickValidator: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
 
   constructor() {
     this.toggleActiveChange = new EventEmitter();
@@ -72,7 +72,7 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
-  onClickValidator(validator: InlineResponse20041Validators) {
+  onClickValidator(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.appClickValidator.emit(validator);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-validator',
@@ -9,13 +9,13 @@ import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
 })
 export class ValidatorComponent implements OnInit, OnChanges {
   @Input()
-  validator?: InlineResponse20041Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   publicKey?: string;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     const pubKey = cosmosclient.codec.protoJSONToInstance(

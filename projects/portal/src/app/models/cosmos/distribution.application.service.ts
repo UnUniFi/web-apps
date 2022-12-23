@@ -12,8 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20050,
-  InlineResponse20041Validators,
+  BroadcastTx200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class DistributionApplicationService {
   ) {}
 
   async openWithdrawDelegatorRewardFormDialog(
-    validator: InlineResponse20041Validators,
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
@@ -50,7 +50,7 @@ export class DistributionApplicationService {
   }
 
   async openWithdrawValidatorCommissionFormDialog(
-    validator: InlineResponse20041Validators,
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
       .open(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
@@ -121,7 +121,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -211,7 +211,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -301,7 +301,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

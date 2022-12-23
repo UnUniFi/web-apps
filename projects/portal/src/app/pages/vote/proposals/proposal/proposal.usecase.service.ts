@@ -3,13 +3,13 @@ import { CosmosRestService } from './../../../../models/cosmos-rest.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20026DepositParams,
-  InlineResponse20026TallyParams,
-  InlineResponse20026VotingParams,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20032Votes,
+  Deposits200ResponseDepositsInner,
+  GovParams200ResponseDepositParams,
+  GovParams200ResponseTallyParams,
+  GovParams200ResponseVotingParams,
+  Proposals200ResponseProposalsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
 } from '@cosmos-client/core/esm/openapi';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -20,11 +20,13 @@ import { map, mergeMap } from 'rxjs/operators';
 export class ProposalUseCaseService {
   constructor(private readonly cosmosRest: CosmosRestService) {}
 
-  proposal$(proposalID$: Observable<string>): Observable<InlineResponse20027Proposals | undefined> {
+  proposal$(
+    proposalID$: Observable<string>,
+  ): Observable<Proposals200ResponseProposalsInner | undefined> {
     return proposalID$.pipe(mergeMap((id) => this.cosmosRest.getProposal$(id)));
   }
   proposalType$(
-    proposal$: Observable<InlineResponse20027Proposals | undefined>,
+    proposal$: Observable<Proposals200ResponseProposalsInner | undefined>,
   ): Observable<string | undefined> {
     return proposal$.pipe(
       map((proposal) => {
@@ -35,7 +37,7 @@ export class ProposalUseCaseService {
     );
   }
   proposalContent$(
-    proposal$: Observable<InlineResponse20027Proposals | undefined>,
+    proposal$: Observable<Proposals200ResponseProposalsInner | undefined>,
   ): Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined> {
     return proposal$.pipe(
       map((proposal) => {
@@ -45,24 +47,24 @@ export class ProposalUseCaseService {
   }
   deposits$(
     proposalID$: Observable<string>,
-  ): Observable<InlineResponse20029Deposits[] | undefined> {
+  ): Observable<Deposits200ResponseDepositsInner[] | undefined> {
     return proposalID$.pipe(mergeMap((id) => this.cosmosRest.getDeposits$(id)));
   }
-  get depositsParams$(): Observable<InlineResponse20026DepositParams | undefined> {
+  get depositsParams$(): Observable<GovParams200ResponseDepositParams | undefined> {
     return this.cosmosRest.getDepositParams$();
   }
   tally$(
     proposalID$: Observable<string>,
-  ): Observable<InlineResponse20027FinalTallyResult | undefined> {
+  ): Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined> {
     return proposalID$.pipe(mergeMap((proposalId) => this.cosmosRest.getTallyResult$(proposalId)));
   }
-  get tallyParams$(): Observable<InlineResponse20026TallyParams | undefined> {
+  get tallyParams$(): Observable<GovParams200ResponseTallyParams | undefined> {
     return this.cosmosRest.getTallyParams$();
   }
-  votes$(proposalID$: Observable<string>): Observable<InlineResponse20032Votes[] | undefined> {
+  votes$(proposalID$: Observable<string>): Observable<Votes200ResponseVotesInner[] | undefined> {
     return proposalID$.pipe(mergeMap((proposalId) => this.cosmosRest.getVotes$(proposalId)));
   }
-  get votingParams$(): Observable<InlineResponse20026VotingParams | undefined> {
+  get votingParams$(): Observable<GovParams200ResponseVotingParams | undefined> {
     return this.cosmosRest.getVotingParams$();
   }
 }

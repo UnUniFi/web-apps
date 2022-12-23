@@ -6,8 +6,8 @@ import { ValidatorsUseCaseService } from './validators.usecase.service';
 import { TestBed } from '@angular/core/testing';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20041Validators,
-  InlineResponse20038,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  DelegatorDelegations200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { BehaviorSubject, of } from 'rxjs';
 
@@ -22,24 +22,24 @@ cosmosclient.config.setBech32Prefix({
 
 const setup = (props?: { mockCosmosRestService?: any; mockWalletService?: any }) => {
   // Mock Values
-  const mockValidator1: InlineResponse20041Validators = {
+  const mockValidator1: StakingDelegatorValidators200ResponseValidatorsInner = {
     tokens: '100',
     status: 'BOND_STATUS_BONDED',
     operator_address: 'ununifivaloper1tu06z57hgfhen4s565zvnr5aqxnzrtfv53ztvq',
   };
-  const mockValidator2: InlineResponse20041Validators = {
+  const mockValidator2: StakingDelegatorValidators200ResponseValidatorsInner = {
     tokens: '200',
     status: 'BOND_STATUS_BONDED',
     operator_address: 'ununifivaloper13uaskveualnc8kkfwrk6g7dmkcggxn3t9nqhu6',
   };
-  const mockValidator3: InlineResponse20041Validators = {
+  const mockValidator3: StakingDelegatorValidators200ResponseValidatorsInner = {
     tokens: '300',
     status: 'BOND_STATUS_UNBONDED',
     operator_address: 'test_address3',
   };
   const mockValidators = [mockValidator1, mockValidator2, mockValidator3];
 
-  const mockDelegationResponses: InlineResponse20038 = {
+  const mockDelegationResponses: DelegatorDelegations200Response = {
     delegation_responses: [
       {
         delegation: {

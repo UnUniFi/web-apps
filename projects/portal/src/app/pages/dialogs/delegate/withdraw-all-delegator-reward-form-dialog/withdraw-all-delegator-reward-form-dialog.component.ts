@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038DelegationResponses,
-  InlineResponse20041Validators,
+  DelegatorDelegations200ResponseDelegationResponsesInner,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
@@ -22,14 +22,16 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20041Validators | undefined;
-  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
-  delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>;
-  delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
+  validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
+  delegatedValidators$: Observable<
+    (StakingDelegatorValidators200ResponseValidatorsInner | undefined)[] | undefined
+  >;
+  delegations$: Observable<DelegatorDelegations200ResponseDelegationResponsesInner[] | undefined>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
     public matDialogRef: MatDialogRef<WithdrawAllDelegatorRewardFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,

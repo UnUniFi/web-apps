@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20012,
+  GetNodeInfo200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -57,7 +57,7 @@ export class BalanceUsecaseService {
       throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
   }
-  get nodeInfo$(): Observable<InlineResponse20012> {
+  get nodeInfo$(): Observable<GetNodeInfo200Response> {
     return this.rest.getNodeInfo$();
   }
   get accountTypeName$(): Observable<string | null | undefined> {

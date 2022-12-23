@@ -3,7 +3,7 @@ import { Key } from '../keys/key.model';
 import { CdpInfrastructureService } from './cdp.infrastructure.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 
 export interface ICdpInfrastructure {
   createCDP(
@@ -14,7 +14,7 @@ export interface ICdpInfrastructure {
     principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToCreateCDP(
     key: Key,
@@ -33,7 +33,7 @@ export interface ICdpInfrastructure {
     principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToDrawCDP(
     key: Key,
@@ -51,7 +51,7 @@ export interface ICdpInfrastructure {
     repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToRepayCDP(
     key: Key,
@@ -70,7 +70,7 @@ export interface ICdpInfrastructure {
     collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToDepositCDP(
     key: Key,
@@ -90,7 +90,7 @@ export interface ICdpInfrastructure {
     collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050>;
+  ): Promise<BroadcastTx200Response>;
 
   simulateToWithdrawCDP(
     key: Key,
@@ -120,7 +120,7 @@ export class CdpService {
     principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iCdpInfrastructure.createCDP(
       key,
       privateKey,
@@ -159,7 +159,7 @@ export class CdpService {
     principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iCdpInfrastructure.drawCDP(key, privateKey, collateralType, principal, gas, fee);
   }
 
@@ -188,7 +188,7 @@ export class CdpService {
     repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iCdpInfrastructure.repayCDP(key, privateKey, collateralType, repayment, gas, fee);
   }
 
@@ -218,7 +218,7 @@ export class CdpService {
     collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iCdpInfrastructure.depositCDP(
       key,
       privateKey,
@@ -258,7 +258,7 @@ export class CdpService {
     collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     return this.iCdpInfrastructure.withdrawCDP(
       key,
       privateKey,

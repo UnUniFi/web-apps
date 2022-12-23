@@ -4,7 +4,7 @@
     <div class="font-bold text-xl m-3">Withdraw Incentive Reward</div>
   </div>
 
-  <form *ngIf="firstRecipient" #formRef="ngForm" (submit)="onSubmit()">
+  <form #formRef="ngForm" (submit)="onSubmit()">
     <mat-list class="w-full">
       <mat-list-item>
         <span class="column-name">Selected Token:</span>

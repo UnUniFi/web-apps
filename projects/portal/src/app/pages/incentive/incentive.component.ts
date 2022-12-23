@@ -44,4 +44,7 @@ export class IncentiveComponent implements OnInit {
   onClickCreate(address: string) {
     this.incentiveApp.openCreateUnitFormDialog(address);
   }
+  onClickReward(denom: string) {
+    this.incentiveApp.openWithdrawIncentiveRewardFormDialog(denom);
+  }
 }

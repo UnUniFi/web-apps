@@ -9,6 +9,7 @@ import { AppWithdrawAllDelegatorRewardFormDialogModule } from './pages/dialogs/d
 import { AppWithdrawDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.module';
 import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.module';
 import { AppCreateUnitFormDialogModule } from './pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.module';
+import { AppWithdrawIncentiveRewardFormDialogModule } from './pages/dialogs/incentive/withdraw-incentive-reward-form-dialog/withdraw-incentive-reward-form-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
@@ -75,6 +76,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     AppVoteFormDialogModule,
     AppDepositFormDialogModule,
     AppCreateUnitFormDialogModule,
+    AppWithdrawIncentiveRewardFormDialogModule,
     GraphQLModule,
   ],
   providers: [],

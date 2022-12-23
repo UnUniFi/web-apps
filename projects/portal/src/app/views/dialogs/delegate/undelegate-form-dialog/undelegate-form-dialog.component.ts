@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20047,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  UnbondingDelegation200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -23,7 +23,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20038 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
   delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -33,9 +33,9 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  unbondingDelegation?: InlineResponse20047 | null;
+  unbondingDelegation?: UnbondingDelegation200Response | null;
   @Input()
-  validator?: InlineResponse20041Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<UndelegateOnSubmitEvent>;
@@ -64,7 +64,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20038, InlineResponse20041 } from '@cosmos-client/core/esm/openapi';
+import {
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200Response,
+} from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -12,8 +15,8 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./delegator.component.css'],
 })
 export class DelegatorComponent implements OnInit {
-  delegations$: Observable<InlineResponse20038>;
-  validators$: Observable<InlineResponse20041>;
+  delegations$: Observable<DelegatorDelegations200Response>;
+  validators$: Observable<StakingDelegatorValidators200Response>;
 
   constructor(
     private readonly route: ActivatedRoute,

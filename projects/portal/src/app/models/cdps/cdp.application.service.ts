@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
@@ -111,7 +111,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.createCDP(
+      const res: BroadcastTx200Response = await this.cdp.createCDP(
         key,
         privateKey,
         collateralType,
@@ -226,7 +226,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.drawCDP(
+      const res: BroadcastTx200Response = await this.cdp.drawCDP(
         key,
         privateKey,
         collateralType,
@@ -339,7 +339,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.repayCDP(
+      const res: BroadcastTx200Response = await this.cdp.repayCDP(
         key,
         privateKey,
         collateralType,
@@ -455,7 +455,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.depositCDP(
+      const res: BroadcastTx200Response = await this.cdp.depositCDP(
         key,
         privateKey,
         ownerAddr,
@@ -572,7 +572,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.withdrawCDP(
+      const res: BroadcastTx200Response = await this.cdp.withdrawCDP(
         key,
         privateKey,
         ownerAddr,

@@ -2,7 +2,7 @@ import * as txParser from './../../../../../../../explorer/src/app/utils/tx-pars
 import { CosmosRestService } from './../../../../models/cosmos-rest.service';
 import { ProposalUseCaseService } from './proposal.usecase.service';
 import { TestBed } from '@angular/core/testing';
-import { InlineResponse20027Proposals } from '@cosmos-client/core/esm/openapi';
+import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { of } from 'rxjs';
 
 jest.spyOn(txParser, 'txParseProposalContent');
@@ -19,13 +19,13 @@ const setup = (props?: { mockCosmosRestService?: any }) => {
     getVotes$: jest.fn(() => of(undefined)),
   };
 
-  //const mockContent: InlineResponse200Accounts
+  //const mockContent: AccountsAreTheExistingAccountsInner
   const mockContent: any = {
     '@type': 'test_type',
     type_url: 'test_url',
     value: 'test_value',
   };
-  const mockProposal: InlineResponse20027Proposals = {
+  const mockProposal: Proposals200ResponseProposalsInner = {
     proposal_id: 'string',
     content: mockContent,
   };

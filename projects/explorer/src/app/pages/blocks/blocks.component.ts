@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20010, InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
+import {
+  GetLatestBlock200Response,
+  GetBlockByHeight200Response,
+} from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable, of, zip, timer, combineLatest, BehaviorSubject } from 'rxjs';
 import { filter, catchError, map, switchMap, mergeMap } from 'rxjs/operators';
@@ -21,10 +24,10 @@ export class BlocksComponent implements OnInit {
   defaultPageNumber = 1;
 
   pollingInterval = 5;
-  latestBlock$: Observable<InlineResponse20010 | undefined>;
+  latestBlock$: Observable<GetLatestBlock200Response | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   firstBlockHeight$: Observable<bigint | undefined>;
-  blocks$: Observable<InlineResponse20011[] | undefined>;
+  blocks$: Observable<GetBlockByHeight200Response[] | undefined>;
 
   autoEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isFirstAccess: boolean;
@@ -44,7 +47,9 @@ export class BlocksComponent implements OnInit {
     );
 
     this.latestBlock$ = combineLatest([timerWithEnable$, this.cosmosSDK.sdk$]).pipe(
-      mergeMap(([n, sdk]) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap(([n, sdk]) =>
+        cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data),
+      ),
     );
 
     this.latestBlockHeight$ = this.latestBlock$.pipe(
@@ -119,7 +124,9 @@ export class BlocksComponent implements OnInit {
           ...blockHeights.map((blockHeight) =>
             this.cosmosSDK.sdk$.pipe(
               mergeMap((sdk) =>
-                cosmosclient.rest.tendermint.getBlockByHeight(sdk.rest, blockHeight).then((res) => res.data),
+                cosmosclient.rest.tendermint
+                  .getBlockByHeight(sdk.rest, blockHeight)
+                  .then((res) => res.data),
               ),
             ),
           ),
@@ -132,7 +139,7 @@ export class BlocksComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   appPaginationChanged(pageEvent: PageEvent): void {
     this.router.navigate([], {

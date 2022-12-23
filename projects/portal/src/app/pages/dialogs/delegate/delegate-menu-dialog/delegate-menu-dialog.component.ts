@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20038,
-  InlineResponse20038Delegation,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
+  DelegatorDelegations200ResponseDelegationResponsesInnerDelegation,
 } from '@cosmos-client/core/esm/openapi/api';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
@@ -24,10 +24,12 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./delegate-menu-dialog.component.css'],
 })
 export class DelegateMenuDialogComponent implements OnInit {
-  selectedValidator: InlineResponse20041Validators | undefined;
+  selectedValidator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20038>;
-  delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
+  delegations$: Observable<DelegatorDelegations200Response>;
+  delegation$: Observable<
+    DelegatorDelegations200ResponseDelegationResponsesInnerDelegation | null | undefined
+  >;
   delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<
@@ -41,7 +43,7 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
     private router: Router,
     public matDialogRef: MatDialogRef<DelegateMenuDialogComponent>,
     private readonly stakingAppService: StakingApplicationService,
@@ -137,32 +139,34 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmitDelegate(validator: InlineResponse20041Validators) {
+  onSubmitDelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.matDialogRef.close();
     this.stakingAppService.openDelegateFormDialog(validator);
   }
 
-  onSubmitRedelegate(validator: InlineResponse20041Validators) {
+  onSubmitRedelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.matDialogRef.close();
     this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
-  onSubmitUndelegate(validator: InlineResponse20041Validators) {
+  onSubmitUndelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.matDialogRef.close();
     this.stakingAppService.openUndelegateFormDialog(validator);
   }
 
-  onSubmitWithdrawDelegatorReward(validator: InlineResponse20041Validators) {
+  onSubmitWithdrawDelegatorReward(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
-  onSubmitWithdrawValidatorCommission(validator: InlineResponse20041Validators) {
+  onSubmitWithdrawValidatorCommission(
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
+  ) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
   }
 
-  onSubmitDetail(validator: InlineResponse20041Validators) {
+  onSubmitDetail(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.matDialogRef.close();
     this.router.navigate(['delegate', 'validators', validator.operator_address]);
   }

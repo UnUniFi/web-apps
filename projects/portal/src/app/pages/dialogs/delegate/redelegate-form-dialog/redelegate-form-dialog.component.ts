@@ -3,8 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
@@ -22,18 +22,18 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
 export class RedelegateFormDialogComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
+  validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20038>;
+  delegations$: Observable<DelegatorDelegations200Response>;
   delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20041Validators | undefined;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
     public matDialogRef: MatDialogRef<RedelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,

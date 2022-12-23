@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./validators.component.css'],
 })
 export class ValidatorsComponent implements OnInit {
-  validators$: Observable<InlineResponse20041Validators[] | undefined>;
+  validators$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
 
   constructor(private cosmosRest: CosmosRestService) {
     this.validators$ = this.cosmosRest.getValidators$();

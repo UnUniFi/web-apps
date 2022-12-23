@@ -2,13 +2,13 @@ import { ProposalContent } from '../proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20032Votes,
-  InlineResponse20026DepositParams,
-  InlineResponse20026TallyParams,
-  InlineResponse20026VotingParams,
+  Proposals200ResponseProposalsInner,
+  Deposits200ResponseDepositsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
+  GovParams200ResponseDepositParams,
+  GovParams200ResponseTallyParams,
+  GovParams200ResponseVotingParams,
 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -18,21 +18,21 @@ import {
 })
 export class ProposalComponent implements OnInit {
   @Input()
-  proposal?: InlineResponse20027Proposals | null;
+  proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
   proposalType?: string | null;
   @Input()
-  deposits?: InlineResponse20029Deposits[] | null;
+  deposits?: Deposits200ResponseDepositsInner[] | null;
   @Input()
-  depositParams?: InlineResponse20026DepositParams | null;
+  depositParams?: GovParams200ResponseDepositParams | null;
   @Input()
-  tally?: InlineResponse20027FinalTallyResult | null;
+  tally?: Proposals200ResponseProposalsInnerFinalTallyResult | null;
   @Input()
-  tallyParams?: InlineResponse20026TallyParams | null;
+  tallyParams?: GovParams200ResponseTallyParams | null;
   @Input()
-  votes?: InlineResponse20032Votes[] | null;
+  votes?: Votes200ResponseVotesInner[] | null;
   @Input()
-  votingParams?: InlineResponse20026VotingParams | null;
+  votingParams?: GovParams200ResponseVotingParams | null;
   @Input()
   proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 

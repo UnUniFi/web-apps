@@ -1,6 +1,6 @@
 import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { Observable, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import { mergeMap } from 'rxjs/operators';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  nodeInfo$: Observable<InlineResponse20012>;
+  nodeInfo$: Observable<GetNodeInfo200Response>;
   syncing$: Observable<boolean>;
 
   constructor(private cosmosRest: CosmosRestService) {

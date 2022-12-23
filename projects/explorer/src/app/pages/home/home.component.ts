@@ -1,7 +1,7 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, timer } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ import { mergeMap, map } from 'rxjs/operators';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  nodeInfo$: Observable<InlineResponse20012>;
+  nodeInfo$: Observable<GetNodeInfo200Response>;
   syncing$: Observable<boolean>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

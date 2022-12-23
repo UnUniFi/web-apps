@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
 import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
@@ -47,20 +47,22 @@ export class BalanceComponent implements OnInit {
     | null
     | undefined
   >;
-  cosmosBaseAccount$: Observable<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined>;
+  cosmosBaseAccount$: Observable<
+    cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined
+  >;
   accountTypeName$: Observable<string | null | undefined>;
   balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
   faucets$: Observable<
     | {
-      hasFaucet: boolean;
-      faucetURL: string;
-      denom: string;
-      creditAmount: number;
-      maxCredit: number;
-    }[]
+        hasFaucet: boolean;
+        faucetURL: string;
+        denom: string;
+        creditAmount: number;
+        maxCredit: number;
+      }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20012>;
+  nodeInfo$: Observable<GetNodeInfo200Response>;
 
   constructor(
     private configService: ConfigService,
@@ -181,5 +183,5 @@ export class BalanceComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

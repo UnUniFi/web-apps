@@ -18,8 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20041Validators,
-  InlineResponse20050,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  BroadcastTx200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
@@ -48,14 +48,18 @@ export class StakingApplicationService {
     private readonly walletApplicationService: WalletApplicationService,
   ) {}
 
-  async openDelegateMenuDialog(validator: InlineResponse20041Validators): Promise<void> {
+  async openDelegateMenuDialog(
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
+  ): Promise<void> {
     await this.dialog
       .open(DelegateMenuDialogComponent, { data: validator })
       .afterClosed()
       .toPromise();
   }
 
-  async openDelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
+  async openDelegateFormDialog(
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
+  ): Promise<void> {
     const txHash = await this.dialog
       .open(DelegateFormDialogComponent, { data: validator })
       .afterClosed()
@@ -63,7 +67,9 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openRedelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
+  async openRedelegateFormDialog(
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
+  ): Promise<void> {
     const txHash = await this.dialog
       .open(RedelegateFormDialogComponent, { data: validator })
       .afterClosed()
@@ -71,7 +77,9 @@ export class StakingApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openUndelegateFormDialog(validator: InlineResponse20041Validators): Promise<void> {
+  async openUndelegateFormDialog(
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
+  ): Promise<void> {
     const txHash = await this.dialog
       .open(UndelegateFormDialogComponent, { data: validator })
       .afterClosed()
@@ -238,7 +246,7 @@ export class StakingApplicationService {
 
     const dialogRef = this.loadingDialog.open('Loading...');
 
-    let createValidatorResult: InlineResponse20050 | undefined;
+    let createValidatorResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -510,7 +518,7 @@ export class StakingApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -606,7 +614,7 @@ export class StakingApplicationService {
     //send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -700,7 +708,7 @@ export class StakingApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let undelegateResult: InlineResponse20050 | undefined;
+    let undelegateResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

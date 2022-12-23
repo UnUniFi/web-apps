@@ -13,7 +13,7 @@ export class BlocksComponent implements OnInit {
   pollingInterval = 30 * 60;
   latestBlock$: Observable<GetLatestBlock200Response | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
-  //latestBlocks$: Observable<InlineResponse20011[] | undefined>;
+  //latestBlocks$: Observable<GetBlockByHeight200Response[] | undefined>;
   latestBlocks$: Observable<bigint[] | undefined>;
 
   constructor(private cosmosRest: CosmosRestService) {

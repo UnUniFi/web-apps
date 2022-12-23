@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20011, GetLatestBlock200Response } from '@cosmos-client/core/esm/openapi';
+import {
+  GetBlockByHeight200Response,
+  GetLatestBlock200Response,
+} from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable, of, zip, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
@@ -15,7 +18,7 @@ export class BlocksComponent implements OnInit {
   pollingInterval = 30 * 60;
   latestBlock$: Observable<GetLatestBlock200Response | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
-  //latestBlocks$: Observable<InlineResponse20011[] | undefined>;
+  //latestBlocks$: Observable<GetBlockByHeight200Response[] | undefined>;
   latestBlocks$: Observable<bigint[] | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {

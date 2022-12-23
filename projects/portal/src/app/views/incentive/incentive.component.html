@@ -24,19 +24,19 @@
 
 <h3 class="mb-0 ml-2">Available Rewards</h3>
 <mat-card class="mb-4">
-  <mat-list>
+  <mat-nav-list >
     <mat-list-item *ngIf="rewards === null">
       <mat-spinner></mat-spinner>
     </mat-list-item>
     <mat-list-item *ngIf="rewards === undefined"> No Rewards! </mat-list-item>
     <mat-list-item *ngIf="rewards && rewards.length === 0"> No Rewards! </mat-list-item>
     <ng-container *ngIf="rewards && rewards.length > 0">
-      <mat-list-item *ngFor="let reward of rewards; last as last">
+      <mat-list-item *ngFor="let reward of rewards; last as last" (click)="onClickReward(reward.denom)">
         <span class="whitespace-nowrap">reward</span>
         <span class="flex-auto"></span>
         <span class="ml2 break-all">{{ reward?.amount }} {{ reward?.denom }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </ng-container>
-  </mat-list>
+  </mat-nav-list>
 </mat-card>

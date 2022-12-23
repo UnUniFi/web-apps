@@ -4,7 +4,9 @@ import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets
 
 export type CreateIncentiveUnitOnSubmitEvent = {
   walletType: WalletType;
-  recipient: { address: string; distRate: string }[];
+  unitID: string;
+  subjectAddresses: string[];
+  weights: string[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
@@ -33,6 +35,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
+  unitId?: string;
   firstRecipient?: IncentiveDist;
   recipients: IncentiveDist[];
   gasRatio: number;
@@ -68,6 +71,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
 
   onSubmit() {
     if (
+      !this.unitId ||
       !this.firstRecipient ||
       !this.recipients ||
       !this.currentStoredWallet ||
@@ -82,12 +86,17 @@ export class CreateUnitFormDialogComponent implements OnInit {
       alert('Please make the total of the percentages 100%');
       return;
     }
-    const listRecipients = [this.firstRecipient].concat(this.recipients).map((rec) => {
-      return { address: rec.address, distRate: rec.distRate.toFixed(1) };
-    });
+    const subjectAddresses = [this.firstRecipient.address].concat(
+      this.recipients.map((rec) => rec.address),
+    );
+    const weights = [this.firstRecipient.distRate]
+      .concat(this.recipients.map((rec) => rec.distRate))
+      .map((weight) => weight.toFixed(1));
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
-      recipient: listRecipients,
+      unitID: this.unitId,
+      subjectAddresses,
+      weights,
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

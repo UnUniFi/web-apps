@@ -14,6 +14,7 @@ import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/opena
   styleUrls: ['./incentive.component.css'],
 })
 export class IncentiveComponent implements OnInit {
+  address$: Observable<string>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   units$: Observable<{ id: string }[]>;
   rewards$: Observable<CdpAll200ResponseCdpInnerCdpCollateral[]>;
@@ -28,6 +29,7 @@ export class IncentiveComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
+    this.address$ = address$.pipe(map((addr) => addr.toString()));
     this.rewards$ = address$.pipe(
       mergeMap((address) => this.ununifiRest.getAllRewards$(address.toString())),
     );
@@ -39,7 +41,7 @@ export class IncentiveComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClickCreate() {
-    this.incentiveApp.openCreateUnitFormDialog('');
+  onClickCreate(address: string) {
+    this.incentiveApp.openCreateUnitFormDialog(address);
   }
 }

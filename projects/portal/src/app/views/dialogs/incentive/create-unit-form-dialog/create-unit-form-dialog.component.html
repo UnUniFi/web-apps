@@ -5,6 +5,10 @@
   </div>
 
   <form *ngIf="firstRecipient" #formRef="ngForm" (submit)="onSubmit()">
+    <mat-form-field class="w-full">
+      <mat-label>Incentive Uint ID</mat-label>
+      <input [(ngModel)]="unitId" name="address" matInput type="text" required />
+    </mat-form-field>
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
         <mat-label>Distribution Rate (%)</mat-label>

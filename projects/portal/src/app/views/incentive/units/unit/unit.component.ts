@@ -13,7 +13,10 @@ export class UnitComponent implements OnInit {
   @Input()
   unitId?: string | null;
   @Input()
+  txMemo?: string | null;
+  @Input()
   unit?: IncentiveUnit200ResponseIncentiveUnit | null;
+
   constructor(private clipboard: Clipboard, private readonly snackBar: MatSnackBar) {}
 
   ngOnInit(): void {}

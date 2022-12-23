@@ -8,19 +8,30 @@ import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/opena
 })
 export class IncentiveComponent implements OnInit {
   @Input()
+  address?: string | null;
+  @Input()
   units?: { id: string }[] | null;
   @Input()
   rewards?: CdpAll200ResponseCdpInnerCdpCollateral[] | null;
   @Output()
-  appClickCreate: EventEmitter<{}>;
+  appClickCreate: EventEmitter<string>;
+  @Output()
+  appClickReward: EventEmitter<string>;
 
   constructor() {
     this.appClickCreate = new EventEmitter();
+    this.appClickReward = new EventEmitter();
   }
 
   ngOnInit(): void {}
 
   onClickCreate() {
-    this.appClickCreate.emit();
+    this.appClickCreate.emit(this.address!);
+  }
+  onClickReward(denom: string | undefined) {
+    if (!denom) {
+      return;
+    }
+    this.appClickReward.emit(denom);
   }
 }

@@ -1,20 +1,16 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Withdraw Incentive Reward</div>
+    <div class="font-bold text-xl m-3">Withdraw All Incentive Rewards</div>
   </div>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
     <mat-list class="w-full">
-      <mat-list-item>
-        <span class="column-name">Selected Token:</span>
-        <span class="flex-auto w-1/4"></span>
-        <span class="column-value truncate">{{ denom }}</span>
-      </mat-list-item>
-      <mat-list-item>
-        <span class="column-name">Rewards:</span>
+      <mat-list-item *ngFor="let reward of rewards; let i = index; last as last">
+        <span class="column-name">Reward #{{ i + 1 }}:</span>
         <span class="flex-auto"></span>
         <span class="column-value">{{ reward?.amount }}{{ reward?.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>
 
@@ -84,7 +80,7 @@
     </mat-accordion>
 
     <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
-      Withdraw
+      Withdraw All
     </button>
   </form>
 </mat-dialog-content>

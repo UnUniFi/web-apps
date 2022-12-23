@@ -17,10 +17,13 @@ export class IncentiveComponent implements OnInit {
   appClickCreate: EventEmitter<string>;
   @Output()
   appClickReward: EventEmitter<string>;
+  @Output()
+  appClickAllRewards: EventEmitter<string>;
 
   constructor() {
     this.appClickCreate = new EventEmitter();
     this.appClickReward = new EventEmitter();
+    this.appClickAllRewards = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -33,5 +36,8 @@ export class IncentiveComponent implements OnInit {
       return;
     }
     this.appClickReward.emit(denom);
+  }
+  onClickAllRewards() {
+    this.appClickAllRewards.emit(this.address!);
   }
 }

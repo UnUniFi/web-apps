@@ -36,7 +36,10 @@ export class IncentiveComponent implements OnInit {
 
     // Dummy data
     this.units$ = of([{ id: 'incentiveUnitId1' }, { id: 'incentiveUnitId2' }]);
-    this.rewards$ = of([{ denom: 'uguu', amount: '20000000' }]);
+    this.rewards$ = of([
+      { denom: 'uguu', amount: '20000000' },
+      { denom: 'ubtc', amount: '15000000' },
+    ]);
   }
 
   ngOnInit(): void {}
@@ -46,5 +49,8 @@ export class IncentiveComponent implements OnInit {
   }
   onClickReward(denom: string) {
     this.incentiveApp.openWithdrawIncentiveRewardFormDialog(denom);
+  }
+  onClickAllRewards(address: string) {
+    this.incentiveApp.openWithdrawIncentiveAllRewardsFormDialog(address);
   }
 }

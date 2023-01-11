@@ -13,6 +13,7 @@ import {
   CdpAll200ResponseCdpInnerCdpCollateral,
   EcosystemincentiveParams200ResponseParams,
   IncentiveUnit200ResponseIncentiveUnit,
+  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
 
@@ -132,6 +133,15 @@ export class UnunifiRestService {
         ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
       ),
       map((res) => res.data.incentive_unit_id!),
+    );
+  }
+
+  listIncentiveUnitIdsByAddr$(
+    address: string,
+  ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
+      map((res) => res.data.incentive_unit_ids_by_addr!),
     );
   }
 }

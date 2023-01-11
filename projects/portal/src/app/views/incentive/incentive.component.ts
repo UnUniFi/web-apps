@@ -10,7 +10,7 @@ export class IncentiveComponent implements OnInit {
   @Input()
   address?: string | null;
   @Input()
-  units?: { id: string }[] | null;
+  unitIds?: string[] | null;
   @Input()
   rewards?: CdpAll200ResponseCdpInnerCdpCollateral[] | null;
   @Output()

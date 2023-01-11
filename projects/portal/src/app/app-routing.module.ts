@@ -63,6 +63,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
+  {
+    path: 'derivative',
+    loadChildren: () =>
+      import('./pages/derivative/derivative.module').then((m) => m.AppDerivativeModule),
+  },
 ];
 
 @NgModule({

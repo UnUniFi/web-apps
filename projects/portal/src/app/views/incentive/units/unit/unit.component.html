@@ -41,7 +41,7 @@
           <mat-list-item>
             <span class="whitespace-nowrap">{{ subject.subject_addr }}:</span>
             <span class="flex-auto"></span>
-            <span class="ml-1 break-all">{{ subject.weight }}</span>
+            <span class="ml-1 break-all">{{ subject.weight | percentage }}%</span>
           </mat-list-item>
           <mat-divider *ngIf="!last"></mat-divider>
         </ng-container>

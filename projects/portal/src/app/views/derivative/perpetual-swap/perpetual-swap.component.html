@@ -1,0 +1,103 @@
+<h2 class="mb-0">Perpetual Swap</h2>
+<mat-card class="mb-4">
+  <div class="flex flex-row content-start items-start">
+    <mat-form-field>
+      <mat-label>Markets</mat-label>
+      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+        <mat-option *ngFor="let conf of configs" [value]="conf">
+          {{ conf }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input #priceRef type="text" name="price" [ngModel]="asset.price" matInput readonly />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>24h Change</mat-label>
+      <input #changeRef type="text" name="change" [ngModel]="changePercentage" matInput readonly />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input #highRef type="text" name="high" [ngModel]="asset.high" matInput readonly />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input #lowRef type="text" name="low" [ngModel]="asset.low" matInput readonly />
+    </mat-form-field>
+  </div>
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
+    <div id="tradingview_5b3c4" class="h-96"></div>
+    <div class="tradingview-widget-copyright">
+      <a
+        href="https://www.tradingview.com/symbols/ETHUSD/?exchange=BITSTAMP"
+        rel="noopener"
+        target="_blank"
+        ><span class="blue-text">Ethereum chart</span></a
+      >
+      by TradingView
+    </div>
+  </div>
+  <!-- TradingView Widget END -->
+
+  <!-- <button class="w-1/2 mt-4" mat-flat-button color="primary">
+    <mat-icon>trending_up</mat-icon>
+    <span>Long</span>
+  </button>
+  <button class="w-1/2 mt-4" mat-flat-button color="accent">
+    <mat-icon>trending_down</mat-icon>
+    <span>Short</span>
+  </button> -->
+</mat-card>
+
+<mat-card class="mb-4">
+  <mat-button-toggle-group
+    class="flex mb-4"
+    #tgl="matButtonToggleGroup"
+    (change)="onToggleChange(tgl.value)"
+    value="long"
+  >
+    <mat-button-toggle class="flex-auto" value="long">
+      <mat-icon>trending_up</mat-icon>Long
+    </mat-button-toggle>
+    <mat-button-toggle class="flex-auto" value="short">
+      <mat-icon>trending_down</mat-icon>Short
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</mat-card>
+
+<mat-card class="mb-4">
+  <ng-container *ngIf="tgl.value === 'long'; then long; else short"></ng-container>
+  <ng-template #long>
+    <h3>Long Info</h3>
+    <mat-list>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Entry Price:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-sm sm:text-base">$1300</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Exit Price:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-sm sm:text-base">$1300</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Borrow Fee:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-sm sm:text-base">0.0007%/h</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Available liquidity:</span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all text-sm sm:text-base">$23403456</span>
+      </mat-list-item>
+    </mat-list>
+  </ng-template>
+  <ng-template #short>
+    <h3>Short Info</h3>
+  </ng-template>
+</mat-card>

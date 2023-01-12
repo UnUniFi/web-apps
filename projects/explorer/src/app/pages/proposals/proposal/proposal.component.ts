@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027Proposals,
-  InlineResponse20029Deposits,
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20032Votes,
-  InlineResponse20026DepositParams,
-  InlineResponse20026TallyParams,
-  InlineResponse20026VotingParams,
+  Proposals200ResponseProposalsInner,
+  Deposits200ResponseDepositsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
+  GovParams200ResponseDepositParams,
+  GovParams200ResponseTallyParams,
+  GovParams200ResponseVotingParams,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 
 @Component({
   selector: 'app-proposal',
@@ -21,15 +21,15 @@ import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parse
   styleUrls: ['./proposal.component.css'],
 })
 export class ProposalComponent implements OnInit {
-  proposal$: Observable<InlineResponse20027Proposals | undefined>;
+  proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
   proposalType$: Observable<string | undefined>;
   proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
-  deposits$: Observable<InlineResponse20029Deposits[] | undefined>;
-  depositParams$: Observable<InlineResponse20026DepositParams | undefined>;
-  tally$: Observable<InlineResponse20027FinalTallyResult | undefined>;
-  tallyParams$: Observable<InlineResponse20026TallyParams | undefined>;
-  votes$: Observable<InlineResponse20032Votes[] | undefined>;
-  votingParams$: Observable<InlineResponse20026VotingParams | undefined>;
+  deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
+  depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
+  tally$: Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined>;
+  tallyParams$: Observable<GovParams200ResponseTallyParams | undefined>;
+  votes$: Observable<Votes200ResponseVotesInner[] | undefined>;
+  votingParams$: Observable<GovParams200ResponseVotingParams | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id));
@@ -53,7 +53,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.proposalContent$ = this.proposal$.pipe(
-      map((proposal) => txParseProposalContent(proposal?.content!))
+      map((proposal) => txParseProposalContent(proposal?.content!)),
     );
 
     this.deposits$ = combined$.pipe(
@@ -107,5 +107,5 @@ export class ProposalComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20012,
+  GetNodeInfo200Response,
 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -31,7 +31,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
         maxCredit: number;
       }[]
     | null;
-  @Input() nodeInfo?: InlineResponse20012 | null;
+  @Input() nodeInfo?: GetNodeInfo200Response | null;
   @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
   // Todo: This is temporal fix.
@@ -46,7 +46,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   // Todo: This lifecycle methods is temporal fix.
-  // default_node_info in type definition of InlineResponse20012 is actually node_info.
+  // default_node_info in type definition of GetNodeInfo200Response is actually node_info.
   // It should be resolved with UnUniFi/chain or @cosmos-client/core, I guess.
   // But this is necessary for user to know which network is connected now.
   // So, currently, I convert it as any.

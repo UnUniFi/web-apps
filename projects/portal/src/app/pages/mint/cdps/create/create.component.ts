@@ -15,7 +15,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-create',
@@ -44,7 +44,7 @@ export class CreateComponent implements OnInit {
   liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   principalLimit$: Observable<number>;
 
-  cdp$: Observable<InlineResponse2004Cdp1 | undefined>;
+  cdp$: Observable<CdpAll200ResponseCdpInner | undefined>;
 
   constructor(
     private readonly key: KeyService,

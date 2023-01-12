@@ -6,7 +6,7 @@ import { MsgListNftData } from './nft-tx.model';
 import { INftTxInfrastructureService } from './nft-tx.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // List NFT
   async listNft(
@@ -24,7 +24,7 @@ export class NftTxInfrastructureService implements INftTxInfrastructureService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildListNftTxBuilder(msgListNftData, cosmosPublicKey, gas, fee);
     const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);

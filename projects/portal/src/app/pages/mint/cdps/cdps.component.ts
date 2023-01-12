@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-cdps',
@@ -14,7 +14,7 @@ import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
   styleUrls: ['./cdps.component.css'],
 })
 export class CdpsComponent implements OnInit {
-  cdps$: Observable<(InlineResponse2004Cdp1 | undefined)[]>;
+  cdps$: Observable<(CdpAll200ResponseCdpInner | undefined)[]>;
 
   constructor(
     private readonly key: KeyService,

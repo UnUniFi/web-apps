@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -8,7 +8,7 @@ export type DelegateOnSubmitEvent = {
   walletType: WalletType;
   amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20041Validators[];
+  validatorList: StakingDelegatorValidators200ResponseValidatorsInner[];
   gasRatio: number;
 };
 
@@ -21,7 +21,7 @@ export class DelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  validatorsList?: InlineResponse20041Validators[] | null;
+  validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
   coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -29,7 +29,7 @@ export class DelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20041Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<DelegateOnSubmitEvent>;
@@ -54,7 +54,7 @@ export class DelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

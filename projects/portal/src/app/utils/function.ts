@@ -1,8 +1,8 @@
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInnerCdp } from 'ununifi-client/esm/openapi';
 
 export const getWithdrawLimit = (
-  cdp: InlineResponse2004Cdp,
+  cdp: CdpAll200ResponseCdpInnerCdp,
   cdpParams: ununifi.proto.ununifi.cdp.IParams,
   spotPrice: ununifi.proto.ununifi.pricefeed.ICurrentPrice,
 ) => {
@@ -34,7 +34,7 @@ export const getWithdrawLimit = (
 };
 
 export const getIssueLimit = (
-  cdp: InlineResponse2004Cdp,
+  cdp: CdpAll200ResponseCdpInnerCdp,
   cdpParams: ununifi.proto.ununifi.cdp.IParams,
   liquidationPrice: ununifi.proto.ununifi.pricefeed.ICurrentPrice,
 ) => {

@@ -2,7 +2,7 @@ import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { combineLatest, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class TxsComponent implements OnInit {
   paginationInfo$: Observable<PaginationInfo>;
   paginationInfoChanged$: Observable<PaginationInfo>;
   pageLength$: Observable<number | undefined>;
-  txs$?: Observable<InlineResponse20050TxResponse[] | undefined>;
+  txs$?: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
 
   constructor(
     private router: Router,

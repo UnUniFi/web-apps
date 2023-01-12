@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
-import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 import { txTitle } from '../../../models/cosmos/tx-common.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { GetBlockByHeight200Response } from '@cosmos-client/core/esm/openapi';
+import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
 
 @Component({
   selector: 'view-block',
@@ -10,7 +10,7 @@ import { txTitle } from '../../../models/cosmos/tx-common.model';
 })
 export class BlockComponent implements OnInit {
   @Input()
-  block?: InlineResponse20011 | null;
+  block?: GetBlockByHeight200Response | null;
 
   @Input()
   nextBlock?: number | null;
@@ -24,7 +24,7 @@ export class BlockComponent implements OnInit {
   @Input()
   txTitles?: txTitle[] | null;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

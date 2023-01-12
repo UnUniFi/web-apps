@@ -15,7 +15,7 @@ import { WithdrawCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdp
 import { combineLatest, Observable, of, timer, zip } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-withdraw',
@@ -29,7 +29,7 @@ export class WithdrawComponent implements OnInit {
   cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
   denom$: Observable<string>;
 
-  cdp$: Observable<InlineResponse2004Cdp1>;
+  cdp$: Observable<CdpAll200ResponseCdpInner>;
   spotPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   withdrawLimit$: Observable<number>;
 

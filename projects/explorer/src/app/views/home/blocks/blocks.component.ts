@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
+import { GetBlockByHeight200Response } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-blocks',
@@ -8,7 +8,7 @@ import { InlineResponse20011 } from '@cosmos-client/core/esm/openapi';
 })
 export class BlocksComponent implements OnInit {
   @Input()
-  //latestBlocks?: InlineResponse20011[] | null | undefined;
+  //latestBlocks?: GetBlockByHeight200Response[] | null | undefined;
   latestBlocks?: bigint[] | null | undefined;
 
   constructor() {}

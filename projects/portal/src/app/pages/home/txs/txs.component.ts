@@ -1,6 +1,6 @@
 import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Component, OnInit } from '@angular/core';
-import { InlineResponse20050TxResponse } from '@cosmos-client/core/esm/openapi/api';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 })
 export class TxsComponent implements OnInit {
   pollingInterval = 30 * 60;
-  txs$?: Observable<InlineResponse20050TxResponse[] | undefined>;
+  txs$?: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
   txTypeOptions$?: Observable<string[] | undefined>;
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(20);
   pageNumber$: BehaviorSubject<number> = new BehaviorSubject(1);

@@ -7,7 +7,7 @@ import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class GovService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly key: KeyService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // WIP Submit Proposal
   async SubmitProposal(
@@ -26,7 +26,7 @@ export class GovService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildSubmitProposal(keyType, gas, fee, privateKey);
     return await this.txCommonService.announceTx(txBuilder);
   }
@@ -128,7 +128,7 @@ export class GovService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildVoteTxBuilder(
       proposalID,
@@ -223,7 +223,7 @@ export class GovService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildDepositTxBuilder(
       proposalID,

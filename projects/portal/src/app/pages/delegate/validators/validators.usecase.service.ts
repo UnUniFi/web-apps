@@ -5,9 +5,9 @@ import { validatorType } from '../../../views/delegate/validators/validators.com
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038DelegationResponses,
-  InlineResponse20041Validators,
-  InlineResponse20047,
+  DelegatorDelegations200ResponseDelegationResponsesInner,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  UnbondingDelegation200Response,
 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -62,7 +62,9 @@ export class ValidatorsUseCaseService {
     );
   }
 
-  get delegations$(): Observable<InlineResponse20038DelegationResponses[] | undefined> {
+  get delegations$(): Observable<
+    DelegatorDelegations200ResponseDelegationResponsesInner[] | undefined
+  > {
     return this.accAddress$?.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
       map((result) => (result?.delegation_responses ? result.delegation_responses : undefined)),
@@ -70,8 +72,8 @@ export class ValidatorsUseCaseService {
   }
 
   delegatedValidators$(
-    delegations$: Observable<InlineResponse20038DelegationResponses[] | undefined>,
-  ): Observable<(InlineResponse20041Validators | undefined)[] | undefined> {
+    delegations$: Observable<DelegatorDelegations200ResponseDelegationResponsesInner[] | undefined>,
+  ): Observable<(StakingDelegatorValidators200ResponseValidatorsInner | undefined)[] | undefined> {
     return combineLatest([this.cosmosRest.getValidators$(), delegations$]).pipe(
       map(([validators, delegations]) => {
         if (!validators || !delegations) {
@@ -88,8 +90,10 @@ export class ValidatorsUseCaseService {
   }
 
   unbondingDelegations$(
-    delegatedValidators$: Observable<(InlineResponse20041Validators | undefined)[] | undefined>,
-  ): Observable<(InlineResponse20047 | undefined)[]> {
+    delegatedValidators$: Observable<
+      (StakingDelegatorValidators200ResponseValidatorsInner | undefined)[] | undefined
+    >,
+  ): Observable<(UnbondingDelegation200Response | undefined)[]> {
     return combineLatest([delegatedValidators$, this.accAddress$]).pipe(
       mergeMap(([validators, accAddress]) => {
         if (!validators || !accAddress) {

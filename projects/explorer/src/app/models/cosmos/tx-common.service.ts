@@ -2,13 +2,12 @@ import { CosmosSDKService } from '../cosmos-sdk.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TxCommonService {
-  constructor(private readonly cosmosSDK: CosmosSDKService) { }
+  constructor(private readonly cosmosSDK: CosmosSDKService) {}
 
   async simulateTx(
     txBuilder: cosmosclient.TxBuilder,
@@ -62,7 +61,7 @@ export class TxCommonService {
     };
   }
 
-  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20050> {
+  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<BroadcastTx200Response> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
 
     // broadcast tx

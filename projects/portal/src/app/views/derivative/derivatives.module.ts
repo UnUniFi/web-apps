@@ -1,12 +1,12 @@
 import { MaterialModule } from '../material.module';
-import { DerivativeComponent } from './derivative.component';
+import { DerivativesComponent } from './derivatives.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [DerivativeComponent],
+  declarations: [DerivativesComponent],
   imports: [CommonModule, RouterModule, MaterialModule],
-  exports: [DerivativeComponent],
+  exports: [DerivativesComponent],
 })
-export class DerivativeModule {}
+export class DerivativesModule {}

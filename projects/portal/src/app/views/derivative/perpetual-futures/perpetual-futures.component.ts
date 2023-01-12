@@ -9,20 +9,26 @@ export interface Asset {
 declare const TradingView: any;
 
 @Component({
-  selector: 'view-perpetual-swap',
-  templateUrl: './perpetual-swap.component.html',
-  styleUrls: ['./perpetual-swap.component.css'],
+  selector: 'view-perpetual-futures',
+  templateUrl: './perpetual-futures.component.html',
+  styleUrls: ['./perpetual-futures.component.css'],
 })
-export class PerpetualSwapComponent implements OnInit, AfterViewInit {
+export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   @Input()
   configs?: string[];
-
   @Input()
   selectedConfig?: string | null;
+  @Input()
+  payAssets?: string[];
+  @Input()
+  selectedPayAssets?: string;
+  @Input()
+  tradeAssets?: string[];
+  @Input()
+  selectedTradeAssets?: string;
 
   @Output()
   appChangeConfig: EventEmitter<string>;
-
   @Output()
   toggleLongChange: EventEmitter<boolean>;
 
@@ -35,6 +41,10 @@ export class PerpetualSwapComponent implements OnInit, AfterViewInit {
 
     this.configs = ['ETH/USDC', 'BTC/USDC', 'ATOM/USDC'];
     this.selectedConfig = 'ETH/USDC';
+    this.payAssets = ['GUU', 'ETH', 'BTC', 'ATOM', 'USDC'];
+    this.selectedPayAssets = 'GUU';
+    this.tradeAssets = ['ETH', 'BTC', 'ATOM'];
+    this.selectedTradeAssets = 'ETH';
     this.asset = { price: '1300', changeRate: '0.0015', high: '1400', low: '1260' };
     this.changePercentage = '+' + (Number(this.asset.changeRate) * 100).toLocaleString() + '%';
   }

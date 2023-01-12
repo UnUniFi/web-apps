@@ -64,9 +64,9 @@ const routes: Routes = [
       import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
   {
-    path: 'derivative',
+    path: 'derivatives',
     loadChildren: () =>
-      import('./pages/derivative/derivative.module').then((m) => m.AppDerivativeModule),
+      import('./pages/derivative/derivatives.module').then((m) => m.AppDerivativesModule),
   },
 ];
 

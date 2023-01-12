@@ -1,16 +1,16 @@
-import { DerivativeComponent } from './derivative.component';
-import { PerpetualSwapComponent } from './perpetual-swap/perpetual-swap.component';
+import { DerivativesComponent } from './derivatives.component';
+import { PerpetualFuturesComponent } from './perpetual-futures/perpetual-futures.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: DerivativeComponent,
+    component: DerivativesComponent,
   },
   {
-    path: 'perpetual-swap',
-    component: PerpetualSwapComponent,
+    path: 'perpetual-futures',
+    component: PerpetualFuturesComponent,
   },
 ];
 

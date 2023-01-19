@@ -25,10 +25,7 @@
 <h3 class="mb-0 ml-2">Available Rewards</h3>
 <mat-card class="mb-4">
   <mat-nav-list>
-    <mat-list-item *ngIf="rewards === null">
-      <mat-spinner></mat-spinner>
-    </mat-list-item>
-    <mat-list-item *ngIf="rewards === undefined"> No Rewards! </mat-list-item>
+    <mat-list-item *ngIf="!rewards"> No Rewards! </mat-list-item>
     <mat-list-item *ngIf="rewards && rewards.length === 0"> No Rewards! </mat-list-item>
     <ng-container *ngIf="rewards && rewards.length > 0">
       <mat-list-item

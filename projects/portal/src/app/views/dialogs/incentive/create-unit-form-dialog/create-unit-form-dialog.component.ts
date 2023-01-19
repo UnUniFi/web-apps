@@ -81,7 +81,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
     }
     const sumDist =
       Math.floor(this.firstRecipient.distRate * 10) / 10 +
-      this.recipients.reduce((prev, curr) => prev + Math.floor(curr.distRate * 10) / 10, 0);
+      this.recipients.reduce((prev, curr) => prev + curr.distRate / 10, 0);
     if (sumDist != 100) {
       alert('Please make the total of the percentages 100%');
       return;
@@ -91,7 +91,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
     );
     const weights = [this.firstRecipient.distRate]
       .concat(this.recipients.map((rec) => rec.distRate))
-      .map((weight) => weight.toFixed(1));
+      .map((weight) => (weight * 10 ** 16).toString());
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       unitID: this.unitId,

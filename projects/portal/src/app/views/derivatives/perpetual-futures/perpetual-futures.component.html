@@ -69,7 +69,15 @@
   <div class="flex flex-row content-center items-center">
     <mat-form-field class="flex-auto">
       <mat-label>Pay</mat-label>
-      <input matNativeControl #payRef name="pay" [(ngModel)]="appChangeConfig" [min]="0" required />
+      <input
+        matNativeControl
+        #payRef
+        name="pay"
+        [(ngModel)]="payAmount"
+        (ngModelChange)="onChangePayAmount()"
+        [min]="0"
+        required
+      />
       <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>
@@ -83,7 +91,15 @@
   <div class="flex flex-row content-center items-center">
     <mat-form-field class="flex-auto">
       <mat-label>Long</mat-label>
-      <input matNativeControl #payRef name="pay" [(ngModel)]="appChangeConfig" [min]="0" required />
+      <input
+        matNativeControl
+        #tradeRef
+        name="trade"
+        [(ngModel)]="tradeAmount"
+        (ngModelChange)="onChangeTradeAmount()"
+        [min]="0"
+        required
+      />
       <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>

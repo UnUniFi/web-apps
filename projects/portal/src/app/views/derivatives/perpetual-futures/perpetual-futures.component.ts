@@ -35,6 +35,11 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   asset: Asset;
   changePercentage: string;
 
+  payAmount: number;
+  tradeAmount: number;
+
+  rate: number;
+
   constructor() {
     this.appChangeConfig = new EventEmitter();
     this.toggleLongChange = new EventEmitter();
@@ -47,6 +52,9 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     this.selectedTradeAssets = 'ETH';
     this.asset = { price: '1300', changeRate: '0.0015', high: '1400', low: '1260' };
     this.changePercentage = '+' + (Number(this.asset.changeRate) * 100).toLocaleString() + '%';
+    this.payAmount = 0;
+    this.tradeAmount = 0;
+    this.rate = 2700;
   }
 
   ngOnInit(): void {}
@@ -70,6 +78,14 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
 
   onChangeConfig(selectedConfig: string): void {
     this.appChangeConfig.emit(selectedConfig);
+  }
+
+  onChangePayAmount(): void {
+    this.tradeAmount = this.payAmount / this.rate;
+  }
+
+  onChangeTradeAmount(): void {
+    this.payAmount = this.tradeAmount * this.rate;
   }
 
   onToggleChange(value: string) {

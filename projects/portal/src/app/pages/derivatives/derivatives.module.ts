@@ -1,5 +1,5 @@
-import { DerivativesModule } from '../../views/derivative/derivatives.module';
-import { PerpetualFuturesModule } from '../../views/derivative/perpetual-futures/perpetual-futures.module';
+import { DerivativesModule } from '../../views/derivatives/derivatives.module';
+import { PerpetualFuturesModule } from '../../views/derivatives/perpetual-futures/perpetual-futures.module';
 import { DerivativeRoutingModule } from './derivatives-routing.module';
 import { DerivativesComponent } from './derivatives.component';
 import { PerpetualFuturesComponent } from './perpetual-futures/perpetual-futures.component';

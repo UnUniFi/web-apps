@@ -66,7 +66,7 @@ const routes: Routes = [
   {
     path: 'derivatives',
     loadChildren: () =>
-      import('./pages/derivative/derivatives.module').then((m) => m.AppDerivativesModule),
+      import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
   },
 ];
 

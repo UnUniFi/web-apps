@@ -1,7 +1,7 @@
 <h2 class="mb-0">Perpetual Futures</h2>
 <mat-card class="mb-4">
   <div class="flex flex-row content-start items-start">
-    <mat-form-field>
+    <mat-form-field class="min-w-0">
       <mat-label>Markets</mat-label>
       <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
         <mat-option *ngFor="let conf of configs" [value]="conf">
@@ -9,19 +9,19 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="min-w-0">
       <mat-label>Price</mat-label>
       <input #priceRef type="text" name="price" [ngModel]="asset.price" matInput readonly />
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="min-w-0">
       <mat-label>24h Change</mat-label>
       <input #changeRef type="text" name="change" [ngModel]="changePercentage" matInput readonly />
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="min-w-0">
       <mat-label>24h High</mat-label>
       <input #highRef type="text" name="high" [ngModel]="asset.high" matInput readonly />
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="min-w-0">
       <mat-label>24h Low</mat-label>
       <input #lowRef type="text" name="low" [ngModel]="asset.low" matInput readonly />
     </mat-form-field>

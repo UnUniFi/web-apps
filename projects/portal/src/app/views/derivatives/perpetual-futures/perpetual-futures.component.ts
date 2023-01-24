@@ -39,6 +39,7 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   tradeAmount: number;
 
   rate: number;
+  leverage: number;
 
   constructor() {
     this.appChangeConfig = new EventEmitter();
@@ -55,6 +56,7 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     this.payAmount = 0;
     this.tradeAmount = 0;
     this.rate = 2700;
+    this.leverage = 1;
   }
 
   ngOnInit(): void {}
@@ -142,5 +144,9 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     if (value == 'short') {
       this.toggleLongChange.emit(false);
     }
+  }
+
+  formatLabel(value: number): string {
+    return value.toLocaleString();
   }
 }

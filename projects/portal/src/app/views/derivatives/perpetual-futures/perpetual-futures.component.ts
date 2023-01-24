@@ -44,8 +44,8 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     this.appChangeConfig = new EventEmitter();
     this.toggleLongChange = new EventEmitter();
 
-    this.configs = ['ETH/USDC', 'BTC/USDC', 'ATOM/USDC'];
-    this.selectedConfig = 'ETH/USDC';
+    this.configs = ['ETH/USD', 'BTC/USD', 'ATOM/USD'];
+    this.selectedConfig = 'ETH/USD';
     this.payAssets = ['GUU', 'ETH', 'BTC', 'ATOM', 'USDC'];
     this.selectedPayAssets = 'GUU';
     this.tradeAssets = ['ETH', 'BTC', 'ATOM'];
@@ -62,7 +62,7 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     new TradingView.widget({
       autosize: true,
-      symbol: 'BITSTAMP:ETHUSD',
+      symbol: 'COINBASE:ETHUSD',
       interval: '60',
       timezone: 'Etc/UTC',
       theme: 'dark',
@@ -76,8 +76,55 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onChangeConfig(selectedConfig: string): void {
-    this.appChangeConfig.emit(selectedConfig);
+  onChangeConfig(config: string): void {
+    this.selectedConfig = config;
+    this.appChangeConfig.emit(config);
+    if (config === 'ETH/USD') {
+      new TradingView.widget({
+        autosize: true,
+        symbol: 'COINBASE:ETHUSD',
+        interval: '60',
+        timezone: 'Etc/UTC',
+        theme: 'dark',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        hide_legend: true,
+        save_image: false,
+        container_id: 'tradingview_5b3c4',
+      });
+    } else if (config === 'BTC/USD') {
+      new TradingView.widget({
+        autosize: true,
+        symbol: 'COINBASE:BTCUSD',
+        interval: '60',
+        timezone: 'Etc/UTC',
+        theme: 'dark',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        hide_legend: true,
+        save_image: false,
+        container_id: 'tradingview_5b3c4',
+      });
+    } else if (config === 'ATOM/USD') {
+      new TradingView.widget({
+        autosize: true,
+        symbol: 'COINBASE:ATOMUSD',
+        interval: '60',
+        timezone: 'Etc/UTC',
+        theme: 'dark',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        hide_legend: true,
+        save_image: false,
+        container_id: 'tradingview_5b3c4',
+      });
+    }
   }
 
   onChangePayAmount(): void {

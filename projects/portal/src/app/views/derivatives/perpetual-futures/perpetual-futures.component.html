@@ -79,7 +79,7 @@
       <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>
-      <mat-select [(value)]="selectedPayAssets">
+      <mat-select [(value)]="selectedPayAsset">
         <mat-option *ngFor="let asset of payAssets" [value]="asset">
           {{ asset }}
         </mat-option>
@@ -101,8 +101,8 @@
       <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>
-      <mat-select [(value)]="selectedTradeAssets">
-        <mat-option *ngFor="let asset of tradeAssets" [value]="asset">
+      <mat-select [(value)]="selectedTargetAsset">
+        <mat-option *ngFor="let asset of targetAssets" [value]="asset">
           {{ asset }}
         </mat-option>
       </mat-select>
@@ -120,7 +120,7 @@
     name="leverage-slider"
   >
   </mat-slider>
-  <button mat-flat-button class="w-full mt-4" color="accent">Order</button>
+  <button mat-flat-button class="w-full mt-4" color="accent" (click)="onClickOrder()">Order</button>
 </mat-card>
 
 <mat-card class="mb-4">

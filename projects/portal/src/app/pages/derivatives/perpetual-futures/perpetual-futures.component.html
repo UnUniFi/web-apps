@@ -1,1 +1,10 @@
-<view-perpetual-futures></view-perpetual-futures>
+<view-perpetual-futures
+  [configs]="configs$ | async"
+  [selectedConfig]="selectedConfig$ | async"
+  [payAssets]="payAssets$ | async"
+  [selectedPayAsset]="selectedPayAsset$ | async"
+  [targetAssets]="targetAssets$ | async"
+  [selectedTargetAsset]="selectedTargetAsset$ | async"
+  (appSubmitOrder)="onSubmitOrder($event)"
+  (appChangeConfig)="onChangeConfig($event)"
+></view-perpetual-futures>

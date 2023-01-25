@@ -15,20 +15,22 @@ declare const TradingView: any;
 })
 export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   @Input()
-  configs?: string[];
+  configs?: string[] | null;
   @Input()
   selectedConfig?: string | null;
   @Input()
-  payAssets?: string[];
+  payAssets?: string[] | null;
   @Input()
-  selectedPayAssets?: string;
+  selectedPayAsset?: string | null;
   @Input()
-  tradeAssets?: string[];
+  targetAssets?: string[] | null;
   @Input()
-  selectedTradeAssets?: string;
+  selectedTargetAsset?: string | null;
 
   @Output()
   appChangeConfig: EventEmitter<string>;
+  @Output()
+  appSubmitOrder: EventEmitter<string>;
   @Output()
   toggleLongChange: EventEmitter<boolean>;
 
@@ -37,24 +39,21 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
 
   payAmount: number;
   tradeAmount: number;
+  isLongOrder: boolean;
 
   rate: number;
   leverage: number;
 
   constructor() {
     this.appChangeConfig = new EventEmitter();
+    this.appSubmitOrder = new EventEmitter();
     this.toggleLongChange = new EventEmitter();
 
-    this.configs = ['ETH/USD', 'BTC/USD', 'ATOM/USD'];
-    this.selectedConfig = 'ETH/USD';
-    this.payAssets = ['GUU', 'ETH', 'BTC', 'ATOM', 'USDC'];
-    this.selectedPayAssets = 'GUU';
-    this.tradeAssets = ['ETH', 'BTC', 'ATOM'];
-    this.selectedTradeAssets = 'ETH';
     this.asset = { price: '1300', changeRate: '0.0015', high: '1400', low: '1260' };
     this.changePercentage = '+' + (Number(this.asset.changeRate) * 100).toLocaleString() + '%';
     this.payAmount = 0;
     this.tradeAmount = 0;
+    this.isLongOrder = true;
     this.rate = 2700;
     this.leverage = 1;
   }
@@ -76,6 +75,10 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
       save_image: false,
       container_id: 'tradingview_5b3c4',
     });
+  }
+
+  onClickOrder(): void {
+    this.appSubmitOrder.emit(this.payAmount.toLocaleString());
   }
 
   onChangeConfig(config: string): void {
@@ -137,12 +140,12 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     this.payAmount = this.tradeAmount * this.rate;
   }
 
-  onToggleChange(value: string) {
+  onToggleChange(value: string): void {
     if (value == 'long') {
-      this.toggleLongChange.emit(true);
+      this.isLongOrder = true;
     }
     if (value == 'short') {
-      this.toggleLongChange.emit(false);
+      this.isLongOrder = false;
     }
   }
 

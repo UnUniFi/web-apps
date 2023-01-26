@@ -38,11 +38,13 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   changePercentage: string;
 
   payAmount: number;
-  tradeAmount: number;
+  targetAmount: number;
   isLongOrder: boolean;
 
   rate: number;
   leverage: number;
+  isLeveraged: boolean;
+  leveragedAmount: number;
 
   constructor() {
     this.appChangeConfig = new EventEmitter();
@@ -52,10 +54,12 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
     this.asset = { price: '1300', changeRate: '0.0015', high: '1400', low: '1260' };
     this.changePercentage = '+' + (Number(this.asset.changeRate) * 100).toLocaleString() + '%';
     this.payAmount = 0;
-    this.tradeAmount = 0;
+    this.targetAmount = 0;
     this.isLongOrder = true;
     this.rate = 2700;
     this.leverage = 1;
+    this.isLeveraged = false;
+    this.leveragedAmount = this.targetAmount;
   }
 
   ngOnInit(): void {}
@@ -133,11 +137,13 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
   }
 
   onChangePayAmount(): void {
-    this.tradeAmount = this.payAmount / this.rate;
+    this.targetAmount = this.payAmount / this.rate;
+    this.calcLeveragedAmount();
   }
 
   onChangeTradeAmount(): void {
-    this.payAmount = this.tradeAmount * this.rate;
+    this.payAmount = this.targetAmount * this.rate;
+    this.calcLeveragedAmount();
   }
 
   onToggleChange(value: string): void {
@@ -148,8 +154,23 @@ export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
       this.isLongOrder = false;
     }
   }
+  onSliderChange(): void {
+    this.calcLeveragedAmount();
+  }
+
+  onCheckboxChange(): void {
+    this.calcLeveragedAmount();
+  }
 
   formatLabel(value: number): string {
     return value.toLocaleString();
+  }
+
+  calcLeveragedAmount() {
+    if (this.isLeveraged) {
+      this.leveragedAmount = this.targetAmount * this.leverage;
+    } else {
+      this.leveragedAmount = this.targetAmount;
+    }
   }
 }

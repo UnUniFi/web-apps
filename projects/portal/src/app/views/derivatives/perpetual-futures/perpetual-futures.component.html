@@ -64,7 +64,7 @@
     </mat-button-toggle>
   </mat-button-toggle-group>
 
-  <div class="flex flex-row content-center items-center">
+  <!-- <div class="flex flex-row content-center items-center">
     <mat-form-field class="flex-auto">
       <mat-label>Pay</mat-label>
       <input
@@ -76,7 +76,6 @@
         [min]="0"
         required
       />
-      <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>
       <mat-select [(value)]="selectedPayAsset">
@@ -85,15 +84,15 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-  </div>
+  </div> -->
   <div class="flex flex-row content-center items-center">
     <mat-form-field class="flex-auto">
       <mat-label>Long</mat-label>
       <input
         matNativeControl
-        #tradeRef
+        #targetRef
         name="trade"
-        [(ngModel)]="tradeAmount"
+        [(ngModel)]="targetAmount"
         (ngModelChange)="onChangeTradeAmount()"
         [min]="0"
         required
@@ -108,8 +107,27 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-list>
+      <mat-list-item>
+        <span class="ml-2 break-all text-sm sm:text-base">Long Amount: {{ leveragedAmount }}</span>
+        <span class="flex-auto"></span>
+        <span *ngIf="isLeveraged" class="ml-2 break-all text-sm sm:text-base"
+          >Leverage: x{{ leverage }}</span
+        >
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
   <h3>Leverage</h3>
-  <mat-checkbox class="mb-4" color="primary"> Enable {{ leverage }}x </mat-checkbox>
+  <mat-checkbox
+    class="mb-4"
+    color="primary"
+    [(ngModel)]="isLeveraged"
+    (change)="onCheckboxChange()"
+  >
+    Enable {{ leverage }}x
+  </mat-checkbox>
   <mat-slider
     thumbLabel
     class="w-full"
@@ -118,6 +136,7 @@
     [step]="0.1"
     [(ngModel)]="leverage"
     name="leverage-slider"
+    (valueChange)="onSliderChange()"
   >
   </mat-slider>
   <button mat-flat-button class="w-full mt-4" color="accent" (click)="onClickOrder()">Order</button>

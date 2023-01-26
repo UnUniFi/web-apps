@@ -4,67 +4,67 @@
   <mat-card-title>Overview</mat-card-title>
   <mat-list>
     <mat-list-item>
-      <span class="break-all truncate pr-4">Assets Under Management:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
       <span class="break-all truncate pr-4">Pool Value:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
+      <span class="break-all truncate">$</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">24h Volume:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
+      <span class="break-all truncate">$</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">24h Fees:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">$</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Long Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
+      <span class="break-all truncate">$</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Short Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
+      <span class="break-all truncate">$</span>
     </mat-list-item>
   </mat-list>
 </mat-card>
+
+<h3 class="mb-0 ml-4">Markets</h3>
 <mat-card class="mb-4">
-  <mat-card-title>Total</mat-card-title>
-  <mat-list>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Total Fees:</span>
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Market</mat-label>
+    <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+      <mat-option *ngFor="let conf of configs" [value]="conf">
+        {{ conf.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-card-title>{{ selectedConfig.name }}</mat-card-title>
+    <mat-card-content>{{ selectedConfig.description }}</mat-card-content>
+    <div class="flex flex-row">
+      <button
+        class="w-1/3 mb-4"
+        mat-flat-button
+        color="primary"
+        routerLink="{{ selectedConfig.route }}"
+      >
+        <mat-icon>score</mat-icon>
+        <span>Trade</span>
+      </button>
       <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Total Volume:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Floor Price Fund: </span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate"></span>
-    </mat-list-item>
-  </mat-list>
+      <button class="w-1/4 mb-4" mat-flat-button color="accent">
+        <span>Read more</span>
+      </button>
+    </div>
+  </mat-card>
 </mat-card>
-<button
-  class="w-full mb-4"
-  mat-flat-button
-  color="primary"
-  routerLink="/derivatives/perpetual-futures"
->
-  <mat-icon>score</mat-icon>
-  <span>Trade</span>
-</button>
 
 <h3 class="mb-0 ml-4">Tokens</h3>
 <div class="flex flex-wrap">

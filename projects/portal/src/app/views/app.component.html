@@ -23,7 +23,7 @@
 
     <mat-nav-list>
       <mat-list-item routerLink="/">
-        <mat-icon class="mr-2" color="primary">other_houses</mat-icon>Balance
+        <mat-icon class="mr-2" color="primary">account_balance</mat-icon>Balance
       </mat-list-item>
       <!-- <mat-list-item routerLink="/keys">
         <mat-icon class="mr-2" color="primary">manage_accounts</mat-icon>Keys
@@ -46,7 +46,10 @@
         <mat-icon class="mr-2" color="primary">gavel</mat-icon>Auction
       </mat-list-item> -->
       <mat-list-item routerLink="/incentive">
-        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Incentive
+        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Ecosystem Incentive
+      </mat-list-item>
+      <mat-list-item routerLink="/yield-aggregator">
+        <mat-icon class="mr-2" color="primary">pie_chart</mat-icon>Yield Aggregator
       </mat-list-item>
       <ng-template ngFor let-navigation [ngForOf]="navigations">
         <ng-container *ngIf="navigation?.name && navigation?.link">

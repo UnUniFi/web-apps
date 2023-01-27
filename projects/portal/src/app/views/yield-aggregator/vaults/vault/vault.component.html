@@ -1,0 +1,32 @@
+<h2 class="mb-0">Vault Info</h2>
+<mat-card class="mb-4">
+  <mat-card-header>
+    <img mat-card-avatar src="{{ vault.iconUrl }}" />
+    <mat-card-title>{{ vault.name }}</mat-card-title>
+    <mat-card-subtitle>{{ vault.symbol }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-list class="mb-4">
+    <mat-list-item>
+      <span class="whitespace-nowrap">Annual Percentage Yield:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.annualPercentageYield }}%</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Total Value Locked:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.totalValueLocked }}GUU</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Coin Type:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.coinType }}</span>
+    </mat-list-item>
+  </mat-list>
+
+  <h3>What is {{ vault.name }}?</h3>
+  <mat-card-content>
+    {{ vault.description }}
+  </mat-card-content>
+</mat-card>

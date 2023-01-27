@@ -63,6 +63,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
+  {
+    path: 'yield-aggregator',
+    loadChildren: () =>
+      import('./pages/yield-aggregator/yield-aggregator.module').then(
+        (m) => m.AppYieldAggregatorModule,
+      ),
+  },
 ];
 
 @NgModule({

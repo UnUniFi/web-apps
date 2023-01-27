@@ -1,0 +1,73 @@
+<h2 class="mb-0">Yield Aggregator Dashboard</h2>
+<mat-card class="mb-4">
+  <mat-card-title>Portfolio</mat-card-title>
+  <mat-list>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Balance:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">$</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Available to Deposit:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">$</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Earnings:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">$</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Vaults est. Yield:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">$</span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+
+<h3 class="mb-0 ml-4">Options</h3>
+<mat-card class="mb-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Market</mat-label>
+    <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+      <mat-option *ngFor="let conf of configs" [value]="conf">
+        {{ conf.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-card-title>{{ selectedConfig.name }}</mat-card-title>
+    <mat-card-content>{{ selectedConfig.description }}</mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <span class="break-all truncate pr-4">Holdings:</span>
+        <span class="flex-auto"></span>
+        <span class="break-all truncate">GUU</span>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+        <span class="break-all truncate pr-4">APY:</span>
+        <span class="flex-auto"></span>
+        <span class="break-all truncate">%</span>
+      </mat-list-item>
+    </mat-list>
+    <div class="flex flex-row">
+      <button
+        class="w-1/3 mb-4"
+        mat-flat-button
+        color="primary"
+        routerLink="{{ selectedConfig.route }}"
+      >
+        <mat-icon>list</mat-icon>
+        <span>Vaults List</span>
+      </button>
+      <span class="flex-auto"></span>
+      <button class="w-1/4 mb-4" mat-flat-button color="accent">
+        <span>Read more</span>
+      </button>
+    </div>
+  </mat-card>
+</mat-card>

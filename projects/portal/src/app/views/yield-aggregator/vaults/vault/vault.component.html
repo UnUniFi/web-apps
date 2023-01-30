@@ -7,6 +7,12 @@
   </mat-card-header>
   <mat-list class="mb-4">
     <mat-list-item>
+      <span class="whitespace-nowrap">Coin Type:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.coinType }}</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
       <span class="whitespace-nowrap">Annual Percentage Yield:</span>
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-sm sm:text-base">{{ vault.annualPercentageYield }}%</span>
@@ -15,13 +21,19 @@
     <mat-list-item>
       <span class="whitespace-nowrap">Total Value Locked:</span>
       <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.totalValueLocked }}GUU</span>
+      <span class="ml-2 break-all text-sm sm:text-base">${{ vault.totalValueLocked }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
-      <span class="whitespace-nowrap">Coin Type:</span>
+      <span class="whitespace-nowrap">Your {{ vault.coinType }} Vault:</span>
       <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.coinType }}</span>
+      <span class="ml-2 break-all text-sm sm:text-base">${{ vault.depositedAmount }}</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Your Earned:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">${{ vault.earnedAmount }}</span>
     </mat-list-item>
   </mat-list>
 
@@ -29,4 +41,104 @@
   <mat-card-content>
     {{ vault.description }}
   </mat-card-content>
+</mat-card>
+
+<mat-card class="mb-4">
+  <mat-button-toggle-group
+    class="flex mb-4"
+    #tgl="matButtonToggleGroup"
+    (change)="onToggleChange(tgl.value)"
+    value="deposit"
+  >
+    <mat-button-toggle class="flex-auto" value="deposit">
+      <mat-icon>add_circle</mat-icon>Deposit
+    </mat-button-toggle>
+    <mat-button-toggle class="flex-auto" value="withdraw">
+      <mat-icon>remove_circle</mat-icon>Withdraw
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-list class="mb-4">
+    <mat-list-item>
+      <span class="whitespace-nowrap">Your Wallet Balance:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.depositedAmount }} ATOM</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Your Vault Balance:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">{{ vault.depositedAmount }} ATOM</span>
+    </mat-list-item>
+  </mat-list>
+
+  <ng-container *ngIf="isDeposit; then deposit; else withdraw"></ng-container>
+  <div class="flex flex-row content-center items-center">
+    <mat-form-field class="flex-auto">
+      <ng-template #deposit><mat-label>From Wallet</mat-label></ng-template>
+      <ng-template #withdraw><mat-label>From Vault</mat-label></ng-template>
+      <input matNativeControl #targetRef name="trade" [(ngModel)]="amount" [min]="0" required />
+      <!-- <mat-error>Required!</mat-error> -->
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select [(value)]="selectedAsset">
+        <mat-option *ngFor="let asset of assets" [value]="asset">
+          {{ asset }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <ng-container *ngIf="isDeposit; then depositButton; else withdrawButton"></ng-container>
+  <ng-template #depositButton>
+    <button mat-flat-button class="w-full mt-4" color="accent">Deposit</button>
+  </ng-template>
+  <ng-template #withdrawButton>
+    <button mat-flat-button class="w-full mt-4" color="primary">Withdraw</button>
+  </ng-template>
+</mat-card>
+
+<mat-card class="mb-4">
+  <mat-card-header>
+    <mat-card-title>Performance</mat-card-title>
+    <mat-card-subtitle>APY History</mat-card-subtitle>
+  </mat-card-header>
+  <div>
+    <span class="flex-auto"></span>
+    <google-chart
+      [title]="chartTitle"
+      [type]="chartType"
+      [data]="chartData"
+      [columns]="chartColumnNames"
+      [options]="chartOptions"
+    >
+    </google-chart>
+    <span class="flex-auto"></span>
+  </div>
+  <h3>APY</h3>
+  <mat-list class="mb-4">
+    <mat-list-item>
+      <span class="whitespace-nowrap">Net APY:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">%</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Weekly APY:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">%</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Monthly APY:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">%</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="whitespace-nowrap">Gross APR:</span>
+      <span class="flex-auto"></span>
+      <span class="ml-2 break-all text-sm sm:text-base">%</span>
+    </mat-list-item>
+  </mat-list>
 </mat-card>

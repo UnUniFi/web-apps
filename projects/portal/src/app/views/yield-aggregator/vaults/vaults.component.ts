@@ -9,6 +9,7 @@ export interface VaultInfo {
   totalValueLocked: string;
   availableAmount: string;
   depositedAmount: string;
+  earnedAmount: string;
   coinType?: string;
   description?: string;
 }
@@ -33,6 +34,7 @@ export class VaultsComponent implements OnInit {
         totalValueLocked: '100000',
         availableAmount: '20000',
         depositedAmount: '0',
+        earnedAmount: '0',
       },
       {
         name: 'Osmosis',
@@ -44,6 +46,7 @@ export class VaultsComponent implements OnInit {
         totalValueLocked: '60000',
         availableAmount: '20000',
         depositedAmount: '0',
+        earnedAmount: '0',
       },
     ];
   }

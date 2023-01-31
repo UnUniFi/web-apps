@@ -1,10 +1,9 @@
-import { NftComponent } from './nft.component';
+import { MyPageComponent } from './my-page.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 @NgModule({
-  declarations: [NftComponent],
+  declarations: [MyPageComponent],
   imports: [CommonModule],
-  exports: [NftComponent],
 })
-export class NftModule {}
+export class MyPageModule {}

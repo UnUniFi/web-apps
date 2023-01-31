@@ -18,11 +18,15 @@ export class VaultComponent implements OnInit {
   chartData: any[];
   chartColumnNames: any[];
   chartOptions: any;
+  configs: string[];
+  selectedConfig: string;
 
   constructor() {
     this.amount = '0';
     this.assets = ['atom'];
     this.selectedAsset = this.assets[0];
+    this.configs = ['APY'];
+    this.selectedConfig = this.configs[0];
     this.isDeposit = true;
     this.vault = {
       name: 'Cosmos',
@@ -63,6 +67,10 @@ export class VaultComponent implements OnInit {
     }
   }
 
+  onChangeConfig(config: string) {
+    this.selectedConfig = config;
+  }
+
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.chartOptions = this.createChartOption();
@@ -73,6 +81,8 @@ export class VaultComponent implements OnInit {
     let width: number;
     if (innerWidth < 640) {
       width = innerWidth;
+    } else if (innerWidth > 1440) {
+      width = 1000;
     } else if (innerWidth > 1024) {
       width = 800;
     } else {

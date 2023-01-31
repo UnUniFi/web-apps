@@ -102,6 +102,15 @@
   <mat-card-header>
     <mat-card-title>Performance</mat-card-title>
     <mat-card-subtitle>APY History</mat-card-subtitle>
+    <span class="flex-auto"></span>
+    <mat-form-field appearance="fill">
+      <mat-label>Chart Type</mat-label>
+      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+        <mat-option *ngFor="let conf of configs" [value]="conf">
+          {{ conf }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </mat-card-header>
   <div>
     <span class="flex-auto"></span>

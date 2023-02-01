@@ -1,1 +1,7 @@
-<view-derivatives [tokenInfos]="tokenInfos$ | async"></view-derivatives>
+<view-derivatives
+  [derivativesParams]="derivativesParams$ | async"
+  [pool]="pool$ | async"
+  [perpetualFuturesParams]="perpetualFuturesParams$ | async"
+  [tokens]="tokens$ | async"
+  [tokenInfos]="tokenInfos$ | async"
+></view-derivatives>

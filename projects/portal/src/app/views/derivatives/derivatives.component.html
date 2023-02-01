@@ -6,31 +6,31 @@
     <mat-list-item>
       <span class="break-all truncate pr-4">Pool Value:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$</span>
+      <span class="break-all truncate">$ {{ pool?.pool_market_cap?.total }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">24h Volume:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$</span>
+      <span class="break-all truncate">$ {{ pool?.volume_24hours }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">24h Fees:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$</span>
+      <span class="break-all truncate">$ {{ pool?.fees_24hours }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Long Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$</span>
+      <span class="break-all truncate">$ {{ perpetualFuturesParams?.long_positions }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Short Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$</span>
+      <span class="break-all truncate">$ {{ perpetualFuturesParams?.short_positions }}</span>
     </mat-list-item>
   </mat-list>
 </mat-card>
@@ -54,8 +54,9 @@
         mat-flat-button
         color="primary"
         routerLink="{{ selectedConfig.route }}"
+        *ngIf="selectedConfig.name === 'Perpetual Futures'"
       >
-        <mat-icon>score</mat-icon>
+        <mat-icon>show_chart</mat-icon>
         <span>Trade</span>
       </button>
       <span class="flex-auto"></span>
@@ -79,19 +80,50 @@
         <mat-list-item>
           <span class="whitespace-nowrap">Price:</span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">${{ tokenInfo.price }}</span>
+          <span class="ml-2 break-all text-sm sm:text-base">$ {{ tokenInfo.price }}</span>
           <mat-divider></mat-divider>
         </mat-list-item>
         <mat-list-item>
           <span class="whitespace-nowrap">Pool:</span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">${{ tokenInfo.pool }}</span>
+          <span class="ml-2 break-all text-sm sm:text-base">$ {{ tokenInfo.pool }}</span>
           <mat-divider></mat-divider>
         </mat-list-item>
         <mat-list-item>
           <span class="whitespace-nowrap">Weight:</span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all text-sm sm:text-base">{{ tokenInfo.weight }}%</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="flex flex-wrap">
+  <mat-card class="text-center hover:shadow-xl w-64 m-5" *ngFor="let token of tokens">
+    <mat-card-header>
+      <img mat-card-avatar src="{{ token.iconUrl }}" />
+      <mat-card-title>{{ token.name }}</mat-card-title>
+      <mat-card-subtitle>{{ token.symbol }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <span class="whitespace-nowrap">Price:</span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.price }}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          <span class="whitespace-nowrap">24h Volume:</span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.volume24h }}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <mat-list-item>
+          <span class="whitespace-nowrap">24h Fees:</span>
+          <span class="flex-auto"></span>
+          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.fees24h }}%</span>
         </mat-list-item>
       </mat-list>
     </mat-card-content>

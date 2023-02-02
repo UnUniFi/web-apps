@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-nft-pawnshop',
+  selector: 'view-nft-pawnshop',
   templateUrl: './nft-pawnshop.component.html',
-  styleUrls: ['./nft-pawnshop.component.css']
+  styleUrls: ['./nft-pawnshop.component.css'],
 })
 export class NftPawnshopComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

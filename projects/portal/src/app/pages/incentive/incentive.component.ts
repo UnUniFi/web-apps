@@ -30,10 +30,11 @@ export class IncentiveComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
     this.address$ = address$.pipe(map((addr) => addr.toString()));
-    this.unitIds$ = address$.pipe(
-      mergeMap((address) => this.ununifiRest.listIncentiveUnitIdsByAddr$(address.toString())),
-      map((res) => res.incentive_unit_ids),
-    );
+    // this.unitIds$ = address$.pipe(
+    //   mergeMap((address) => this.ununifiRest.listIncentiveUnitIdsByAddr$(address.toString())),
+    //   map((res) => res.incentive_unit_ids),
+    // );
+    this.unitIds$ = of(undefined);
     this.rewards$ = address$.pipe(
       mergeMap((address) => this.ununifiRest.getAllRewards$(address.toString())),
     );

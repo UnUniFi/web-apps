@@ -13,7 +13,8 @@ import {
   CdpAll200ResponseCdpInnerCdpCollateral,
   EcosystemincentiveParams200ResponseParams,
   IncentiveUnit200ResponseIncentiveUnit,
-  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
+  ListedClass200Response,
+  ListedNfts200ResponseListingsInner, // IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
 
@@ -136,12 +137,34 @@ export class UnunifiRestService {
     );
   }
 
-  listIncentiveUnitIdsByAddr$(
-    address: string,
-  ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
+  // listIncentiveUnitIdsByAddr$(
+  //   address: string,
+  // ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
+  //     map((res) => res.data.incentive_unit_ids_by_addr!),
+  //   );
+  // }
+
+  // nftmarket => nft-pawnshop
+  getAllListedClasses(): Observable<ListedClass200Response[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
-      map((res) => res.data.incentive_unit_ids_by_addr!),
+      mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
+      map((res) => res.data.classes!),
+    );
+  }
+
+  getAllListedNfts(): Observable<ListedNfts200ResponseListingsInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),
+      map((res) => res.data.listings!),
+    );
+  }
+
+  getNftListing(classID: string, nftID: string): Observable<ListedNfts200ResponseListingsInner> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.nftListing(sdk, classID, nftID)),
+      map((res) => res.data.listing!),
     );
   }
 }

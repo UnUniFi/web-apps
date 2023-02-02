@@ -1,6 +1,4 @@
 import { CreateUnitFormDialogComponent } from '../../pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
-import { WithdrawIncentiveAllRewardsFormDialogComponent } from '../../pages/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.component';
-import { WithdrawIncentiveRewardFormDialogComponent } from '../../pages/dialogs/incentive/withdraw-incentive-reward-form-dialog/withdraw-incentive-reward-form-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
@@ -15,6 +13,8 @@ import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
+import { ununifi } from 'ununifi-client/cjs/proto';
+import { google } from 'ununifi-client/esm/proto';
 
 @Injectable({
   providedIn: 'root',
@@ -30,34 +30,20 @@ export class DerivativesApplicationService {
     private readonly derivativesService: DerivativesService,
   ) {}
 
-  async openCreateUnitFormDialog(address: string): Promise<void> {
+  async openPositionFormDialog(data: string): Promise<void> {
     const txHash = await this.dialog
-      .open(CreateUnitFormDialogComponent, { data: address })
+      .open(CreateUnitFormDialogComponent, { data: data })
       .afterClosed()
       .toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
-  async openWithdrawIncentiveRewardFormDialog(denom: string): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawIncentiveRewardFormDialogComponent, { data: denom })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
-  }
-
-  async openWithdrawIncentiveAllRewardsFormDialog(address: string): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawIncentiveAllRewardsFormDialogComponent, { data: address })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
-  }
-
-  async Register(
-    derivativesUnitId: string,
-    subjectAddresses: string[],
-    weights: string[],
+  async openPerpetualFuturesPosition(
+    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    market: ununifi.derivatives.IMarket,
+    positionType: ununifi.derivatives.PositionType,
+    size: string,
+    leverage: string,
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
@@ -80,11 +66,21 @@ export class DerivativesApplicationService {
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
+    // create IAny Instance
+    const perpetualFuturesPositionInstance = {
+      position_type: positionType,
+      size: size,
+      leverage: leverage,
+    };
+    const positionInstance: google.protobuf.IAny = cosmosclient.codec.instanceToProtoAny(
+      perpetualFuturesPositionInstance,
+    );
+
     try {
-      simulatedResultData = await this.derivativesService.simulateToRegister(
-        derivativesUnitId,
-        subjectAddresses,
-        weights,
+      simulatedResultData = await this.derivativesService.simulateToOpenPosition(
+        margin,
+        market,
+        positionInstance,
         cosmosPublicKey,
         minimumGasPrice,
         gasRatio,
@@ -124,10 +120,10 @@ export class DerivativesApplicationService {
     let txHash: string | undefined;
 
     try {
-      txResult = await this.derivativesService.register(
-        derivativesUnitId,
-        subjectAddresses,
-        weights,
+      txResult = await this.derivativesService.openPosition(
+        margin,
+        market,
+        positionInstance,
         currentCosmosWallet,
         gas,
         fee,
@@ -147,7 +143,7 @@ export class DerivativesApplicationService {
     this.snackBar.open('Successfully registered frontend derivatives.', undefined, {
       duration: 6000,
     });
-    return txHash;
+    await this.router.navigate(['txs', txHash]);
   }
 
   async withdrawReward(

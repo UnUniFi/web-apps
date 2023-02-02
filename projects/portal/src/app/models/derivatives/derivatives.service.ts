@@ -6,7 +6,9 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import { google } from '@cosmos-client/core/esm/proto';
 import ununificlient from 'ununifi-client';
+import { ununifi } from 'ununifi-client/esm/proto';
 
 @Injectable({
   providedIn: 'root',
@@ -18,21 +20,21 @@ export class DerivativesService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
-  // register incentive token
-  async register(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
-    weights: string[],
+  // open position
+  async openPosition(
+    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    market: ununifi.derivatives.IMarket,
+    positionInstance: google.protobuf.IAny,
     currentCosmosWallet: CosmosWallet,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
-    const txBuilder = await this.buildRegisterTxBuilder(
-      incentiveUnitId,
-      subjectAddresses,
-      weights,
+    const txBuilder = await this.buildOpenPositionTxBuilder(
+      margin,
+      market,
+      positionInstance,
       cosmosPublicKey,
       gas,
       fee,
@@ -54,10 +56,10 @@ export class DerivativesService {
     return txResult;
   }
 
-  async simulateToRegister(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
-    weight: string[],
+  async simulateToOpenPosition(
+    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    market: ununifi.derivatives.IMarket,
+    positionInstance: google.protobuf.IAny,
     cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
@@ -70,10 +72,10 @@ export class DerivativesService {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const simulatedTxBuilder = await this.buildRegisterTxBuilder(
-      incentiveUnitId,
-      subjectAddresses,
-      weight,
+    const simulatedTxBuilder = await this.buildOpenPositionTxBuilder(
+      margin,
+      market,
+      positionInstance,
       cosmosPublicKey,
       dummyGas,
       dummyFee,
@@ -81,10 +83,10 @@ export class DerivativesService {
     return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
   }
 
-  async buildRegisterTxBuilder(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
-    weights: string[],
+  async buildOpenPositionTxBuilder(
+    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    market: ununifi.derivatives.IMarket,
+    positionInstance: google.protobuf.IAny,
     cosmosPublicKey: cosmosclient.PubKey,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -94,15 +96,15 @@ export class DerivativesService {
       throw Error('Unused Account or Unsupported Account Type!');
     }
     const senderAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const msgRegister = this.buildMsgRegister(
+    const msgOpenPosition = this.buildMsgOpenPosition(
       senderAddress.toString(),
-      incentiveUnitId,
-      subjectAddresses,
-      weights,
+      margin,
+      market,
+      positionInstance,
     );
 
     const txBuilder = await this.txCommonService.buildTxBuilder(
-      [msgRegister],
+      [msgOpenPosition],
       cosmosPublicKey,
       baseAccount,
       gas,
@@ -111,19 +113,19 @@ export class DerivativesService {
     return txBuilder;
   }
 
-  buildMsgRegister(
+  buildMsgOpenPosition(
     senderAddress: string,
-    incentiveUnitId: string,
-    subjectAddresses: string[],
-    weights: string[],
-  ): ununificlient.proto.ununifi.ecosystemincentive.MsgRegister {
-    const msgRegister = new ununificlient.proto.ununifi.ecosystemincentive.MsgRegister({
+    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    market: ununifi.derivatives.IMarket,
+    positionInstance: google.protobuf.IAny,
+  ): ununificlient.proto.ununifi.derivatives.MsgOpenPosition {
+    const msgOpenPosition = new ununificlient.proto.ununifi.derivatives.MsgOpenPosition({
       sender: senderAddress,
-      incentive_unit_id: incentiveUnitId,
-      subject_addrs: subjectAddresses,
-      weights: weights,
+      margin,
+      market,
+      position_instance: positionInstance,
     });
-    return msgRegister;
+    return msgOpenPosition;
   }
 
   // withdraw reward

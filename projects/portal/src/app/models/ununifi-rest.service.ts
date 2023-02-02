@@ -10,11 +10,8 @@ import {
   AuctionAll200ResponseAuctionsInner,
   AuctionParams200ResponseParams,
   CdpAll200ResponseCdpInner,
-  CdpAll200ResponseCdpInnerCdpCollateral,
-  EcosystemincentiveParams200ResponseParams,
-  IncentiveUnit200ResponseIncentiveUnit,
   ListedClass200Response,
-  ListedNfts200ResponseListingsInner, // IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
+  ListedNfts200ResponseListingsInner,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
 
@@ -97,45 +94,45 @@ export class UnunifiRestService {
     );
   }
 
-  getEcosystemIncentiveParams$(): Observable<EcosystemincentiveParams200ResponseParams> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.params(sdk)),
-      map((res) => res.data.params!),
-    );
-  }
+  // getEcosystemIncentiveParams$(): Observable<EcosystemincentiveParams200ResponseParams> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) => ununifi.rest.ecosystemIncentive.params(sdk)),
+  //     map((res) => res.data.params!),
+  //   );
+  // }
 
-  getIncentiveUnit$(incentiveUnitId: string): Observable<IncentiveUnit200ResponseIncentiveUnit> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnit(sdk, incentiveUnitId)),
-      map((res) => res.data.incentive_unit!),
-    );
-  }
+  // getIncentiveUnit$(incentiveUnitId: string): Observable<IncentiveUnit200ResponseIncentiveUnit> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnit(sdk, incentiveUnitId)),
+  //     map((res) => res.data.incentive_unit!),
+  //   );
+  // }
 
-  getAllRewards$(subjectAddr: string): Observable<CdpAll200ResponseCdpInnerCdpCollateral[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
-      map((res) => res.data.rewards?.rewards!),
-    );
-  }
+  // getAllRewards$(subjectAddr: string): Observable<CdpAll200ResponseCdpInnerCdpCollateral[]> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
+  //     map((res) => res.data.rewards?.rewards!),
+  //   );
+  // }
 
-  getReward$(
-    subjectAddr: string,
-    denom: string,
-  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
-      map((res) => res.data.reward!),
-    );
-  }
+  // getReward$(
+  //   subjectAddr: string,
+  //   denom: string,
+  // ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
+  //     map((res) => res.data.reward!),
+  //   );
+  // }
 
-  getRecordedIncentiveUnitId$(classId: string, nftId: string): Observable<string> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) =>
-        ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
-      ),
-      map((res) => res.data.incentive_unit_id!),
-    );
-  }
+  // getRecordedIncentiveUnitId$(classId: string, nftId: string): Observable<string> {
+  //   return this.restSdk$.pipe(
+  //     mergeMap((sdk) =>
+  //       ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
+  //     ),
+  //     map((res) => res.data.incentive_unit_id!),
+  //   );
+  // }
 
   // listIncentiveUnitIdsByAddr$(
   //   address: string,

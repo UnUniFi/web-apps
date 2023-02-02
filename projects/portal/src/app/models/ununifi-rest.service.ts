@@ -37,6 +37,7 @@ export const getCollateralParamsStream = (
 
 @Injectable({ providedIn: 'root' })
 export class UnunifiRestService {
+  // TODO: split this into multiple services for each module (pawn-market-rest, yield-aggregator-rest, derivatives-rest)
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
@@ -137,65 +138,6 @@ export class UnunifiRestService {
         ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
       ),
       map((res) => res.data.incentive_unit_id!),
-    );
-  }
-
-  getDerivativesParams$(): Observable<DerivativesParams200ResponseParams> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.params(sdk)),
-      map((res) => res.data.params!),
-    );
-  }
-
-  getNominalAPY$(): Observable<string> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.nominalAPY(sdk)),
-      map((res) => res.data.apy!),
-    );
-  }
-
-  getRealAPY$(): Observable<string> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.realAPY(sdk)),
-      map((res) => res.data.apy!),
-    );
-  }
-
-  getPool$(): Observable<Pool200Response> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.pool(sdk)),
-      map((res) => res.data!),
-    );
-  }
-
-  listAllPositions$(): Observable<AllPositions200ResponsePositionsInner[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.allPositions(sdk)),
-      map((res) => res.data.positions!),
-    );
-  }
-
-  listAddressPositions$(address: string): Observable<AllPositions200ResponsePositionsInner[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.positions(sdk, address)),
-      map((res) => res.data.positions!),
-    );
-  }
-
-  getWholePerpetualFutures$(): Observable<PerpetualFutures200Response> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.wholePerpetualFutures(sdk)),
-      map((res) => res.data!),
-    );
-  }
-
-  getPerpetualFuture$(
-    denom: string,
-    quoteDenom: string,
-  ): Observable<PerpetualFuturesMarket200Response> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.perpetualFuture(sdk, denom, quoteDenom)),
-      map((res) => res.data!),
     );
   }
 }

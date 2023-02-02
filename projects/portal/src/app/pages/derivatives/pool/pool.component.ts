@@ -1,3 +1,5 @@
+import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
+import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pool.component.css'],
 })
 export class PoolComponent implements OnInit {
-  pool$ = this.derivativesService.pool$;
+  pool$ = this.derivativesQuery.getPool$();
 
-  constructor() {}
+  constructor(private derivativesQuery: DerivativesQueryService) {}
 
   ngOnInit(): void {}
+
+  onMintLPT($event: MintLPTEvent) {}
+
+  onBurnLPT($event: BurnLPTEvent) {}
 }

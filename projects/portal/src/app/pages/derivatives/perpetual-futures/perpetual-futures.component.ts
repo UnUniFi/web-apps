@@ -1,3 +1,4 @@
+import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -13,8 +14,9 @@ export class PerpetualFuturesComponent implements OnInit {
   selectedPayAsset$: Observable<string>;
   targetAssets$: Observable<string[]>;
   selectedTargetAsset$: Observable<string>;
+  info$ = this.derivativesQuery.getWholePerpetualFutures$();
 
-  constructor() {
+  constructor(private derivativesQuery: DerivativesQueryService) {
     this.configs$ = of(['ETH/USD', 'BTC/USD', 'ATOM/USD']);
     this.selectedConfig$ = of('ETH/USD');
     this.payAssets$ = of(['GUU', 'ETH', 'BTC', 'ATOM', 'USDC']);

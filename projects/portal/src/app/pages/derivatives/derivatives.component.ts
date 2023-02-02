@@ -1,4 +1,4 @@
-import { UnunifiRestService } from '../../models/ununifi-rest.service';
+import { DerivativesQueryService } from '../../models/derivatives/derivatives.query.service';
 import { TokenInfo } from '../../views/derivatives/derivatives.component';
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -32,19 +32,19 @@ export class DerivativesComponent implements OnInit {
   tokens$: Observable<TokenData[]>;
   tokenInfos$: Observable<TokenInfo[]>;
 
-  constructor(private ununifiRest: UnunifiRestService) {
-    this.derivativesParams$ = this.ununifiRest.getDerivativesParams$();
+  constructor(private derivativesQuery: DerivativesQueryService) {
+    this.derivativesParams$ = this.derivativesQuery.getDerivativesParams$();
     this.derivativesParams$.subscribe((a) => console.log(a));
-    this.pool$ = this.ununifiRest.getPool$();
+    this.pool$ = this.derivativesQuery.getPool$();
     this.pool$.subscribe((a) => console.log(a));
-    this.perpetualFuturesParams$ = this.ununifiRest.getWholePerpetualFutures$();
+    this.perpetualFuturesParams$ = this.derivativesQuery.getWholePerpetualFutures$();
     this.perpetualFuturesParams$.subscribe((a) => console.log(a));
     this.tokens$ = this.derivativesParams$.pipe(
       map((params) => params.perpetual_futures?.markets!),
       mergeMap((markets) =>
         Promise.all(
           markets.map((market) =>
-            this.ununifiRest
+            this.derivativesQuery
               .getPerpetualFuture$(market.denom!, market.quote_denom!)
               .toPromise()
               .then((res) => {

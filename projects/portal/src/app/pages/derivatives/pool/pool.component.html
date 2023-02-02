@@ -1,1 +1,1 @@
-<view-pool></view-pool>
+<view-pool [pool]="pool$ | async" (mintLPT)="onMintLPT($event)" (burnLPT)="onBurnLPT($event)"></view-pool>

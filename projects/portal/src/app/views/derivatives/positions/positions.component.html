@@ -1,1 +1,3 @@
-<p>positions works!</p>
+<ng-container *ngFor="let position of positions">
+  <view-position [position]="position" (closePosition)="onClosePosition($event)"></view-position>
+</ng-container>

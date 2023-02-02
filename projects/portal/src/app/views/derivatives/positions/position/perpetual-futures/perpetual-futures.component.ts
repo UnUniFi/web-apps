@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'view-perpetual-futures',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./perpetual-futures.component.css'],
 })
 export class PerpetualFuturesComponent implements OnInit {
+  @Output()
+  closePosition = new EventEmitter();
+
   constructor() {}
 
   ngOnInit(): void {}

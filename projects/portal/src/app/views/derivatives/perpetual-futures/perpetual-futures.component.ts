@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { PerpetualFutures200Response } from 'ununifi-client/esm/openapi';
 
 export interface Asset {
   price: string;
@@ -14,6 +15,9 @@ declare const TradingView: any;
   styleUrls: ['./perpetual-futures.component.css'],
 })
 export class PerpetualFuturesComponent implements OnInit, AfterViewInit {
+  @Input()
+  info?: PerpetualFutures200Response | null;
+
   @Input()
   configs?: string[] | null;
   @Input()

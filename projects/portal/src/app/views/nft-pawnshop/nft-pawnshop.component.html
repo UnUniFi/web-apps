@@ -1,1 +1,83 @@
-<p>nft-pawnshop works!</p>
+<h2 class="mb-0">NFT-Fi GUU Lending</h2>
+<h3 class="mb-0 ml-4">Markets</h3>
+<mat-card class="mb-4">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-card-title>Borrow GUUs on the Security of NFT</mat-card-title>
+    <mat-card-subtitle>NFT Management</mat-card-subtitle>
+    <mat-card-content>
+      <p>
+        You can list an NFT and borrow a GUU from a bidder. You can also sell the NFT directly to
+        the bidder.
+      </p>
+      <p>In case of late repayment, the NFT will be automatically liquidated.</p>
+    </mat-card-content>
+    <div class="flex flex-row">
+      <button class="w-1/3 mb-4" mat-flat-button color="primary" routerLink="borrowers">
+        <mat-icon>add_photo_alternate</mat-icon>
+        <span>Join as a Borrower</span>
+      </button>
+      <span class="flex-auto"></span>
+      <button class="w-1/4 mb-4" mat-flat-button color="accent">
+        <span>Read more</span>
+      </button>
+    </div>
+  </mat-card>
+
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-card-title>Lend your GUUs to NFT Holder</mat-card-title>
+    <mat-card-subtitle>GUU Management</mat-card-subtitle>
+    <mat-card-content>
+      <p>
+        You can lend your GUUs at a set interest rate and repayment term. In addition to earning
+        interest rates, you may be able to buy NFTs at lower prices.
+      </p>
+      <p>The Interest is charged from the time the NFT seller borrows from your deposit.</p>
+    </mat-card-content>
+    <div class="flex flex-row">
+      <button class="w-1/3 mb-4" mat-flat-button color="primary" routerLink="lenders">
+        <mat-icon>monetization_on</mat-icon>
+        <span>Join as a Lender</span>
+      </button>
+      <span class="flex-auto"></span>
+      <button class="w-1/4 mb-4" mat-flat-button color="accent">
+        <span>Read more</span>
+      </button>
+    </div>
+  </mat-card>
+</mat-card>
+
+<h3 class="mb-0 ml-4">Stats</h3>
+<mat-card class="mb-4">
+  <mat-card-title>Overview</mat-card-title>
+  <mat-list>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Average Interest Rate:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">%</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">24h Volume:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">GUU</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">24h Total Interest:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">GUU</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Now Listing NFTs:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ listedNfts?.length }}</span>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Total Deposits:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">GUU</span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>

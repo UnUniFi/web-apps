@@ -12,6 +12,7 @@ import {
   CdpAll200ResponseCdpInner,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
+  NftmarketParams200ResponseParams,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
 
@@ -144,6 +145,12 @@ export class UnunifiRestService {
   // }
 
   // nftmarket => nft-pawnshop
+  getNftmarketParam(): Observable<NftmarketParams200ResponseParams> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.params(sdk)),
+      map((res) => res.data.params!),
+    );
+  }
   getAllListedClasses(): Observable<ListedClass200Response[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
@@ -162,6 +169,20 @@ export class UnunifiRestService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.nftListing(sdk, classID, nftID)),
       map((res) => res.data.listing!),
+    );
+  }
+
+  listListedNfts(): Observable<ListedNfts200ResponseListingsInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),
+      map((res) => res.data.listings!),
+    );
+  }
+
+  listListedClasses(): Observable<ListedClass200Response[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
+      map((res) => res.data.classes!),
     );
   }
 }

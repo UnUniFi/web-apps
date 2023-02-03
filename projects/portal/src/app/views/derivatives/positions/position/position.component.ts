@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
+import ununificlient from 'ununifi-client';
 import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -13,9 +15,27 @@ export class PositionComponent implements OnInit {
   @Output()
   closePosition = new EventEmitter<string>();
 
+  perpetualFuturesPositionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | null;
+  perpetualOptionsPositionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance | null;
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const positionInstance = cosmosclient.codec.protoJSONToInstance(
+      this.position?.position_instance as any,
+    );
+    if (
+      positionInstance instanceof
+      ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
+    ) {
+      this.perpetualFuturesPositionInstance = positionInstance;
+    } else if (
+      positionInstance instanceof
+      ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance
+    ) {
+      this.perpetualOptionsPositionInstance = positionInstance;
+    }
+  }
 
   onClosePosition() {
     this.closePosition.emit(this.position?.id);

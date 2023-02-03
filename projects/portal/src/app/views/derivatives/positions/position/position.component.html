@@ -1,1 +1,6 @@
-<view-perpetual-futures (closePosition)="onClosePosition()"></view-perpetual-futures>
+<ng-container *ngIf="perpetualFuturesPositionInstance">
+  <view-perpetual-futures [position]="position" [positionInstance]="perpetualFuturesPositionInstance" (closePosition)="onClosePosition()"></view-perpetual-futures>
+</ng-container>
+<!-- <ng-container *ngIf="perpetualOptionsPositionInstance">
+  <view-perpetual-options [position]="position" [positionInstance]="perpetualOptionsPositionInstance" (closePosition)="onClosePosition()"></view-perpetual-options>
+</ng-container> -->

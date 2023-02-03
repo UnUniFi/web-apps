@@ -1,3 +1,4 @@
+import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pool200Response } from 'ununifi-client/esm/openapi';
 
@@ -25,7 +26,11 @@ export class PoolComponent implements OnInit {
   @Output()
   burnLPT = new EventEmitter<BurnLPTEvent>();
 
-  constructor() {}
+  constructor(private readonly derivativesApplication: DerivativesApplicationService) {}
 
   ngOnInit(): void {}
+
+  onSubmitMint(denom: string, amount: string) {}
+
+  onSubmitRedeem(amount: string) {}
 }

@@ -1,1 +1,50 @@
-<p>perpetual-futures works!</p>
+<mat-card>
+  <div class="flex-row">
+    <span class="flex-auto"></span>
+    <button mat-button color="warn" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+      <span>Close</span>
+    </button>
+  </div>
+    <mat-chip>Perpetual Futures</mat-chip>
+    <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
+      <mat-chip color="primary">Long</mat-chip>
+    </ng-container>
+    <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
+      <mat-chip color="warn">Short</mat-chip>
+    </ng-container>
+
+  <mat-list>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Market:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ position?.market }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Opened at:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ position?.opened_at }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Opened rate:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ position?.opened_rate }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Leverage:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ positionInstance?.leverage}}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span class="break-all truncate pr-4">Position size:</span>
+      <span class="flex-auto"></span>
+      <span class="break-all truncate">{{ positionInstance?.size}}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
+
+</mat-card>

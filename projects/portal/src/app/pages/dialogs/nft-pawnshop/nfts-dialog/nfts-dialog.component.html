@@ -1,0 +1,8 @@
+<view-nfts-dialog
+  [classID]="classID"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [coins]="coins$ | async"
+  [uguuBalance]="uguuBalance$ | async"
+  [listedClass]="listedClass$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-nfts-dialog>

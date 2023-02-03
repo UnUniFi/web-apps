@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-lenders',
@@ -11,11 +12,16 @@ export class LendersComponent implements OnInit {
   balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   denoms?: string[] | null;
+  @Input()
+  listedClasses?: ListedClass200Response[] | null;
+  @Input()
+  classImages?: string[] | null;
 
   depositAmount: number;
   selectedDenom: string;
   interestRate: number;
   datePicker: Date;
+  isSubmitted: boolean;
 
   constructor() {
     this.denoms = ['GUU'];
@@ -27,7 +33,20 @@ export class LendersComponent implements OnInit {
     now.setMinutes(0);
     now.setSeconds(0);
     this.datePicker = now;
+    this.isSubmitted = false;
   }
 
   ngOnInit(): void {}
+
+  onSubmit() {
+    // todo output & change NFT classes
+    this.isSubmitted = true;
+  }
+
+  onClickClass(classID?: string) {
+    if (!classID) {
+      alert('No classID');
+    }
+    // todo open nfts in the class
+  }
 }

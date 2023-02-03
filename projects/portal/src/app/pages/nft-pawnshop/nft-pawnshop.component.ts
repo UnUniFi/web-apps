@@ -1,4 +1,4 @@
-import { UnunifiRestService } from '../../models/ununifi-rest.service';
+import { PawnshopQueryService } from '../../models/nft-pawnshops/nft-pawnshop.query.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
@@ -17,10 +17,10 @@ export class NftPawnshopComponent implements OnInit {
   listedClasses$: Observable<ListedClass200Response[]>;
   listedNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
 
-  constructor(private readonly ununifiRest: UnunifiRestService) {
-    this.params$ = this.ununifiRest.getNftmarketParam();
-    this.listedClasses$ = this.ununifiRest.listListedClasses();
-    this.listedNfts$ = this.ununifiRest.listListedNfts();
+  constructor(private readonly pawnshopQuery: PawnshopQueryService) {
+    this.params$ = this.pawnshopQuery.getNftmarketParam();
+    this.listedClasses$ = this.pawnshopQuery.listListedClasses();
+    this.listedNfts$ = this.pawnshopQuery.listListedNfts();
   }
 
   ngOnInit(): void {}

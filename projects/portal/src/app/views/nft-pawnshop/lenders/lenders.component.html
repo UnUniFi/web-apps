@@ -23,69 +23,122 @@
 
   <h3>Set Lending Parameter</h3>
   <mat-card class="mb-4 mat-elevation-z8">
-    <div class="flex flex-row content-center items-center">
-      <mat-form-field class="flex-auto">
-        <mat-label>Deposit</mat-label>
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <div class="flex flex-row content-center items-center">
+        <mat-form-field class="flex-auto">
+          <mat-label>Deposit</mat-label>
+          <input
+            matNativeControl
+            #depositRef
+            name="deposit"
+            [(ngModel)]="depositAmount"
+            [min]="0"
+            required
+          />
+          <!-- <mat-error>Required!</mat-error> -->
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [(value)]="selectedDenom">
+            <mat-option *ngFor="let denom of denoms" [value]="denom">
+              {{ denom }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="w-full">
+        <mat-label>Interest Rate</mat-label>
         <input
           matNativeControl
-          #depositRef
-          name="deposit"
-          [(ngModel)]="depositAmount"
+          #interestRef
+          name="interest"
+          [(ngModel)]="interestRate"
           [min]="0"
           required
         />
         <!-- <mat-error>Required!</mat-error> -->
+        <span matSuffix>&nbsp;%</span>
       </mat-form-field>
-      <mat-form-field>
-        <mat-select [(value)]="selectedDenom">
-          <mat-option *ngFor="let denom of denoms" [value]="denom">
-            {{ denom }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <mat-form-field class="w-full">
-      <mat-label>Interest Rate</mat-label>
-      <input
-        matNativeControl
-        #interestRef
-        name="interest"
-        [(ngModel)]="interestRate"
+      <mat-slider
+        thumbLabel
+        class="w-full"
+        [max]="20"
         [min]="0"
-        required
-      />
-      <!-- <mat-error>Required!</mat-error> -->
-      <span matSuffix>&nbsp;%</span>
-    </mat-form-field>
-    <mat-slider
-      thumbLabel
-      class="w-full"
-      [max]="20"
-      [min]="0"
-      [step]="0.1"
-      [(ngModel)]="interestRate"
-      name="leverage-slider"
-    >
-    </mat-slider>
-    <mat-form-field class="w-full">
-      <mat-label>Repayment Term</mat-label>
-      <input
-        matInput
-        [ngxMatDatetimePicker]="picker"
-        placeholder="Choose a date & time"
-        [(ngModel)]="datePicker"
-      />
-      <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-      <ngx-mat-datetime-picker
-        #picker
-        [showSpinners]="true"
-        [showSeconds]="false"
-        [stepHour]="1"
-        [stepMinute]="1"
-        [stepSecond]="1"
-        [enableMeridian]="false"
-      ></ngx-mat-datetime-picker>
-    </mat-form-field>
-    <button mat-flat-button class="w-full mt-4" color="primary">Search NFTs</button>
+        [step]="0.1"
+        [(ngModel)]="interestRate"
+        name="leverage-slider"
+      >
+      </mat-slider>
+      <mat-form-field class="w-full">
+        <mat-label>Repayment Term</mat-label>
+        <input
+          matInput
+          [ngxMatDatetimePicker]="picker"
+          placeholder="Choose a date & time"
+          [(ngModel)]="datePicker"
+          name="picker"
+        />
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #picker
+          [showSpinners]="true"
+          [showSeconds]="false"
+          [stepHour]="1"
+          [stepMinute]="1"
+          [stepSecond]="1"
+          [enableMeridian]="false"
+        ></ngx-mat-datetime-picker>
+      </mat-form-field>
+      <button mat-flat-button class="w-full mt-4" color="primary">Search NFTs</button>
+    </form>
   </mat-card>
+</mat-card>
+
+<mat-card class="mb-4" *ngIf="isSubmitted">
+  <mat-card-title>Listing NFT Collections</mat-card-title>
+  <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
+
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  </ng-template>
+  <ng-template #loaded>
+    <ng-container *ngIf="(listedClasses?.length || 0) > 0; then exist; else empty"> </ng-container>
+  </ng-template>
+
+  <ng-template #exist>
+    <div class="flex flex-wrap">
+      <mat-card
+        class="mat-elevation-z8 text-center w-64 m-5 p-0"
+        *ngFor="let class of listedClasses; index as i"
+      >
+        <img
+          mat-card-image
+          *ngIf="classImages"
+          src="{{ classImages[i] }}"
+          class="object-contain h-64 m-0"
+          style="margin: 0%"
+          alt="image of the NFT class"
+        />
+        <mat-card-title class="py-1">
+          {{ class.name }}
+        </mat-card-title>
+        <mat-card-subtitle class="break-all font-semibold text-sm text-gray-500">
+          {{ class.class_id }}
+        </mat-card-subtitle>
+        <mat-card-content>
+          <p>{{ class.description }}</p>
+        </mat-card-content>
+        <mat-card-content class="mb-4">
+          <span class="flex-auto"></span>
+          <button class="text-blue-400" mat-button (click)="onClickClass(class.class_id)">
+            View collection
+          </button>
+          <span class="flex-auto"></span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-template>
+  <ng-template #empty>
+    <p>There is no NFT holder to lend.</p>
+    <p>Try changing the parameter.</p>
+  </ng-template>
 </mat-card>

@@ -15,6 +15,27 @@ export class BankService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
+  convertSymbolAmountMapToCoins(
+    symbolBalanceMap: { [symbol: string]: number },
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): cosmosclient.proto.cosmos.base.v1beta1.ICoin[] {
+    const coins = Object.keys(symbolBalanceMap).map((symbol) => {
+      const denom = symbolMetadataMap[symbol].base!;
+      const denomUnit = symbolMetadataMap[symbol].denom_units?.find((unit) => unit.denom === denom);
+      if (!denomUnit) {
+        throw Error();
+      }
+
+      const amount = symbolBalanceMap[symbol].toFixed(denomUnit.exponent!).replace('.', '');
+      return {
+        denom,
+        amount,
+      } as cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    });
+
+    return coins;
+  }
+
   async simulateToSend(
     fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,

@@ -4,7 +4,7 @@ import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { AccAddress } from '@cosmos-client/core/cjs/types';
 import { Observable, zip } from 'rxjs';
 import { filter, map, mergeMap, pluck } from 'rxjs/operators';
-import ununifi from 'ununifi-client';
+import ununificlient from 'ununifi-client';
 import {
   AllPositions200ResponsePositionsInner,
   DerivativesParams200ResponseParams,
@@ -23,49 +23,49 @@ export class DerivativesQueryService {
 
   getDerivativesParams$(): Observable<DerivativesParams200ResponseParams> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.params(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.params(sdk)),
       map((res) => res.data.params!),
     );
   }
 
   getNominalAPY$(): Observable<string> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.nominalAPY(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.nominalAPY(sdk)),
       map((res) => res.data.apy!),
     );
   }
 
   getRealAPY$(): Observable<string> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.realAPY(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.realAPY(sdk)),
       map((res) => res.data.apy!),
     );
   }
 
   getPool$(): Observable<Pool200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.pool(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.pool(sdk)),
       map((res) => res.data!),
     );
   }
 
   listAllPositions$(): Observable<AllPositions200ResponsePositionsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.allPositions(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.allPositions(sdk)),
       map((res) => res.data.positions!),
     );
   }
 
   listAddressPositions$(address: string): Observable<AllPositions200ResponsePositionsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.positions(sdk, address)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.positions(sdk, address)),
       map((res) => res.data.positions!),
     );
   }
 
   getWholePerpetualFutures$(): Observable<PerpetualFutures200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.wholePerpetualFutures(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.wholePerpetualFutures(sdk)),
       map((res) => res.data!),
     );
   }
@@ -75,7 +75,7 @@ export class DerivativesQueryService {
     quoteDenom: string,
   ): Observable<PerpetualFuturesMarket200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.derivatives.perpetualFuture(sdk, denom, quoteDenom)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.perpetualFuture(sdk, denom, quoteDenom)),
       map((res) => res.data!),
     );
   }

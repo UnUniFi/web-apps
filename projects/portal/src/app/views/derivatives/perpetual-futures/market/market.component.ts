@@ -8,7 +8,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 
 declare const TradingView: any;
@@ -35,9 +34,6 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
-
-  @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
 
   @Output()
   openPosition = new EventEmitter<OpenPositionEvent>();
@@ -116,11 +112,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
     if (changes.baseSymbol || changes.quoteSymbol) {
       this.updateTradingView();
 
-      if (changes.balancesMap) {
-        const metadata = this.symbolMetadataMap?.[this.quoteSymbol || ''];
-        const quoteDenom = metadata?.base;
-        const exponent =
-          metadata?.denom_units?.find((unit) => unit.denom === quoteDenom)?.exponent ?? 0;
+      if (changes.symbolBalancesMap) {
         this.maxMargin = this.symbolBalancesMap?.[this.quoteSymbol || ''] ?? 0;
       }
     }

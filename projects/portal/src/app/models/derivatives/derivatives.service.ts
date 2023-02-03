@@ -1,14 +1,9 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { KeyService } from '../keys/key.service';
-import { CosmosWallet } from '../wallets/wallet.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
-import { google } from '@cosmos-client/core/esm/proto';
 import ununificlient from 'ununifi-client';
-import { ununifi } from 'ununifi-client/esm/proto';
 
 @Injectable({
   providedIn: 'root',
@@ -20,274 +15,128 @@ export class DerivativesService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
-  // open position
-  async openPosition(
-    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    market: ununifi.derivatives.IMarket,
-    positionInstance: google.protobuf.IAny,
-    currentCosmosWallet: CosmosWallet,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    privateKey?: string,
-  ): Promise<BroadcastTx200Response> {
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    const txBuilder = await this.buildOpenPositionTxBuilder(
-      margin,
-      market,
-      positionInstance,
-      cosmosPublicKey,
-      gas,
-      fee,
-    );
-    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!signerBaseAccount) {
-      throw Error('Unsupported Account!');
+  getMarginSymbol(
+    baseSymbol: string,
+    quoteSymbol: string,
+    positionType: ununificlient.proto.ununifi.derivatives.PositionType,
+  ) {
+    switch (positionType) {
+      case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
+        return quoteSymbol;
+      case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
+        return baseSymbol;
+      default:
+        throw Error('');
     }
-    const signedTxBuilder = await this.txCommonService.signTx(
-      txBuilder,
-      signerBaseAccount,
-      currentCosmosWallet,
-      privateKey,
-    );
-    if (!signedTxBuilder) {
-      throw Error('Failed to sign!');
-    }
-    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
-    return txResult;
   }
 
-  async simulateToOpenPosition(
-    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    market: ununifi.derivatives.IMarket,
-    positionInstance: google.protobuf.IAny,
-    cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const simulatedTxBuilder = await this.buildOpenPositionTxBuilder(
-      margin,
-      market,
-      positionInstance,
-      cosmosPublicKey,
-      dummyGas,
-      dummyFee,
-    );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
+  buildMsgMintLiquidityProviderToken(
+    senderAddress: string,
+    symbol: string,
+    amount: number,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const bankService = {} as any;
+    const coin = (
+      bankService.convert(
+        symbol,
+        amount,
+        symbolMetadataMap,
+      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
+    )[0]; // DERIVATIVES_TODO
+
+    const msgMintLiquidityProviderToken =
+      new ununificlient.proto.ununifi.derivatives.MsgMintLiquidityProviderToken({
+        sender: senderAddress,
+        amount: coin,
+      });
+    return msgMintLiquidityProviderToken;
   }
 
-  async buildOpenPositionTxBuilder(
-    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    market: ununifi.derivatives.IMarket,
-    positionInstance: google.protobuf.IAny,
-    cosmosPublicKey: cosmosclient.PubKey,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<cosmosclient.TxBuilder> {
-    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!baseAccount) {
-      throw Error('Unused Account or Unsupported Account Type!');
-    }
-    const senderAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const msgOpenPosition = this.buildMsgOpenPosition(
-      senderAddress.toString(),
-      margin,
-      market,
-      positionInstance,
-    );
+  buildMsgRedeemLiquidityProviderToken(
+    senderAddress: string,
+    amount: number,
+    returnDenom: string,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const bankService = {} as any;
+    const symbol = 'DLP';
+    const coin = (
+      bankService.convert(
+        symbol,
+        amount,
+        symbolMetadataMap,
+      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
+    )[0]; // DERIVATIVES_TODO
 
-    const txBuilder = await this.txCommonService.buildTxBuilder(
-      [msgOpenPosition],
-      cosmosPublicKey,
-      baseAccount,
-      gas,
-      fee,
-    );
-    return txBuilder;
+    const msgMintLiquidityProviderToken =
+      new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
+        sender: senderAddress,
+        amount: coin.amount,
+        // return_denom: returnDenom,
+      });
+    return msgMintLiquidityProviderToken;
+  }
+
+  buildPerpetualFuturesPositionInstance(
+    baseSymbol: string,
+    positionType: ununificlient.proto.ununifi.derivatives.PositionType,
+    size: number,
+    leverage: number,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const bankService = {} as any;
+    const position = (
+      bankService.convert(
+        baseSymbol,
+        size,
+        symbolMetadataMap,
+      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
+    )[0]; // DERIVATIVES_TODO
+
+    const perpetualFuturesPositionInstance =
+      new ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance({
+        position_type: positionType,
+        size: position.amount,
+        leverage: Math.floor(leverage).toString(), // DERIVATIVES_TODO: remove toString
+      });
+    return perpetualFuturesPositionInstance;
   }
 
   buildMsgOpenPosition(
     senderAddress: string,
-    margin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    market: ununifi.derivatives.IMarket,
-    positionInstance: google.protobuf.IAny,
-  ): ununificlient.proto.ununifi.derivatives.MsgOpenPosition {
+    marginSymbol: string,
+    marginAmount: number,
+    baseSymbol: string,
+    quoteSymbol: string,
+    positionInstance: cosmosclient.proto.google.protobuf.IAny,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const bankService = {} as any;
+    const margin = (
+      bankService.convert(
+        marginSymbol,
+        marginAmount,
+        symbolMetadataMap,
+      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
+    )[0]; // DERIVATIVES_TODO
     const msgOpenPosition = new ununificlient.proto.ununifi.derivatives.MsgOpenPosition({
       sender: senderAddress,
       margin,
-      market,
+      market: {
+        denom: symbolMetadataMap?.[baseSymbol].base, // DERIVATIVES_TODO: base_denom
+        quote_denom: symbolMetadataMap?.[quoteSymbol].base,
+      },
       position_instance: positionInstance,
     });
     return msgOpenPosition;
   }
 
-  // withdraw reward
-  async withdrawReward(
-    denom: string,
-    currentCosmosWallet: CosmosWallet,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    privateKey?: string,
-  ): Promise<BroadcastTx200Response> {
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    const txBuilder = await this.buildWithdrawRewardTxBuilder(denom, cosmosPublicKey, gas, fee);
-    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!signerBaseAccount) {
-      throw Error('Unsupported Account!');
-    }
-    const signedTxBuilder = await this.txCommonService.signTx(
-      txBuilder,
-      signerBaseAccount,
-      currentCosmosWallet,
-      privateKey,
-    );
-    if (!signedTxBuilder) {
-      throw Error('Failed to sign!');
-    }
-    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
-    return txResult;
-  }
-
-  async simulateToWithdrawReward(
-    denom: string,
-    cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const simulatedTxBuilder = await this.buildWithdrawRewardTxBuilder(
-      denom,
-      cosmosPublicKey,
-      dummyGas,
-      dummyFee,
-    );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
-  }
-
-  async buildWithdrawRewardTxBuilder(
-    denom: string,
-    cosmosPublicKey: cosmosclient.PubKey,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<cosmosclient.TxBuilder> {
-    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!baseAccount) {
-      throw Error('Unused Account or Unsupported Account Type!');
-    }
-    const senderAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const msgWithdrawReward = this.buildWithdrawReward(senderAddress.toString(), denom);
-
-    const txBuilder = await this.txCommonService.buildTxBuilder(
-      [msgWithdrawReward],
-      cosmosPublicKey,
-      baseAccount,
-      gas,
-      fee,
-    );
-    return txBuilder;
-  }
-
-  buildWithdrawReward(
-    senderAddress: string,
-    denom: string,
-  ): ununificlient.proto.ununifi.ecosystemincentive.MsgWithdrawReward {
-    const msgWithdrawReward = new ununificlient.proto.ununifi.ecosystemincentive.MsgWithdrawReward({
+  buildMsgClosePosition(senderAddress: string, positionId: string) {
+    const msgClosePosition = new ununificlient.proto.ununifi.derivatives.MsgClosePosition({
       sender: senderAddress,
-      denom: denom,
+      position_id: positionId,
     });
-    return msgWithdrawReward;
-  }
-
-  // withdraw all rewards
-  async withdrawAllRewards(
-    currentCosmosWallet: CosmosWallet,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    privateKey?: string,
-  ): Promise<BroadcastTx200Response> {
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    const txBuilder = await this.buildWithdrawAllRewardsTxBuilder(cosmosPublicKey, gas, fee);
-    const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!signerBaseAccount) {
-      throw Error('Unsupported Account!');
-    }
-    const signedTxBuilder = await this.txCommonService.signTx(
-      txBuilder,
-      signerBaseAccount,
-      currentCosmosWallet,
-      privateKey,
-    );
-    if (!signedTxBuilder) {
-      throw Error('Failed to sign!');
-    }
-    const txResult = await this.txCommonService.announceTx(signedTxBuilder);
-    return txResult;
-  }
-
-  async simulateToWithdrawAllRewards(
-    cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
-      denom: minimumGasPrice.denom,
-      amount: '1',
-    };
-    const simulatedTxBuilder = await this.buildWithdrawAllRewardsTxBuilder(
-      cosmosPublicKey,
-      dummyGas,
-      dummyFee,
-    );
-    return await this.txCommonService.simulateTx(simulatedTxBuilder, minimumGasPrice, gasRatio);
-  }
-
-  async buildWithdrawAllRewardsTxBuilder(
-    cosmosPublicKey: cosmosclient.PubKey,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<cosmosclient.TxBuilder> {
-    const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
-    if (!baseAccount) {
-      throw Error('Unused Account or Unsupported Account Type!');
-    }
-    const senderAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const msgWithdrawAllRewards = this.buildWithdrawAllRewards(senderAddress.toString());
-
-    const txBuilder = await this.txCommonService.buildTxBuilder(
-      [msgWithdrawAllRewards],
-      cosmosPublicKey,
-      baseAccount,
-      gas,
-      fee,
-    );
-    return txBuilder;
-  }
-
-  buildWithdrawAllRewards(
-    senderAddress: string,
-  ): ununificlient.proto.ununifi.ecosystemincentive.MsgWithdrawAllRewards {
-    const msgWithdrawAllRewards =
-      new ununificlient.proto.ununifi.ecosystemincentive.MsgWithdrawAllRewards({
-        sender: senderAddress,
-      });
-    return msgWithdrawAllRewards;
+    return msgClosePosition;
   }
 }

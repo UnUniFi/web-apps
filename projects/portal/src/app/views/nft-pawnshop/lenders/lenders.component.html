@@ -1,1 +1,91 @@
-<p>lenders works!</p>
+<h2 class="mb-0">Lending</h2>
+
+<mat-card class="mb-4">
+  <mat-card-title>Lending Token</mat-card-title>
+  <h3>Your Balance</h3>
+  <mat-card class="mb-4 mat-elevation-z8">
+    <mat-list>
+      <mat-list-item *ngIf="balances === null">
+        <mat-spinner></mat-spinner>
+      </mat-list-item>
+      <mat-list-item *ngIf="balances === undefined"> No Balances! </mat-list-item>
+      <mat-list-item *ngIf="balances && balances.length === 0"> No Balances! </mat-list-item>
+      <ng-container *ngIf="balances && balances.length > 0">
+        <mat-list-item *ngFor="let balance of balances; last as last">
+          <span class="flex-auto"></span>
+          <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
+          <span>{{ balance.denom }}</span>
+          <mat-divider *ngIf="!last"></mat-divider>
+        </mat-list-item>
+      </ng-container>
+    </mat-list>
+  </mat-card>
+
+  <h3>Set Lending Parameter</h3>
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="flex flex-row content-center items-center">
+      <mat-form-field class="flex-auto">
+        <mat-label>Deposit</mat-label>
+        <input
+          matNativeControl
+          #depositRef
+          name="deposit"
+          [(ngModel)]="depositAmount"
+          [min]="0"
+          required
+        />
+        <!-- <mat-error>Required!</mat-error> -->
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select [(value)]="selectedDenom">
+          <mat-option *ngFor="let denom of denoms" [value]="denom">
+            {{ denom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="w-full">
+      <mat-label>Interest Rate</mat-label>
+      <input
+        matNativeControl
+        #interestRef
+        name="interest"
+        [(ngModel)]="interestRate"
+        [min]="0"
+        required
+      />
+      <!-- <mat-error>Required!</mat-error> -->
+      <span matSuffix>&nbsp;%</span>
+    </mat-form-field>
+    <mat-slider
+      thumbLabel
+      class="w-full"
+      [max]="20"
+      [min]="0"
+      [step]="0.1"
+      [(ngModel)]="interestRate"
+      name="leverage-slider"
+    >
+    </mat-slider>
+    <mat-form-field class="w-full">
+      <mat-label>Repayment Term</mat-label>
+      <input
+        matInput
+        [ngxMatDatetimePicker]="picker"
+        placeholder="Choose a date & time"
+        [(ngModel)]="datePicker"
+      />
+      <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker
+        #picker
+        [showSpinners]="true"
+        [showSeconds]="false"
+        [stepHour]="1"
+        [stepMinute]="1"
+        [stepSecond]="1"
+        [enableMeridian]="false"
+      ></ngx-mat-datetime-picker>
+    </mat-form-field>
+    <button mat-flat-button class="w-full mt-4" color="primary">Search NFTs</button>
+  </mat-card>
+</mat-card>

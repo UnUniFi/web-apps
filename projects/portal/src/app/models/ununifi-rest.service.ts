@@ -143,46 +143,4 @@ export class UnunifiRestService {
   //     map((res) => res.data.incentive_unit_ids_by_addr!),
   //   );
   // }
-
-  // nftmarket => nft-pawnshop
-  getNftmarketParam(): Observable<NftmarketParams200ResponseParams> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.params(sdk)),
-      map((res) => res.data.params!),
-    );
-  }
-  getAllListedClasses(): Observable<ListedClass200Response[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
-      map((res) => res.data.classes!),
-    );
-  }
-
-  getAllListedNfts(): Observable<ListedNfts200ResponseListingsInner[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),
-      map((res) => res.data.listings!),
-    );
-  }
-
-  getNftListing(classID: string, nftID: string): Observable<ListedNfts200ResponseListingsInner> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.nftListing(sdk, classID, nftID)),
-      map((res) => res.data.listing!),
-    );
-  }
-
-  listListedNfts(): Observable<ListedNfts200ResponseListingsInner[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),
-      map((res) => res.data.listings!),
-    );
-  }
-
-  listListedClasses(): Observable<ListedClass200Response[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
-      map((res) => res.data.classes!),
-    );
-  }
 }

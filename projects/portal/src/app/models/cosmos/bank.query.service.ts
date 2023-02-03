@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class DerivativesQueryService {
+export class BankQueryService {
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {

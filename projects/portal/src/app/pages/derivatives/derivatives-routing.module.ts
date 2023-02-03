@@ -1,5 +1,7 @@
 import { DerivativesComponent } from './derivatives.component';
 import { PerpetualFuturesComponent } from './perpetual-futures/perpetual-futures.component';
+import { PoolComponent } from './pool/pool.component';
+import { PositionsComponent } from './positions/positions.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -9,8 +11,19 @@ const routes: Routes = [
     component: DerivativesComponent,
   },
   {
+    path: 'pool',
+    component: PoolComponent,
+  },
+  {
+    path: 'positions',
+    component: PositionsComponent,
+  },
+  {
     path: 'perpetual-futures',
-    component: PerpetualFuturesComponent,
+    loadChildren: () =>
+      import('./perpetual-futures/perpetual-futures.module').then(
+        (m) => m.AppPerpetualFuturesModule,
+      ),
   },
 ];
 
@@ -18,4 +31,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DerivativeRoutingModule {}
+export class DerivativesRoutingModule {}

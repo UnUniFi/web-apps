@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
@@ -8,7 +16,7 @@ import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openap
   templateUrl: './position.component.html',
   styleUrls: ['./position.component.css'],
 })
-export class PositionComponent implements OnInit {
+export class PositionComponent implements OnInit, OnChanges {
   @Input()
   position?: AllPositions200ResponsePositionsInner | null;
 
@@ -20,20 +28,24 @@ export class PositionComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    const positionInstance = cosmosclient.codec.protoJSONToInstance(
-      this.position?.position_instance as any,
-    );
-    if (
-      positionInstance instanceof
-      ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
-    ) {
-      this.perpetualFuturesPositionInstance = positionInstance;
-    } else if (
-      positionInstance instanceof
-      ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance
-    ) {
-      this.perpetualOptionsPositionInstance = positionInstance;
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.position) {
+      const positionInstance = cosmosclient.codec.protoJSONToInstance(
+        this.position?.position_instance as any,
+      );
+      if (
+        positionInstance instanceof
+        ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
+      ) {
+        this.perpetualFuturesPositionInstance = positionInstance;
+      } else if (
+        positionInstance instanceof
+        ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance
+      ) {
+        this.perpetualOptionsPositionInstance = positionInstance;
+      }
     }
   }
 

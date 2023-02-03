@@ -1,0 +1,99 @@
+<h2 class="mb-0">Perpetual Futures</h2>
+
+<mat-card class="mb-4">
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
+    <div id="tradingview_5b3c4" class="h-96"></div>
+    <div class="tradingview-widget-copyright">
+      <a
+        href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE"
+        rel="noopener"
+        target="_blank"
+      ></a>
+      by TradingView
+    </div>
+  </div>
+</mat-card>
+<form (submit)="onSubmit(sizeRef.valueAsNumber, leverage, marginRef.valueAsNumber)">
+  <mat-card class="mb-4">
+    <mat-button-toggle-group
+      class="flex mb-4"
+      #positionRef="matButtonToggleGroup"
+      [ngModel]="positionType.LONG"
+    >
+      <mat-button-toggle class="flex-auto" [value]="positionType.LONG">
+        <mat-icon>trending_up</mat-icon>Long
+      </mat-button-toggle>
+      <mat-button-toggle class="flex-auto" [value]="positionType.SHORT">
+        <mat-icon>trending_down</mat-icon>Short
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="flex flex-row content-center items-center">
+      <mat-form-field class="flex-auto">
+        <mat-label>Position size</mat-label>
+        <input
+          matInput
+          type="number"
+          #sizeRef
+          name="size"
+          ngModel
+          [min]="0"
+          required
+          pattern="^[0-9]*\.?[0-9]{0,6}$"
+        />
+        <span mutSuffix>{{ baseSymbol }}</span>
+        <mat-error>Required!</mat-error>
+      </mat-form-field>
+    </div>
+
+    <h3>Leverage</h3>
+    <mat-slider
+      class="w-full"
+      [max]="50"
+      [min]="1"
+      [step]="0.1"
+      [(ngModel)]="leverage"
+      name="leverage-slider"
+    >
+    </mat-slider>
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="leverage"
+        [max]="50"
+        [min]="1"
+        [step]="0.1"
+        name="leverage-slider"
+      />
+    </mat-form-field>
+
+    <div class="flex flex-row content-center items-center">
+      <mat-form-field class="flex-auto">
+        <mat-label>Margin</mat-label>
+        <input
+          matInput
+          type="number"
+          #marginRef
+          name="margin"
+          [(ngModel)]="margin"
+          [max]="maxMargin"
+          [min]="minMargin"
+          required
+          pattern="^[0-9]*\.?[0-9]{0,6}$"
+        />
+        <mat-error>Required!</mat-error>
+        <button type="button" mat-button matSuffix>Default</button>
+      </mat-form-field>
+    </div>
+    <button
+      mat-flat-button
+      class="w-full mt-4"
+      color="accent"
+      (click)="onClickSetMargin(sizeRef.valueAsNumber, leverage)"
+    >
+      Open Position
+    </button>
+  </mat-card>
+</form>

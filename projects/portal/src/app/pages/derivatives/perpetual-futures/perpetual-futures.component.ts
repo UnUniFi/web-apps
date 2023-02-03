@@ -1,5 +1,6 @@
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -8,26 +9,16 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./perpetual-futures.component.css'],
 })
 export class PerpetualFuturesComponent implements OnInit {
-  configs$: Observable<string[]>;
-  selectedConfig$: Observable<string>;
-  payAssets$: Observable<string[]>;
-  selectedPayAsset$: Observable<string>;
-  targetAssets$: Observable<string[]>;
-  selectedTargetAsset$: Observable<string>;
   info$ = this.derivativesQuery.getWholePerpetualFutures$();
 
-  constructor(private derivativesQuery: DerivativesQueryService) {
-    this.configs$ = of(['ETH/USD', 'BTC/USD', 'ATOM/USD']);
-    this.selectedConfig$ = of('ETH/USD');
-    this.payAssets$ = of(['GUU', 'ETH', 'BTC', 'ATOM', 'USDC']);
-    this.selectedPayAsset$ = of('GUU');
-    this.targetAssets$ = of(['ETH', 'BTC', 'ATOM']);
-    this.selectedTargetAsset$ = of('ETH');
-  }
+  constructor(
+    private readonly router: Router,
+    private readonly derivativesQuery: DerivativesQueryService,
+  ) {}
 
   ngOnInit(): void {}
 
-  onSubmitOrder($event: string) {}
-
-  onChangeConfig($event: string) {}
+  onChangeMarket(market: string) {
+    this.router.navigate(['/derivatives/perpetual-futures', market]);
+  }
 }

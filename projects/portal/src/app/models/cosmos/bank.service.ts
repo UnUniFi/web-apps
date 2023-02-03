@@ -16,17 +16,17 @@ export class BankService {
   ) {}
 
   convertSymbolAmountMapToCoins(
-    symbolBalanceMap: { [symbol: string]: number },
+    symbolAmountMap: { [symbol: string]: number },
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): cosmosclient.proto.cosmos.base.v1beta1.ICoin[] {
-    const coins = Object.keys(symbolBalanceMap).map((symbol) => {
+    const coins = Object.keys(symbolAmountMap).map((symbol) => {
       const denom = symbolMetadataMap[symbol].base!;
       const denomUnit = symbolMetadataMap[symbol].denom_units?.find((unit) => unit.denom === denom);
       if (!denomUnit) {
         throw Error();
       }
 
-      const amount = symbolBalanceMap[symbol].toFixed(denomUnit.exponent!).replace('.', '');
+      const amount = symbolAmountMap[symbol].toFixed(denomUnit.exponent!).replace('.', '');
       return {
         denom,
         amount,

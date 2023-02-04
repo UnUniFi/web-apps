@@ -52,6 +52,14 @@ export class MarketComponent implements OnInit {
   ngOnInit(): void {}
 
   async onOpenPosition($event: OpenPositionEvent) {
-    await this.derivativesApplication.openPerpetualFuturesPosition();
+    await this.derivativesApplication.openPerpetualFuturesPosition(
+      $event.marginSymbol,
+      $event.marginAmount,
+      $event.baseSymbol,
+      $event.quoteSymbol,
+      $event.positionType,
+      $event.size,
+      $event.leverage,
+    );
   }
 }

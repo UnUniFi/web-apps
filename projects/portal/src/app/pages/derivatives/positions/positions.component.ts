@@ -2,6 +2,7 @@ import { DerivativesApplicationService } from '../../../models/derivatives/deriv
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
+import { ClosePositionEvent } from '../../../views/derivatives/positions/positions.component';
 import { Component, OnInit } from '@angular/core';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -27,7 +28,7 @@ export class PositionsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onClosePosition(positionId: string) {
-    await this.derivativesApplication.closePosition(positionId);
+  async onClosePosition($event: ClosePositionEvent) {
+    await this.derivativesApplication.closePosition($event.positionId);
   }
 }

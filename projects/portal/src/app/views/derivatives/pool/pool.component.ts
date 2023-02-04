@@ -3,12 +3,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pool200Response } from 'ununifi-client/esm/openapi';
 
 export type MintLPTEvent = {
-  denom: string;
-  amount: string;
+  symbol: string;
+  amount: number;
 };
 
 export type BurnLPTEvent = {
-  amount: string;
+  amount: number;
+  redeemSymbol: string;
 };
 
 @Component({
@@ -30,7 +31,17 @@ export class PoolComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmitMint(denom: string, amount: string) {}
+  onSubmitMint(symbol: string, amount: number) {
+    this.mintLPT.emit({
+      symbol,
+      amount,
+    });
+  }
 
-  onSubmitRedeem(amount: string) {}
+  onSubmitBurn(amount: number, redeemSymbol: string) {
+    this.burnLPT.emit({
+      amount,
+      redeemSymbol,
+    });
+  }
 }

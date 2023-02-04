@@ -56,7 +56,7 @@ export class DerivativesService {
   buildMsgBurnLiquidityProviderToken(
     senderAddress: string,
     amount: number,
-    returnSymbol: string,
+    redeemSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
     const bankService = {} as any;
@@ -73,7 +73,7 @@ export class DerivativesService {
       new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
         sender: senderAddress,
         amount: coin.amount,
-        // return_denom: returnDenom,
+        // redeem_denom: redeemDenom,
       });
     return msgMintLiquidityProviderToken;
   }

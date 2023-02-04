@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
 
+export type ClosePositionEvent = {
+  positionId: string;
+};
+
 @Component({
   selector: 'view-positions',
   templateUrl: './positions.component.html',
@@ -11,13 +15,15 @@ export class PositionsComponent implements OnInit {
   positions?: AllPositions200ResponsePositionsInner[] | null;
 
   @Output()
-  closePosition = new EventEmitter<string>();
+  closePosition = new EventEmitter<ClosePositionEvent>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   onClosePosition($event: string) {
-    this.closePosition.emit($event);
+    this.closePosition.emit({
+      positionId: $event,
+    });
   }
 }

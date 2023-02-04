@@ -14,7 +14,11 @@
     </div>
   </div>
 </mat-card>
-<form (submit)="onSubmit(sizeRef.valueAsNumber, leverage, marginRef.valueAsNumber)">
+<form
+  (submit)="
+    onSubmit(sizeRef.valueAsNumber, leverage, marginAmountRef.valueAsNumber, positionRef.value)
+  "
+>
   <mat-card class="mb-4">
     <mat-button-toggle-group
       class="flex mb-4"
@@ -75,9 +79,9 @@
         <input
           matInput
           type="number"
-          #marginRef
+          #marginAmountRef
           name="margin"
-          [(ngModel)]="margin"
+          [(ngModel)]="marginAmount"
           [max]="maxMargin"
           [min]="minMargin"
           required

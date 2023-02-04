@@ -12,7 +12,15 @@ import ununificlient from 'ununifi-client';
 
 declare const TradingView: any;
 
-export type OpenPositionEvent = {};
+export type OpenPositionEvent = {
+  marginSymbol: string;
+  marginAmount: number;
+  baseSymbol: string;
+  quoteSymbol: string;
+  positionType: ununificlient.proto.ununifi.derivatives.PositionType;
+  size: number;
+  leverage: number;
+};
 
 @Component({
   selector: 'view-market',
@@ -39,10 +47,10 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   openPosition = new EventEmitter<OpenPositionEvent>();
 
   leverage = 1;
-  margin = 0;
+  marginAmount = 0;
   maxMargin = 100;
   minMargin = 0;
-  marginDenom?: string | null;
+  marginSymbol?: string | null;
 
   positionType = ununificlient.proto.ununifi.derivatives.PositionType;
   tradingViewConfig: { [market: string]: any } = {
@@ -121,23 +129,32 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   onTogglePositionType(positionType: ununificlient.proto.ununifi.derivatives.PositionType) {
     switch (positionType) {
       case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
-        this.marginDenom = this.quoteSymbol;
+        this.marginSymbol = this.quoteSymbol;
         break;
       case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
-        this.marginDenom = this.baseSymbol;
+        this.marginSymbol = this.baseSymbol;
         break;
     }
   }
 
   onClickSetMargin(size: number, leverage: number) {
-    this.margin = size / leverage;
+    this.marginAmount = size / leverage;
   }
 
-  onSubmit(size: number, leverage: number, margin: number) {
+  onSubmit(
+    size: number,
+    leverage: number,
+    marginAmount: number,
+    positionType: ununificlient.proto.ununifi.derivatives.PositionType,
+  ) {
     this.openPosition.emit({
+      marginSymbol: this.marginSymbol || '',
+      marginAmount: marginAmount,
+      baseSymbol: this.baseSymbol || '',
+      quoteSymbol: this.quoteSymbol || '',
+      positionType,
       size,
       leverage,
-      margin,
     });
   }
 }

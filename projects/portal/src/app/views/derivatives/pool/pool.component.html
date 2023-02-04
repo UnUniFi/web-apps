@@ -26,13 +26,13 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>generating_tokens</mat-icon>
-      <span>Mint</span>
+      <span>Deposit to Mint</span>
     </ng-template>
     <ng-template matTabContent>
-      <form (submit)="onSubmitMint(mintDenomRef.value, mintAmountRef.value)">
+      <form (submit)="onSubmitMint(mintSymbolRef.value, mintAmountRef.valueAsNumber)">
         <mat-form-field appearance="outline">
-          <mat-label>Token</mat-label>
-          <mat-select #mintDenomRef required ngModel>
+          <mat-label>Token to deposit</mat-label>
+          <mat-select #mintSymbolRef required ngModel>
             <mat-option value="0">USDC</mat-option>
             <mat-option value="1">DAI</mat-option>
             <mat-option value="2">USDT</mat-option>
@@ -43,22 +43,30 @@
           <input #mintAmountRef matInput required type="number" pattern="^[0-9]*\.?[0-9]{0,6}$" />
         </mat-form-field>
 
-        <button mat-raised-button color="primary">Mint</button>
+        <button mat-raised-button color="primary">Deposit to Mint</button>
       </form>
     </ng-template>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>eject</mat-icon>
-      <span>Redeem</span>
+      <span>Burn to Redeem</span>
     </ng-template>
     <ng-template matTabContent>
-      <form (submit)="onSubmitRedeem(redeemAmountRef.value)">
+      <form (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
         <mat-form-field appearance="outline">
-          <mat-label>Amount</mat-label>
-          <input #redeemAmountRef matInput required type="number" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+          <mat-label>Amount of DLP</mat-label>
+          <input #burnAmountRef matInput required type="number" pattern="^[0-9]*\.?[0-9]{0,6}$" />
         </mat-form-field>
-        <button mat-raised-button color="primary">Redeem</button>
+        <mat-form-field appearance="outline">
+          <mat-label>Token to redeem</mat-label>
+          <mat-select #redeemSymbolRef required ngModel>
+            <mat-option value="0">USDC</mat-option>
+            <mat-option value="1">DAI</mat-option>
+            <mat-option value="2">USDT</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary">Burn to Redeem</button>
       </form>
     </ng-template>
   </mat-tab>

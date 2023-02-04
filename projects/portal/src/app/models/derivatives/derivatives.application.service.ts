@@ -1,5 +1,7 @@
 import { CreateUnitFormDialogComponent } from '../../pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
 import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { ConfigService } from '../config.service';
+import { BankQueryService } from '../cosmos/bank.query.service';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
@@ -13,7 +15,7 @@ import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
 @Injectable({
@@ -27,17 +29,21 @@ export class DerivativesApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly walletApplicationService: WalletApplicationService,
     private readonly walletService: WalletService,
+    private readonly bankQueryService: BankQueryService,
     private readonly derivativesService: DerivativesService,
     private readonly txCommon: TxCommonService,
+    private readonly config: ConfigService,
   ) {}
 
-  async mintLiquidityProviderToken(
-    symbol: string,
-    amount: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ) {
+  async mintLiquidityProviderToken(symbol: string, amount: number) {
+    const minimumGasPrice = await this.config.config$
+      .pipe(
+        take(1),
+        map((config) => config?.minimumGasPrices[0]!),
+      )
+      .toPromise();
+    const gasRatio = 1.1;
+
     // get public key
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))
@@ -55,6 +61,11 @@ export class DerivativesApplicationService {
     if (!account) {
       throw Error('Unsupported account type.');
     }
+
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
@@ -145,13 +156,15 @@ export class DerivativesApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async burnLiquidityProviderToken(
-    amount: number,
-    returnSymbol: string,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ) {
+  async burnLiquidityProviderToken(amount: number, redeemSymbol: string) {
+    const minimumGasPrice = await this.config.config$
+      .pipe(
+        take(1),
+        map((config) => config?.minimumGasPrices[0]!),
+      )
+      .toPromise();
+    const gasRatio = 1.1;
+
     // get public key
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))
@@ -170,6 +183,11 @@ export class DerivativesApplicationService {
       throw Error('Unsupported account type.');
     }
 
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
+
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
     let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
@@ -181,7 +199,7 @@ export class DerivativesApplicationService {
     const msg = this.derivativesService.buildMsgBurnLiquidityProviderToken(
       address,
       amount,
-      returnSymbol,
+      redeemSymbol,
       symbolMetadataMap,
     );
 
@@ -267,10 +285,15 @@ export class DerivativesApplicationService {
     positionType: ununificlient.proto.ununifi.derivatives.PositionType,
     size: number,
     leverage: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
   ) {
+    const minimumGasPrice = await this.config.config$
+      .pipe(
+        take(1),
+        map((config) => config?.minimumGasPrices[0]!),
+      )
+      .toPromise();
+    const gasRatio = 1.1;
+
     // get public key
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))
@@ -288,6 +311,11 @@ export class DerivativesApplicationService {
     if (!account) {
       throw Error('Unsupported account type.');
     }
+
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
@@ -394,11 +422,15 @@ export class DerivativesApplicationService {
     await this.router.navigate(['txs', txHash]);
   }
 
-  async closePosition(
-    positionId: string,
-    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    gasRatio: number,
-  ) {
+  async closePosition(positionId: string) {
+    const minimumGasPrice = await this.config.config$
+      .pipe(
+        take(1),
+        map((config) => config?.minimumGasPrices[0]!),
+      )
+      .toPromise();
+    const gasRatio = 1.1;
+
     // get public key
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
       .pipe(take(1))

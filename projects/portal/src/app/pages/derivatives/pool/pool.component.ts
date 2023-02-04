@@ -19,10 +19,13 @@ export class PoolComponent implements OnInit {
   ngOnInit(): void {}
 
   async onMintLPT($event: MintLPTEvent) {
-    await this.derivativesApplication.mintLiquidityProviderToken();
+    await this.derivativesApplication.mintLiquidityProviderToken($event.symbol, $event.amount);
   }
 
   async onBurnLPT($event: BurnLPTEvent) {
-    await this.derivativesApplication.burnLiquidityProviderToken();
+    await this.derivativesApplication.burnLiquidityProviderToken(
+      $event.amount,
+      $event.redeemSymbol,
+    );
   }
 }

@@ -91,6 +91,24 @@ export class TxCommonService {
     return baseAccount;
   }
 
+  async buildTxBuilderWithDummyGasAndFee(
+    messages: cosmosclient.proto.google.protobuf.Any[],
+    cosmosPublicKey: cosmosclient.PubKey,
+    baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ) {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+
+    return await this.buildTxBuilder(messages, cosmosPublicKey, baseAccount, dummyGas, dummyFee);
+  }
+
   async buildTxBuilder(
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,

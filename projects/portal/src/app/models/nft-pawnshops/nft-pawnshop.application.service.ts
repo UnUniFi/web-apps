@@ -1,4 +1,4 @@
-import { CreateUnitFormDialogComponent } from '../../pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
+import { NftsDialogComponent } from '../../pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { WalletService } from '../wallets/wallet.service';
 import { NftPawnshopService } from './nft-pawnshop.service';
@@ -11,7 +11,7 @@ import { LoadingDialogService } from 'projects/shared/src/lib/components/loading
 @Injectable({
   providedIn: 'root',
 })
-export class IncentiveApplicationService {
+export class NftPawnshopApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
@@ -24,7 +24,7 @@ export class IncentiveApplicationService {
 
   async openNftsDialog(classID: string): Promise<void> {
     const nftID = await this.dialog
-      .open(CreateUnitFormDialogComponent, { data: classID })
+      .open(NftsDialogComponent, { data: classID })
       .afterClosed()
       .toPromise();
     await this.router.navigate([classID, nftID]);

@@ -11,7 +11,7 @@ import {
 } from 'ununifi-client/esm/openapi';
 
 @Injectable({ providedIn: 'root' })
-export class PawnshopQueryService {
+export class NftPawnshopQueryService {
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {

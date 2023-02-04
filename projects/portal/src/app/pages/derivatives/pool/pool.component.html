@@ -1,1 +1,8 @@
-<view-pool [pool]="pool$ | async" (mintLPT)="onMintLPT($event)" (burnLPT)="onBurnLPT($event)"></view-pool>
+<view-pool
+  [pool]="pool$ | async"
+  [params]="params$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  [symbolBalanceMap]="symbolBalanceMap$ | async"
+  (mintLPT)="onMintLPT($event)"
+  (burnLPT)="onBurnLPT($event)"
+></view-pool>

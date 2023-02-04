@@ -46,12 +46,12 @@
             required
             type="number"
             [min]="0"
-            [max]="symbolBalancesMap?.[mintSymbolRef.value] || 0"
+            [max]="symbolBalanceMap?.[mintSymbolRef.value] || 0"
             pattern="^[0-9]*\.?[0-9]{0,6}$"
           />
           <ng-container *ngIf="mintSymbolRef.value">
             <mat-hint>
-              Available balance: {{ symbolBalancesMap?.[mintSymbolRef.value] || 0 }}
+              Available balance: {{ symbolBalanceMap?.[mintSymbolRef.value] || 0 }}
             </mat-hint>
           </ng-container>
           <mat-error>Invalid amount</mat-error>

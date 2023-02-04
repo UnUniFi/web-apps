@@ -1,1 +1,4 @@
-<view-positions [positions]="positions$ | async"></view-positions>
+<view-positions
+  [positions]="positions$ | async"
+  (closePosition)="onClosePosition($event)"
+></view-positions>

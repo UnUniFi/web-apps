@@ -13,10 +13,10 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class PositionsComponent implements OnInit {
   address$ = this.walletService.currentStoredWallet$.pipe(
     filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-    map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+    map((wallet) => wallet.address),
   );
   positions$ = this.address$.pipe(
-    mergeMap((address) => this.derivativesQuery.listAddressPositions$(address.toString())),
+    mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
   );
 
   constructor(
@@ -25,4 +25,6 @@ export class PositionsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  onClosePosition(positionId: string) {}
 }

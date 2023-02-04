@@ -1,3 +1,8 @@
-<view-perpetual-futures [info]="info$ | async">
+<view-perpetual-futures
+  [info]="info$ | async"
+  [params]="params$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  (changeMarket)="onChangeMarket($event)"
+>
   <router-outlet></router-outlet>
 </view-perpetual-futures>

@@ -30,7 +30,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   params?: ununificlient.proto.ununifi.derivatives.IPerpetualFuturesParams | null;
 
   @Input()
-  info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse;
+  info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
 
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;

@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
-import { IncentiveApplicationService } from 'projects/portal/src/app/models/incentives/incentive.application.service';
-import { PawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
-import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
+import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
+import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { CreateIncentiveUnitOnSubmitEvent as RegisterIncentiveUnitOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
@@ -23,8 +19,10 @@ export class NftsDialogComponent implements OnInit {
   classID: string | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
+  uguuBalance$: Observable<string>;
   listedClass$: Observable<ListedClass200Response>;
+  classImage$: Observable<string>;
+  nftImages$: Observable<string[]>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -32,7 +30,8 @@ export class NftsDialogComponent implements OnInit {
     public matDialogRef: MatDialogRef<NftsDialogComponent>,
     private readonly walletService: WalletService,
     private readonly cosmosRest: CosmosRestService,
-    private readonly pawnshopQuery: PawnshopQueryService,
+    private readonly pawnshop: NftPawnshopService,
+    private readonly pawnshopQuery: NftPawnshopQueryService,
   ) {
     this.classID = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -48,6 +47,32 @@ export class NftsDialogComponent implements OnInit {
       }),
     );
     this.listedClass$ = this.pawnshopQuery.listListedClass(this.classID, 100);
+    this.classImage$ = this.listedClass$.pipe(
+      mergeMap(async (value) => {
+        if (!value.uri) {
+          return '';
+        }
+        const imageUri = await this.pawnshop.getImageFromUri(value.uri);
+        return imageUri;
+      }),
+    );
+    this.classImage$.subscribe((a) => console.log(a));
+    this.nftImages$ = this.listedClass$.pipe(
+      mergeMap((value) => {
+        if (!value.nfts) {
+          return [];
+        }
+        return Promise.all(
+          value.nfts.map(async (nft) => {
+            if (!nft.uri) {
+              return '';
+            }
+            const imageUri = await this.pawnshop.getImageFromUri(nft.uri);
+            return imageUri;
+          }),
+        );
+      }),
+    );
   }
 
   ngOnInit(): void {}

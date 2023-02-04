@@ -8,6 +8,7 @@ import { AppUndelegateFormDialogModule } from './pages/dialogs/delegate/undelega
 import { AppWithdrawAllDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-all-delegator-reward-form-dialog/withdraw-all-delegator-reward-form-dialog.module';
 import { AppWithdrawDelegatorRewardFormDialogModule } from './pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.module';
 import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.module';
+import { AppNftsDialogModule } from './pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
@@ -76,6 +77,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     // AppCreateUnitFormDialogModule,
     // AppWithdrawIncentiveRewardFormDialogModule,
     // AppWithdrawIncentiveAllRewardsFormDialogModule,
+    AppNftsDialogModule,
     GraphQLModule,
   ],
   providers: [],

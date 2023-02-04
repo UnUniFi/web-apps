@@ -24,6 +24,8 @@ export class PerpetualFuturesComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickClose() {
-    this.closePosition.emit();
+    if (window.confirm('Are you sure to close this position?')) {
+      this.closePosition.emit();
+    }
   }
 }

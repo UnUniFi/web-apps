@@ -53,10 +53,10 @@ export class DerivativesService {
     return msgMintLiquidityProviderToken;
   }
 
-  buildMsgRedeemLiquidityProviderToken(
+  buildMsgBurnLiquidityProviderToken(
     senderAddress: string,
     amount: number,
-    returnDenom: string,
+    returnSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
     const bankService = {} as any;

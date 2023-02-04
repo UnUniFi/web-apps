@@ -1,3 +1,4 @@
+import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
 import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
@@ -10,11 +11,18 @@ import { Component, OnInit } from '@angular/core';
 export class PoolComponent implements OnInit {
   pool$ = this.derivativesQuery.getPool$();
 
-  constructor(private derivativesQuery: DerivativesQueryService) {}
+  constructor(
+    private readonly derivativesQuery: DerivativesQueryService,
+    private readonly derivativesApplication: DerivativesApplicationService,
+  ) {}
 
   ngOnInit(): void {}
 
-  onMintLPT($event: MintLPTEvent) {}
+  async onMintLPT($event: MintLPTEvent) {
+    await this.derivativesApplication.mintLiquidityProviderToken();
+  }
 
-  onBurnLPT($event: BurnLPTEvent) {}
+  async onBurnLPT($event: BurnLPTEvent) {
+    await this.derivativesApplication.burnLiquidityProviderToken();
+  }
 }

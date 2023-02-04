@@ -1,5 +1,5 @@
 <view-market
   [baseSymbol]="baseSymbol$ | async"
   [quoteSymbol]="quoteSymbol$ | async"
-  (openPosition)="onOpenPosition()"
+  (openPosition)="onOpenPosition($event)"
 ></view-market>

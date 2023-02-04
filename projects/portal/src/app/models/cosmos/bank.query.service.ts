@@ -48,11 +48,9 @@ export class BankQueryService {
     return this.getBalance$(address, denoms).pipe(
       map((balance) => {
         const map: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } = {};
-        balance.forEach((b) => {
-          if (b.denom) {
-            map[b.denom] = b;
-          }
-        });
+        for (const b of balance) {
+          map[b.denom || ''] = b;
+        }
         return map;
       }),
     );

@@ -46,9 +46,10 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   @Output()
   openPosition = new EventEmitter<OpenPositionEvent>();
 
+  selectedPositionType = ununificlient.proto.ununifi.derivatives.PositionType.LONG;
   leverage = 1;
   marginAmount = 0;
-  maxMargin = 100;
+  maxMargin = 0;
   minMargin = 0;
   marginSymbol?: string | null;
 
@@ -119,6 +120,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.baseSymbol || changes.quoteSymbol) {
       this.updateTradingView();
+      this.onTogglePositionType(this.selectedPositionType);
 
       if (changes.symbolBalancesMap) {
         this.maxMargin = this.symbolBalancesMap?.[this.quoteSymbol || ''] ?? 0;

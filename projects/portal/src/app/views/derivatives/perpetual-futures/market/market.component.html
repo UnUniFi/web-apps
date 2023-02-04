@@ -23,7 +23,7 @@
     <mat-button-toggle-group
       class="flex mb-4"
       #positionRef="matButtonToggleGroup"
-      [ngModel]="positionType.LONG"
+      [(ngModel)]="selectedPositionType"
     >
       <mat-button-toggle class="flex-auto" [value]="positionType.LONG">
         <mat-icon>trending_up</mat-icon>Long
@@ -89,6 +89,7 @@
         />
         <mat-error>Required!</mat-error>
         <button type="button" mat-button matSuffix>Default</button>
+        <span matSuffix> {{ marginSymbol }}</span>
       </mat-form-field>
     </div>
     <button

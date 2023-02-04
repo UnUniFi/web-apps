@@ -33,16 +33,29 @@
         <mat-form-field appearance="outline">
           <mat-label>Token to deposit</mat-label>
           <mat-select #mintSymbolRef required ngModel>
-            <mat-option value="0">USDC</mat-option>
-            <mat-option value="1">DAI</mat-option>
-            <mat-option value="2">USDT</mat-option>
+            <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+              <mat-option [value]="symbol">{{ symbol }}</mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Amount</mat-label>
-          <input #mintAmountRef matInput required type="number" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+          <input
+            #mintAmountRef
+            matInput
+            required
+            type="number"
+            [min]="0"
+            [max]="symbolBalancesMap?.[mintSymbolRef.value] || 0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+          />
+          <ng-container *ngIf="mintSymbolRef.value">
+            <mat-hint>
+              Available balance: {{ symbolBalancesMap?.[mintSymbolRef.value] || 0 }}
+            </mat-hint>
+          </ng-container>
+          <mat-error>Invalid amount</mat-error>
         </mat-form-field>
-
         <button mat-raised-button color="primary">Deposit to Mint</button>
       </form>
     </ng-template>
@@ -56,14 +69,25 @@
       <form (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
         <mat-form-field appearance="outline">
           <mat-label>Amount of DLP</mat-label>
-          <input #burnAmountRef matInput required type="number" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+          <input
+            #burnAmountRef
+            matInput
+            required
+            type="number"
+            [min]="0"
+            [max]="dlpBalance"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+          />
+          <span matSuffix>DLP</span>
+          <mat-hint>Available balance: {{ dlpBalance }}</mat-hint>
+          <mat-error>Invalid amount</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Token to redeem</mat-label>
           <mat-select #redeemSymbolRef required ngModel>
-            <mat-option value="0">USDC</mat-option>
-            <mat-option value="1">DAI</mat-option>
-            <mat-option value="2">USDT</mat-option>
+            <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+              <mat-option [value]="symbol">{{ symbol }}</mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
         <button mat-raised-button color="primary">Burn to Redeem</button>

@@ -1,6 +1,14 @@
-import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Pool200Response } from 'ununifi-client/esm/openapi';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
+import ununificlient from 'ununifi-client';
 
 export type MintLPTEvent = {
   symbol: string;
@@ -17,9 +25,18 @@ export type BurnLPTEvent = {
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.css'],
 })
-export class PoolComponent implements OnInit {
+export class PoolComponent implements OnInit, OnChanges {
   @Input()
-  pool?: Pool200Response | null;
+  pool?: ununificlient.proto.ununifi.derivatives.IQueryPoolResponse | null;
+
+  @Input()
+  params?: ununificlient.proto.ununifi.derivatives.IPool | null;
+
+  @Input()
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+
+  @Input()
+  symbolBalancesMap?: { [symbol: string]: number } | null;
 
   @Output()
   mintLPT = new EventEmitter<MintLPTEvent>();
@@ -27,9 +44,24 @@ export class PoolComponent implements OnInit {
   @Output()
   burnLPT = new EventEmitter<BurnLPTEvent>();
 
-  constructor(private readonly derivativesApplication: DerivativesApplicationService) {}
+  poolAcceptedSymbols: string[] = [];
+  dlpBalance = 0;
+
+  constructor() {}
 
   ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.params || changes.denomMetadataMap) {
+      this.poolAcceptedSymbols =
+        this.params?.accepted_assets?.map(
+          (asset) => this.denomMetadataMap?.[asset.denom!]?.symbol!,
+        ) || [];
+    }
+    if (changes.symbolBalancesMap) {
+      this.dlpBalance = this.symbolBalancesMap?.['DLP'] || 0;
+    }
+  }
 
   onSubmitMint(symbol: string, amount: number) {
     this.mintLPT.emit({

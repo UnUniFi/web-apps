@@ -58,36 +58,6 @@ export class BankQueryService {
     );
   }
 
-  getDisplayBalanceMap$(
-    address: string,
-    denoms?: string[],
-  ): Observable<{
-    [display: string]: number;
-  }> {
-    return this.getBalance$(address, denoms).pipe(
-      mergeMap((balance) =>
-        this.getDenomMetadataMap$(denoms).pipe(map((metadataMap) => ({ balance, metadataMap }))),
-      ),
-      mergeMap(async ({ balance, metadataMap }) => {
-        const map: { [display: string]: number } = {};
-        await Promise.all(
-          balance.map((b) => {
-            const metadata = metadataMap[b.denom!];
-            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
-
-            if (denomUnit) {
-              map[metadata.display!] = Long.fromString(b.amount!)
-                .div(10 ** denomUnit.exponent!)
-                .toNumber();
-            }
-          }),
-        );
-
-        return map;
-      }),
-    );
-  }
-
   getSymbolBalanceMap$(
     address: string,
     denoms?: string[],

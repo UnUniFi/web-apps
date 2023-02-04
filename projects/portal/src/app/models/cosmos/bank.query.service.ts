@@ -4,7 +4,7 @@ import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { QueryApi } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
-import { Observable } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -64,14 +64,11 @@ export class BankQueryService {
   ): Observable<{
     [symbol: string]: number;
   }> {
-    return this.getBalance$(address, denoms).pipe(
-      mergeMap((balance) =>
-        this.getDenomMetadataMap$(denoms).pipe(map((metadataMap) => ({ balance, metadataMap }))),
-      ),
-      mergeMap(async ({ balance, metadataMap }) => {
+    return zip(this.getBalance$(address, denoms), this.getDenomMetadataMap$(denoms)).pipe(
+      mergeMap(async ([balance, metadataMap]) => {
         const map: { [symbol: string]: number } = {};
         await Promise.all(
-          balance.map((b) => {
+          balance.map(async (b) => {
             const metadata = metadataMap[b.denom!];
             const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
 

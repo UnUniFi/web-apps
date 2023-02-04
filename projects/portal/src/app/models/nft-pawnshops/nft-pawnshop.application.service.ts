@@ -27,6 +27,6 @@ export class NftPawnshopApplicationService {
       .open(NftsDialogComponent, { data: classID })
       .afterClosed()
       .toPromise();
-    await this.router.navigate([classID, nftID]);
+    await this.router.navigate([classID, nftID, 'place-bid']);
   }
 }

@@ -77,5 +77,7 @@ export class NftsDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onSubmit($event: string) {}
+  async onSubmit(nftID: string) {
+    this.matDialogRef.close(nftID);
+  }
 }

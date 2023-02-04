@@ -2,6 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 
+export interface LendParams {
+  classID: string;
+  deposit: { amount: number; denom: string };
+  interestRate: number;
+  repaymentTerm: Date;
+}
+
 @Component({
   selector: 'view-lenders',
   templateUrl: './lenders.component.html',
@@ -17,7 +24,7 @@ export class LendersComponent implements OnInit {
   @Input()
   classImages?: string[] | null;
   @Output()
-  appViewClass: EventEmitter<string>;
+  appViewClass: EventEmitter<LendParams>;
 
   depositAmount: number;
   selectedDenom: string;
@@ -49,8 +56,13 @@ export class LendersComponent implements OnInit {
   onClickClass(classID?: string) {
     if (!classID) {
       alert('No classID');
+      return;
     }
-    this.appViewClass.emit(classID);
-    // todo open nfts in the class
+    this.appViewClass.emit({
+      classID,
+      deposit: { amount: this.depositAmount, denom: this.selectedDenom },
+      interestRate: this.interestRate,
+      repaymentTerm: this.datePicker,
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { NftPawnshopApplicationService } from '../../../models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from '../../../models/nft-pawnshops/nft-pawnshop.service';
+import { LendParams } from '../../../views/nft-pawnshop/lenders/lenders.component';
 import { BalanceUsecaseService } from '../../balance/balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
@@ -48,7 +49,11 @@ export class LendersComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onViewClass(classID: string) {
-    this.pawnshopApp.openNftsDialog(classID);
+  onViewClass(params: LendParams) {
+    localStorage.setItem('lendAmount', params.deposit.amount.toString());
+    localStorage.setItem('lendDenom', params.deposit.denom);
+    localStorage.setItem('lendRate', params.interestRate.toString());
+    localStorage.setItem('lendTerm', params.repaymentTerm.toISOString());
+    this.pawnshopApp.openNftsDialog(params.classID);
   }
 }

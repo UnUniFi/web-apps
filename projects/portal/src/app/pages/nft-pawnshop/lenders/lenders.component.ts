@@ -1,9 +1,9 @@
-import { PawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawnshop.query.service';
+import { NftPawnshopApplicationService } from '../../../models/nft-pawnshops/nft-pawnshop.application.service';
+import { NftPawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawnshop.query.service';
+import { NftPawnshopService } from '../../../models/nft-pawnshops/nft-pawnshop.service';
 import { BalanceUsecaseService } from '../../balance/balance.usecase.service';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import {
@@ -24,8 +24,9 @@ export class LendersComponent implements OnInit {
 
   constructor(
     private usecase: BalanceUsecaseService,
-    private http: HttpClient,
-    private readonly pawnshopQuery: PawnshopQueryService,
+    private readonly pawnshop: NftPawnshopService,
+    private readonly pawnshopApp: NftPawnshopApplicationService,
+    private readonly pawnshopQuery: NftPawnshopQueryService,
   ) {
     this.balances$ = this.usecase.balances$;
     this.listedNfts$ = this.pawnshopQuery.listListedNfts();
@@ -33,17 +34,12 @@ export class LendersComponent implements OnInit {
     this.classImages$ = this.listedClasses$.pipe(
       mergeMap((classes) =>
         Promise.all(
-          classes.map((nftClass) => {
+          classes.map(async (nftClass) => {
             if (!nftClass.uri) {
               return '';
             }
-            const uri = this.replaceIpfs(nftClass.uri);
-            return this.getMetadataFromUri(uri).then((metadata) => {
-              if (!metadata.image) {
-                return '';
-              }
-              return this.replaceIpfs(metadata.image);
-            });
+            const imageUri = await this.pawnshop.getImageFromUri(nftClass.uri);
+            return imageUri;
           }),
         ),
       ),
@@ -52,12 +48,7 @@ export class LendersComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  replaceIpfs(url: string): string {
-    return url.replace('ipfs://', 'https://ununifi.mypinata.cloud/ipfs/');
-  }
-
-  async getMetadataFromUri(uri: string): Promise<Metadata> {
-    const metadata = await this.http.get(uri).toPromise();
-    return metadata;
+  onViewClass(classID: string) {
+    this.pawnshopApp.openNftsDialog(classID);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 
@@ -16,6 +16,8 @@ export class LendersComponent implements OnInit {
   listedClasses?: ListedClass200Response[] | null;
   @Input()
   classImages?: string[] | null;
+  @Output()
+  appViewClass: EventEmitter<string>;
 
   depositAmount: number;
   selectedDenom: string;
@@ -24,6 +26,7 @@ export class LendersComponent implements OnInit {
   isSubmitted: boolean;
 
   constructor() {
+    this.appViewClass = new EventEmitter();
     this.denoms = ['GUU'];
     this.selectedDenom = this.denoms[0];
     this.depositAmount = 0;
@@ -47,6 +50,7 @@ export class LendersComponent implements OnInit {
     if (!classID) {
       alert('No classID');
     }
+    this.appViewClass.emit(classID);
     // todo open nfts in the class
   }
 }

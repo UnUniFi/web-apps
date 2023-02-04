@@ -2,25 +2,6 @@
 
 <mat-card class="mb-4">
   <mat-card-title>Lending Token</mat-card-title>
-  <h3>Your Balance</h3>
-  <mat-card class="mb-4 mat-elevation-z8">
-    <mat-list>
-      <mat-list-item *ngIf="balances === null">
-        <mat-spinner></mat-spinner>
-      </mat-list-item>
-      <mat-list-item *ngIf="balances === undefined"> No Balances! </mat-list-item>
-      <mat-list-item *ngIf="balances && balances.length === 0"> No Balances! </mat-list-item>
-      <ng-container *ngIf="balances && balances.length > 0">
-        <mat-list-item *ngFor="let balance of balances; last as last">
-          <span class="flex-auto"></span>
-          <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
-          <span>{{ balance.denom }}</span>
-          <mat-divider *ngIf="!last"></mat-divider>
-        </mat-list-item>
-      </ng-container>
-    </mat-list>
-  </mat-card>
-
   <h3>Set Lending Parameter</h3>
   <mat-card class="mb-4 mat-elevation-z8">
     <form #formRef="ngForm" (submit)="onSubmit()">
@@ -91,6 +72,25 @@
       <button mat-flat-button class="w-full mt-4" color="primary">Search NFTs</button>
     </form>
   </mat-card>
+</mat-card>
+
+<mat-card *ngIf="!isSubmitted" class="mb-4 mat-elevation-z8">
+  <mat-card-title>Your Balance</mat-card-title>
+  <mat-list>
+    <mat-list-item *ngIf="balances === null">
+      <mat-spinner></mat-spinner>
+    </mat-list-item>
+    <mat-list-item *ngIf="balances === undefined"> No Balances! </mat-list-item>
+    <mat-list-item *ngIf="balances && balances.length === 0"> No Balances! </mat-list-item>
+    <ng-container *ngIf="balances && balances.length > 0">
+      <mat-list-item *ngFor="let balance of balances; last as last">
+        <span class="flex-auto"></span>
+        <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
+        <span>{{ balance.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
 </mat-card>
 
 <mat-card class="mb-4" *ngIf="isSubmitted">

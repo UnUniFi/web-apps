@@ -6,13 +6,13 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyEB = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyEC = 'ununifi-alpha-test-v3.cauchye.net';
-const domainCauchyED = 'ununifi-alpha-test-v3.cauchye.net';
+const domainCauchyEA = 'localhost';
+const domainCauchyEB = 'localhost';
+const domainCauchyEC = 'localhost';
+const domainCauchyED = 'localhost';
 
-const chainID = 'ununifi-alpha-test-v3';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'ununifi-test-private-m1';
+const chainName = 'UnUniFi (Private)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

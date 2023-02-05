@@ -1,6 +1,5 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { TxCommonService } from '../cosmos/tx-common.service';
-import { KeyService } from '../keys/key.service';
+import { BankService } from '../cosmos/bank.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
@@ -11,8 +10,7 @@ import ununificlient from 'ununifi-client';
 export class DerivativesService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
-    private readonly key: KeyService,
-    private readonly txCommonService: TxCommonService,
+    private readonly bankService: BankService,
   ) {}
 
   getMarginSymbol(
@@ -36,14 +34,10 @@ export class DerivativesService {
     amount: number,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const bankService = {} as any;
-    const coin = (
-      bankService.convert(
-        symbol,
-        amount,
-        symbolMetadataMap,
-      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
-    )[0]; // DERIVATIVES_TODO
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
 
     const msgMintLiquidityProviderToken =
       new ununificlient.proto.ununifi.derivatives.MsgMintLiquidityProviderToken({
@@ -59,15 +53,13 @@ export class DerivativesService {
     redeemSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const bankService = {} as any;
     const symbol = 'DLP';
-    const coin = (
-      bankService.convert(
-        symbol,
-        amount,
-        symbolMetadataMap,
-      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
-    )[0]; // DERIVATIVES_TODO
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
+
+    const redeemDenom = symbolMetadataMap?.[redeemSymbol].base;
 
     const msgMintLiquidityProviderToken =
       new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
@@ -85,14 +77,10 @@ export class DerivativesService {
     leverage: number,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const bankService = {} as any;
-    const position = (
-      bankService.convert(
-        baseSymbol,
-        size,
-        symbolMetadataMap,
-      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
-    )[0]; // DERIVATIVES_TODO
+    const position = this.bankService.convertSymbolAmountMapToCoins(
+      { [baseSymbol]: size },
+      symbolMetadataMap,
+    )[0];
 
     const perpetualFuturesPositionInstance =
       new ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance({
@@ -112,14 +100,11 @@ export class DerivativesService {
     positionInstance: cosmosclient.proto.google.protobuf.IAny,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const bankService = {} as any;
-    const margin = (
-      bankService.convert(
-        marginSymbol,
-        marginAmount,
-        symbolMetadataMap,
-      ) as cosmosclient.proto.cosmos.base.v1beta1.ICoin[]
-    )[0]; // DERIVATIVES_TODO
+    const margin = this.bankService.convertSymbolAmountMapToCoins(
+      { [marginSymbol]: marginAmount },
+      symbolMetadataMap,
+    )[0];
+
     const msgOpenPosition = new ununificlient.proto.ununifi.derivatives.MsgOpenPosition({
       sender: senderAddress,
       margin,

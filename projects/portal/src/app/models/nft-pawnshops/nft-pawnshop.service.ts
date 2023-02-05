@@ -34,19 +34,37 @@ export class NftPawnshopService {
     return this.replaceIpfs(metadata.image);
   }
 
-  buildMsgListNft(senderAddress: string) {
+  buildMsgListNft(
+    senderAddress: string,
+    classId: string,
+    nftId: string,
+    listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
+    bidSymbol: string,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const bidDenom = symbolMetadataMap[bidSymbol].base;
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgListNft({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      listing_type: listingType,
+      bid_token: bidDenom,
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgCancelNftListing(senderAddress: string) {
+  buildMsgCancelNftListing(senderAddress: string, classId: string, nftId: string) {
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgCancelNftListing({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
@@ -54,6 +72,8 @@ export class NftPawnshopService {
 
   buildMsgPlaceBid(
     senderAddress: string,
+    classId: string,
+    nftId: string,
     symbol: string,
     bidAmount: number,
     lendingRate: number,
@@ -72,61 +92,115 @@ export class NftPawnshopService {
 
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgPlaceBid({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgCancelBid(senderAddress: string) {
+  buildMsgCancelBid(senderAddress: string, classId: string, nftId: string) {
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgCancelBid({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgEndNftListing(senderAddress: string) {
+  buildMsgEndNftListing(senderAddress: string, classId: string, nftId: string) {
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgEndNftListing({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgSellingDecision(senderAddress: string) {
+  buildMsgSellingDecision(senderAddress: string, classId: string, nftId: string) {
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgSellingDecision({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgPayFullBid(senderAddress: string) {
+  buildMsgPayFullBid(senderAddress: string, classId: string, nftId: string) {
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgPayFullBid({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgBorrow(senderAddress: string) {
+  buildMsgBorrow(
+    senderAddress: string,
+    classId: string,
+    nftId: string,
+    symbol: string,
+    amount: number,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
+
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgBorrow({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      amount: coin,
+      // TODO: check the remaining fields
     });
 
     return msg;
   }
 
-  buildMsgRepay(senderAddress: string) {
+  buildMsgRepay(
+    senderAddress: string,
+    classId: string,
+    nftId: string,
+    symbol: string,
+    amount: number,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ) {
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
+
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgRepay({
       sender: senderAddress,
-      // TODO
+      nft_id: {
+        class_id: classId,
+        nft_id: nftId,
+      },
+      amount: coin,
+      // TODO: check the remaining fields
     });
 
     return msg;

@@ -1,104 +1,70 @@
-<h2 class="mb-0">Perpetual Futures</h2>
+<h2>Perpetual Futures</h2>
 
 <mat-card class="mb-4">
   <!-- TradingView Widget BEGIN -->
   <div class="tradingview-widget-container">
     <div id="tradingview_5b3c4" class="h-96"></div>
     <div class="tradingview-widget-copyright">
-      <a
-        href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE"
-        rel="noopener"
-        target="_blank"
-      ></a>
+      <a href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE" rel="noopener" target="_blank"></a>
       by TradingView
     </div>
   </div>
 </mat-card>
-<form
-  (submit)="
-    onSubmit(sizeRef.valueAsNumber, leverage, marginAmountRef.valueAsNumber, positionRef.value)
-  "
->
-  <mat-card class="mb-4">
-    <mat-button-toggle-group
-      class="flex mb-4"
-      #positionRef="matButtonToggleGroup"
-      [(ngModel)]="selectedPositionType"
-    >
-      <mat-button-toggle class="flex-auto" [value]="positionType.LONG">
-        <mat-icon>trending_up</mat-icon>Long
-      </mat-button-toggle>
-      <mat-button-toggle class="flex-auto" [value]="positionType.SHORT">
-        <mat-icon>trending_down</mat-icon>Short
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-
-    <div class="flex flex-row content-center items-center">
-      <mat-form-field class="flex-auto">
-        <mat-label>Position size</mat-label>
-        <input
-          matInput
-          type="number"
-          #sizeRef
-          name="size"
-          ngModel
-          [min]="0"
-          required
-          pattern="^[0-9]*\.?[0-9]{0,6}$"
-        />
-        <span mutSuffix>{{ baseSymbol }}</span>
-        <mat-error>Required!</mat-error>
-      </mat-form-field>
-    </div>
-
-    <h3>Leverage</h3>
-    <mat-slider
-      class="w-full"
-      [max]="60"
-      [min]="1"
-      [step]="1"
-      [(ngModel)]="leverage"
-      name="leverage-slider"
-    >
-    </mat-slider>
-    <mat-form-field>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="leverage"
-        [max]="60"
-        [min]="1"
-        [step]="1"
-        name="leverage-slider"
-      />
-    </mat-form-field>
-
-    <div class="flex flex-row content-center items-center">
-      <mat-form-field class="flex-auto">
-        <mat-label>Margin</mat-label>
-        <input
-          matInput
-          type="number"
-          #marginAmountRef
-          name="margin"
-          [(ngModel)]="marginAmount"
-          [max]="maxMargin"
-          [min]="minMargin"
-          required
-          pattern="^[0-9]*\.?[0-9]{0,6}$"
-        />
-        <mat-error>Required!</mat-error>
-        <button type="button" mat-button matSuffix>Default</button>
-        <span matSuffix> {{ marginSymbol }}</span>
-      </mat-form-field>
-    </div>
-    <button
-      mat-flat-button
-      class="w-full mt-4"
-      color="accent"
-      (click)="onClickSetMargin(sizeRef.valueAsNumber, leverage)"
-    >
-      Open Position
+<form (submit)="
+    onSubmit(sizeRef.valueAsNumber, leverage, marginAmountRef.valueAsNumber, selectedPositionType)
+  ">
+  <div class="btn-group">
+    <button type="button" class="btn" [class.btn-active]="selectedPositionType === positionType.LONG"
+      (click)="selectedPositionType = positionType.LONG">
+      <mat-icon>trending_up</mat-icon>Long
     </button>
-  </mat-card>
+    <button type="button" class="btn" [class.btn-active]="selectedPositionType === positionType.SHORT"
+      (click)="selectedPositionType = positionType.SHORT">
+      <mat-icon>trending_down</mat-icon>Short
+    </button>
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Enter position size</span>
+    </label>
+
+    <label class="input-group">
+      <input #sizeRef required ngModel name="name" type="number" placeholder="10" class="input input-bordered" [min]="0"
+        pattern="^[0-9]*\.?[0-9]{0,6}$" />
+      <span>{{ baseSymbol }}</span>
+    </label>
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Enter leverage</span>
+    </label>
+    <label class="input-group">
+      <input type="number" placeholder="20" class="input input-bordered" [min]="1" [max]="60" [step]="1"
+        [(ngModel)]="leverage" name="leverage" />
+      <span>x</span>
+    </label>
+    <input type="range" min="1" max="60" class="range mt-1" [(ngModel)]="leverage" name="leverage-slider" />
+  </div>
+
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Enter margin</span>
+    </label>
+
+    <label class="input-group">
+      <input #marginAmountRef required type="number" placeholder="10" class="input input-bordered" [min]="minMargin"
+        [max]="maxMargin" pattern="^[0-9]*\.?[0-9]{0,6}$" [(ngModel)]="marginAmount" name="margin" />
+      <span>{{ marginSymbol }}</span>
+    </label>
+
+    <label class="label">
+      <span class="label-text-alt"></span>
+      <span class="label-text-alt" (click)="onClickSetMargin(sizeRef.valueAsNumber, leverage)">Set default margin</span>
+    </label>
+  </div>
+
+  <br />
+  <button class="btn btn-primary w-full">Open position</button>
 </form>

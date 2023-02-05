@@ -1,50 +1,73 @@
-<mat-card>
-  <div class="flex flex-row">
-    <span class="flex-auto"></span>
-    <button mat-button color="warn" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
-      <span>Close</span>
-    </button>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <div class="flex flex-row">
+      <div class="badge badge-lg mr-1">Perpetual Futures</div>
+
+      <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
+        <div class="badge badge-lg badge-primary">Long</div>
+      </ng-container>
+      <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
+        <div class="badge badge-lg badge-secondary">Short</div>
+      </ng-container>
+    </div>
+    <h2 class="card-title">
+      <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
+        <span class="text-primary">{{ positionInstance?.size }} {{ symbolMetadataMap?.[position?.market?.denom ||
+          '']?.symbol }}/{{ symbolMetadataMap?.[position?.market?.quote_denom ||
+          '']?.symbol }}</span>
+      </ng-container>
+      <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
+        <span class="text-secondary">{{ positionInstance?.size }} {{ symbolMetadataMap?.[position?.market?.denom ||
+          '']?.symbol }}/{{ symbolMetadataMap?.[position?.market?.quote_denom ||
+          '']?.symbol }}</span>
+      </ng-container>
+
+
+    </h2>
+
+    <div class="flex flex-row items-center">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Remaining margin rate</div>
+          <div class="stat-value">123.4%</div>
+          <div class="stat-desc">Being under 50% leads liquidation</div>
+        </div>
+      </div>
+
+      <span class="flex-auto"></span>
+      <button class="btn btn-outline btn-error" (click)="onClickClose()">Close Position</button>
+    </div>
+
+    <div class="collapse collapse-arrow">
+      <input type="checkbox" />
+      <div class="collapse-title text-xl font-medium">
+        Details
+      </div>
+      <div class="collapse-content">
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <th>Opened at</th>
+                <td>{{ position?.opened_at }}</td>
+              </tr>
+              <tr>
+                <th>Opened rate</th>
+                <td>{{ position?.opened_rate }}</td>
+              </tr>
+              <tr>
+                <th>Leverage</th>
+                <td>{{ positionInstance?.leverage }}x</td>
+              </tr>
+              <tr>
+                <th>Remaining margin</th>
+                <td>458 axlUSDC</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
-    <mat-chip>Perpetual Futures</mat-chip>
-    <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
-      <mat-chip color="primary">Long</mat-chip>
-    </ng-container>
-    <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
-      <mat-chip color="warn">Short</mat-chip>
-    </ng-container>
-
-  <mat-list>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Market:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">{{ position?.market }}</span>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Opened at:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">{{ position?.opened_at }}</span>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Opened rate:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">{{ position?.opened_rate }}</span>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Leverage:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">{{ positionInstance?.leverage}}</span>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Position size:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">{{ positionInstance?.size}}</span>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-  </mat-list>
-
-</mat-card>
+</div>

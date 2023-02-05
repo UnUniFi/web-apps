@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
 
@@ -13,6 +14,9 @@ export class PerpetualFuturesComponent implements OnInit {
 
   @Input()
   positionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | null;
+
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
 
   @Output()
   closePosition = new EventEmitter();

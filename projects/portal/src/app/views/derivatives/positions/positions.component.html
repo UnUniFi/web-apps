@@ -1,5 +1,6 @@
 <ng-container *ngFor="let position of positions">
-  <div class="my-2">
-    <view-position [position]="position" (closePosition)="onClosePosition($event)"></view-position>
+  <div class="-mb-4">
+    <view-position [position]="position" [symbolMetadataMap]="symbolMetadataMap"
+      (closePosition)="onClosePosition($event)"></view-position>
   </div>
 </ng-container>

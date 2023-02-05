@@ -1,3 +1,4 @@
+import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
@@ -19,9 +20,11 @@ export class PositionsComponent implements OnInit {
   positions$ = this.address$.pipe(
     mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
   );
+  symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
 
   constructor(
     private readonly walletService: WalletService,
+    private readonly bankQuery: BankQueryService,
     private readonly derivativesQuery: DerivativesQueryService,
     private readonly derivativesApplication: DerivativesApplicationService,
   ) {}

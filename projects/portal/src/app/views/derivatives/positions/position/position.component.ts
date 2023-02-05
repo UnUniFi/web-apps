@@ -20,6 +20,9 @@ export class PositionComponent implements OnInit, OnChanges {
   @Input()
   position?: AllPositions200ResponsePositionsInner | null;
 
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+
   @Output()
   closePosition = new EventEmitter<string>();
 

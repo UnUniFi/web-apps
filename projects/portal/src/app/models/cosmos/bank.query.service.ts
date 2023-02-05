@@ -1,15 +1,14 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
-import { QueryApi } from '@cosmos-client/core/esm/openapi';
+import { QueryApi } from '@cosmos-client/core/esm/openapi/';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class BankQueryService {
-  private restSdk$: Observable<CosmosSDK>;
+  private restSdk$: Observable<cosmosclient.CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));

@@ -5,7 +5,7 @@ import { BankQueryService } from '../cosmos/bank.query.service';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
-import { WalletType } from '../wallets/wallet.model';
+import { CosmosWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { NftPawnshopService } from './nft-pawnshop.service';
 import { Injectable } from '@angular/core';
@@ -44,6 +44,42 @@ export class NftPawnshopApplicationService {
     await this.router.navigate(['nft-pawnshop', 'lenders', 'nfts', classID, nftID, 'place-bid']);
   }
 
+  async getPrerequisiteData() {
+    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
+      .pipe(take(1))
+      .toPromise();
+    if (!currentCosmosWallet) {
+      this.snackBar.open(`Current connected wallet is invalid.`, 'Close');
+      return null;
+    }
+    const address = currentCosmosWallet.address.toString();
+    const publicKey = currentCosmosWallet.public_key;
+    if (!publicKey) {
+      this.snackBar.open(`Invalid public key.`, 'Close');
+      return null;
+    }
+    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
+    if (!account) {
+      this.snackBar.open(`Unsupported account type.`, 'Close');
+      return null;
+    }
+
+    const minimumGasPrice = await this.config.config$
+      .pipe(
+        take(1),
+        map((config) => config?.minimumGasPrices[0]!),
+      )
+      .toPromise();
+
+    return {
+      address,
+      publicKey,
+      account,
+      currentCosmosWallet,
+      minimumGasPrice,
+    };
+  }
+
   async simulate(
     msg: any,
     cosmosPublicKey: PubKey,
@@ -76,12 +112,34 @@ export class NftPawnshopApplicationService {
       return { gas, fee };
     } catch (error) {
       console.error(error);
-      const errorMessage = `Tx simulation failed: ${(error as Error).toString()}`;
-      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      this.snackBar.open(`Tx simulation failed: ${(error as Error).toString()}`, 'Close');
       return null;
     } finally {
       dialogRefSimulating.close();
     }
+  }
+
+  async confirmFeeIfUnUniFiWallet(
+    currentCosmosWallet: CosmosWallet,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ) {
+    if (currentCosmosWallet.type === WalletType.ununifi) {
+      const txFeeConfirmedResult = await this.dialog
+        .open(TxFeeConfirmDialogComponent, {
+          data: {
+            fee,
+            isConfirmed: false,
+          },
+        })
+        .afterClosed()
+        .toPromise();
+      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
+        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
+        return false;
+      }
+    }
+
+    return true;
   }
 
   async broadcast(
@@ -112,8 +170,7 @@ export class NftPawnshopApplicationService {
       return txHash;
     } catch (error) {
       console.error(error);
-      const msg = (error as Error).toString();
-      this.snackBar.open(`An error has occur: ${msg}`, 'Close');
+      this.snackBar.open(`Tx broadcasting failed: ${(error as Error).toString()}`, 'Close');
       return null;
     } finally {
       dialogRef.close();
@@ -126,37 +183,17 @@ export class NftPawnshopApplicationService {
     listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
     bidSymbol: string,
   ) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const symbolMetadataMap = await this.bankQueryService
       .getSymbolMetadataMap$()
       .pipe(take(1))
       .toPromise();
 
-    // create msg
     const msg = this.pawnshopService.buildMsgListNft(
       address,
       classId,
@@ -166,30 +203,17 @@ export class NftPawnshopApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -201,57 +225,25 @@ export class NftPawnshopApplicationService {
   }
 
   async cancelNftListing(classId: string, nftId: string) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const msg = this.pawnshopService.buildMsgCancelNftListing(address, classId, nftId);
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -271,30 +263,11 @@ export class NftPawnshopApplicationService {
     automaticPayment: boolean,
     depositAmount: number,
   ) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const symbolMetadataMap = await this.bankQueryService
       .getSymbolMetadataMap$()
@@ -313,30 +286,17 @@ export class NftPawnshopApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -348,57 +308,25 @@ export class NftPawnshopApplicationService {
   }
 
   async cancelBid(classId: string, nftId: string) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const msg = this.pawnshopService.buildMsgCancelBid(address, classId, nftId);
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -410,57 +338,25 @@ export class NftPawnshopApplicationService {
   }
 
   async endNftListing(classId: string, nftId: string) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const msg = this.pawnshopService.buildMsgEndNftListing(address, classId, nftId);
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -472,57 +368,25 @@ export class NftPawnshopApplicationService {
   }
 
   async sellingDecision(classId: string, nftId: string) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const msg = this.pawnshopService.buildMsgSellingDecision(address, classId, nftId);
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -534,30 +398,11 @@ export class NftPawnshopApplicationService {
   }
 
   async payFullBid(classId: string, nftId: string) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     // const symbolMetadataMap = await this.bankQueryService
     //   .getSymbolMetadataMap$()
@@ -566,30 +411,17 @@ export class NftPawnshopApplicationService {
 
     const msg = this.pawnshopService.buildMsgPayFullBid(address, classId, nftId);
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -601,30 +433,11 @@ export class NftPawnshopApplicationService {
   }
 
   async borrow(classId: string, nftId: string, symbol: string, amount: number) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const symbolMetadataMap = await this.bankQueryService
       .getSymbolMetadataMap$()
@@ -640,30 +453,17 @@ export class NftPawnshopApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -675,30 +475,11 @@ export class NftPawnshopApplicationService {
   }
 
   async repay(classId: string, nftId: string, symbol: string, amount: number) {
-    const minimumGasPrice = await this.config.config$
-      .pipe(
-        take(1),
-        map((config) => config?.minimumGasPrices[0]!),
-      )
-      .toPromise();
-
-    // get public key
-    const currentCosmosWallet = await this.walletService.currentCosmosWallet$
-      .pipe(take(1))
-      .toPromise();
-    if (!currentCosmosWallet) {
-      throw Error('Current connected wallet is invalid!');
+    const prerequisiteData = await this.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
     }
-    const cosmosPublicKey = currentCosmosWallet.public_key;
-    if (!cosmosPublicKey) {
-      throw Error('Invalid public key!');
-    }
-
-    const address = currentCosmosWallet.address.toString();
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
-    if (!account) {
-      throw Error('Unsupported account type.');
-    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
     const symbolMetadataMap = await this.bankQueryService
       .getSymbolMetadataMap$()
@@ -714,30 +495,17 @@ export class NftPawnshopApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.simulate(msg, cosmosPublicKey, account, minimumGasPrice);
+    const simulationResult = await this.simulate(msg, publicKey, account, minimumGasPrice);
     if (!simulationResult) {
       return;
     }
     const { gas, fee } = simulationResult;
 
-    // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
-          data: {
-            fee,
-            isConfirmed: false,
-          },
-        })
-        .afterClosed()
-        .toPromise();
-      if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
-        this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
-        return;
-      }
+    if (!(await this.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
     }
 
-    const txHash = await this.broadcast(msg, cosmosPublicKey, account, gas, fee);
+    const txHash = await this.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }

@@ -1,97 +1,88 @@
-<h3 class="mb-0">Pool Overviews</h3>
-<mat-card class="mb-4">
-  <mat-list>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Pool Value:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.pool_market_cap?.total }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">24h Volume:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.volume_24hours }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">24h Fees:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.fees_24hours }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
-</mat-card>
-<h3 class="mb-0">Liquidity Provider Token</h3>
-<mat-tab-group>
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon>generating_tokens</mat-icon>
-      <span>Deposit to Mint</span>
-    </ng-template>
-    <ng-template matTabContent>
-      <form (submit)="onSubmitMint(mintSymbolRef.value, mintAmountRef.valueAsNumber)">
-        <mat-form-field appearance="outline">
-          <mat-label>Token to deposit</mat-label>
-          <mat-select #mintSymbolRef required ngModel>
-            <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-              <mat-option [value]="symbol">{{ symbol }}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Amount</mat-label>
-          <input
-            #mintAmountRef
-            matInput
-            required
-            type="number"
-            [min]="0"
-            [max]="symbolBalanceMap?.[mintSymbolRef.value] || 0"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
-          />
-          <ng-container *ngIf="mintSymbolRef.value">
-            <mat-hint>
-              Available balance: {{ symbolBalanceMap?.[mintSymbolRef.value] || 0 }}
-            </mat-hint>
+<h3>Pool Overviews</h3>
+<div class="stats shadow mb-4">
+  <div class="stat">
+    <div class="stat-figure text-primary">
+    </div>
+    <div class="stat-title">Pool Market Cap</div>
+    <div class="stat-value text-primary">{{ pool?.pool_market_cap?.total }}</div>
+    <div class="stat-desc">USD</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-figure text-secondary">
+    </div>
+    <div class="stat-title">24h Volume</div>
+    <div class="stat-value text-secondary">{{ pool?.volume_24hours }}</div>
+    <div class="stat-desc">USD</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-figure text-secondary">
+    </div>
+    <div class="stat-title">24h Fees</div>
+    <div class="stat-value text-secondary">{{ pool?.fees_24hours }}</div>
+    <div class="stat-desc">USD</div>
+  </div>
+</div>
+<h3>Liquidity Provider Token</h3>
+<div class="tabs tabs-boxed">
+  <a class="tab tab-lg" [class.tab-active]="tab === 'mint'">Mint</a>
+  <a class="tab tab-lg" [class.tab-active]="tab === 'burn'">Burn</a>
+</div>
+<ng-container *ngIf="tab === 'mint'">
+  <form (submit)="onSubmitMint(mintSymbolRef.value, mintAmountRef.valueAsNumber)">
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Enter amount to deposit</span>
+      </label>
+      <label class="input-group">
+        <input #mintAmountRef type="number" placeholder="0.123456" class="input input-bordered" [min]="0"
+          [max]="symbolBalanceMap?.[mintSymbolRef.value] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+        <select #mintSymbolRef required ngModel class="select select-bordered">
+          <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+            <option [value]="symbol">{{ symbol }}</option>
           </ng-container>
-          <mat-error>Invalid amount</mat-error>
-        </mat-form-field>
-        <button mat-raised-button color="primary">Deposit to Mint</button>
-      </form>
-    </ng-template>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon>eject</mat-icon>
-      <span>Burn to Redeem</span>
-    </ng-template>
-    <ng-template matTabContent>
-      <form (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
-        <mat-form-field appearance="outline">
-          <mat-label>Amount of DLP</mat-label>
-          <input
-            #burnAmountRef
-            matInput
-            required
-            type="number"
-            [min]="0"
-            [max]="dlpBalance"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
-          />
-          <span matSuffix>DLP</span>
-          <mat-hint>Available balance: {{ dlpBalance }}</mat-hint>
-          <mat-error>Invalid amount</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Token to redeem</mat-label>
-          <mat-select #redeemSymbolRef required ngModel>
-            <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-              <mat-option [value]="symbol">{{ symbol }}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-        <button mat-raised-button color="primary">Burn to Redeem</button>
-      </form>
-    </ng-template>
-  </mat-tab>
-</mat-tab-group>
+        </select>
+      </label>
+      <label class="label">
+        <span class="label-text-alt">Available balance:</span>
+        <span class="label-text-alt">{{ symbolBalanceMap?.[mintSymbolRef.value] || 0 }} {{ mintSymbolRef.value
+          }}</span>
+      </label>
+    </div>
+
+    <br />
+    <button class="btn btn-primary w-full">Deposit to mint</button>
+  </form>
+</ng-container>
+<ng-container *ngIf="tab === 'burn'">
+  <form (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Enter amount to burn</span>
+      </label>
+      <label class="input-group">
+        <input #burnAmountRef matInput required type="number" placeholder="0.123456" class="input input-bordered"
+          [min]="0" [max]="dlpBalance" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+        <span>DLP</span>
+      </label>
+      <label class="label">
+        <span class="label-text-alt">Available balance:</span>
+        <span class="label-text-alt">23.4 DLP</span>
+      </label>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Select symbol to redeem</span>
+      </label>
+      <select #redeemSymbolRef required ngModel class="select select-bordered w-full max-w-xs">
+        <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+          <option [value]="symbol">{{ symbol }}</option>
+        </ng-container>
+      </select>
+    </div>
+
+    <br />
+    <button class="btn btn-primary w-full">Burn to Redeem</button>
+  </form>
+</ng-container>

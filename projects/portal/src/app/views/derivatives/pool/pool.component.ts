@@ -44,6 +44,7 @@ export class PoolComponent implements OnInit, OnChanges {
   @Output()
   burnLPT = new EventEmitter<BurnLPTEvent>();
 
+  tab: 'mint' | 'burn' = 'mint';
   poolAcceptedSymbols: string[] = [];
   dlpBalance = 0;
 

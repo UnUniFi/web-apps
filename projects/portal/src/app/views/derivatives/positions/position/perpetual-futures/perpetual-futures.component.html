@@ -11,18 +11,18 @@
       </ng-container>
     </div>
     <h2 class="card-title">
-      <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
-        <span class="text-primary">{{ positionInstance?.size }} {{ symbolMetadataMap?.[position?.market?.denom ||
-          '']?.symbol }}/{{ symbolMetadataMap?.[position?.market?.quote_denom ||
-          '']?.symbol }}</span>
-      </ng-container>
-      <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
-        <span class="text-secondary">{{ positionInstance?.size }} {{ symbolMetadataMap?.[position?.market?.denom ||
-          '']?.symbol }}/{{ symbolMetadataMap?.[position?.market?.quote_denom ||
-          '']?.symbol }}</span>
-      </ng-container>
-
-
+      <span [ngClass]="{
+          'text-primary': positionInstance?.position_type === positionType.LONG,
+          'text-secondary': positionInstance?.position_type === positionType.SHORT
+        }">{{
+        positionInstance?.size
+        }} {{
+        symbolMetadataMap?.[position?.market?.denom ||
+        '']?.symbol
+        }}/{{
+        symbolMetadataMap?.[position?.market?.quote_denom ||
+        '']?.symbol
+        }}</span>
     </h2>
 
     <div class="flex flex-row items-center">

@@ -1,15 +1,18 @@
-<h2>Perpetual Futures</h2>
-<div class="form-control">
-  <label class="label">
-    <span class="label-text">Select market</span>
-  </label>
-  <select #marketRef class="select select-bordered w-full max-w-xs" (valueChange)="onChangeMarket(marketRef.value)">
-    <ng-container *ngFor="let m of markets">
-      <option [value]="m">{{ m }}</option>
-    </ng-container>
-  </select>
+<div class="w-full h-screen">
+  <h2>Perpetual Futures</h2>
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Select market</span>
+    </label>
+    <select #marketRef class="select select-bordered w-full max-w-xs" (valueChange)="onChangeMarket(marketRef.value)">
+      <ng-container *ngFor="let m of markets">
+        <option [value]="m">{{ m }}</option>
+      </ng-container>
+    </select>
+  </div>
+  <ng-content></ng-content>
 </div>
-<ng-content></ng-content>
+
 <mat-card class="mb-4">
   <mat-list>
     <mat-list-item>

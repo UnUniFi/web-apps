@@ -1,70 +1,150 @@
-<h2>Perpetual Futures</h2>
-
-<mat-card class="mb-4">
-  <!-- TradingView Widget BEGIN -->
-  <div class="tradingview-widget-container">
-    <div id="tradingview_5b3c4" class="h-96"></div>
-    <div class="tradingview-widget-copyright">
-      <a href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE" rel="noopener" target="_blank"></a>
-      by TradingView
+<div class="flex-auto flex flex-row flex-wrap items-end">
+  <div class="h-full min-h-96 flex-auto flex justify-center items-center">
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container w-full h-full">
+      <div id="tradingview_5b3c4" class="w-full h-full"></div>
+      <div class="tradingview-widget-copyright">
+        <a href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE" rel="noopener" target="_blank"></a>
+        by TradingView
+      </div>
     </div>
   </div>
-</mat-card>
-<form (submit)="
+</div>
+<div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+  <div class="card-body">
+    <form (submit)="
     onSubmit(sizeRef.valueAsNumber, leverage, marginAmountRef.valueAsNumber, selectedPositionType)
   ">
-  <div class="btn-group">
-    <button type="button" class="btn" [class.btn-active]="selectedPositionType === positionType.LONG"
-      (click)="selectedPositionType = positionType.LONG">
-      <mat-icon>trending_up</mat-icon>Long
-    </button>
-    <button type="button" class="btn" [class.btn-active]="selectedPositionType === positionType.SHORT"
-      (click)="selectedPositionType = positionType.SHORT">
-      <mat-icon>trending_down</mat-icon>Short
-    </button>
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Long or Short</span>
+          <!-- The button to open modal -->
+          <label for="modal-position-type" class="label-text">(?)</label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-position-type" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is Long and Short?</h3>
+              <p class="py-4">
+                Description here
+              </p>
+              <div class="modal-action">
+                <label for="modal-position-type" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <div class="btn-group">
+          <button type="button" class="btn w-1/2" [class.btn-active]="selectedPositionType === positionType.LONG"
+            (click)="selectedPositionType = positionType.LONG">
+            <mat-icon>trending_up</mat-icon>Long
+          </button>
+          <button type="button" class="btn w-1/2" [class.btn-active]="selectedPositionType === positionType.SHORT"
+            (click)="selectedPositionType = positionType.SHORT">
+            <mat-icon>trending_down</mat-icon>Short
+          </button>
+        </div>
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Enter position size</span>
+          <!-- The button to open modal -->
+          <label for="modal-position-size" class="label-text">(?)</label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-position-size" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is position size?</h3>
+              <p class="py-4">
+                Description here
+              </p>
+              <div class="modal-action">
+                <label for="modal-position-size" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <label class="input-group">
+          <input #sizeRef required ngModel name="position-size" type="number" placeholder="10"
+            class="input input-bordered w-full" [min]="0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+          <span>{{ baseSymbol }}</span>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Enter leverage</span>
+
+          <!-- The button to open modal -->
+          <label for="modal-leverage" class="label-text">(?)</label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-leverage" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is leverage?</h3>
+              <p class="py-4">
+                Description here
+              </p>
+              <div class="modal-action">
+                <label for="modal-leverage" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+        <label class="input-group">
+          <input type="number" placeholder="20" class="input input-bordered w-full" [min]="1" [max]="60" [step]="1"
+            [(ngModel)]="leverage" name="leverage" />
+          <span>x</span>
+        </label>
+        <input type="range" min="1" max="60" class="range mt-1"
+          [ngClass]="{ 'range-info': leverage < 20, 'range-warning': 20 <= leverage && leverage < 40, 'range-error': 40 <= leverage }"
+          [(ngModel)]="leverage" name="leverage-slider" />
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Enter margin</span>
+
+          <!-- The button to open modal -->
+          <label for="modal-margin" class="label-text">(?)</label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-margin" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is margin?</h3>
+              <p class="py-4">
+                Description here
+              </p>
+              <div class="modal-action">
+                <label for="modal-margin" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <label class="input-group">
+          <input #marginAmountRef required type="number" placeholder="10" class="input input-bordered w-full"
+            [min]="minMargin" [max]="maxMargin" pattern="^[0-9]*\.?[0-9]{0,6}$" [(ngModel)]="marginAmount"
+            name="margin" />
+          <span>{{ marginSymbol }}</span>
+        </label>
+
+        <label class="label">
+          <span class="label-text-alt">Available balance:</span>
+          <span class="label-text-alt">{{ symbolBalancesMap?.[marginSymbol || ''] || 0 }} {{marginSymbol}}</span>
+        </label>
+      </div>
+
+      <br />
+      <button class="btn btn-primary w-full">Open position</button>
+    </form>
+
   </div>
-
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Enter position size</span>
-    </label>
-
-    <label class="input-group">
-      <input #sizeRef required ngModel name="name" type="number" placeholder="10" class="input input-bordered" [min]="0"
-        pattern="^[0-9]*\.?[0-9]{0,6}$" />
-      <span>{{ baseSymbol }}</span>
-    </label>
-  </div>
-
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Enter leverage</span>
-    </label>
-    <label class="input-group">
-      <input type="number" placeholder="20" class="input input-bordered" [min]="1" [max]="60" [step]="1"
-        [(ngModel)]="leverage" name="leverage" />
-      <span>x</span>
-    </label>
-    <input type="range" min="1" max="60" class="range mt-1" [(ngModel)]="leverage" name="leverage-slider" />
-  </div>
-
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Enter margin</span>
-    </label>
-
-    <label class="input-group">
-      <input #marginAmountRef required type="number" placeholder="10" class="input input-bordered" [min]="minMargin"
-        [max]="maxMargin" pattern="^[0-9]*\.?[0-9]{0,6}$" [(ngModel)]="marginAmount" name="margin" />
-      <span>{{ marginSymbol }}</span>
-    </label>
-
-    <label class="label">
-      <span class="label-text-alt"></span>
-      <span class="label-text-alt" (click)="onClickSetMargin(sizeRef.valueAsNumber, leverage)">Set default margin</span>
-    </label>
-  </div>
-
-  <br />
-  <button class="btn btn-primary w-full">Open position</button>
-</form>
+</div>

@@ -69,4 +69,12 @@ export class NftPawnshopQueryService {
       map((res) => res.data.bids!),
     );
   }
+
+  // To do update @cosmosclient/core
+  listOwnNfts(address: string): Observable<string> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.nft.DUMMY),
+      map((res) => res),
+    );
+  }
 }

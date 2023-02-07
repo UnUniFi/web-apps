@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-borrowers',
@@ -6,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./borrowers.component.css'],
 })
 export class BorrowersComponent implements OnInit {
+  @Input()
+  address?: string | null;
+  @Input()
+  ownNfts?: any | null;
+  @Input()
+  listedOwnNfts?: ListedNfts200ResponseListingsInner[] | null;
+
   constructor() {}
 
   ngOnInit(): void {}

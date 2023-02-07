@@ -17,6 +17,9 @@ import { NftPawnshopRoutingModule } from './nft-pawnshop-routing.module';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
+import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
+import { RepayComponent } from './borrowers/borrower-nfts/borrower-nft/repay/repay.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { NgModule } from '@angular/core';
     BorrowerComponent,
     BorrowerNftComponent,
     PlaceBidComponent,
+    ListComponent,
+    BorrowComponent,
+    RepayComponent,
   ],
   imports: [
     CommonModule,

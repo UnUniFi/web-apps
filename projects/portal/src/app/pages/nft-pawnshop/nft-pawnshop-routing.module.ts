@@ -1,4 +1,7 @@
+import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
 import { BorrowerNftComponent } from './borrowers/borrower-nfts/borrower-nft/borrower-nft.component';
+import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
+import { RepayComponent } from './borrowers/borrower-nfts/borrower-nft/repay/repay.component';
 import { BorrowerComponent } from './borrowers/borrower/borrower.component';
 import { BorrowersComponent } from './borrowers/borrowers.component';
 import { LenderNftComponent } from './lenders/lender-nfts/lender-nft/lender-nft.component';
@@ -41,6 +44,18 @@ const routes: Routes = [
   {
     path: 'borrowers/nfts/:class_id/:nft_id',
     component: BorrowerNftComponent,
+  },
+  {
+    path: 'borrowers/nfts/:class_id/:nft_id/list',
+    component: ListComponent,
+  },
+  {
+    path: 'borrowers/nfts/:class_id/:nft_id/borrow',
+    component: BorrowComponent,
+  },
+  {
+    path: 'borrowers/nfts/:class_id/:nft_id/repay',
+    component: RepayComponent,
   },
 ];
 

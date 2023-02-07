@@ -1,4 +1,7 @@
+import { BorrowModule } from '../../views/nft-pawnshop/borrowers/borrower-nfts/borrower-nft/borrow/borrow.module';
 import { BorrowerNftModule } from '../../views/nft-pawnshop/borrowers/borrower-nfts/borrower-nft/borrower-nft.module';
+import { ListModule } from '../../views/nft-pawnshop/borrowers/borrower-nfts/borrower-nft/list/list.module';
+import { RepayModule } from '../../views/nft-pawnshop/borrowers/borrower-nfts/borrower-nft/repay/repay.module';
 import { BorrowerModule } from '../../views/nft-pawnshop/borrowers/borrower/borrower.module';
 import { BorrowersModule } from '../../views/nft-pawnshop/borrowers/borrowers.module';
 import { LenderNftModule } from '../../views/nft-pawnshop/lenders/lender-nfts/lender-nft/lender-nft.module';
@@ -6,7 +9,10 @@ import { PlaceBidModule } from '../../views/nft-pawnshop/lenders/lender-nfts/len
 import { LenderModule } from '../../views/nft-pawnshop/lenders/lender/lender.module';
 import { LendersModule } from '../../views/nft-pawnshop/lenders/lenders.module';
 import { NftPawnshopModule } from '../../views/nft-pawnshop/nft-pawnshop.module';
+import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
 import { BorrowerNftComponent } from './borrowers/borrower-nfts/borrower-nft/borrower-nft.component';
+import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
+import { RepayComponent } from './borrowers/borrower-nfts/borrower-nft/repay/repay.component';
 import { BorrowerComponent } from './borrowers/borrower/borrower.component';
 import { BorrowersComponent } from './borrowers/borrowers.component';
 import { LenderNftComponent } from './lenders/lender-nfts/lender-nft/lender-nft.component';
@@ -17,9 +23,6 @@ import { NftPawnshopRoutingModule } from './nft-pawnshop-routing.module';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
-import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
-import { RepayComponent } from './borrowers/borrower-nfts/borrower-nft/repay/repay.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { RepayComponent } from './borrowers/borrower-nfts/borrower-nft/repay/rep
     BorrowerModule,
     BorrowerNftModule,
     PlaceBidModule,
+    ListModule,
+    BorrowModule,
+    RepayModule,
   ],
 })
 export class AppNftPawnshopModule {}

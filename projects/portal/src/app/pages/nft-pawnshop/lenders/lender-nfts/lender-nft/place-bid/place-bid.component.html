@@ -1,1 +1,8 @@
-<view-place-bid></view-place-bid>
+<view-place-bid
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+  (appSubmit)="onSubmit($event)"
+  (appSimulate)="onSimulate($event)"
+></view-place-bid>

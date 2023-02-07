@@ -19,8 +19,8 @@ export class NftPawnshopComponent implements OnInit {
 
   constructor(private readonly pawnshopQuery: NftPawnshopQueryService) {
     this.params$ = this.pawnshopQuery.getNftmarketParam();
-    this.listedClasses$ = this.pawnshopQuery.listListedClasses();
-    this.listedNfts$ = this.pawnshopQuery.listListedNfts();
+    this.listedClasses$ = this.pawnshopQuery.listAllListedClasses();
+    this.listedNfts$ = this.pawnshopQuery.listAllListedNfts();
   }
 
   ngOnInit(): void {}

@@ -1,1 +1,6 @@
-<view-lender-nft></view-lender-nft>
+<view-lender-nft
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+></view-lender-nft>

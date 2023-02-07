@@ -76,6 +76,7 @@ export class NftPawnshopService {
     nftId: string,
     symbol: string,
     bidAmount: number,
+    biddingPeriod: Date,
     lendingRate: number,
     automaticPayment: boolean,
     depositAmount: number,

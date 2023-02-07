@@ -1,10 +1,12 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { QueryApi } from '@cosmos-client/core/esm/openapi/';
+// import { QueryApi } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
+
+declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
 @Injectable({ providedIn: 'root' })
 export class BankQueryService {
@@ -20,7 +22,9 @@ export class BankQueryService {
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     if (!denoms) {
       return this.restSdk$.pipe(
-        mergeMap((sdk) => new QueryApi(undefined, sdk.url).allBalances(address)),
+        mergeMap((sdk) =>
+          cosmosclient.rest.bank.allBalances(sdk, cosmosclient.AccAddress.fromString(address)),
+        ),
         map((res) => res.data.balances || []),
       );
     }
@@ -28,10 +32,11 @@ export class BankQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         Promise.all(
-          denoms.map((denom) =>
-            new QueryApi(undefined, sdk.url)
-              .balance(address, denom)
-              .then((res) => res.data.balance!),
+          denoms.map(
+            (denom) =>
+              new QueryApi(undefined, sdk.url)
+                .balance(address, denom)
+                .then((res: any) => res.data.balance!), // TODO: remove any
           ),
         ),
       ),

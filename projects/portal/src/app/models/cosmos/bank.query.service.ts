@@ -1,12 +1,9 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-// import { QueryApi } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
-
-declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
 @Injectable({ providedIn: 'root' })
 export class BankQueryService {
@@ -34,9 +31,9 @@ export class BankQueryService {
         Promise.all(
           denoms.map(
             (denom) =>
-              new QueryApi(undefined, sdk.url)
-                .balance(address, denom)
-                .then((res: any) => res.data.balance!), // TODO: remove any
+              cosmosclient.rest.bank
+                .balance(sdk, cosmosclient.AccAddress.fromString(address), denom)
+                .then((res) => res.data.balance!), // TODO: remove any
           ),
         ),
       ),

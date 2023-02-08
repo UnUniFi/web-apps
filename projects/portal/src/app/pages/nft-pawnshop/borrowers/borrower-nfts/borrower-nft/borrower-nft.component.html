@@ -1,1 +1,9 @@
-<view-borrower-nft></view-borrower-nft>
+<view-borrower-nft
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+  [loans]="loans$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+></view-borrower-nft>

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
@@ -19,6 +20,10 @@ export class PlaceBidComponent implements OnInit {
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
+  @Input()
+  nftMetadata?: Metadata | null;
+  @Input()
+  nftImage?: string | null;
 
   @Output()
   appSimulate: EventEmitter<PlaceBidRequest>;

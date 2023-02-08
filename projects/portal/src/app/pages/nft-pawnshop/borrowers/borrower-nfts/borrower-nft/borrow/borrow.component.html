@@ -1,1 +1,11 @@
-<view-borrow></view-borrow>
+<view-borrow
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+  [loans]="loans$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  (appSubmit)="onSubmit($event)"
+  (appSimulate)="onSimulate($event)"
+></view-borrow>

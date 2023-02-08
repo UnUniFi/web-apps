@@ -1,1 +1,4 @@
-<view-borrower></view-borrower>
+<view-borrower
+  [address]="address$ | async"
+  [listedOwnNfts]="listedOwnNfts$ | async"
+></view-borrower>

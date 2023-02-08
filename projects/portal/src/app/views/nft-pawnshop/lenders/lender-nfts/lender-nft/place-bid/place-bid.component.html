@@ -1,1 +1,216 @@
-<p>place-bid works!</p>
+<div class="flex justify-center">
+  <div>
+    <div class="card lg:card-side bg-base-100 shadow-xl">
+      <figure class="aspect-square">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
+          alt=""
+          class="h-full object-cover"
+        />
+      </figure>
+      <div class="card-body">
+        <div class="flex flex-row">
+          <div class="badge badge-lg badge-primary">BIDDING</div>
+        </div>
+        <h2 class="card-title">Unknown (Metadata not registered)</h2>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <th>Class ID</th>
+                <td>ununifi-XXXXXXXXXXXXXXXXXX</td>
+              </tr>
+              <tr>
+                <th>NFT ID</th>
+                <td>a01</td>
+              </tr>
+              <tr>
+                <th>Minimum deposit rate</th>
+                <td>10%</td>
+              </tr>
+              <tr>
+                <th>Started at</th>
+                <td>2023/02/06</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <h3>Offer the bid</h3>
+    <div class="flex flex-row">
+      <span class="flex-auto"> </span>
+      <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+        <div class="card-body">
+          <form>
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Enter bid price</span>
+                <!-- The button to open modal -->
+                <label for="modal-bid-price" class="label-text">(?)</label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-bid-price" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is bid price?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-bid-price" class="btn">Understood</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  required
+                  type="number"
+                  placeholder="12.123456"
+                  class="input input-bordered w-full"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                />
+                <span>axlUSDC</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Enter deposit amount</span>
+                <!-- The button to open modal -->
+                <label for="modal-deposit" class="label-text">(?)</label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is deposit amount?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-deposit" class="btn">Understood</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  required
+                  type="number"
+                  placeholder="12.123456"
+                  class="input input-bordered w-full"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                />
+                <span>axlUSDC</span>
+              </label>
+              <label class="label">
+                <span class="label-text-alt">Available balance:</span>
+                <span class="label-text-alt">234 axlUSDC</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Enter interest rate</span>
+                <!-- The button to open modal -->
+                <label for="modal-interest" class="label-text">(?)</label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-interest" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is interest rate?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-interest" class="btn">Understood</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  required
+                  type="number"
+                  placeholder="12.1234"
+                  class="input input-bordered w-full"
+                  pattern="^[0-9]*\.?[0-9]{0,4}$"
+                />
+                <span>%</span>
+              </label>
+            </div>
+
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Expiry date</span>
+                <!-- The button to open modal -->
+                <label for="modal-expiry" class="label-text">(?)</label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-expiry" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is expiry date?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-expiry" class="btn">Understood</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input required type="date" class="input input-bordered w-1/2" />
+                <input required type="time" class="input input-bordered w-1/2" />
+              </label>
+            </div>
+
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text"></span>
+
+                <!-- The button to open modal -->
+                <label for="modal-auto-pay" class="label-text">(?)</label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-auto-pay" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is auto pay?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-auto-pay" class="btn">Understood</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="cursor-pointer label">
+                <span class="label-text">Auto pay</span>
+                <input type="checkbox" class="toggle toggle-primary" checked />
+              </label>
+            </div>
+
+            <br />
+            <button class="btn btn-primary w-full">Offer the bid</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

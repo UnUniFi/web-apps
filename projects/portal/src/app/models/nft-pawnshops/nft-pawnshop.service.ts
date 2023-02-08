@@ -3,6 +3,7 @@ import { BankService } from '../cosmos/bank.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import Long from 'long';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 
@@ -34,6 +35,14 @@ export class NftPawnshopService {
     return this.replaceIpfs(metadata.image);
   }
 
+  convertDateToTimestamp(date: Date) {
+    const millisecond = date.getTime();
+    return {
+      seconds: Long.fromNumber(millisecond / 1000),
+      nanos: (millisecond % 1000) * 1e6,
+    };
+  }
+
   buildMsgListNft(
     senderAddress: string,
     classId: string,
@@ -41,6 +50,8 @@ export class NftPawnshopService {
     listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
     bidSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+    minimumDepositRate: number,
+    autoRefinancing: boolean,
   ) {
     const bidDenom = symbolMetadataMap[bidSymbol].base;
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgListNft({
@@ -51,7 +62,8 @@ export class NftPawnshopService {
       },
       listing_type: listingType,
       bid_token: bidDenom,
-      // TODO: check the remaining fields
+      minimum_deposit_rate: minimumDepositRate.toString(),
+      automatic_refinancing: autoRefinancing,
     });
 
     return msg;
@@ -64,7 +76,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -90,6 +101,7 @@ export class NftPawnshopService {
       { [symbol]: depositAmount },
       symbolMetadataMap,
     )[0];
+    const biddingPeriodTimestamp = this.convertDateToTimestamp(biddingPeriod);
 
     const msg = new ununificlient.proto.ununifi.nftmarket.MsgPlaceBid({
       sender: senderAddress,
@@ -97,7 +109,11 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
+      bid_amount: bid,
+      bidding_period: biddingPeriodTimestamp,
+      deposit_lending_rate: lendingRate.toString(),
+      automatic_payment: automaticPayment,
+      deposit_amount: deposit,
     });
 
     return msg;
@@ -110,7 +126,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -123,7 +138,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -136,7 +150,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -149,7 +162,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -175,7 +187,6 @@ export class NftPawnshopService {
         nft_id: nftId,
       },
       amount: coin,
-      // TODO: check the remaining fields
     });
 
     return msg;
@@ -201,7 +212,6 @@ export class NftPawnshopService {
         nft_id: nftId,
       },
       amount: coin,
-      // TODO: check the remaining fields
     });
 
     return msg;

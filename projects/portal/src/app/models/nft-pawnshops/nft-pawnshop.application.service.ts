@@ -35,6 +35,8 @@ export class NftPawnshopApplicationService {
     nftId: string,
     listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
     bidSymbol: string,
+    minimumDepositRate: number,
+    autoRefinancing: boolean,
   ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
@@ -54,6 +56,8 @@ export class NftPawnshopApplicationService {
       listingType,
       bidSymbol,
       symbolMetadataMap,
+      minimumDepositRate,
+      autoRefinancing,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

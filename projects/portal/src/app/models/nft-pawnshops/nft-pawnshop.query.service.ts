@@ -1,4 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
+import { Nft, Nfts } from './nft-pawnshop.model';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
@@ -9,6 +11,7 @@ import {
   BidderBids200ResponseBidsInner,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
+  Loans200ResponseLoansInner,
   NftmarketParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
 
@@ -16,7 +19,7 @@ import {
 export class NftPawnshopQueryService {
   private restSdk$: Observable<CosmosSDK>;
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(private http: HttpClient, private cosmosSDK: CosmosSDKService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
   getNftmarketParam(): Observable<NftmarketParams200ResponseParams> {
@@ -70,11 +73,25 @@ export class NftPawnshopQueryService {
     );
   }
 
-  // To do update @cosmosclient/core
-  listOwnNfts(address: string): Observable<string> {
+  listAllLoans(): Observable<Loans200ResponseLoansInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.nft.DUMMY),
-      map((res) => res),
+      mergeMap((sdk) => ununifi.rest.nftmarket.loans(sdk)),
+      map((res) => res.data.loans!),
+    );
+  }
+
+  // To do update @cosmosclient/core
+  getNft(classID: string, nftID: string): Observable<Nft> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        this.http.get(sdk.url + '/cosmos/nft/v1beta1/nfts/' + classID + '/' + nftID),
+      ),
+    );
+  }
+
+  listOwnNfts(address: string): Observable<Nfts> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => this.http.get(sdk.url + '/cosmos/nft/v1beta1/nfts?owner=' + address)),
     );
   }
 }

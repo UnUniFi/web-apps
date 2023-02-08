@@ -6,6 +6,7 @@ import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawn
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
@@ -22,6 +23,7 @@ export class NftsDialogComponent implements OnInit {
   uguuBalance$: Observable<string>;
   listedClass$: Observable<ListedClass200Response>;
   classImage$: Observable<string>;
+  nftsMetadata$: Observable<Metadata[]>;
   nftImages$: Observable<string[]>;
 
   constructor(
@@ -57,6 +59,22 @@ export class NftsDialogComponent implements OnInit {
       }),
     );
     this.classImage$.subscribe((a) => console.log(a));
+    this.nftsMetadata$ = this.listedClass$.pipe(
+      mergeMap((value) => {
+        if (!value.nfts) {
+          return [];
+        }
+        return Promise.all(
+          value.nfts.map(async (nft) => {
+            if (!nft.uri) {
+              return {};
+            }
+            const metadata = await this.pawnshop.getMetadataFromUri(nft.uri);
+            return metadata;
+          }),
+        );
+      }),
+    );
     this.nftImages$ = this.listedClass$.pipe(
       mergeMap((value) => {
         if (!value.nfts) {

@@ -1,11 +1,13 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { BankService } from '../cosmos/bank.service';
+import { Nfts } from './nft-pawnshop.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
+import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,8 @@ export class NftPawnshopService {
   }
 
   async getMetadataFromUri(uri: string): Promise<Metadata> {
-    const metadata = await this.http.get(uri).toPromise();
+    const replacedUri = this.replaceIpfs(uri);
+    const metadata = await this.http.get(replacedUri).toPromise();
     return metadata;
   }
 
@@ -41,6 +44,36 @@ export class NftPawnshopService {
       seconds: Long.fromNumber(millisecond / 1000),
       nanos: (millisecond % 1000) * 1e6,
     };
+  }
+
+  async listNftImages(data: ListedClass200Response | Nfts): Promise<string[]> {
+    if (!data.nfts) {
+      return [];
+    }
+    return Promise.all(
+      data.nfts.map(async (nft) => {
+        if (!nft.uri) {
+          return '';
+        }
+        const imageUri = await this.getImageFromUri(nft.uri);
+        return imageUri;
+      }),
+    );
+  }
+
+  async listNftsMetadata(data: ListedClass200Response | Nfts): Promise<Metadata[]> {
+    if (!data.nfts) {
+      return [];
+    }
+    return Promise.all(
+      data.nfts.map(async (nft) => {
+        if (!nft.uri) {
+          return {};
+        }
+        const metadata = await this.getMetadataFromUri(nft.uri);
+        return metadata;
+      }),
+    );
   }
 
   buildMsgListNft(

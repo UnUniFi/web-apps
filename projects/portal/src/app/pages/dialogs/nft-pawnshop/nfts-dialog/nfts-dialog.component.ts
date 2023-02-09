@@ -58,38 +58,11 @@ export class NftsDialogComponent implements OnInit {
         return imageUri;
       }),
     );
-    this.classImage$.subscribe((a) => console.log(a));
     this.nftsMetadata$ = this.listedClass$.pipe(
-      mergeMap((value) => {
-        if (!value.nfts) {
-          return [];
-        }
-        return Promise.all(
-          value.nfts.map(async (nft) => {
-            if (!nft.uri) {
-              return {};
-            }
-            const metadata = await this.pawnshop.getMetadataFromUri(nft.uri);
-            return metadata;
-          }),
-        );
-      }),
+      mergeMap((value) => this.pawnshop.listNftsMetadata(value)),
     );
     this.nftImages$ = this.listedClass$.pipe(
-      mergeMap((value) => {
-        if (!value.nfts) {
-          return [];
-        }
-        return Promise.all(
-          value.nfts.map(async (nft) => {
-            if (!nft.uri) {
-              return '';
-            }
-            const imageUri = await this.pawnshop.getImageFromUri(nft.uri);
-            return imageUri;
-          }),
-        );
-      }),
+      mergeMap((value) => this.pawnshop.listNftImages(value)),
     );
   }
 

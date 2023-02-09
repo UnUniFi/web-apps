@@ -1,101 +1,51 @@
+<h2>Your NFTs</h2>
 <div class="flex justify-center">
   <div class="m-16 max-w-screen-xl">
     <div class="flex flex-row flex-wrap -mr-12 -mb-12">
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+      <div
+        *ngFor="let nft of ownNfts?.nfts; let i = index"
+        class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4"
+      >
         <div class="card w-full glass shadow-xl">
           <figure class="aspect-square">
             <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
+              *ngIf="ownNftImages"
+              src="{{ ownNftImages[i] }}"
               alt=""
               class="h-full object-cover"
             />
           </figure>
           <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
+            <h2 *ngIf="ownNftsMetadata" class="card-title">{{ ownNftsMetadata[i].name }}</h2>
           </div>
         </div>
       </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
+    </div>
+  </div>
+</div>
+
+<h2>Listing NFTs</h2>
+<div class="flex justify-center">
+  <div class="m-16 max-w-screen-xl">
+    <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+      <div
+        *ngFor="let nft of listedOwnNfts; let i = index"
+        class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4"
+      >
+        <span class="indicator-item badge badge-primary">{{ nft.state }}</span>
         <div class="card w-full glass shadow-xl">
           <figure class="aspect-square">
             <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
+              *ngIf="listedOwnNftImages"
+              src="{{ listedOwnNftImages[i] }}"
               alt=""
               class="h-full object-cover"
             />
           </figure>
           <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
-          </div>
-        </div>
-      </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
-          </div>
-        </div>
-      </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
-          </div>
-        </div>
-      </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
-          </div>
-        </div>
-      </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
-          </div>
-        </div>
-      </div>
-      <div class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">Unknown (Metadata not registered)</h2>
+            <h2 *ngIf="listedOwnNftsMetadata" class="card-title">
+              {{ listedOwnNftsMetadata[i].name }}
+            </h2>
           </div>
         </div>
       </div>

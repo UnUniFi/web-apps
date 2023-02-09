@@ -1,3 +1,4 @@
+import { Nfts } from '../../../models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawnshop.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -14,7 +15,7 @@ import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 })
 export class BorrowersComponent implements OnInit {
   address$: Observable<string>;
-  ownNfts$: Observable<any>;
+  ownNfts$: Observable<Nfts>;
   listedOwnNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
 
   constructor(

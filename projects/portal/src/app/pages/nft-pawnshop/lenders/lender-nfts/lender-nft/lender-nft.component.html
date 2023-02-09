@@ -7,4 +7,6 @@
   [nftImage]="nftImage$ | async"
   [isBided]="isBided$ | async"
   [isWinning]="isWinning$ | async"
+  (appSubmitCancelBid)="onSubmitCancelBid($event)"
+  (appSubmitPayFullBid)="onSubmitPayFullBid($event)"
 ></view-lender-nft>

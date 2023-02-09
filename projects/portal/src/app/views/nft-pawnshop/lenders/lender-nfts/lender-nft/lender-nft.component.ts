@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   BidderBids200ResponseBidsInner,
@@ -28,7 +29,29 @@ export class LenderNftComponent implements OnInit {
   @Input()
   isWinning?: boolean | null;
 
-  constructor() {}
+  @Output()
+  appSubmitCancelBid: EventEmitter<NftRequest>;
+  @Output()
+  appSubmitPayFullBid: EventEmitter<NftRequest>;
+
+  constructor() {
+    this.appSubmitCancelBid = new EventEmitter();
+    this.appSubmitPayFullBid = new EventEmitter();
+  }
 
   ngOnInit(): void {}
+
+  onSubmitCancelBid() {
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    this.appSubmitCancelBid.emit({ classID: this.classID, nftID: this.nftID });
+  }
+
+  onSubmitPayFullBid() {
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    this.appSubmitPayFullBid.emit({ classID: this.classID, nftID: this.nftID });
+  }
 }

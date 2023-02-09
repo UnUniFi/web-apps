@@ -64,11 +64,13 @@
             </div>
             <span class="flex-auto"></span>
             <div class="card-actions justify-end">
-              <button class="btn btn-secondary">Cancel Offer</button>
+              <button class="btn btn-secondary" (click)="onSubmitCancelBid()">Cancel Offer</button>
             </div>
           </div>
           <div *ngIf="isWinning" class="card-actions justify-end">
-            <button class="btn btn-primary">Pay Settlement Shortfall</button>
+            <button class="btn btn-primary" (click)="onSubmitPayFullBid()">
+              Pay Settlement Shortfall
+            </button>
           </div>
         </div>
       </div>

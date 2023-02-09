@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
+import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -32,9 +34,9 @@ export class LenderNftComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
-
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
+    private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
     const currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.address$ = currentStoredWallet$.pipe(
@@ -89,4 +91,12 @@ export class LenderNftComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onSubmitCancelBid(data: NftRequest) {
+    this.pawnshopApp.cancelBid(data.classID, data.nftID);
+  }
+
+  onSubmitPayFullBid(data: NftRequest) {
+    this.pawnshopApp.payFullBid(data.classID, data.nftID);
+  }
 }

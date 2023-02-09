@@ -40,17 +40,35 @@
 
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
-        <div class="flex flex-row justify-center items-center">
+        <div class="flex flex-row items-center">
           <div class="stats">
-            <div class="stat">
-              <div class="stat-title">Listed until</div>
+            <div *ngIf="!isWinning" class="stat">
+              <div class="stat-title">Your Status</div>
+              <div *ngIf="!isBided" class="stat-value text-info">Not Offered</div>
+              <div *ngIf="isBided" class="stat-value text-accent">Offered</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div *ngIf="isWinning" class="stat">
+              <div class="stat-title">Settlement Shortfall Deadline</div>
               <div class="stat-value text-accent">2023/03/22</div>
               <div class="stat-desc">18:07</div>
             </div>
           </div>
           <span class="flex-auto"></span>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Bid</button>
+          <div *ngIf="!isBided && !isWinning" class="card-actions justify-end">
+            <button routerLink="place-bid" class="btn btn-primary">Make Offer</button>
+          </div>
+          <div *ngIf="isBided && !isWinning">
+            <div class="card-actions justify-end">
+              <button routerLink="place-bid" class="btn btn-primary">Update Offer</button>
+            </div>
+            <span class="flex-auto"></span>
+            <div class="card-actions justify-end">
+              <button class="btn btn-secondary">Cancel Offer</button>
+            </div>
+          </div>
+          <div *ngIf="isWinning" class="card-actions justify-end">
+            <button class="btn btn-primary">Pay Settlement Shortfall</button>
           </div>
         </div>
       </div>

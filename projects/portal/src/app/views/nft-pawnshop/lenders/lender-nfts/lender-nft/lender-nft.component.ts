@@ -23,6 +23,10 @@ export class LenderNftComponent implements OnInit {
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;
+  @Input()
+  isBided?: boolean | null;
+  @Input()
+  isWinning?: boolean | null;
 
   constructor() {}
 

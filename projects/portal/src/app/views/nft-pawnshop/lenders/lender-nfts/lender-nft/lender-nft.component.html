@@ -1,36 +1,34 @@
 <div class="flex justify-center">
-  <div>
+  <div class="text-base-content">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-          alt=""
-          class="h-full object-cover"
-        />
+        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-contain" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary">BIDDING</div>
+          <div class="badge badge-lg badge-primary">{{ listingInfo?.state || 'NOT_LISTING' }}</div>
         </div>
-        <h2 class="card-title">Unknown (Metadata not registered)</h2>
+        <h2 class="card-title">
+          {{ nftMetadata?.name || classID + '/' + nftID }}
+        </h2>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <th>Class ID</th>
-                <td>ununifi-XXXXXXXXXXXXXXXXXX</td>
+                <td>{{ classID }}</td>
               </tr>
               <tr>
                 <th>NFT ID</th>
-                <td>a01</td>
+                <td>{{ nftID }}</td>
               </tr>
               <tr>
                 <th>Minimum deposit rate</th>
-                <td>10%</td>
+                <td>{{ listingInfo?.minimum_deposit_rate }}</td>
               </tr>
               <tr>
                 <th>Started at</th>
-                <td>2023/02/06</td>
+                <td>{{ listingInfo?.started_at }}</td>
               </tr>
             </tbody>
           </table>
@@ -73,21 +71,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr *ngFor="let bidder of bidders">
             <th>#1</th>
-            <td>ununifi1xxxxxxxxxx</td>
-            <td>4.2%</td>
-            <td>23</td>
-            <td>451</td>
-            <td>2023/02/05</td>
-          </tr>
-          <tr>
-            <th>#2</th>
-            <td>ununifi1xxxxxxxxxx</td>
-            <td>3.9%</td>
-            <td>19</td>
-            <td>372</td>
-            <td>2023/02/07</td>
+            <td>{{ bidder.bidder }}</td>
+            <td>{{ bidder.deposit_lending_rate }}%</td>
+            <td>{{ bidder.deposit_amount?.amount }}</td>
+            <td>{{ bidder.bid_amount?.amount }}</td>
+            <td>{{ bidder.bidding_period }}</td>
           </tr>
         </tbody>
       </table>

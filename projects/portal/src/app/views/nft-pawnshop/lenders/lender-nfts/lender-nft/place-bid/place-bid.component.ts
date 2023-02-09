@@ -25,12 +25,25 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   nftImage?: string | null;
 
+  depositAmount?: number | null;
+  depositDenom?: string | null;
+  interestRate?: number | null;
+  datePicker?: Date | null;
+
   @Output()
   appSimulate: EventEmitter<PlaceBidRequest>;
   @Output()
   appSubmit: EventEmitter<PlaceBidRequest>;
 
   constructor() {
+    const lendAmount = localStorage.getItem('lendAmount');
+    this.depositAmount = lendAmount ? Number(lendAmount) : null;
+    this.depositDenom = localStorage.getItem('lendDenom');
+    const lendRate = localStorage.getItem('lendRate');
+    this.interestRate = lendRate ? Number(lendRate) : null;
+    const lendTerm = localStorage.getItem('lendTerm');
+    this.datePicker = lendTerm ? new Date(lendTerm) : null;
+
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }

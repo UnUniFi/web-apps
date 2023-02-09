@@ -39,20 +39,20 @@
         </span>
 
         <div class="btn-group">
-          <button type="button" class="btn w-1/2" [class.btn-active]="selectedPositionType === positionType.LONG"
+          <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.LONG"
             (click)="selectedPositionType = positionType.LONG">
             <mat-icon>trending_up</mat-icon>Long
-          </button>
-          <button type="button" class="btn w-1/2" [class.btn-active]="selectedPositionType === positionType.SHORT"
+          </label>
+          <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.SHORT"
             (click)="selectedPositionType = positionType.SHORT">
             <mat-icon>trending_down</mat-icon>Short
-          </button>
+          </label>
         </div>
       </div>
 
       <div class="form-control">
         <span class="label">
-          <span class="label-text">Enter position size</span>
+          <span class="label-text">Position Size</span>
           <!-- The button to open modal -->
           <label for="modal-position-size" class="label-text">
             <mat-icon>help</mat-icon>
@@ -82,7 +82,7 @@
 
       <div class="form-control">
         <span class="label">
-          <span class="label-text">Enter leverage</span>
+          <span class="label-text">Leverage</span>
 
           <!-- The button to open modal -->
           <label for="modal-leverage" class="label-text">
@@ -115,7 +115,7 @@
 
       <div class="form-control">
         <span class="label">
-          <span class="label-text">Enter margin</span>
+          <span class="label-text">Margin</span>
 
           <!-- The button to open modal -->
           <label for="modal-margin" class="label-text">

@@ -43,12 +43,12 @@
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
         <h3 class="m-4 card-title">Make Offer</h3>
         <div class="card-body">
-          <form>
+          <form #formRef="ngForm" (submit)="onSubmit()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Bid Price</span>
                 <!-- The button to open modal -->
-                <mat-icon>help</mat-icon>
+                <label for="modal-bid-price"><mat-icon>help</mat-icon></label>
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-bid-price" class="modal-toggle" />
                 <div class="modal modal-bottom sm:modal-middle">
@@ -69,18 +69,19 @@
                 <input
                   required
                   type="number"
-                  placeholder="12.123456"
+                  name="bidAmount"
+                  [(ngModel)]="bidAmount"
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
-                <span>axlUSDC</span>
+                <span>{{ depositDenom }}</span>
               </label>
             </div>
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Deposit Amount</span>
                 <!-- The button to open modal -->
-                <mat-icon>help</mat-icon>
+                <label for="modal-deposit"><mat-icon>help</mat-icon></label>
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-deposit" class="modal-toggle" />
                 <div class="modal modal-bottom sm:modal-middle">
@@ -101,11 +102,12 @@
                 <input
                   required
                   type="number"
-                  placeholder="12.123456"
+                  name="depositAmount"
+                  [(ngModel)]="depositAmount"
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
-                <span>axlUSDC</span>
+                <span>{{ depositDenom }}</span>
               </label>
               <label class="label">
                 <span class="label-text-alt">Available balance:</span>
@@ -116,7 +118,7 @@
               <span class="label">
                 <span class="label-text">Interest Rate</span>
                 <!-- The button to open modal -->
-                <mat-icon>help</mat-icon>
+                <label for="modal-interest"><mat-icon>help</mat-icon></label>
 
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-interest" class="modal-toggle" />
@@ -138,7 +140,8 @@
                 <input
                   required
                   type="number"
-                  placeholder="12.1234"
+                  name="interestRate"
+                  [(ngModel)]="interestRate"
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,4}$"
                 />
@@ -150,7 +153,7 @@
               <span class="label">
                 <span class="label-text">Expiration Date</span>
                 <!-- The button to open modal -->
-                <mat-icon>help</mat-icon>
+                <label for="modal-expiry"><mat-icon>help</mat-icon></label>
 
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-expiry" class="modal-toggle" />
@@ -169,17 +172,30 @@
                 </div>
               </span>
               <label class="input-group">
-                <input required type="date" class="input input-bordered w-1/2" />
-                <input required type="time" class="input input-bordered w-1/2" />
+                <input
+                  required
+                  type="date"
+                  name="expiryDate"
+                  [(ngModel)]="date"
+                  class="input input-bordered w-1/2"
+                />
+                <input
+                  #timeRef
+                  type="time"
+                  required
+                  name="expiryTime"
+                  [(ngModel)]="time"
+                  class="input input-bordered w-1/2"
+                />
               </label>
             </div>
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text"></span>
+                <span class="label-text">Auto Payment</span>
 
                 <!-- The button to open modal -->
-                <mat-icon>help</mat-icon>
+                <label for="auto-pay"><mat-icon>help</mat-icon></label>
 
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-auto-pay" class="modal-toggle" />
@@ -198,8 +214,13 @@
                 </div>
               </span>
               <label class="cursor-pointer label">
-                <span class="label-text">Auto-Pay</span>
-                <input type="checkbox" class="toggle toggle-primary" checked />
+                <span class="label-text">Enable</span>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-primary"
+                  name="autoPyament"
+                  [(ngModel)]="autoPayment"
+                />
               </label>
             </div>
 

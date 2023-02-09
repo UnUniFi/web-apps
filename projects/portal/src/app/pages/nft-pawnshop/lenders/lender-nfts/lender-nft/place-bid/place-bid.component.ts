@@ -66,7 +66,7 @@ export class PlaceBidComponent implements OnInit {
       data.symbol,
       data.bidAmount,
       data.biddingPeriod,
-      data.depositLendingRate,
+      data.depositLendingRate / 100,
       data.autoPayment,
       data.depositAmount,
     );

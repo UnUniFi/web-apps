@@ -25,10 +25,14 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   nftImage?: string | null;
 
+  bidAmount?: number | null;
   depositAmount?: number | null;
   depositDenom?: string | null;
   interestRate?: number | null;
   datePicker?: Date | null;
+  date?: string;
+  time?: string;
+  autoPayment?: boolean;
 
   @Output()
   appSimulate: EventEmitter<PlaceBidRequest>;
@@ -43,6 +47,12 @@ export class PlaceBidComponent implements OnInit {
     this.interestRate = lendRate ? Number(lendRate) : null;
     const lendTerm = localStorage.getItem('lendTerm');
     this.datePicker = lendTerm ? new Date(lendTerm) : null;
+    const dateString = this.datePicker?.toISOString();
+    if (dateString) {
+      this.date = dateString.substring(0, dateString.indexOf('T'));
+      this.time = dateString.substring(dateString.indexOf('T') + 1, dateString.indexOf('T') + 6);
+    }
+    this.autoPayment = true;
 
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
@@ -55,6 +65,30 @@ export class PlaceBidComponent implements OnInit {
   }
 
   onSubmit() {
-    this.appSubmit.emit();
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    if (
+      !this.depositDenom ||
+      !this.depositAmount ||
+      !this.bidAmount ||
+      !this.date ||
+      !this.time ||
+      !this.interestRate
+    ) {
+      alert('Some values are invalid!');
+      return;
+    }
+    const biddingPeriod = new Date(this.date + 'T' + this.time);
+    this.appSubmit.emit({
+      classID: this.classID,
+      nftID: this.nftID,
+      symbol: this.depositDenom,
+      bidAmount: this.bidAmount,
+      biddingPeriod: biddingPeriod,
+      depositLendingRate: this.interestRate,
+      autoPayment: this.autoPayment || false,
+      depositAmount: this.depositAmount,
+    });
   }
 }

@@ -22,7 +22,12 @@
             <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
               {{ nft.class_id + '/' + nft.id }}
             </h2>
-            <button class="btn btn-outline btn-primary">List</button>
+            <button
+              class="btn btn-outline btn-primary"
+              routerLink="../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
+            >
+              List
+            </button>
           </div>
         </div>
       </div>

@@ -1,28 +1,24 @@
 <div class="flex justify-center">
-  <div>
+  <div class="text-base-content">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-          alt=""
-          class="h-full object-cover"
-        />
+        <img src="{{ nftImage }}" alt="" class="h-full object-contain" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
           <div class="badge badge-lg badge-info">NOT LISTED</div>
         </div>
-        <h2 class="card-title">Unknown (Metadata not registered)</h2>
+        <h2 class="card-title">{{ nftMetadata?.name }}</h2>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <th>Class ID</th>
-                <td>ununifi-XXXXXXXXXXXXXXXXXX</td>
+                <td>{{ classID }}</td>
               </tr>
               <tr>
                 <th>NFT ID</th>
-                <td>a01</td>
+                <td>{{ nftID }}</td>
               </tr>
             </tbody>
           </table>
@@ -36,21 +32,23 @@
       <span class="flex-auto"></span>
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
         <div class="card-body">
-          <form>
+          <form (submit)="onSubmit()">
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Select Bid Currency</span>
               </label>
-              <select class="select select-bordered w-full">
-                <option selected>axlUSDC</option>
-                <option>ATOM</option>
+              <select class="select select-bordered w-full" [(ngModel)]="bidSymbol" name="symbol">
+                <option disabled="disabled" [value]="undefined">Please Select</option>
+                <option [value]="'axlUSDC'">axlUSDC</option>
+                <option [value]="'ATOM'">ATOM</option>
+                <option [value]="'GUU'">GUU</option>
               </select>
             </div>
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Enter Minimum Deposit Rate</span>
                 <!-- The button to open modal -->
-                <label for="modal-minimum-deposit" class="label-text">(?)</label>
+                <label for="modal-minimum-deposit"><mat-icon>help</mat-icon></label>
 
                 <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-minimum-deposit" class="modal-toggle" />
@@ -72,7 +70,9 @@
                 <input
                   required
                   type="number"
-                  placeholder="12.1234"
+                  name="minDepositRate"
+                  [(ngModel)]="minDepositRate"
+                  placeholder="1.5"
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,4}$"
                 />

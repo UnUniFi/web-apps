@@ -4,11 +4,12 @@ import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawn
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { first, map, mergeMap } from 'rxjs/operators';
 import {
   ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
+  Loan200Response,
+  Liquidation200ResponseLiquidations,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -21,7 +22,8 @@ export class BorrowerNftComponent implements OnInit {
   nftID$: Observable<string>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
-  loans$: Observable<Loans200ResponseLoansInner[]>;
+  loan$: Observable<Loan200Response>;
+  liquidation$: Observable<Liquidation200ResponseLiquidations>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
 
@@ -38,19 +40,23 @@ export class BorrowerNftComponent implements OnInit {
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids(classID, nftID)),
-    );
-    this.loans$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) =>
-        this.pawnshopQuery
-          .listAllLoans()
-          .pipe(
-            map((loans) =>
-              loans.filter(
-                (loan) => loan.nft_id?.class_id == classID && loan.nft_id?.nft_id == nftID,
-              ),
-            ),
-          ),
+      map((bidders) =>
+        bidders.sort((first, second) => {
+          if (parseInt(first.bid_amount?.amount!) > parseInt(second.bid_amount?.amount!)) {
+            return -1;
+          } else if (parseInt(first.bid_amount?.amount!) < parseInt(second.bid_amount?.amount!)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }),
       ),
+    );
+    this.loan$ = nftCombine$.pipe(
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getLoan(classID, nftID)),
+    );
+    this.liquidation$ = nftCombine$.pipe(
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getLiquidation(classID, nftID)),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft(classID, nftID)),

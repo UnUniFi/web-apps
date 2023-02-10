@@ -3,7 +3,8 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import {
   ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
+  Loan200Response,
+  Liquidation200ResponseLiquidations,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -21,7 +22,9 @@ export class BorrowerNftComponent implements OnInit {
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  loans?: Loans200ResponseLoansInner[] | null;
+  loan?: Loan200Response | null;
+  @Input()
+  liquidation?: Liquidation200ResponseLiquidations | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()

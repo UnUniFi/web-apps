@@ -1,36 +1,32 @@
 <div class="flex justify-center">
-  <div>
+  <div class="text-base-content">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg"
-          alt=""
-          class="h-full object-cover"
-        />
+        <img src="{{ nftImage }}" alt="" class="h-full object-contain" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary">BIDDING</div>
+          <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
         </div>
-        <h2 class="card-title">Unknown (Metadata not registered)</h2>
+        <h2 class="card-title">{{ nftMetadata?.name }}</h2>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <th>Class ID</th>
-                <td>ununifi-XXXXXXXXXXXXXXXXXX</td>
+                <td>{{ classID }}</td>
               </tr>
               <tr>
                 <th>NFT ID</th>
-                <td>a01</td>
+                <td>{{ nftID }}</td>
               </tr>
               <tr>
                 <th>Minimum deposit rate</th>
-                <td>10%</td>
+                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}%</td>
               </tr>
               <tr>
                 <th>Started at</th>
-                <td>2023/02/06</td>
+                <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
               </tr>
             </tbody>
           </table>
@@ -40,25 +36,25 @@
 
     <br />
 
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
       <div class="card-body">
         <div class="flex flex-row justify-center items-center">
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Total deposits</div>
-              <div class="stat-value text-primary">432</div>
-              <div class="stat-desc">axlUSDC</div>
+              <div class="stat-value text-primary">{{ loan?.borrowing_limit }}</div>
+              <div class="stat-desc">Denom</div>
             </div>
             <div class="stat">
               <div class="stat-title">Amount you borrowed</div>
-              <div class="stat-value text-secondary">167</div>
-              <div class="stat-desc">axlUSDC</div>
+              <div class="stat-value text-secondary">{{ loan?.loan?.loan?.amount }}</div>
+              <div class="stat-desc">{{ loan?.loan?.loan?.denom }}</div>
             </div>
-            <div class="stat">
+            <!-- <div class="stat">
               <div class="stat-title">Available amount to borrow</div>
-              <div class="stat-value text-accent">265</div>
+              <div class="stat-value text-accent">{{ loan?.borrowing_limit }}</div>
               <div class="stat-desc">axlUSDC</div>
-            </div>
+            </div> -->
           </div>
           <span class="flex-auto"></span>
           <div class="card-actions justify-end">
@@ -70,19 +66,27 @@
 
     <br />
 
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow-xl" *ngIf="liquidation && liquidation.liquidation">
       <div class="card-body">
         <div class="flex flex-row justify-center items-center">
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Next Repayment Deadline</div>
-              <div class="stat-value text-accent">2023/03/22</div>
-              <div class="stat-desc">18:07</div>
+              <div class="stat-value text-accent">
+                {{ liquidation.liquidation.liquidation_date | date : 'yyyy-M-d' }}
+              </div>
+              <div class="stat-desc">
+                {{ liquidation.liquidation.liquidation_date | date : 'a h:mm:ss z' }}
+              </div>
             </div>
             <div class="stat">
               <div class="stat-title">Amount you must Repay</div>
-              <div class="stat-value text-secondary">5.2</div>
-              <div class="stat-desc">axlUSDC</div>
+              <div class="stat-value text-secondary">
+                {{ liquidation.liquidation.amount?.amount }}
+              </div>
+              <div class="stat-desc">
+                {{ liquidation.liquidation.amount?.denom }}
+              </div>
             </div>
           </div>
           <span class="flex-auto"></span>
@@ -90,52 +94,19 @@
             <button class="btn btn-primary">Repay</button>
           </div>
         </div>
-
-        <div class="collapse collapse-arrow">
-          <input type="checkbox" />
-          <div class="collapse-title text-xl font-medium">Details</div>
-          <div class="collapse-content">
-            <div class="overflow-x-auto">
-              <table class="table w-full">
-                <thead>
-                  <tr>
-                    <td>Expiry</td>
-                    <td>Interest rate</td>
-                    <td>Borrowed amount</td>
-                    <td>Deposit</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>2023/02/05</td>
-                    <td>4.2%</td>
-                    <td>4</td>
-                    <td>23</td>
-                  </tr>
-                  <tr>
-                    <td>2023/02/07</td>
-                    <td>3.9%</td>
-                    <td>2</td>
-                    <td>19</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
     <br />
 
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
       <div class="card-body">
         <div class="flex flex-row justify-center items-center">
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Highest bid price</div>
-              <div class="stat-value text-primary">927</div>
-              <div class="stat-desc">axlUSDC</div>
+              <div class="stat-value text-primary">{{ bidders[0].bid_amount?.amount }}</div>
+              <div class="stat-desc">{{ bidders[0].bid_amount?.denom }}</div>
             </div>
           </div>
           <span class="flex-auto"></span>
@@ -149,7 +120,10 @@
     <br />
 
     <div class="overflow-x-auto">
-      <table class="table w-full">
+      <div class="stats w-full justify-center" *ngIf="!bidders || !bidders.length">
+        <div class="stat"><div class="stat-title">No Bidder</div></div>
+      </div>
+      <table class="table w-full" *ngIf="bidders && bidders.length">
         <thead>
           <tr>
             <th></th>
@@ -161,21 +135,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>#1</th>
-            <td>ununifi1xxxxxxxxxx</td>
-            <td>4.2%</td>
-            <td>23</td>
-            <td>451</td>
-            <td>2023/02/05</td>
-          </tr>
-          <tr>
-            <th>#2</th>
-            <td>ununifi1xxxxxxxxxx</td>
-            <td>3.9%</td>
-            <td>19</td>
-            <td>372</td>
-            <td>2023/02/07</td>
+          <tr *ngFor="let bidder of bidders; let i = index">
+            <th>#{{ i }}</th>
+            <td>{{ bidder.bidder }}</td>
+            <td>{{ bidder.deposit_lending_rate | percent }}%</td>
+            <td>{{ bidder.deposit_amount?.amount }}</td>
+            <td>{{ bidder.bid_amount?.amount }}</td>
+            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm:ss z' }}</td>
           </tr>
         </tbody>
       </table>

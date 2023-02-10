@@ -9,8 +9,10 @@ import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
   BidderBids200ResponseBidsInner,
+  Liquidation200ResponseLiquidations,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
+  Loan200Response,
   Loans200ResponseLoansInner,
   NftmarketParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
@@ -66,9 +68,7 @@ export class NftPawnshopQueryService {
 
   listBidderBids(address: string): Observable<BidderBids200ResponseBidsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) =>
-        ununifi.rest.nftmarket.bidderBids(sdk, cosmosclient.AccAddress.fromString(address)),
-      ),
+      mergeMap((sdk) => ununifi.rest.nftmarket.bidderBids(sdk, address)),
       map((res) => res.data.bids!),
     );
   }
@@ -77,6 +77,20 @@ export class NftPawnshopQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.loans(sdk)),
       map((res) => res.data.loans!),
+    );
+  }
+
+  getLoan(classID: string, nftID: string): Observable<Loan200Response> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.loan(sdk, classID, nftID)),
+      map((res) => res.data),
+    );
+  }
+
+  getLiquidation(classID: string, nftID: string): Observable<Liquidation200ResponseLiquidations> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.liquidation(sdk, classID, nftID)),
+      map((res) => res.data.liquidations!),
     );
   }
 

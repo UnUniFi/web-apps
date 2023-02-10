@@ -16,7 +16,13 @@
             />
           </figure>
           <div class="card-body">
-            <h2 *ngIf="ownNftsMetadata" class="card-title">{{ ownNftsMetadata[i].name }}</h2>
+            <h2 *ngIf="ownNftsMetadata" class="card-title break-all">
+              {{ ownNftsMetadata[i].name }}
+            </h2>
+            <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
+              {{ nft.class_id + '/' + nft.id }}
+            </h2>
+            <button class="btn btn-outline btn-primary">List</button>
           </div>
         </div>
       </div>
@@ -43,9 +49,18 @@
             />
           </figure>
           <div class="card-body">
-            <h2 *ngIf="listedOwnNftsMetadata" class="card-title">
+            <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
               {{ listedOwnNftsMetadata[i].name }}
             </h2>
+            <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
+              {{ nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id }}
+            </h2>
+            <button
+              class="btn btn-outline btn-secondary"
+              routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
+            >
+              View
+            </button>
           </div>
         </div>
       </div>

@@ -6,8 +6,8 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { concatMap, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -27,7 +27,6 @@ export class BorrowerComponent implements OnInit {
   constructor(
     private readonly walletService: WalletService,
     private readonly pawnshop: NftPawnshopService,
-
     private readonly pawnshopQuery: NftPawnshopQueryService,
   ) {
     const currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -44,7 +43,6 @@ export class BorrowerComponent implements OnInit {
     this.ownNftsMetadata$ = this.ownNfts$.pipe(
       mergeMap((value) => this.pawnshop.listNftsMetadata(value)),
     );
-    this.ownNftsMetadata$.subscribe((a) => console.log(a));
 
     this.listedOwnNfts$ = this.address$.pipe(
       mergeMap((address) =>
@@ -53,33 +51,36 @@ export class BorrowerComponent implements OnInit {
           .pipe(map((nfts) => nfts.filter((nft) => nft.owner == address))),
       ),
     );
-    const ownNftsUri = combineLatest([this.listedOwnNfts$, this.ownNfts$]).pipe(
-      map(([listedNfts, nfts]) =>
-        listedNfts.map(
-          (listedNft) =>
-            nfts.nfts?.find(
-              (nft) =>
-                nft.class_id == listedNft.nft_id?.class_id && nft.id == listedNft.nft_id?.nft_id,
-            )?.uri || '',
+
+    const ownNftsUri$ = this.listedOwnNfts$.pipe(
+      mergeMap((nfts) =>
+        Promise.all(
+          nfts.map(async (nft) => {
+            const res = await this.pawnshopQuery
+              .getNft(nft.nft_id?.class_id!, nft.nft_id?.nft_id!)
+              .toPromise();
+            return res.nft?.uri;
+          }),
         ),
       ),
     );
 
-    this.listedOwnNftImages$ = ownNftsUri.pipe(
+    this.listedOwnNftImages$ = ownNftsUri$.pipe(
       mergeMap((uris) =>
         Promise.all(
           uris.map(async (uri) => {
-            const imageUri = await this.pawnshop.getImageFromUri(uri);
+            const imageUri = await this.pawnshop.getImageFromUri(uri!);
             return imageUri;
           }),
         ),
       ),
     );
-    this.listedOwnNftsMetadata$ = ownNftsUri.pipe(
+
+    this.listedOwnNftsMetadata$ = ownNftsUri$.pipe(
       mergeMap((uris) =>
         Promise.all(
           uris.map(async (uri) => {
-            const imageUri = await this.pawnshop.getMetadataFromUri(uri);
+            const imageUri = await this.pawnshop.getMetadataFromUri(uri!);
             return imageUri;
           }),
         ),

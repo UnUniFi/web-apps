@@ -92,8 +92,6 @@ export class TxCommonService {
   }
 
   async buildTxBuilderWithDummyGasAndFee(
-    // TODO:
-    // messages: cosmosclient.proto.google.protobuf.IAny[],
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,

@@ -75,7 +75,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -110,7 +117,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -170,7 +184,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -205,7 +226,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -240,7 +268,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -275,7 +310,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -315,7 +357,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -362,7 +411,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -409,7 +465,14 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }

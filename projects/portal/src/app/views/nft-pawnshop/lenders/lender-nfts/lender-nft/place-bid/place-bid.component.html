@@ -39,6 +39,18 @@
     <br />
 
     <div class="flex flex-row">
+      <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+        <google-chart
+          *ngIf="chartData"
+          [title]="chartTitle"
+          [type]="chartType"
+          [data]="chartData"
+          [columns]="chartColumns"
+          [options]="chartOptions"
+        >
+        </google-chart>
+      </div>
+
       <span class="flex-auto"></span>
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
         <h3 class="m-4 card-title">Make Offer</h3>
@@ -177,7 +189,7 @@
                   type="date"
                   name="expiryDate"
                   [(ngModel)]="date"
-                  class="input input-bordered w-1/2"
+                  class="input input-bordered w-3/5"
                 />
                 <input
                   #timeRef
@@ -185,7 +197,7 @@
                   required
                   name="expiryTime"
                   [(ngModel)]="time"
-                  class="input input-bordered w-1/2"
+                  class="input input-bordered w-2/5"
                 />
               </label>
             </div>

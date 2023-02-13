@@ -119,10 +119,23 @@
 
     <br />
 
-    <div class="overflow-x-auto">
-      <div class="stats w-full justify-center" *ngIf="!bidders || !bidders.length">
-        <div class="stat"><div class="stat-title">No Bidder</div></div>
+    <div class="card bg-base-100 shadow-xl" *ngIf="!bidders || !bidders.length">
+      <div class="card-body">
+        <div class="flex flex-row justify-center items-center">
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-title">No Bidder</div>
+            </div>
+          </div>
+          <span class="flex-auto"></span>
+          <div class="card-actions justify-end">
+            <button class="btn btn-secondary" (click)="onSubmitCancel()">Cancel Listing</button>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div class="overflow-x-auto">
       <table class="table w-full" *ngIf="bidders && bidders.length">
         <thead>
           <tr>

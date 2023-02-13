@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
+import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
@@ -31,6 +33,7 @@ export class BorrowerNftComponent implements OnInit {
     private route: ActivatedRoute,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
+    private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
@@ -70,4 +73,8 @@ export class BorrowerNftComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onSubmitCancel(data: NftRequest) {
+    this.pawnshopApp.cancelNftListing(data.classID, data.nftID);
+  }
 }

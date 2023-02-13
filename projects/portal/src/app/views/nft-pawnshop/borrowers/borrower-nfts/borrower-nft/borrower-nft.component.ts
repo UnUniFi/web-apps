@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   ListedNfts200ResponseListingsInner,
@@ -30,7 +31,19 @@ export class BorrowerNftComponent implements OnInit {
   @Input()
   nftImage?: string | null;
 
-  constructor() {}
+  @Output()
+  appSubmitCancel: EventEmitter<NftRequest>;
+
+  constructor() {
+    this.appSubmitCancel = new EventEmitter();
+  }
 
   ngOnInit(): void {}
+
+  onSubmitCancel() {
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    this.appSubmitCancel.emit({ classID: this.classID, nftID: this.nftID });
+  }
 }

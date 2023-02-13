@@ -7,4 +7,5 @@
   [liquidation]="liquidation$ | async"
   [nftMetadata]="nftMetadata$ | async"
   [nftImage]="nftImage$ | async"
+  (appSubmitCancel)="onSubmitCancel($event)"
 ></view-borrower-nft>

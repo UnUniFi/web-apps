@@ -77,7 +77,7 @@ export class TxCommonApplicationService {
 
     try {
       const simulateTxBuilder = await this.txCommon.buildTxBuilderWithDummyGasAndFee(
-        [msg as any], // TODO
+        [msg], //TODO
         cosmosPublicKey,
         account,
         minimumGasPrice,
@@ -126,10 +126,12 @@ export class TxCommonApplicationService {
 
   async broadcast(
     msg: any,
+    currentCosmosWallet: CosmosWallet,
     cosmosPublicKey: PubKey,
     account: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    privateKey?: string,
   ) {
     const dialogRef = this.loadingDialog.open('Sending');
 
@@ -138,12 +140,27 @@ export class TxCommonApplicationService {
 
     try {
       const txBuilder = await this.txCommon.buildTxBuilder(
-        [msg as any], // TODO
+        [msg], // TODO
         cosmosPublicKey,
         account,
         gas,
         fee,
       );
+
+      const signerBaseAccount = await this.txCommon.getBaseAccount(cosmosPublicKey);
+      if (!signerBaseAccount) {
+        throw Error('Unsupported Account!');
+      }
+      const signedTxBuilder = await this.txCommon.signTx(
+        txBuilder,
+        signerBaseAccount,
+        currentCosmosWallet,
+        privateKey,
+      );
+      if (!signedTxBuilder) {
+        throw Error('Failed to sign!');
+      }
+
       txResult = await this.txCommon.announceTx(txBuilder);
       txHash = txResult?.tx_response?.txhash;
       if (txHash === undefined) {

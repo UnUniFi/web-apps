@@ -77,4 +77,8 @@ export class BorrowerNftComponent implements OnInit {
   onSubmitCancel(data: NftRequest) {
     this.pawnshopApp.cancelNftListing(data.classID, data.nftID);
   }
+
+  onSubmitSell(data: NftRequest) {
+    this.pawnshopApp.sellingDecision(data.classID, data.nftID);
+  }
 }

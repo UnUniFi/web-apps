@@ -33,9 +33,12 @@ export class BorrowerNftComponent implements OnInit {
 
   @Output()
   appSubmitCancel: EventEmitter<NftRequest>;
+  @Output()
+  appSubmitSell: EventEmitter<NftRequest>;
 
   constructor() {
     this.appSubmitCancel = new EventEmitter();
+    this.appSubmitSell = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -45,5 +48,12 @@ export class BorrowerNftComponent implements OnInit {
       return;
     }
     this.appSubmitCancel.emit({ classID: this.classID, nftID: this.nftID });
+  }
+
+  onSubmitSell() {
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    this.appSubmitSell.emit({ classID: this.classID, nftID: this.nftID });
   }
 }

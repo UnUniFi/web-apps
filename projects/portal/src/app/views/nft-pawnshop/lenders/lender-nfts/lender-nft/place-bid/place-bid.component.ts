@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
@@ -29,7 +30,7 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   nftImage?: string | null;
   @Input()
-  chartData?: (string | number | Date)[][] | null;
+  chartData?: (string | number)[][] | null;
 
   bidAmount?: number | null;
   depositAmount?: number | null;
@@ -50,7 +51,7 @@ export class PlaceBidComponent implements OnInit {
   @Output()
   appSubmit: EventEmitter<PlaceBidRequest>;
 
-  constructor() {
+  constructor(private readonly pawnshopChart: NftPawnshopChartService) {
     const lendAmount = localStorage.getItem('lendAmount');
     this.depositAmount = lendAmount ? Number(lendAmount) : null;
     this.depositDenom = localStorage.getItem('lendDenom');
@@ -67,7 +68,7 @@ export class PlaceBidComponent implements OnInit {
 
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
-    this.chartOptions = this.createChartOption();
+    this.chartOptions = this.pawnshopChart.createChartOption();
     this.chartColumns = [
       { type: 'string', label: 'Expiry Date' },
       { type: 'number', label: 'Bid Amount' },
@@ -77,6 +78,11 @@ export class PlaceBidComponent implements OnInit {
 
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.chartOptions = this.pawnshopChart.createChartOption();
   }
 
   ngOnInit(): void {}
@@ -128,67 +134,6 @@ export class PlaceBidComponent implements OnInit {
       autoPayment: this.autoPayment || false,
       depositAmount: this.depositAmount,
     });
-  }
-
-  createChartOption() {
-    const innerWidth = window.innerWidth;
-    let width: number;
-    if (innerWidth < 640) {
-      width = innerWidth;
-    } else if (innerWidth > 1440) {
-      width = 500;
-    } else if (innerWidth > 1024) {
-      width = 400;
-    } else {
-      width = innerWidth / 3;
-    }
-    return {
-      width: width,
-      height: width / 2,
-      backgroundColor: 'none',
-      // colors: ['pink'],
-      lineWidth: 4,
-      pointSize: 6,
-      legend: {
-        position: 'bottom',
-        textStyle: {
-          color: 'black',
-          fontSize: 14,
-          bold: true,
-        },
-      },
-      hAxis: {
-        textStyle: {
-          color: 'black',
-          fontSize: 14,
-        },
-      },
-      vAxis: {
-        textStyle: {
-          color: 'black',
-          fontSize: 14,
-        },
-        baseline: 0,
-        baselineColor: 'black',
-        gridlines: { color: 'grey', count: -1 },
-      },
-      bar: { groupWidth: '75%' },
-      annotations: {
-        alwaysOutside: true,
-        highContrast: false,
-        stem: {
-          color: 'black',
-          length: 0,
-        },
-        textStyle: {
-          fontSize: 14,
-          bold: true,
-          color: 'black',
-          opacity: 0.8,
-        },
-      },
-      Animation: { duration: 1000, startup: true },
-    };
   }
 
   toSimpleString(date: Date) {

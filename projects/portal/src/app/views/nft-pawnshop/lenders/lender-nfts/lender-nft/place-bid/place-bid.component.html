@@ -24,7 +24,7 @@
               </tr>
               <tr>
                 <th>Minimum Deposit Rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate }}</td>
+                <td>{{ listingInfo?.minimum_deposit_rate | percent }}</td>
               </tr>
               <tr>
                 <th>Owner</th>
@@ -40,7 +40,7 @@
               </tr>
               <tr>
                 <th>Started at</th>
-                <td>{{ listingInfo?.started_at }}</td>
+                <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
               </tr>
             </tbody>
           </table>
@@ -52,6 +52,7 @@
 
     <div class="flex flex-row">
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+        <h3 class="m-4 card-title">Offers</h3>
         <google-chart
           *ngIf="chartData"
           [title]="chartTitle"
@@ -61,6 +62,30 @@
           [options]="chartOptions"
         >
         </google-chart>
+        <div *ngIf="bidders?.length" class="mt-4 overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th></th>
+                <td>Bidder address</td>
+                <td>Interest rate</td>
+                <td>Deposit</td>
+                <td>Bid price</td>
+                <td>Expiry</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bidder of bidders">
+                <th>#1</th>
+                <td>{{ bidder.bidder }}</td>
+                <td>{{ bidder.deposit_lending_rate }}%</td>
+                <td>{{ bidder.deposit_amount?.amount }}</td>
+                <td>{{ bidder.bid_amount?.amount }}</td>
+                <td>{{ bidder.bidding_period }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <span class="flex-auto"></span>
@@ -249,6 +274,9 @@
             </div>
 
             <br />
+            <button type="button" class="btn btn-secondary w-full mb-2" (click)="onSimulate()">
+              Simulate this offer
+            </button>
             <button
               *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
               class="btn btn-primary w-full"

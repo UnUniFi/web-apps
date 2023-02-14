@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
+import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
@@ -27,13 +28,14 @@ export class PlaceBidComponent implements OnInit {
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
-  chartData$: Observable<(string | number | Date)[][]>;
+  chartData$: Observable<(string | number)[][]>;
 
   constructor(
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
+    private readonly pawnshopChart: NftPawnshopChartService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
@@ -56,26 +58,8 @@ export class PlaceBidComponent implements OnInit {
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
 
-    // To Do : Add charts data source
-    const primaryColor = '#007bff';
     this.chartData$ = this.bidders$.pipe(
-      map((bidders) =>
-        bidders.map((bidder) => {
-          if (
-            bidder.bidding_period &&
-            bidder.bid_amount &&
-            bidder.bid_amount.amount &&
-            bidder.deposit_lending_rate
-          ) {
-            const date = new Date(bidder.bidding_period).toLocaleString();
-            const bidAmount = Number(bidder.bid_amount.amount) / 1000000;
-            const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
-            return [date, bidAmount, primaryColor, rate];
-          } else {
-            return [];
-          }
-        }),
-      ),
+      map((bidders) => this.pawnshopChart.createBidAmountChartData(bidders)),
       map((data) => data.sort((a, b) => Number(a[1]) - Number(b[1]))),
     );
   }
@@ -83,16 +67,15 @@ export class PlaceBidComponent implements OnInit {
   ngOnInit(): void {}
 
   onSimulate(data: PlaceBidRequest) {
-    // To Do Change Chart's data source
     const bidAmount = data.bidAmount;
     const date = data.biddingPeriod.toLocaleString();
     const rate = data.depositLendingRate;
-    const secondaryColor = '#6c757d';
-    this.chartData$ = this.chartData$.pipe(
+    const secondaryColor = '#EC0BA1';
+    this.chartData$ = this.bidders$.pipe(
+      map((bidders) => this.pawnshopChart.createBidAmountChartData(bidders)),
       map((data) => {
-        let newData = data.slice();
-        newData[newData.length] = [date, bidAmount, secondaryColor, rate];
-        return newData;
+        data[data.length] = [date, bidAmount, secondaryColor, rate];
+        return data;
       }),
       map((data) => data.sort((a, b) => Number(a[1]) - Number(b[1]))),
     );

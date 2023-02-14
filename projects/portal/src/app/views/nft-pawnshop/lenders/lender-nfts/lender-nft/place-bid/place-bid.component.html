@@ -274,21 +274,24 @@
             </div>
 
             <br />
-            <button type="button" class="btn btn-secondary w-full mb-2" (click)="onSimulate()">
-              Simulate this offer
-            </button>
-            <button
-              *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
-              class="btn btn-primary w-full"
-            >
-              Make Offer
-            </button>
-            <button
-              *ngIf="listingInfo?.owner === currentStoredWallet?.address"
-              class="btn btn-disabled w-full"
-            >
-              Your Listing
-            </button>
+            <div class="flex flex-row">
+              <button type="button" class="btn btn-secondary w-2/5" (click)="onSimulate()">
+                Simulate this offer
+              </button>
+              <span class="flex-auto"></span>
+              <button
+                *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
+                class="btn btn-primary w-2/5"
+              >
+                Make Offer
+              </button>
+              <button
+                *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+                class="btn btn-disabled w-full"
+              >
+                Your Listing
+              </button>
+            </div>
           </form>
         </div>
       </div>

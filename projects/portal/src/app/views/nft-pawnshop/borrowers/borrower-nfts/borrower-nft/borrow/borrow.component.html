@@ -126,8 +126,13 @@
                 <div class="stat-desc">{{ shortestExpiryDate | date : 'a h:mm:ss z' }}</div>
               </div>
             </div>
-
-            <button class="btn btn-primary w-full">Borrow</button>
+            <div class="flex flex-row">
+              <button type="button" class="btn btn-secondary w-2/5" (click)="onSimulate()">
+                Simulate
+              </button>
+              <span class="flex-auto"></span>
+              <button class="btn btn-primary w-2/5">Borrow</button>
+            </div>
           </form>
         </div>
       </div>

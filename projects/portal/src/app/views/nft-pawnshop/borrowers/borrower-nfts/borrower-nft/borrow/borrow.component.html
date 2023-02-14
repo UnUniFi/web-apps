@@ -79,7 +79,7 @@
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
         <h3 class="m-4 card-title">Borrow</h3>
         <div class="card-body">
-          <form>
+          <form #formRef="ngForm" (submit)="onSubmit()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Enter borrow amount</span>
@@ -106,7 +106,8 @@
                 <input
                   required
                   type="number"
-                  placeholder="12.123456"
+                  name="amount"
+                  [(ngModel)]="borrowAmount"
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />

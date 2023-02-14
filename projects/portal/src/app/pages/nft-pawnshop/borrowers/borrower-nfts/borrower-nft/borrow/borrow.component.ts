@@ -6,7 +6,7 @@ import { BorrowRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   ListedNfts200ResponseListingsInner,
@@ -102,7 +102,6 @@ export class BorrowComponent implements OnInit {
         ),
       ),
     );
-    this.chartData$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}
@@ -143,8 +142,8 @@ export class BorrowComponent implements OnInit {
           }
           i++;
         }
-        this.shortestExpiryDate$.pipe(map((_) => shortestExpiry));
-        this.averageInterestRate$.pipe(map((_) => sumInterest / data.amount));
+        this.shortestExpiryDate$ = of(shortestExpiry);
+        this.averageInterestRate$ = of(sumInterest / data.amount);
         return chartData;
       }),
     );

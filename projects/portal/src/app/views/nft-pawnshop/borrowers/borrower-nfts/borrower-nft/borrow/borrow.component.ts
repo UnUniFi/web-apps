@@ -57,6 +57,7 @@ export class BorrowComponent implements OnInit {
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
+    this.borrowAmount = 12.123456;
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }

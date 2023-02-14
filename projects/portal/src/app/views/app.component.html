@@ -69,6 +69,7 @@
       <view-toolbar
         class="flex-auto"
         [searchResult]="searchResult"
+        [currentStoredWallet]="currentStoredWallet"
         (appSubmitSearchResult)="onSubmitSearchResult($event)"
         (appChangeInputValue)="onChangeInputValue($event)"
         (appConnectWallet)="onConnectWallet($event)"

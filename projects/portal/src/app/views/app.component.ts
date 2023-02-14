@@ -1,4 +1,5 @@
 import { Config } from '../models/config.service';
+import { StoredWallet } from '../models/wallets/wallet.model';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
@@ -22,6 +23,9 @@ export class AppComponent implements OnInit {
 
   @Input()
   selectedConfig?: string | null;
+
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
 
   @Input()
   navigations?: { name: string; link: string; icon: string }[] | null;

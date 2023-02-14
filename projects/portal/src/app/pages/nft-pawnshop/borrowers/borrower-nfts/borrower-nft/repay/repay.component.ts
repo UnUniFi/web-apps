@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
+import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   ListedNfts200ResponseListingsInner,
@@ -26,11 +27,15 @@ export class RepayComponent implements OnInit {
   loans$: Observable<Loans200ResponseLoansInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
+  shortestExpiryDate$: Observable<Date>;
+  averageInterestRate$: Observable<number>;
+  chartData$: Observable<(string | number)[][]>;
 
   constructor(
     private route: ActivatedRoute,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
+    private readonly pawnshopChart: NftPawnshopChartService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
@@ -41,6 +46,7 @@ export class RepayComponent implements OnInit {
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids(classID, nftID)),
+      map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
     );
     this.loans$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) =>
@@ -64,12 +70,91 @@ export class RepayComponent implements OnInit {
     this.nftImage$ = nftData$.pipe(
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
+
+    this.shortestExpiryDate$ = this.bidders$.pipe(
+      map((bidders) =>
+        bidders.reduce((prev, curr) => {
+          const prevDate = new Date(prev.bidding_period!);
+          const currDate = new Date(curr.bidding_period!);
+          return prevDate > currDate ? curr : prev;
+        }),
+      ),
+      map((bidder) => new Date(bidder.bidding_period!)),
+    );
+
+    this.averageInterestRate$ = this.bidders$.pipe(
+      map((bidders) => {
+        const interests = bidders.reduce(
+          (sum, curr) =>
+            sum + Number(curr.deposit_amount?.amount) * Number(curr.deposit_lending_rate),
+          0,
+        );
+        const amounts = bidders.reduce((sum, curr) => sum + Number(curr.deposit_amount?.amount), 0);
+        return interests / amounts;
+      }),
+    );
+
+    this.chartData$ = this.bidders$.pipe(
+      map((bidders) => this.pawnshopChart.createBorrowingAmountChartData(bidders)),
+      map((data) =>
+        data.sort(
+          (a, b) =>
+            Number((a[3] as string).replace('%', '')) - Number((b[3] as string).replace('%', '')),
+        ),
+      ),
+    );
   }
 
   ngOnInit(): void {}
 
   onSimulate(data: RepayRequest) {
-    // To Do Change Chart's data source
+    const secondaryColor = '#EC0BA1';
+    this.chartData$ = this.bidders$.pipe(
+      map((bidders) => this.pawnshopChart.createBorrowingAmountChartData(bidders)),
+      map((data) =>
+        data.sort(
+          (a, b) =>
+            Number((a[3] as string).replace('%', '')) - Number((b[3] as string).replace('%', '')),
+        ),
+      ),
+      map((chartData) => {
+        const amounts = chartData.reduce((sum, curr) => sum + Number(curr[1]), 0);
+        const interests = chartData.reduce(
+          (sum, curr) => sum + Number(curr[1]) * Number((curr[3] as string).replace('%', '')),
+          0,
+        );
+        let repayAmount = data.amount;
+        let sumInterest = 0;
+        let i = 0;
+        let j = 0;
+        while (repayAmount > 0 && i < chartData.length) {
+          if (repayAmount > Number(chartData[i][1])) {
+            sumInterest +=
+              Number(chartData[i][1]) * Number((chartData[i][3] as string).replace('%', ''));
+          } else {
+            sumInterest += repayAmount * Number((chartData[i][3] as string).replace('%', ''));
+            chartData[i][2] = secondaryColor;
+            j++;
+            break;
+          }
+          chartData[i][2] = secondaryColor;
+          repayAmount -= Number(chartData[i][1]);
+          i++;
+          j++;
+        }
+        if (amounts != data.amount) {
+          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount));
+        }
+        this.shortestExpiryDate$ = of(
+          new Date(
+            chartData
+              .slice(i)
+              .reduce((prev, curr) => (prev < curr[1] ? prev : curr[1]), chartData[0][1]),
+          ),
+        );
+        return chartData;
+      }),
+    );
   }
 
   onSubmit(data: RepayRequest) {

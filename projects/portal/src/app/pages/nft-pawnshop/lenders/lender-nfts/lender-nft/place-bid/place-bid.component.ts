@@ -4,6 +4,8 @@ import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nf
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -20,6 +22,7 @@ import {
 export class PlaceBidComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
@@ -28,12 +31,14 @@ export class PlaceBidComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private readonly walletService: WalletService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing(classID, nftID)),

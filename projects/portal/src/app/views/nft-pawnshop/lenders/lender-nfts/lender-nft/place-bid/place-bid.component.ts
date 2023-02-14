@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   ListedNfts200ResponseListingsInner,
@@ -17,6 +18,8 @@ export class PlaceBidComponent implements OnInit {
   classID?: string | null;
   @Input()
   nftID?: string | null;
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()

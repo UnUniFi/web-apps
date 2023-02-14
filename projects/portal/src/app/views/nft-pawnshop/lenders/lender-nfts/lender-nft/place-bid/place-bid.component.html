@@ -27,6 +27,18 @@
                 <td>{{ listingInfo?.minimum_deposit_rate }}</td>
               </tr>
               <tr>
+                <th>Owner</th>
+                <td
+                  class="text-warning"
+                  *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+                >
+                  {{ listingInfo?.owner }}
+                </td>
+                <td *ngIf="listingInfo?.owner !== currentStoredWallet?.address">
+                  {{ listingInfo?.owner }}
+                </td>
+              </tr>
+              <tr>
                 <th>Started at</th>
                 <td>{{ listingInfo?.started_at }}</td>
               </tr>
@@ -237,7 +249,18 @@
             </div>
 
             <br />
-            <button class="btn btn-primary w-full">Make Offer</button>
+            <button
+              *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
+              class="btn btn-primary w-full"
+            >
+              Make Offer
+            </button>
+            <button
+              *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+              class="btn btn-disabled w-full"
+            >
+              Your Listing
+            </button>
           </form>
         </div>
       </div>

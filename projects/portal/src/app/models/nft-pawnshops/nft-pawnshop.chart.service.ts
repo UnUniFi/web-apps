@@ -120,4 +120,24 @@ export class NftPawnshopChartService {
     }
     return data;
   }
+
+  createBorrowingAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
+    const primaryColor = '#3A4D8F';
+    return bidders.map((bidder) => {
+      if (
+        bidder.bidding_period &&
+        bidder.borrowings &&
+        bidder.borrowings.length &&
+        bidder.deposit_lending_rate
+      ) {
+        const date = new Date(bidder.bidding_period).toLocaleString();
+        const borrowAmount =
+          bidder.borrowings.reduce((sum, curr) => sum + Number(curr.amount?.amount), 0) / 1000000;
+        const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
+        return [date, borrowAmount, primaryColor, rate];
+      } else {
+        return [];
+      }
+    });
+  }
 }

@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
-    private readonly walletAPplicationService: WalletApplicationService,
+    private readonly walletApplicationService: WalletApplicationService,
   ) {
     this.config$ = this.configS.config$;
     this.configs = this.configS.configs.map((config) => config.id);
@@ -89,8 +89,7 @@ export class AppComponent implements OnInit {
                 BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 : false;
-            }
-            catch (error) {
+            } catch (error) {
               return false;
             }
           });
@@ -215,12 +214,12 @@ export class AppComponent implements OnInit {
 
   // WIP
   async onConnectWallet($event: {}) {
-    const cosmosWallet = await this.walletAPplicationService.connectWalletDialog();
+    const cosmosWallet = await this.walletApplicationService.connectWalletDialog();
   }
 
   onChangeConfig(value: string) {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

@@ -7,6 +7,7 @@ import {
   ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
+  Liquidation200ResponseLiquidations,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -26,6 +27,10 @@ export class RepayComponent implements OnInit {
   @Input()
   loans?: Loans200ResponseLoansInner[] | null;
   @Input()
+  liquidation?: Liquidation200ResponseLiquidations | null;
+  @Input()
+  repayAmount?: number | null;
+  @Input()
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;
@@ -36,7 +41,7 @@ export class RepayComponent implements OnInit {
   @Input()
   averageInterestRate?: number | null;
 
-  repayAmount?: number;
+  repayDenom?: string;
   chartType: ChartType;
   chartTitle: string;
   chartColumns: any[];
@@ -48,6 +53,7 @@ export class RepayComponent implements OnInit {
   appSubmit: EventEmitter<RepayRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
+    this.repayDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     this.chartOptions = this.pawnshopChart.createChartOption();
@@ -70,10 +76,34 @@ export class RepayComponent implements OnInit {
   ngOnInit(): void {}
 
   onSimulate() {
-    this.appSimulate.emit();
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    if (!this.repayAmount || !this.repayDenom) {
+      alert('Some values are invalid!');
+      return;
+    }
+    this.appSimulate.emit({
+      classID: this.classID,
+      nftID: this.nftID,
+      symbol: this.repayDenom,
+      amount: this.repayAmount,
+    });
   }
 
   onSubmit() {
-    this.appSubmit.emit();
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    if (!this.repayAmount || !this.repayDenom) {
+      alert('Some values are invalid!');
+      return;
+    }
+    this.appSubmit.emit({
+      classID: this.classID,
+      nftID: this.nftID,
+      symbol: this.repayDenom,
+      amount: this.repayAmount,
+    });
   }
 }

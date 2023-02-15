@@ -8,10 +8,12 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { rewards } from 'ununifi-client/cjs/rest/nftmarket/module';
 import {
   ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
+  Liquidation200ResponseLiquidations,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -25,6 +27,8 @@ export class RepayComponent implements OnInit {
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loans$: Observable<Loans200ResponseLoansInner[]>;
+  liquidation$: Observable<Liquidation200ResponseLiquidations>;
+  repayAmount$: Observable<number>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   shortestExpiryDate$: Observable<Date>;
@@ -61,6 +65,13 @@ export class RepayComponent implements OnInit {
           ),
       ),
     );
+    this.liquidation$ = nftCombine$.pipe(
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getLiquidation$(classID, nftID)),
+    );
+    this.repayAmount$ = this.liquidation$.pipe(
+      map((liq) => Number(liq.liquidation?.amount?.amount) / 1000000),
+    );
+
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
     );

@@ -24,7 +24,7 @@
               </tr>
               <tr>
                 <th>Minimum deposit rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate | percent }}</td>
+                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
               </tr>
               <tr>
                 <th>Started at</th>
@@ -39,7 +39,7 @@
     <br />
 
     <div class="flex flex-row">
-      <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+      <div class="card bg-base-100 shadow-xl w-full lg:w-auto lg:mr-2">
         <h3 class="m-4 card-title">Borrowing</h3>
         <google-chart
           *ngIf="chartData"
@@ -55,8 +55,8 @@
             <thead>
               <tr>
                 <th></th>
-                <td>Bidder address</td>
-                <td>Interest rate</td>
+                <td>Bidder</td>
+                <td>Interest</td>
                 <td>Deposit</td>
                 <td>Bid price</td>
                 <td>Expiry</td>
@@ -65,11 +65,11 @@
             <tbody>
               <tr *ngFor="let bidder of bidders">
                 <th>#1</th>
-                <td>{{ bidder.bidder }}</td>
-                <td>{{ bidder.deposit_lending_rate }}%</td>
-                <td>{{ bidder.deposit_amount?.amount }}</td>
-                <td>{{ bidder.bid_amount?.amount }}</td>
-                <td>{{ bidder.bidding_period }}</td>
+                <td>{{ bidder.bidder | ellipsis }}</td>
+                <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+                <td>{{ bidder.deposit_amount | coin }}</td>
+                <td>{{ bidder.bid_amount | coin }}</td>
+                <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm' }}</td>
               </tr>
             </tbody>
           </table>
@@ -111,14 +111,14 @@
                   class="input input-bordered w-full"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
-                <span>axlUSDC</span>
+                <span>{{ repayDenom }}</span>
               </label>
             </div>
 
             <div class="stats flex flex-row justify-end my-4">
               <div class="stat flex flex-col items-end">
                 <div class="stat-title">Average interest rate</div>
-                <div class="stat-value">{{ averageInterestRate | percent }}</div>
+                <div class="stat-value">{{ averageInterestRate | percentage }}</div>
                 <div class="stat-desc"></div>
               </div>
               <div class="stat flex flex-col items-end">

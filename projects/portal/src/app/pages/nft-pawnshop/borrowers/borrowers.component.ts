@@ -28,12 +28,12 @@ export class BorrowersComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
     this.ownNfts$ = this.address$.pipe(
-      mergeMap((address) => this.pawnshopQuery.listOwnNfts(address)),
+      mergeMap((address) => this.pawnshopQuery.listOwnNfts$(address)),
     );
     this.listedOwnNfts$ = this.address$.pipe(
       mergeMap((address) =>
         this.pawnshopQuery
-          .listAllListedNfts()
+          .listAllListedNfts$()
           .pipe(map((nfts) => nfts.filter((nft) => nft.owner == address))),
       ),
     );

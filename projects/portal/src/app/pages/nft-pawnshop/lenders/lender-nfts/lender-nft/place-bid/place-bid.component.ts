@@ -43,13 +43,13 @@ export class PlaceBidComponent implements OnInit {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
     );
     this.bidders$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
     );
     const nftData$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
     );
     this.nftMetadata$ = nftData$.pipe(
       mergeMap((nft) => this.pawnshop.getMetadataFromUri(nft.nft?.uri || '')),

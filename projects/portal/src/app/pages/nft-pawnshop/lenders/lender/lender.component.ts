@@ -31,7 +31,7 @@ export class LenderComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
     const bidderBids = this.address$.pipe(
-      mergeMap((address) => this.pawnshopQueryService.listBidderBids(address)),
+      mergeMap((address) => this.pawnshopQueryService.listBidderBids$(address)),
     );
     this.biddingNfts$ = bidderBids.pipe(
       mergeMap((bids) =>
@@ -39,7 +39,7 @@ export class LenderComponent implements OnInit {
           bids.map(
             async (bid) =>
               await this.pawnshopQueryService
-                .getNftListing(bid.nft_id?.class_id!, bid.nft_id?.nft_id!)
+                .getNftListing$(bid.nft_id?.class_id!, bid.nft_id?.nft_id!)
                 .toPromise(),
           ),
         ),
@@ -54,7 +54,7 @@ export class LenderComponent implements OnInit {
               return {};
             }
             const nftData = await this.pawnshopQueryService
-              .getNft(nft.nft_id.class_id, nft.nft_id?.nft_id)
+              .getNft$(nft.nft_id.class_id, nft.nft_id?.nft_id)
               .toPromise();
             return nftData;
           }),

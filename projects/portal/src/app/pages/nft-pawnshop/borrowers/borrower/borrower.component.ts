@@ -35,7 +35,7 @@ export class BorrowerComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
     this.ownNfts$ = this.address$.pipe(
-      mergeMap((address) => this.pawnshopQuery.listOwnNfts(address)),
+      mergeMap((address) => this.pawnshopQuery.listOwnNfts$(address)),
     );
     this.ownNftImages$ = this.ownNfts$.pipe(
       mergeMap((value) => this.pawnshop.listNftImages(value)),
@@ -47,7 +47,7 @@ export class BorrowerComponent implements OnInit {
     this.listedOwnNfts$ = this.address$.pipe(
       mergeMap((address) =>
         this.pawnshopQuery
-          .listAllListedNfts()
+          .listAllListedNfts$()
           .pipe(map((nfts) => nfts.filter((nft) => nft.owner == address))),
       ),
     );
@@ -56,10 +56,15 @@ export class BorrowerComponent implements OnInit {
       mergeMap((nfts) =>
         Promise.all(
           nfts.map(async (nft) => {
-            const res = await this.pawnshopQuery
-              .getNft(nft.nft_id?.class_id!, nft.nft_id?.nft_id!)
-              .toPromise();
-            return res.nft?.uri;
+            console.log(nft.nft_id);
+            if (nft.nft_id && nft.nft_id.class_id && nft.nft_id.nft_id) {
+              const res = await this.pawnshopQuery.getNft(nft.nft_id.class_id, nft.nft_id.nft_id);
+              console.log('aa');
+              return res.nft?.uri;
+            } else {
+              console.log('hoge');
+              return '';
+            }
           }),
         ),
       ),

@@ -48,7 +48,7 @@ export class NftsDialogComponent implements OnInit {
         return balance ? balance.amount! : '0';
       }),
     );
-    this.listedClass$ = this.pawnshopQuery.listListedClass(this.classID, 100);
+    this.listedClass$ = this.pawnshopQuery.listListedClass$(this.classID, 100);
     this.classImage$ = this.listedClass$.pipe(
       mergeMap(async (value) => {
         if (!value.uri) {

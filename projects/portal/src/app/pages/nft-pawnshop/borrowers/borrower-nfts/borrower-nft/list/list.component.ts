@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     const nftData$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
     );
     this.nftMetadata$ = nftData$.pipe(
       mergeMap((nft) => this.pawnshop.getMetadataFromUri(nft.nft?.uri || '')),

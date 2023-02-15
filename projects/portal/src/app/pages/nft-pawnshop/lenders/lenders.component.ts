@@ -30,8 +30,8 @@ export class LendersComponent implements OnInit {
     private readonly pawnshopQuery: NftPawnshopQueryService,
   ) {
     this.balances$ = this.usecase.balances$;
-    this.listedNfts$ = this.pawnshopQuery.listAllListedNfts();
-    this.listedClasses$ = this.pawnshopQuery.listAllListedClasses();
+    this.listedNfts$ = this.pawnshopQuery.listAllListedNfts$();
+    this.listedClasses$ = this.pawnshopQuery.listAllListedClasses$();
     this.classImages$ = this.listedClasses$.pipe(
       mergeMap((classes) =>
         Promise.all(

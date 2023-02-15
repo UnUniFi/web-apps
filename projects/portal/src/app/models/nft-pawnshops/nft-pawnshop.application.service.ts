@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
 @Injectable({
@@ -169,28 +169,27 @@ export class NftPawnshopApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.txCommonApplication.simulate(
-      msg,
-      publicKey,
-      account,
-      minimumGasPrice,
-    );
-    if (!simulationResult) {
-      return;
-    }
-    const { gas, fee } = simulationResult;
+    // comment-out simulate
+    // const simulationResult = await this.txCommonApplication.simulate(
+    //   msg,
+    //   publicKey,
+    //   account,
+    //   minimumGasPrice,
+    // );
+    // if (!simulationResult) {
+    //   return;
+    // }
+    // const { gas, fee } = simulationResult;
 
-    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
-      return;
-    }
+    // if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+    //   return;
+    // }
 
     const txHash = await this.txCommonApplication.broadcast(
       msg,
       currentCosmosWallet,
       publicKey,
       account,
-      gas,
-      fee,
     );
     if (!txHash) {
       return;

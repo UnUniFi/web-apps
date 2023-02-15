@@ -4,7 +4,6 @@ import { Nfts } from './nft-pawnshop.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import Long from 'long';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
@@ -40,10 +39,10 @@ export class NftPawnshopService {
 
   convertDateToTimestamp(date: Date) {
     const millisecond = date.getTime();
-    return {
-      seconds: Long.fromNumber(millisecond / 1000),
+    return ununificlient.proto.google.protobuf.Timestamp.fromObject({
+      seconds: millisecond / 1000,
       nanos: (millisecond % 1000) * 1e6,
-    };
+    });
   }
 
   async listNftImages(data: ListedClass200Response | Nfts): Promise<string[]> {

@@ -22,7 +22,7 @@
               </tr>
               <tr>
                 <th>Minimum deposit rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}%</td>
+                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
               </tr>
               <tr>
                 <th>Started at</th>
@@ -42,13 +42,15 @@
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Total deposits</div>
-              <div class="stat-value text-primary">{{ loan?.borrowing_limit }}</div>
-              <div class="stat-desc">Denom</div>
+              <div class="stat-value text-primary">{{ loan?.borrowing_limit | coinAmount }}</div>
+              <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
             </div>
             <div class="stat">
               <div class="stat-title">Amount you borrowed</div>
-              <div class="stat-value text-secondary">{{ loan?.loan?.loan?.amount }}</div>
-              <div class="stat-desc">{{ loan?.loan?.loan?.denom }}</div>
+              <div class="stat-value text-secondary">
+                {{ loan?.loan?.loan?.amount | coinAmount }}
+              </div>
+              <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
             </div>
             <!-- <div class="stat">
               <div class="stat-title">Available amount to borrow</div>
@@ -82,10 +84,10 @@
             <div class="stat">
               <div class="stat-title">Amount you must Repay</div>
               <div class="stat-value text-secondary">
-                {{ liquidation.liquidation.amount?.amount }}
+                {{ liquidation.liquidation.amount?.amount | coinAmount }}
               </div>
               <div class="stat-desc">
-                {{ liquidation.liquidation.amount?.denom }}
+                {{ liquidation.liquidation.amount?.denom | coinDenom }}
               </div>
             </div>
           </div>
@@ -105,8 +107,10 @@
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Highest bid price</div>
-              <div class="stat-value text-primary">{{ bidders[0].bid_amount?.amount }}</div>
-              <div class="stat-desc">{{ bidders[0].bid_amount?.denom }}</div>
+              <div class="stat-value text-primary">
+                {{ bidders[0].bid_amount?.amount | coinAmount }}
+              </div>
+              <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom }}</div>
             </div>
           </div>
           <span class="flex-auto"></span>
@@ -150,11 +154,11 @@
         <tbody>
           <tr *ngFor="let bidder of bidders; let i = index">
             <th>#{{ i }}</th>
-            <td>{{ bidder.bidder }}</td>
-            <td>{{ bidder.deposit_lending_rate | percent }}%</td>
-            <td>{{ bidder.deposit_amount?.amount }}</td>
-            <td>{{ bidder.bid_amount?.amount }}</td>
-            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+            <td>{{ bidder.bidder | ellipsis }}</td>
+            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+            <td>{{ bidder.deposit_amount | coin }}</td>
+            <td>{{ bidder.bid_amount | coin }}</td>
+            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm' }}</td>
           </tr>
         </tbody>
       </table>

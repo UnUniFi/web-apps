@@ -89,7 +89,7 @@ export class NftPawnshopChartService {
 
   createDepositAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
-    const warningColor = '#D62755';
+    const disableColor = '#BFBFBF';
     let data = [];
     for (let bidder of bidders) {
       if (
@@ -106,7 +106,7 @@ export class NftPawnshopChartService {
             (sum, curr) => sum + Number(curr.amount?.amount) / 1000000,
             0,
           );
-          data.push([date, borrowedAmount, warningColor, rate]);
+          data.push([date, borrowedAmount, disableColor, rate]);
           const restAmount = depositAmount - borrowedAmount;
           if (restAmount > 0) {
             data.push([date, restAmount, primaryColor, rate]);

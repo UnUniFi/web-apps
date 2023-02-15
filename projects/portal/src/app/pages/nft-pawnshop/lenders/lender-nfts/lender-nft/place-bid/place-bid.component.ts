@@ -74,7 +74,7 @@ export class PlaceBidComponent implements OnInit {
     this.chartData$ = this.bidders$.pipe(
       map((bidders) => this.pawnshopChart.createBidAmountChartData(bidders)),
       map((data) => {
-        data[data.length] = [date, bidAmount, secondaryColor, rate];
+        data[data.length] = [date, bidAmount, secondaryColor, rate + '%'];
         return data;
       }),
       map((data) => data.sort((a, b) => Number(a[1]) - Number(b[1]))),

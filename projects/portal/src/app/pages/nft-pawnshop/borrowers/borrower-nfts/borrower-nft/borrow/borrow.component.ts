@@ -30,6 +30,7 @@ export class BorrowComponent implements OnInit {
   shortestExpiryDate$: Observable<Date>;
   averageInterestRate$: Observable<number>;
   chartData$: Observable<(string | number)[][]>;
+  borrowAmount$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +48,24 @@ export class BorrowComponent implements OnInit {
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
     );
+    this.borrowAmount$ = this.bidders$.pipe(
+      map((bidders) =>
+        bidders.reduce((sum, bidder) => {
+          const deposit = sum + Number(bidder.deposit_amount?.amount);
+          if (bidder.borrowings && bidder.borrowings.length) {
+            const borrow = bidder.borrowings.reduce(
+              (sum, borrowing) => sum + Number(borrowing.amount?.amount),
+              0,
+            );
+            return deposit - borrow;
+          } else {
+            return deposit;
+          }
+        }, 0),
+      ),
+      map((amount) => amount / 1000000),
+    );
+
     this.loans$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) =>
         this.pawnshopQuery
@@ -143,7 +162,8 @@ export class BorrowComponent implements OnInit {
           i++;
         }
         this.shortestExpiryDate$ = of(shortestExpiry);
-        this.averageInterestRate$ = of(sumInterest / data.amount);
+        console.log(sumInterest, data.amount);
+        this.averageInterestRate$ = of(sumInterest / data.amount / 100);
         return chartData;
       }),
     );

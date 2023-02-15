@@ -26,6 +26,8 @@ export class BorrowComponent implements OnInit {
   @Input()
   loans?: Loans200ResponseLoansInner[] | null;
   @Input()
+  borrowAmount?: number | null;
+  @Input()
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;
@@ -36,7 +38,7 @@ export class BorrowComponent implements OnInit {
   @Input()
   averageInterestRate?: number | null;
 
-  borrowAmount?: number;
+  borrowDenom?: string;
   chartType: ChartType;
   chartTitle: string;
   chartColumns: any[];
@@ -48,6 +50,7 @@ export class BorrowComponent implements OnInit {
   appSubmit: EventEmitter<BorrowRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
+    this.borrowDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     this.chartOptions = this.pawnshopChart.createChartOption();
@@ -57,7 +60,6 @@ export class BorrowComponent implements OnInit {
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
-    this.borrowAmount = 12.123456;
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
@@ -70,10 +72,34 @@ export class BorrowComponent implements OnInit {
   ngOnInit(): void {}
 
   onSimulate() {
-    this.appSimulate.emit();
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    if (!this.borrowAmount || !this.borrowDenom) {
+      alert('Some values are invalid!');
+      return;
+    }
+    this.appSimulate.emit({
+      classID: this.classID,
+      nftID: this.nftID,
+      symbol: this.borrowDenom,
+      amount: this.borrowAmount,
+    });
   }
 
   onSubmit() {
-    this.appSubmit.emit();
+    if (!this.classID || !this.nftID) {
+      return;
+    }
+    if (!this.borrowAmount || !this.borrowDenom) {
+      alert('Some values are invalid!');
+      return;
+    }
+    this.appSubmit.emit({
+      classID: this.classID,
+      nftID: this.nftID,
+      symbol: this.borrowDenom,
+      amount: this.borrowAmount,
+    });
   }
 }

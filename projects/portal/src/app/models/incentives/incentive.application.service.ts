@@ -7,6 +7,7 @@ import { WalletApplicationService } from '../wallets/wallet.application.service'
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { IncentiveService } from './incentive.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,6 +25,7 @@ export class IncentiveApplicationService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly walletApplicationService: WalletApplicationService,
     private readonly walletService: WalletService,
@@ -31,10 +33,9 @@ export class IncentiveApplicationService {
   ) {}
 
   async openCreateUnitFormDialog(address: string): Promise<void> {
-    const txHash = await this.dialog
-      .open(CreateUnitFormDialogComponent, { data: address })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(CreateUnitFormDialogComponent, { data: address })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

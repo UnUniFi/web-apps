@@ -1,7 +1,10 @@
 import { CreateUnitFormDialogComponent } from '../../pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
 import { WithdrawIncentiveAllRewardsFormDialogComponent } from '../../pages/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.component';
 import { WithdrawIncentiveRewardFormDialogComponent } from '../../pages/dialogs/incentive/withdraw-incentive-reward-form-dialog/withdraw-incentive-reward-form-dialog.component';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { WalletType } from '../wallets/wallet.model';
@@ -101,15 +104,14 @@ export class IncentiveApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+      const txFeeConfirmedResult = await this.tmp_dialog
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -189,15 +191,14 @@ export class IncentiveApplicationService {
     }
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+      const txFeeConfirmedResult = await this.tmp_dialog
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -265,15 +266,14 @@ export class IncentiveApplicationService {
     }
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+      const txFeeConfirmedResult = await this.tmp_dialog
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;

@@ -40,10 +40,9 @@ export class IncentiveApplicationService {
   }
 
   async openWithdrawIncentiveRewardFormDialog(denom: string): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawIncentiveRewardFormDialogComponent, { data: denom })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(WithdrawIncentiveRewardFormDialogComponent, { data: denom })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

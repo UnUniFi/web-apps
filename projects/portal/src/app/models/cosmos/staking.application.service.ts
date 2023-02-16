@@ -12,6 +12,7 @@ import { WalletService } from '../wallets/wallet.service';
 import { CreateValidatorData, EditValidatorData } from './staking.model';
 import { StakingService } from './staking.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -42,6 +43,7 @@ export class StakingApplicationService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: StakingService,
     private readonly walletService: WalletService,
@@ -51,10 +53,7 @@ export class StakingApplicationService {
   async openDelegateMenuDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    await this.dialog
-      .open(DelegateMenuDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+    await this.tmp_dialog.open(DelegateMenuDialogComponent, { data: validator }).closed.toPromise();
   }
 
   async openDelegateFormDialog(

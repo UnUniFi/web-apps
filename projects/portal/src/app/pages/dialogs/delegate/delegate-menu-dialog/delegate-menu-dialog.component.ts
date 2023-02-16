@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -42,10 +42,10 @@ export class DelegateMenuDialogComponent implements OnInit {
   isValidator$: Observable<boolean | undefined> | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
     private router: Router,
-    public matDialogRef: MatDialogRef<DelegateMenuDialogComponent>,
+    public dialogRef: DialogRef<DelegateMenuDialogComponent>,
     private readonly stakingAppService: StakingApplicationService,
     private readonly distributionAppService: DistributionApplicationService,
     private readonly walletService: WalletService,
@@ -140,34 +140,34 @@ export class DelegateMenuDialogComponent implements OnInit {
   ngOnInit() {}
 
   onSubmitDelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.stakingAppService.openDelegateFormDialog(validator);
   }
 
   onSubmitRedelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
   onSubmitUndelegate(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.stakingAppService.openUndelegateFormDialog(validator);
   }
 
   onSubmitWithdrawDelegatorReward(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
   onSubmitWithdrawValidatorCommission(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
   }
 
   onSubmitDetail(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     this.router.navigate(['delegate', 'validators', validator.operator_address]);
   }
 }

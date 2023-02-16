@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -21,9 +21,9 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
   validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
-    public matDialogRef: MatDialogRef<WithdrawDelegatorRewardFormDialogComponent>,
+    public dialogRef: DialogRef<string, WithdrawDelegatorRewardFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly distributionAppService: DistributionApplicationService,
@@ -41,6 +41,6 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

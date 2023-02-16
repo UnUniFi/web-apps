@@ -7,18 +7,7 @@ import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
 export class NftPawnshopChartService {
   constructor() {}
 
-  createChartOption() {
-    const innerWidth = window.innerWidth;
-    let width: number;
-    if (innerWidth < 640) {
-      width = innerWidth;
-    } else if (innerWidth > 1440) {
-      width = 460;
-    } else if (innerWidth > 1024) {
-      width = 400;
-    } else {
-      width = innerWidth / 3;
-    }
+  createChartOption(width: number) {
     return {
       width: width,
       height: width / 2,

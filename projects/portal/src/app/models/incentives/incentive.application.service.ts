@@ -47,10 +47,9 @@ export class IncentiveApplicationService {
   }
 
   async openWithdrawIncentiveAllRewardsFormDialog(address: string): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawIncentiveAllRewardsFormDialogComponent, { data: address })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(WithdrawIncentiveAllRewardsFormDialogComponent, { data: address })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

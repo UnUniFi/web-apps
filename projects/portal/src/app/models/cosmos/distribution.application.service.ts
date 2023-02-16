@@ -53,10 +53,9 @@ export class DistributionApplicationService {
   async openWithdrawValidatorCommissionFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

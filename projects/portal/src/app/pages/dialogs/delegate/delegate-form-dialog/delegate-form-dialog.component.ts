@@ -1,3 +1,4 @@
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,9 +28,9 @@ export class DelegateFormDialogComponent implements OnInit {
   validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
-    public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
+    public dialogRef: DialogRef<string, DelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
@@ -83,6 +84,6 @@ export class DelegateFormDialogComponent implements OnInit {
       $event.gasRatio,
     );
 
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

@@ -59,10 +59,8 @@ export class BorrowerComponent implements OnInit {
             console.log(nft.nft_id);
             if (nft.nft_id && nft.nft_id.class_id && nft.nft_id.nft_id) {
               const res = await this.pawnshopQuery.getNft(nft.nft_id.class_id, nft.nft_id.nft_id);
-              console.log('aa');
               return res.nft?.uri;
             } else {
-              console.log('hoge');
               return '';
             }
           }),

@@ -1,8 +1,8 @@
 <div class="flex justify-center">
-  <div class="text-base-content">
+  <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img src="{{ nftImage }}" alt="" class="h-full object-contain" />
+        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
@@ -27,10 +27,10 @@
     </div>
 
     <br />
-    <h3>List this NFT</h3>
     <div class="flex flex-row">
       <span class="flex-auto"></span>
       <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+        <h3 class="m-4 card-title">List this NFT</h3>
         <div class="card-body">
           <form (submit)="onSubmit()">
             <div class="form-control">
@@ -81,7 +81,7 @@
             </div>
 
             <br />
-            <button class="btn btn-primary w-full">List NFT</button>
+            <button class="btn btn-primary w-full px-8">List NFT</button>
           </form>
         </div>
       </div>

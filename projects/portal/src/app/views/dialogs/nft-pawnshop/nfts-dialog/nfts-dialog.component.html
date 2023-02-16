@@ -26,11 +26,11 @@
         mat-card-image
         *ngIf="nftImages"
         src="{{ nftImages[i] }}"
-        class="object-contain h-64 m-0"
+        class="object-cover h-64 m-0"
         style="margin: 0%"
         alt="image of the NFT class"
       />
-      <mat-card-title class="py-1">
+      <mat-card-title class="mt-2">
         {{ nft.id }}
       </mat-card-title>
       <mat-card-content class="mb-4">

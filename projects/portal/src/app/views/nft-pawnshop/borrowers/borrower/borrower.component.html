@@ -6,29 +6,31 @@
         *ngFor="let nft of ownNfts?.nfts; let i = index"
         class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4"
       >
-        <span class="indicator-item badge badge-primary">NOT LISTING</span>
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              *ngIf="ownNftImages"
-              src="{{ ownNftImages[i] }}"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 *ngIf="ownNftsMetadata" class="card-title">
-              {{ ownNftsMetadata[i].name }}
-            </h2>
-            <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
-              {{ nft.class_id + '/' + nft.id }}
-            </h2>
-            <button
-              class="btn btn-outline btn-secondary"
-              routerLink="../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
-            >
-              List
-            </button>
+        <div class="indicator w-full">
+          <span class="indicator-item badge badge-primary">NOT LISTING</span>
+          <div class="card w-full glass shadow-xl">
+            <figure class="aspect-square">
+              <img
+                *ngIf="ownNftImages"
+                src="{{ ownNftImages[i] }}"
+                alt=""
+                class="h-full object-cover"
+              />
+            </figure>
+            <div class="card-body">
+              <h2 *ngIf="ownNftsMetadata" class="card-title">
+                {{ ownNftsMetadata[i].name }}
+              </h2>
+              <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
+                {{ nft.class_id + '/' + nft.id }}
+              </h2>
+              <button
+                class="btn btn-outline btn-secondary"
+                routerLink="../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
+              >
+                List
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -44,29 +46,31 @@
         *ngFor="let nft of listedOwnNfts; let i = index"
         class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4"
       >
-        <span class="indicator-item badge badge-primary">{{ nft.state }}</span>
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square">
-            <img
-              *ngIf="listedOwnNftImages"
-              src="{{ listedOwnNftImages[i] }}"
-              alt=""
-              class="h-full object-cover"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 *ngIf="listedOwnNftsMetadata" class="card-title">
-              {{ listedOwnNftsMetadata[i].name }}
-            </h2>
-            <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
-              {{ nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id }}
-            </h2>
-            <button
-              class="btn btn-outline btn-secondary"
-              routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
-            >
-              View
-            </button>
+        <div class="indicator w-full">
+          <span class="indicator-item badge badge-primary">{{ nft.state }}</span>
+          <div class="card w-full glass shadow-xl">
+            <figure class="aspect-square">
+              <img
+                *ngIf="listedOwnNftImages"
+                src="{{ listedOwnNftImages[i] }}"
+                alt=""
+                class="h-full object-cover"
+              />
+            </figure>
+            <div class="card-body">
+              <h2 *ngIf="listedOwnNftsMetadata" class="card-title">
+                {{ listedOwnNftsMetadata[i].name }}
+              </h2>
+              <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
+                {{ nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id }}
+              </h2>
+              <button
+                class="btn btn-outline btn-secondary"
+                routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
+              >
+                View
+              </button>
+            </div>
           </div>
         </div>
       </div>

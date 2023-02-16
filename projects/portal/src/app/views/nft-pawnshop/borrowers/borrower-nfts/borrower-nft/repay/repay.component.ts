@@ -1,4 +1,13 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -56,7 +65,8 @@ export class RepayComponent implements OnInit {
     this.repayDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
-    this.chartOptions = this.pawnshopChart.createChartOption();
+    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 640;
+    this.chartOptions = this.pawnshopChart.createChartOption(width);
     this.chartColumns = [
       { type: 'string', label: 'Expiry Date' },
       { type: 'number', label: 'Borrowing Amount' },
@@ -68,9 +78,11 @@ export class RepayComponent implements OnInit {
     this.appSubmit = new EventEmitter();
   }
 
+  @ViewChild('chartCardRef') chartCardRef?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    this.chartOptions = this.pawnshopChart.createChartOption();
+    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
   ngOnInit(): void {}

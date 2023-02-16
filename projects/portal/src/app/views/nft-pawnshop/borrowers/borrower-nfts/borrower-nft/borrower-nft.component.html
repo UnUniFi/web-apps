@@ -1,8 +1,8 @@
 <div class="flex justify-center">
-  <div class="text-base-content">
+  <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img src="{{ nftImage }}" alt="" class="h-full object-contain" />
+        <img src="{{ nftImage }}" alt="" class="h-full object-cover" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
@@ -60,7 +60,7 @@
           </div>
           <span class="flex-auto"></span>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" routerLink="borrow">Borrow</button>
+            <button class="btn btn-secondary px-8" routerLink="borrow">Borrow</button>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@
           </div>
           <span class="flex-auto"></span>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" routerLink="repay">Repay</button>
+            <button class="btn btn-primary px-8" routerLink="repay">Repay</button>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@
           </div>
           <span class="flex-auto"></span>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" (click)="onSubmitSell()">Sell</button>
+            <button class="btn btn-secondary px-8" (click)="onSubmitSell()">Sell</button>
           </div>
         </div>
       </div>
@@ -144,21 +144,21 @@
         <thead>
           <tr>
             <th></th>
-            <td>Bidder address</td>
             <td>Interest rate</td>
             <td>Deposit</td>
             <td>Bid price</td>
             <td>Expiry</td>
+            <td>Bidder address</td>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let bidder of bidders; let i = index">
             <th>#{{ i }}</th>
-            <td>{{ bidder.bidder | ellipsis }}</td>
             <td>{{ bidder.deposit_lending_rate | percentage }}</td>
             <td>{{ bidder.deposit_amount | coin }}</td>
             <td>{{ bidder.bid_amount | coin }}</td>
-            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm' }}</td>
+            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+            <td>{{ bidder.bidder }}</td>
           </tr>
         </tbody>
       </table>

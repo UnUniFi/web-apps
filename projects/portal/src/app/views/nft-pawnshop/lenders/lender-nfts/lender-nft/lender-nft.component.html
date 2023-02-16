@@ -2,7 +2,7 @@
   <div class="text-base-content">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-contain" />
+        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
@@ -56,21 +56,21 @@
           </div>
           <span class="flex-auto"></span>
           <div *ngIf="!isBided && !isWinning" class="card-actions justify-end">
-            <button routerLink="place-bid" class="btn btn-primary">Make Offer</button>
+            <button routerLink="place-bid" class="btn btn-primary px-8">Make Offer</button>
           </div>
           <div *ngIf="isBided && !isWinning" class="card-actions flex flex-row">
-            <button routerLink="place-bid" class="btn btn-primary">Update Offer</button>
+            <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>
             <span class="flex-auto"></span>
             <button
               *ngIf="bidders && bidders.length > 1"
-              class="btn btn-secondary"
+              class="btn btn-secondary px-8"
               (click)="onSubmitCancelBid()"
             >
               Cancel Offer
             </button>
           </div>
           <div *ngIf="isWinning" class="card-actions justify-end">
-            <button class="btn btn-primary" (click)="onSubmitPayFullBid()">
+            <button class="btn btn-primary px-8" (click)="onSubmitPayFullBid()">
               Pay Settlement Shortfall
             </button>
           </div>

@@ -1,8 +1,8 @@
 <div class="flex justify-center">
-  <div class="text-base-content">
+  <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square">
-        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-contain" />
+        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">
@@ -37,8 +37,9 @@
     </div>
 
     <br />
-    <div class="flex flex-row">
-      <div class="card bg-base-100 shadow-xl w-full lg:w-auto lg:mr-2">
+
+    <div class="flex flex-col lg:flex-row">
+      <div #chartCardRef class="card bg-base-100 shadow-xl w-full lg:w-2/3 mb-4 lg:mb-0 lg:mr-4">
         <h3 class="m-4 card-title">Deposits</h3>
         <google-chart
           *ngIf="chartData"
@@ -49,30 +50,6 @@
           [options]="chartOptions"
         >
         </google-chart>
-        <div *ngIf="bidders?.length" class="mt-4 overflow-x-auto">
-          <table class="table w-full">
-            <thead>
-              <tr>
-                <th></th>
-                <td>Bidder</td>
-                <td>Interest</td>
-                <td>Deposit</td>
-                <td>Bid price</td>
-                <td>Expiry</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let bidder of bidders">
-                <th>#1</th>
-                <td>{{ bidder.bidder | ellipsis }}</td>
-                <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-                <td>{{ bidder.deposit_amount | coin }}</td>
-                <td>{{ bidder.bid_amount | coin }}</td>
-                <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
 
       <span class="flex-auto"></span>
@@ -128,14 +105,47 @@
               </div>
             </div>
             <div class="flex flex-row">
-              <button type="button" class="btn btn-secondary w-2/5" (click)="onSimulate()">
+              <span class="flex-auto"></span>
+              <button
+                type="button"
+                class="btn btn-secondary btn-outline mr-2 px-8"
+                (click)="onSimulate()"
+              >
                 Simulate
               </button>
-              <span class="flex-auto"></span>
-              <button class="btn btn-primary w-2/5">Borrow</button>
+              <button class="btn btn-secondary px-8">Borrow</button>
             </div>
           </form>
         </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <td>Interest</td>
+              <td>Deposit</td>
+              <td>Bid price</td>
+              <td>Expiry</td>
+              <td>Bidder</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bidder of bidders">
+              <th>#1</th>
+              <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+              <td>{{ bidder.deposit_amount | coin }}</td>
+              <td>{{ bidder.bid_amount | coin }}</td>
+              <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+              <td>{{ bidder.bidder }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

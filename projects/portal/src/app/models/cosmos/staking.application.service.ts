@@ -68,10 +68,9 @@ export class StakingApplicationService {
   async openRedelegateFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    const txHash = await this.dialog
-      .open(RedelegateFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(RedelegateFormDialogComponent, { data: validator })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

@@ -8,6 +8,7 @@ import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
   BidderBids200ResponseBidsInner,
+  CdpAll200ResponseCdpInnerCdpCollateral,
   Liquidation200ResponseLiquidations,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
@@ -96,6 +97,13 @@ export class NftPawnshopQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.liquidation(sdk, classID, nftID)),
       map((res) => res.data.liquidations!),
+    );
+  }
+
+  listRewards$(address: string): Observable<CdpAll200ResponseCdpInnerCdpCollateral[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.nftmarket.rewards(sdk, address)),
+      map((res) => res.data.rewards!),
     );
   }
 

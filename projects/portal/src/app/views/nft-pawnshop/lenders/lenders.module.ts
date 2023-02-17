@@ -1,3 +1,4 @@
+import { PipesModule } from '../../../pipes/pipes.module';
 import { MaterialModule } from '../../material.module';
 import { LendersComponent } from './lenders.component';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,14 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [LendersComponent],
-  imports: [CommonModule, MaterialModule, RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PipesModule,
+  ],
   exports: [LendersComponent],
 })
 export class LendersModule {}

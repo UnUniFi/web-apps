@@ -30,10 +30,10 @@ export class LenderComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
-    const bidderBids = this.address$.pipe(
+    const bidderBids$ = this.address$.pipe(
       mergeMap((address) => this.pawnshopQueryService.listBidderBids$(address)),
     );
-    this.biddingNfts$ = bidderBids.pipe(
+    this.biddingNfts$ = bidderBids$.pipe(
       mergeMap((bids) =>
         Promise.all(
           bids.map(async (bid) => {
@@ -49,7 +49,6 @@ export class LenderComponent implements OnInit {
         ),
       ),
     );
-    this.biddingNfts$.subscribe((a) => console.log(a));
 
     const nfts$ = this.biddingNfts$.pipe(
       mergeMap((nfts) => {

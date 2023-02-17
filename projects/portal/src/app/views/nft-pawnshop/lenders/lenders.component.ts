@@ -1,10 +1,12 @@
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { BidderNftsInfo } from '../../../pages/nft-pawnshop/lenders/lenders.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 
 export interface LendParams {
   classID: string;
-  deposit: { amount: number; denom: string };
+  deposit: { amount: number; symbol: string };
   interestRate: number;
   repaymentTerm: Date;
 }
@@ -16,13 +18,23 @@ export interface LendParams {
 })
 export class LendersComponent implements OnInit {
   @Input()
-  balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  currentStoredWallet?: StoredWallet | null;
+  @Input()
+  balances?: { [symbol: string]: number } | null;
+  @Input()
+  depositCoins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  lendCoins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  biddingNftsInfo?: BidderNftsInfo | null;
   @Input()
   denoms?: string[] | null;
   @Input()
   listedClasses?: ListedClass200Response[] | null;
   @Input()
   classImages?: string[] | null;
+  @Output()
+  appSubmit: EventEmitter<string>;
   @Output()
   appViewClass: EventEmitter<LendParams>;
 
@@ -33,6 +45,7 @@ export class LendersComponent implements OnInit {
   isSubmitted: boolean;
 
   constructor() {
+    this.appSubmit = new EventEmitter();
     this.appViewClass = new EventEmitter();
     this.denoms = ['axlUSDC', 'ATOM', 'GUU'];
     this.selectedDenom = this.denoms[2];
@@ -49,8 +62,12 @@ export class LendersComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    // todo output & change NFT classes
     this.isSubmitted = true;
+    this.appSubmit.emit(this.selectedDenom);
+  }
+
+  onChangeSymbol() {
+    this.isSubmitted = false;
   }
 
   onClickClass(classID?: string) {
@@ -60,7 +77,7 @@ export class LendersComponent implements OnInit {
     }
     this.appViewClass.emit({
       classID,
-      deposit: { amount: this.depositAmount, denom: this.selectedDenom },
+      deposit: { amount: this.depositAmount, symbol: this.selectedDenom },
       interestRate: this.interestRate,
       repaymentTerm: this.datePicker,
     });

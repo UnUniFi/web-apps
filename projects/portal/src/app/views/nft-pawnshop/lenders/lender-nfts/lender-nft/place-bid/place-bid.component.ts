@@ -45,7 +45,7 @@ export class PlaceBidComponent implements OnInit {
 
   bidAmount?: number | null;
   depositAmount?: number | null;
-  depositDenom?: string | null;
+  depositSymbol?: string | null;
   interestRate?: number | null;
   datePicker?: Date | null;
   date?: string;
@@ -65,7 +65,7 @@ export class PlaceBidComponent implements OnInit {
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
     const lendAmount = localStorage.getItem('lendAmount');
     this.depositAmount = lendAmount ? Number(lendAmount) : null;
-    this.depositDenom = localStorage.getItem('lendDenom');
+    this.depositSymbol = localStorage.getItem('lendSymbol');
     const lendRate = localStorage.getItem('lendRate');
     this.interestRate = lendRate ? Number(lendRate) : null;
     const lendTerm = localStorage.getItem('lendTerm');
@@ -105,7 +105,7 @@ export class PlaceBidComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.depositDenom || !this.bidAmount || !this.date || !this.time || !this.interestRate) {
+    if (!this.depositSymbol || !this.bidAmount || !this.date || !this.time || !this.interestRate) {
       alert('Some values are invalid!');
       return;
     }
@@ -113,7 +113,7 @@ export class PlaceBidComponent implements OnInit {
     this.appSimulate.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.depositDenom,
+      symbol: this.depositSymbol,
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,
@@ -127,7 +127,7 @@ export class PlaceBidComponent implements OnInit {
       return;
     }
     if (
-      !this.depositDenom ||
+      !this.depositSymbol ||
       !this.depositAmount ||
       !this.bidAmount ||
       !this.date ||
@@ -141,7 +141,7 @@ export class PlaceBidComponent implements OnInit {
     this.appSubmit.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.depositDenom,
+      symbol: this.depositSymbol,
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,

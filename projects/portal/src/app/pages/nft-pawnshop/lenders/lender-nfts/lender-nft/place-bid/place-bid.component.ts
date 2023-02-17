@@ -48,12 +48,11 @@ export class PlaceBidComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    const symbol = localStorage.getItem('lendDenom');
+    const symbol = localStorage.getItem('lendSymbol');
     this.balance$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
       map((balanceMap) => balanceMap[symbol!]),
     );
-    this.balance$.subscribe((a) => console.log(a));
 
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(

@@ -70,7 +70,7 @@ export class BankQueryService {
           balance.map(async (b) => {
             const metadata = metadataMap[b.denom!];
             if (metadata && metadata.denom_units) {
-              const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
+              const denomUnit = metadata.denom_units.find((u) => u.denom === b.denom);
 
               if (denomUnit) {
                 map[metadata.symbol!] = Long.fromString(b.amount!)

@@ -110,6 +110,8 @@ export class TxCommonService {
   }
 
   async buildTxBuilder(
+    // TODO: instanceToProtoAny should be called before this function for type safety
+    // messages: cosmosclient.proto.google.protobuf.IAny[],
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,

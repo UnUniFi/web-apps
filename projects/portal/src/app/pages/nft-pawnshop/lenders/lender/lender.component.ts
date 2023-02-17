@@ -36,27 +36,34 @@ export class LenderComponent implements OnInit {
     this.biddingNfts$ = bidderBids.pipe(
       mergeMap((bids) =>
         Promise.all(
-          bids.map(
-            async (bid) =>
-              await this.pawnshopQueryService
-                .getNftListing$(bid.nft_id?.class_id!, bid.nft_id?.nft_id!)
-                .toPromise(),
-          ),
+          bids.map(async (bid) => {
+            if (bid.nft_id && bid.nft_id.class_id && bid.nft_id.nft_id) {
+              return await this.pawnshopQueryService.getNftListing(
+                bid.nft_id?.class_id!,
+                bid.nft_id?.nft_id!,
+              );
+            } else {
+              return {};
+            }
+          }),
         ),
       ),
     );
+    this.biddingNfts$.subscribe((a) => console.log(a));
 
     const nfts$ = this.biddingNfts$.pipe(
       mergeMap((nfts) => {
         return Promise.all(
           nfts.map(async (nft) => {
-            if (!nft.nft_id?.class_id || !nft.nft_id?.nft_id) {
+            if (nft) {
+              const nftData = await this.pawnshopQueryService.getNft(
+                nft.nft_id?.class_id!,
+                nft.nft_id?.nft_id!,
+              );
+              return nftData;
+            } else {
               return {};
             }
-            const nftData = await this.pawnshopQueryService
-              .getNft$(nft.nft_id.class_id, nft.nft_id?.nft_id)
-              .toPromise();
-            return nftData;
           }),
         );
       }),

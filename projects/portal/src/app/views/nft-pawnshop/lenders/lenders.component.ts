@@ -34,8 +34,8 @@ export class LendersComponent implements OnInit {
 
   constructor() {
     this.appViewClass = new EventEmitter();
-    this.denoms = ['GUU'];
-    this.selectedDenom = this.denoms[0];
+    this.denoms = ['axlUSDC', 'ATOM', 'GUU'];
+    this.selectedDenom = this.denoms[2];
     this.depositAmount = 0;
     this.interestRate = 1.5;
     let now = new Date();

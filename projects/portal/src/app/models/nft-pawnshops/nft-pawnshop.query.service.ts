@@ -37,6 +37,12 @@ export class NftPawnshopQueryService {
     );
   }
 
+  async getNftListing(classID: string, nftID: string): Promise<ListedNfts200ResponseListingsInner> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const res = await ununifi.rest.nftmarket.nftListing(sdk, classID, nftID);
+    return res.data.listing!;
+  }
+
   listAllListedNfts$(): Observable<ListedNfts200ResponseListingsInner[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),

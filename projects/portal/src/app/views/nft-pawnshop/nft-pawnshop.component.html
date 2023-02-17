@@ -1,49 +1,75 @@
+<h2 class="mb-0">NFT-Backed Loan</h2>
 <div class="flex justify-center">
-  <div class="max-w-full">
-    <h2 class="mb-0">NFT-Backed Loan</h2>
-    <mat-card class="mb-4 mat-elevation-z8">
-      <mat-card-title>Borrow Tokens on the Security of NFT</mat-card-title>
-      <mat-card-subtitle>NFT Management</mat-card-subtitle>
-      <mat-card-content>
+  <div class="max-w-full text-base-content">
+    <div class="card lg:card-side bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title break-all">Borrow Tokens on the Security of NFT</h2>
         <p>
           You can list an NFT and borrow Tokens from a bidder. You can also sell the NFT directly to
           the bidder.
         </p>
         <p>In case of late repayment, the NFT will be automatically liquidated.</p>
-      </mat-card-content>
-      <div class="flex flex-row">
-        <button class="mr-4 px-8" mat-flat-button color="primary" routerLink="borrowers/borrower">
-          <mat-icon>add_photo_alternate</mat-icon>
-          <span>Join as a Borrower</span>
-        </button>
-        <button mat-stroked-button color="accent">
-          <span>Read more</span>
-        </button>
-        <span class="flex-auto"></span>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary" routerLink="borrowers/borrower">
+            <mat-icon>add_photo_alternate</mat-icon>
+            <span class="ml-2">Join as a Borrower</span>
+          </button>
+          <!-- The button to open modal -->
+          <label for="modal-deposit" class="btn">Read more</label>
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is deposit amount?</h3>
+              <p class="py-4">
+                For example, imagine that you set it as 10%. Then some users offer the bid to your
+                NFT with price 2ATOM. In this situation, that user have to deposit not less than
+                0.2ATOM.
+              </p>
+              <div class="modal-action">
+                <label for="modal-deposit" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </mat-card>
+    </div>
 
-    <mat-card class="mb-4 mat-elevation-z8">
-      <mat-card-title>Lend your Tokens to NFT Holder</mat-card-title>
-      <mat-card-subtitle>Token Management</mat-card-subtitle>
-      <mat-card-content>
+    <br />
+
+    <div class="card lg:card-side bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title break-all">Lend your Tokens to NFT Holder</h2>
         <p>
           You can lend your Tokens at a set interest rate and repayment term. In addition to earning
           interest rates, you may be able to buy NFTs at lower prices.
         </p>
         <p>The Interest is charged from the time the NFT seller borrows from your deposit.</p>
-      </mat-card-content>
-      <div class="flex flex-row">
-        <button class="mr-4 px-8" mat-flat-button color="primary" routerLink="lenders">
-          <mat-icon>monetization_on</mat-icon>
-          <span>Join as a Lender</span>
-        </button>
-        <button mat-stroked-button color="accent">
-          <span>Read more</span>
-        </button>
-        <span class="flex-auto"></span>
+        <div class="card-actions justify-end">
+          <button class="btn btn-secondary" routerLink="lenders">
+            <mat-icon>monetization_on</mat-icon>
+            <span class="ml-2">Join as a Lender</span>
+          </button>
+          <!-- The button to open modal -->
+          <label for="modal-deposit" class="btn">Read more</label>
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box text-base-content">
+              <h3 class="font-bold text-lg">What is deposit amount?</h3>
+              <p class="py-4">
+                For example, imagine that you set it as 10%. Then some users offer the bid to your
+                NFT with price 2ATOM. In this situation, that user have to deposit not less than
+                0.2ATOM.
+              </p>
+              <div class="modal-action">
+                <label for="modal-deposit" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </mat-card>
+    </div>
 
     <!-- To do: Update Query & show overview -->
     <!-- <mat-card class="mb-4 mat-elevation-z8">

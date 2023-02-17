@@ -31,6 +31,8 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
+  balance?: number | null;
+  @Input()
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;

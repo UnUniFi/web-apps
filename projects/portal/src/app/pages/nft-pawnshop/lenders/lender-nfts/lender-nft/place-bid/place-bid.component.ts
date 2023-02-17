@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -9,7 +10,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   BidderBids200ResponseBidsInner,
   ListedNfts200ResponseListingsInner,
@@ -24,6 +25,7 @@ export class PlaceBidComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
+  balance$: Observable<number>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
@@ -33,6 +35,7 @@ export class PlaceBidComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
+    private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopChart: NftPawnshopChartService,
@@ -41,6 +44,17 @@ export class PlaceBidComponent implements OnInit {
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
+    const address$ = this.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => wallet.address),
+    );
+    const symbol = localStorage.getItem('lendDenom');
+    this.balance$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+      map((balanceMap) => balanceMap[symbol!]),
+    );
+    this.balance$.subscribe((a) => console.log(a));
+
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),

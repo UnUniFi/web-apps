@@ -9,13 +9,13 @@
         <div class="flex flex-row">
           <div class="badge badge-lg badge-primary">{{ listingInfo?.state || 'NOT_LISTING' }}</div>
           <div
-            class="badge badge-lg badge-secondary"
+            class="badge badge-lg badge-secondary ml-2"
             *ngIf="listingInfo?.owner === currentStoredWallet?.address"
           >
             Your NFT
           </div>
         </div>
-        <h2 class="card-title">
+        <h2 class="card-title break-all">
           {{ nftMetadata?.name || classID + '/' + nftID }}
         </h2>
         <div class="overflow-x-auto">
@@ -135,7 +135,7 @@
               </label>
               <label class="label">
                 <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt">234 axlUSDC</span>
+                <span class="label-text-alt">{{ balance }}{{ depositDenom }}</span>
               </label>
             </div>
             <div class="form-control">

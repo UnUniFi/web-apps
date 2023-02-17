@@ -69,12 +69,14 @@ export class BankQueryService {
         await Promise.all(
           balance.map(async (b) => {
             const metadata = metadataMap[b.denom!];
-            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
+            if (metadata && metadata.denom_units) {
+              const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
 
-            if (denomUnit) {
-              map[metadata.symbol!] = Long.fromString(b.amount!)
-                .div(10 ** denomUnit.exponent!)
-                .toNumber();
+              if (denomUnit) {
+                map[metadata.symbol!] = Long.fromString(b.amount!)
+                  .div(10 ** denomUnit.exponent!)
+                  .toNumber();
+              }
             }
           }),
         );

@@ -307,10 +307,9 @@ export class WalletApplicationService {
     return backupResult;
   }
   async openConnectWalletCompletedDialog(connectedStoredWallet: StoredWallet): Promise<void> {
-    await this.dialog
+    await this.tmp_dialog
       .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
   }
 
   async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {

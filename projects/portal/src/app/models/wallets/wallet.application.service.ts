@@ -264,10 +264,12 @@ export class WalletApplicationService {
   async openUnunifiImportWalletWithMnemonicDialog(): Promise<
     (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
   > {
-    const privateWallet: StoredWallet & { mnemonic: string; privateKey: string } = await this.dialog
-      .open(UnunifiImportWalletWithMnemonicFormDialogComponent)
-      .afterClosed()
-      .toPromise();
+    const privateWallet: (StoredWallet & { mnemonic: string; privateKey: string }) | undefined =
+      await this.tmp_dialog
+        .open<StoredWallet & { mnemonic: string; privateKey: string }>(
+          UnunifiImportWalletWithMnemonicFormDialogComponent,
+        )
+        .closed.toPromise();
     return privateWallet;
   }
 

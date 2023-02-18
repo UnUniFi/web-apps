@@ -1,7 +1,7 @@
 import { StoredWallet, WalletType } from './../../../../../models/wallets/wallet.model';
 import { WalletService } from './../../../../../models/wallets/wallet.service';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import * as crypto from 'crypto';
 
 @Component({
@@ -15,7 +15,7 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
 
   constructor(
     private readonly walletService: WalletService,
-    private readonly dialogRef: MatDialogRef<UnunifiSelectWalletDialogComponent>,
+    private readonly dialogRef: DialogRef<StoredWallet, UnunifiSelectWalletDialogComponent>,
   ) {
     this.storedWallets$ = this.walletService
       .listStoredWallets()

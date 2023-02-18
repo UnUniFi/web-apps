@@ -235,10 +235,9 @@ export class WalletApplicationService {
   }
 
   async openUnunifiSelectWalletDialog(): Promise<StoredWallet | undefined> {
-    const selectedStoredWallet: StoredWallet | undefined = await this.dialog
-      .open(UnunifiSelectWalletDialogComponent)
-      .afterClosed()
-      .toPromise();
+    const selectedStoredWallet: StoredWallet | undefined = await this.tmp_dialog
+      .open<StoredWallet>(UnunifiSelectWalletDialogComponent)
+      .closed.toPromise();
     return selectedStoredWallet;
   }
 

@@ -1,7 +1,6 @@
 import { KeyDeleteConfirmDialogComponent } from '../key-delete-confirm-dialog/key-delete-confirm-dialog.component';
-import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { Dialog, DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -18,7 +17,7 @@ export class KeyDeleteDialogComponent implements OnInit {
       id: string;
     },
     public dialogRef: DialogRef<KeyDeleteDialogComponent>,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly snackBar: MatSnackBar,
   ) {}
 
@@ -39,8 +38,7 @@ export class KeyDeleteDialogComponent implements OnInit {
       .open(KeyDeleteConfirmDialogComponent, {
         data: { id: this.data.id },
       })
-      .afterClosed()
-      .subscribe((_) => {
+      .closed.subscribe((_) => {
         this.dialogRef.close();
       });
   }

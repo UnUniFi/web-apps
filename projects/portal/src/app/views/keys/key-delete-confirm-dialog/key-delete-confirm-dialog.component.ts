@@ -1,5 +1,5 @@
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { KeyApplicationService } from 'projects/portal/src/app/models/keys/key.application.service';
 
 @Component({
@@ -9,11 +9,11 @@ import { KeyApplicationService } from 'projects/portal/src/app/models/keys/key.a
 })
 export class KeyDeleteConfirmDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: {
       id: string;
     },
-    public matDialogRef: MatDialogRef<KeyDeleteConfirmDialogComponent>,
+    public dialogRef: DialogRef<KeyDeleteConfirmDialogComponent>,
     private readonly keyApplication: KeyApplicationService,
   ) {}
 
@@ -21,10 +21,10 @@ export class KeyDeleteConfirmDialogComponent implements OnInit {
 
   confirm(): void {
     this.keyApplication.delete(this.data.id);
-    this.matDialogRef.close();
+    this.dialogRef.close();
   }
 
   notConfirm(): void {
-    this.matDialogRef.close();
+    this.dialogRef.close();
   }
 }

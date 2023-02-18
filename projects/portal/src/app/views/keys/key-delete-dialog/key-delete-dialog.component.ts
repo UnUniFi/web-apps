@@ -1,6 +1,6 @@
 import { KeyDeleteConfirmDialogComponent } from '../key-delete-confirm-dialog/key-delete-confirm-dialog.component';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -13,11 +13,11 @@ export class KeyDeleteDialogComponent implements OnInit {
   inputId = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: {
       id: string;
     },
-    public matDialogRef: MatDialogRef<KeyDeleteDialogComponent>,
+    public dialogRef: DialogRef<KeyDeleteDialogComponent>,
     private readonly dialog: MatDialog,
     private readonly snackBar: MatSnackBar,
   ) {}
@@ -41,7 +41,7 @@ export class KeyDeleteDialogComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((_) => {
-        this.matDialogRef.close();
+        this.dialogRef.close();
       });
   }
 }

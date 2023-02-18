@@ -2,13 +2,12 @@ import { KeyBackupDialogComponent } from '../../views/keys/key-backup-dialog/key
 import { KeyBackupResult } from './key.model';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeyBackupDialogService {
-  constructor(public matDialog: Dialog, private readonly dialog: Dialog) {}
+  constructor(private readonly dialog: Dialog) {}
 
   async open(
     mnemonic: string,

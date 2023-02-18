@@ -6,7 +6,10 @@ import { UnunifiCreateWalletFormDialogComponent } from '../../views/dialogs/wall
 import { UnunifiImportWalletWithMnemonicFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-import-wallet-with-mnemonic-form-dialog/ununifi-import-wallet-with-mnemonic-form-dialog.component';
 import { UnunifiImportWalletWithPrivateKeyFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-import-wallet-with-private-key-form-dialog/ununifi-import-wallet-with-private-key-form-dialog.component';
 import { UnunifiKeyFormDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-key-form-dialog/ununifi-key-form-dialog.component';
-import { UnunifiSelectCreateImportDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
+import {
+  UnunifiSelectCreateImportDialogData,
+  UnunifiSelectCreateImportDialogComponent,
+} from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 import { KeplrService } from './keplr/keplr.service';
 import { MetaMaskService } from './metamask/metamask.service';
@@ -222,10 +225,11 @@ export class WalletApplicationService {
   }
 
   async openUnunifiSelectCreateImportDialog(): Promise<
-    'select' | 'import' | 'importWithPrivateKey' | 'create' | undefined
+    UnunifiSelectCreateImportDialogData | undefined
   > {
-    const selectedResult: 'select' | 'import' | 'importWithPrivateKey' | 'create' | undefined =
-      await this.dialog.open(UnunifiSelectCreateImportDialogComponent).afterClosed().toPromise();
+    const selectedResult: UnunifiSelectCreateImportDialogData | undefined = await this.tmp_dialog
+      .open<UnunifiSelectCreateImportDialogData>(UnunifiSelectCreateImportDialogComponent)
+      .closed.toPromise();
 
     return selectedResult;
   }

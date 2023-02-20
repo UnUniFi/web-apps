@@ -36,10 +36,9 @@ export class GovApplicationService {
   ) {}
 
   async openVoteFormDialog(proposalID: number): Promise<void> {
-    const txHash = await this.dialog
-      .open(VoteFormDialogComponent, { data: proposalID })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(VoteFormDialogComponent, { data: proposalID })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
@@ -222,7 +221,8 @@ export class GovApplicationService {
     }
 
     this.snackBar.open('Successfully vote the proposal', undefined, { duration: 6000 });
-    await this.router.navigate(['txs', txHash]);
+    // await this.router.navigate(['txs', txHash]);
+    return txHash;
   }
 
   async Deposit(

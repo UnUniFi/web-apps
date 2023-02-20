@@ -43,10 +43,9 @@ export class GovApplicationService {
   }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
-    const txHash = await this.dialog
-      .open(DepositFormDialogComponent, { data: proposalID })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(DepositFormDialogComponent, { data: proposalID })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

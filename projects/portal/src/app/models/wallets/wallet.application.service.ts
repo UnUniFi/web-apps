@@ -279,15 +279,23 @@ export class WalletApplicationService {
     | (StoredWallet & { mnemonic: string; privateKey: string; checked: boolean; saved: boolean })
     | undefined
   > {
-    const backupResult: StoredWallet & {
-      mnemonic: string;
-      privateKey: string;
-      checked: boolean;
-      saved: boolean;
-    } = await this.dialog
-      .open(UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent, { data: privateWallet })
-      .afterClosed()
-      .toPromise();
+    const backupResult:
+      | (StoredWallet & {
+          mnemonic: string;
+          privateKey: string;
+          checked: boolean;
+          saved: boolean;
+        })
+      | undefined = await this.tmp_dialog
+      .open<
+        StoredWallet & {
+          mnemonic: string;
+          privateKey: string;
+          checked: boolean;
+          saved: boolean;
+        }
+      >(UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent, { data: privateWallet })
+      .closed.toPromise();
     return backupResult;
   }
 

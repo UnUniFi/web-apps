@@ -86,7 +86,7 @@ export class DerivativesService {
       new ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance({
         position_type: positionType,
         size: position.amount,
-        leverage: Math.floor(leverage).toString(), // DERIVATIVES_TODO: remove toString
+        leverage: Math.floor(leverage),
       });
     return perpetualFuturesPositionInstance;
   }
@@ -109,7 +109,7 @@ export class DerivativesService {
       sender: senderAddress,
       margin,
       market: {
-        denom: symbolMetadataMap?.[baseSymbol].base, // DERIVATIVES_TODO: base_denom
+        base_denom: symbolMetadataMap?.[baseSymbol].base,
         quote_denom: symbolMetadataMap?.[quoteSymbol].base,
       },
       position_instance: positionInstance,

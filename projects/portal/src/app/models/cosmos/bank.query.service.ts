@@ -104,6 +104,35 @@ export class BankQueryService {
         name: 'UnUniFi',
         symbol: 'GUU',
       },
+      {
+        description: 'The first cryptocurrency invented in 2008',
+        denom_units: [
+          {
+            denom: 'ubtc',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'ubtc',
+        display: 'BTC',
+        name: 'Bitcoin',
+        symbol: 'BTC',
+      },
+
+      {
+        description: 'The currency of the U.S.A.',
+        denom_units: [
+          {
+            denom: 'uusd',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'uusd',
+        display: 'USD',
+        name: 'US Dollar',
+        symbol: 'USD',
+      },
     ];
 
     return {

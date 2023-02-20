@@ -17,7 +17,6 @@ import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
@@ -29,8 +28,7 @@ export class WalletApplicationService {
     private readonly walletService: WalletService,
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
-    private readonly dialog: MatDialog,
-    private readonly tmp_dialog: Dialog,
+    private readonly dialog: Dialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
   ) {}
@@ -218,7 +216,7 @@ export class WalletApplicationService {
   }
 
   async openConnectWalletStartDialog(): Promise<WalletType | undefined> {
-    const selectedWalletType: WalletType | undefined = await this.tmp_dialog
+    const selectedWalletType: WalletType | undefined = await this.dialog
       .open<WalletType>(ConnectWalletStartDialogComponent)
       .closed.toPromise();
     return selectedWalletType;
@@ -227,7 +225,7 @@ export class WalletApplicationService {
   async openUnunifiSelectCreateImportDialog(): Promise<
     UnunifiSelectCreateImportDialogData | undefined
   > {
-    const selectedResult: UnunifiSelectCreateImportDialogData | undefined = await this.tmp_dialog
+    const selectedResult: UnunifiSelectCreateImportDialogData | undefined = await this.dialog
       .open<UnunifiSelectCreateImportDialogData>(UnunifiSelectCreateImportDialogComponent)
       .closed.toPromise();
 
@@ -235,7 +233,7 @@ export class WalletApplicationService {
   }
 
   async openUnunifiSelectWalletDialog(): Promise<StoredWallet | undefined> {
-    const selectedStoredWallet: StoredWallet | undefined = await this.tmp_dialog
+    const selectedStoredWallet: StoredWallet | undefined = await this.dialog
       .open<StoredWallet>(UnunifiSelectWalletDialogComponent)
       .closed.toPromise();
     return selectedStoredWallet;
@@ -245,7 +243,7 @@ export class WalletApplicationService {
     (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
   > {
     const privateWallet: (StoredWallet & { mnemonic: string; privateKey: string }) | undefined =
-      await this.tmp_dialog
+      await this.dialog
         .open<StoredWallet & { mnemonic: string; privateKey: string }>(
           UnunifiCreateWalletFormDialogComponent,
         )
@@ -257,7 +255,7 @@ export class WalletApplicationService {
     (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
   > {
     const privateWallet: (StoredWallet & { mnemonic: string; privateKey: string }) | undefined =
-      await this.tmp_dialog
+      await this.dialog
         .open<StoredWallet & { mnemonic: string; privateKey: string }>(
           UnunifiImportWalletWithPrivateKeyFormDialogComponent,
         )
@@ -269,7 +267,7 @@ export class WalletApplicationService {
     (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
   > {
     const privateWallet: (StoredWallet & { mnemonic: string; privateKey: string }) | undefined =
-      await this.tmp_dialog
+      await this.dialog
         .open<StoredWallet & { mnemonic: string; privateKey: string }>(
           UnunifiImportWalletWithMnemonicFormDialogComponent,
         )
@@ -290,7 +288,7 @@ export class WalletApplicationService {
           checked: boolean;
           saved: boolean;
         })
-      | undefined = await this.tmp_dialog
+      | undefined = await this.dialog
       .open<
         StoredWallet & {
           mnemonic: string;
@@ -316,7 +314,7 @@ export class WalletApplicationService {
           checked: boolean;
           saved: boolean;
         })
-      | undefined = await this.tmp_dialog
+      | undefined = await this.dialog
       .open<
         StoredWallet & {
           mnemonic: string;
@@ -329,13 +327,13 @@ export class WalletApplicationService {
     return backupResult;
   }
   async openConnectWalletCompletedDialog(connectedStoredWallet: StoredWallet): Promise<void> {
-    await this.tmp_dialog
+    await this.dialog
       .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
       .closed.toPromise();
   }
 
   async openUnunifiKeyFormDialog(): Promise<(StoredWallet & { privateKey: string }) | undefined> {
-    const privateKey = await this.tmp_dialog
+    const privateKey = await this.dialog
       .open<StoredWallet & { privateKey: string }>(UnunifiKeyFormDialogComponent)
       .closed.toPromise();
     return privateKey;

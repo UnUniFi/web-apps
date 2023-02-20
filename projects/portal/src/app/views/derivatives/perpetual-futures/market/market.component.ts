@@ -35,7 +35,10 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   quoteSymbol?: string | null;
 
   @Input()
-  params?: ununificlient.proto.ununifi.derivatives.IPerpetualFuturesParams | null;
+  params?: ununificlient.proto.ununifi.derivatives.IParams | null;
+
+  @Input()
+  pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IBreakdown | null;
 
   @Input()
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
@@ -109,7 +112,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
 
     const market = getMarket(this.baseSymbol, this.quoteSymbol);
     if (this.tradingViewConfig[market]) {
-      TradingView.widget(this.tradingViewConfig[market]);
+      new TradingView.widget(this.tradingViewConfig[market]);
     }
   }
 

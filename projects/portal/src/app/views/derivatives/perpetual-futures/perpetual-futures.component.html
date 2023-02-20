@@ -1,19 +1,37 @@
 <div class="w-full h-screen">
   <h2>Perpetual Futures</h2>
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Select market</span>
-    </label>
-    <select #marketRef class="select select-bordered w-full max-w-xs" (valueChange)="onChangeMarket(marketRef.value)">
-      <ng-container *ngFor="let m of markets">
-        <option [value]="m">{{ m }}</option>
+  <div class="form-control mb-4">
+    <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="!markets || markets.length === 0; then empty; else filled">
       </ng-container>
-    </select>
+    </ng-template>
+    <ng-template #empty>
+      <p>No market is available</p>
+    </ng-template>
+    <ng-template #filled>
+      <label class="label">
+        <span class="label-text text-base-100">Select market</span>
+      </label>
+      <select
+        #marketRef
+        class="select select-bordered w-full max-w-xs"
+        (change)="onChangeMarket(marketRef.value)"
+      >
+        <option disabled="disabled" [value]="undefined">Please Select</option>
+        <ng-container *ngFor="let m of markets">
+          <option [value]="m">{{ m }}</option>
+        </ng-container>
+      </select>
+    </ng-template>
   </div>
-  <ng-content></ng-content>
+  <ng-content class="mb-4"></ng-content>
 </div>
 
-<mat-card class="mb-4">
+<!-- <mat-card class="mb-4">
   <mat-list>
     <mat-list-item>
       <span class="whitespace-nowrap">Entry Price:</span>
@@ -39,4 +57,4 @@
       <span class="ml-2 break-all text-sm sm:text-base">$23403456</span>
     </mat-list-item>
   </mat-list>
-</mat-card>
+</mat-card> -->

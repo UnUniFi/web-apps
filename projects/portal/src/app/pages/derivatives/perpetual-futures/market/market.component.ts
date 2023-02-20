@@ -6,7 +6,7 @@ import { DerivativesQueryService } from 'projects/portal/src/app/models/derivati
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { OpenPositionEvent } from 'projects/portal/src/app/views/derivatives/perpetual-futures/market/market.component';
-import { zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -23,9 +23,7 @@ export class MarketComponent implements OnInit {
     map((wallet) => wallet.address),
   );
 
-  params$ = this.derivativesQuery
-    .getDerivativesParams$()
-    .pipe(map((params) => params.perpetual_futures));
+  params$ = this.derivativesQuery.getDerivativesParams$();
 
   symbolBalancesMap$ = this.address$.pipe(
     mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
@@ -39,6 +37,26 @@ export class MarketComponent implements OnInit {
         symbolMetadataMap[quoteSymbol].base!,
       ),
     ),
+  );
+
+  isLong$ = new BehaviorSubject(true);
+
+  pools$ = this.derivativesQuery.getPool$();
+
+  pool$ = combineLatest([
+    this.pools$,
+    this.baseSymbol$,
+    this.quoteSymbol$,
+    this.symbolMetadataMap$,
+    this.isLong$,
+  ]).pipe(
+    map(([pools, baseSymbol, quoteSymbol, symbolMetadataMap, isLong]) => {
+      let selectDenom = symbolMetadataMap[baseSymbol].base!;
+      if (isLong) {
+        selectDenom = symbolMetadataMap[quoteSymbol].base!;
+      }
+      return pools.pool_market_cap?.breakdown?.find((pool) => pool.denom == selectDenom);
+    }),
   );
 
   constructor(

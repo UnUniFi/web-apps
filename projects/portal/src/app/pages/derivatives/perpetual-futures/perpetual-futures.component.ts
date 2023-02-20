@@ -3,7 +3,6 @@ import { DerivativesQueryService } from '../../../models/derivatives/derivatives
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { params } from 'ununifi-client/cjs/rest/auction/module';
 
 @Component({
   selector: 'app-perpetual-futures',
@@ -27,6 +26,9 @@ export class PerpetualFuturesComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeMarket(market: string) {
-    this.router.navigate(['/derivatives/perpetual-futures', market]);
+    const slashIndex = market.indexOf('/');
+    const base = market.slice(0, slashIndex);
+    const quote = market.slice(slashIndex + 1);
+    this.router.navigate(['/derivatives/perpetual-futures', base, quote]);
   }
 }

@@ -1,5 +1,5 @@
 <div class="card bg-base-100 shadow-xl w-full">
-  <div class="card-body">
+  <div class="card-body text-base-100">
     <div class="flex flex-row">
       <div class="badge badge-lg mr-1">Perpetual Futures</div>
 
@@ -11,18 +11,22 @@
       </ng-container>
     </div>
     <h2 class="card-title">
-      <span [ngClass]="{
+      <span
+        [ngClass]="{
           'text-primary': positionInstance?.position_type === positionType.LONG,
           'text-secondary': positionInstance?.position_type === positionType.SHORT
-        }">{{
-        positionInstance?.size
-        }} {{
+        }"
+        >{{ positionInstance?.size }}
+        {{
         symbolMetadataMap?.[position?.market?.denom ||
         '']?.symbol
+
+
         }}/{{
         symbolMetadataMap?.[position?.market?.quote_denom ||
         '']?.symbol
-        }}</span>
+        }}</span
+      >
     </h2>
 
     <div class="flex flex-row items-center">
@@ -40,9 +44,7 @@
 
     <div class="collapse collapse-arrow">
       <input type="checkbox" />
-      <div class="collapse-title text-xl font-medium">
-        Details
-      </div>
+      <div class="collapse-title text-xl font-medium">Details</div>
       <div class="collapse-content">
         <div class="overflow-x-auto">
           <table class="table w-full">
@@ -67,7 +69,6 @@
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </div>

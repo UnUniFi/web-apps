@@ -2,19 +2,58 @@
   <div class="h-full min-h-96 flex-auto flex justify-center items-center">
     <!-- TradingView Widget BEGIN -->
     <div class="tradingview-widget-container w-full h-full">
-      <div id="tradingview_5b3c4" class="w-full h-full"></div>
+      <div id="tradingview_5b3c4" class="w-full h-48 md:h-96"></div>
       <div class="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE" rel="noopener" target="_blank"></a>
+        <a
+          href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE"
+          rel="noopener"
+          target="_blank"
+        ></a>
         by TradingView
       </div>
     </div>
   </div>
 </div>
-<div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+
+<div class="stats shadow-xl mb-4 w-full">
+  <div class="stat">
+    <div class="stat-title">Entry Price</div>
+    <div class="stat-value">${{ info?.price | number }}</div>
+    <div class="stat-desc"></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title">Exit Price</div>
+    <div class="stat-value">${{ info?.price | number }}</div>
+    <div class="stat-desc"></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title">Borrow Fee</div>
+    <div class="stat-value text-primary">
+      {{ params?.pool?.borrowing_fee_rate_per_hour | percentage }}
+    </div>
+    <div class="stat-desc"></div>
+  </div>
+  <!-- To Do GET all positions and calc available liquidity -->
+  <!-- <div class="stat">
+    <div class="stat-title">Available Liquidity</div>
+    <div class="stat-value text-secondary"></div>
+    <div class="stat-desc">Max capacity: {{ pool | coin }}</div>
+  </div> -->
+</div>
+
+<div class="card bg-base-100 shadow-xl mb-4 w-full lg:w-auto">
   <div class="card-body">
-    <form (submit)="
-    onSubmit(sizeRef.valueAsNumber, leverage, marginAmountRef.valueAsNumber, selectedPositionType)
-  ">
+    <form
+      #formRef="ngForm"
+      (submit)="
+        onSubmit(
+          sizeRef.valueAsNumber,
+          leverage,
+          marginAmountRef.valueAsNumber,
+          selectedPositionType
+        )
+      "
+    >
       <div class="form-control">
         <span class="label">
           <span class="label-text">Long or Short</span>
@@ -28,9 +67,7 @@
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">What is Long and Short?</h3>
-              <p class="py-4">
-                Description here
-              </p>
+              <p class="py-4">Description here</p>
               <div class="modal-action">
                 <label for="modal-position-type" class="btn">Understood</label>
               </div>
@@ -39,12 +76,18 @@
         </span>
 
         <div class="btn-group">
-          <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.LONG"
-            (click)="selectedPositionType = positionType.LONG">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="selectedPositionType === positionType.LONG"
+            (click)="selectedPositionType = positionType.LONG"
+          >
             <mat-icon>trending_up</mat-icon>Long
           </label>
-          <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.SHORT"
-            (click)="selectedPositionType = positionType.SHORT">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="selectedPositionType === positionType.SHORT"
+            (click)="selectedPositionType = positionType.SHORT"
+          >
             <mat-icon>trending_down</mat-icon>Short
           </label>
         </div>
@@ -63,9 +106,7 @@
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">What is position size?</h3>
-              <p class="py-4">
-                Description here
-              </p>
+              <p class="py-4">Description here</p>
               <div class="modal-action">
                 <label for="modal-position-size" class="btn">Understood</label>
               </div>
@@ -74,8 +115,17 @@
         </span>
 
         <label class="input-group">
-          <input #sizeRef required ngModel name="position-size" type="number" placeholder="10"
-            class="input input-bordered w-full" [min]="0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+          <input
+            #sizeRef
+            required
+            ngModel
+            name="position-size"
+            type="number"
+            placeholder="10"
+            class="input input-bordered w-full"
+            [min]="0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+          />
           <span>{{ baseSymbol }}</span>
         </label>
       </div>
@@ -94,9 +144,7 @@
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">What is leverage?</h3>
-              <p class="py-4">
-                Description here
-              </p>
+              <p class="py-4">Description here</p>
               <div class="modal-action">
                 <label for="modal-leverage" class="btn">Understood</label>
               </div>
@@ -104,13 +152,31 @@
           </div>
         </span>
         <label class="input-group">
-          <input type="number" placeholder="20" class="input input-bordered w-full" [min]="1" [max]="60" [step]="1"
-            [(ngModel)]="leverage" name="leverage" />
+          <input
+            type="number"
+            placeholder="20"
+            class="input input-bordered w-full"
+            [min]="1"
+            [max]="60"
+            [step]="1"
+            [(ngModel)]="leverage"
+            name="leverage"
+          />
           <span>x</span>
         </label>
-        <input type="range" min="1" max="60" class="range mt-1"
-          [ngClass]="{ 'range-info': leverage < 20, 'range-warning': 20 <= leverage && leverage < 40, 'range-error': 40 <= leverage }"
-          [(ngModel)]="leverage" name="leverage-slider" />
+        <input
+          type="range"
+          min="1"
+          max="60"
+          class="range mt-1"
+          [ngClass]="{
+            'range-info': leverage < 20,
+            'range-warning': 20 <= leverage && leverage < 40,
+            'range-error': 40 <= leverage
+          }"
+          [(ngModel)]="leverage"
+          name="leverage-slider"
+        />
       </div>
 
       <div class="form-control">
@@ -127,9 +193,7 @@
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">What is margin?</h3>
-              <p class="py-4">
-                Description here
-              </p>
+              <p class="py-4">Description here</p>
               <div class="modal-action">
                 <label for="modal-margin" class="btn">Understood</label>
               </div>
@@ -138,21 +202,31 @@
         </span>
 
         <label class="input-group">
-          <input #marginAmountRef required type="number" placeholder="10" class="input input-bordered w-full"
-            [min]="minMargin" [max]="maxMargin" pattern="^[0-9]*\.?[0-9]{0,6}$" [(ngModel)]="marginAmount"
-            name="margin" />
+          <input
+            #marginAmountRef
+            required
+            type="number"
+            placeholder="10"
+            class="input input-bordered w-full"
+            [min]="minMargin"
+            [max]="maxMargin"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            [(ngModel)]="marginAmount"
+            name="margin"
+          />
           <span>{{ marginSymbol }}</span>
         </label>
 
         <label class="label">
           <span class="label-text-alt">Available balance:</span>
-          <span class="label-text-alt">{{ symbolBalancesMap?.[marginSymbol || ''] || 0 }} {{marginSymbol}}</span>
+          <span class="label-text-alt"
+            >{{ symbolBalancesMap?.[marginSymbol || ''] || 0 }} {{ marginSymbol }}</span
+          >
         </label>
       </div>
 
       <br />
-      <button class="btn btn-primary w-full">Open position</button>
+      <button class="btn btn-primary w-full" [disabled]="formRef.invalid">Open position</button>
     </form>
-
   </div>
 </div>

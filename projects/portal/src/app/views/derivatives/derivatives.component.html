@@ -1,6 +1,6 @@
 <h2 class="mb-0">Derivatives Dashboard</h2>
 <h3 class="mb-0 ml-4">Stats</h3>
-<mat-card class="mb-4">
+<mat-card class="mb-4 mat-elevation-z8">
   <mat-card-title>Pool Overview</mat-card-title>
   <mat-list>
     <mat-list-item>
@@ -36,41 +36,41 @@
 </mat-card>
 
 <h3 class="mb-0 ml-4">Markets</h3>
-<mat-card class="mb-4">
-  <mat-form-field appearance="fill" class="w-full">
-    <mat-label>Market</mat-label>
-    <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
-      <mat-option *ngFor="let conf of configs" [value]="conf">
-        {{ conf.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-card class="mb-4 mat-elevation-z8">
-    <mat-card-title>{{ selectedConfig.name }}</mat-card-title>
-    <mat-card-content>{{ selectedConfig.description }}</mat-card-content>
-    <div class="flex flex-row">
-      <button
-        class="w-1/3 mb-4"
-        mat-flat-button
-        color="primary"
-        routerLink="{{ selectedConfig.route }}"
-        *ngIf="selectedConfig.name === 'Perpetual Futures'"
-      >
-        <mat-icon>show_chart</mat-icon>
-        <span>Trade</span>
-      </button>
-      <span class="flex-auto"></span>
-      <button class="w-1/4 mb-4" mat-flat-button color="accent">
-        <span>Read more</span>
-      </button>
-    </div>
-  </mat-card>
+<mat-form-field appearance="fill" class="w-full">
+  <mat-label>Market</mat-label>
+  <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
+    <mat-option *ngFor="let conf of configs" [value]="conf">
+      {{ conf.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-card class="mb-4 mat-elevation-z8">
+  <mat-card-title>{{ selectedConfig.name }}</mat-card-title>
+  <mat-card-content>{{ selectedConfig.description }}</mat-card-content>
+  <div class="flex flex-row">
+    <button
+      class="mr-2 px-8"
+      mat-flat-button
+      color="primary"
+      routerLink="{{ selectedConfig.route }}"
+      *ngIf="selectedConfig.name === 'Perpetual Futures'"
+    >
+      <mat-icon>show_chart</mat-icon>
+      <span>Trade</span>
+    </button>
+    <button class="px-8" mat-flat-button color="accent">
+      <span>Read more</span>
+    </button>
+  </div>
 </mat-card>
 
 <h3 class="mb-0 ml-4">Tokens</h3>
 <!-- To Do Delete: Dummy Card -->
 <div class="flex flex-wrap">
-  <mat-card class="text-center hover:shadow-xl w-64 m-5" *ngFor="let tokenInfo of tokenInfos">
+  <mat-card
+    class="mat-elevation-z8 text-center hover:shadow-xl w-64 m-5"
+    *ngFor="let tokenInfo of tokenInfos"
+  >
     <mat-card-header>
       <img mat-card-avatar src="{{ tokenInfo.iconUrl }}" />
       <mat-card-title>{{ tokenInfo.name }}</mat-card-title>

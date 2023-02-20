@@ -34,11 +34,8 @@ export class DerivativesComponent implements OnInit {
 
   constructor(private derivativesQuery: DerivativesQueryService) {
     this.derivativesParams$ = this.derivativesQuery.getDerivativesParams$();
-    this.derivativesParams$.subscribe((a) => console.log(a));
     this.pool$ = this.derivativesQuery.getPool$();
-    this.pool$.subscribe((a) => console.log(a));
     this.perpetualFuturesParams$ = this.derivativesQuery.getWholePerpetualFutures$();
-    this.perpetualFuturesParams$.subscribe((a) => console.log(a));
     this.tokens$ = this.derivativesParams$.pipe(
       map((params) => params.perpetual_futures?.markets!),
       mergeMap((markets) =>

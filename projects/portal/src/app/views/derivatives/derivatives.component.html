@@ -6,31 +6,35 @@
     <mat-list-item>
       <span class="break-all truncate pr-4">Pool Value:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.pool_market_cap?.total }}</span>
+      <span class="break-all truncate">$ {{ pool?.pool_market_cap?.total | number }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">24h Volume:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.volume_24hours }}</span>
+      <span class="break-all truncate">$ {{ pool?.volume_24hours | number }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">24h Fees:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.fees_24hours }}</span>
+      <span class="break-all truncate">$ {{ pool?.fees_24hours | number }}</span>
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Long Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ perpetualFuturesParams?.long_positions }}</span>
+      <span class="break-all truncate"
+        >$ {{ perpetualFuturesParams?.long_positions | number }}</span
+      >
       <mat-divider></mat-divider>
     </mat-list-item>
     <mat-list-item>
       <span class="break-all truncate pr-4">Short Position:</span>
       <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ perpetualFuturesParams?.short_positions }}</span>
+      <span class="break-all truncate"
+        >$ {{ perpetualFuturesParams?.short_positions | number }}</span
+      >
     </mat-list-item>
   </mat-list>
 </mat-card>

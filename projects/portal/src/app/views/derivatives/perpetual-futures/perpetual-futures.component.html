@@ -21,7 +21,7 @@
         class="select select-bordered w-full max-w-xs"
         (change)="onChangeMarket(marketRef.value)"
       >
-        <option disabled="disabled" [value]="undefined">Please Select</option>
+        <option disabled [value]="undefined" selected>Please Select</option>
         <ng-container *ngFor="let m of markets">
           <option [value]="m">{{ m }}</option>
         </ng-container>

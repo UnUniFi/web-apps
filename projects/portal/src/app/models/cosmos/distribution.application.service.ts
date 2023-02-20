@@ -43,10 +43,9 @@ export class DistributionApplicationService {
   }
 
   async openWithdrawAllDelegatorRewardFormDialog(): Promise<void> {
-    const txHash = await this.dialog
-      .open(WithdrawAllDelegatorRewardFormDialogComponent)
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(WithdrawAllDelegatorRewardFormDialogComponent)
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

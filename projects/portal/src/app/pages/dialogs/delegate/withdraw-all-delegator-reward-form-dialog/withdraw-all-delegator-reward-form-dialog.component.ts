@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200ResponseDelegationResponsesInner,
@@ -30,9 +30,9 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
   delegations$: Observable<DelegatorDelegations200ResponseDelegationResponsesInner[] | undefined>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
-    public matDialogRef: MatDialogRef<WithdrawAllDelegatorRewardFormDialogComponent>,
+    public dialogRef: DialogRef<string, WithdrawAllDelegatorRewardFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private cosmosRest: CosmosRestService,
@@ -69,6 +69,6 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

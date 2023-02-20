@@ -334,11 +334,10 @@ export class WalletApplicationService {
       .closed.toPromise();
   }
 
-  async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {
-    const privateKey = await this.dialog
-      .open(UnunifiKeyFormDialogComponent)
-      .afterClosed()
-      .toPromise();
+  async openUnunifiKeyFormDialog(): Promise<(StoredWallet & { privateKey: string }) | undefined> {
+    const privateKey = await this.tmp_dialog
+      .open<StoredWallet & { privateKey: string }>(UnunifiKeyFormDialogComponent)
+      .closed.toPromise();
     return privateKey;
   }
 }

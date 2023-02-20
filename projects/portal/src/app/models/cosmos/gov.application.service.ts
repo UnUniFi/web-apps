@@ -51,7 +51,7 @@ export class GovApplicationService {
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
-    const privateWallet: StoredWallet & { privateKey: string } =
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
       this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');

@@ -36,7 +36,7 @@ export class PoolComponent implements OnInit, OnChanges {
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
 
   @Input()
-  symbolBalanceMap?: { [symbol: string]: number } | null;
+  symbolBalancesMap?: { [symbol: string]: number } | null;
 
   @Output()
   mintLPT = new EventEmitter<MintLPTEvent>();
@@ -60,7 +60,7 @@ export class PoolComponent implements OnInit, OnChanges {
         ) || [];
     }
     if (changes.symbolBalancesMap) {
-      this.dlpBalance = this.symbolBalanceMap?.['DLP'] || 0;
+      this.dlpBalance = this.symbolBalancesMap?.['DLP'] || 0;
     }
   }
 

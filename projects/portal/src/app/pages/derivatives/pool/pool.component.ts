@@ -1,10 +1,11 @@
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
-import { map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pool',
@@ -16,8 +17,12 @@ export class PoolComponent implements OnInit {
   params$ = this.derivativesQuery.getDerivativesParams$().pipe(map((params) => params?.pool));
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   // TODO: route guard for wallet may be needed
-  symbolBalanceMap$ = this.walletService.currentCosmosWallet$.pipe(
-    mergeMap((wallet) => this.bankQuery.getSymbolBalanceMap$(wallet?.address.toString() || '')),
+  address$ = this.walletService.currentStoredWallet$.pipe(
+    filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+    map((wallet) => wallet.address),
+  );
+  symbolBalancesMap$ = this.address$.pipe(
+    mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
   );
 
   constructor(

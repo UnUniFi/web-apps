@@ -65,7 +65,7 @@ export class DerivativesService {
       new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
         sender: senderAddress,
         amount: coin.amount,
-        // redeem_denom: redeemDenom,
+        redeem_denom: redeemDenom,
       });
     return msgMintLiquidityProviderToken;
   }

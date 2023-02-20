@@ -1,101 +1,151 @@
-<div class="flex flex-row flex-wrap m-4">
-  <div class="mb-4 md:mb-0">
-    <div class="stats md:stats-vertical shadow">
-      <div class="stat">
-        <div class="stat-figure text-primary">
+<div class="w-full h-screen">
+  <h2>Perpetual Futures</h2>
+  <div class="flex flex-row flex-wrap m-4">
+    <div class="mb-4 md:mb-0">
+      <h3>Pool Status</h3>
+      <div class="stats stats-vertical md:stats-horizontal shadow">
+        <div class="stat">
+          <div class="stat-figure text-primary"></div>
+          <div class="stat-title">Pool Market Cap</div>
+          <div class="stat-value text-primary">{{ pool?.pool_market_cap?.total | number }}</div>
+          <div class="stat-desc">USD</div>
         </div>
-        <div class="stat-title">Pool Market Cap</div>
-        <div class="stat-value text-primary">{{ pool?.pool_market_cap?.total }}</div>
-        <div class="stat-desc">USD</div>
-      </div>
 
-      <div class="stat">
-        <div class="stat-figure text-secondary">
+        <div class="stat">
+          <div class="stat-figure text-secondary"></div>
+          <div class="stat-title">24h Volume</div>
+          <div class="stat-value text-secondary">{{ pool?.volume_24hours | number }}</div>
+          <div class="stat-desc">USD</div>
         </div>
-        <div class="stat-title">24h Volume</div>
-        <div class="stat-value text-secondary">{{ pool?.volume_24hours }}</div>
-        <div class="stat-desc">USD</div>
-      </div>
 
-      <div class="stat">
-        <div class="stat-figure text-secondary">
+        <div class="stat">
+          <div class="stat-figure text-secondary"></div>
+          <div class="stat-title">24h Fees</div>
+          <div class="stat-value text-secondary">{{ pool?.fees_24hours | number }}</div>
+          <div class="stat-desc">USD</div>
         </div>
-        <div class="stat-title">24h Fees</div>
-        <div class="stat-value text-secondary">{{ pool?.fees_24hours }}</div>
-        <div class="stat-desc">USD</div>
       </div>
     </div>
-  </div>
 
-  <span class="flex-auto"></span>
-  <div class="w-full md:w-auto">
-    <h3>Liquidity Provider Token</h3>
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="tabs tabs-boxed">
-        <a class="tab tab-lg" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">Mint</a>
-        <a class="tab tab-lg" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">Burn</a>
-      </div>
-      <div class="card-body">
-        <ng-container *ngIf="tab === 'mint'">
-          <form (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Enter amount to deposit</span>
-              </label>
-              <label class="input-group">
-                <input #depositAmountRef required ngModel name="mint-amount" type="number" placeholder="0.123456"
-                  class="input input-bordered w-full" [min]="0" [max]="symbolBalanceMap?.[depositSymbolRef.value] || 0"
-                  pattern="^[0-9]*\.?[0-9]{0,6}$" />
-                <select #depositSymbolRef required ngModel name="mint-symbol" class="select select-bordered">
+    <span class="flex-auto"></span>
+    <div class="w-full lg:w-1/2">
+      <h3>Liquidity Provider Token</h3>
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="tabs tabs-boxed">
+          <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
+            >Mint</a
+          >
+          <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
+            >Burn</a
+          >
+        </div>
+        <div class="card-body">
+          <ng-container *ngIf="tab === 'mint'">
+            <form
+              #mintRef="ngForm"
+              (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
+            >
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Enter amount to deposit</span>
+                </label>
+                <label class="input-group">
+                  <input
+                    #depositAmountRef
+                    required
+                    ngModel
+                    name="mint-amount"
+                    type="number"
+                    placeholder="0.123456"
+                    class="input input-bordered w-full"
+                    [min]="0"
+                    [max]="symbolBalancesMap?.[depositSymbolRef.value] || 0"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
+                  <select
+                    #depositSymbolRef
+                    required
+                    ngModel
+                    name="mint-symbol"
+                    class="select select-bordered"
+                  >
+                    <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+                      <option [value]="symbol">{{ symbol }}</option>
+                    </ng-container>
+                  </select>
+                </label>
+                <label class="label">
+                  <span class="label-text-alt">Available balance:</span>
+                  <span class="label-text-alt"
+                    >{{ symbolBalancesMap?.[depositSymbolRef.value] || 0 }}
+                    {{ depositSymbolRef.value }}
+                  </span>
+                </label>
+              </div>
+
+              <br />
+              <button [disabled]="mintRef.invalid" class="btn btn-primary w-full">
+                Deposit to mint
+              </button>
+            </form>
+          </ng-container>
+
+          <ng-container *ngIf="tab === 'burn'">
+            <form
+              #burnRef="ngForm"
+              (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
+            >
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Enter amount to burn</span>
+                </label>
+                <label class="input-group">
+                  <input
+                    #burnAmountRef
+                    required
+                    ngModel
+                    name="burn-amount"
+                    type="number"
+                    placeholder="0.12"
+                    class="input input-bordered w-full"
+                    [min]="0"
+                    [max]="dlpBalance"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
+                  <span>DLP</span>
+                </label>
+                <label class="label">
+                  <span class="label-text-alt">Available balance:</span>
+                  <span class="label-text-alt">
+                    {{ symbolBalancesMap?.['DLP'] || 0 }}
+                    DLP
+                  </span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Select symbol to redeem</span>
+                </label>
+                <select
+                  #redeemSymbolRef
+                  required
+                  ngModel
+                  name="redeem-symbol"
+                  class="select select-bordered w-full"
+                >
                   <ng-container *ngFor="let symbol of poolAcceptedSymbols">
                     <option [value]="symbol">{{ symbol }}</option>
                   </ng-container>
                 </select>
-              </label>
-              <label class="label">
-                <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt">{{ symbolBalanceMap?.[depositSymbolRef.value] || 0 }} {{
-                  depositSymbolRef.value
-                  }}</span>
-              </label>
-            </div>
+              </div>
 
-            <br />
-            <button class="btn btn-primary w-full">Deposit to mint</button>
-          </form>
-        </ng-container>
-        <ng-container *ngIf="tab === 'burn'">
-          <form (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Enter amount to burn</span>
-              </label>
-              <label class="input-group">
-                <input #burnAmountRef required ngModel name="burn-amount" type="number" placeholder="0.123456"
-                  class="input input-bordered w-full" [min]="0" [max]="dlpBalance" pattern="^[0-9]*\.?[0-9]{0,6}$" />
-                <span>DLP</span>
-              </label>
-              <label class="label">
-                <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt">23.4 DLP</span>
-              </label>
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Select symbol to redeem</span>
-              </label>
-              <select #redeemSymbolRef required ngModel name="redeem-symbol" class="select select-bordered w-full">
-                <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-                  <option [value]="symbol">{{ symbol }}</option>
-                </ng-container>
-              </select>
-            </div>
-
-            <br />
-            <button class="btn btn-primary w-full">Burn to Redeem</button>
-          </form>
-        </ng-container>
-
+              <br />
+              <button class="btn btn-primary w-full" [disabled]="burnRef.invalid">
+                Burn to Redeem
+              </button>
+            </form>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>

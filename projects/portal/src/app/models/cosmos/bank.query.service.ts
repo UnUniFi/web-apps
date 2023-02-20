@@ -118,7 +118,6 @@ export class BankQueryService {
         name: 'Bitcoin',
         symbol: 'BTC',
       },
-
       {
         description: 'The currency of the U.S.A.',
         denom_units: [
@@ -132,6 +131,20 @@ export class BankQueryService {
         display: 'USD',
         name: 'US Dollar',
         symbol: 'USD',
+      },
+      {
+        description: 'Decentralized Liquidity Provider Token',
+        denom_units: [
+          {
+            denom: 'udlp',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'udlp',
+        display: 'DLP',
+        name: 'Liquidity Provider',
+        symbol: 'DLP',
       },
     ];
 

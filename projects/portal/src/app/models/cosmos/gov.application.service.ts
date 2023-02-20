@@ -12,7 +12,6 @@ import { GovService } from './gov.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -27,8 +26,7 @@ export class GovApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
-    private readonly tmp_dialog: Dialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
@@ -36,14 +34,14 @@ export class GovApplicationService {
   ) {}
 
   async openVoteFormDialog(proposalID: number): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(VoteFormDialogComponent, { data: proposalID })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(DepositFormDialogComponent, { data: proposalID })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
@@ -94,7 +92,7 @@ export class GovApplicationService {
     }
 
     // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.tmp_dialog
+    const txFeeConfirmedResult = await this.dialog
       .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
@@ -184,7 +182,7 @@ export class GovApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
@@ -270,7 +268,7 @@ export class GovApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,

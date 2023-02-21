@@ -17,7 +17,6 @@ import { StakingService } from './staking.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -45,8 +44,7 @@ export class StakingApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
-    private readonly tmp_dialog: Dialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: StakingService,
     private readonly walletService: WalletService,
@@ -56,13 +54,13 @@ export class StakingApplicationService {
   async openDelegateMenuDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    await this.tmp_dialog.open(DelegateMenuDialogComponent, { data: validator }).closed.toPromise();
+    await this.dialog.open(DelegateMenuDialogComponent, { data: validator }).closed.toPromise();
   }
 
   async openDelegateFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(DelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
@@ -71,7 +69,7 @@ export class StakingApplicationService {
   async openRedelegateFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(RedelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
@@ -80,7 +78,7 @@ export class StakingApplicationService {
   async openUndelegateFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(UndelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
@@ -228,7 +226,7 @@ export class StakingApplicationService {
     }
 
     // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.tmp_dialog
+    const txFeeConfirmedResult = await this.dialog
       .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
@@ -406,7 +404,7 @@ export class StakingApplicationService {
       );
 
       // ask the user to confirm the fee with a dialog
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
@@ -497,7 +495,7 @@ export class StakingApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
@@ -592,7 +590,7 @@ export class StakingApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
@@ -686,7 +684,7 @@ export class StakingApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.tmp_dialog
+      const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,

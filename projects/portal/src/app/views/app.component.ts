@@ -4,6 +4,7 @@ import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
+import * as crypto from 'crypto';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
@@ -80,6 +81,15 @@ export class AppComponent implements OnInit {
       this.drawerMode$.next('side');
       this.drawerOpened$.next(true);
     }
+  }
+
+  getColorCode(storedWallet: StoredWallet) {
+    const hash = crypto
+      .createHash('sha256')
+      .update(Buffer.from(storedWallet.id))
+      .digest()
+      .toString('hex');
+    return `#${hash.substr(0, 6)}`;
   }
 
   onSubmitSearchResult(searchResult: SearchResult) {

@@ -1,12 +1,14 @@
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { WalletApplicationService } from './models/wallets/wallet.application.service';
+import { WalletService } from './models/wallets/wallet.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
+import { StoredWallet } from './models/wallets/wallet.model';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,7 @@ export class AppComponent implements OnInit {
   configs?: string[];
   navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
   selectedConfig$: Observable<string | undefined>;
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
 
   searchBoxInputValue$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -37,11 +40,13 @@ export class AppComponent implements OnInit {
     private router: Router,
     public cosmosSDK: CosmosSDKService,
     private readonly configS: ConfigService,
-    private readonly walletAPplicationService: WalletApplicationService,
+    private readonly walletService: WalletService,
+    private readonly walletApplicationService: WalletApplicationService,
   ) {
     this.config$ = this.configS.config$;
     this.configs = this.configS.configs.map((config) => config.id);
     this.selectedConfig$ = this.config$.pipe(map((config) => config?.id));
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.navigations$ = this.config$.pipe(
       map((config) => {
         if (config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet == true).length) {
@@ -107,8 +112,7 @@ export class AppComponent implements OnInit {
                 BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 ? BigInt(res.data.block?.header?.height) > BigInt(searchBoxInputValue)
                 : false;
-            }
-            catch (error) {
+            } catch (error) {
               return false;
             }
           });
@@ -233,12 +237,12 @@ export class AppComponent implements OnInit {
 
   // WIP
   async onConnectWallet($event: {}) {
-    const cosmosWallet = await this.walletAPplicationService.connectWalletDialog();
+    const cosmosWallet = await this.walletApplicationService.connectWalletDialog();
   }
 
   onChangeConfig(value: string) {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

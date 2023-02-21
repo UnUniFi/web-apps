@@ -1,85 +1,150 @@
-<mat-drawer-container>
-  <mat-drawer
-    #drawer
-    class="mat-elevation-z16"
-    [mode]="(drawerMode$ | async) || 'over'"
-    [opened]="drawerOpened$ | async"
-  >
-    <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
+<div class="drawer drawer-mobile w-screen h-screen">
+  <input id="drawer-main" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col h-full overflow-auto">
+    <!-- Navbar -->
+    <div class="navbar glass sticky top-0 z-20">
+      <div class="flex-none lg:hidden">
+        <label for="drawer-main" class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-6 h-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
+      </div>
       <button class="align-middle" mat-icon-button routerLink="/">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
-      <h1 class="align-middle">UnUniFi Portal</h1>
-    </mat-toolbar>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Change Node</mat-label>
-      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
-        <mat-option *ngFor="let conf of configs" [value]="conf">
-          {{ conf }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-nav-list>
-      <mat-list-item routerLink="/">
-        <mat-icon class="mr-2" color="primary">other_houses</mat-icon>Balance
-      </mat-list-item>
-      <!-- <mat-list-item routerLink="/keys">
-        <mat-icon class="mr-2" color="primary">manage_accounts</mat-icon>Keys
-      </mat-list-item> -->
-      <!-- Note: Disable bank send -->
-      <!-- <mat-list-item routerLink="/cosmos/bank/send">
-        <mat-icon class="mr-2" color="primary">sync_alt</mat-icon>Send
-      </mat-list-item> -->
-
-      <!-- <mat-list-item routerLink="/mint">
-        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Mint
-      </mat-list-item> -->
-      <mat-list-item routerLink="/vote/proposals">
-        <mat-icon class="mr-2" color="primary">how_to_vote</mat-icon>Vote
-      </mat-list-item>
-      <mat-list-item routerLink="/delegate/validators">
-        <mat-icon class="mr-2" color="primary">savings</mat-icon>Delegate
-      </mat-list-item>
-      <!-- <mat-list-item routerLink="/auction">
-        <mat-icon class="mr-2" color="primary">gavel</mat-icon>Auction
-      </mat-list-item> -->
-      <mat-list-item routerLink="/incentive">
-        <mat-icon class="mr-2" color="primary">attach_money</mat-icon>Incentive
-      </mat-list-item>
-      <mat-list-item routerLink="/derivatives">
-        <mat-icon class="mr-2" color="primary">show_chart</mat-icon>Derivatives
-      </mat-list-item>
+      <div class="flex-1 px-2 mx-2 text-2xl">UnUniFi Portal</div>
+      <div class="flex-none">
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" class="btn gap-1 btn-ghost">
+            <mat-icon class="mr-2">cloud</mat-icon>
+            <span class="hidden md:inline">{{ selectedConfig }}</span>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </div>
+          <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li *ngFor="let conf of configs">
+              <a (click)="onChangeConfig(conf)">{{ conf }}</a>
+            </li>
+          </ul>
+        </div>
+        <!-- <ul class="menu menu-horizontal">
+          <li (click)="onConnectWallet($event)">
+            <a>
+              <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
+              <ng-template #exist>
+                <mat-icon
+                  matListIcon
+                  class="ml-3"
+                  [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+                >
+                  circle
+                </mat-icon>
+                <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
+              </ng-template>
+              <ng-template #empty>
+                <mat-icon color="primary" class="ml-3">wallet</mat-icon>
+                <span class="hidden md:inline">Connect wallet</span>
+              </ng-template>
+            </a>
+          </li>
+        </ul> -->
+        <button class="btn gap-1 btn-ghost" (click)="onConnectWallet($event)">
+          <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
+          <ng-template #exist>
+            <mat-icon
+              matListIcon
+              class="ml-3"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+            >
+              circle
+            </mat-icon>
+            <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
+          </ng-template>
+          <ng-template #empty>
+            <mat-icon color="primary" class="ml-3">wallet</mat-icon>
+            <span class="hidden md:inline">Connect wallet</span>
+          </ng-template>
+        </button>
+      </div>
+    </div>
+    <!-- Page content here -->
+    <div class="bg-base-300 flex justify-center">
+      <div class="w-full max-w-screen-xl p-8">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-side h-full overflow-auto">
+    <label for="drawer-main" class="drawer-overlay"></label>
+    <!-- To Do impl search bar -->
+    <!-- <div class="sticky z-10">
+      <div class="flex w-full"></div>
+    </div> -->
+    <div class="h-4"></div>
+    <ul class="menu p-4 w-80 bg-base-200">
+      <!-- Sidebar content here -->
+      <li>
+        <a class="flex gap-4" routerLink="/">
+          <span class="flex-none">
+            <mat-icon color="primary">other_houses</mat-icon>
+          </span>
+          <span class="flex-1">Balance</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex gap-4" routerLink="/vote/proposals">
+          <span class="flex-none">
+            <mat-icon color="primary">how_to_vote</mat-icon>
+          </span>
+          <span class="flex-1">Vote</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex gap-4" routerLink="/delegate/validators">
+          <span class="flex-none">
+            <mat-icon color="primary">savings</mat-icon>
+          </span>
+          <span class="flex-1">Delegate</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex gap-4" routerLink="/incentive">
+          <span class="flex-none">
+            <mat-icon color="primary">attach_money</mat-icon>
+          </span>
+          <span class="flex-1">Incentive</span>
+        </a>
+      </li>
+      <li>
+        <a class="flex gap-4" routerLink="/derivatives">
+          <span class="flex-none">
+            <mat-icon color="primary">show_chart</mat-icon>
+          </span>
+          <span class="flex-1">Derivatives</span>
+        </a>
+      </li>
       <ng-template ngFor let-navigation [ngForOf]="navigations">
         <ng-container *ngIf="navigation?.name && navigation?.link">
-          <a mat-list-item [href]="navigation.link">
-            <mat-icon class="mr-2" color="primary"> {{ navigation.icon }}</mat-icon>
-            {{ navigation.name }}
-          </a>
+          <li>
+            <a class="flex gap-4" routerLink="{{ navigation.link.replace('/portal', '') }}">
+              <span class="flex-none">
+                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+              </span>
+              <span class="flex-1">{{ navigation.name }}</span>
+            </a>
+          </li>
         </ng-container>
       </ng-template>
-    </mat-nav-list>
-  </mat-drawer>
-
-  <mat-drawer-content class="mat-typography">
-    <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
-      <ng-container *ngIf="!(drawerOpened$ | async)">
-        <button mat-icon-button (click)="drawer.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </ng-container>
-      <view-toolbar
-        class="flex-auto"
-        [searchResult]="searchResult"
-        (appSubmitSearchResult)="onSubmitSearchResult($event)"
-        (appChangeInputValue)="onChangeInputValue($event)"
-        (appConnectWallet)="onConnectWallet($event)"
-      >
-      </view-toolbar>
-    </mat-toolbar>
-    <div class="container">
-      <ng-content></ng-content>
-    </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+    </ul>
+  </div>
+</div>

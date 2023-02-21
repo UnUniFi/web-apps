@@ -1,8 +1,10 @@
 import { Config } from '../models/config.service';
+import { StoredWallet } from '../models/wallets/wallet.model';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
+import * as crypto from 'crypto';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
@@ -22,6 +24,9 @@ export class AppComponent implements OnInit {
 
   @Input()
   selectedConfig?: string | null;
+
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
 
   @Input()
   navigations?: { name: string; link: string; icon: string }[] | null;
@@ -76,6 +81,15 @@ export class AppComponent implements OnInit {
       this.drawerMode$.next('side');
       this.drawerOpened$.next(true);
     }
+  }
+
+  getColorCode(storedWallet: StoredWallet) {
+    const hash = crypto
+      .createHash('sha256')
+      .update(Buffer.from(storedWallet.id))
+      .digest()
+      .toString('hex');
+    return `#${hash.substr(0, 6)}`;
   }
 
   onSubmitSearchResult(searchResult: SearchResult) {

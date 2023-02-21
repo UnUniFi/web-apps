@@ -31,10 +31,14 @@ const routes: Routes = [
     component: EditValidatorComponent,
     canActivate: [WalletGuard],
   },
+  {
+    path: 'edit-validator/multiple',
+    component: EditValidatorMultipleComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class StakingRoutingModule { }
+export class StakingRoutingModule {}

@@ -50,7 +50,14 @@ export class AppComponent implements OnInit {
 
   drawerOpened$ = new BehaviorSubject(true);
 
+  searchValue: string;
+
   constructor(private router: Router, private ngZone: NgZone) {
+    this.searchValue = '';
+    this.searchResult = {
+      searchValue: '',
+      type: '',
+    };
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
     this.appConnectWallet = new EventEmitter();
@@ -92,10 +99,6 @@ export class AppComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
-  onSubmitSearchResult(searchResult: SearchResult) {
-    this.appSubmitSearchResult.emit(searchResult);
-  }
-
   onChangeInputValue(inputValue: string) {
     this.appChangeInputValue.emit(inputValue);
   }
@@ -106,5 +109,29 @@ export class AppComponent implements OnInit {
 
   onChangeConfig(selectedConfig: string): void {
     this.appChangeConfig.emit(selectedConfig);
+  }
+
+  onOptionSelected(): void {
+    if (this.searchResult) {
+      this.appSubmitSearchResult.emit(this.searchResult);
+      this.searchResult = { searchValue: '', type: '' };
+      this.searchValue = '';
+    }
+  }
+
+  onSubmitSearchResult(): void {
+    if (this.searchResult) {
+      this.appSubmitSearchResult.emit(this.searchResult);
+      this.searchResult = { searchValue: '', type: '' };
+      this.searchValue = '';
+    }
+  }
+
+  onChangeInput(inputValue: string): void {
+    this.appChangeInputValue.emit(inputValue);
+  }
+
+  onFocusInput(inputValue: string): void {
+    this.appChangeInputValue.emit(inputValue);
   }
 }

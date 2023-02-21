@@ -37,27 +37,6 @@
             </li>
           </ul>
         </div>
-        <!-- <ul class="menu menu-horizontal">
-          <li (click)="onConnectWallet($event)">
-            <a>
-              <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
-              <ng-template #exist>
-                <mat-icon
-                  matListIcon
-                  class="ml-3"
-                  [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
-                >
-                  circle
-                </mat-icon>
-                <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
-              </ng-template>
-              <ng-template #empty>
-                <mat-icon color="primary" class="ml-3">wallet</mat-icon>
-                <span class="hidden md:inline">Connect wallet</span>
-              </ng-template>
-            </a>
-          </li>
-        </ul> -->
         <button class="btn gap-1 btn-ghost" (click)="onConnectWallet($event)">
           <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
           <ng-template #exist>
@@ -86,13 +65,51 @@
   </div>
   <div class="drawer-side h-full overflow-auto">
     <label for="drawer-main" class="drawer-overlay"></label>
-    <!-- To Do impl search bar -->
-    <!-- <div class="sticky z-10">
-      <div class="flex w-full"></div>
-    </div> -->
-    <div class="h-4"></div>
-    <ul class="menu p-4 w-80 bg-base-200">
+    <ul class="menu p-4 w-full bg-base-200">
       <!-- Sidebar content here -->
+      <form #formRef="ngForm" (submit)="onSubmitSearchResult()">
+        <div class="form-control">
+          <div class="input-group">
+            <input
+              #searchValueRef
+              id="searchValue"
+              name="searchValue"
+              [(ngModel)]="searchValue"
+              [matAutocomplete]="auto"
+              (ngModelChange)="onChangeInput(searchValueRef.value)"
+              (focus)="onFocusInput(searchValueRef.value)"
+              class="input input-bordered"
+            />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected()">
+              <mat-option
+                *ngIf="searchResult?.searchValue !== '' && searchResult?.type !== ''"
+                [value]="searchResult?.searchValue"
+              >
+                {{ searchResult?.type }} = {{ searchResult?.searchValue }}
+              </mat-option>
+            </mat-autocomplete>
+            <button
+              class="btn btn-square"
+              [disabled]="searchResult?.searchValue === '' || searchResult?.type === ''"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
       <li>
         <a class="flex gap-4" routerLink="/">
           <span class="flex-none">

@@ -3,6 +3,7 @@ import { KeyType } from '../../../models/keys/key.model';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { InterfaceCreateValidatorsData } from '../../../pages/staking/create-validator-multiple/create-validator-multiple.component';
 import { createCosmosPublicKeyFromString } from '../../../utils/key';
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import {
   Component,
   ElementRef,
@@ -14,7 +15,6 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
@@ -57,15 +57,12 @@ export class CreateValidatorMultipleComponent implements OnInit {
 
   templateToRender: InterfaceTemplateToRender = 'loading';
 
-  constructor(private readonly snackBar: MatSnackBar, public dialog: MatDialog) { }
+  constructor(private readonly snackBar: MatSnackBar, public dialog: Dialog) {}
 
   openDialog() {
-    this.dialog.open(ValidatorDialog, {
+    this.dialog.open(ValidatorDialogComponent, {
       data: {
         redirectUrls: this.redirectUrls,
-      },
-      position: {
-        left: '44%',
       },
       width: '420px',
     });
@@ -98,7 +95,7 @@ export class CreateValidatorMultipleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   checkInput(input: any) {
     if (!input) {
@@ -284,9 +281,12 @@ export class CreateValidatorMultipleComponent implements OnInit {
 }
 
 @Component({
-  selector: 'validator-dialog',
+  selector: 'app-view-validator-dialog',
   templateUrl: 'validator-dialog.html',
 })
-export class ValidatorDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { redirectUrls: string[] | undefined }) { }
+export class ValidatorDialogComponent {
+  constructor(
+    @Inject(DIALOG_DATA)
+    public data: { redirectUrls: string[] | undefined },
+  ) {}
 }

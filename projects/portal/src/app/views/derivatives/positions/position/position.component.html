@@ -1,7 +1,11 @@
 <div class="pb-8">
   <ng-container *ngIf="perpetualFuturesPositionInstance">
-    <view-perpetual-futures [position]="position" [positionInstance]="perpetualFuturesPositionInstance"
-      [symbolMetadataMap]="symbolMetadataMap" (closePosition)="onClosePosition()"></view-perpetual-futures>
+    <view-perpetual-futures
+      [position]="position"
+      [positionInstance]="perpetualFuturesPositionInstance"
+      [symbolMetadataMap]="symbolMetadataMap"
+      (closePosition)="onClosePosition()"
+    ></view-perpetual-futures>
   </ng-container>
   <!-- <ng-container *ngIf="perpetualOptionsPositionInstance">
     <view-perpetual-options [position]="position" [positionInstance]="perpetualOptionsPositionInstance" (closePosition)="onClosePosition()"></view-perpetual-options>

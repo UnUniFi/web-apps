@@ -6,6 +6,7 @@ import { MetaMaskService } from './metamask/metamask.service';
 import { UnunifiWalletService } from './ununifi-wallet/ununifi-wallet.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,6 +21,7 @@ export class WalletApplicationService {
     private readonly metaMaskService: MetaMaskService,
     private readonly ununifiWalletService: UnunifiWalletService,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
   ) {}
@@ -95,10 +97,9 @@ export class WalletApplicationService {
   }
 
   async openConnectWalletStartDialog(): Promise<WalletType | undefined> {
-    const selectedWalletType: WalletType = await this.dialog
-      .open(ConnectWalletStartDialogComponent)
-      .afterClosed()
-      .toPromise();
+    const selectedWalletType: WalletType | undefined = await this.tmp_dialog
+      .open<WalletType>(ConnectWalletStartDialogComponent)
+      .closed.toPromise();
     return selectedWalletType;
   }
 

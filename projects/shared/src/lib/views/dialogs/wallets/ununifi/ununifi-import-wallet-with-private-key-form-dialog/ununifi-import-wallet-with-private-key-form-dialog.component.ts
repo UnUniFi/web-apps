@@ -3,8 +3,8 @@ import { StoredWallet, WalletType } from '../../../../../models/wallets/wallet.m
 import { WalletService } from '../../../../../models/wallets/wallet.service';
 import { createCosmosPrivateKeyFromString } from '../../../../../utils/key';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -25,7 +25,10 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
   wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithPrivateKeyFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiImportWalletWithPrivateKeyFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -86,7 +89,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

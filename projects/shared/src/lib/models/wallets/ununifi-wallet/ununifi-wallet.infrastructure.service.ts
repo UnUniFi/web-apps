@@ -14,6 +14,7 @@ import { KeyType } from '../../keys/key.model';
 import { StoredWallet } from '../wallet.model';
 import { WalletService } from '../wallet.service';
 import { IUnunifiWalletInfrastructureService } from './ununifi-wallet.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,6 +27,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   constructor(
     private readonly walletService: WalletService,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
   ) {}
@@ -199,10 +201,9 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async openConnectWalletCompletedDialog(
     connectedStoredWallet: StoredWallet,
   ): Promise<void> {
-    await this.dialog
+    await this.tmp_dialog
       .open(ConnectWalletCompletedDialogComponent, { data: connectedStoredWallet })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
   }
 
   private async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {

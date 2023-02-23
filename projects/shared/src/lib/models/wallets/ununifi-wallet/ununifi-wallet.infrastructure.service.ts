@@ -150,10 +150,12 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async openUnunifiImportWalletWithPrivateKeyDialog(): Promise<
     (StoredWallet & { mnemonic: string; privateKey: string }) | undefined
   > {
-    const privateWallet: StoredWallet & { mnemonic: string; privateKey: string } = await this.dialog
-      .open(UnunifiImportWalletWithPrivateKeyFormDialogComponent)
-      .afterClosed()
-      .toPromise();
+    const privateWallet: (StoredWallet & { mnemonic: string; privateKey: string }) | undefined =
+      await this.tmp_dialog
+        .open<StoredWallet & { mnemonic: string; privateKey: string }>(
+          UnunifiImportWalletWithPrivateKeyFormDialogComponent,
+        )
+        .closed.toPromise();
     return privateWallet;
   }
 

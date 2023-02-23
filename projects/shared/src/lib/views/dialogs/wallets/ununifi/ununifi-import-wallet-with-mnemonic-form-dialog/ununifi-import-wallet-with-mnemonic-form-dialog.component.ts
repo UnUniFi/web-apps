@@ -7,8 +7,8 @@ import {
 } from '../../../../../../lib/utils/key';
 import { validatePrivateStoredWallet } from '../../../../../../lib/utils/validation';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
@@ -29,7 +29,10 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithMnemonicFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiImportWalletWithMnemonicFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -99,7 +102,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

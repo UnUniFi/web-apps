@@ -6,8 +6,8 @@ import {
   createPrivateKeyStringFromMnemonic,
 } from '../../../../../../lib/utils/key';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import * as bip39 from 'bip39';
@@ -23,7 +23,10 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
   wallets$: Promise<StoredWallet[] | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiCreateWalletFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiCreateWalletFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -56,7 +59,7 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

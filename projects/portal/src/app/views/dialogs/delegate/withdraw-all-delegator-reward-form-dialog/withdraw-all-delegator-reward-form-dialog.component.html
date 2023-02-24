@@ -20,9 +20,9 @@
           <span class="w-2/3 break-all text-sm sm:text-base"
             >{{ validator?.description?.moniker }}
           </span>
-          <span class="w-1/3 break-all text-sm sm:text-base text-right pl-4"
-            >{{ delegation.delegation?.shares ?? '0'|coinAmount }}
-            {{ delegation.balance?.denom|coinDenom }}</span
+          <span class="w-1/3 text-sm sm:text-base text-right pl-4"
+            >{{ delegation.delegation?.shares ?? '0' | coinAmount
+            }}{{ delegation.balance?.denom | coinDenom }}</span
           >
         </mat-list-item>
       </ng-container>

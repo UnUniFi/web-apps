@@ -1,7 +1,7 @@
 import { StoredWallet } from '../../../../../../lib/models/wallets/wallet.model';
 import { WalletService } from '../../../../../../lib/models/wallets/wallet.service';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -14,7 +14,10 @@ export class UnunifiKeyFormDialogComponent implements OnInit {
 
   constructor(
     private readonly walletService: WalletService,
-    private readonly dialogRef: MatDialogRef<UnunifiKeyFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { privateKey: string },
+      UnunifiKeyFormDialogComponent
+    >,
     private readonly snackBar: MatSnackBar,
   ) {
     this.currentStoredWallet$ = this.walletService.getCurrentStoredWallet();

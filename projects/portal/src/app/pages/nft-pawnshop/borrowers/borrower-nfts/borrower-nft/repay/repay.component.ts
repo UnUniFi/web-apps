@@ -154,7 +154,7 @@ export class RepayComponent implements OnInit {
           j++;
         }
         if (amounts != data.amount) {
-          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount));
+          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount)/100);
         }
         this.shortestExpiryDate$ = of(
           new Date(

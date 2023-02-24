@@ -5,8 +5,8 @@ import { NftTxApplicationService } from '../../../../../models/ununifi/tx/nft/nf
 import { StoredWallet } from '../../../../../models/wallets/wallet.model';
 import { WalletService } from '../../../../../models/wallets/wallet.service';
 import { MsgListNftFormData } from '../../../../../views/dialogs/ununifi/tx/nft/list-nft-form-dialog/list-nft-form-dialog.component';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
@@ -26,15 +26,14 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: Nft,
-    public matDialogRef: MatDialogRef<LibWidgetListNftFormDialogComponent>,
+    public dialogRef: DialogRef<string, LibWidgetListNftFormDialogComponent>,
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly nftTxAppService: NftTxApplicationService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
   ) {
     this.nft = data;
 
@@ -56,7 +55,7 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: MsgListNftFormData): Promise<void> {
     let txHash: string | undefined;
@@ -67,6 +66,6 @@ export class LibWidgetListNftFormDialogComponent implements OnInit {
       $event.gasSetting.gasRatio,
     );
 
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

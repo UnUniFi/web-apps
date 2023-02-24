@@ -203,15 +203,23 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
     | (StoredWallet & { mnemonic: string; privateKey: string; checked: boolean; saved: boolean })
     | undefined
   > {
-    const backupResult: StoredWallet & {
-      mnemonic: string;
-      privateKey: string;
-      checked: boolean;
-      saved: boolean;
-    } = await this.dialog
-      .open(UnunifiBackupPrivateKeyWizardDialogComponent, { data: privateWallet })
-      .afterClosed()
-      .toPromise();
+    const backupResult:
+      | (StoredWallet & {
+          mnemonic: string;
+          privateKey: string;
+          checked: boolean;
+          saved: boolean;
+        })
+      | undefined = await this.tmp_dialog
+      .open<
+        StoredWallet & {
+          mnemonic: string;
+          privateKey: string;
+          checked: boolean;
+          saved: boolean;
+        }
+      >(UnunifiBackupPrivateKeyWizardDialogComponent, { data: privateWallet })
+      .closed.toPromise();
     return backupResult;
   }
 

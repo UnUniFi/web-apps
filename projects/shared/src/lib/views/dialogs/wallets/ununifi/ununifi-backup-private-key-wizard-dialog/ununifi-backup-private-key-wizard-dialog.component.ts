@@ -1,7 +1,7 @@
 import { StoredWallet } from '../../../../../models/wallets/wallet.model';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -25,9 +25,17 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   sec = this.now.getSeconds();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StoredWallet & { mnemonic: string; privateKey: string },
-    public matDialogRef: MatDialogRef<UnunifiBackupPrivateKeyWizardDialogComponent>,
+    public dialogRef: DialogRef<
+      StoredWallet & {
+        mnemonic: string;
+        privateKey: string;
+        checked: boolean;
+        saved: boolean;
+      },
+      UnunifiBackupPrivateKeyWizardDialogComponent
+    >,
     private readonly snackBar: MatSnackBar,
   ) {}
 
@@ -50,7 +58,7 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
       checked: this.checked,
       saved: this.saved,
     };
-    this.matDialogRef.close(walletBackupResult);
+    this.dialogRef.close(walletBackupResult);
   }
 
   savePrivateKey(): void {

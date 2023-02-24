@@ -10,6 +10,7 @@ import { WalletService } from '../../../wallets/wallet.service';
 import { Nft } from '../../query/nft/nft.model';
 import { NftTxInfrastructureService } from './nft-tx.infrastructure.service';
 import { MsgListNftData } from './nft-tx.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,16 +27,14 @@ export class NftTxApplicationService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: NftTxInfrastructureService,
     private readonly walletService: WalletService,
   ) {}
 
   async openNftMenuDialog(nft: Nft): Promise<void> {
-    await this.dialog
-      .open(LibWidgetNftMenuDialogComponent, { data: nft })
-      .afterClosed()
-      .toPromise();
+    await this.tmp_dialog.open(LibWidgetNftMenuDialogComponent, { data: nft }).closed.toPromise();
   }
 
   async openListNftFormDialog(nft: Nft): Promise<void> {

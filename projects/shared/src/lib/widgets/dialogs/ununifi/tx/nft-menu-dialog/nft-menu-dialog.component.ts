@@ -1,7 +1,7 @@
 import { Nft } from '../../../../../models/ununifi/query/nft/nft.model';
 import { NftTxApplicationService } from '../../../../../models/ununifi/tx/nft/nft-tx.application.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,10 +13,10 @@ export class LibWidgetNftMenuDialogComponent implements OnInit {
   nft: Nft;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: Nft,
     private router: Router,
-    public matDialogRef: MatDialogRef<LibWidgetNftMenuDialogComponent>,
+    public dialogRef: DialogRef<LibWidgetNftMenuDialogComponent>,
     private readonly nftTxApplicationService: NftTxApplicationService,
   ) {
     this.nft = data;
@@ -25,7 +25,7 @@ export class LibWidgetNftMenuDialogComponent implements OnInit {
   ngOnInit() {}
 
   async onSubmitListNft(nft: Nft) {
-    this.matDialogRef.close();
+    this.dialogRef.close();
     await this.nftTxApplicationService.openListNftFormDialog(nft);
   }
 }

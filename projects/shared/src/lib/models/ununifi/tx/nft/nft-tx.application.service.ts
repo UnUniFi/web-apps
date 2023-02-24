@@ -38,10 +38,9 @@ export class NftTxApplicationService {
   }
 
   async openListNftFormDialog(nft: Nft): Promise<void> {
-    const txHash = await this.dialog
-      .open(LibWidgetListNftFormDialogComponent, { data: nft })
-      .afterClosed()
-      .toPromise();
+    const txHash = await this.tmp_dialog
+      .open<string>(LibWidgetListNftFormDialogComponent, { data: nft })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 

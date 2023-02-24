@@ -12,7 +12,6 @@ import { NftTxInfrastructureService } from './nft-tx.infrastructure.service';
 import { MsgListNftData } from './nft-tx.model';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -26,19 +25,18 @@ export class NftTxApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
-    private readonly tmp_dialog: Dialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: NftTxInfrastructureService,
     private readonly walletService: WalletService,
   ) {}
 
   async openNftMenuDialog(nft: Nft): Promise<void> {
-    await this.tmp_dialog.open(LibWidgetNftMenuDialogComponent, { data: nft }).closed.toPromise();
+    await this.dialog.open(LibWidgetNftMenuDialogComponent, { data: nft }).closed.toPromise();
   }
 
   async openListNftFormDialog(nft: Nft): Promise<void> {
-    const txHash = await this.tmp_dialog
+    const txHash = await this.dialog
       .open<string>(LibWidgetListNftFormDialogComponent, { data: nft })
       .closed.toPromise();
     await this.router.navigate(['txs', txHash]);

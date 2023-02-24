@@ -64,7 +64,7 @@ const routes: Routes = [
   //     import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   // },
   {
-    path: 'nft-pawnshop',
+    path: 'nft-backed-loan',
     loadChildren: () =>
       import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
   },

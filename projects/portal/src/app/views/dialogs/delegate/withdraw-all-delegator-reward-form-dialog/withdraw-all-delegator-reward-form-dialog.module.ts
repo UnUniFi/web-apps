@@ -3,10 +3,11 @@ import { WithdrawAllDelegatorRewardFormDialogComponent } from './withdraw-all-de
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [WithdrawAllDelegatorRewardFormDialogComponent],
-  imports: [CommonModule, FormsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, MaterialModule, PipesModule],
   exports: [WithdrawAllDelegatorRewardFormDialogComponent],
 })
 export class WithdrawAllDelegatorRewardFormDialogModule {}

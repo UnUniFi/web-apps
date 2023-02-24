@@ -7,7 +7,9 @@
   <mat-list>
     <mat-label>To. (Validator)</mat-label>
     <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">circle</mat-icon>
+      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+        >circle</mat-icon
+      >
       <div mat-line>
         <span>{{ validator?.description?.moniker }}</span>
       </div>
@@ -17,20 +19,26 @@
   <mat-list>
     <mat-label>From. (Delegator)</mat-label>
     <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">circle</mat-icon>
+      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+        >circle</mat-icon
+      >
       <div mat-line>
         <span>{{ currentStoredWallet?.id }}</span>
       </div>
     </mat-list-item>
   </mat-list>
-  <ng-container *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding">
+  <ng-container
+    *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding"
+  >
   </ng-container>
 
   <ng-template #unbonding>
     <mat-list>
       <mat-label>Unbonding Date</mat-label>
       <mat-list-item>
-        <span>{{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-M-d a h:mm:ss z'}}</span>
+        <span
+          >{{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-M-d a h:mm:ss z'}}</span
+        >
       </mat-list-item>
     </mat-list>
   </ng-template>
@@ -39,31 +47,40 @@
     <mat-list>
       <mat-label>Unbonding Date (estimated.)</mat-label>
       <mat-list-item>
-        <span>{{estimatedUnbondingData| date: 'yyyy-M-d a h:mm:ss z'}}</span>
+        <span>{{ estimatedUnbondingData | date : 'yyyy-M-d a h:mm:ss z' }}</span>
       </mat-list-item>
     </mat-list>
   </ng-template>
 
-  <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
+  <form #formRef="ngForm" (submit)="onSubmit()">
     <div class="flex flex-col content-content lg:flex-row">
       <mat-form-field class="flex-auto">
-        <mat-label>Delegate Denom</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.denom" name="delegate-denom" matInput type="text" required
-          readonly />
-      </mat-form-field>
-      <mat-form-field class="flex-auto">
         <mat-label>UnDelegate Amount</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.amount" name="undelegate-amount" matInput type="number"
-          pattern="^\d+$" [min]="0" required />
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.amount"
+          name="undelegate-amount"
+          matInput
+          type="number"
+          pattern="^\d+(\.\d{1,6})?$"
+          [min]="0"
+          required
+        />
+        <mat-hint>Delegated Amount: {{ delegateAmount | coin }}</mat-hint>
       </mat-form-field>
       <mat-form-field class="flex-auto">
-        <mat-label>Delegated Amount</mat-label>
-        <input [(ngModel)]="delegateAmount && delegateAmount.amount" name="delegate-amount" matInput type="number"
-          pattern="^\d+$" [min]="0" required readonly />
+        <mat-label>Delegate Token</mat-label>
+        <input
+          [(ngModel)]="selectedAmount && selectedAmount.denom"
+          name="delegate-denom"
+          matInput
+          type="text"
+          required
+          readonly
+        />
       </mat-form-field>
     </div>
 
-    <h3 class="pt-3">Gas Settings</h3>
+    <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -100,9 +117,9 @@
           [(ngModel)]="selectedGasPrice && selectedGasPrice.amount" name="minimum-gas-price-slider">
         </mat-slider>
       </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
 
-    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
+    <button mat-flat-button class="my-4 px-8" color="accent" [disabled]="formRef.invalid">
       Delete Delegate
     </button>
   </form>

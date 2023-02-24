@@ -1,7 +1,7 @@
 <div class="flex justify-center">
   <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
-      <figure class="aspect-square">
+      <figure class="aspect-square w-full">
         <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
       </figure>
       <div class="card-body">
@@ -39,8 +39,8 @@
               </label>
               <select class="select select-bordered w-full" [(ngModel)]="bidSymbol" name="symbol">
                 <option disabled="disabled" [value]="undefined">Please Select</option>
-                <option [value]="'axlUSDC'">axlUSDC</option>
-                <option [value]="'ATOM'">ATOM</option>
+                <option disabled="disabled" [value]="'axlUSDC'">axlUSDC (coming soon)</option>
+                <option disabled="disabled" [value]="'ATOM'">ATOM (coming soon)</option>
                 <option [value]="'GUU'">GUU</option>
               </select>
             </div>

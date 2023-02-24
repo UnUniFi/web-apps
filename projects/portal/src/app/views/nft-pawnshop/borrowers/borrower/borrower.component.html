@@ -20,7 +20,7 @@
           <div class="indicator w-full">
             <span class="indicator-item badge badge-primary">NOT LISTING</span>
             <div class="card w-full glass shadow-xl">
-              <figure class="aspect-square">
+              <figure class="aspect-square w-full">
                 <img
                   *ngIf="ownNftImages"
                   src="{{ ownNftImages[i] }}"
@@ -80,7 +80,7 @@
           <div class="indicator w-full">
             <span class="indicator-item badge badge-primary">{{ nft.state }}</span>
             <div class="card w-full glass shadow-xl">
-              <figure class="aspect-square">
+              <figure class="aspect-square w-full">
                 <img
                   *ngIf="listedOwnNftImages"
                   src="{{ listedOwnNftImages[i] }}"

@@ -231,11 +231,12 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
       .closed.toPromise();
   }
 
-  private async openUnunifiKeyFormDialog(): Promise<StoredWallet & { privateKey: string }> {
-    const privateKey = await this.dialog
-      .open(UnunifiKeyFormDialogComponent)
-      .afterClosed()
-      .toPromise();
+  private async openUnunifiKeyFormDialog(): Promise<
+    (StoredWallet & { privateKey: string }) | undefined
+  > {
+    const privateKey: (StoredWallet & { privateKey: string }) | undefined = await this.tmp_dialog
+      .open<StoredWallet & { privateKey: string }>(UnunifiKeyFormDialogComponent)
+      .closed.toPromise();
     return privateKey;
   }
 
@@ -274,7 +275,7 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    const privateWallet: StoredWallet & { privateKey: string } =
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
       const errorMessage = 'Failed to get Wallet info from dialog! Tray again!';

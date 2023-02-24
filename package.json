@@ -28,6 +28,7 @@
     "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-8-private-test": "npm run build:all:prod && node copy-config ununifi-8-private-test",
     "build:all:prod:ununifi-test": "npm run build:all:prod && node copy-config ununifi-test",
+    "build:all:prod:ununifi-nftfi-pocv1": "npm run build:all:prod && node copy-config ununifi-nftfi-pocv1",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:explorer": "ng test --project explorer",

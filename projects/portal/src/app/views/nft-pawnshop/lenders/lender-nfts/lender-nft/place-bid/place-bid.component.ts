@@ -11,6 +11,7 @@ import {
 import { ChartType } from 'angular-google-charts';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { NftPawnshopPocService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.poc.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
@@ -51,6 +52,7 @@ export class PlaceBidComponent implements OnInit {
   date?: string;
   time?: string;
   autoPayment?: boolean;
+  within3Days?: boolean;
 
   chartType: ChartType;
   chartTitle: string;
@@ -62,7 +64,10 @@ export class PlaceBidComponent implements OnInit {
   @Output()
   appSubmit: EventEmitter<PlaceBidRequest>;
 
-  constructor(private readonly pawnshopChart: NftPawnshopChartService) {
+  constructor(
+    private readonly pawnshopChart: NftPawnshopChartService,
+    private readonly pawnshopPoc: NftPawnshopPocService,
+  ) {
     const lendAmount = localStorage.getItem('lendAmount');
     this.depositAmount = lendAmount ? Number(lendAmount) : null;
     this.depositSymbol = localStorage.getItem('lendSymbol');
@@ -76,6 +81,9 @@ export class PlaceBidComponent implements OnInit {
       this.time = dateString.substring(dateString.indexOf('T') + 1, dateString.indexOf('T') + 6);
     }
     this.autoPayment = true;
+    const now = new Date();
+    now.setDate(now.getDate() + 3);
+    this.within3Days = this.datePicker ? this.datePicker < now : false;
 
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
@@ -100,6 +108,25 @@ export class PlaceBidComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onChangeDate() {
+    const biddingPeriod = new Date(this.date + 'T' + this.time);
+    const now = new Date();
+    now.setDate(now.getDate() + 3);
+    this.within3Days = biddingPeriod < now;
+  }
+
+  getPocValue() {
+    if (this.currentStoredWallet && this.classID && this.nftID) {
+      return this.pawnshopPoc.getPocValue(
+        this.currentStoredWallet?.address,
+        this.classID,
+        this.nftID,
+      );
+    } else {
+      return '0GUU';
+    }
+  }
 
   onSimulate() {
     if (!this.classID || !this.nftID) {

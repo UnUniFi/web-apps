@@ -1,7 +1,7 @@
 <div class="flex justify-center">
   <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
-      <figure class="aspect-square">
+      <figure class="aspect-square w-full">
         <!-- img width setting not working -->
         <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
       </figure>
@@ -40,6 +40,11 @@
               <tr>
                 <th>Started at</th>
                 <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+              </tr>
+
+              <tr>
+                <th class="text-primary">Value for you (POC)</th>
+                <td>{{ getPocValue() }}</td>
               </tr>
             </tbody>
           </table>
@@ -202,6 +207,7 @@
                   name="expiryDate"
                   [(ngModel)]="date"
                   class="input input-bordered w-3/5"
+                  (change)="onChangeDate()"
                 />
                 <input
                   #timeRef
@@ -210,18 +216,23 @@
                   name="expiryTime"
                   [(ngModel)]="time"
                   class="input input-bordered w-2/5"
+                  (change)="onChangeDate()"
                 />
+              </label>
+
+              <label class="label" *ngIf="!within3Days">
+                <span class="label-text-alt text-error"
+                  >Please set Expiration Date within 3 days.</span
+                >
               </label>
             </div>
 
-            <div class="form-control">
+            <!-- <div class="form-control">
               <span class="label">
                 <span class="label-text">Auto Payment</span>
 
-                <!-- The button to open modal -->
-                <label for="auto-pay"><mat-icon>help</mat-icon></label>
+                <label for="modal-auto-pay"><mat-icon>help</mat-icon></label>
 
-                <!-- Put this part before </body> tag -->
                 <input type="checkbox" id="modal-auto-pay" class="modal-toggle" />
                 <div class="modal modal-bottom sm:modal-middle">
                   <div class="modal-box">
@@ -246,7 +257,7 @@
                   [(ngModel)]="autoPayment"
                 />
               </label>
-            </div>
+            </div> -->
 
             <br />
             <div class="flex flex-row">
@@ -261,6 +272,7 @@
               <button
                 *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
                 class="btn btn-primary px-8"
+                [disabled]="formRef.invalid || !within3Days"
               >
                 Make Offer
               </button>

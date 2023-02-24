@@ -58,3 +58,9 @@ export type NftRequest = {
   classID: string;
   nftID: string;
 };
+
+export type PrimaryNft = {
+  address: string;
+  class_id: string;
+  nft_id: string;
+};

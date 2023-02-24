@@ -52,7 +52,7 @@ export class LendersComponent implements OnInit {
     this.depositAmount = 0;
     this.interestRate = 1.5;
     let now = new Date();
-    now.setMonth(now.getMonth() + 1);
+    now.setDate(now.getDate() + 2);
     now.setMinutes(0);
     now.setSeconds(0);
     this.datePicker = now;

@@ -17,7 +17,7 @@
   </mat-list>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
-    <h3 class="pt-3">Gas Settings</h3>
+    <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -80,9 +80,9 @@
         >
         </mat-slider>
       </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
 
-    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
+    <button mat-flat-button class="my-4 px-8" color="accent" [disabled]="formRef.invalid">
       Claim Delegator Reward
     </button>
   </form>

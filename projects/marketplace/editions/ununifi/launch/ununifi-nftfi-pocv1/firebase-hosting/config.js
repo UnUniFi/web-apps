@@ -7,10 +7,10 @@ const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
 // To Do write chain config
-const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
+const domainCauchyEA = 'ununifi-poc-nftmarket-v3.cauchye.net';
 
-const chainID = 'ununifi-alpha-test-v3';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'poc2-type-v2-events';
+const chainName = 'UnUniFi (NFT-Fi POC)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

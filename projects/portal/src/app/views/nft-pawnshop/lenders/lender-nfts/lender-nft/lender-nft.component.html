@@ -46,10 +46,13 @@
               <div class="stat-title">Your Status</div>
               <div *ngIf="!bidDetail" class="stat-value text-info">Not Offered</div>
               <div *ngIf="bidDetail" class="stat-value text-accent">Offered</div>
-              <div *ngIf="bidDetail && bidDetail.borrowings && bidDetail.borrowings.length">
-                <div class="stat-value text-accent">Lending</div>
-                <div class="stat-desc">{{ bidDetail.borrowings[0].amount | coin }}</div>
-              </div>
+            </div>
+            <div
+              *ngIf="bidDetail && bidDetail.borrowings && bidDetail.borrowings.length"
+              class="stat"
+            >
+              <div class="stat-title">Lending Status</div>
+              <div class="stat-value text-primary">{{ bidDetail.borrowings[0].amount | coin }}</div>
             </div>
             <div *ngIf="isWinning" class="stat">
               <div class="stat-title">Settlement Shortfall Deadline</div>

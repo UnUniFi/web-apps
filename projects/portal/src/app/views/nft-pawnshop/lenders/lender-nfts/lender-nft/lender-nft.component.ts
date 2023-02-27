@@ -25,7 +25,7 @@ export class LenderNftComponent implements OnInit {
   @Input()
   nftImage?: string | null;
   @Input()
-  isBided?: boolean | null;
+  bidDetail?: BidderBids200ResponseBidsInner | null;
   @Input()
   isWinning?: boolean | null;
 

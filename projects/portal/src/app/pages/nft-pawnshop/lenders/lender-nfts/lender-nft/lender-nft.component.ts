@@ -28,7 +28,7 @@ export class LenderNftComponent implements OnInit {
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
-  isBided$: Observable<boolean>;
+  bidDetail$: Observable<BidderBids200ResponseBidsInner | undefined>;
   isWinning$: Observable<boolean>;
 
   constructor(
@@ -68,10 +68,10 @@ export class LenderNftComponent implements OnInit {
     this.nftImage$ = nftData$.pipe(
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
-    this.isBided$ = combineLatest([this.address$, this.bidders$]).pipe(
+    this.bidDetail$ = combineLatest([this.address$, this.bidders$]).pipe(
       map(([address, bidders]) => {
         const bidder = bidders.find((bidder) => bidder.bidder == address);
-        return !!bidder;
+        return bidder;
       }),
     );
     // To Do Add Liquidate

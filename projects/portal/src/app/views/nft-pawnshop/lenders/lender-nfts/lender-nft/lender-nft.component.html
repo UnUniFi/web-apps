@@ -42,23 +42,31 @@
       <div class="card-body">
         <div class="flex flex-row items-center">
           <div class="stats">
-            <div *ngIf="!isWinning" class="stat">
+            <div class="stat">
               <div class="stat-title">Your Status</div>
-              <div *ngIf="!isBided" class="stat-value text-info">Not Offered</div>
-              <div *ngIf="isBided" class="stat-value text-accent">Offered</div>
-              <div class="stat-desc"></div>
+              <div *ngIf="!bidDetail" class="stat-value text-info">Not Offered</div>
+              <div *ngIf="bidDetail" class="stat-value text-accent">Offered</div>
+              <div *ngIf="bidDetail && bidDetail.borrowings && bidDetail.borrowings.length">
+                <div class="stat-value text-accent">Lending</div>
+                <div class="stat-desc">{{ bidDetail.borrowings[0].amount | coin }}</div>
+              </div>
             </div>
             <div *ngIf="isWinning" class="stat">
               <div class="stat-title">Settlement Shortfall Deadline</div>
-              <div class="stat-value text-accent">2023/03/22</div>
-              <div class="stat-desc">18:07</div>
+              <div class="stat-value text-accent">
+                {{ listingInfo?.end_at | date : 'yyyy-M-d' }}
+              </div>
+              <div class="stat-desc">{{ listingInfo?.end_at | date : 'h:mm:ss z' }}</div>
             </div>
           </div>
           <span class="flex-auto"></span>
-          <div *ngIf="!isBided && !isWinning" class="card-actions justify-end">
+          <div *ngIf="!bidDetail && !isWinning" class="card-actions justify-end">
             <button routerLink="place-bid" class="btn btn-primary px-8">Make Offer</button>
           </div>
-          <div *ngIf="isBided && !isWinning" class="card-actions flex flex-row">
+          <div
+            *ngIf="bidDetail && !bidDetail.borrowings?.length && !isWinning"
+            class="card-actions flex flex-row"
+          >
             <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>
             <span class="flex-auto"></span>
             <button

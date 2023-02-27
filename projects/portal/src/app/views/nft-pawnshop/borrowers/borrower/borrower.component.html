@@ -27,10 +27,16 @@
                   alt=""
                   class="h-full object-cover"
                 />
+                <img
+                  *ngIf="!ownNftImages"
+                  src="assets/UnUniFi-logo.png"
+                  alt=""
+                  class="h-full object-cover"
+                />
               </figure>
               <div class="card-body">
                 <h2 *ngIf="ownNftsMetadata" class="card-title break-all">
-                  {{ ownNftsMetadata[i].name }}
+                  {{ ownNftsMetadata[i].name || nft.class_id + '/' + nft.id }}
                 </h2>
                 <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
                   {{ nft.class_id + '/' + nft.id }}
@@ -87,10 +93,18 @@
                   alt=""
                   class="h-full object-cover"
                 />
+                <img
+                  *ngIf="!listedOwnNftImages"
+                  src="assets/UnUniFi-logo.png"
+                  alt=""
+                  class="h-full object-cover"
+                />
               </figure>
               <div class="card-body">
                 <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
-                  {{ listedOwnNftsMetadata[i].name }}
+                  {{
+                    listedOwnNftsMetadata[i].name || nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id
+                  }}
                 </h2>
                 <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
                   {{ nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id }}

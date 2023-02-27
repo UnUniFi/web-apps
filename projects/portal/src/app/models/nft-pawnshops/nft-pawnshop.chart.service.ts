@@ -18,24 +18,24 @@ export class NftPawnshopChartService {
       legend: {
         position: 'bottom',
         textStyle: {
-          color: 'black',
+          color: 'grey',
           fontSize: 14,
           bold: true,
         },
       },
       hAxis: {
         textStyle: {
-          color: 'black',
+          color: 'grey',
           fontSize: 14,
         },
       },
       vAxis: {
         textStyle: {
-          color: 'black',
+          color: 'grey',
           fontSize: 14,
         },
         baseline: 0,
-        baselineColor: 'black',
+        baselineColor: 'grey',
         gridlines: { color: 'grey', count: -1 },
       },
       bar: { groupWidth: '75%' },
@@ -43,13 +43,13 @@ export class NftPawnshopChartService {
         alwaysOutside: true,
         highContrast: false,
         stem: {
-          color: 'black',
+          color: 'grey',
           length: 0,
         },
         textStyle: {
           fontSize: 14,
           bold: true,
-          color: 'black',
+          color: 'grey',
           opacity: 0.8,
         },
       },

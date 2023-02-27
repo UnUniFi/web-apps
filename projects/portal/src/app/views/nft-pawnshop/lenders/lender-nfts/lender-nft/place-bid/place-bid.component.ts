@@ -75,10 +75,17 @@ export class PlaceBidComponent implements OnInit {
     this.interestRate = lendRate ? Number(lendRate) : null;
     const lendTerm = localStorage.getItem('lendTerm');
     this.datePicker = lendTerm ? new Date(lendTerm) : null;
-    const dateString = this.datePicker?.toISOString();
-    if (dateString) {
-      this.date = dateString.substring(0, dateString.indexOf('T'));
-      this.time = dateString.substring(dateString.indexOf('T') + 1, dateString.indexOf('T') + 6);
+    if (this.datePicker) {
+      this.date =
+        this.datePicker.getFullYear().toString().padStart(4, '0') +
+        '-' +
+        (this.datePicker.getMonth() + 1).toString().padStart(2, '0') +
+        '-' +
+        this.datePicker.getDate().toString().padStart(2, '0');
+      this.time =
+        this.datePicker.getHours().toString().padStart(2, '0') +
+        ':' +
+        this.datePicker.getDate().toString().padStart(2, '0');
     }
     this.autoPayment = true;
     const now = new Date();
@@ -110,8 +117,10 @@ export class PlaceBidComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeDate() {
+    console.log(this.date, this.time);
     const biddingPeriod = new Date(this.date + 'T' + this.time);
     const now = new Date();
+    console.log(biddingPeriod);
     now.setDate(now.getDate() + 3);
     this.within3Days = biddingPeriod < now;
   }

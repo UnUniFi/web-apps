@@ -176,7 +176,7 @@
             <img
               mat-card-image
               *ngIf="classImages"
-              src="{{ classImages[i] }}"
+              src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
               class="object-cover h-64 m-0"
               alt="image of the NFT class"
             />

@@ -23,7 +23,7 @@
               <figure class="aspect-square w-full">
                 <img
                   *ngIf="nftImages"
-                  src="{{ nftImages[i] }}"
+                  src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
                   alt="image of the NFT"
                   class="h-full object-cover"
                 />

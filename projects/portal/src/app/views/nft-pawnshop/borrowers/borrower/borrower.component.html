@@ -23,7 +23,7 @@
               <figure class="aspect-square w-full">
                 <img
                   *ngIf="ownNftImages"
-                  src="{{ ownNftImages[i] }}"
+                  src="{{ ownNftImages[i] || 'assets/UnUniFi-logo.png' }}"
                   alt=""
                   class="h-full object-cover"
                 />
@@ -83,7 +83,7 @@
               <figure class="aspect-square w-full">
                 <img
                   *ngIf="listedOwnNftImages"
-                  src="{{ listedOwnNftImages[i] }}"
+                  src="{{ listedOwnNftImages[i] || 'assets/UnUniFi-logo.png' }}"
                   alt=""
                   class="h-full object-cover"
                 />

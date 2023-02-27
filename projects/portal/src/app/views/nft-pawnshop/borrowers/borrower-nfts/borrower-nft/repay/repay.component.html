@@ -2,7 +2,11 @@
   <div class="text-base-content max-w-full">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <figure class="aspect-square w-full">
-        <img src="{{ nftImage }}" alt="image of the NFT" class="h-full object-cover" />
+        <img
+          src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+          alt="image of the NFT"
+          class="h-full object-cover"
+        />
       </figure>
       <div class="card-body">
         <div class="flex flex-row">

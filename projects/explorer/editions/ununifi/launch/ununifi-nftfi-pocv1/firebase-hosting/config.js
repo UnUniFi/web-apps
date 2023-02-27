@@ -55,22 +55,22 @@ const configs = [
       },
     ],
     extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 100, // amount to credit in max request
-          maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 99,
-        },
-      ],
+      // faucet: [
+      //   {
+      //     hasFaucet: false,
+      //     faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+      //     denom: 'ubtc',
+      //     creditAmount: 100, // amount to credit in max request
+      //     maxCredit: 99, // account has already maxCredit balance cannot claim anymore
+      //   },
+      //   {
+      //     hasFaucet: false,
+      //     faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+      //     denom: 'uguu',
+      //     creditAmount: 100,
+      //     maxCredit: 99,
+      //   },
+      // ],
       monitor: undefined,
       navigations: [],
       messageModules,

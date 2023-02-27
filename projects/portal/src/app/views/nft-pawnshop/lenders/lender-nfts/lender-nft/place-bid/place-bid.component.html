@@ -9,7 +9,7 @@
           class="h-full object-cover"
         />
       </figure>
-      <div class="card-body">
+      <div class="card-body w-2/3">
         <div class="flex flex-row">
           <div class="badge badge-lg badge-primary">{{ listingInfo?.state || 'NOT_LISTING' }}</div>
           <div
@@ -58,8 +58,8 @@
 
     <br />
 
-    <div class="flex flex-col lg:flex-row">
-      <div #chartCardRef class="card bg-base-100 shadow-xl w-full lg:w-2/3 mb-4 lg:mb-0 lg:mr-4">
+    <div class="flex flex-col xl:flex-row">
+      <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 xl:mb-0 xl:mr-4">
         <h3 class="m-4 card-title">Offers</h3>
         <google-chart
           *ngIf="chartData"
@@ -73,7 +73,7 @@
       </div>
 
       <span class="flex-auto"></span>
-      <div class="card bg-base-100 shadow-xl w-full lg:w-auto">
+      <div class="card bg-base-100 shadow-xl w-full xl:w-auto">
         <h3 class="m-4 card-title">Make Offer</h3>
         <div class="card-body">
           <form #formRef="ngForm" (submit)="onSubmit()">

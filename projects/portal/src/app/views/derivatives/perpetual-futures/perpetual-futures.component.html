@@ -1,4 +1,4 @@
-<div class="w-full h-screen">
+<div class="w-full">
   <h2>Perpetual Futures</h2>
   <div class="form-control mb-4">
     <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>
@@ -14,7 +14,7 @@
     </ng-template>
     <ng-template #filled>
       <label class="label">
-        <span class="label-text text-base-100">Select market</span>
+        <span class="label-text">Select market</span>
       </label>
       <select
         #marketRef

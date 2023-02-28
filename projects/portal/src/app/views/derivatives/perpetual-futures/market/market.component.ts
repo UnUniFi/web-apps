@@ -107,8 +107,15 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit(): void {}
 
   updateTradingView() {
-    const getMarket = (baseSymbol?: string | null, quoteSymbol?: string | null) =>
-      `${baseSymbol}/${quoteSymbol}`;
+    const getMarket = (baseSymbol?: string | null, quoteSymbol?: string | null) => {
+      if (baseSymbol?.includes('USD')) {
+        baseSymbol = 'USD';
+      }
+      if (quoteSymbol?.includes('USD')) {
+        quoteSymbol = 'USD';
+      }
+      return `${baseSymbol}/${quoteSymbol}`;
+    };
 
     const market = getMarket(this.baseSymbol, this.quoteSymbol);
     if (this.tradingViewConfig[market]) {

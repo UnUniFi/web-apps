@@ -133,6 +133,20 @@ export class BankQueryService {
         symbol: 'USD',
       },
       {
+        description: 'Stablecoin pegged to the USD',
+        denom_units: [
+          {
+            denom: 'uusdc',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'uusdc',
+        display: 'USDC',
+        name: 'USD Coin',
+        symbol: 'USDC',
+      },
+      {
         description: 'Decentralized Liquidity Provider Token',
         denom_units: [
           {

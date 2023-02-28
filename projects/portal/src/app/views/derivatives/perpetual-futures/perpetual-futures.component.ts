@@ -36,9 +36,13 @@ export class PerpetualFuturesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const getMarket = (m: ununificlient.proto.ununifi.derivatives.IMarket) => {
-      return `${this.denomMetadataMap?.[m.base_denom || ''].symbol}/${
-        this.denomMetadataMap?.[m.quote_denom || ''].symbol
-      }`;
+      const baseMetadata = this.denomMetadataMap?.[m.base_denom || ''];
+      const quoteMetadata = this.denomMetadataMap?.[m.quote_denom || ''];
+      if (baseMetadata && quoteMetadata) {
+        return baseMetadata.symbol + '/' + quoteMetadata.symbol;
+      } else {
+        return m.base_denom + '/' + m.quote_denom;
+      }
     };
 
     if (changes.params) {

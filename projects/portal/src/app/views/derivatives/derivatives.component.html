@@ -1,75 +1,105 @@
 <h2 class="mb-0">Derivatives Dashboard</h2>
-<h3 class="mb-0 ml-4">Stats</h3>
-<mat-card class="mb-4 mat-elevation-z8">
-  <mat-card-title>Pool Overview</mat-card-title>
-  <mat-list>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Pool Value:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.pool_market_cap?.total | number }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">24h Volume:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.volume_24hours | number }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">24h Fees:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">$ {{ pool?.fees_24hours | number }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Long Position:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate"
-        >$ {{ perpetualFuturesParams?.long_positions | number }}</span
-      >
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="break-all truncate pr-4">Short Position:</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate"
-        >$ {{ perpetualFuturesParams?.short_positions | number }}</span
-      >
-    </mat-list-item>
-  </mat-list>
-</mat-card>
+<div class="flex justify-center">
+  <div class="max-w-full text-base-content">
+    <ng-container *ngFor="let config of configs">
+      <div class="card lg:card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title break-all">{{ config.name }}</h2>
+          <p>
+            {{ config.description }}
+          </p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" routerLink="{{ config.route }}">
+              <mat-icon>show_chart</mat-icon>
+              <span class="ml-2">Trade</span>
+            </button>
+            <!-- The button to open modal -->
+            <label class="btn"
+              ><a
+                href="https://cauchye.notion.site/NFT-Backed-Loan-Manual-5cedb4b28ef64a37accd4e19425fe2e4#:~:text=Overall%20User%20Flow-,Join%20as%20a%20Borrower%20(if%20you%20have%20a%20NFT),-You%20can%20list"
+                target="_blank"
+                >Read more</a
+              ></label
+            >
+            <!-- Put this part before </body> tag -->
+            <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+            <div class="modal modal-bottom sm:modal-middle">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">NFT-Backed Loan Borrow</h3>
+                <p class="py-4">Coming soon!</p>
+                <div class="modal-action">
+                  <label for="modal-deposit" class="btn">Understood</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<h3 class="mb-0 ml-4">Markets</h3>
-<mat-form-field appearance="fill" class="w-full">
-  <mat-label>Market</mat-label>
-  <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
-    <mat-option *ngFor="let conf of configs" [value]="conf">
-      {{ conf.name }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-card class="mb-4 mat-elevation-z8">
-  <mat-card-title>{{ selectedConfig.name }}</mat-card-title>
-  <mat-card-content>{{ selectedConfig.description }}</mat-card-content>
-  <div class="flex flex-row">
-    <button
-      class="mr-2 px-8"
-      mat-flat-button
-      color="primary"
-      routerLink="{{ selectedConfig.route }}"
-      *ngIf="selectedConfig.name === 'Perpetual Futures'"
-    >
-      <mat-icon>show_chart</mat-icon>
-      <span>Trade</span>
-    </button>
-    <button class="px-8" mat-flat-button color="accent">
-      <span>Read more</span>
-    </button>
+      <br />
+    </ng-container>
   </div>
-</mat-card>
+</div>
 
-<h3 class="mb-0 ml-4">Tokens</h3>
-<!-- To Do Delete: Dummy Card -->
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title break-all">Pool Overview</h2>
+    <div class="flex flex-row justify-center items-center">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Pool Value</div>
+          <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">24h Volume</div>
+          <div class="stat-value text-primary">$ {{ pool?.volume_24hours | number }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">24h Fees</div>
+          <div class="stat-value text-secondary">$ {{ pool?.fees_24hours | number }}</div>
+          <div class="stat-desc"></div>
+        </div>
+      </div>
+      <span class="flex-auto"></span>
+      <div class="card-actions justify-end">
+        <button class="btn btn-secondary px-8" routerLink="pool">View Pool</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title break-all">Perpetual Futures Overview</h2>
+    <div class="flex flex-row justify-center items-center">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Long Position (Perpetual Futures)</div>
+          <div class="stat-value text-primary">
+            $ {{ perpetualFuturesParams?.long_positions | number }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Short Position (Perpetual Futures)</div>
+          <div class="stat-value text-secondary">
+            $ {{ perpetualFuturesParams?.short_positions | number }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-actions justify-start">
+      <button class="btn btn-primary px-8" routerLink="positions">View Positions</button>
+    </div>
+  </div>
+</div>
+
+<!-- <h3 class="mb-0 ml-4">Tokens</h3>
 <div class="flex flex-wrap">
   <mat-card
     class="mat-elevation-z8 text-center hover:shadow-xl w-64 m-5"
@@ -133,4 +163,4 @@
       </mat-list>
     </mat-card-content>
   </mat-card>
-</div>
+</div> -->

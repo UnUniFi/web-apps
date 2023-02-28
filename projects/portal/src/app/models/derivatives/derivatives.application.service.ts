@@ -60,7 +60,14 @@ export class DerivativesApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -105,7 +112,14 @@ export class DerivativesApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
@@ -145,9 +159,8 @@ export class DerivativesApplicationService {
         symbolMetadataMap,
       );
 
-    const positionInstance = cosmosclient.codec.instanceToProtoAny(
-      perpetualFuturesPositionInstance,
-    );
+    const positionInstance: cosmosclient.proto.google.protobuf.IAny =
+      cosmosclient.codec.instanceToProtoAny(perpetualFuturesPositionInstance);
 
     const msg = this.derivativesService.buildMsgOpenPosition(
       address,
@@ -159,22 +172,28 @@ export class DerivativesApplicationService {
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.txCommonApplication.simulate(
+    // comment-out simulate
+    // const simulationResult = await this.txCommonApplication.simulate(
+    //   msg,
+    //   publicKey,
+    //   account,
+    //   minimumGasPrice,
+    // );
+    // if (!simulationResult) {
+    //   return;
+    // }
+    // const { gas, fee } = simulationResult;
+
+    // if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+    //   return;
+    // }
+
+    const txHash = await this.txCommonApplication.broadcast(
       msg,
+      currentCosmosWallet,
       publicKey,
       account,
-      minimumGasPrice,
     );
-    if (!simulationResult) {
-      return;
-    }
-    const { gas, fee } = simulationResult;
-
-    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
-      return;
-    }
-
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
     if (!txHash) {
       return;
     }
@@ -209,7 +228,14 @@ export class DerivativesApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }

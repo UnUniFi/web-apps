@@ -169,35 +169,36 @@
       <div *ngIf="isSubmitted">
         <h3>Listing NFT Collection</h3>
         <div class="flex flex-wrap md:-ml-5">
-          <mat-card
-            class="mat-elevation-z8 text-center w-64 md:ml-5 mb-5 p-0"
-            *ngFor="let class of listedClasses; index as i"
-          >
-            <img
-              mat-card-image
-              *ngIf="classImages"
-              src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
-              class="object-cover h-64 m-0"
-              alt="image of the NFT class"
-            />
-            <mat-card-title class="py-1">
-              {{ class.name }}
-            </mat-card-title>
-            <mat-card-subtitle class="break-all font-semibold text-sm text-gray-500">
-              {{ class.class_id }}
-            </mat-card-subtitle>
-            <mat-card-content>
-              <p>{{ class.description }}</p>
-            </mat-card-content>
-            <mat-card-content class="mb-4">
-              <span class="flex-auto"></span>
-              <button class="text-blue-400" mat-button (click)="onClickClass(class.class_id)">
-                View collection
-              </button>
-              <span class="flex-auto"></span>
-            </mat-card-content>
-          </mat-card>
-          <span class="flex-auto"></span>
+          <ng-container *ngFor="let class of listedClasses; index as i">
+            <mat-card
+              *ngIf="class.class_id !== 'ununifi-debugUserClass'"
+              class="mat-elevation-z8 text-center w-64 md:ml-5 mb-5 p-0"
+            >
+              <img
+                mat-card-image
+                *ngIf="classImages"
+                src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
+                class="object-cover h-64 m-0"
+                alt="image of the NFT class"
+              />
+              <mat-card-title class="py-1">
+                {{ class.name }}
+              </mat-card-title>
+              <mat-card-subtitle class="break-all font-semibold text-sm text-gray-500">
+                {{ class.class_id }}
+              </mat-card-subtitle>
+              <mat-card-content>
+                <p>{{ class.description }}</p>
+              </mat-card-content>
+              <mat-card-content class="mb-4">
+                <span class="flex-auto"></span>
+                <button class="text-blue-400" mat-button (click)="onClickClass(class.class_id)">
+                  View collection
+                </button>
+                <span class="flex-auto"></span>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
         </div>
       </div>
     </ng-template>

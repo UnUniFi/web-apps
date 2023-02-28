@@ -30,7 +30,7 @@ export class PoolComponent implements OnInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.IQueryPoolResponse | null;
 
   @Input()
-  params?: ununificlient.proto.ununifi.derivatives.IPool | null;
+  params?: ununificlient.proto.ununifi.derivatives.IPoolParams | null;
 
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;

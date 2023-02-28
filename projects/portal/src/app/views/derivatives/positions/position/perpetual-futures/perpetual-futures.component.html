@@ -18,8 +18,9 @@
         }"
         >{{ positionInstance?.size }}
         {{
-        symbolMetadataMap?.[position?.market?.denom ||
+        symbolMetadataMap?.[position?.market?.base_denom ||
         '']?.symbol
+
 
 
         }}/{{

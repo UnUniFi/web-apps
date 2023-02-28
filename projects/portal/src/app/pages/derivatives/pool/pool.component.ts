@@ -14,7 +14,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class PoolComponent implements OnInit {
   pool$ = this.derivativesQuery.getPool$();
-  params$ = this.derivativesQuery.getDerivativesParams$().pipe(map((params) => params?.pool));
+  params$ = this.derivativesQuery.getDerivativesParams$().pipe(map((params) => params.pool_params));
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   // TODO: route guard for wallet may be needed
   address$ = this.walletService.currentStoredWallet$.pipe(

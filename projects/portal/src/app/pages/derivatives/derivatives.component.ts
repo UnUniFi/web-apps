@@ -42,12 +42,12 @@ export class DerivativesComponent implements OnInit {
         Promise.all(
           markets.map((market) =>
             this.derivativesQuery
-              .getPerpetualFuture$(market.denom!, market.quote_denom!)
+              .getPerpetualFuture$(market.base_denom!, market.quote_denom!)
               .toPromise()
               .then((res) => {
-                const info = this.getTokenInfo(market.denom!);
+                const info = this.getTokenInfo(market.base_denom!);
                 return {
-                  denom: market.denom,
+                  denom: market.base_denom,
                   name: info?.name,
                   symbol: info?.symbol,
                   iconUrl: info?.iconUrl,

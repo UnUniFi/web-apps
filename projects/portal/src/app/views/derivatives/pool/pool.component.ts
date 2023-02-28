@@ -45,7 +45,9 @@ export class PoolComponent implements OnInit, OnChanges {
   burnLPT = new EventEmitter<BurnLPTEvent>();
 
   tab: 'mint' | 'burn' = 'mint';
-  poolAcceptedSymbols: string[] = [];
+  poolAcceptedSymbols: string[] = ['BTC', 'USDC'];
+  mintSymbol: string = 'BTC';
+  redeemSymbol: string = 'BTC';
   dlpBalance = 0;
 
   constructor() {}
@@ -53,12 +55,12 @@ export class PoolComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.params || changes.denomMetadataMap) {
-      this.poolAcceptedSymbols =
-        this.params?.accepted_assets?.map(
-          (asset) => this.denomMetadataMap?.[asset.denom!]?.symbol!,
-        ) || [];
-    }
+    // if (changes.params || changes.denomMetadataMap) {
+    //   this.poolAcceptedSymbols =
+    //     this.params?.accepted_assets?.map(
+    //       (asset) => this.denomMetadataMap?.[asset.denom!]?.symbol!,
+    //     ) || [];
+    // }
     if (changes.symbolBalancesMap) {
       this.dlpBalance = this.symbolBalancesMap?.['DLP'] || 0;
     }

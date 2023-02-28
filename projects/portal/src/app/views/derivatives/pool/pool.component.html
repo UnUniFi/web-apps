@@ -65,7 +65,7 @@
                   <select
                     #depositSymbolRef
                     required
-                    ngModel
+                    [(ngModel)]="mintSymbol"
                     name="mint-symbol"
                     class="select select-bordered"
                   >
@@ -129,7 +129,7 @@
                 <select
                   #redeemSymbolRef
                   required
-                  ngModel
+                  [(ngModel)]="redeemSymbol"
                   name="redeem-symbol"
                   class="select select-bordered w-full"
                 >

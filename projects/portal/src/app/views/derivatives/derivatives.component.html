@@ -9,7 +9,11 @@
             {{ config.description }}
           </p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" routerLink="{{ config.route }}">
+            <button
+              *ngIf="config.name === 'Perpetual Futures'"
+              class="btn btn-primary"
+              routerLink="{{ config.route }}"
+            >
               <mat-icon>show_chart</mat-icon>
               <span class="ml-2">Trade</span>
             </button>

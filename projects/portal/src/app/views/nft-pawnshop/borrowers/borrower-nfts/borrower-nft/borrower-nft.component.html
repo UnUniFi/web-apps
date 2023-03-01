@@ -153,7 +153,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let bidder of bidders; let i = index">
-            <th>#{{ i }}</th>
+            <th>#{{ i + 1 }}</th>
             <td>{{ bidder.deposit_lending_rate | percentage }}</td>
             <td>{{ bidder.deposit_amount | coin }}</td>
             <td>{{ bidder.bid_amount | coin }}</td>

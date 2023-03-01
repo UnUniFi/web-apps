@@ -44,15 +44,7 @@ export class BorrowerNftComponent implements OnInit {
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort((first, second) => {
-          if (parseInt(first.bid_amount?.amount!) > parseInt(second.bid_amount?.amount!)) {
-            return -1;
-          } else if (parseInt(first.bid_amount?.amount!) < parseInt(second.bid_amount?.amount!)) {
-            return 1;
-          } else {
-            return 0;
-          }
-        }),
+        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
       ),
     );
     this.loan$ = nftCombine$.pipe(

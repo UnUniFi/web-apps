@@ -60,6 +60,9 @@ export class PlaceBidComponent implements OnInit {
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
+      map((bidders) =>
+        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+      ),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),

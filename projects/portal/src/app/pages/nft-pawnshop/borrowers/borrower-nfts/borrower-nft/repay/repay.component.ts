@@ -51,6 +51,9 @@ export class RepayComponent implements OnInit {
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
+      map((bidders) =>
+        bidders.sort((a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!)),
+      ),
     );
     this.loans$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) =>
@@ -154,7 +157,7 @@ export class RepayComponent implements OnInit {
           j++;
         }
         if (amounts != data.amount) {
-          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount)/100);
+          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount) / 100);
         }
         this.shortestExpiryDate$ = of(
           new Date(

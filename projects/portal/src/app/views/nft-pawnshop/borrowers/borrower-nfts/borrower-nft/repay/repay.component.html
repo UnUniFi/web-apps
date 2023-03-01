@@ -142,8 +142,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let bidder of bidders">
-              <th>#1</th>
+            <tr *ngFor="let bidder of bidders; let i = index">
+              <th>#{{ i + 1 }}</th>
               <td>{{ bidder.deposit_lending_rate | percentage }}</td>
               <td>{{ bidder.borrowings![0].amount | coin }}</td>
               <td>{{ bidder.bid_amount | coin }}</td>

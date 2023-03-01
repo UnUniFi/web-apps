@@ -53,10 +53,7 @@ export class LenderNftComponent implements OnInit {
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort(
-          (first, second) =>
-            parseInt(second.bid_amount?.amount!) - parseInt(first.bid_amount?.amount!),
-        ),
+        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
       ),
     );
     const nftData$ = nftCombine$.pipe(

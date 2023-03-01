@@ -2,22 +2,22 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SlashingService {
-  constructor(private readonly txCommonService: TxCommonService) {}
+  constructor(private readonly txCommonService: TxCommonService) { }
 
   async unjail(
     validatorAddress: string,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin | undefined,
-    fee: proto.cosmos.base.v1beta1.ICoin | undefined,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined,
     privateKey?: string,
-  ): Promise<InlineResponse20075 | undefined> {
+  ): Promise<InlineResponse20050 | undefined> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildUnjailTxBuilder(validatorAddress, cosmosPublicKey, gas, fee);
     const signerBaseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
@@ -40,14 +40,14 @@ export class SlashingService {
   async simulateToUnjail(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -63,8 +63,8 @@ export class SlashingService {
   async buildUnjailTxBuilder(
     validatorAddress: string,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin | null | undefined,
-    fee: proto.cosmos.base.v1beta1.ICoin | null | undefined,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null | undefined,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null | undefined,
   ): Promise<cosmosclient.TxBuilder> {
     const valAddress = cosmosclient.ValAddress.fromPublicKey(cosmosPublicKey);
     if (valAddress.toString() !== validatorAddress) {
@@ -85,8 +85,8 @@ export class SlashingService {
     return txBuilder;
   }
 
-  buildMsgUnjail(validatorAddress: string): proto.cosmos.slashing.v1beta1.MsgUnjail {
-    const msgUnjail = new proto.cosmos.slashing.v1beta1.MsgUnjail({
+  buildMsgUnjail(validatorAddress: string): cosmosclient.proto.cosmos.slashing.v1beta1.MsgUnjail {
+    const msgUnjail = new cosmosclient.proto.cosmos.slashing.v1beta1.MsgUnjail({
       validator_addr: validatorAddress,
     });
     return msgUnjail;

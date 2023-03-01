@@ -11,9 +11,9 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -47,7 +47,10 @@ export class GovApplicationService {
   }
 
   // WIP
-  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin, gasRatio: number) {
+  async submitProposal(
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+  ) {
     const privateWallet: StoredWallet & { privateKey: string } =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
@@ -64,8 +67,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -105,7 +108,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Loading...');
 
-    let submitProposalResult: InlineResponse20075 | undefined;
+    let submitProposalResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -135,8 +138,8 @@ export class GovApplicationService {
 
   async Vote(
     proposalID: number,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -153,8 +156,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -197,7 +200,7 @@ export class GovApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let voteResult: InlineResponse20075 | undefined;
+    let voteResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {
@@ -221,8 +224,8 @@ export class GovApplicationService {
 
   async Deposit(
     proposalID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -239,8 +242,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -282,7 +285,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let depositResult: InlineResponse20075 | undefined;
+    let depositResult: InlineResponse20050 | undefined;
     let txHash: string | undefined;
 
     try {

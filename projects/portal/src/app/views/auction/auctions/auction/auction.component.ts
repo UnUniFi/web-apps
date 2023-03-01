@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Component({
   selector: 'view-auction',
@@ -8,14 +8,14 @@ import { ununifi } from 'ununifi-client';
 })
 export class AuctionComponent implements OnInit {
   @Input()
-  auction?: ununifi.auction.CollateralAuction | null;
+  auction?: ununifi.proto.ununifi.auction.CollateralAuction | null;
 
   @Input()
   endTime?: Date | null;
   @Input()
   maxEndTime?: Date | null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

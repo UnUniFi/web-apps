@@ -30,13 +30,6 @@
     <mat-divider [inset]="true"></mat-divider>
 
     <mat-list-item>
-      <span class="whitespace-nowrap">Type: </span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all">{{ txType }}</span>
-    </mat-list-item>
-    <mat-divider [inset]="true"></mat-divider>
-
-    <mat-list-item>
       <span class="whitespace-nowrap">Timestamp: </span>
       <span class="flex-auto"></span>
       <span class="ml-2 break-all text-xs sm:text-base">
@@ -45,95 +38,3 @@
     </mat-list-item>
   </mat-list>
 </mat-card>
-
-<mat-accordion>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-description> Click to see more </mat-panel-description>
-    </mat-expansion-panel-header>
-
-    <h3 class="mb-0 ml-2">Messages</h3>
-    <ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
-      <ng-container *ngIf="unpackMsg(message) as msg">
-        <mat-card class="mb-2">
-          <mat-list>
-            <mat-list-item>
-              <span class="whitespace-nowrap">Type: </span>
-              <span class="flex-auto"></span>
-              <span class="ml-2 break-all">{{ constructorName(msg) }}</span>
-            </mat-list-item>
-            <mat-divider [inset]="true"></mat-divider>
-            <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
-              <mat-list-item>
-                <span class="whitespace-nowrap">{{ data[0] }}</span>
-                <span class="flex-auto"></span>
-                <span class="ml-2 break-all text-xs sm:text-base">{{ data[1] | json }}</span>
-              </mat-list-item>
-              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-            </ng-template>
-          </mat-list>
-        </mat-card>
-      </ng-container>
-    </ng-template>
-
-    <h3 class="mb-0 ml-2">Signatures</h3>
-    <ng-template ngFor let-signerInfo [ngForOf]="tx?.tx?.auth_info?.signer_infos">
-      <ng-container *ngIf="unpackKey(signerInfo.public_key) as pubKey">
-        <mat-card class="mb-2">
-          <mat-list>
-            <mat-list-item>
-              <span class="whitespace-nowrap">Key Type: </span>
-              <span class="flex-auto"></span>
-              <span class="ml-2 break-all">{{ constructorName(pubKey) }}</span>
-            </mat-list-item>
-            <mat-divider [inset]="true"></mat-divider>
-            <mat-list-item>
-              <span class="whitespace-nowrap">Public Key: </span>
-              <span class="flex-auto"></span>
-              <span class="ml-2 break-all">{{ pubKey?.toString() }}</span>
-            </mat-list-item>
-            <mat-divider [inset]="true"></mat-divider>
-            <mat-list-item>
-              <span class="whitespace-nowrap">Signature: </span>
-              <span class="flex-auto"></span>
-              <span class="ml-2 break-all">{{ signerInfo?.mode_info }}</span>
-            </mat-list-item>
-          </mat-list>
-        </mat-card>
-      </ng-container>
-    </ng-template>
-
-    <h3 class="mb-0 ml-2">Logs</h3>
-    <ng-template ngFor let-log [ngForOf]="tx?.tx_response?.logs">
-      <ng-template ngFor let-event [ngForOf]="log.events">
-        <mat-card class="mb-2">
-          <mat-list>
-            <mat-list-item>
-              <span class="whitespace-nowrap">Type: </span>
-              <span class="flex-auto"></span>
-              <span class="ml-2 break-all">{{ event.type }}</span>
-            </mat-list-item>
-            <mat-divider [inset]="true"></mat-divider>
-            <ng-template ngFor let-attr [ngForOf]="event.attributes" let-last="last">
-              <mat-list-item>
-                <span class="whitespace-nowrap">{{ attr.key }}</span>
-                <span class="flex-auto"></span>
-                <span class="ml-2 break-all text-sm sm:text-base">{{ attr.value | json }}</span>
-              </mat-list-item>
-              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-            </ng-template>
-          </mat-list>
-        </mat-card>
-      </ng-template>
-    </ng-template>
-  </mat-expansion-panel>
-</mat-accordion>
-
-<!--
-<h3>Data Download</h3>
-
-<body>
-  <button mat-flat-button color="accent" id="download" type="button">Download CSV</button>
-  <script type="text/javascript" src="download.csv.js"></script>
-</body>
--->

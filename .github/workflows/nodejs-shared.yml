@@ -3,7 +3,7 @@ name: Node.js CI shared
 on:
   pull_request:
     paths:
-      - "projects/shared/**"
+      - 'projects/shared/**'
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
       - run: npm i -g npm
       - run: npm ci
       - run: npm run build --if-present -- --project=shared
-      # Todo: after implementation of testing, this should be enabled.
-      # - run: npm run test -- --project=shared
+        # Todo: after implementation of testing, this should be enabled.
+        # - run: npm run test -- --project=shared
         env:
           CI: true

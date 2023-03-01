@@ -9,6 +9,9 @@ export class FloorPipe implements PipeTransform {
       return value;
     }
     const index = value.indexOf('.');
+    if (index == -1 && Number(value)) {
+      return value;
+    }
     const numString = value.substring(0, index);
 
     return Number(numString).toLocaleString();

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 import { InlineResponse2004Cdp1, InlineResponse2006Deposits } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -18,7 +18,7 @@ export class CdpComponent implements OnInit {
   denom?: string | null;
 
   @Input()
-  params?: ununifi.cdp.IParams | null;
+  params?: ununifi.proto.ununifi.cdp.IParams | null;
 
   @Input()
   cdp?: InlineResponse2004Cdp1 | null;
@@ -27,10 +27,10 @@ export class CdpComponent implements OnInit {
   deposits?: InlineResponse2006Deposits[] | null;
 
   @Input()
-  spotPrice?: ununifi.pricefeed.ICurrentPrice | null;
+  spotPrice?: ununifi.proto.ununifi.pricefeed.ICurrentPrice | null;
 
   @Input()
-  liquidationPrice?: ununifi.pricefeed.ICurrentPrice | null;
+  liquidationPrice?: ununifi.proto.ununifi.pricefeed.ICurrentPrice | null;
 
   @Input()
   withdrawLimit?: number | null;
@@ -38,7 +38,7 @@ export class CdpComponent implements OnInit {
   @Input()
   issueLimit?: number | null;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     setTimeout(() => {

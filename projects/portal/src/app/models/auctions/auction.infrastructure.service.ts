@@ -3,25 +3,25 @@ import { TxCommonService } from '../cosmos/tx-common.service';
 import { CosmosWallet } from '../wallets/wallet.model';
 import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuctionInfrastructureService implements IAuctionInfrastructure {
-  constructor(private readonly txCommonService: TxCommonService) {}
+  constructor(private readonly txCommonService: TxCommonService) { }
 
   async placeBid(
     auctionID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     currentCosmosWallet: CosmosWallet,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20075> {
+  ): Promise<InlineResponse20050> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildPlaceBidTxBuilder(
       auctionID,
@@ -49,16 +49,16 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
   async simulateToPlaceBid(
     auctionID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -74,10 +74,10 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
 
   async buildPlaceBidTxBuilder(
     auctionID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     cosmosPublicKey: cosmosclient.PubKey,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const baseAccount = await this.txCommonService.getBaseAccount(cosmosPublicKey);
     if (!baseAccount) {
@@ -99,13 +99,16 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
   buildMsgPlaceBid(
     auctionID: number,
     bidder: string,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-  ): ununifi.auction.MsgPlaceBid {
-    const msgPlaceBid = new ununifi.auction.MsgPlaceBid({
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): ununifi.proto.ununifi.auction.MsgPlaceBid {
+    //Todo: make auction.MsgPlaceBid
+    const msgPlaceBid: any = undefined
+    /*
+    const msgPlaceBid = new ununifi.rest.auction.MsgPlaceBid({
       auction_id: Long.fromNumber(auctionID),
       bidder: bidder,
       amount: amount,
-    });
+    }); */
     return msgPlaceBid;
   }
 }

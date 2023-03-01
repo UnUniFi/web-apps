@@ -1,16 +1,16 @@
+import { KeyType } from './../../../../../models/keys/key.model';
+import { StoredWallet, WalletType } from './../../../../../models/wallets/wallet.model';
+import { WalletService } from './../../../../../models/wallets/wallet.service';
+import {
+  createCosmosPrivateKeyFromString,
+  createPrivateKeyStringFromMnemonic,
+} from './../../../../../utils/key';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import * as bip39 from 'bip39';
-import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import {
-  createCosmosPrivateKeyFromString,
-  createPrivateKeyStringFromMnemonic,
-} from 'projects/portal/src/app/utils/key';
 
 @Component({
   selector: 'view-ununifi-create-wallet-form-dialog',
@@ -56,7 +56,7 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;

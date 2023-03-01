@@ -1,14 +1,7 @@
 import { CosmosSDKService } from '../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
-import { rest } from '@cosmos-client/core';
-import { pool } from '@cosmos-client/core/cjs/rest/staking/module';
-import {
-  CosmosMintV1beta1QueryInflationResponse,
-  InlineResponse20035,
-  InlineResponse20069,
-  InlineResponse20070,
-  QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod,
-} from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20010 } from '@cosmos-client/core/esm/openapi';
 import { combineLatest, Observable, of, timer } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -19,7 +12,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   pollingInterval = 30 * 60;
-  latestBlock$: Observable<InlineResponse20035 | undefined>;
+  latestBlock$: Observable<InlineResponse20010 | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   totalSupply$: Observable<number | undefined>;
   stakedTokens$: Observable<number | undefined>;
@@ -31,7 +24,7 @@ export class DashboardComponent implements OnInit {
     // eslint-disable-next-line no-unused-vars
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
     this.latestBlock$ = sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getLatestBlock(sdk.rest).then((res) => res.data)),
     );
     this.latestBlockHeight$ = this.latestBlock$.pipe(
       map((latestBlock) =>
@@ -44,12 +37,12 @@ export class DashboardComponent implements OnInit {
     );
 
     this.totalSupply$ = sdk$.pipe(
-      mergeMap((sdk) => rest.bank.totalSupply(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.bank.totalSupply(sdk.rest).then((res) => res.data)),
       map((sdk) => Number(sdk.supply?.find((supply) => supply.denom == 'uguu')?.amount)),
     );
 
     this.stakedTokens$ = sdk$.pipe(
-      mergeMap((sdk) => rest.staking.pool(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.staking.pool(sdk.rest).then((res) => res.data)),
       map((res) => Number(res.pool?.bonded_tokens) + Number(res.pool?.not_bonded_tokens)),
     );
 
@@ -58,10 +51,10 @@ export class DashboardComponent implements OnInit {
     );
 
     this.inflation$ = sdk$.pipe(
-      mergeMap((sdk) => rest.mint.inflation(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.mint.inflation(sdk.rest).then((res) => res.data)),
       map((res) => (Number(res.inflation) * 100).toFixed(2)),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

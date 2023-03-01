@@ -1,22 +1,17 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import {
-  InlineResponse20063DelegationResponses,
-  InlineResponse20066Validators,
-  InlineResponse20072,
+  InlineResponse20038DelegationResponses,
+  InlineResponse20041Validators,
+  InlineResponse20047,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
-  val: InlineResponse20066Validators;
+  val: InlineResponse20041Validators;
   share: number;
   inList: boolean;
   rank: number;
-};
-
-export type validatorWithShareType = {
-  val: InlineResponse20066Validators;
-  share: number;
 };
 
 @Component({
@@ -30,17 +25,17 @@ export class ValidatorsComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063DelegationResponses[] | null;
+  delegations?: InlineResponse20038DelegationResponses[] | null;
   @Input()
-  delegatedValidators?: (InlineResponse20066Validators | undefined)[] | null;
+  delegatedValidators?: (InlineResponse20041Validators | undefined)[] | null;
   @Input()
-  unbondingDelegations?: (InlineResponse20072 | undefined)[] | null;
+  unbondingDelegations?: (InlineResponse20047 | undefined)[] | null;
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
 
   @Output()
-  appClickValidator: EventEmitter<InlineResponse20066Validators>;
+  appClickValidator: EventEmitter<InlineResponse20041Validators>;
 
   constructor() {
     this.toggleActiveChange = new EventEmitter();
@@ -52,7 +47,6 @@ export class ValidatorsComponent implements OnInit {
       console.log('validators', this.validators);
       console.log('unbonding', this.unbondingDelegations);
     }, 5000);
-
   }
 
   getColorCode(valAddress: string) {
@@ -78,7 +72,7 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
-  onClickValidator(validator: InlineResponse20066Validators) {
+  onClickValidator(validator: InlineResponse20041Validators) {
     this.appClickValidator.emit(validator);
   }
 }

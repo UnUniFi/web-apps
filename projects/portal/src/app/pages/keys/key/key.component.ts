@@ -1,10 +1,10 @@
 import { Config, ConfigService } from '../../../models/config.service';
-import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
+import { CosmosRestService } from '../../../models/cosmos-rest.service';
 import { Key } from '../../../models/keys/key.model';
 import { KeyService } from '../../../models/keys/key.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ export class KeyComponent implements OnInit {
   key$: Observable<Key | undefined>;
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
   valAddress$: Observable<cosmosclient.ValAddress | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[]>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   faucets$: Observable<
     | {
         hasFaucet: boolean;
@@ -34,8 +34,8 @@ export class KeyComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly key: KeyService,
-    private cosmosSDK: CosmosSDKService,
     private configService: ConfigService,
+    private cosmosRest: CosmosRestService,
   ) {
     this.config$ = this.configService.config$;
     this.keyID$ = this.route.params.pipe(map((params) => params['key_id']));
@@ -47,16 +47,12 @@ export class KeyComponent implements OnInit {
 
     this.accAddress$ = pubKey$.pipe(map((key) => cosmosclient.AccAddress.fromPublicKey(key)));
     this.valAddress$ = pubKey$.pipe(map((key) => cosmosclient.ValAddress.fromPublicKey(key)));
-
-    this.balances$ = combineLatest([this.cosmosSDK.sdk$, this.accAddress$]).pipe(
-      mergeMap(([sdk, address]) => {
+    this.balances$ = this.accAddress$.pipe(
+      mergeMap((address) => {
         if (address === undefined) {
-          return [];
+          return of([]);
         }
-        return rest.bank
-          .allBalances(sdk.rest, address)
-          .then((res) => res.data.balances || [])
-          .catch((_) => []);
+        return this.cosmosRest.getAllBalances$(address).pipe(map((res) => res || []));
       }),
     );
 

@@ -2,9 +2,9 @@ name: Publish Market Docker image for Private Testnet
 on:
   workflow_dispatch:
   ## disable Github Action related to Docker.
-  # push:
-  #   branches:
-  #     - develop
+  #push:
+  #  branches:
+  #    - develop
 jobs:
   push_to_registry:
     name: Push Docker image for Private Testnet to ghcr.io

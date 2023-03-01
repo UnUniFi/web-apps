@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryValidatorSlashesResponse,
-  InlineResponse20047,
+  InlineResponse20022,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -21,13 +21,13 @@ export class DistributionComponent implements OnInit {
     | QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod
     | undefined
   >;
-  rewards$: Observable<InlineResponse20047 | undefined>;
+  rewards$: Observable<InlineResponse20022 | undefined>;
   slashes$: Observable<CosmosDistributionV1beta1QueryValidatorSlashesResponse | undefined>;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly snackBar: MatSnackBar,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     const accAddress$ = this.route.params.pipe(
       map((params) => params.address),
@@ -50,36 +50,32 @@ export class DistributionComponent implements OnInit {
         return address.toValAddress();
       }),
     );
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, accAddress$, valAddress$]);
+    const combined$ = combineLatest([accAddress$, valAddress$]);
 
     this.commission$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => {
+      mergeMap(([accAddress, valAddress]) => {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+        return this.cosmosRest.getValidatorCommission$(valAddress);
       }),
     );
 
     this.rewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => {
+      mergeMap(([accAddress, valAddress]) => {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
-          .validatorOutstandingRewards(sdk.rest, valAddress)
-          .then((res) => res.data);
+        return this.cosmosRest.getValidatorOutstandingRewards$(valAddress);
       }),
     );
 
     this.slashes$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => {
+      mergeMap(([accAddress, valAddress]) => {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
-          .validatorSlashes(sdk.rest, valAddress, '1', '2') // Todo: '2' must be fixed to latest block height and add pagination support!
-          .then((res) => res.data);
+        return this.cosmosRest.getValidatorSlashes$(valAddress, '1', '2');
       }),
     );
   }

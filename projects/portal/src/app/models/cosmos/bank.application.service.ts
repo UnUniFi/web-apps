@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -27,9 +27,9 @@ export class BankApplicationService {
 
   async send(
     toAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // TODO: firstValueFrom
@@ -67,8 +67,8 @@ export class BankApplicationService {
     }
 
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     try {
       simulatedResultData = await this.bank.simulateToSend(

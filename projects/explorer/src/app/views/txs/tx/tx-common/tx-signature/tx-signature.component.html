@@ -1,0 +1,21 @@
+<ng-container *ngIf="txSignature">
+  <h3 class="mb-0 ml-2 font-medium">Signatures</h3>
+  <mat-card class="mb-2">
+    <mat-chip-list>
+      <mat-chip color="primary" selected> {{txSignature.type}} </mat-chip>
+    </mat-chip-list>
+    <mat-list>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Public Key: </span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">{{ txSignature.publicKey }}</span>
+      </mat-list-item>
+      <mat-divider [inset]="true"></mat-divider>
+      <mat-list-item>
+        <span class="whitespace-nowrap">Signature: </span>
+        <span class="flex-auto"></span>
+        <span class="ml-2 break-all">{{ txSignature.accAddress }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</ng-container>

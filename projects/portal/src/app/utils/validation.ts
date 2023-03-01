@@ -1,6 +1,6 @@
 import { StoredWallet } from '../models/wallets/wallet.model';
 import { createCosmosPrivateKeyFromString, createCosmosPublicKeyFromString } from './key';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 export const validatePrivateStoredWallet = (
   privateStoredWallet: StoredWallet & { privateKey: string },
@@ -31,6 +31,16 @@ export const validatePrivateStoredWallet = (
     if (matchPublicKeyAndAddress) {
       return false;
     }
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const validateAccAddress = (address: string): boolean => {
+  try {
+    const accAddress = cosmosclient.AccAddress.fromString(address);
     return true;
   } catch (error) {
     console.error(error);

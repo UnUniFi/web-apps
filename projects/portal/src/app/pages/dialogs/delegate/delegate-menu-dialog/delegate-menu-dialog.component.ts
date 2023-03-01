@@ -2,15 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  InlineResponse20063Delegation,
+  InlineResponse20038,
+  InlineResponse20038Delegation,
+  InlineResponse20041Validators,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -24,11 +24,11 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./delegate-menu-dialog.component.css'],
 })
 export class DelegateMenuDialogComponent implements OnInit {
-  selectedValidator: InlineResponse20066Validators | undefined;
+  selectedValidator: InlineResponse20041Validators | undefined;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063>;
-  delegation$: Observable<InlineResponse20063Delegation | null | undefined>;
-  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
+  delegations$: Observable<InlineResponse20038>;
+  delegation$: Observable<InlineResponse20038Delegation | null | undefined>;
+  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   isDelegated$: Observable<boolean | undefined> | undefined;
   totalRewards$: Observable<
     CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | undefined
@@ -41,14 +41,14 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
+    public readonly data: InlineResponse20041Validators,
     private router: Router,
     public matDialogRef: MatDialogRef<DelegateMenuDialogComponent>,
     private readonly stakingAppService: StakingApplicationService,
     private readonly distributionAppService: DistributionApplicationService,
     private readonly walletService: WalletService,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly snackBar: MatSnackBar,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.selectedValidator = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -56,9 +56,8 @@ export class DelegateMenuDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((res) => res.data),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
     this.delegateAmount$ = this.delegations$.pipe(
       map(
@@ -109,23 +108,21 @@ export class DelegateMenuDialogComponent implements OnInit {
         return address.toValAddress();
       }),
     );
-    const combined$ = combineLatest([this.cosmosSDK.sdk$, accAddress$, valAddress$]);
-    this.totalRewards$ = combined$.pipe(
-      mergeMap(([sdk, accAddress]) => {
+    const combined$ = combineLatest([accAddress$, valAddress$]);
+    this.totalRewards$ = accAddress$.pipe(
+      mergeMap((accAddress) => {
         if (accAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution
-          .delegationTotalRewards(sdk.rest, accAddress)
-          .then((res) => res.data);
+        return this.cosmosRest.getDelegationTotalRewards$(accAddress);
       }),
     );
     this.commission$ = combined$.pipe(
-      mergeMap(([sdk, accAddress, valAddress]) => {
+      mergeMap(([accAddress, valAddress]) => {
         if (accAddress === undefined || valAddress === undefined) {
           return of(undefined);
         }
-        return rest.distribution.validatorCommission(sdk.rest, valAddress).then((res) => res.data);
+        return this.cosmosRest.getValidatorCommission$(valAddress);
       }),
     );
     this.isValidator$ = valAddress$.pipe(
@@ -140,32 +137,32 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmitDelegate(validator: InlineResponse20066Validators) {
+  onSubmitDelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openDelegateFormDialog(validator);
   }
 
-  onSubmitRedelegate(validator: InlineResponse20066Validators) {
+  onSubmitRedelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openRedelegateFormDialog(validator);
   }
 
-  onSubmitUndelegate(validator: InlineResponse20066Validators) {
+  onSubmitUndelegate(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.stakingAppService.openUndelegateFormDialog(validator);
   }
 
-  onSubmitWithdrawDelegatorReward(validator: InlineResponse20066Validators) {
+  onSubmitWithdrawDelegatorReward(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawDelegatorRewardFormDialog(validator);
   }
 
-  onSubmitWithdrawValidatorCommission(validator: InlineResponse20066Validators) {
+  onSubmitWithdrawValidatorCommission(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.distributionAppService.openWithdrawValidatorCommissionFormDialog(validator);
   }
 
-  onSubmitDetail(validator: InlineResponse20066Validators) {
+  onSubmitDetail(validator: InlineResponse20041Validators) {
     this.matDialogRef.close();
     this.router.navigate(['delegate', 'validators', validator.operator_address]);
   }

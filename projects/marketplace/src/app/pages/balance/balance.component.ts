@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { InlineResponse20012 } from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import { Config, ConfigService } from 'projects/shared/src/lib/models/config/config.service';
 import { CosmosSDKService } from 'projects/shared/src/lib/models/cosmos-sdk/cosmos-sdk.service';
@@ -37,30 +37,30 @@ export class BalanceComponent implements OnInit {
   valAddress$: Observable<string | null | undefined>;
   cosmosUnknownAccount$: Observable<unknown | null | undefined>;
   cosmosAccount$: Observable<
-    | proto.cosmos.auth.v1beta1.BaseAccount
-    | proto.cosmos.vesting.v1beta1.BaseVestingAccount
-    | proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
-    | proto.cosmos.vesting.v1beta1.DelayedVestingAccount
-    | proto.cosmos.vesting.v1beta1.PeriodicVestingAccount
-    | proto.cosmos.vesting.v1beta1.PermanentLockedAccount
-    | proto.cosmos.auth.v1beta1.ModuleAccount
+    | cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.BaseVestingAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.DelayedVestingAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.PeriodicVestingAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.PermanentLockedAccount
+    | cosmosclient.proto.cosmos.auth.v1beta1.ModuleAccount
     | null
     | undefined
   >;
-  cosmosBaseAccount$: Observable<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined>;
+  cosmosBaseAccount$: Observable<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined>;
   accountTypeName$: Observable<string | null | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
+  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
   faucets$: Observable<
     | {
-        hasFaucet: boolean;
-        faucetURL: string;
-        denom: string;
-        creditAmount: number;
-        maxCredit: number;
-      }[]
+      hasFaucet: boolean;
+      faucetURL: string;
+      denom: string;
+      creditAmount: number;
+      maxCredit: number;
+    }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20037>;
+  nodeInfo$: Observable<InlineResponse20012>;
 
   constructor(
     private configService: ConfigService,
@@ -106,7 +106,7 @@ export class BalanceComponent implements OnInit {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return rest.auth
+        return cosmosclient.rest.auth
           .account(sdk.rest, cosmosAccAddress)
           .then(
             (res) =>
@@ -135,7 +135,7 @@ export class BalanceComponent implements OnInit {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return rest.bank
+        return cosmosclient.rest.bank
           .allBalances(sdk.rest, cosmosAccAddress)
           .then((res) => res.data.balances)
           .catch((error) => {
@@ -177,9 +177,9 @@ export class BalanceComponent implements OnInit {
       }),
     );
     this.nodeInfo$ = sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
+      mergeMap((sdk) => cosmosclient.rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

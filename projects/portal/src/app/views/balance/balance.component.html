@@ -115,6 +115,41 @@
   </mat-list>
 </mat-card>
 
+<h2 class="mt-6 mb-0">Claimable Delegator Reward</h2>
+<mat-card class="mb-4">
+  <mat-list>
+    <mat-list-item *ngIf="rewards === null">
+      <mat-spinner></mat-spinner>
+    </mat-list-item>
+    <mat-list-item *ngIf="rewards === undefined || rewards?.total === undefined">
+      No Rewards!
+    </mat-list-item>
+    <mat-list-item *ngIf="rewards && rewards.total && rewards.total.length === 0">
+      No Rewards!
+    </mat-list-item>
+    <ng-container *ngIf="rewards && rewards.total && rewards.total.length > 0">
+      <mat-list-item *ngFor="let totalReward of rewards.total; last as last">
+        <span class="flex-auto"></span>
+        <span class="mr-2">{{ totalReward.amount | number: '1.0-0' }}</span>
+        <span>{{ totalReward.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</mat-card>
+
+<button
+  *ngIf="rewards && rewards.total"
+  class="w-full"
+  mat-flat-button
+  color="accent"
+  [disabled]="!rewards.total.length"
+  type="button"
+  (click)="onClickWithdrawAllDelegatorRewardButton()"
+>
+  Claim All Rewards
+</button>
+
 <h2 class="mt-6 mb-0">Network</h2>
 
 <mat-card class="mb-4">
@@ -127,7 +162,8 @@
       <mat-list-item>
         <span class="whitespace-nowrap">Chain ID</span>
         <span class="flex-auto"></span>
-        <span class="ml2 break-all">{{ nodeInfo.default_node_info?.network }}</span>
+        <!-- Todo: Following line is workaround fix. Refer details in ts file. -->
+        <span class="ml2 break-all">{{ tempNodeInfo.node_info?.network }}</span>
       </mat-list-item>
     </ng-container>
   </mat-list>

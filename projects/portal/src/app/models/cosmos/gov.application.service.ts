@@ -1,12 +1,16 @@
 import { DepositFormDialogComponent } from '../../pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.component';
 import { VoteFormDialogComponent } from '../../pages/dialogs/vote/vote-form-dialog/vote-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { GovService } from './gov.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,6 +28,7 @@ export class GovApplicationService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: MatDialog,
+    private readonly tmp_dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
@@ -91,15 +96,14 @@ export class GovApplicationService {
     }
 
     // ask the user to confirm the fee with a dialog
-    const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+    const txFeeConfirmedResult = await this.tmp_dialog
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -182,15 +186,14 @@ export class GovApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+      const txFeeConfirmedResult = await this.tmp_dialog
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -268,15 +271,14 @@ export class GovApplicationService {
 
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
-      const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+      const txFeeConfirmedResult = await this.tmp_dialog
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;

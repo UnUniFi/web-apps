@@ -181,7 +181,16 @@
               <mat-card-title class="py-1">
                 {{ class.name }}
               </mat-card-title>
-              <mat-card-subtitle class="break-all font-semibold text-sm text-gray-500">
+              <mat-card-subtitle
+                *ngIf="class.class_id !== 'ununifi-debugUserClass'"
+                class="break-all font-semibold text-sm text-gray-500"
+              >
+                {{ class.class_id }}
+              </mat-card-subtitle>
+              <mat-card-subtitle
+                *ngIf="class.class_id === 'ununifi-debugUserClass'"
+                class="break-all font-semibold text-sm text-gray-500"
+              >
                 {{ class.class_id }}
               </mat-card-subtitle>
               <mat-card-content>

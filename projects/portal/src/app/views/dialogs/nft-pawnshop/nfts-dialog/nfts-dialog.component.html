@@ -2,7 +2,10 @@
   <mat-card class="mb-4 w-full">
     <mat-card-header>
       <img mat-card-avatar src="{{ classImage || 'assets/UnUniFi-logo.png' }}" />
-      <mat-card-title>{{ listedClass?.name }}</mat-card-title>
+      <mat-card-title *ngIf="classID !== 'ununifi-debugUserClass'">{{
+        listedClass?.name
+      }}</mat-card-title>
+      <mat-card-title *ngIf="classID === 'ununifi-debugUserClass'">poc_s3_1</mat-card-title>
       <mat-card-subtitle>{{ classID }}</mat-card-subtitle>
     </mat-card-header>
 

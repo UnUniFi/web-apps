@@ -1,2 +1,5 @@
-<view-positions [positions]="positions$ | async" [symbolMetadataMap]="symbolMetadataMap$ | async"
-  (closePosition)="onClosePosition($event)"></view-positions>
+<view-positions
+  [positions]="positions$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  (closePosition)="onClosePosition($event)"
+></view-positions>

@@ -20,7 +20,7 @@ export class PositionsComponent implements OnInit {
   positions$ = this.address$.pipe(
     mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
   );
-  symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+  denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
 
   constructor(
     private readonly walletService: WalletService,

@@ -16,7 +16,7 @@ export class PositionsComponent implements OnInit {
   positions?: AllPositions200ResponsePositionsInner[] | null;
 
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
 
   @Output()
   closePosition = new EventEmitter<ClosePositionEvent>();

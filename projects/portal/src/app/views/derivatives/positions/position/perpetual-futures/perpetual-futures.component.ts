@@ -16,7 +16,10 @@ export class PerpetualFuturesComponent implements OnInit {
   positionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | null;
 
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+
+  @Input()
+  market?: string;
 
   @Output()
   closePosition = new EventEmitter();

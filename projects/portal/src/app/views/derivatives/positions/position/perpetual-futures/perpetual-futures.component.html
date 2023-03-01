@@ -1,5 +1,5 @@
 <div class="card bg-base-100 shadow-xl w-full">
-  <div class="card-body text-base-100">
+  <div class="card-body">
     <div class="flex flex-row">
       <div class="badge badge-lg mr-1">Perpetual Futures</div>
 
@@ -16,17 +16,7 @@
           'text-primary': positionInstance?.position_type === positionType.LONG,
           'text-secondary': positionInstance?.position_type === positionType.SHORT
         }"
-        >{{ positionInstance?.size }}
-        {{
-        symbolMetadataMap?.[position?.market?.base_denom ||
-        '']?.symbol
-
-
-
-        }}/{{
-        symbolMetadataMap?.[position?.market?.quote_denom ||
-        '']?.symbol
-        }}</span
+        >{{ positionInstance?.size }} {{ market }}</span
       >
     </h2>
 
@@ -43,6 +33,7 @@
       <button class="btn btn-outline btn-error" (click)="onClickClose()">Close Position</button>
     </div>
 
+    // To Do collapse not work
     <div class="collapse collapse-arrow">
       <input type="checkbox" />
       <div class="collapse-title text-xl font-medium">Details</div>
@@ -52,11 +43,11 @@
             <tbody>
               <tr>
                 <th>Date Opened</th>
-                <td>{{ position?.opened_at }}</td>
+                <td>{{ position?.opened_at | date: 'yyyy-M-d a h:mm:ss z' }}</td>
               </tr>
               <tr>
                 <th>Opened Rate</th>
-                <td>{{ position?.opened_rate }}</td>
+                <td>$ {{ position?.opened_rate }}</td>
               </tr>
               <tr>
                 <th>Leverage</th>

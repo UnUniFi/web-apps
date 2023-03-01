@@ -3,7 +3,8 @@
     <view-perpetual-futures
       [position]="position"
       [positionInstance]="perpetualFuturesPositionInstance"
-      [symbolMetadataMap]="symbolMetadataMap"
+      [denomMetadataMap]="denomMetadataMap"
+      [market]="market"
       (closePosition)="onClosePosition()"
     ></view-perpetual-futures>
   </ng-container>

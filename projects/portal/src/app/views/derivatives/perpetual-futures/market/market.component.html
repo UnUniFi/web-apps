@@ -18,18 +18,18 @@
 <div class="stats shadow-xl mb-4 w-full">
   <div class="stat">
     <div class="stat-title">Entry Price</div>
-    <div class="stat-value">${{ info?.price | number }}</div>
+    <div class="stat-value">${{ price?.price | number }}</div>
     <div class="stat-desc"></div>
   </div>
   <div class="stat">
     <div class="stat-title">Exit Price</div>
-    <div class="stat-value">${{ info?.price | number }}</div>
+    <div class="stat-value">${{ price?.price | number }}</div>
     <div class="stat-desc"></div>
   </div>
   <div class="stat">
     <div class="stat-title">Borrow Fee</div>
     <div class="stat-value text-primary">
-      {{ params?.pool_params?.borrowing_fee_rate_per_hour| percentage }}
+      {{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}
     </div>
     <div class="stat-desc"></div>
   </div>
@@ -79,14 +79,14 @@
           <label
             class="btn btn-outline w-1/2"
             [class.btn-active]="selectedPositionType === positionType.LONG"
-            (click)="selectedPositionType = positionType.LONG"
+            (click)="onTogglePositionType(positionType.LONG)"
           >
             <mat-icon>trending_up</mat-icon>Long
           </label>
           <label
             class="btn btn-outline w-1/2"
             [class.btn-active]="selectedPositionType === positionType.SHORT"
-            (click)="selectedPositionType = positionType.SHORT"
+            (click)="onTogglePositionType(positionType.SHORT)"
           >
             <mat-icon>trending_down</mat-icon>Short
           </label>
@@ -125,6 +125,7 @@
             class="input input-bordered w-full"
             [min]="0"
             pattern="^[0-9]*\.?[0-9]{0,6}$"
+            (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
           />
           <span>{{ baseSymbol }}</span>
         </label>
@@ -161,6 +162,7 @@
             [step]="1"
             [(ngModel)]="leverage"
             name="leverage"
+            (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
           />
           <span>x</span>
         </label>
@@ -176,6 +178,7 @@
           }"
           [(ngModel)]="leverage"
           name="leverage-slider"
+          (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
         />
       </div>
 
@@ -209,7 +212,7 @@
             placeholder="10"
             class="input input-bordered w-full"
             [min]="minMargin"
-            [max]="maxMargin"
+            [max]="symbolBalancesMap?.[marginSymbol || ''] || 0"
             pattern="^[0-9]*\.?[0-9]{0,6}$"
             [(ngModel)]="marginAmount"
             name="margin"
@@ -218,15 +221,18 @@
         </label>
 
         <label class="label">
-          <span class="label-text-alt">Available balance:</span>
+          <span class="label-text-alt">Minimum margin: {{ minMargin }}</span>
           <span class="label-text-alt"
-            >{{ symbolBalancesMap?.[marginSymbol || ''] || 0 }} {{ marginSymbol }}</span
+            >Available balance (Max margin): {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
+            {{ marginSymbol }}</span
           >
         </label>
       </div>
 
       <br />
-      <button class="btn btn-primary w-full" [disabled]="formRef.invalid">Open position</button>
+      <div class="card-actions justify-start">
+        <button class="btn btn-primary px-8" [disabled]="formRef.invalid">Open position</button>
+      </div>
     </form>
   </div>
 </div>

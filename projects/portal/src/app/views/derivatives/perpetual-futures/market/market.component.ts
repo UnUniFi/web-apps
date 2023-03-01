@@ -41,6 +41,9 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IBreakdown | null;
 
   @Input()
+  price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
+
+  @Input()
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
 
   @Input()
@@ -139,18 +142,28 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onTogglePositionType(positionType: ununificlient.proto.ununifi.derivatives.PositionType) {
+    this.selectedPositionType = positionType;
     switch (positionType) {
       case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
-        this.marginSymbol = this.quoteSymbol;
+        this.marginSymbol = this.baseSymbol;
         break;
       case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
-        this.marginSymbol = this.baseSymbol;
+        this.marginSymbol = this.quoteSymbol;
         break;
     }
   }
 
-  onClickSetMargin(size: number, leverage: number) {
-    this.marginAmount = size / leverage;
+  onSetMargin(size: number, leverage: number) {
+    switch (this.selectedPositionType) {
+      case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
+        this.marginAmount = Math.ceil((size / leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
+        this.minMargin = this.marginAmount / 2;
+        break;
+      case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
+        this.marginAmount = Math.ceil((size / leverage) * Number(this.price?.price));
+        this.minMargin = this.marginAmount / 2;
+        break;
+    }
   }
 
   onSubmit(

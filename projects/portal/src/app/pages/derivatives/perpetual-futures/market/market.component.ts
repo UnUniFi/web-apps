@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from 'projects/portal/src/app/models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from 'projects/portal/src/app/models/derivatives/derivatives.query.service';
+import { PricefeedQueryService } from 'projects/portal/src/app/models/pricefeeds/pricefeed.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { OpenPositionEvent } from 'projects/portal/src/app/views/derivatives/perpetual-futures/market/market.component';
@@ -59,13 +60,34 @@ export class MarketComponent implements OnInit {
     }),
   );
 
+  markets$ = this.pricefeedQuery.listAllMarkets$();
+  marketId$ = combineLatest([
+    this.markets$,
+    this.baseSymbol$,
+    this.quoteSymbol$,
+    this.symbolMetadataMap$,
+  ]).pipe(
+    map(
+      ([markets, baseSymbol, quoteSymbol, symbolMetadataMap]) =>
+        markets.find(
+          (market) =>
+            market.base_asset == symbolMetadataMap[baseSymbol].base! &&
+            market.quote_asset == symbolMetadataMap[quoteSymbol].base!,
+        )?.market_id,
+    ),
+  );
+  price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
+    private readonly pricefeedQuery: PricefeedQueryService,
     private readonly derivativesQuery: DerivativesQueryService,
     private readonly derivativesApplication: DerivativesApplicationService,
-  ) {}
+  ) {
+    this.info$.subscribe((a) => console.log(a));
+  }
 
   ngOnInit(): void {}
 

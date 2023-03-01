@@ -170,10 +170,7 @@
         <h3>Listing NFT Collection</h3>
         <div class="flex flex-wrap md:-ml-5">
           <ng-container *ngFor="let class of listedClasses; index as i">
-            <mat-card
-              *ngIf="class.class_id !== 'ununifi-debugUserClass'"
-              class="mat-elevation-z8 text-center w-64 md:ml-5 mb-5 p-0"
-            >
+            <mat-card class="mat-elevation-z8 text-center w-64 md:ml-5 mb-5 p-0">
               <img
                 mat-card-image
                 *ngIf="classImages"

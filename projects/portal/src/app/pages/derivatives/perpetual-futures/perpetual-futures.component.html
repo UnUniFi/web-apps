@@ -2,6 +2,8 @@
   [info]="info$ | async"
   [params]="params$ | async"
   [denomMetadataMap]="denomMetadataMap$ | async"
+  [markets]="markets$ | async"
+  [selectedMarket]="selectedMarket$ | async"
   (changeMarket)="onChangeMarket($event)"
 >
   <router-outlet></router-outlet>

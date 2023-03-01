@@ -32,3 +32,10 @@ mat-progress-spinner {
 mat-dialog-container {
   background: #3734B0 !important;
 }
+
+cdk-dialog-container {
+  display: block;
+  background: #3734B0 !important;
+  border-radius: 4px;
+  padding: 24px;
+}

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { StoredWallet } from 'projects/shared/src/common';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   BidderBids200ResponseBidsInner,
@@ -16,6 +17,8 @@ export class LenderNftComponent implements OnInit {
   classID?: string | null;
   @Input()
   nftID?: string | null;
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()

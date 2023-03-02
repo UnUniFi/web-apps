@@ -21,6 +21,7 @@ import {
   styleUrls: ['./lender-nft.component.css'],
 })
 export class LenderNftComponent implements OnInit {
+  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   address$: Observable<string>;
   classID$: Observable<string>;
   nftID$: Observable<string>;
@@ -38,8 +39,8 @@ export class LenderNftComponent implements OnInit {
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
-    const currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    this.address$ = currentStoredWallet$.pipe(
+    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
+    this.address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );

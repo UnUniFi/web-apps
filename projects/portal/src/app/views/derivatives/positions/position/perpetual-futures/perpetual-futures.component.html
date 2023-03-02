@@ -33,32 +33,29 @@
       <button class="btn btn-outline btn-error" (click)="onClickClose()">Close Position</button>
     </div>
 
-    // To Do collapse not work
-    <div class="collapse collapse-arrow">
-      <input type="checkbox" />
-      <div class="collapse-title text-xl font-medium">Details</div>
-      <div class="collapse-content">
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr>
-                <th>Date Opened</th>
-                <td>{{ position?.opened_at | date: 'yyyy-M-d a h:mm:ss z' }}</td>
-              </tr>
-              <tr>
-                <th>Opened Rate</th>
-                <td>$ {{ position?.opened_rate }}</td>
-              </tr>
-              <tr>
-                <th>Leverage</th>
-                <td>{{ positionInstance?.leverage }}x</td>
-              </tr>
-              <tr>
-                <th>Remaining Margin</th>
-                <td>458 axlUSDC</td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="flex flex-row justify-center items-center">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Opened Rate</div>
+          <div class="stat-value text-primary">$ {{ position?.opened_rate | number }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Leverage</div>
+          <div class="stat-value text-accent">{{ positionInstance?.leverage }}x</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Remaining Margin</div>
+          <div class="stat-value text-primary">
+            {{ position?.remaining_margin?.amount | coinAmount }}
+          </div>
+          <div class="stat-desc">{{ position?.remaining_margin?.denom | coinDenom }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Date Opened</div>
+          <div class="stat-value text-accent">
+            {{ position?.opened_at | date: 'yyyy-M-d' }}
+          </div>
+          <div class="stat-desc">{{ position?.opened_at | date: 'h:mm:ss z' }}</div>
         </div>
       </div>
     </div>

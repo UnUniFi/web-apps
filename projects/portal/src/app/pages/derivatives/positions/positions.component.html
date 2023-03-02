@@ -1,5 +1,7 @@
 <view-positions
   [positions]="positions$ | async"
   [denomMetadataMap]="denomMetadataMap$ | async"
+  [prices]="prices$ | async"
+  [markets]="markets$ | async"
   (closePosition)="onClosePosition($event)"
 ></view-positions>

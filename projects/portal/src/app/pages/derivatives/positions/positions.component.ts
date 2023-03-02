@@ -1,6 +1,7 @@
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from '../../../models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
+import { PricefeedQueryService } from '../../../models/pricefeeds/pricefeed.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { ClosePositionEvent } from '../../../views/derivatives/positions/positions.component';
@@ -21,10 +22,13 @@ export class PositionsComponent implements OnInit {
     mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
   );
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+  prices$ = this.pricefeedQuery.listAllPrices$();
+  markets$ = this.pricefeedQuery.listAllMarkets$();
 
   constructor(
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
+    private readonly pricefeedQuery: PricefeedQueryService,
     private readonly derivativesQuery: DerivativesQueryService,
     private readonly derivativesApplication: DerivativesApplicationService,
   ) {}

@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
+import {
+  AllPositions200ResponsePositionsInner,
+  MarketAll200ResponseMarketsInner,
+  Price200ResponsePrice,
+} from 'ununifi-client/esm/openapi';
 
 export type ClosePositionEvent = {
   positionId: string;
@@ -17,6 +21,12 @@ export class PositionsComponent implements OnInit {
 
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+
+  @Input()
+  prices?: Price200ResponsePrice[] | null;
+
+  @Input()
+  markets?: MarketAll200ResponseMarketsInner[] | null;
 
   @Output()
   closePosition = new EventEmitter<ClosePositionEvent>();

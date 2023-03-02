@@ -9,7 +9,11 @@ import {
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
-import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
+import {
+  AllPositions200ResponsePositionsInner,
+  MarketAll200ResponseMarketsInner,
+  Price200ResponsePrice,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-position',
@@ -22,6 +26,12 @@ export class PositionComponent implements OnInit, OnChanges {
 
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+
+  @Input()
+  prices?: Price200ResponsePrice[] | null;
+
+  @Input()
+  markets?: MarketAll200ResponseMarketsInner[] | null;
 
   @Output()
   closePosition = new EventEmitter<string>();

@@ -5,9 +5,7 @@
       <div class="card lg:card-side bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title break-all">{{ config.name }}</h2>
-          <p>
-            {{ config.description }}
-          </p>
+          <p style="white-space: pre-wrap">{{ config.description }}</p>
           <div class="card-actions justify-end">
             <button
               *ngIf="config.name === 'Perpetual Futures'"

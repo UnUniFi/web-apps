@@ -18,7 +18,7 @@ export interface TokenInfo {
 export interface MarketConfig {
   name: string;
   route: string;
-  description: string;
+  description?: string;
 }
 
 @Component({
@@ -48,13 +48,13 @@ export class DerivativesComponent implements OnInit {
         name: 'Perpetual Futures',
         route: '/derivatives/perpetual-futures',
         description:
-          'A perpetual futures contract is a special type of futures contract. It does not have an expiry date unlike the traditional one. So you can hold a position for as long as you like. The trading of perpetual contracts is based on an underlying Index Price.',
+          'Perpetual futures are a type of cryptocurrency trading contract that allows traders to take positions on future price movements. These contracts have no expiration date, and traders are able to maintain positions indefinitely by depositing funds with the exchange. \nPerpetual futures contracts typically require margin, making them a high-risk, high-reward investment product. Additionally, leverage can be employed for these contracts, meaning even small price movements can result in significant gains or losses, necessitating careful trading practices.',
       },
       {
         name: 'Perpetual Options (Coming soon)',
         route: '/derivatives/perpetual-options',
         description:
-          'A perpetual option (XPO) is a non-standard financial option that has no fixed maturity and no exercise limitation. While the life of a standard option can range from a few days to several years, a perpetual option (XPO) can be exercised at any time and without any expiration.',
+          'Perpetual options are a type of cryptocurrency trading contract that allows traders to take positions on future price movements. These contracts have no expiration date, and traders are able to maintain positions indefinitely by depositing funds with the exchange. \nPerpetual options, like traditional options contracts, allow for the exchange of underlying and quote currencies, and the ability to settle prices at a specific future date. \nThese contracts come in two varieties, allowing traders to hedge against potential future price increases with purchasing options and against potential price decreases with selling options. \nPerpetual options trading comes with significant risk, and requires ample knowledge and experience. Proper utilization of exchange-provided margin and leverage is also critical.',
       },
     ];
     this.selectedConfig = this.configs[0];

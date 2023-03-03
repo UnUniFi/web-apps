@@ -62,7 +62,7 @@
       <h3>Set Lending Parameter</h3>
       <form #formRef="ngForm" (submit)="onSubmit()">
         <div class="flex flex-row content-center items-center mb-4">
-          <mat-form-field class="flex-auto">
+          <mat-form-field class="w-1/2">
             <mat-label>Lend (Deposit)</mat-label>
             <input
               matNativeControl
@@ -77,7 +77,7 @@
             >
             <!-- <mat-error>Required!</mat-error> -->
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field class="w-1/2">
             <mat-select [(value)]="selectedDenom" (selectionChange)="onChangeSymbol()">
               <mat-option *ngFor="let denom of denoms" [value]="denom">
                 {{ denom }}

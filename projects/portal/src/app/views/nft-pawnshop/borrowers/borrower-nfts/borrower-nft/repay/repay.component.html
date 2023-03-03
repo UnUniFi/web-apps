@@ -8,7 +8,7 @@
           class="h-full object-cover"
         />
       </figure>
-      <div class="card-body w-2/3">
+      <div class="card-body w-full lg:w-2/3">
         <div class="flex flex-row">
           <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
         </div>
@@ -97,7 +97,7 @@
               </label>
             </div>
 
-            <div class="stats flex flex-row justify-end my-4">
+            <div class="stats flex flex-col md:flex-row justify-end my-4">
               <div class="stat flex flex-col items-end">
                 <div class="stat-title">Average interest rate</div>
                 <div class="stat-value">{{ averageInterestRate | percentage }}</div>
@@ -110,11 +110,10 @@
               </div>
             </div>
 
-            <div class="flex flex-row">
-              <span class="flex-auto"></span>
+            <div class="flex flex-col md:flex-row justify-end">
               <button
                 type="button"
-                class="btn btn-primary btn-outline mr-2 px-8"
+                class="btn btn-primary btn-outline mb-2 md:-mb-2 md:mr-2 px-8"
                 (click)="onSimulate()"
               >
                 Simulate

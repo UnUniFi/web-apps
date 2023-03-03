@@ -30,7 +30,24 @@
       </div>
 
       <span class="flex-auto"></span>
-      <button class="btn btn-outline btn-error" (click)="onClickClose()">Close Position</button>
+      <!-- The button to open modal -->
+      <label for="close-modal" class="btn btn-outline btn-error">Close Position</label>
+
+      <!-- Put this part before </body> tag -->
+      <input type="checkbox" id="close-modal" class="modal-toggle" />
+      <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
+          <p class="py-4">
+            You've been selected for a chance to get one year of subscription to use Wikipedia for
+            free!
+          </p>
+          <div class="modal-action">
+            <label for="close-modal" class="btn btn-outline">Cancel</label>
+            <button class="btn btn-secondary" (click)="onClickClose()">Close Position</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="flex flex-row justify-center items-center">

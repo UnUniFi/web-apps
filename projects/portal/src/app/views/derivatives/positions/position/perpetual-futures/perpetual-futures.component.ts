@@ -67,8 +67,6 @@ export class PerpetualFuturesComponent implements OnInit {
   }
 
   onClickClose() {
-    if (window.confirm('Are you sure to close this position?')) {
-      this.closePosition.emit();
-    }
+    this.closePosition.emit();
   }
 }

@@ -65,7 +65,7 @@ export class RepayComponent implements OnInit {
     this.repayDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
-    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 640;
+    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
     this.chartColumns = [
       { type: 'string', label: 'Expiry Date' },
@@ -86,6 +86,11 @@ export class RepayComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    this.chartOptions = this.pawnshopChart.createChartOption(width);
+  }
 
   onSimulate() {
     if (!this.classID || !this.nftID) {

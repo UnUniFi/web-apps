@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
@@ -27,9 +27,9 @@ export class VoteFormDialogComponent implements OnInit {
   proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: number,
-    public matDialogRef: MatDialogRef<VoteFormDialogComponent>,
+    public dialogRef: DialogRef<string, VoteFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly govAppService: GovApplicationService,
@@ -70,7 +70,7 @@ export class VoteFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
   async onSubmitNoWithVeto($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
@@ -82,7 +82,7 @@ export class VoteFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
   async onSubmitNo($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
@@ -94,7 +94,7 @@ export class VoteFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
   async onSubmitAbstain($event: VoteOnSubmitEvent) {
     if (!this.proposalID) {
@@ -106,6 +106,6 @@ export class VoteFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

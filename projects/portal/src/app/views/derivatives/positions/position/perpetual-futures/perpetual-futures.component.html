@@ -20,7 +20,7 @@
       >
     </h2>
 
-    <div class="flex flex-row items-center">
+    <div class="flex flex-col md:flex-row items-center">
       <div class="stats">
         <div class="stat">
           <div class="stat-title">Remaining Margin Rate</div>
@@ -31,7 +31,9 @@
 
       <span class="flex-auto"></span>
       <!-- The button to open modal -->
-      <label for="close-modal" class="btn btn-outline btn-error">Close Position</label>
+      <div class="card-actions justify-end hidden md:flex">
+        <label for="close-modal" class="btn btn-outline btn-error">Close Position</label>
+      </div>
 
       <!-- Put this part before </body> tag -->
       <input type="checkbox" id="close-modal" class="modal-toggle" />
@@ -51,7 +53,7 @@
     </div>
 
     <div class="flex flex-row justify-center items-center">
-      <div class="stats">
+      <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Opened Rate</div>
           <div class="stat-value text-primary">$ {{ position?.opened_rate | number }}</div>
@@ -75,6 +77,9 @@
           <div class="stat-desc">{{ position?.opened_at | date: 'h:mm:ss z' }}</div>
         </div>
       </div>
+    </div>
+    <div class="card-actions justify-end flex md:hidden">
+      <label for="close-modal" class="btn btn-outline btn-error">Close Position</label>
     </div>
   </div>
 </div>

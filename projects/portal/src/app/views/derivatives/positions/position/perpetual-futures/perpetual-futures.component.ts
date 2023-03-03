@@ -61,7 +61,7 @@ export class PerpetualFuturesComponent implements OnInit {
         10 ** baseMetadata?.denom_units![0].exponent!;
     }
     if (margin?.denom == quote) {
-      marginAmount = Number(margin?.amount) / quoteMetadata?.denom_units![0].exponent!;
+      marginAmount = Number(margin?.amount) / 10 ** quoteMetadata?.denom_units![0].exponent!;
     }
     this.marginRate = ((marginAmount * leverage!) / requiredMargin) * 100;
   }

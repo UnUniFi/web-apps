@@ -78,7 +78,12 @@
             <button routerLink="place-bid" class="btn btn-primary px-8">Make Offer</button>
           </div>
           <div
-            *ngIf="bidDetail && !bidDetail.borrowings?.length && !isWinning"
+            *ngIf="
+              bidDetail &&
+              !bidDetail.borrowings?.length &&
+              !isWinning &&
+              listingInfo?.state === 'BIDDING'
+            "
             class="card-actions flex flex-row"
           >
             <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>

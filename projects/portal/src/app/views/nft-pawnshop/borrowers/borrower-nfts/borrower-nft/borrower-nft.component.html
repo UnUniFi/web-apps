@@ -59,7 +59,7 @@
             </div> -->
           </div>
           <span class="flex-auto"></span>
-          <div class="card-actions justify-end">
+          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
             <button class="btn btn-secondary px-8" routerLink="borrow">Borrow</button>
           </div>
         </div>
@@ -92,7 +92,7 @@
             </div>
           </div>
           <span class="flex-auto"></span>
-          <div class="card-actions justify-end">
+          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
             <button class="btn btn-primary px-8" routerLink="repay">Repay</button>
           </div>
         </div>
@@ -114,7 +114,7 @@
             </div>
           </div>
           <span class="flex-auto"></span>
-          <div class="card-actions justify-end">
+          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
             <button class="btn btn-secondary px-8" (click)="onSubmitSell()">Sell</button>
           </div>
         </div>

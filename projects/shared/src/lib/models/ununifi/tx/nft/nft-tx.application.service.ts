@@ -93,14 +93,16 @@ export class NftTxApplicationService {
     // // confirm fee only ununifi wallet type case
     // if (currentCosmosWallet.type === WalletType.ununifi) {
     //   const txFeeConfirmedResult = await this.dialog
-    //     .open(TxFeeConfirmDialogComponent, {
+    //     .open<{
+    //       fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    //       isConfirmed: boolean;
+    //     }>(TxFeeConfirmDialogComponent, {
     //       data: {
     //         fee,
     //         isConfirmed: false,
     //       },
     //     })
-    //     .afterClosed()
-    //     .toPromise();
+    //     .closed.toPromise();
     //   if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
     //     this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
     //     return;

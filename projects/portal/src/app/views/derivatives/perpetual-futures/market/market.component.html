@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="stats shadow-xl mb-4 w-full">
+<div class="stats flex flex-col md:flex-row shadow-xl mb-4 w-full">
   <div class="stat">
     <div class="stat-title">Entry Price</div>
     <div class="stat-value">${{ price?.price | number }}</div>
@@ -83,14 +83,14 @@
             [class.btn-active]="selectedPositionType === positionType.LONG"
             (click)="onTogglePositionType(positionType.LONG)"
           >
-            <mat-icon>trending_up</mat-icon>Long
+            <mat-icon class="hidden sm:flex">trending_up</mat-icon>Long
           </label>
           <label
             class="btn btn-outline w-1/2"
             [class.btn-active]="selectedPositionType === positionType.SHORT"
             (click)="onTogglePositionType(positionType.SHORT)"
           >
-            <mat-icon>trending_down</mat-icon>Short
+            <mat-icon class="hidden sm:flex">trending_down</mat-icon>Short
           </label>
         </div>
       </div>
@@ -120,14 +120,14 @@
           <input
             #sizeRef
             required
-            ngModel
+            [(ngModel)]="size"
             name="position-size"
             type="number"
             placeholder="10"
             class="input input-bordered w-full"
             [min]="0"
             pattern="^[0-9]*\.?[0-9]{0,6}$"
-            (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
+            (input)="onSetMargin()"
           />
           <span>{{ baseSymbol }}</span>
         </label>
@@ -164,7 +164,7 @@
             [step]="1"
             [(ngModel)]="leverage"
             name="leverage"
-            (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
+            (input)="onSetMargin()"
           />
           <span>x</span>
         </label>
@@ -180,7 +180,7 @@
           }"
           [(ngModel)]="leverage"
           name="leverage-slider"
-          (input)="onSetMargin(sizeRef.valueAsNumber, leverage)"
+          (input)="onSetMargin()"
         />
       </div>
 
@@ -219,15 +219,27 @@
             [(ngModel)]="marginAmount"
             name="margin"
           />
-          <span>{{ marginSymbol }}</span>
+          <select
+            #marginSymbolRef
+            required
+            [(ngModel)]="marginSymbol"
+            name="margin-symbol"
+            class="select select-bordered"
+            (change)="onSetMargin()"
+          >
+            <option [value]="baseSymbol">{{ baseSymbol }}</option>
+            <option [value]="quoteSymbol">{{ quoteSymbol }}</option>
+          </select>
         </label>
 
         <label class="label">
-          <span class="label-text-alt">Minimum margin: {{ minMargin }}</span>
-          <span class="label-text-alt"
-            >Available balance (Max margin): {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
-            {{ marginSymbol }}</span
-          >
+          <span class="label-text-alt">
+            <p>Minimum margin: {{ minMargin }} {{ marginSymbol }}</p>
+            <p>
+              Available balance (Max margin): {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
+              {{ marginSymbol }}
+            </p>
+          </span>
         </label>
       </div>
 

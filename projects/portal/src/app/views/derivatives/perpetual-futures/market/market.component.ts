@@ -53,6 +53,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   openPosition = new EventEmitter<OpenPositionEvent>();
 
   selectedPositionType = ununificlient.proto.ununifi.derivatives.PositionType.LONG;
+  size = 1;
   leverage = 1;
   marginAmount = 0;
   maxMargin = 0;
@@ -146,21 +147,24 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
     switch (positionType) {
       case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
         this.marginSymbol = this.baseSymbol;
+        this.onSetMargin();
         break;
       case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
         this.marginSymbol = this.quoteSymbol;
+        this.onSetMargin();
         break;
     }
   }
 
-  onSetMargin(size: number, leverage: number) {
-    switch (this.selectedPositionType) {
-      case ununificlient.proto.ununifi.derivatives.PositionType.LONG:
-        this.marginAmount = Math.ceil((size / leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
+  onSetMargin() {
+    switch (this.marginSymbol) {
+      case this.baseSymbol:
+        this.marginAmount =
+          Math.ceil((this.size / this.leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
         this.minMargin = this.marginAmount / 2;
         break;
-      case ununificlient.proto.ununifi.derivatives.PositionType.SHORT:
-        this.marginAmount = Math.ceil((size / leverage) * Number(this.price?.price));
+      case this.quoteSymbol:
+        this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
         this.minMargin = this.marginAmount / 2;
         break;
     }

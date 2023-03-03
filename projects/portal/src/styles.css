@@ -63,3 +63,10 @@ cdk-dialog-container {
   border-radius: 4px;
   padding: 24px;
 }
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}

@@ -2,8 +2,8 @@ import { KeySelectDialogComponent } from '../../views/keys/key-select-dialog/key
 import { Key } from './key.model';
 import { KeyService } from './key.service';
 import { KeyStoreService } from './key.store.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ import { first } from 'rxjs/operators';
 export class KeySelectDialogService {
   constructor(
     private readonly router: Router,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly key: KeyService,
     private readonly keyStore: KeyStoreService,
   ) {}
@@ -23,11 +23,10 @@ export class KeySelectDialogService {
     const currentKey = await this.keyStore.currentKey$.pipe(first()).toPromise();
 
     const result: Key | undefined = await this.dialog
-      .open(KeySelectDialogComponent, {
+      .open<Key>(KeySelectDialogComponent, {
         data: { keys, currentKeyID: currentKey?.id },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (!result || result.id === currentKey?.id) {
       return result;

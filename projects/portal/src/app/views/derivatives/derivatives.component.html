@@ -48,8 +48,8 @@
 <div class="card bg-base-100 shadow-xl">
   <div class="card-body">
     <h2 class="card-title break-all">Pool Overview</h2>
-    <div class="flex flex-row justify-center items-center">
-      <div class="stats">
+    <div class="flex flex-col xl:flex-row items-center">
+      <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Pool Value</div>
           <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
@@ -68,7 +68,7 @@
       </div>
       <span class="flex-auto"></span>
       <div class="card-actions justify-end">
-        <button class="btn btn-secondary px-8" routerLink="pool">View Pool</button>
+        <button class="btn btn-disabled px-8" routerLink="pool">View Pool</button>
       </div>
     </div>
   </div>
@@ -79,8 +79,8 @@
 <div class="card bg-base-100 shadow-xl">
   <div class="card-body">
     <h2 class="card-title break-all">Perpetual Futures Overview</h2>
-    <div class="flex flex-row justify-center items-center">
-      <div class="stats">
+    <div class="flex flex-col xl:flex-row items-center">
+      <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Long Position (Perpetual Futures)</div>
           <div class="stat-value text-primary">
@@ -96,9 +96,10 @@
           <div class="stat-desc"></div>
         </div>
       </div>
-    </div>
-    <div class="card-actions justify-start">
-      <button class="btn btn-primary px-8" routerLink="positions">View Positions</button>
+      <span class="flex-auto"></span>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary px-8" routerLink="positions">View Positions</button>
+      </div>
     </div>
   </div>
 </div>

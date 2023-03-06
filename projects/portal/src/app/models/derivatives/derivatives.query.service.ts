@@ -1,5 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { AccAddress } from '@cosmos-client/core/cjs/types';
 import { Observable, zip } from 'rxjs';
@@ -58,14 +59,14 @@ export class DerivativesQueryService {
 
   listAddressPositions$(address: string): Observable<AllPositions200ResponsePositionsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununificlient.rest.derivatives.positions(sdk, address)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.addressPositions(sdk, address)),
       map((res) => res.data.positions!),
     );
   }
 
   getWholePerpetualFutures$(): Observable<PerpetualFutures200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununificlient.rest.derivatives.wholePerpetualFutures(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.PerpetualFutures(sdk)),
       map((res) => res.data!),
     );
   }
@@ -75,8 +76,22 @@ export class DerivativesQueryService {
     quoteDenom: string,
   ): Observable<PerpetualFuturesMarket200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununificlient.rest.derivatives.perpetualFuture(sdk, denom, quoteDenom)),
+      mergeMap((sdk) =>
+        ununificlient.rest.derivatives.perpetualFuturesMarket(sdk, denom, quoteDenom),
+      ),
       map((res) => res.data!),
+    );
+  }
+
+  getPerpetualFuturesPositionsTotal(
+    positionType: 'POSITION_UNKNOWN' | 'LONG' | 'SHORT',
+    address: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        ununificlient.rest.derivatives.perpetualFuturePositions(sdk, positionType, address),
+      ),
+      map((res) => res.data.total_position_size_usd!),
     );
   }
 }

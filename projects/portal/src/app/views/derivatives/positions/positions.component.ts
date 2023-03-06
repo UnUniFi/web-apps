@@ -28,6 +28,12 @@ export class PositionsComponent implements OnInit {
   @Input()
   markets?: MarketAll200ResponseMarketsInner[] | null;
 
+  @Input()
+  longPositionsTotal?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+
+  @Input()
+  shortPositionsTotal?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+
   @Output()
   closePosition = new EventEmitter<ClosePositionEvent>();
 

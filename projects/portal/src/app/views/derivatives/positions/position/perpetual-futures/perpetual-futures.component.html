@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl w-full">
   <div class="card-body">
     <div class="flex flex-row">
-      <div class="badge badge-lg badge-accent mr-1">#{{ position?.id }}</div>
+      <div class="badge badge-lg badge-accent mr-1">#{{ position?.position?.id }}</div>
       <div class="badge badge-lg mr-1">Perpetual Futures</div>
 
       <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
@@ -24,28 +24,46 @@
     <div class="flex flex-col md:flex-row items-center">
       <div class="stats">
         <div class="stat">
-          <div class="stat-title">Remaining Margin Rate</div>
-          <div class="stat-value">{{ marginRate | number }}%</div>
+          <div class="stat-title">Margin Maintenance Rate</div>
+          <div class="stat-value">{{ position?.margin_maintenance_rate | percentage }}</div>
           <div class="stat-desc">Under 50% will initiate liquidation</div>
         </div>
+        <!-- <div class="stat">
+          <div class="stat-title">Effective Margin</div>
+          <div class="stat-value">{{ position?.effective_margin | coin }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Profit</div>
+          <div class="stat-value text-error">
+            {{ position?.valuation_profit | coin }}
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Loss</div>
+          <div class="stat-value text-error">
+            {{ position?.valuation_profit | coin }}
+          </div>
+        </div> -->
       </div>
 
       <span class="flex-auto"></span>
       <!-- The button to open modal -->
       <div class="card-actions justify-end hidden md:flex">
-        <label for="close-modal-{{ position?.id }}" class="btn btn-outline btn-error"
+        <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline btn-error"
           >Close Position</label
         >
       </div>
 
       <!-- Put this part before </body> tag -->
-      <input type="checkbox" id="close-modal-{{ position?.id }}" class="modal-toggle" />
+      <input type="checkbox" id="close-modal-{{ position?.position?.id }}" class="modal-toggle" />
       <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
           <p class="py-4">The position is closed and settled, OK?</p>
           <div class="modal-action">
-            <label for="close-modal-{{ position?.id }}" class="btn btn-outline">Cancel</label>
+            <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
+              >Cancel</label
+            >
             <button class="btn btn-secondary" (click)="onClickClose()">Close Position</button>
           </div>
         </div>
@@ -56,7 +74,7 @@
       <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Opened Rate</div>
-          <div class="stat-value text-primary">$ {{ position?.opened_rate | number }}</div>
+          <div class="stat-value text-primary">$ {{ openedRate | number }}</div>
         </div>
         <div class="stat">
           <div class="stat-title">Leverage</div>
@@ -65,16 +83,16 @@
         <div class="stat">
           <div class="stat-title">Remaining Margin</div>
           <div class="stat-value text-primary">
-            {{ position?.remaining_margin?.amount | coinAmount }}
+            {{ position?.position?.remaining_margin?.amount | coinAmount }}
           </div>
-          <div class="stat-desc">{{ position?.remaining_margin?.denom | coinDenom }}</div>
+          <div class="stat-desc">{{ position?.position?.remaining_margin?.denom | coinDenom }}</div>
         </div>
         <div class="stat">
           <div class="stat-title">Date Opened</div>
           <div class="stat-value text-accent">
-            {{ position?.opened_at | date: 'yyyy-M-d' }}
+            {{ position?.position?.opened_at | date: 'yyyy-M-d' }}
           </div>
-          <div class="stat-desc">{{ position?.opened_at | date: 'h:mm:ss z' }}</div>
+          <div class="stat-desc">{{ position?.position?.opened_at | date: 'h:mm:ss z' }}</div>
         </div>
       </div>
     </div>

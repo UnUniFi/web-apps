@@ -24,6 +24,14 @@ export class PositionsComponent implements OnInit {
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   prices$ = this.pricefeedQuery.listAllPrices$();
   markets$ = this.pricefeedQuery.listAllMarkets$();
+  longPositionsTotal$ = this.address$.pipe(
+    mergeMap((address) => this.derivativesQuery.getPerpetualFuturesPositionsTotal('LONG', address)),
+  );
+  shortPositionsTotal$ = this.address$.pipe(
+    mergeMap((address) =>
+      this.derivativesQuery.getPerpetualFuturesPositionsTotal('SHORT', address),
+    ),
+  );
 
   constructor(
     private readonly walletService: WalletService,

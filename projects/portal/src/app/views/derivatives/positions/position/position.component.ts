@@ -39,6 +39,7 @@ export class PositionComponent implements OnInit, OnChanges {
   perpetualFuturesPositionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | null;
   perpetualOptionsPositionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance | null;
   market?: string;
+  openedRate?: number;
 
   constructor() {}
 
@@ -46,19 +47,24 @@ export class PositionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.position && changes.denomMetadataMap) {
-      const baseMetadata = this.denomMetadataMap?.[this.position?.market?.base_denom || ''];
-      const quoteMetadata = this.denomMetadataMap?.[this.position?.market?.quote_denom || ''];
+      const baseDenom = this.position?.position?.market?.base_denom;
+      const quoteDenom = this.position?.position?.market?.quote_denom;
+      const baseMetadata = this.denomMetadataMap?.[baseDenom || ''];
+      const quoteMetadata = this.denomMetadataMap?.[quoteDenom || ''];
       if (baseMetadata && quoteMetadata) {
         this.market = baseMetadata.symbol + '/' + quoteMetadata.symbol;
       } else {
-        this.market = this.position?.market?.base_denom + '/' + this.position?.market?.quote_denom;
+        this.market = baseDenom + '/' + quoteDenom;
       }
     }
 
     if (changes.position) {
       const positionInstance = cosmosclient.codec.protoJSONToInstance(
-        this.position?.position_instance as any,
+        this.position?.position?.position_instance as any,
       );
+      const baseRate = this.position?.position?.opened_base_rate;
+      const quoteRate = this.position?.position?.opened_quote_rate;
+      this.openedRate = Number(baseRate) / Number(quoteRate);
       if (
         positionInstance instanceof
         ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance

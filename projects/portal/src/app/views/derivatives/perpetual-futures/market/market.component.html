@@ -160,7 +160,7 @@
             placeholder="20"
             class="input input-bordered w-full"
             [min]="1"
-            [max]="60"
+            [max]="10"
             [step]="1"
             [(ngModel)]="leverage"
             name="leverage"
@@ -171,12 +171,12 @@
         <input
           type="range"
           min="1"
-          max="60"
+          max="10"
           class="range mt-1"
           [ngClass]="{
-            'range-info': leverage < 20,
-            'range-warning': 20 <= leverage && leverage < 40,
-            'range-error': 40 <= leverage
+            'range-info': leverage <= 3,
+            'range-warning': 3 < leverage && leverage <= 5,
+            'range-error': 5 < leverage
           }"
           [(ngModel)]="leverage"
           name="leverage-slider"

@@ -5,24 +5,35 @@
       <h3>Pool Status</h3>
       <div class="stats stats-vertical md:stats-horizontal shadow">
         <div class="stat">
-          <div class="stat-figure text-primary"></div>
           <div class="stat-title">Pool Market Cap</div>
-          <div class="stat-value text-primary">{{ pool?.pool_market_cap?.total | number }}</div>
-          <div class="stat-desc">USD</div>
+          <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
         </div>
 
-        <div class="stat">
-          <div class="stat-figure text-secondary"></div>
+        <!-- <div class="stat">
           <div class="stat-title">24h Volume</div>
           <div class="stat-value text-secondary">{{ pool?.volume_24hours | number }}</div>
           <div class="stat-desc">USD</div>
         </div>
 
         <div class="stat">
-          <div class="stat-figure text-secondary"></div>
           <div class="stat-title">24h Fees</div>
           <div class="stat-value text-secondary">{{ pool?.fees_24hours | number }}</div>
           <div class="stat-desc">USD</div>
+        </div> -->
+      </div>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="w-full lg:w-1/2">
+      <h3>DLP Rates (1DLP=)</h3>
+      <div class="stats stats-vertical md:stats-horizontal shadow">
+        <div class="stat">
+          <div class="stat-title">BTC</div>
+          <div class="stat-value text-primary">{{ 0.1234 | number }}</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">USDC</div>
+          <div class="stat-value text-secondary">{{ 1234.5678 | number }}</div>
         </div>
       </div>
     </div>
@@ -59,7 +70,7 @@
                     placeholder="0.123456"
                     class="input input-bordered w-full"
                     [min]="0"
-                    [max]="symbolBalancesMap?.[depositSymbolRef.value] || 0"
+                    [max]="symbolBalancesMap?.[mintSymbol] || 0"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                   />
                   <select

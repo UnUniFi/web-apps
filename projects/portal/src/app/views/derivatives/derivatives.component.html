@@ -66,7 +66,7 @@
       </div>
       <span class="flex-auto"></span>
       <div class="card-actions justify-end">
-        <button class="btn btn-disabled px-8" routerLink="pool">View Pool</button>
+        <button class="btn btn-secondary px-8" routerLink="pool">View Pool</button>
       </div>
     </div>
   </div>
@@ -80,14 +80,14 @@
     <div class="flex flex-col xl:flex-row items-center">
       <div class="stats flex flex-col md:flex-row">
         <div class="stat">
-          <div class="stat-title">Long Position (Perpetual Futures)</div>
+          <div class="stat-title">Total Long Position (Perpetual Futures)</div>
           <div class="stat-value text-primary">
             $ {{ perpetualFuturesParams?.long_positions | number }}
           </div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
-          <div class="stat-title">Short Position (Perpetual Futures)</div>
+          <div class="stat-title">Total Short Position (Perpetual Futures)</div>
           <div class="stat-value text-secondary">
             $ {{ perpetualFuturesParams?.short_positions | number }}
           </div>

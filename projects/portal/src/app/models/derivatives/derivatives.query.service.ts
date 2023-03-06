@@ -9,6 +9,7 @@ import ununificlient from 'ununifi-client';
 import {
   AllPositions200ResponsePositionsInner,
   DerivativesParams200ResponseParams,
+  EstimateDLPTokenAmount200Response,
   PerpetualFutures200Response,
   PerpetualFuturesMarket200Response,
   Pool200Response,
@@ -26,6 +27,30 @@ export class DerivativesQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununificlient.rest.derivatives.params(sdk)),
       map((res) => res.data.params!),
+    );
+  }
+
+  getEstimateDLPTokenAmount(
+    mintDenom: string,
+    amount: string,
+  ): Observable<EstimateDLPTokenAmount200Response> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        ununificlient.rest.derivatives.estimateDLPTokenAmount(sdk, mintDenom, amount),
+      ),
+      map((res) => res.data!),
+    );
+  }
+
+  getEstimateRedeemTokenAmount(
+    lptAmount: string,
+    redeemDenom: string,
+  ): Observable<EstimateDLPTokenAmount200Response> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        ununificlient.rest.derivatives.estimateRedeemAmount(sdk, redeemDenom, lptAmount),
+      ),
+      map((res) => res.data!),
     );
   }
 

@@ -67,6 +67,6 @@ export class PerpetualFuturesComponent implements OnInit {
   }
 
   onClickClose() {
-    this.closePosition.emit();
+    this.closePosition.emit(this.position?.id);
   }
 }

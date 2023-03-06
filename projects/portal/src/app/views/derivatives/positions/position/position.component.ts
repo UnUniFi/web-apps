@@ -74,7 +74,7 @@ export class PositionComponent implements OnInit, OnChanges {
     }
   }
 
-  onClosePosition() {
-    this.closePosition.emit(this.position?.id);
+  onClosePosition($event: string) {
+    this.closePosition.emit($event);
   }
 }

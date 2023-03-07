@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from 'projects/portal/src/app/models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from 'projects/portal/src/app/models/derivatives/derivatives.query.service';
@@ -7,8 +8,9 @@ import { PricefeedQueryService } from 'projects/portal/src/app/models/pricefeeds
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { OpenPositionEvent } from 'projects/portal/src/app/views/derivatives/perpetual-futures/market/market.component';
-import { BehaviorSubject, combineLatest, zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
+import ununificlient from 'ununifi-client';
 
 @Component({
   selector: 'app-market',
@@ -78,6 +80,42 @@ export class MarketComponent implements OnInit {
   );
   price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
 
+  positions$ = this.address$.pipe(
+    mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
+    map((positions) =>
+      positions.filter((position) => {
+        const positionInstance = cosmosclient.codec.protoJSONToInstance(
+          position.position?.position_instance as any,
+        );
+        return (
+          positionInstance instanceof
+          ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
+        );
+      }),
+    ),
+  );
+
+  positionInstances$: Observable<
+    (ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | undefined)[]
+  > = this.positions$.pipe(
+    map((positions) =>
+      positions.map((position) => {
+        const instance = cosmosclient.codec.protoJSONToInstance(
+          position.position?.position_instance as any,
+        );
+        if (
+          instance instanceof
+          ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
+        ) {
+          instance.size = (Number(instance.size) * 10 ** 12).toString();
+          return instance;
+        } else {
+          return undefined;
+        }
+      }),
+    ),
+  );
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly walletService: WalletService,
@@ -101,5 +139,9 @@ export class MarketComponent implements OnInit {
       $event.size,
       $event.leverage,
     );
+  }
+
+  async onClosePosition($event: string) {
+    await this.derivativesApplication.closePosition($event);
   }
 }

@@ -9,6 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import ununificlient from 'ununifi-client';
+import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
 
 declare const TradingView: any;
 
@@ -44,6 +45,14 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
 
   @Input()
+  positions?: AllPositions200ResponsePositionsInner[] | null;
+
+  @Input()
+  positionInstances?:
+    | (ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | undefined)[]
+    | null;
+
+  @Input()
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
 
   @Input()
@@ -51,6 +60,9 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Output()
   openPosition = new EventEmitter<OpenPositionEvent>();
+
+  @Output()
+  closePosition = new EventEmitter<string>();
 
   selectedPositionType = ununificlient.proto.ununifi.derivatives.PositionType.LONG;
   size = 1;
@@ -170,7 +182,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  onSubmit(
+  onSubmitOpen(
     size: number,
     leverage: number,
     marginAmount: number,
@@ -185,5 +197,13 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       size,
       leverage,
     });
+  }
+
+  calcMarketRate(base: string, quote: string): number {
+    return Number(base) / Number(quote);
+  }
+
+  onSubmitClose(positionId: string) {
+    this.closePosition.emit(positionId);
   }
 }

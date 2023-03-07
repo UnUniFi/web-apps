@@ -6,5 +6,8 @@
   [symbolBalancesMap]="symbolBalancesMap$ | async"
   [pool]="pool$ | async"
   [price]="price$ | async"
+  [positions]="positions$ | async"
+  [positionInstances]="positionInstances$ | async"
   (openPosition)="onOpenPosition($event)"
+  (closePosition)="onClosePosition($event)"
 ></view-market>

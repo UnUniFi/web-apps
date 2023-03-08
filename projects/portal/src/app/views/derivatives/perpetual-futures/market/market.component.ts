@@ -42,8 +42,8 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IBreakdown | null;
 
   @Input()
-  // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
   price?: number | null;
+  // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
 
   @Input()
   positions?: AllPositions200ResponsePositionsInner[] | null;

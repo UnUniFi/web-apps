@@ -6,6 +6,7 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { ClosePositionEvent } from '../../../views/derivatives/positions/positions.component';
 import { Component, OnInit } from '@angular/core';
+import { combineLatest, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -18,8 +19,9 @@ export class PositionsComponent implements OnInit {
     filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
     map((wallet) => wallet.address),
   );
-  positions$ = this.address$.pipe(
-    mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
+  timer$ = timer(0, 5000);
+  positions$ = combineLatest([this.address$, this.timer$]).pipe(
+    mergeMap(([address, n]) => this.derivativesQuery.listAddressPositions$(address)),
   );
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   prices$ = this.pricefeedQuery.listAllPrices$();

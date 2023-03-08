@@ -8,7 +8,7 @@ import { PricefeedQueryService } from 'projects/portal/src/app/models/pricefeeds
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { OpenPositionEvent } from 'projects/portal/src/app/views/derivatives/perpetual-futures/market/market.component';
-import { BehaviorSubject, combineLatest, Observable, zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, timer, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
@@ -78,15 +78,16 @@ export class MarketComponent implements OnInit {
         )?.market_id,
     ),
   );
+  timer$ = timer(0, 5000);
   // price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
   basePrice$ = this.pricefeedQuery.getPrice$('ubtc:usd');
   quotePrice$ = this.pricefeedQuery.getPrice$('uusdc:usd');
-  price$ = combineLatest([this.basePrice$, this.quotePrice$]).pipe(
-    map(([base, quote]) => Number(base.price) / Number(quote.price)),
+  price$ = combineLatest([this.timer$, this.basePrice$, this.quotePrice$]).pipe(
+    map(([n, base, quote]) => Number(base.price) / Number(quote.price)),
   );
 
-  positions$ = this.address$.pipe(
-    mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
+  positions$ = combineLatest([this.address$, this.timer$]).pipe(
+    mergeMap(([address, n]) => this.derivativesQuery.listAddressPositions$(address)),
     map((positions) =>
       positions.filter((position) => {
         const positionInstance = cosmosclient.codec.protoJSONToInstance(
@@ -129,8 +130,7 @@ export class MarketComponent implements OnInit {
     private readonly derivativesQuery: DerivativesQueryService,
     private readonly derivativesApplication: DerivativesApplicationService,
   ) {
-    this.info$.subscribe((a) => console.log(a));
-    this.markets$.subscribe((a) => console.log(a));
+    this.price$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

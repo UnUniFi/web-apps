@@ -19,7 +19,7 @@ export class PositionsComponent implements OnInit {
     filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
     map((wallet) => wallet.address),
   );
-  timer$ = timer(0, 5000);
+  timer$ = timer(0, 60000);
   positions$ = combineLatest([this.address$, this.timer$]).pipe(
     mergeMap(([address, n]) => this.derivativesQuery.listAddressPositions$(address)),
   );

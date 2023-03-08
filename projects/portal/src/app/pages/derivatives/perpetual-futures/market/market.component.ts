@@ -78,7 +78,7 @@ export class MarketComponent implements OnInit {
         )?.market_id,
     ),
   );
-  timer$ = timer(0, 5000);
+  timer$ = timer(0, 60000);
   // price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
   basePrice$ = this.pricefeedQuery.getPrice$('ubtc:usd');
   quotePrice$ = this.pricefeedQuery.getPrice$('uusdc:usd');

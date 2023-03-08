@@ -20,6 +20,7 @@ export class VaultComponent implements OnInit {
   chartOptions: any;
   configs: string[];
   selectedConfig: string;
+  tab: 'mint' | 'burn' = 'mint';
 
   constructor() {
     this.amount = '0';

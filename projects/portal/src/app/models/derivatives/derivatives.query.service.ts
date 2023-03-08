@@ -43,8 +43,8 @@ export class DerivativesQueryService {
   }
 
   getEstimateRedeemTokenAmount(
-    lptAmount: string,
     redeemDenom: string,
+    lptAmount: string,
   ): Observable<EstimateDLPTokenAmount200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>

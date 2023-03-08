@@ -95,9 +95,32 @@
               </div>
 
               <br />
-              <button [disabled]="mintRef.invalid" class="btn btn-primary w-full">
+
+              <label
+                for="mint-model"
+                class="btn btn-primary w-full"
+                (click)="onEstimateMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
+              >
                 Deposit to mint
-              </button>
+              </label>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="mint-model" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">Are you sure to mint DLP?</h3>
+                  <p class="py-4" *ngIf="estimatedLPTAmount">
+                    Estimated DLP is {{ estimatedLPTAmount.amount | coinAmount }} (Fee is
+                    {{ estimatedLPTAmount.fee | coinAmount }}), OK?
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedLPTAmount">
+                    Estimated redeem amount is DLP, and fees will be deducted from this amount.
+                  </p>
+                  <div class="modal-action">
+                    <label for="mint-model" class="btn btn-outline">Cancel</label>
+                    <button class="btn btn-primary" [disabled]="mintRef.invalid">Mint</button>
+                  </div>
+                </div>
+              </div>
             </form>
           </ng-container>
 
@@ -151,9 +174,34 @@
               </div>
 
               <br />
-              <button class="btn btn-primary w-full" [disabled]="burnRef.invalid">
+
+              <label
+                for="mint-model"
+                class="btn btn-primary w-full"
+                (click)="onEstimateBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
+              >
                 Burn to Redeem
-              </button>
+              </label>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="mint-model" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">Are you sure to burn DLP?</h3>
+                  <p class="py-4" *ngIf="estimatedRedeemAmount">
+                    Estimated {{ redeemSymbolRef.value }} is
+                    {{ estimatedRedeemAmount.amount | coinAmount }} (Fee is
+                    {{ estimatedRedeemAmount.fee | coinAmount }}), OK?
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedRedeemAmount">
+                    Estimated redeem amount is {{ redeemSymbolRef.value }}, and fees will be
+                    deducted from this amount.
+                  </p>
+                  <div class="modal-action">
+                    <label for="mint-model" class="btn btn-outline">Cancel</label>
+                    <button class="btn btn-primary" [disabled]="burnRef.invalid">Burn</button>
+                  </div>
+                </div>
+              </div>
             </form>
           </ng-container>
         </div>

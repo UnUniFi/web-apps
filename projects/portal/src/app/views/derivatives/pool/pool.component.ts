@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
+import { EstimateDLPTokenAmount200Response } from 'ununifi-client/esm/openapi';
 
 export type MintLPTEvent = {
   symbol: string;
@@ -38,6 +39,18 @@ export class PoolComponent implements OnInit, OnChanges {
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
 
+  @Input()
+  estimatedLPTAmount?: EstimateDLPTokenAmount200Response | null;
+
+  @Input()
+  estimatedRedeemAmount?: EstimateDLPTokenAmount200Response | null;
+
+  @Output()
+  estimateMint = new EventEmitter<MintLPTEvent>();
+
+  @Output()
+  estimateBurn = new EventEmitter<BurnLPTEvent>();
+
   @Output()
   mintLPT = new EventEmitter<MintLPTEvent>();
 
@@ -64,6 +77,20 @@ export class PoolComponent implements OnInit, OnChanges {
     if (changes.symbolBalancesMap) {
       this.dlpBalance = this.symbolBalancesMap?.['DLP'] || 0;
     }
+  }
+
+  onEstimateMint(symbol: string, amount: number) {
+    this.estimateMint.emit({
+      symbol,
+      amount,
+    });
+  }
+
+  onEstimateBurn(amount: number, redeemSymbol: string) {
+    this.estimateBurn.emit({
+      amount,
+      redeemSymbol,
+    });
   }
 
   onSubmitMint(symbol: string, amount: number) {

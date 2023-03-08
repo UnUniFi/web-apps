@@ -3,6 +3,10 @@
   [params]="params$ | async"
   [denomMetadataMap]="denomMetadataMap$ | async"
   [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [estimatedLPTAmount]="estimatedLPTAmount$ | async"
+  [estimatedRedeemAmount]="estimatedRedeemAmount$ | async"
+  (estimateMint)="onEstimateMint($event)"
+  (estimateBurn)="onEstimateBurn($event)"
   (mintLPT)="onMintLPT($event)"
   (burnLPT)="onBurnLPT($event)"
 ></view-pool>

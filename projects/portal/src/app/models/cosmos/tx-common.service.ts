@@ -92,7 +92,7 @@ export class TxCommonService {
   }
 
   async buildTxBuilderWithDummyGasAndFee(
-    messages: cosmosclient.proto.google.protobuf.Any[],
+    messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -110,6 +110,8 @@ export class TxCommonService {
   }
 
   async buildTxBuilder(
+    // TODO: instanceToProtoAny should be called before this function for type safety
+    // messages: cosmosclient.proto.google.protobuf.IAny[],
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -180,7 +182,7 @@ export class TxCommonService {
     if (privateKey) {
       cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
     } else {
-      const privateWallet: StoredWallet & { privateKey: string } =
+      const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
         await this.walletAppService.openUnunifiKeyFormDialog();
       if (!privateWallet || !privateWallet.privateKey) {
         this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');

@@ -6,13 +6,12 @@ module.exports = {
   content: ['./projects/**/*.{html,ts}'],
   theme: {
     extend: {
-      screens: {
-      },
+      screens: {},
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('daisyui')],
   important: true,
 };

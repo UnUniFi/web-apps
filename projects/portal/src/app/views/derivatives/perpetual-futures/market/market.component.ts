@@ -42,7 +42,8 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IBreakdown | null;
 
   @Input()
-  price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
+  // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
+  price?: number | null;
 
   @Input()
   positions?: AllPositions200ResponsePositionsInner[] | null;
@@ -176,7 +177,8 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
         this.minMargin = this.marginAmount / 2;
         break;
       case this.quoteSymbol:
-        this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
+        // this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
+        this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price));
         this.minMargin = this.marginAmount / 2;
         break;
     }

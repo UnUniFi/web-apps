@@ -78,7 +78,12 @@ export class MarketComponent implements OnInit {
         )?.market_id,
     ),
   );
-  price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
+  // price$ = this.marketId$.pipe(mergeMap((id) => this.pricefeedQuery.getPrice$(id || '')));
+  basePrice$ = this.pricefeedQuery.getPrice$('ubtc:usd');
+  quotePrice$ = this.pricefeedQuery.getPrice$('uusdc:usd');
+  price$ = combineLatest([this.basePrice$, this.quotePrice$]).pipe(
+    map(([base, quote]) => Number(base.price) / Number(quote.price)),
+  );
 
   positions$ = this.address$.pipe(
     mergeMap((address) => this.derivativesQuery.listAddressPositions$(address)),
@@ -125,6 +130,7 @@ export class MarketComponent implements OnInit {
     private readonly derivativesApplication: DerivativesApplicationService,
   ) {
     this.info$.subscribe((a) => console.log(a));
+    this.markets$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

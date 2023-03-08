@@ -72,4 +72,8 @@ export class PerpetualFuturesComponent implements OnInit {
   onClickClose() {
     this.closePosition.emit(this.position?.position?.id);
   }
+
+  calcMarginRate(decRate: string) {
+    return Number(decRate) / 10 ** 18;
+  }
 }

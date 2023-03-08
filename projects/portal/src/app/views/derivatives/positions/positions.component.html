@@ -1,6 +1,6 @@
 <div class="w-full">
   <h2>Your Positions</h2>
-  <div class="flex flex-col md:flex-row items-center mb-8">
+  <!-- <div class="flex flex-col md:flex-row items-center mb-8">
     <div class="stats">
       <div class="stat">
         <div class="stat-title">Your Long Positions</div>
@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <ng-container *ngIf="positions === null; then loading; else loaded"></ng-container>
   <ng-template #loading>
     <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>

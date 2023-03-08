@@ -315,7 +315,9 @@
             <div class="stats">
               <div class="stat">
                 <div class="stat-title">Margin Maintenance Rate</div>
-                <div class="stat-value">{{ position?.margin_maintenance_rate | percentage }}</div>
+                <div class="stat-value">
+                  {{ calcMarginRate(position?.margin_maintenance_rate!) | percentage }}
+                </div>
                 <div class="stat-desc">Under 50% will initiate liquidation</div>
               </div>
             </div>

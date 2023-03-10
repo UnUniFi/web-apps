@@ -91,7 +91,7 @@ export class DerivativesQueryService {
 
   getWholePerpetualFutures$(): Observable<PerpetualFutures200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununificlient.rest.derivatives.PerpetualFutures(sdk)),
+      mergeMap((sdk) => ununificlient.rest.derivatives.perpetualFutures(sdk)),
       map((res) => res.data!),
     );
   }
@@ -114,9 +114,16 @@ export class DerivativesQueryService {
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
-        ununificlient.rest.derivatives.perpetualFuturePositions(sdk, positionType, address),
+        ununificlient.rest.derivatives.perpetualFuturesPositions(sdk, positionType, address),
       ),
       map((res) => res.data.total_position_size_usd!),
+    );
+  }
+
+  listDLPRates() {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununificlient.rest.derivatives.dlpTokenRates(sdk)),
+      map((res) => res.data.rates!),
     );
   }
 }

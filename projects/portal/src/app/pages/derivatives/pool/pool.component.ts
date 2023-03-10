@@ -75,6 +75,8 @@ export class PoolComponent implements OnInit {
     }),
   );
 
+  dlpRates$ = this.derivativesQuery.listDLPRates();
+
   constructor(
     private readonly walletService: WalletService,
     private readonly derivativesQuery: DerivativesQueryService,

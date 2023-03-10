@@ -1,7 +1,7 @@
 import { DerivativesQueryService } from '../../models/derivatives/derivatives.query.service';
 import { TokenInfo } from '../../views/derivatives/derivatives.component';
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   DerivativesParams200ResponseParams,
@@ -33,9 +33,14 @@ export class DerivativesComponent implements OnInit {
   tokenInfos$: Observable<TokenInfo[]>;
 
   constructor(private derivativesQuery: DerivativesQueryService) {
-    this.derivativesParams$ = this.derivativesQuery.getDerivativesParams$();
-    this.pool$ = this.derivativesQuery.getPool$();
-    this.perpetualFuturesParams$ = this.derivativesQuery.getWholePerpetualFutures$();
+    const timer$ = timer(0, 1000 * 60);
+    this.derivativesParams$ = timer$.pipe(
+      mergeMap((_) => this.derivativesQuery.getDerivativesParams$()),
+    );
+    this.pool$ = timer$.pipe(mergeMap((_) => this.derivativesQuery.getPool$()));
+    this.perpetualFuturesParams$ = timer$.pipe(
+      mergeMap((_) => this.derivativesQuery.getWholePerpetualFutures$()),
+    );
     this.tokens$ = this.derivativesParams$.pipe(
       map((params) => params.perpetual_futures?.markets!),
       mergeMap((markets) =>

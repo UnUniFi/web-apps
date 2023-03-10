@@ -86,7 +86,7 @@ export class MarketComponent implements OnInit {
   );
 
   positions$ = combineLatest([this.address$, this.timer$]).pipe(
-    mergeMap(([address, n]) => this.derivativesQuery.listAddressPositions$(address)),
+    mergeMap(([address, _]) => this.derivativesQuery.listAddressPositions$(address)),
     map((positions) =>
       positions.filter((position) => {
         const positionInstance = cosmosclient.codec.protoJSONToInstance(

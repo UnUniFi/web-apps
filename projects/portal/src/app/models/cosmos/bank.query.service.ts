@@ -1,6 +1,7 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import Decimal from 'decimal.js';
 // import { QueryApi } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
@@ -75,9 +76,10 @@ export class BankQueryService {
             const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
 
             if (denomUnit) {
-              map[metadata.symbol!] = Long.fromString(b.amount!)
-                .div(10 ** denomUnit.exponent!)
-                .toNumber();
+              const amount = new Decimal(b.amount!);
+              map[metadata.symbol!] = Number(
+                amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+              );
             }
           }),
         );

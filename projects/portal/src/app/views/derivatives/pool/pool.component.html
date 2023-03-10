@@ -26,15 +26,12 @@
     <div class="w-full lg:w-1/2">
       <h3>DLP Rates (1DLP=)</h3>
       <div class="stats stats-vertical md:stats-horizontal shadow">
-        <div class="stat">
-          <div class="stat-title">BTC</div>
-          <div class="stat-value text-primary">{{ 0.1234 | number }}</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title">USDC</div>
-          <div class="stat-value text-secondary">{{ 1234.5678 | number }}</div>
-        </div>
+        <ng-container *ngFor="let rate of dlpRates">
+          <div class="stat">
+            <div class="stat-title">{{ rate.denom | coinDenom }}</div>
+            <div class="stat-value text-info">{{ rate.amount | coinAmount }}</div>
+          </div>
+        </ng-container>
       </div>
     </div>
 
@@ -109,11 +106,15 @@
                 <div class="modal-box">
                   <h3 class="font-bold text-lg">Are you sure to mint DLP?</h3>
                   <p class="py-4" *ngIf="estimatedLPTAmount">
-                    Estimated DLP is {{ estimatedLPTAmount.amount | coinAmount }} (Fee is
-                    {{ estimatedLPTAmount.fee | coinAmount }}), OK?
+                    Estimated DLP is {{ estimatedLPTAmount.amount | coin }} (Fee is
+                    {{ estimatedLPTAmount.fee | coin }}), OK?
                   </p>
-                  <p class="py-4" *ngIf="!estimatedLPTAmount">
-                    Estimated redeem amount is DLP, and fees will be deducted from this amount.
+                  <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
+                    Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be
+                    deducted from this amount.
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedLPTAmount && !calculatedDLPAmount">
+                    The amount of DLP to be retrieved is unknown.
                   </p>
                   <div class="modal-action">
                     <label for="mint-model" class="btn btn-outline">Cancel</label>
@@ -189,12 +190,15 @@
                   <h3 class="font-bold text-lg">Are you sure to burn DLP?</h3>
                   <p class="py-4" *ngIf="estimatedRedeemAmount">
                     Estimated {{ redeemSymbolRef.value }} is
-                    {{ estimatedRedeemAmount.amount | coinAmount }} (Fee is
-                    {{ estimatedRedeemAmount.fee | coinAmount }}), OK?
+                    {{ estimatedRedeemAmount.amount | coin }} (Fee is
+                    {{ estimatedRedeemAmount.fee | coin }}), OK?
                   </p>
-                  <p class="py-4" *ngIf="!estimatedRedeemAmount">
-                    Estimated redeem amount is {{ redeemSymbolRef.value }}, and fees will be
-                    deducted from this amount.
+                  <p class="py-4" *ngIf="!estimatedRedeemAmount && calculatedRedeemAmount">
+                    Estimated redeem amount is {{ calculatedRedeemAmount | number
+                    }}{{ redeemSymbolRef.value }}, and fees will be deducted from this amount.
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedRedeemAmount && !calculatedRedeemAmount">
+                    The amount of {{ redeemSymbolRef.value }} to be retrieved is unknown.
                   </p>
                   <div class="modal-action">
                     <label for="mint-model" class="btn btn-outline">Cancel</label>

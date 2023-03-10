@@ -30,22 +30,22 @@
           </div>
           <div class="stat-desc">Under 50% will initiate liquidation</div>
         </div>
-        <!-- <div class="stat">
+        <div class="stat">
           <div class="stat-title">Effective Margin</div>
-          <div class="stat-value">{{ position?.effective_margin | coin }}</div>
+          <div class="stat-value text-primary">{{ position?.effective_margin | coin }}</div>
         </div>
-        <div class="stat">
-          <div class="stat-title">Profit</div>
+        <div class="stat" *ngIf="!position?.valuation_profit?.amount?.includes('-')">
+          <div class="stat-title">Current Profit</div>
+          <div class="stat-value text-info">
+            {{ position?.valuation_profit | coin }}
+          </div>
+        </div>
+        <div class="stat" *ngIf="position?.valuation_profit?.amount?.includes('-')">
+          <div class="stat-title">Current Loss</div>
           <div class="stat-value text-error">
             {{ position?.valuation_profit | coin }}
           </div>
         </div>
-        <div class="stat">
-          <div class="stat-title">Loss</div>
-          <div class="stat-value text-error">
-            {{ position?.valuation_profit | coin }}
-          </div>
-        </div> -->
       </div>
 
       <span class="flex-auto"></span>

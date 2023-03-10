@@ -323,6 +323,24 @@
             </div>
             <div class="stats">
               <div class="stat">
+                <div class="stat-title" *ngIf="!position.valuation_profit?.amount?.includes('-')">
+                  Current Profit
+                </div>
+                <div class="stat-value text-info">
+                  {{ position.valuation_profit | coin }}
+                </div>
+                <div class="stat-desc"></div>
+              </div>
+              <div class="stat" *ngIf="position.valuation_profit?.amount?.includes('-')">
+                <div class="stat-title">Current Loss</div>
+                <div class="stat-value text-error">
+                  {{ position.valuation_profit | coin }}
+                </div>
+                <div class="stat-desc"></div>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat">
                 <div class="stat-title">Opened Rate</div>
                 <div class="stat-value text-primary">
                   $

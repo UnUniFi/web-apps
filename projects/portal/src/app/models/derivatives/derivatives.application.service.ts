@@ -154,7 +154,7 @@ export class DerivativesApplicationService {
       this.derivativesService.buildPerpetualFuturesPositionInstance(
         baseSymbol,
         positionType,
-        size,
+        size * 10 ** 12,
         leverage,
         symbolMetadataMap,
       );

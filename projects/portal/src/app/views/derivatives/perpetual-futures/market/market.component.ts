@@ -210,6 +210,6 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   calcMarginRate(decRate: string) {
-    return Number(decRate) / 10 ** 18;
+    return Number(decRate) / 10 ** 6;
   }
 }

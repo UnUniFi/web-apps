@@ -82,14 +82,14 @@
         <div class="stat">
           <div class="stat-title">Total Long Position (Perpetual Futures)</div>
           <div class="stat-value text-primary">
-            $ {{ perpetualFuturesParams?.long_positions | number }}
+            $ {{ perpetualFuturesParams?.long_positions?.amount | number }}
           </div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
           <div class="stat-title">Total Short Position (Perpetual Futures)</div>
           <div class="stat-value text-secondary">
-            $ {{ perpetualFuturesParams?.short_positions | number }}
+            $ {{ perpetualFuturesParams?.short_positions?.amount | number }}
           </div>
           <div class="stat-desc"></div>
         </div>

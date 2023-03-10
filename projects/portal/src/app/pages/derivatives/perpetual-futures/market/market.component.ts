@@ -112,7 +112,6 @@ export class MarketComponent implements OnInit {
           instance instanceof
           ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
         ) {
-          instance.size = (Number(instance.size) * 10 ** 12).toString();
           return instance;
         } else {
           return undefined;

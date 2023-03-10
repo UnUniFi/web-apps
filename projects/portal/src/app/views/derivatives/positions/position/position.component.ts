@@ -69,7 +69,6 @@ export class PositionComponent implements OnInit, OnChanges {
         positionInstance instanceof
         ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance
       ) {
-        positionInstance.size = (Number(positionInstance.size) * 10 ** 12).toString();
         this.perpetualFuturesPositionInstance = positionInstance;
       } else if (
         positionInstance instanceof

@@ -17,7 +17,7 @@
           'text-primary': positionInstance?.position_type === positionType.LONG,
           'text-secondary': positionInstance?.position_type === positionType.SHORT
         }"
-        >{{ positionInstance?.size | number }} {{ market }}</span
+        >{{ positionInstance?.size }} {{ market }}</span
       >
     </h2>
 
@@ -76,7 +76,7 @@
       <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Opened Rate</div>
-          <div class="stat-value text-primary">$ {{ openedRate | number }}</div>
+          <div class="stat-value text-primary">{{ openedRate | number }} {{ quoteSymbol }}</div>
         </div>
         <div class="stat">
           <div class="stat-title">Leverage</div>

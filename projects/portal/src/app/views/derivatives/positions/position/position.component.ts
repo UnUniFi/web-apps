@@ -40,6 +40,8 @@ export class PositionComponent implements OnInit, OnChanges {
   perpetualOptionsPositionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualOptionsPositionInstance | null;
   market?: string;
   openedRate?: number;
+  baseSymbol?: string | null;
+  quoteSymbol?: string | null;
 
   constructor() {}
 
@@ -52,6 +54,8 @@ export class PositionComponent implements OnInit, OnChanges {
       const baseMetadata = this.denomMetadataMap?.[baseDenom || ''];
       const quoteMetadata = this.denomMetadataMap?.[quoteDenom || ''];
       if (baseMetadata && quoteMetadata) {
+        this.baseSymbol = baseMetadata.symbol;
+        this.quoteSymbol = quoteMetadata.symbol;
         this.market = baseMetadata.symbol + '/' + quoteMetadata.symbol;
       } else {
         this.market = baseDenom + '/' + quoteDenom;

@@ -17,6 +17,10 @@ const routes: Routes = [
     path: 'vaults/:vault_id',
     component: VaultComponent,
   },
+  {
+    path: 'my-vaults/:address',
+    loadChildren: () => import('./my-vaults/my-vaults.module').then((m) => m.AppMyVaultsModule),
+  },
 ];
 
 @NgModule({

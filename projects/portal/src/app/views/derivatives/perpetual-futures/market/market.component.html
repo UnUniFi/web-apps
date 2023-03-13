@@ -309,7 +309,9 @@
                   'text-primary': positionInstances![i]?.position_type === positionType.LONG,
                   'text-secondary': positionInstances![i]?.position_type === positionType.SHORT
                 }"
-                >{{ positionInstances![i]?.size }} {{ baseSymbol }}/{{ quoteSymbol }}</span
+                >{{ positionInstances![i]?.size | number: '1.0-6' }} {{ baseSymbol }}/{{
+                  quoteSymbol
+                }}</span
               >
             </h2>
             <div class="stats">

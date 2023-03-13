@@ -17,7 +17,7 @@
           'text-primary': positionInstance?.position_type === positionType.LONG,
           'text-secondary': positionInstance?.position_type === positionType.SHORT
         }"
-        >{{ positionInstance?.size }} {{ market }}</span
+        >{{ positionInstance?.size | number: '1.0-6' }} {{ market }}</span
       >
     </h2>
 

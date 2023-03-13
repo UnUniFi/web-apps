@@ -21,8 +21,8 @@
       >
     </h2>
 
-    <div class="flex flex-col md:flex-row items-center">
-      <div class="stats">
+    <div class="flex flex-row justify-center items-center">
+      <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Margin Maintenance Rate</div>
           <div class="stat-value">
@@ -44,29 +44,6 @@
           <div class="stat-title">Current Loss</div>
           <div class="stat-value text-error">
             {{ position?.valuation_profit | coin }}
-          </div>
-        </div>
-      </div>
-
-      <span class="flex-auto"></span>
-      <!-- The button to open modal -->
-      <div class="card-actions justify-end hidden md:flex">
-        <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline btn-error"
-          >Close Position</label
-        >
-      </div>
-
-      <!-- Put this part before </body> tag -->
-      <input type="checkbox" id="close-modal-{{ position?.position?.id }}" class="modal-toggle" />
-      <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
-          <p class="py-4">The position #{{ position?.position?.id }} is closed and settled, OK?</p>
-          <div class="modal-action">
-            <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
-              >Cancel</label
-            >
-            <button class="btn btn-secondary" (click)="onClickClose()">Close Position</button>
           </div>
         </div>
       </div>
@@ -98,8 +75,27 @@
         </div>
       </div>
     </div>
-    <div class="card-actions justify-end flex md:hidden">
-      <label for="close-modal" class="btn btn-outline btn-error">Close Position</label>
+    <span class="flex-auto"></span>
+    <!-- The button to open modal -->
+    <div class="card-actions justify-end">
+      <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline btn-error"
+        >Close Position</label
+      >
+    </div>
+
+    <!-- Put this part before </body> tag -->
+    <input type="checkbox" id="close-modal-{{ position?.position?.id }}" class="modal-toggle" />
+    <div class="modal modal-bottom sm:modal-middle">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
+        <p class="py-4">The position #{{ position?.position?.id }} is closed and settled, OK?</p>
+        <div class="modal-action">
+          <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
+            >Cancel</label
+          >
+          <button class="btn btn-secondary" (click)="onClickClose()">Close Position</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,3 +1,5 @@
+import { StrategiesComponent } from './strategies/strategies.component';
+import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';
 import { OwnerComponent } from './vaults/owner/owner.component';
 import { VaultComponent } from './vaults/vault/vault.component';
@@ -26,6 +28,14 @@ const routes: Routes = [
   {
     path: 'vaults/:vault_id',
     component: VaultComponent,
+  },
+  {
+    path: 'strategies',
+    component: StrategiesComponent,
+  },
+  {
+    path: 'strategies/:strategy_id',
+    component: StrategyComponent,
   },
 ];
 

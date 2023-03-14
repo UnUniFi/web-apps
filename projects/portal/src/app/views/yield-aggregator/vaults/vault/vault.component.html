@@ -6,7 +6,7 @@
           {{ vault.name }}
           <div class="badge badge-secondary">{{ vault.symbol }}</div>
         </h2>
-        <div class="stats shadow">
+        <div class="stats">
           <div class="stat">
             <div class="stat-title">APY</div>
             <div class="stat-value">12.34%</div>
@@ -119,7 +119,15 @@
             </div>
           </div>
 
-          <div class="collapse collapse-arrow">
+          <div class="card-actions justify-end hidden lg:flex">
+            <button
+              routerLink="/yield-aggregator/strategies/mar00"
+              class="btn btn-outline btn-info"
+            >
+              View
+            </button>
+          </div>
+          <!-- <div class="collapse collapse-arrow">
             <input type="checkbox" />
             <div class="collapse-title text-xl font-medium">Details</div>
             <div class="collapse-content">
@@ -138,7 +146,7 @@
                 </table>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

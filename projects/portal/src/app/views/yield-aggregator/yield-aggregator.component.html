@@ -7,7 +7,11 @@
           <h2 class="card-title break-all">{{ config.name }}</h2>
           <p style="white-space: pre-wrap">{{ config.description }}</p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary" routerLink="{{ config.route }}">
+            <button
+              *ngIf="config.route === 'vaults'"
+              class="btn btn-primary"
+              routerLink="{{ config.route }}"
+            >
               <mat-icon>monetization_on</mat-icon>
               <span class="ml-2">Deposit</span>
             </button>
@@ -18,6 +22,14 @@
             >
               <mat-icon>create</mat-icon>
               <span class="ml-2">create</span>
+            </button>
+            <button
+              *ngIf="config.route === 'strategies'"
+              class="btn btn-primary"
+              routerLink="{{ config.route }}"
+            >
+              <mat-icon>explore</mat-icon>
+              <span class="ml-2">View</span>
             </button>
             <!-- The button to open modal -->
             <label class="btn"

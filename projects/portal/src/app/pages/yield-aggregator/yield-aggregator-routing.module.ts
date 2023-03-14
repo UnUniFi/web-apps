@@ -1,3 +1,5 @@
+import { CreateComponent } from './vaults/create/create.component';
+import { OwnerComponent } from './vaults/owner/owner.component';
 import { VaultComponent } from './vaults/vault/vault.component';
 import { VaultsComponent } from './vaults/vaults.component';
 import { YieldAggregatorComponent } from './yield-aggregator.component';
@@ -14,12 +16,16 @@ const routes: Routes = [
     component: VaultsComponent,
   },
   {
-    path: 'vaults/:vault_id',
-    component: VaultComponent,
+    path: 'vaults/create',
+    component: CreateComponent,
   },
   {
-    path: 'my-vaults/:address',
-    loadChildren: () => import('./my-vaults/my-vaults.module').then((m) => m.AppMyVaultsModule),
+    path: 'vaults/owner/:address',
+    component: OwnerComponent,
+  },
+  {
+    path: 'vaults/:vault_id',
+    component: VaultComponent,
   },
 ];
 

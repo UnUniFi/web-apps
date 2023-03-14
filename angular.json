@@ -222,7 +222,7 @@
             "tsConfig": "projects/portal/tsconfig.app.json",
             "assets": ["projects/portal/src/favicon.png", "projects/portal/src/assets"],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/portal/src/styles.css"
             ],
             "scripts": []

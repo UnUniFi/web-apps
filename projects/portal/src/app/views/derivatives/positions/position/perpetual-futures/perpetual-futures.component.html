@@ -1,4 +1,4 @@
-<div class="card bg-base-100 shadow-xl w-full">
+<div class="card bg-base-100 shadow-xl w-full" *ngIf="position?.position?.id !== '10'">
   <div class="card-body">
     <div class="flex flex-row">
       <div class="badge badge-lg badge-accent mr-1">#{{ position?.position?.id }}</div>

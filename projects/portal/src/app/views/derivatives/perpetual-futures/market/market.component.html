@@ -290,7 +290,7 @@
         *ngFor="let position of positions; let i = index"
         class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3"
       >
-        <div class="card bg-base-100 w-full shadow-xl">
+        <div class="card bg-base-100 w-full shadow-xl" *ngIf="position?.position?.id !== '10'">
           <div class="card-body">
             <div class="flex flex-row">
               <div class="badge badge-lg badge-accent mr-1">#{{ position?.position?.id }}</div>

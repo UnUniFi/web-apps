@@ -65,7 +65,7 @@
           </div>
 
           <br />
-          <button class="btn btn-primary w-full">Deposit to mint</button>
+          <button class="btn btn-primary px-8">Deposit to mint</button>
         </form>
       </div>
       <div class="card-body" *ngIf="tab === 'burn'">
@@ -94,7 +94,7 @@
           </div>
 
           <br />
-          <button class="btn btn-primary w-full">Burn to Redeem</button>
+          <button class="btn btn-secondary px-8">Burn to Redeem</button>
         </form>
       </div>
     </div>
@@ -145,7 +145,7 @@
   </div>
 </div>
 
-<h2 class="mb-0">Vault Info</h2>
+<!-- <h2 class="mb-0">Vault Info</h2>
 <mat-card class="mb-4">
   <mat-card-header>
     <img mat-card-avatar src="{{ vault.iconUrl }}" />
@@ -225,7 +225,6 @@
       <ng-template #deposit><mat-label>From Wallet</mat-label></ng-template>
       <ng-template #withdraw><mat-label>From Vault</mat-label></ng-template>
       <input matNativeControl #targetRef name="trade" [(ngModel)]="amount" [min]="0" required />
-      <!-- <mat-error>Required!</mat-error> -->
     </mat-form-field>
     <mat-form-field>
       <mat-select [(value)]="selectedAsset">
@@ -297,4 +296,4 @@
       <span class="ml-2 break-all text-sm sm:text-base">%</span>
     </mat-list-item>
   </mat-list>
-</mat-card>
+</mat-card> -->

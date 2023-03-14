@@ -72,23 +72,24 @@
               <input type="number" placeholder="12.123456" class="input input-bordered w-full" />
               <span>%</span>
             </label>
-            <label class="input-group mb-2">
-              <select class="select select-bordered">
-                <option disabled selected>Select a strategy</option>
-                <option>Mercury</option>
-                <option>Venus</option>
-                <option>Mars</option>
-                <option>Jupiter</option>
-              </select>
-              <input type="number" placeholder="12.123456" class="input input-bordered w-full" />
-              <span>%</span>
-            </label>
+            <div *ngFor="let strategy of strategies">
+              <label class="input-group mb-2">
+                <select class="select select-bordered">
+                  <option disabled selected>Select a strategy</option>
+                  <option>Mercury</option>
+                  <option>Venus</option>
+                  <option>Mars</option>
+                  <option>Jupiter</option>
+                </select>
+                <input type="number" placeholder="12.123456" class="input input-bordered w-full" />
+                <span>%</span>
+              </label>
+            </div>
           </div>
-          <!-- <button>
-                      <mat-icon>add</mat-icon> Add s Strategy
-                      </button> -->
           <div class="text-center">
-            <label class="btn btn-outline btn-primary px-8 mb-4">Add a Strategy</label>
+            <label class="btn btn-outline px-8 mb-4" (click)="onClickAddStrategy()">
+              <mat-icon>add</mat-icon>
+            </label>
           </div>
 
           <br />

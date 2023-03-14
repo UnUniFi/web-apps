@@ -6,7 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
+  firstStrategy = { id: '', distRate: 0 };
+  strategies: { id: string; distRate: number }[] = [];
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClickAddStrategy() {
+    this.strategies.push({ id: '', distRate: 0 });
+  }
 }

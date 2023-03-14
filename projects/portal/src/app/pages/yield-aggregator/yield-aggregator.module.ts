@@ -1,8 +1,12 @@
+import { StrategiesModule } from '../../views/yield-aggregator/strategies/strategies.module';
+import { StrategyModule } from '../../views/yield-aggregator/strategies/strategy/strategy.module';
 import { CreateModule } from '../../views/yield-aggregator/vaults/create/create.module';
 import { OwnerModule } from '../../views/yield-aggregator/vaults/owner/owner.module';
 import { VaultModule } from '../../views/yield-aggregator/vaults/vault/vault.module';
 import { VaultsModule } from '../../views/yield-aggregator/vaults/vaults.module';
 import { YieldAggregatorModule } from '../../views/yield-aggregator/yield-aggregator.module';
+import { StrategiesComponent } from './strategies/strategies.component';
+import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';
 import { OwnerComponent } from './vaults/owner/owner.component';
 import { VaultComponent } from './vaults/vault/vault.component';
@@ -19,6 +23,8 @@ import { NgModule } from '@angular/core';
     VaultComponent,
     CreateComponent,
     OwnerComponent,
+    StrategiesComponent,
+    StrategyComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +34,8 @@ import { NgModule } from '@angular/core';
     VaultModule,
     CreateModule,
     OwnerModule,
+    StrategiesModule,
+    StrategyModule,
   ],
 })
 export class AppYieldAggregatorModule {}

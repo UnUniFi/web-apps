@@ -2,35 +2,38 @@
   <div class="flex flex-row flex-wrap mb-8">
     <h2>Vault Management</h2>
   </div>
-  <div class="mb-8">
-    <h3>Your Vaults Info</h3>
-    <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats shadow">
-        <div class="stat">
-          <div class="stat-title">Average APY</div>
-          <div class="stat-value">12.34%</div>
-          <div class="stat-desc"></div>
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title break-all">Your Vaults Info</h2>
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">Average APY</div>
+            <div class="stat-value">12.34%</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Average TVL</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Deposited</div>
+            <div class="stat-value">$ 123</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Earnings</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-title">Average TVL</div>
-          <div class="stat-value">$ 12.3</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Total Deposited</div>
-          <div class="stat-value">$ 123456</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Total Earnings</div>
-          <div class="stat-value">$ 123.4</div>
-          <div class="stat-desc"></div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary px-8" routerLink="/yield-aggregator/vaults/create">
+            Create a New Vault
+          </button>
         </div>
       </div>
-      <span class="flex-auto"></span>
-      <button class="btn btn-primary px-8" routerLink="/yield-aggregator/vaults/create">
-        Create a New Vault
-      </button>
     </div>
   </div>
 
@@ -43,28 +46,26 @@
           <div class="badge badge-lg badge-secondary mr-1">USDC</div>
         </div>
         <h2 class="card-title">USDC Vault</h2>
-        <div class="flex flex-col lg:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">APY</div>
-              <div class="stat-value text-secondary">12.34%</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">TVL</div>
-              <div class="stat-value text-primary">$ 1.23</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Deposits</div>
-              <div class="stat-value">$ 123.4</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Earnings</div>
-              <div class="stat-value text-primary">$ 12.3</div>
-              <div class="stat-desc"></div>
-            </div>
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">APY</div>
+            <div class="stat-value text-secondary">12.34%</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">TVL</div>
+            <div class="stat-value text-primary">$ 1.23</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Deposits</div>
+            <div class="stat-value">$ 123.4</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Earnings</div>
+            <div class="stat-value text-primary">$ 12.3</div>
+            <div class="stat-desc"></div>
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -145,28 +146,26 @@
           <div class="badge badge-lg badge-secondary mr-1">GUU</div>
         </div>
         <h2 class="card-title">GUU Vault</h2>
-        <div class="flex flex-col lg:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">APY</div>
-              <div class="stat-value text-secondary">12.34%</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">TVL</div>
-              <div class="stat-value text-primary">$ 1.23</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Deposits</div>
-              <div class="stat-value">$ 123.4</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Earnings</div>
-              <div class="stat-value text-primary">$ 12.3</div>
-              <div class="stat-desc"></div>
-            </div>
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">APY</div>
+            <div class="stat-value text-secondary">12.34%</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">TVL</div>
+            <div class="stat-value text-primary">$ 1.23</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Deposits</div>
+            <div class="stat-value">$ 123.4</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Earnings</div>
+            <div class="stat-value text-primary">$ 12.3</div>
+            <div class="stat-desc"></div>
           </div>
         </div>
         <div class="overflow-x-auto">

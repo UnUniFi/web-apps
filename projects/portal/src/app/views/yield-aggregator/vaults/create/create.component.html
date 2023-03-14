@@ -2,35 +2,41 @@
   <div class="flex flex-row flex-wrap mb-8">
     <h2>Create a New Vault</h2>
   </div>
-  <div class="mb-8">
-    <h3>All Available vaults</h3>
-    <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats shadow">
-        <div class="stat">
-          <div class="stat-title">Average APY</div>
-          <div class="stat-value">12.34%</div>
-          <div class="stat-desc"></div>
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title break-all">All Available Vaults</h2>
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">Average APY</div>
+            <div class="stat-value">12.34%</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Average TVL</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Deposited</div>
+            <div class="stat-value">$ 123</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Earnings</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-title">Average TVL</div>
-          <div class="stat-value">$ 12.3</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Total Deposited</div>
-          <div class="stat-value">$ 123</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Total Earnings</div>
-          <div class="stat-value">$ 12.3</div>
-          <div class="stat-desc"></div>
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-secondary px-8"
+            routerLink="/yield-aggregator/vaults/owner/address"
+          >
+            Manage Your Vaults
+          </button>
         </div>
       </div>
-      <span class="flex-auto"></span>
-      <button class="btn btn-secondary px-8" routerLink="/yield-aggregator/vaults/owner/address">
-        Manage Your Vaults
-      </button>
     </div>
   </div>
 
@@ -64,7 +70,7 @@
               <span class="label-text">Select Strategies</span>
             </label>
             <label class="input-group mb-2">
-              <select class="select select-bordered">
+              <select class="select select-bordered w-1/2 lg:w-1/4">
                 <option disabled selected>Select a strategy</option>
                 <option>Mercury</option>
                 <option>Venus</option>
@@ -88,12 +94,14 @@
               </label>
             </div>
           </div>
-          <label class="btn btn-outline px-8 mb-4 ml-8" (click)="onClickAddStrategy()">
+          <label class="btn btn-outline w-1/2 lg:w-1/4 mb-4" (click)="onClickAddStrategy()">
             <mat-icon>add</mat-icon>
           </label>
 
-          <br />
-          <label for="create-model" class="btn btn-primary px-8"> Create a new Vault </label>
+          <div class="card-actions justify-end">
+            <label for="create-model" class="btn btn-primary px-8"> Create a new Vault </label>
+          </div>
+
           <!-- Put this part before </body> tag -->
           <input type="checkbox" id="create-model" class="modal-toggle" />
           <div class="modal modal-bottom sm:modal-middle">

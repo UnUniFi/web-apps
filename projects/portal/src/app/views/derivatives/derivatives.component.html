@@ -81,15 +81,33 @@
       <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Total Long Position (Perpetual Futures)</div>
-          <div class="stat-value text-primary">
+          <div
+            class="stat-value text-primary"
+            *ngIf="perpetualFuturesParams?.long_positions?.denom === 'usd'"
+          >
             $ {{ perpetualFuturesParams?.long_positions?.amount | number }}
+          </div>
+          <div
+            class="stat-value text-primary"
+            *ngIf="perpetualFuturesParams?.long_positions?.denom !== 'usd'"
+          >
+            {{ perpetualFuturesParams?.long_positions | coin }}
           </div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
           <div class="stat-title">Total Short Position (Perpetual Futures)</div>
-          <div class="stat-value text-secondary">
+          <div
+            class="stat-value text-secondary"
+            *ngIf="perpetualFuturesParams?.short_positions?.denom === 'usd'"
+          >
             $ {{ perpetualFuturesParams?.short_positions?.amount | number }}
+          </div>
+          <div
+            class="stat-value text-secondary"
+            *ngIf="perpetualFuturesParams?.short_positions?.denom !== 'usd'"
+          >
+            {{ perpetualFuturesParams?.short_positions | coin }}
           </div>
           <div class="stat-desc"></div>
         </div>

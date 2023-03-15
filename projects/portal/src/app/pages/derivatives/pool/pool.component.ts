@@ -7,7 +7,7 @@ import { WalletService } from '../../../models/wallets/wallet.service';
 import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +16,8 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./pool.component.css'],
 })
 export class PoolComponent implements OnInit {
-  pool$ = this.derivativesQuery.getPool$();
+  timer$ = timer(0, 1000 * 60);
+  pool$ = this.timer$.pipe(mergeMap((_) => this.derivativesQuery.getPool$()));
   params$ = this.derivativesQuery.getDerivativesParams$().pipe(map((params) => params.pool_params));
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   // TODO: route guard for wallet may be needed

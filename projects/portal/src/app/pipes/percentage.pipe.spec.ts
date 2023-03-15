@@ -10,7 +10,7 @@ describe('PercentagePipe', () => {
   });
 
   it('returns empty string, when input a string that is not a number.', () => {
-    expect(pipe.transform('string')).toBe('0');
+    expect(pipe.transform('string')).toBe('0%');
   });
 
   it('truncates string percentage with decimal points to integer, ', () => {

@@ -19,18 +19,21 @@ export class PositionsComponent implements OnInit {
     filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
     map((wallet) => wallet.address),
   );
-  timer$ = timer(0, 60000);
+  timer$ = timer(0, 1000 * 60);
   positions$ = combineLatest([this.address$, this.timer$]).pipe(
-    mergeMap(([address, n]) => this.derivativesQuery.listAddressPositions$(address)),
+    mergeMap(([address, _]) => this.derivativesQuery.listAddressPositions$(address)),
   );
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-  prices$ = this.pricefeedQuery.listAllPrices$();
+  prices$ = this.timer$.pipe(mergeMap((_) => this.pricefeedQuery.listAllPrices$()));
+
   markets$ = this.pricefeedQuery.listAllMarkets$();
-  longPositionsTotal$ = this.address$.pipe(
-    mergeMap((address) => this.derivativesQuery.getPerpetualFuturesPositionsTotal('LONG', address)),
+  longPositionsTotal$ = combineLatest([this.address$, this.timer$]).pipe(
+    mergeMap(([address, _]) =>
+      this.derivativesQuery.getPerpetualFuturesPositionsTotal('LONG', address),
+    ),
   );
-  shortPositionsTotal$ = this.address$.pipe(
-    mergeMap((address) =>
+  shortPositionsTotal$ = combineLatest([this.address$, this.timer$]).pipe(
+    mergeMap(([address, _]) =>
       this.derivativesQuery.getPerpetualFuturesPositionsTotal('SHORT', address),
     ),
   );

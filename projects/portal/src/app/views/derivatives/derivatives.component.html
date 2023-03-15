@@ -78,22 +78,40 @@
   <div class="card-body overflow-x-auto">
     <h2 class="card-title break-all">Perpetual Futures Overview</h2>
     <div class="flex flex-col xl:flex-row items-center">
-      <!-- <div class="stats flex flex-col md:flex-row">
+      <div class="stats flex flex-col md:flex-row">
         <div class="stat">
           <div class="stat-title">Total Long Position (Perpetual Futures)</div>
-          <div class="stat-value text-primary">
-            $ {{ perpetualFuturesParams?.long_positions | number }}
+          <div
+            class="stat-value text-primary"
+            *ngIf="perpetualFuturesParams?.long_positions?.denom === 'usd'"
+          >
+            $ {{ perpetualFuturesParams?.long_positions?.amount | number }}
+          </div>
+          <div
+            class="stat-value text-primary"
+            *ngIf="perpetualFuturesParams?.long_positions?.denom !== 'usd'"
+          >
+            {{ perpetualFuturesParams?.long_positions | coin }}
           </div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
           <div class="stat-title">Total Short Position (Perpetual Futures)</div>
-          <div class="stat-value text-secondary">
-            $ {{ perpetualFuturesParams?.short_positions | number }}
+          <div
+            class="stat-value text-secondary"
+            *ngIf="perpetualFuturesParams?.short_positions?.denom === 'usd'"
+          >
+            $ {{ perpetualFuturesParams?.short_positions?.amount | number }}
+          </div>
+          <div
+            class="stat-value text-secondary"
+            *ngIf="perpetualFuturesParams?.short_positions?.denom !== 'usd'"
+          >
+            {{ perpetualFuturesParams?.short_positions | coin }}
           </div>
           <div class="stat-desc"></div>
         </div>
-      </div> -->
+      </div>
       <span class="flex-auto"></span>
       <div class="card-actions justify-end">
         <button class="btn btn-primary px-8" routerLink="positions">View Positions</button>

@@ -174,12 +174,14 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       case this.baseSymbol:
         this.marginAmount =
           Math.ceil((this.size / this.leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
-        this.minMargin = this.marginAmount / 2;
+        this.minMargin = this.marginAmount;
+        // this.minMargin = this.marginAmount / 2;
         break;
       case this.quoteSymbol:
         // this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
         this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price));
-        this.minMargin = this.marginAmount / 2;
+        this.minMargin = this.marginAmount;
+        // this.minMargin = this.marginAmount / 2;
         break;
     }
   }
@@ -210,6 +212,6 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   calcMarginRate(decRate: string) {
-    return Number(decRate) / 10 ** 18;
+    return Number(decRate) / 10 ** 6;
   }
 }

@@ -32,6 +32,12 @@ export class PerpetualFuturesComponent implements OnInit {
   market?: string;
 
   @Input()
+  baseSymbol?: string | null;
+
+  @Input()
+  quoteSymbol?: string | null;
+
+  @Input()
   openedRate?: number;
 
   @Output()
@@ -74,6 +80,6 @@ export class PerpetualFuturesComponent implements OnInit {
   }
 
   calcMarginRate(decRate: string) {
-    return Number(decRate) / 10 ** 18;
+    return Number(decRate) / 10 ** 6;
   }
 }

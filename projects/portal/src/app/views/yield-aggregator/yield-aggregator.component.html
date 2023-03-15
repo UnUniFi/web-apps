@@ -2,7 +2,7 @@
 <div class="flex justify-center">
   <div class="w-full text-base-content">
     <ng-container *ngFor="let config of configs">
-      <div class="card lg:card-side bg-base-100 shadow-xl">
+      <div class="card lg:card-side bg-base-100 shadow-xl mb-4">
         <div class="card-body">
           <h2 class="card-title break-all">{{ config.name }}</h2>
           <p style="white-space: pre-wrap">{{ config.description }}</p>
@@ -53,8 +53,6 @@
           </div>
         </div>
       </div>
-
-      <br />
     </ng-container>
   </div>
 </div>

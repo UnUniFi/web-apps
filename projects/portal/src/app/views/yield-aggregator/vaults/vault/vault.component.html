@@ -3,13 +3,14 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">
-          {{ vault.name }}
-          <div class="badge badge-secondary">{{ vault.symbol }}</div>
+          Dev axlUSDC
+          <div class="badge badge-primary">#1</div>
+          <div class="badge badge-secondary">USDC</div>
         </h2>
         <div class="stats">
           <div class="stat">
             <div class="stat-title">APY</div>
-            <div class="stat-value">12.34%</div>
+            <div class="stat-value text-secondary">12.34%</div>
             <div class="stat-desc"></div>
           </div>
           <div class="stat">
@@ -19,7 +20,7 @@
           </div>
           <div class="stat">
             <div class="stat-title">Deposited</div>
-            <div class="stat-value">$ 123</div>
+            <div class="stat-value text-primary">$ 123</div>
             <div class="stat-desc"></div>
           </div>
           <div class="stat">
@@ -109,21 +110,18 @@
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Allocation weight</div>
-              <div class="stat-value">0.563</div>
+              <div class="stat-value">56.3%</div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat">
               <div class="stat-title">APR</div>
-              <div class="stat-value">21.2%</div>
+              <div class="stat-value text-secondary">21.2%</div>
               <div class="stat-desc"></div>
             </div>
           </div>
 
-          <div class="card-actions justify-end hidden lg:flex">
-            <button
-              routerLink="/yield-aggregator/strategies/mar00"
-              class="btn btn-outline btn-info"
-            >
+          <div class="card-actions justify-end">
+            <button routerLink="/yield-aggregator/strategies/0" class="btn btn-outline btn-info">
               View
             </button>
           </div>

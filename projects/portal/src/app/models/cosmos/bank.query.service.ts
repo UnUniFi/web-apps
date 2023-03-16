@@ -1,9 +1,13 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import Decimal from 'decimal.js';
+// import { QueryApi } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
+
+declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
 @Injectable({ providedIn: 'root' })
 export class BankQueryService {
@@ -31,9 +35,9 @@ export class BankQueryService {
         Promise.all(
           denoms.map(
             (denom) =>
-              cosmosclient.rest.bank
-                .balance(sdk, cosmosclient.AccAddress.fromString(address), denom)
-                .then((res) => res.data.balance!), // TODO: remove any
+              new QueryApi(undefined, sdk.url)
+                .balance(address, denom)
+                .then((res: any) => res.data.balance!), // TODO: remove any
           ),
         ),
       ),
@@ -69,14 +73,13 @@ export class BankQueryService {
         await Promise.all(
           balance.map(async (b) => {
             const metadata = metadataMap[b.denom!];
-            if (metadata && metadata.denom_units) {
-              const denomUnit = metadata.denom_units.find((u) => u.denom === b.denom);
+            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
 
-              if (denomUnit) {
-                map[metadata.symbol!] = Long.fromString(b.amount!)
-                  .div(10 ** denomUnit.exponent!)
-                  .toNumber();
-              }
+            if (denomUnit) {
+              const amount = new Decimal(b.amount!);
+              map[metadata.symbol!] = Number(
+                amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+              );
             }
           }),
         );
@@ -102,6 +105,62 @@ export class BankQueryService {
         display: 'GUU',
         name: 'UnUniFi',
         symbol: 'GUU',
+      },
+      {
+        description: 'The first cryptocurrency invented in 2008',
+        denom_units: [
+          {
+            denom: 'ubtc',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'ubtc',
+        display: 'BTC',
+        name: 'Bitcoin',
+        symbol: 'BTC',
+      },
+      {
+        description: 'The currency of the U.S.A.',
+        denom_units: [
+          {
+            denom: 'uusd',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'uusd',
+        display: 'USD',
+        name: 'US Dollar',
+        symbol: 'USD',
+      },
+      {
+        description: 'Stablecoin pegged to the USD',
+        denom_units: [
+          {
+            denom: 'uusdc',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'uusdc',
+        display: 'USDC',
+        name: 'USD Coin',
+        symbol: 'USDC',
+      },
+      {
+        description: 'Decentralized Liquidity Provider Token',
+        denom_units: [
+          {
+            denom: 'udlp',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'udlp',
+        display: 'DLP',
+        name: 'Liquidity Provider',
+        symbol: 'DLP',
       },
     ];
 

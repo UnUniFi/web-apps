@@ -9,7 +9,7 @@ export class PercentagePipe implements PipeTransform {
       return value;
     }
     if (!Number(value)) {
-      return '';
+      return '0%';
     }
 
     const percent = (Number(value) * 100).toLocaleString();

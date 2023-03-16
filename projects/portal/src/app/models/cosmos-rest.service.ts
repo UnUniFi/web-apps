@@ -34,6 +34,7 @@ import { catchError, map, mergeMap, pluck, tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class CosmosRestService {
+  // TODO: split this into multiple services for each module (bank.query, staking.query, gov.query, etc.)
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {

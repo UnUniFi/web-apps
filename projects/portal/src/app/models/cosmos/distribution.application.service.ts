@@ -5,6 +5,7 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { DistributionService } from './distribution.service';
@@ -40,14 +41,18 @@ export class DistributionApplicationService {
     const txHash = await this.dialog
       .open<string>(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawAllDelegatorRewardFormDialog(): Promise<void> {
     const txHash = await this.dialog
       .open<string>(WithdrawAllDelegatorRewardFormDialogComponent)
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawValidatorCommissionFormDialog(
@@ -56,7 +61,9 @@ export class DistributionApplicationService {
     const txHash = await this.dialog
       .open<string>(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async withdrawDelegatorReward(

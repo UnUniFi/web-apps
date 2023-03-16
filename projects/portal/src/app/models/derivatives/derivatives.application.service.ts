@@ -1,9 +1,10 @@
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { WalletService } from '../wallets/wallet.service';
 import { DerivativesService } from './derivatives.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -18,7 +19,7 @@ export class DerivativesApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly walletService: WalletService,
     private readonly bankQueryService: BankQueryService,
@@ -75,7 +76,9 @@ export class DerivativesApplicationService {
     this.snackBar.open('Successfully minted liquidity provider token.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async burnLiquidityProviderToken(amount: number, redeemSymbol: string) {
@@ -127,7 +130,9 @@ export class DerivativesApplicationService {
     this.snackBar.open('Successfully burned liquidity provider token.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openPerpetualFuturesPosition(
@@ -201,7 +206,9 @@ export class DerivativesApplicationService {
     this.snackBar.open('Successfully opened position.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async closePosition(positionId: string) {
@@ -243,6 +250,8 @@ export class DerivativesApplicationService {
     this.snackBar.open('Successfully closed position.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 }

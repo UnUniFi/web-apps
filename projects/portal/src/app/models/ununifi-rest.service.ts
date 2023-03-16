@@ -6,19 +6,15 @@ import { Observable, zip } from 'rxjs';
 import { filter, map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
-  AllPositions200ResponsePositionsInner,
   AuctionAll200Response,
   AuctionAll200ResponseAuctionsInner,
   AuctionParams200ResponseParams,
   CdpAll200ResponseCdpInner,
   CdpAll200ResponseCdpInnerCdpCollateral,
-  DerivativesParams200ResponseParams,
   EcosystemincentiveParams200ResponseParams,
   IncentiveUnit200ResponseIncentiveUnit,
-  PerpetualFutures200Response,
-  PerpetualFuturesMarket200Response,
-  Pool200Response,
   Price200ResponsePrice,
+  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
 } from 'ununifi-client/esm/openapi';
 
 export const getCollateralParamsStream = (
@@ -138,6 +134,15 @@ export class UnunifiRestService {
         ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
       ),
       map((res) => res.data.incentive_unit_id!),
+    );
+  }
+
+  listIncentiveUnitIdsByAddr$(
+    address: string,
+  ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
+      map((res) => res.data.incentive_unit_ids_by_addr!),
     );
   }
 }

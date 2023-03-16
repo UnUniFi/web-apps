@@ -13,7 +13,7 @@
     </mat-toolbar>
 
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Change Node</mat-label>
+      <mat-label class="text-gray-400">Change Node</mat-label>
       <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
         <mat-option *ngFor="let conf of configs" [value]="conf">
           {{ conf }}
@@ -28,6 +28,10 @@
 
       <mat-list-item routerLink="/my-page">
         <mat-icon class="mr-2" color="primary">account_circle</mat-icon>My Page
+      </mat-list-item>
+
+      <mat-list-item routerLink="/listed-nfts">
+        <mat-icon class="mr-2" color="primary">photo_library</mat-icon>Market
       </mat-list-item>
 
       <ng-template ngFor let-navigation [ngForOf]="navigations">

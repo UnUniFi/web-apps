@@ -182,7 +182,7 @@ export class TxCommonService {
     if (privateKey) {
       cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
     } else {
-      const privateWallet: StoredWallet & { privateKey: string } =
+      const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
         await this.walletAppService.openUnunifiKeyFormDialog();
       if (!privateWallet || !privateWallet.privateKey) {
         this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');

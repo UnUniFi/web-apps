@@ -1,6 +1,6 @@
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export type LoadingDialogComponentData = {
   message$?: Observable<string>;
@@ -16,9 +16,9 @@ export class LoadingDialogComponent implements OnInit {
   message$: Observable<string>;
 
   constructor(
-    private dialogRef: MatDialogRef<LoadingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    private data?: LoadingDialogComponentData
+    private dialogRef: DialogRef<LoadingDialogComponent>,
+    @Inject(DIALOG_DATA)
+    private data?: LoadingDialogComponentData,
   ) {
     this.message$ = data?.message$ ? data.message$ : of('');
   }
@@ -27,7 +27,7 @@ export class LoadingDialogComponent implements OnInit {
     this.data?.message$?.subscribe(
       undefined,
       () => this.closeDialog(),
-      () => this.closeDialog()
+      () => this.closeDialog(),
     );
   }
 

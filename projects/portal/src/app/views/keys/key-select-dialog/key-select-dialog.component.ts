@@ -1,6 +1,6 @@
 import { Key } from '../../../models/keys/key.model';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as crypto from 'crypto';
 
 @Component({
@@ -10,12 +10,12 @@ import * as crypto from 'crypto';
 })
 export class KeySelectDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: {
       keys: Key[];
       currentKeyID: string | undefined;
     },
-    private readonly dialogRef: MatDialogRef<KeySelectDialogComponent>,
+    private readonly dialogRef: DialogRef<Key, KeySelectDialogComponent>,
   ) {}
 
   ngOnInit(): void {}

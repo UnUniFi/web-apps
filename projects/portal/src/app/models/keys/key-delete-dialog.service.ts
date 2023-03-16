@@ -1,18 +1,16 @@
 import { KeyDeleteDialogComponent } from '../../views/keys/key-delete-dialog/key-delete-dialog.component';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeyDeleteDialogService {
-  constructor(private readonly dialog: MatDialog) {}
+  constructor(private readonly dialog: Dialog) {}
 
   openKeyDeleteDialog(id: string) {
-    return this.dialog
-      .open(KeyDeleteDialogComponent, {
-        data: { id: id },
-      })
-      .afterClosed();
+    return this.dialog.open(KeyDeleteDialogComponent, {
+      data: { id: id },
+    }).closed;
   }
 }

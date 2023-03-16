@@ -1,6 +1,7 @@
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { WalletApplicationService } from './models/wallets/wallet.application.service';
+import { StoredWallet } from './models/wallets/wallet.model';
 import { WalletService } from './models/wallets/wallet.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +9,6 @@ import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { StoredWallet } from './models/wallets/wallet.model';
 
 @Component({
   selector: 'app-root',

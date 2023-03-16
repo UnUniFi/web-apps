@@ -1,6 +1,6 @@
 import { StoredWallet } from './../../../../models/wallets/wallet.model';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as crypto from 'crypto';
 
 @Component({
@@ -10,9 +10,9 @@ import * as crypto from 'crypto';
 })
 export class ConnectWalletCompletedDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StoredWallet,
-    private readonly dialogRef: MatDialogRef<ConnectWalletCompletedDialogComponent>,
+    private readonly dialogRef: DialogRef<ConnectWalletCompletedDialogComponent>,
   ) {}
 
   ngOnInit(): void {}

@@ -1,0 +1,11 @@
+<view-lenders
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [balances]="balances$ | async"
+  [depositCoins]="depositCoins$ | async"
+  [lendCoins]="lendCoins$ | async"
+  [biddingNftsInfo]="biddingNftsInfo$ | async"
+  [listedClasses]="listedClasses$ | async"
+  [classImages]="classImages$ | async"
+  (appViewClass)="onViewClass($event)"
+  (appSubmit)="onSubmit($event)"
+></view-lenders>

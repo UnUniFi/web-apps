@@ -4,7 +4,10 @@ import { RedelegateFormDialogComponent } from '../../pages/dialogs/delegate/rede
 import { UndelegateFormDialogComponent } from '../../pages/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
 import { validatePrivateStoredWallet } from '../../utils/validation';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
@@ -12,8 +15,8 @@ import { WalletService } from '../wallets/wallet.service';
 import { CreateValidatorData, EditValidatorData } from './staking.model';
 import { StakingService } from './staking.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
@@ -41,7 +44,7 @@ export class StakingApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly staking: StakingService,
     private readonly walletService: WalletService,
@@ -51,19 +54,15 @@ export class StakingApplicationService {
   async openDelegateMenuDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
-    await this.dialog
-      .open(DelegateMenuDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+    await this.dialog.open(DelegateMenuDialogComponent, { data: validator }).closed.toPromise();
   }
 
   async openDelegateFormDialog(
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
-      .open(DelegateFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+      .open<string>(DelegateFormDialogComponent, { data: validator })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
@@ -71,9 +70,8 @@ export class StakingApplicationService {
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
-      .open(RedelegateFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+      .open<string>(RedelegateFormDialogComponent, { data: validator })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
@@ -81,9 +79,8 @@ export class StakingApplicationService {
     validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
-      .open(UndelegateFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
+      .open<string>(UndelegateFormDialogComponent, { data: validator })
+      .closed.toPromise();
     await this.router.navigate(['txs', txHash]);
   }
 
@@ -183,7 +180,7 @@ export class StakingApplicationService {
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
-    const privateWallet: StoredWallet & { privateKey: string } =
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
       this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
@@ -230,14 +227,13 @@ export class StakingApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -376,7 +372,7 @@ export class StakingApplicationService {
     gasRatio: number,
     options?: InterfaceValidatorSimpleOptions,
   ) {
-    const privateWallet: StoredWallet & { privateKey: string } =
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
       this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
@@ -409,14 +405,13 @@ export class StakingApplicationService {
 
       // ask the user to confirm the fee with a dialog
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
 
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -501,14 +496,13 @@ export class StakingApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -597,14 +591,13 @@ export class StakingApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -692,14 +685,13 @@ export class StakingApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;

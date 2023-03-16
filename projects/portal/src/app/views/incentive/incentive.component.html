@@ -4,12 +4,12 @@
 <div class="flex flex-col">
   <mat-card class="mb-4">
     <mat-nav-list>
-      <mat-list-item *ngIf="units === undefined"> No Tokens! </mat-list-item>
-      <mat-list-item *ngIf="units && units.length === 0"> No Tokens! </mat-list-item>
-      <ng-container *ngIf="units && units.length > 0">
-        <ng-container *ngFor="let unit of units; last as last">
-          <mat-list-item routerLink="/incentive/units/{{ unit.id }}">
-            <span>{{ unit.id }}</span>
+      <mat-list-item *ngIf="unitIds === undefined"> No Tokens! </mat-list-item>
+      <mat-list-item *ngIf="unitIds && unitIds.length === 0"> No Tokens! </mat-list-item>
+      <ng-container *ngIf="unitIds && unitIds.length > 0">
+        <ng-container *ngFor="let unitId of unitIds; last as last">
+          <mat-list-item routerLink="/incentive/units/{{ unitId }}">
+            <span>{{ unitId }}</span>
             <mat-divider *ngIf="!last"></mat-divider>
           </mat-list-item>
         </ng-container>
@@ -25,10 +25,7 @@
 <h3 class="mb-0 ml-2">Available Rewards</h3>
 <mat-card class="mb-4">
   <mat-nav-list>
-    <mat-list-item *ngIf="rewards === null">
-      <mat-spinner></mat-spinner>
-    </mat-list-item>
-    <mat-list-item *ngIf="rewards === undefined"> No Rewards! </mat-list-item>
+    <mat-list-item *ngIf="!rewards"> No Rewards! </mat-list-item>
     <mat-list-item *ngIf="rewards && rewards.length === 0"> No Rewards! </mat-list-item>
     <ng-container *ngIf="rewards && rewards.length > 0">
       <mat-list-item

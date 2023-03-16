@@ -29,6 +29,58 @@ mat-progress-spinner {
   margin: 1em auto;
 }
 
-mat-dialog-container {
+cdk-dialog-container {
+  display: block;
+  background: #3734B0 !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
   background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+cdk-dialog-container {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
 }

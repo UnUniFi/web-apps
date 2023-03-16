@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -27,13 +27,12 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   reward$: Observable<CdpAll200ResponseCdpInnerCdpCollateral>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: string,
-    public matDialogRef: MatDialogRef<WithdrawIncentiveRewardFormDialogComponent>,
+    public dialogRef: DialogRef<string, WithdrawIncentiveRewardFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
     private readonly cosmosRest: CosmosRestService,
     private readonly incentiveApp: IncentiveApplicationService,
     private ununifiRest: UnunifiRestService,
@@ -67,6 +66,6 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

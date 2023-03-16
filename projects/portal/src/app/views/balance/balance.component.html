@@ -107,8 +107,7 @@
     <ng-container *ngIf="balances && balances.length > 0">
       <mat-list-item *ngFor="let balance of balances; last as last">
         <span class="flex-auto"></span>
-        <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
-        <span>{{ balance.denom }}</span>
+        <span class="mr-2">{{ balance | coin }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </ng-container>
@@ -130,8 +129,7 @@
     <ng-container *ngIf="rewards && rewards.total && rewards.total.length > 0">
       <mat-list-item *ngFor="let totalReward of rewards.total; last as last">
         <span class="flex-auto"></span>
-        <span class="mr-2">{{ totalReward.amount | number: '1.0-0' }}</span>
-        <span>{{ totalReward.denom }}</span>
+        <span class="mr-2">{{ totalReward | coin }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </ng-container>
@@ -140,7 +138,7 @@
 
 <button
   *ngIf="rewards && rewards.total"
-  class="w-full"
+  class="px-8"
   mat-flat-button
   color="accent"
   [disabled]="!rewards.total.length"

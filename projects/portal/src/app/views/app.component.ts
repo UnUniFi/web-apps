@@ -1,8 +1,10 @@
 import { Config } from '../models/config.service';
+import { StoredWallet } from '../models/wallets/wallet.model';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
+import * as crypto from 'crypto';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
@@ -22,6 +24,9 @@ export class AppComponent implements OnInit {
 
   @Input()
   selectedConfig?: string | null;
+
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
 
   @Input()
   navigations?: { name: string; link: string; icon: string }[] | null;
@@ -45,7 +50,14 @@ export class AppComponent implements OnInit {
 
   drawerOpened$ = new BehaviorSubject(true);
 
+  searchValue: string;
+
   constructor(private router: Router, private ngZone: NgZone) {
+    this.searchValue = '';
+    this.searchResult = {
+      searchValue: '',
+      type: '',
+    };
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
     this.appConnectWallet = new EventEmitter();
@@ -78,8 +90,13 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onSubmitSearchResult(searchResult: SearchResult) {
-    this.appSubmitSearchResult.emit(searchResult);
+  getColorCode(storedWallet: StoredWallet) {
+    const hash = crypto
+      .createHash('sha256')
+      .update(Buffer.from(storedWallet.id))
+      .digest()
+      .toString('hex');
+    return `#${hash.substr(0, 6)}`;
   }
 
   onChangeInputValue(inputValue: string) {
@@ -92,5 +109,29 @@ export class AppComponent implements OnInit {
 
   onChangeConfig(selectedConfig: string): void {
     this.appChangeConfig.emit(selectedConfig);
+  }
+
+  onOptionSelected(): void {
+    if (this.searchResult) {
+      this.appSubmitSearchResult.emit(this.searchResult);
+      this.searchResult = { searchValue: '', type: '' };
+      this.searchValue = '';
+    }
+  }
+
+  onSubmitSearchResult(): void {
+    if (this.searchResult) {
+      this.appSubmitSearchResult.emit(this.searchResult);
+      this.searchResult = { searchValue: '', type: '' };
+      this.searchValue = '';
+    }
+  }
+
+  onChangeInput(inputValue: string): void {
+    this.appChangeInputValue.emit(inputValue);
+  }
+
+  onFocusInput(inputValue: string): void {
+    this.appChangeInputValue.emit(inputValue);
   }
 }

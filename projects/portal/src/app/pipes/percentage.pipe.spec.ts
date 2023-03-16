@@ -4,8 +4,8 @@ describe('PercentagePipe', () => {
   const pipe = new PercentagePipe();
 
   it('converts string number into percentages', () => {
-    expect(pipe.transform('0.2')).toBe('20');
-    expect(pipe.transform('1')).toBe('100');
+    expect(pipe.transform('0.2')).toBe('20%');
+    expect(pipe.transform('1')).toBe('100%');
   });
 
   it('returns empty string, when input a string that is not a number.', () => {
@@ -13,7 +13,7 @@ describe('PercentagePipe', () => {
   });
 
   it('truncates string percentage with decimal points to integer, ', () => {
-    expect(pipe.transform('0.123')).toBe('12');
+    expect(pipe.transform('0.123')).toBe('12.3%');
   });
 
   it('returns null, when input null', () => {

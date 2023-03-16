@@ -22,8 +22,12 @@
         ],
         "ununifi-9-beta-test-v1": [
           "ununifi-9-beta-test-v1"
+        ],
+        "ununifi-nftfi-pocv1": [
+          "ununifi-nftfi-pocv1"
         ]
       }
     }
-  }
+  },
+  "etags": {}
 }

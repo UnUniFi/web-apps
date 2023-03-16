@@ -11,18 +11,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/my-page/my-page.module').then((m) => m.AppMyPageModule),
   },
   {
-    path: 'nfts',
-    loadChildren: () => import('./pages/nfts/nfts.module').then((m) => m.AppNftsModule),
+    path: 'listed-nfts',
+    loadChildren: () =>
+      import('./pages/listed-nfts/listed-nfts.module').then((m) => m.AppListedNftsModule),
   },
-  // Todo: After reference, we need to remove these resources.
-  // {
-  //   path: 'balance',
-  //   loadChildren: () => import('./pages/balance/balance.module').then((m) => m.AppBalanceModule),
-  // },
-  // {
-  //   path: 'assets',
-  //   loadChildren: () => import('./pages/assets/assets.module').then((m) => m.AppAssetsModule),
-  // },
+  {
+    path: 'my-nfts',
+    loadChildren: () => import('./pages/my-nfts/my-nfts.module').then((m) => m.AppMyNftsModule),
+  },
 ];
 
 @NgModule({

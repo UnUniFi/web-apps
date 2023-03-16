@@ -1,0 +1,12 @@
+<view-borrower-nft
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+  [loan]="loan$ | async"
+  [liquidation]="liquidation$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  (appSubmitCancel)="onSubmitCancel($event)"
+  (appSubmitSell)="onSubmitSell($event)"
+></view-borrower-nft>

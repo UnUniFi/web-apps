@@ -1,0 +1,39 @@
+<h2 class="mb-0">Listing NFT Collections</h2>
+<ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
+
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="(listedClasses?.length || 0) > 0; then exist; else empty"> </ng-container>
+</ng-template>
+
+<ng-template #exist>
+  <div class="flex flex-wrap">
+    <mat-card
+      class="cursor-pointer text-center w-64 m-5 p-0"
+      *ngFor="let class of listedClasses; index as i"
+      routerLink="{{ class.class_id }}"
+    >
+      <img
+        mat-card-image
+        *ngIf="classImages"
+        src="{{ classImages[i] }}"
+        class="object-cover h-64 m-0"
+        style="margin: 0%"
+      />
+      <mat-card-title class="py-1">
+        {{ class.name }}
+      </mat-card-title>
+      <mat-card-subtitle class="font-semibold text-sm text-gray-500">
+        {{ class.class_id }}
+      </mat-card-subtitle>
+      <mat-card-content>
+        <p>{{ class.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>
+<ng-template #empty>
+  <p>There is no listing NFT.</p>
+</ng-template>

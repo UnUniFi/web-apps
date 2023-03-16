@@ -58,11 +58,11 @@ const routes: Routes = [
     path: 'vote',
     loadChildren: () => import('./pages/vote/vote.module').then((m) => m.AppVoteModule),
   },
-  // {
-  //   path: 'incentive',
-  //   loadChildren: () =>
-  //     import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
-  // },
+  {
+    path: 'incentive',
+    loadChildren: () =>
+      import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
+  },
   {
     path: 'nft-backed-loan',
     loadChildren: () =>

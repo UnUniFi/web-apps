@@ -3,7 +3,7 @@
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <ng-container *ngIf="txHash; then exist; else empty"></ng-container>
     <ng-template #exist>
-      <div class="font-bold text-xl m-3">Transaction sent successfully!</div>
+      <div class="font-bold text-xl m-3">Transaction has been sent successfully!</div>
       <form (submit)="onClickClose()">
         <div class="hidden md:block mockup-code text-primary-content mb-4">
           <pre><code class="break-all">{{ txHash }}</code></pre>

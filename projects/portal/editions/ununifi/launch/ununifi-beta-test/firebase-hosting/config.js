@@ -54,21 +54,27 @@ const configs = [
     ],
     extension: {
       faucet: [
-        // Todo: After setup faucet, enable the following faucet.
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+          denom: 'ubtc',
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uguu',
+          creditAmount: 2000000,
+          maxCredit: 2000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000,
+          maxCredit: 2000000,
+        },
         // {
         //   hasFaucet: false,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
@@ -77,7 +83,7 @@ const configs = [
         //   maxCredit: 9,
         // },
         // {
-        //   hasFaucet: false,
+        //   hasFaucet: true,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
         //   denom: 'ueth',
         //   creditAmount: 1000,

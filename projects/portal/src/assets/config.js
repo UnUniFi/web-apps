@@ -60,15 +60,22 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
           denom: 'ubtc',
-          creditAmount: 100, // amount to credit in max request
-          maxCredit: 99, // account has already maxCredit balance cannot claim anymore
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
         },
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 99,
+          creditAmount: 2000000,
+          maxCredit: 2000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000,
+          maxCredit: 2000000,
         },
         // {
         //   hasFaucet: false,

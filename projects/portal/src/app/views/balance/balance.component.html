@@ -81,14 +81,13 @@
       <mat-list-item
         routerLink="/faucet"
         [queryParams]="{
-          address: accAddress,
           denom: faucet.denom,
           amount: faucet.creditAmount
         }"
         *ngFor="let faucet of faucets; last as last"
       >
         <mat-icon color="accent">clean_hands</mat-icon>
-        <span class="ml-2">Go to Faucet of {{ faucet.denom }}</span>
+        <span class="ml-2">Go to Faucet of {{ faucet.denom | coinDenom }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>

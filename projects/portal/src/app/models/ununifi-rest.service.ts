@@ -141,7 +141,7 @@ export class UnunifiRestService {
     address: string,
   ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnitIdsByAddr(sdk, address)),
       map((res) => res.data.incentive_unit_ids_by_addr!),
     );
   }

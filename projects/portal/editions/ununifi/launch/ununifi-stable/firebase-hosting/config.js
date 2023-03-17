@@ -6,10 +6,9 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-beta-test.cauchye.net';
-
-const chainID = 'ununifi-beta';
-const chainName = 'UnUniFi (Beta)';
+const domainCauchyEA = 'ununifi-stable.cauchye.net';
+const chainID = 'ununifi-stable';
+const chainName = 'UnUniFi (Stable)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -45,6 +44,7 @@ const configs = [
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {

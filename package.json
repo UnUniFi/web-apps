@@ -21,6 +21,7 @@
     "build:landing-page": "ng build --project landing-page",
     "build:landing-page:prod": "ng build --project landing-page --configuration=production",
     "build:all:prod:ununifi": "npm run build:all:prod && node copy-config ununifi",
+    "build:all:prod:stable": "npm run build:all:prod && node copy-config ununifi-stable",
     "build:all:prod:ununifi-alpha-test": "npm run build:all:prod && node copy-config ununifi-alpha-test",
     "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-8-private-test": "npm run build:all:prod && node copy-config ununifi-8-private-test",

@@ -63,6 +63,13 @@ export class AppComponent implements OnInit {
             icon: 'monitor',
           });
         }
+        if (config?.extension?.nftMint.enabled) {
+          config.extension.navigations.unshift({
+            name: 'NFT Mint',
+            link: '/portal/nfts/mint',
+            icon: 'add_photo_alternate',
+          });
+        }
         return config?.extension?.navigations;
       }),
     );

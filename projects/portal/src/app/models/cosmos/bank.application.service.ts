@@ -2,6 +2,7 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletService } from '../wallets/wallet.service';
 import { BankService } from './bank.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -120,7 +121,7 @@ export class BankApplicationService {
 
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
-    let txhash: string | undefined;
+    let txHash: string | undefined;
 
     try {
       const res = await this.bank.send(
@@ -131,8 +132,8 @@ export class BankApplicationService {
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = res.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('Invalid txhash!');
       }
     } catch (error) {
@@ -148,6 +149,8 @@ export class BankApplicationService {
       duration: 6000,
     });
 
-    await this.router.navigate(['txs', txhash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 }

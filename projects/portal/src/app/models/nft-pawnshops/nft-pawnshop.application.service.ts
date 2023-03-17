@@ -1,9 +1,10 @@
 import { NftsDialogComponent } from '../../pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { NftPawnshopService } from './nft-pawnshop.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -16,7 +17,7 @@ export class NftPawnshopApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly bankQueryService: BankQueryService,
     private readonly pawnshopService: NftPawnshopService,
     private readonly txCommonApplication: TxCommonApplicationService,
@@ -24,9 +25,8 @@ export class NftPawnshopApplicationService {
 
   async openNftsDialog(classID: string): Promise<void> {
     const nftID = await this.dialog
-      .open(NftsDialogComponent, { data: classID })
-      .afterClosed()
-      .toPromise();
+      .open<string>(NftsDialogComponent, { data: classID })
+      .closed.toPromise();
     await this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classID, nftID, 'place-bid']);
   }
 
@@ -90,7 +90,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully listed NFT.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async cancelNftListing(classId: string, nftId: string) {
@@ -132,7 +134,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully cancelled NFT listing.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async placeBid(
@@ -198,7 +202,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully placed bid.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async cancelBid(classId: string, nftId: string) {
@@ -240,7 +246,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully cancelled bid.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async endNftListing(classId: string, nftId: string) {
@@ -282,7 +290,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully ended listing.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async sellingDecision(classId: string, nftId: string) {
@@ -324,7 +334,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully decided selling.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async payFullBid(classId: string, nftId: string) {
@@ -371,7 +383,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully paid settlement shortfall.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async borrow(classId: string, nftId: string, symbol: string, amount: number) {
@@ -425,7 +439,9 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully borrowed.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async repay(classId: string, nftId: string, symbol: string, amount: number) {
@@ -479,6 +495,8 @@ export class NftPawnshopApplicationService {
     this.snackBar.open('Successfully repaid interests.', undefined, {
       duration: 6000,
     });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 }

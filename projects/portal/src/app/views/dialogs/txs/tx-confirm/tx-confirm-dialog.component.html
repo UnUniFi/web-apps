@@ -1,0 +1,36 @@
+<div>
+  <div class="flex flex-col items-center">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <ng-container *ngIf="txHash; then exist; else empty"></ng-container>
+    <ng-template #exist>
+      <div class="font-bold text-xl m-3">Transaction has been sent successfully!</div>
+      <form (submit)="onClickClose()">
+        <div class="hidden md:block mockup-code text-primary-content mb-4">
+          <pre><code class="break-all">{{ txHash }}</code></pre>
+          <div class="flex flex-row justify-end">
+            <label class="btn" (click)="copyClipboard(txHash!)">
+              <mat-icon>content_copy</mat-icon>Copy
+            </label>
+          </div>
+        </div>
+        <div class="flex flex-col md:hidden">
+          <P class="text-md">Tx hash</P>
+          <p class="text-lg break-all">{{ txHash }}</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-end">
+          <label class="btn btn-outline btn-info mb-4 md:mr-4" (click)="onClickOpenTxDetail()"
+            >View</label
+          >
+          <button class="btn btn-secondary">Close</button>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #empty>
+      <div class="font-bold text-xl m-3">An error occurred in Tx broadcasting.</div>
+      <div class="flex flex-col md:flex-row justify-end">
+        <button class="btn btn-secondary">Close</button>
+      </div>
+    </ng-template>
+  </div>
+</div>

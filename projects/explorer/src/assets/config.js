@@ -99,6 +99,10 @@ const configs = [
         //   maxCredit: 9,
         // },
       ],
+      nftMint: {
+        enabled: true,
+        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+      },
       monitor: undefined,
       navigations: [],
       messageModules,

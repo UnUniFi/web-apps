@@ -1,0 +1,408 @@
+<div class="flex-auto flex flex-row flex-wrap items-end">
+  <div class="h-full min-h-96 flex-auto flex justify-center items-center">
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container w-full h-full">
+      <div id="tradingview_5b3c4" class="w-full h-48 md:h-96"></div>
+      <div class="tradingview-widget-copyright">
+        <a
+          href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE"
+          rel="noopener"
+          target="_blank"
+        ></a>
+        by TradingView
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats flex flex-col md:flex-row shadow-xl mb-4 w-full">
+  <div class="stat">
+    <div class="stat-title">Entry Price</div>
+    <div class="stat-value">{{ price | number }} {{ quoteSymbol }}</div>
+    <!-- <div class="stat-value">${{ info?.price | number }}</div> -->
+    <div class="stat-desc"></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title">Exit Price</div>
+    <div class="stat-value">{{ price | number }} {{ quoteSymbol }}</div>
+    <!-- <div class="stat-value">${{ info?.price | number }}</div> -->
+    <div class="stat-desc"></div>
+  </div>
+  <!-- <div class="stat">
+    <div class="stat-title">Borrow Fee</div>
+    <div class="stat-value text-primary">
+      {{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}
+    </div>
+    <div class="stat-desc"></div>
+  </div> -->
+  <!-- To Do GET all positions and calc available liquidity -->
+  <!-- <div class="stat">
+    <div class="stat-title">Available Liquidity</div>
+    <div class="stat-value text-secondary"></div>
+    <div class="stat-desc">Max capacity: {{ pool | coin }}</div>
+  </div> -->
+</div>
+
+<div class="card bg-base-100 shadow-xl mb-4 w-full lg:w-auto">
+  <div class="card-body">
+    <form
+      #formRef="ngForm"
+      (submit)="
+        onSubmitOpen(
+          sizeRef.valueAsNumber,
+          leverage,
+          marginAmountRef.valueAsNumber,
+          selectedPositionType
+        )
+      "
+    >
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Long or Short</span>
+          <!-- The button to open modal -->
+          <label for="modal-position-type" class="label-text">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-position-type" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is Long and Short?</h3>
+              <p class="py-2">
+                A long position is when you purchase an asset with the expectation that its value
+                will increase over time. In this scenario, you would profit from the price
+                appreciation.
+              </p>
+              <p class="py-2">
+                A short position is when you sell an asset with the expectation that its value will
+                decrease over time. In this case, you would profit from the price depreciation.
+              </p>
+              <p class="py-2">
+                Long Positions are used when investors' expectations about the future price
+                movements of underlying Securities are positive, while Short Positions are used when
+                the expectation regarding the Securities prices is bearish.
+              </p>
+
+              <div class="modal-action">
+                <label for="modal-position-type" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <div class="btn-group">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="selectedPositionType === positionType.LONG"
+            (click)="onTogglePositionType(positionType.LONG)"
+          >
+            <mat-icon class="hidden sm:flex">trending_up</mat-icon>Long
+          </label>
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="selectedPositionType === positionType.SHORT"
+            (click)="onTogglePositionType(positionType.SHORT)"
+          >
+            <mat-icon class="hidden sm:flex">trending_down</mat-icon>Short
+          </label>
+        </div>
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Position Size</span>
+          <!-- The button to open modal -->
+          <label for="modal-position-size" class="label-text">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-position-size" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is position size?</h3>
+              <p class="py-4">
+                A position size refers to the size of the investment made in any given trade. The
+                position size will vary depending on the trader's risk tolerance, account size, and
+                the asset being traded. In general, traders aim to minimize their risk by sizing
+                positions appropriately.
+              </p>
+              <div class="modal-action">
+                <label for="modal-position-size" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <label class="input-group">
+          <input
+            #sizeRef
+            required
+            [(ngModel)]="size"
+            name="position-size"
+            type="number"
+            placeholder="10"
+            class="input input-bordered w-full"
+            [min]="0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            (input)="onSetMargin()"
+          />
+          <span>{{ baseSymbol }}</span>
+        </label>
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Leverage</span>
+
+          <!-- The button to open modal -->
+          <label for="modal-leverage" class="label-text">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-leverage" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is leverage?</h3>
+              <p class="py-4">
+                Leverage is the use of borrowed money to increase potential returns. In trading,
+                leverage allows traders to control larger amounts of an asset with a smaller initial
+                investment. This amplifies both gains and losses - increasing both the potential
+                profitability and the potential risk. It is important for traders to exercise
+                caution when using leverage, as it can magnify the impact of market volatility.
+              </p>
+              <div class="modal-action">
+                <label for="modal-leverage" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+        <label class="input-group">
+          <input
+            type="number"
+            placeholder="20"
+            class="input input-bordered w-full"
+            [min]="1"
+            [max]="10"
+            [step]="1"
+            [(ngModel)]="leverage"
+            name="leverage"
+            (input)="onSetMargin()"
+          />
+          <span>x</span>
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          class="range mt-1"
+          [ngClass]="{
+            'range-info': leverage <= 3,
+            'range-warning': 3 < leverage && leverage <= 5,
+            'range-error': 5 < leverage
+          }"
+          [(ngModel)]="leverage"
+          name="leverage-slider"
+          (input)="onSetMargin()"
+        />
+      </div>
+
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Margin</span>
+
+          <!-- The button to open modal -->
+          <label for="modal-margin" class="label-text">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-margin" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is margin?</h3>
+              <p class="py-2">
+                Margin is collateral that a trader must put up to open and maintain a leveraged
+                position.
+              </p>
+              <p class="py-2">
+                By default, it is automatically entered to be 100%. If the price fluctuation drops
+                below 50%, a loss cut is triggered and the position is settled.
+              </p>
+              <div class="modal-action">
+                <label for="modal-margin" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+
+        <label class="input-group">
+          <input
+            #marginAmountRef
+            required
+            type="number"
+            placeholder="10"
+            class="input input-bordered w-full"
+            [min]="minMargin"
+            [max]="symbolBalancesMap?.[marginSymbol || ''] || 0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            [(ngModel)]="marginAmount"
+            name="margin"
+          />
+          <select
+            #marginSymbolRef
+            required
+            [(ngModel)]="marginSymbol"
+            name="margin-symbol"
+            class="select select-bordered"
+            (change)="onSetMargin()"
+          >
+            <option [value]="baseSymbol">{{ baseSymbol }}</option>
+            <option [value]="quoteSymbol">{{ quoteSymbol }}</option>
+          </select>
+        </label>
+
+        <label class="label">
+          <span class="label-text-alt">
+            <p>Minimum margin: {{ minMargin }} {{ marginSymbol }}</p>
+            <p>
+              Available balance (Max margin): {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
+              {{ marginSymbol }}
+            </p>
+          </span>
+        </label>
+      </div>
+
+      <br />
+      <div class="card-actions justify-start">
+        <button class="btn btn-primary px-8" [disabled]="formRef.invalid">Open position</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="flex justify-start">
+  <div class="max-w-screen-xl w-full">
+    <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+      <div
+        *ngFor="let position of positions; let i = index"
+        class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3"
+      >
+        <div class="card bg-base-100 w-full shadow-xl" *ngIf="position?.position?.id !== '10'">
+          <div class="card-body">
+            <div class="flex flex-row">
+              <div class="badge badge-lg badge-accent mr-1">#{{ position?.position?.id }}</div>
+
+              <ng-container *ngIf="positionInstances![i]?.position_type === positionType.LONG">
+                <div class="badge badge-lg badge-primary">Long</div>
+              </ng-container>
+              <ng-container *ngIf="positionInstances![i]?.position_type === positionType.SHORT">
+                <div class="badge badge-lg badge-secondary">Short</div>
+              </ng-container>
+            </div>
+
+            <h2 class="card-title break-all">
+              <span
+                [ngClass]="{
+                  'text-primary': positionInstances![i]?.position_type === positionType.LONG,
+                  'text-secondary': positionInstances![i]?.position_type === positionType.SHORT
+                }"
+                >{{ positionInstances![i]?.size | number: '1.0-6' }} {{ baseSymbol }}/{{
+                  quoteSymbol
+                }}</span
+              >
+            </h2>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Margin Maintenance Rate</div>
+                <div class="stat-value">
+                  {{ calcMarginRate(position?.margin_maintenance_rate!) | percentage }}
+                </div>
+                <div class="stat-desc">Under 50% will initiate liquidation</div>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title" *ngIf="!position.valuation_profit?.amount?.includes('-')">
+                  Current Profit
+                </div>
+                <div class="stat-value text-info">
+                  {{ position.valuation_profit | coin }}
+                </div>
+                <div class="stat-desc"></div>
+              </div>
+              <div class="stat" *ngIf="position.valuation_profit?.amount?.includes('-')">
+                <div class="stat-title">Current Loss</div>
+                <div class="stat-value text-error">
+                  {{ position.valuation_profit | coin }}
+                </div>
+                <div class="stat-desc"></div>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Opened Rate</div>
+                <div class="stat-value text-primary">
+                  {{
+                    calcMarketRate(
+                      position.position?.opened_base_rate!,
+                      position.position?.opened_quote_rate!
+                    ) | number
+                  }}
+                  {{ quoteSymbol }}
+                </div>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Leverage</div>
+                <div class="stat-value text-secondary">{{ positionInstances![i]?.leverage }}x</div>
+              </div>
+              <div class="stat">
+                <div class="stat-title">Date Opened</div>
+                <div class="stat-value text-accent">
+                  {{ position?.position?.opened_at | date: 'yyyy-M-d' }}
+                </div>
+                <div class="stat-desc">{{ position?.position?.opened_at | date: 'h:mm:ss z' }}</div>
+              </div>
+            </div>
+            <div class="card-actions justify-center">
+              <label
+                for="close-modal-{{ position?.position?.id }}"
+                class="btn btn-outline btn-error"
+              >
+                Close Position
+              </label>
+            </div>
+            <input
+              type="checkbox"
+              id="close-modal-{{ position?.position?.id }}"
+              class="modal-toggle"
+            />
+            <div class="modal modal-bottom sm:modal-middle">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
+                <p class="py-4">
+                  The position #{{ position?.position?.id }} is closed and settled, OK?
+                </p>
+                <div class="modal-action">
+                  <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
+                    >Cancel</label
+                  >
+                  <button
+                    class="btn btn-secondary"
+                    (click)="onSubmitClose(position?.position?.id!)"
+                  >
+                    Close Position
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

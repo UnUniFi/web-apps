@@ -1,7 +1,5 @@
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { ToolbarModule } from './views/toolbar/toolbar.module';
 import { ViewModule } from './views/view.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,7 +20,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ViewModule,
     ToolbarModule,
     HttpClientModule,
-    TxFeeConfirmDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

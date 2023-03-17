@@ -6,6 +6,7 @@ import { UnjailComponent } from './unjail/unjail.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+// TODO: move into model/cosmos/slashing
 @NgModule({
   declarations: [UnjailComponent, UnjailSimpleComponent],
   imports: [CommonModule, SlashingRoutingModule, UnjailModule, UnjailSimpleModule],

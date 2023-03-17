@@ -131,8 +131,8 @@ export class TxCommonApplicationService {
     currentCosmosWallet: CosmosWallet,
     cosmosPublicKey: PubKey,
     account: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas?: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee?: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
   ) {
     const dialogRef = this.loadingDialog.open('Sending');

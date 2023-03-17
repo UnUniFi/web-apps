@@ -42,9 +42,9 @@ export class DelegateFormDialogComponent implements OnInit {
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
+    this.availableDenoms = ['GUU'];
 
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     this.gasRatio = 0;
   }
 
@@ -78,10 +78,13 @@ export class DelegateFormDialogComponent implements OnInit {
     ) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: 'uguu',
+      },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
       gasRatio: this.gasRatio,

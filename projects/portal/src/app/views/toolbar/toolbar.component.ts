@@ -1,4 +1,6 @@
+import { StoredWallet } from '../../models/wallets/wallet.model';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import * as crypto from 'crypto';
 
 export type SearchResult = {
   searchValue: string;
@@ -13,6 +15,9 @@ export type SearchResult = {
 export class ToolbarComponent implements OnInit {
   @Input()
   searchResult?: SearchResult | null;
+
+  @Input()
+  currentStoredWallet?: StoredWallet | null;
 
   @Output()
   appSubmitSearchResult: EventEmitter<SearchResult>;
@@ -64,5 +69,14 @@ export class ToolbarComponent implements OnInit {
 
   onConnectWallet(): void {
     this.appConnectWallet.emit();
+  }
+
+  getColorCode(storedWallet: StoredWallet) {
+    const hash = crypto
+      .createHash('sha256')
+      .update(Buffer.from(storedWallet.id))
+      .digest()
+      .toString('hex');
+    return `#${hash.substr(0, 6)}`;
   }
 }

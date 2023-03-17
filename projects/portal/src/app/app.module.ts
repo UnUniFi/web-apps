@@ -11,10 +11,12 @@ import { AppWithdrawValidatorCommissionFormDialogModule } from './pages/dialogs/
 import { AppCreateUnitFormDialogModule } from './pages/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.module';
 import { AppWithdrawIncentiveAllRewardsFormDialogModule } from './pages/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.module';
 import { AppWithdrawIncentiveRewardFormDialogModule } from './pages/dialogs/incentive/withdraw-incentive-reward-form-dialog/withdraw-incentive-reward-form-dialog.module';
+import { AppNftsDialogModule } from './pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { InactiveValidatorModule } from './views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.module';
+import { TxConfirmDialogModule } from './views/dialogs/txs/tx-confirm/tx-confirm-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule } from './views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.module';
@@ -67,6 +69,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     UnunifiSelectWalletDialogModule,
     UnunifiKeyFormDialogModule,
     InactiveValidatorModule,
+    TxConfirmDialogModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,
@@ -79,6 +82,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     AppCreateUnitFormDialogModule,
     AppWithdrawIncentiveRewardFormDialogModule,
     AppWithdrawIncentiveAllRewardsFormDialogModule,
+    AppNftsDialogModule,
     GraphQLModule,
   ],
   providers: [],

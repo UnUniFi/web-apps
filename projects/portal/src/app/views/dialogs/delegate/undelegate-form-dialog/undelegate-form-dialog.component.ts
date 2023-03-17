@@ -51,8 +51,8 @@ export class UndelegateFormDialogComponent implements OnInit {
   constructor() {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.availableDenoms = ['GUU'];
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     this.gasRatio = 0;
     this.now.setDate(this.now.getDate() + 14);
     this.estimatedUnbondingData = this.now.toString();
@@ -79,16 +79,19 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  onSubmit() {
     if (!this.selectedAmount) {
       return;
     }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: 'uguu',
+      },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

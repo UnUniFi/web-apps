@@ -1,0 +1,15 @@
+<view-borrow
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bidders]="bidders$ | async"
+  [loans]="loans$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  [borrowAmount]="borrowAmount$ | async"
+  [chartData]="chartData$ | async"
+  [shortestExpiryDate]="shortestExpiryDate$ | async"
+  [averageInterestRate]="averageInterestRate$ | async"
+  (appSubmit)="onSubmit($event)"
+  (appSimulate)="onSimulate($event)"
+></view-borrow>

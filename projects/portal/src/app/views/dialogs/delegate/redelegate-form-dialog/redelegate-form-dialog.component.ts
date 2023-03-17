@@ -49,12 +49,12 @@ export class RedelegateFormDialogComponent implements OnInit {
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
+    this.availableDenoms = ['GUU'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
@@ -78,7 +78,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  onSubmit() {
     if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
@@ -91,10 +91,13 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.validatorsList) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       destinationValidator: this.selectedValidator.operator_address,
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: 'uguu',
+      },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
       gasRatio: this.gasRatio,

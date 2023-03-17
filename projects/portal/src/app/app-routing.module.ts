@@ -63,6 +63,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
+  {
+    path: 'nft-backed-loan',
+    loadChildren: () =>
+      import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
+  },
+  {
+    path: 'derivatives',
+    loadChildren: () =>
+      import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
+  },
 ];
 
 @NgModule({

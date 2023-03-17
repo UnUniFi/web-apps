@@ -10,11 +10,11 @@ import {
   AuctionAll200ResponseAuctionsInner,
   AuctionParams200ResponseParams,
   CdpAll200ResponseCdpInner,
-  CdpAll200ResponseCdpInnerCdpCollateral,
+  Price200ResponsePrice,
+  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
   EcosystemincentiveParams200ResponseParams,
   IncentiveUnit200ResponseIncentiveUnit,
-  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
-  Price200ResponsePrice,
+  CdpAll200ResponseCdpInnerCdpCollateral,
 } from 'ununifi-client/esm/openapi';
 
 export const getCollateralParamsStream = (
@@ -33,6 +33,7 @@ export const getCollateralParamsStream = (
 
 @Injectable({ providedIn: 'root' })
 export class UnunifiRestService {
+  // TODO: split this into multiple services for each module (pawn-market-rest, yield-aggregator-rest, derivatives-rest)
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
@@ -140,7 +141,7 @@ export class UnunifiRestService {
     address: string,
   ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.IncentiveUnitIdsByAddr(sdk, address)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnitIdsByAddr(sdk, address)),
       map((res) => res.data.incentive_unit_ids_by_addr!),
     );
   }

@@ -69,6 +69,10 @@ const routes: Routes = [
       import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
   },
   {
+    path: 'nfts',
+    loadChildren: () => import('./pages/nfts/nfts.module').then((m) => m.AppNftsModule),
+  },
+  {
     path: 'derivatives',
     loadChildren: () =>
       import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),

@@ -18,6 +18,7 @@ import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -37,15 +38,17 @@ export class GovApplicationService {
     const txHash = await this.dialog
       .open<string>(VoteFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
-  }
+      if (txHash) {
+        await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      }  }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
       .open<string>(DepositFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
-  }
+      if (txHash) {
+        await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      }  }
 
   // WIP
   async submitProposal(
@@ -133,8 +136,9 @@ export class GovApplicationService {
 
     this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
-  }
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }  }
 
   async Vote(
     proposalID: number,

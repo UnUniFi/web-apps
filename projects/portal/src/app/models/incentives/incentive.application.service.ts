@@ -5,6 +5,7 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { WalletType } from '../wallets/wallet.model';
@@ -37,21 +38,27 @@ export class IncentiveApplicationService {
     const txHash = await this.dialog
       .open<string>(CreateUnitFormDialogComponent, { data: address })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawIncentiveRewardFormDialog(denom: string): Promise<void> {
     const txHash = await this.dialog
       .open<string>(WithdrawIncentiveRewardFormDialogComponent, { data: denom })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawIncentiveAllRewardsFormDialog(address: string): Promise<void> {
     const txHash = await this.dialog
       .open<string>(WithdrawIncentiveAllRewardsFormDialogComponent, { data: address })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async Register(

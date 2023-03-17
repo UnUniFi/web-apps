@@ -31,55 +31,7 @@ mat-progress-spinner {
 
 cdk-dialog-container {
   display: block;
-  background: #3734b0 !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}
-
-cdk-dialog-container {
-  display: block;
+  color: #000000 !important;
   background: #ffffff !important;
   border-radius: 4px;
   padding: 24px;

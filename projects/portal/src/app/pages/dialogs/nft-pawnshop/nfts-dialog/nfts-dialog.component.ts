@@ -1,5 +1,5 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
@@ -27,9 +27,9 @@ export class NftsDialogComponent implements OnInit {
   nftImages$: Observable<string[]>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: string,
-    public matDialogRef: MatDialogRef<NftsDialogComponent>,
+    public dialogRef: DialogRef<string, NftsDialogComponent>,
     private readonly walletService: WalletService,
     private readonly cosmosRest: CosmosRestService,
     private readonly pawnshop: NftPawnshopService,
@@ -69,6 +69,6 @@ export class NftsDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   async onSubmit(nftID: string) {
-    this.matDialogRef.close(nftID);
+    this.dialogRef.close(nftID);
   }
 }

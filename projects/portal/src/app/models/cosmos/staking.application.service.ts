@@ -8,6 +8,7 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
@@ -63,7 +64,9 @@ export class StakingApplicationService {
     const txHash = await this.dialog
       .open<string>(DelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openRedelegateFormDialog(
@@ -72,7 +75,9 @@ export class StakingApplicationService {
     const txHash = await this.dialog
       .open<string>(RedelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openUndelegateFormDialog(
@@ -81,7 +86,9 @@ export class StakingApplicationService {
     const txHash = await this.dialog
       .open<string>(UndelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async handleSimulateToCreateValidator(
@@ -268,7 +275,9 @@ export class StakingApplicationService {
 
     this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async handleSimulateToEditValidator(

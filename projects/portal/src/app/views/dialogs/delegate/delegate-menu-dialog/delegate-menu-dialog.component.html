@@ -107,20 +107,20 @@
     </ng-container>
   </div>
 
-  <div class="flex justify-start">
-    <button mat-stroked-button color="primary" class="px-4 m-3" (click)="onClickDetailButton()">
+  <div class="flex flex-col md:flex-row justify-start">
+    <button mat-stroked-button color="primary" class="px-4 m-2" (click)="onClickDetailButton()">
       <span>More information</span>
     </button>
-    <button mat-flat-button color="primary" class="px-4 m-3" (click)="onClickDelegateButton()">
+    <button mat-flat-button color="primary" class="px-4 m-2" (click)="onClickDelegateButton()">
       <span>Delegate to this validator</span>
     </button>
   </div>
-  <div class="flex justify-start">
+  <div class="flex flex-col md:flex-row justify-start">
     <ng-container *ngIf="isDelegated">
-      <button mat-flat-button color="accent" class="px-4 m-3" (click)="onClickRedelegateButton()">
+      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickRedelegateButton()">
         <span>Redelegate to another validator</span>
       </button>
-      <button mat-flat-button color="accent" class="px-4 m-3" (click)="onClickUndelegateButton()">
+      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickUndelegateButton()">
         <span>Undelegate from this validator</span>
       </button>
       <button

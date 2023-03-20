@@ -1,167 +1,176 @@
-<div class="flex justify-center">
-  <div class="text-base-content max-w-full">
-    <div class="card lg:card-side bg-base-100 shadow-xl">
-      <figure class="aspect-square w-full">
-        <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="" class="h-full object-cover" />
-      </figure>
-      <div class="card-body w-2/3">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
-        </div>
-        <h2 class="card-title break-all">{{ nftMetadata?.name }}</h2>
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr>
-                <th>Class ID</th>
-                <td>{{ classID }}</td>
-              </tr>
-              <tr>
-                <th>NFT ID</th>
-                <td>{{ nftID }}</td>
-              </tr>
-              <tr>
-                <th>Minimum deposit rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
-              </tr>
-              <tr>
-                <th>Started at</th>
-                <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
-              </tr>
-            </tbody>
-          </table>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <h2>Repay</h2>
+  </div>
+  <div class="flex justify-center">
+    <div class="text-base-content max-w-full">
+      <div class="card lg:card-side bg-base-100 shadow-xl">
+        <figure class="aspect-square w-full">
+          <img
+            src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+            alt=""
+            class="h-full object-cover"
+          />
+        </figure>
+        <div class="card-body w-2/3">
+          <div class="flex flex-row">
+            <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
+          </div>
+          <h2 class="card-title break-all">{{ nftMetadata?.name }}</h2>
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <tbody>
+                <tr>
+                  <th>Class ID</th>
+                  <td>{{ classID }}</td>
+                </tr>
+                <tr>
+                  <th>NFT ID</th>
+                  <td>{{ nftID }}</td>
+                </tr>
+                <tr>
+                  <th>Minimum deposit rate</th>
+                  <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
+                </tr>
+                <tr>
+                  <th>Started at</th>
+                  <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
 
-    <br />
+      <br />
 
-    <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
-      <div class="card-body">
-        <div class="flex flex-col md:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">Total deposits</div>
-              <div class="stat-value text-primary">{{ loan?.borrowing_limit | coinAmount }}</div>
-              <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">Amount you borrowed</div>
-              <div class="stat-value text-secondary">
-                {{ loan?.loan?.loan?.amount | coinAmount }}
+      <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
+        <div class="card-body">
+          <div class="flex flex-col md:flex-row justify-center items-center">
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Total deposits</div>
+                <div class="stat-value text-primary">{{ loan?.borrowing_limit | coinAmount }}</div>
+                <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
               </div>
-              <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
-            </div>
-            <!-- <div class="stat">
+              <div class="stat">
+                <div class="stat-title">Amount you borrowed</div>
+                <div class="stat-value text-secondary">
+                  {{ loan?.loan?.loan?.amount | coinAmount }}
+                </div>
+                <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom }}</div>
+              </div>
+              <!-- <div class="stat">
               <div class="stat-title">Available amount to borrow</div>
               <div class="stat-value text-accent">{{ loan?.borrowing_limit }}</div>
               <div class="stat-desc">axlUSDC</div>
             </div> -->
-          </div>
-          <span class="flex-auto"></span>
-          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
-            <button class="btn btn-secondary px-8" routerLink="borrow">Borrow</button>
+            </div>
+            <span class="flex-auto"></span>
+            <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+              <button class="btn btn-secondary px-8" routerLink="borrow">Borrow</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <br />
+      <br />
 
-    <div class="card bg-base-100 shadow-xl" *ngIf="liquidation && liquidation.liquidation">
-      <div class="card-body">
-        <div class="flex flex-col md:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">Next Repayment Deadline</div>
-              <div class="stat-value text-accent">
-                {{ liquidation.liquidation.liquidation_date | date : 'yyyy-M-d' }}
+      <div class="card bg-base-100 shadow-xl" *ngIf="liquidation && liquidation.liquidation">
+        <div class="card-body">
+          <div class="flex flex-col md:flex-row justify-center items-center">
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Next Repayment Deadline</div>
+                <div class="stat-value text-accent">
+                  {{ liquidation.liquidation.liquidation_date | date : 'yyyy-M-d' }}
+                </div>
+                <div class="stat-desc">
+                  {{ liquidation.liquidation.liquidation_date | date : 'a h:mm:ss z' }}
+                </div>
               </div>
-              <div class="stat-desc">
-                {{ liquidation.liquidation.liquidation_date | date : 'a h:mm:ss z' }}
+              <div class="stat">
+                <div class="stat-title">Amount you must Repay</div>
+                <div class="stat-value text-secondary">
+                  {{ liquidation.liquidation.amount?.amount | coinAmount }}
+                </div>
+                <div class="stat-desc">
+                  {{ liquidation.liquidation.amount?.denom | coinDenom }}
+                </div>
               </div>
             </div>
-            <div class="stat">
-              <div class="stat-title">Amount you must Repay</div>
-              <div class="stat-value text-secondary">
-                {{ liquidation.liquidation.amount?.amount | coinAmount }}
-              </div>
-              <div class="stat-desc">
-                {{ liquidation.liquidation.amount?.denom | coinDenom }}
-              </div>
+            <span class="flex-auto"></span>
+            <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+              <button class="btn btn-primary px-8" routerLink="repay">Repay</button>
             </div>
-          </div>
-          <span class="flex-auto"></span>
-          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
-            <button class="btn btn-primary px-8" routerLink="repay">Repay</button>
           </div>
         </div>
       </div>
-    </div>
 
-    <br />
+      <br />
 
-    <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
-      <div class="card-body">
-        <div class="flex flex-col md:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">Highest bid price</div>
-              <div class="stat-value text-primary">
-                {{ bidders[0].bid_amount?.amount | coinAmount }}
+      <div class="card bg-base-100 shadow-xl" *ngIf="bidders && bidders.length">
+        <div class="card-body">
+          <div class="flex flex-col md:flex-row justify-center items-center">
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">Highest bid price</div>
+                <div class="stat-value text-primary">
+                  {{ bidders[0].bid_amount?.amount | coinAmount }}
+                </div>
+                <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom }}</div>
               </div>
-              <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom }}</div>
             </div>
-          </div>
-          <span class="flex-auto"></span>
-          <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
-            <button class="btn btn-secondary px-8" (click)="onSubmitSell()">Sell</button>
+            <span class="flex-auto"></span>
+            <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+              <button class="btn btn-secondary px-8" (click)="onSubmitSell()">Sell</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <br />
+      <br />
 
-    <div class="card bg-base-100 shadow-xl" *ngIf="!bidders || !bidders.length">
-      <div class="card-body">
-        <div class="flex flex-col md:flex-row justify-center items-center">
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">No Bidder</div>
+      <div class="card bg-base-100 shadow-xl" *ngIf="!bidders || !bidders.length">
+        <div class="card-body">
+          <div class="flex flex-col md:flex-row justify-center items-center">
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-title">No Bidder</div>
+              </div>
             </div>
-          </div>
-          <span class="flex-auto"></span>
-          <div class="card-actions justify-end">
-            <button class="btn btn-secondary" (click)="onSubmitCancel()">Cancel Listing</button>
+            <span class="flex-auto"></span>
+            <div class="card-actions justify-end">
+              <button class="btn btn-secondary" (click)="onSubmitCancel()">Cancel Listing</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="overflow-x-auto">
-      <table class="table w-full" *ngIf="bidders && bidders.length">
-        <thead>
-          <tr>
-            <th></th>
-            <td>Interest rate</td>
-            <td>Deposit</td>
-            <td>Bid price</td>
-            <td>Expiry</td>
-            <td>Bidder address</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let bidder of bidders; let i = index">
-            <th>#{{ i + 1 }}</th>
-            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-            <td>{{ bidder.deposit_amount | coin }}</td>
-            <td>{{ bidder.bid_amount | coin }}</td>
-            <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
-            <td>{{ bidder.bidder }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="table w-full" *ngIf="bidders && bidders.length">
+          <thead>
+            <tr>
+              <th></th>
+              <td>Interest rate</td>
+              <td>Deposit</td>
+              <td>Bid price</td>
+              <td>Expiry</td>
+              <td>Bidder address</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bidder of bidders; let i = index">
+              <th>#{{ i + 1 }}</th>
+              <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+              <td>{{ bidder.deposit_amount | coin }}</td>
+              <td>{{ bidder.bid_amount | coin }}</td>
+              <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+              <td>{{ bidder.bidder }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

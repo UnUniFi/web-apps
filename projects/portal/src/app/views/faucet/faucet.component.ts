@@ -87,14 +87,20 @@ export class FaucetComponent implements OnInit {
     }
   }
 
-  onSelectedDenomChanged(selectedSymbol: string): void {
-    if (!this.symbolMetadataMap) {
-      this.matSnackBar.open('No Coin Info of ' + selectedSymbol, undefined, {
+  onSelectedDenomChanged(): void {
+    if (!this.symbol) {
+      this.matSnackBar.open('Invalid Coin', undefined, {
         duration: 6000,
       });
       return;
     }
-    const metadata = this.symbolMetadataMap[selectedSymbol];
+    if (!this.symbolMetadataMap) {
+      this.matSnackBar.open('No Coin Info of ' + this.symbol, undefined, {
+        duration: 6000,
+      });
+      return;
+    }
+    const metadata = this.symbolMetadataMap[this.symbol];
 
     this.selectedDenomChanged.emit(metadata.base!);
   }

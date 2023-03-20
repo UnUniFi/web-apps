@@ -173,13 +173,15 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
     switch (this.marginSymbol) {
       case this.baseSymbol:
         this.marginAmount =
-          Math.ceil((this.size / this.leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
+          Math.ceil((this.size / this.leverage) * Math.pow(10, 6)) / Math.pow(10, 6);
         this.minMargin = this.marginAmount;
         // this.minMargin = this.marginAmount / 2;
         break;
       case this.quoteSymbol:
         // this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
-        this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price));
+        this.marginAmount =
+          Math.ceil((this.size / this.leverage) * Number(this.price) * Math.pow(10, 6)) /
+          Math.pow(10, 6);
         this.minMargin = this.marginAmount;
         // this.minMargin = this.marginAmount / 2;
         break;

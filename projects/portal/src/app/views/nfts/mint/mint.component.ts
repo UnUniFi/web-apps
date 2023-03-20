@@ -33,7 +33,7 @@ export class MintComponent implements OnInit {
   autoID() {
     const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    let autoID = '';
+    let autoID = 'a';
 
     for (let i = 0; i < 20; i++) {
       autoID += CHARS.charAt(Math.floor(Math.random() * CHARS.length));

@@ -48,7 +48,7 @@
           <mat-list-item>
             <span>Date:</span>
             <span class="flex-auto"></span>
-            <span>{{ data.date | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+            <span>{{ data.date | date : 'yyyy-MM-dd a hh:mm:ss z' }}</span>
             <mat-divider></mat-divider>
           </mat-list-item>
           <mat-list-item>
@@ -57,7 +57,7 @@
             <span class="mr-1 break-all">
               <span>{{ data.result.commission.commission.commission[0].amount | floor }}</span>
               <span class="text-gray-300 text-sm"
-                >{{ data.result.commission.commission.commission[0].amount | decimals: 3 }}
+                >{{ data.result.commission.commission.commission[0].amount | decimals : 3 }}
               </span>
             </span>
             <span>{{ data.result.commission.commission.commission[0].denom }}</span>
@@ -69,7 +69,7 @@
             <span class="mr-1 break-all">
               <span>{{ data.result.outstanding_rewards.rewards.rewards[0].amount | floor }}</span>
               <span class="text-gray-300 text-sm"
-                >{{ data.result.outstanding_rewards.rewards.rewards[0].amount | decimals: 3 }}
+                >{{ data.result.outstanding_rewards.rewards.rewards[0].amount | decimals : 3 }}
               </span>
             </span>
             <span>{{ data.result.outstanding_rewards.rewards.rewards[0].denom }}</span>
@@ -78,7 +78,7 @@
           <mat-list-item>
             <span>Before Date:</span>
             <span class="flex-auto"></span>
-            <span>{{ data.before_date | date: 'yyyy-M-d a h:mm:ss z' }}</span>
+            <span>{{ data.before_date | date : 'yyyy-MM-dd a hh:mm:ss z' }}</span>
           </mat-list-item>
         </mat-list>
       </mat-card>

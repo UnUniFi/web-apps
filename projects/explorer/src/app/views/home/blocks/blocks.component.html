@@ -1,7 +1,7 @@
 <h2>Latest Blocks</h2>
 <div class="overflow-scroll h-80">
   <mat-card>
-    <ng-container *ngIf="latestBlocks === undefined || null ; then empty; else exist"></ng-container>
+    <ng-container *ngIf="latestBlocks === undefined || null; then empty; else exist"></ng-container>
     <ng-template #empty></ng-template>
     <ng-template #exist>
       <mat-list>
@@ -23,7 +23,7 @@
             <span class="flex-auto"></span>
             <!--
             <span class="break-all text-sm sm:text-base">
-              {{ latestBlock?.block?.header?.time | date : 'yyyy-M-d a h:mm:ss z' }}
+              {{ latestBlock?.block?.header?.time | date : 'yyyy-MM-dd a hh:mm:ss z' }}
             </span>
             -->
           </mat-list-item>

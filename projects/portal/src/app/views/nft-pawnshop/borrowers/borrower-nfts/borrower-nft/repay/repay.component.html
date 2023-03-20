@@ -32,7 +32,7 @@
               </tr>
               <tr>
                 <th>Started at</th>
-                <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+                <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
               </tr>
             </tbody>
           </table>
@@ -105,8 +105,8 @@
               </div>
               <div class="stat flex flex-col items-end">
                 <div class="stat-title">Shortest expiry date</div>
-                <div class="stat-value">{{ shortestExpiryDate | date : 'yyyy-M-d' }}</div>
-                <div class="stat-desc">{{ shortestExpiryDate | date : 'a h:mm:ss z' }}</div>
+                <div class="stat-value">{{ shortestExpiryDate | date : 'yyyy-MM-dd' }}</div>
+                <div class="stat-desc">{{ shortestExpiryDate | date : 'a hh:mm:ss z' }}</div>
               </div>
             </div>
 
@@ -146,7 +146,7 @@
               <td>{{ bidder.deposit_lending_rate | percentage }}</td>
               <td>{{ bidder.borrowings![0].amount | coin }}</td>
               <td>{{ bidder.bid_amount | coin }}</td>
-              <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+              <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               <td>{{ bidder.bidder }}</td>
             </tr>
           </tbody>

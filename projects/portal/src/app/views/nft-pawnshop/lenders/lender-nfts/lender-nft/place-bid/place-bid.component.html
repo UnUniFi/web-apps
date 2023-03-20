@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                   <th>Started at</th>
-                  <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+                  <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
                 </tr>
 
                 <tr>
@@ -326,7 +326,7 @@
                   <td class="text-secondary">{{ bidder.deposit_amount | coin }}</td>
                   <td class="text-secondary">{{ bidder.bid_amount | coin }}</td>
                   <td class="text-secondary">
-                    {{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}
+                    {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
                   </td>
                   <td class="text-secondary">{{ bidder.bidder }}</td>
                 </ng-template>
@@ -335,7 +335,7 @@
                   <td>{{ bidder.deposit_lending_rate | percentage }}</td>
                   <td>{{ bidder.deposit_amount | coin }}</td>
                   <td>{{ bidder.bid_amount | coin }}</td>
-                  <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+                  <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
                   <td>{{ bidder.bidder }}</td>
                 </ng-template>
               </tr>

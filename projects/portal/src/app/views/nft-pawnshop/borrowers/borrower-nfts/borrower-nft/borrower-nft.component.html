@@ -34,7 +34,7 @@
                 </tr>
                 <tr>
                   <th>Started at</th>
-                  <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
+                  <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -83,10 +83,10 @@
               <div class="stat">
                 <div class="stat-title">Next Repayment Deadline</div>
                 <div class="stat-value text-accent">
-                  {{ liquidation.liquidation.liquidation_date | date : 'yyyy-M-d' }}
+                  {{ liquidation.liquidation.liquidation_date | date : 'yyyy-MM-dd' }}
                 </div>
                 <div class="stat-desc">
-                  {{ liquidation.liquidation.liquidation_date | date : 'a h:mm:ss z' }}
+                  {{ liquidation.liquidation.liquidation_date | date : 'a hh:mm:ss z' }}
                 </div>
               </div>
               <div class="stat">
@@ -165,7 +165,7 @@
               <td>{{ bidder.deposit_lending_rate | percentage }}</td>
               <td>{{ bidder.deposit_amount | coin }}</td>
               <td>{{ bidder.bid_amount | coin }}</td>
-              <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+              <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               <td>{{ bidder.bidder }}</td>
             </tr>
           </tbody>

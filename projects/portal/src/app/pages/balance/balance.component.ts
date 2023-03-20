@@ -51,6 +51,7 @@ export class BalanceComponent implements OnInit {
     this.faucets$ = this.usecase.faucets$;
     this.nodeInfo$ = this.usecase.nodeInfo$;
     this.accountTypeName$ = this.usecase.accountTypeName$;
+    this.nodeInfo$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

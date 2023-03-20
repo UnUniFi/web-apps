@@ -291,6 +291,12 @@
         >
           Open Short position
         </button>
+        <p
+          *ngIf="(symbolBalancesMap?.[marginSymbol || ''] || 0)<marginAmount"
+          class="text-lg text-error m-auto"
+        >
+          Insufficient balance!
+        </p>
       </div>
     </form>
   </div>

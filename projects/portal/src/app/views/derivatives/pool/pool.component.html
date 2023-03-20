@@ -1,6 +1,6 @@
 <div class="w-full">
   <h2>Perpetual Futures</h2>
-  <div class="flex flex-row flex-wrap m-4">
+  <div class="flex flex-col m-4">
     <div class="mb-4 md:mb-0">
       <h3>Pool Status</h3>
       <div class="stats stats-vertical md:stats-horizontal shadow">
@@ -9,21 +9,22 @@
           <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
         </div>
 
-        <!-- <div class="stat">
+        <div class="stat">
           <div class="stat-title">24h Volume</div>
-          <div class="stat-value text-secondary">{{ pool?.volume_24hours | number }}</div>
-          <div class="stat-desc">USD</div>
+          <!-- <div class="stat-value text-secondary">{{ pool?.volume_24hours | number }}</div>
+          <div class="stat-desc">USD</div> -->
+          <div class="stat-value">Coming Soon</div>
+          <div class="stat-desc"></div>
         </div>
 
         <div class="stat">
           <div class="stat-title">24h Fees</div>
-          <div class="stat-value text-secondary">{{ pool?.fees_24hours | number }}</div>
-          <div class="stat-desc">USD</div>
-        </div> -->
+          <div class="stat-value">Coming Soon</div>
+          <div class="stat-desc"></div>
+        </div>
       </div>
     </div>
-    <span class="flex-auto"></span>
-    <div class="w-full lg:w-1/2">
+    <div class="w-full mt-4">
       <h3>DLP Rates (1DLP=)</h3>
       <div class="stats stats-vertical md:stats-horizontal shadow">
         <ng-container *ngFor="let rate of dlpRates">
@@ -35,10 +36,9 @@
       </div>
     </div>
 
-    <span class="flex-auto"></span>
     <div class="w-full lg:w-1/2 lg:mt-4">
+      <h3>Liquidity Provider Token</h3>
       <div class="card bg-base-100 shadow-xl w-full">
-        <h2 class="card-title">Liquidity Provider Token</h2>
         <div class="tabs tabs-boxed">
           <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
             >Buy</a
@@ -56,6 +56,10 @@
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Enter amount to deposit</span>
+                  <!-- The button to open modal -->
+                  <label for="modal-dlp" class="label-text">
+                    <mat-icon>help</mat-icon>
+                  </label>
                 </label>
                 <label class="input-group">
                   <input
@@ -133,6 +137,9 @@
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Enter amount to sell</span>
+                  <label for="modal-dlp" class="label-text">
+                    <mat-icon>help</mat-icon>
+                  </label>
                 </label>
                 <label class="input-group">
                   <input
@@ -208,6 +215,27 @@
               </div>
             </form>
           </ng-container>
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-dlp" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is DLP?</h3>
+              <p class="py-2">
+                By depositing tokens into the pool, you can obtain DLP. Fees from derivatives such
+                as Perpetual-Futures are accumulated in the pool, and by selling DLP and converting
+                it to tokens, you can get a portion of these fees.
+              </p>
+              <p class="py-2">
+                The rate of DLP is currently determined and may fluctuate due to user deposits and
+                withdrawals. Please check the detailed received amount in the window before sending
+                transaction.
+              </p>
+
+              <div class="modal-action">
+                <label for="modal-dlp" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

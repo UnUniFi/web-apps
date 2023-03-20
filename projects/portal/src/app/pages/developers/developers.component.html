@@ -1,0 +1,6 @@
+<view-developers
+  [config]="config$ | async"
+  [version]="version$ | async"
+  (rebuild)="onRebuild($event)"
+  (restart)="onRestart($event)"
+></view-developers>

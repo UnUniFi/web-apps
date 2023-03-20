@@ -77,6 +77,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
   },
+  {
+    path: 'developers',
+    loadChildren: () =>
+      import('./pages/developers/developers.module').then((m) => m.AppDevelopersModule),
+  },
 ];
 
 @NgModule({

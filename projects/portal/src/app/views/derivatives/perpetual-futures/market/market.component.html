@@ -302,6 +302,12 @@
   </div>
 </div>
 
+<div *ngIf="positions&&positions.length" class="flex flex-col md:flex-row justify-end">
+  <button class="btn btn-outline btn-info px-8 mr-4" routerLink="/derivatives/positions">
+    View Positions Detail
+  </button>
+</div>
+
 <div class="flex justify-start">
   <div class="max-w-screen-xl w-full">
     <div class="flex flex-row flex-wrap -mr-12 -mb-12">

@@ -36,15 +36,15 @@
     </div>
 
     <span class="flex-auto"></span>
-    <div class="w-full lg:w-1/2">
-      <h3>Liquidity Provider Token</h3>
+    <div class="w-full lg:w-1/2 lg:mt-4">
       <div class="card bg-base-100 shadow-xl w-full">
+        <h2 class="card-title">Liquidity Provider Token</h2>
         <div class="tabs tabs-boxed">
           <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
-            >Mint</a
+            >Buy</a
           >
           <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
-            >Burn</a
+            >Sell</a
           >
         </div>
         <div class="card-body">
@@ -98,7 +98,7 @@
                 class="btn btn-primary w-full"
                 (click)="onEstimateMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
               >
-                Deposit to mint
+                Buy LPT
               </label>
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="mint-model" class="modal-toggle" />
@@ -132,7 +132,7 @@
             >
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Enter amount to burn</span>
+                  <span class="label-text">Enter amount to sell</span>
                 </label>
                 <label class="input-group">
                   <input
@@ -181,7 +181,7 @@
                 class="btn btn-primary w-full"
                 (click)="onEstimateBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
               >
-                Burn to Redeem
+                Sell LPT
               </label>
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="mint-model" class="modal-toggle" />

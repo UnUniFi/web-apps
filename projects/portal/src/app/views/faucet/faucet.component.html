@@ -42,6 +42,7 @@
                 [(ngModel)]="symbol"
                 name="symbol"
                 class="select select-bordered w-1/4"
+                (change)="onSelectedDenomChanged()"
               >
                 <ng-container *ngFor="let s of symbols">
                   <option [value]="s">{{ s }}</option>

@@ -4,7 +4,7 @@ import { CosmosWallet } from '../wallets/wallet.model';
 import { IAuctionInfrastructure } from './auction.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import ununifi from 'ununifi-client';
 
@@ -12,7 +12,7 @@ import ununifi from 'ununifi-client';
   providedIn: 'root',
 })
 export class AuctionInfrastructureService implements IAuctionInfrastructure {
-  constructor(private readonly txCommonService: TxCommonService) { }
+  constructor(private readonly txCommonService: TxCommonService) {}
 
   async placeBid(
     auctionID: number,
@@ -21,7 +21,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildPlaceBidTxBuilder(
       auctionID,
@@ -102,7 +102,7 @@ export class AuctionInfrastructureService implements IAuctionInfrastructure {
     amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): ununifi.proto.ununifi.auction.MsgPlaceBid {
     //Todo: make auction.MsgPlaceBid
-    const msgPlaceBid: any = undefined
+    const msgPlaceBid: any = undefined;
     /*
     const msgPlaceBid = new ununifi.rest.auction.MsgPlaceBid({
       auction_id: Long.fromNumber(auctionID),

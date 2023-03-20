@@ -1,0 +1,8 @@
+<view-incentive
+  [address]="address$ | async"
+  [unitIds]="unitIds$ | async"
+  [rewards]="rewards$ | async"
+  (appClickCreate)="onClickCreate($event)"
+  (appClickReward)="onClickReward($event)"
+  (appClickAllRewards)="onClickAllRewards($event)"
+></view-incentive>

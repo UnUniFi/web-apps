@@ -15,7 +15,7 @@ import { IssueCdpOnSubmitEvent } from 'projects/portal/src/app/views/mint/cdps/c
 import { combineLatest, Observable, of, timer, zip } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-issue',
@@ -30,7 +30,7 @@ export class IssueComponent implements OnInit {
   principalDenom$: Observable<string>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
-  cdp$: Observable<InlineResponse2004Cdp1>;
+  cdp$: Observable<CdpAll200ResponseCdpInner>;
   liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   issueLimit$: Observable<number>;
 

@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LoadingDialogComponent } from './loading-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { DialogModule } from '@angular/cdk/dialog';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [LoadingDialogComponent],
-  imports: [CommonModule, MatDialogModule, MatProgressSpinnerModule],
+  imports: [CommonModule, DialogModule, MatProgressSpinnerModule],
   exports: [LoadingDialogComponent],
 })
 export class LoadingDialogModule {}

@@ -11,7 +11,7 @@ import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class TxCommonService {
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
-  ) { }
+  ) {}
 
   canonicalizeAccAddress(address: string) {
     const canonicalized = address.replace(/\s+/g, '');
@@ -91,7 +91,27 @@ export class TxCommonService {
     return baseAccount;
   }
 
+  async buildTxBuilderWithDummyGasAndFee(
+    messages: any[],
+    cosmosPublicKey: cosmosclient.PubKey,
+    baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ) {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
+      denom: minimumGasPrice.denom,
+      amount: '1',
+    };
+
+    return await this.buildTxBuilder(messages, cosmosPublicKey, baseAccount, dummyGas, dummyFee);
+  }
+
   async buildTxBuilder(
+    // TODO: instanceToProtoAny should be called before this function for type safety
+    // messages: cosmosclient.proto.google.protobuf.IAny[],
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -162,7 +182,7 @@ export class TxCommonService {
     if (privateKey) {
       cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
     } else {
-      const privateWallet: StoredWallet & { privateKey: string } =
+      const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
         await this.walletAppService.openUnunifiKeyFormDialog();
       if (!privateWallet || !privateWallet.privateKey) {
         this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
@@ -292,7 +312,7 @@ export class TxCommonService {
     };
   }
 
-  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20050> {
+  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<BroadcastTx200Response> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     console.log(txBuilder);
 

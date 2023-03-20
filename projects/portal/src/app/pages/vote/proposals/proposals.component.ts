@@ -5,8 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Proposals200ResponseProposalsInner,
 } from '@cosmos-client/core/esm/openapi/api';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,15 +17,15 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  paginatedProposals$: Observable<InlineResponse20027Proposals[]>;
-  tallies$: Observable<(InlineResponse20027FinalTallyResult | undefined)[]>;
+  paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  tallies$: Observable<(Proposals200ResponseProposalsInnerFinalTallyResult | undefined)[]>;
   proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
   pageLength$: Observable<number | undefined>;
   pageSizeOptions = [5, 10, 15];
 
-  private proposals$: Observable<InlineResponse20027Proposals[]>;
+  private proposals$: Observable<Proposals200ResponseProposalsInner[]>;
   private defaultPageSize = this.pageSizeOptions[1];
   private defaultPageNumber = 1;
 
@@ -93,10 +93,10 @@ export class ProposalsComponent implements OnInit {
   }
 
   getPaginatedProposals(
-    proposals: InlineResponse20027Proposals[],
+    proposals: Proposals200ResponseProposalsInner[],
     pageNumber: number,
     pageSize: number,
-  ): InlineResponse20027Proposals[] {
+  ): Proposals200ResponseProposalsInner[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
     return proposals.filter((_, i) => min <= i && i < max).reverse();

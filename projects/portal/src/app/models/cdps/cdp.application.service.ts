@@ -1,14 +1,17 @@
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { CdpService } from './cdp.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
@@ -18,7 +21,7 @@ export class CdpApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly cdp: CdpService,
     private readonly key: KeyService,
@@ -93,14 +96,13 @@ export class CdpApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -111,7 +113,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.createCDP(
+      const res: BroadcastTx200Response = await this.cdp.createCDP(
         key,
         privateKey,
         collateralType,
@@ -208,14 +210,13 @@ export class CdpApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -226,7 +227,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.drawCDP(
+      const res: BroadcastTx200Response = await this.cdp.drawCDP(
         key,
         privateKey,
         collateralType,
@@ -322,14 +323,13 @@ export class CdpApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -339,7 +339,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.repayCDP(
+      const res: BroadcastTx200Response = await this.cdp.repayCDP(
         key,
         privateKey,
         collateralType,
@@ -437,14 +437,13 @@ export class CdpApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -455,7 +454,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.depositCDP(
+      const res: BroadcastTx200Response = await this.cdp.depositCDP(
         key,
         privateKey,
         ownerAddr,
@@ -554,14 +553,13 @@ export class CdpApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -572,7 +570,7 @@ export class CdpApplicationService {
 
     let txhash: string | undefined;
     try {
-      const res: InlineResponse20050 = await this.cdp.withdrawCDP(
+      const res: BroadcastTx200Response = await this.cdp.withdrawCDP(
         key,
         privateKey,
         ownerAddr,

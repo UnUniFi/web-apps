@@ -1,7 +1,7 @@
 import { KeyBackupResult } from '../../../models/keys/key.model';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -26,19 +26,19 @@ export class KeyBackupDialogComponent implements OnInit {
   private mnemonicArray = this.data.mnemonic.split(/\s/);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: {
       mnemonic: string;
       privateKey: string;
       id: string;
     },
-    public matDialogRef: MatDialogRef<KeyBackupDialogComponent>,
+    public dialogRef: DialogRef<KeyBackupResult, KeyBackupDialogComponent>,
     private readonly snackBar: MatSnackBar,
   ) {}
 
   onClickSubmit(): void {
     const keyBackupResult: KeyBackupResult = { saved: this.saved, checked: this.checked };
-    this.matDialogRef.close(keyBackupResult);
+    this.dialogRef.close(keyBackupResult);
   }
 
   ordinal(n: number): string {

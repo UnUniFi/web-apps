@@ -3,17 +3,15 @@ const { guessProductionMode } = require('@ngneat/tailwind');
 process.env.TAILWIND_MODE = guessProductionMode() ? 'build' : 'watch';
 
 module.exports = {
-  purge: ['./src/**/*.{html,ts}'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./projects/**/*.{html,ts}'],
   theme: {
     extend: {
-      screens: {
-      },
+      screens: {},
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('daisyui')],
   important: true,
 };

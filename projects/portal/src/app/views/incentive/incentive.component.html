@@ -1,0 +1,51 @@
+<h2 class="mb-4">Ecosystem-Incentive</h2>
+
+<h3 class="mb-0 ml-2">Existing Incentive Tokens</h3>
+<div class="flex flex-col">
+  <mat-card class="mb-4">
+    <mat-nav-list>
+      <mat-list-item *ngIf="!unitIds"> No Tokens! </mat-list-item>
+      <mat-list-item *ngIf="unitIds && unitIds.length === 0"> No Tokens! </mat-list-item>
+      <ng-container *ngIf="unitIds && unitIds.length > 0">
+        <ng-container *ngFor="let unitId of unitIds; last as last">
+          <mat-list-item routerLink="/incentive/units/{{ unitId }}">
+            <span>{{ unitId }}</span>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </mat-list-item>
+        </ng-container>
+      </ng-container>
+    </mat-nav-list>
+  </mat-card>
+
+  <button class="mb-4" mat-flat-button color="primary" (click)="onClickCreate()">
+    Create New Token
+  </button>
+</div>
+
+<h3 class="mb-0 ml-2">Available Rewards</h3>
+<mat-card class="mb-4">
+  <mat-nav-list>
+    <mat-list-item *ngIf="!rewards"> No Rewards! </mat-list-item>
+    <mat-list-item *ngIf="rewards && rewards.length === 0"> No Rewards! </mat-list-item>
+    <ng-container *ngIf="rewards && rewards.length > 0">
+      <mat-list-item
+        *ngFor="let reward of rewards; let i = index; last as last"
+        (click)="onClickReward(reward.denom)"
+      >
+        <span class="whitespace-nowrap">Reward #{{ i + 1 }}</span>
+        <span class="flex-auto"></span>
+        <span class="ml2 break-all">{{ reward?.amount }} {{ reward?.denom }}</span>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </ng-container>
+  </mat-nav-list>
+</mat-card>
+<button
+  *ngIf="rewards && rewards.length > 1"
+  class="mb-4 w-full"
+  mat-flat-button
+  color="accent"
+  (click)="onClickAllRewards()"
+>
+  Withdraw All Rewards
+</button>

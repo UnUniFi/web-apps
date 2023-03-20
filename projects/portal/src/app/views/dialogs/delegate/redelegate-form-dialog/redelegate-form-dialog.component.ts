@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -11,7 +11,7 @@ export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
   amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20041Validators[];
+  validatorList: StakingDelegatorValidators200ResponseValidatorsInner[];
   gasRatio: number;
 };
 
@@ -22,11 +22,11 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: InlineResponse20041Validators[] | null;
+  validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20038 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
   delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -36,7 +36,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20041Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
@@ -44,17 +44,17 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
   selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: InlineResponse20041Validators;
+  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
   gasRatio: number;
 
   constructor() {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
+    this.availableDenoms = ['GUU'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
@@ -63,7 +63,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto
@@ -78,7 +78,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  onSubmit() {
     if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
@@ -91,10 +91,13 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.validatorsList) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       destinationValidator: this.selectedValidator.operator_address,
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: 'uguu',
+      },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
       gasRatio: this.gasRatio,

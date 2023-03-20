@@ -1,31 +1,64 @@
-<h2>Faucet</h2>
-<form #formRef="ngForm" (submit)="onPostFaucetRequested(addressRef.value, amountRef.value)">
-  <div class="flex flex-col">
-    <mat-form-field>
-      <mat-label>Select Denom</mat-label>
-      <mat-select [(value)]="denom" (valueChange)="onSelectedDenomChanged($event)">
-        <ng-container *ngFor="let eachDenom of denoms">
-          <mat-option value="{{eachDenom}}">{{eachDenom}}</mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Address</mat-label>
-      <input matNativeControl #addressRef name="address" [(ngModel)]="address" required />
-      <mat-error>Required!</mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Amount({{ denom }})</mat-label>
-      <input matNativeControl #amountRef name="amount" [(ngModel)]="amount" [min]="1"
-        [max]="creditAmount ? creditAmount : 0" (focus)="focusAmount = true" (focusout)="focusAmount = false"
-        required />
-      <span matSuffix>{{ denom }}</span>
-      <mat-hint *ngIf="focusAmount">Limit 1-{{ creditAmount }} (per account)</mat-hint>
-      <mat-error>Limit 1-{{ creditAmount }} (per account)!</mat-error>
-    </mat-form-field>
-
-    <button mat-flat-button color="accent" [disabled]="formRef.invalid">Claim</button>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <h2>Faucet (Only Testnet)</h2>
   </div>
-</form>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Request</h2>
+        <form #formRef="ngForm" (submit)="onPostFaucetRequested()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Address</span>
+            </label>
+            <input
+              #addressRef
+              class="input input-bordered"
+              name="address"
+              [(ngModel)]="address"
+              required
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Token</span>
+            </label>
+            <label class="input-group">
+              <input
+                #amountRef
+                class="input input-bordered w-full"
+                name="amount"
+                [(ngModel)]="amount"
+                [min]="0.000001"
+                [max]="creditAmount ? creditAmount : 0"
+                (focus)="focusAmount = true"
+                (focusout)="focusAmount = false"
+                required
+              />
+              <select
+                #symbolRef
+                required
+                [(ngModel)]="symbol"
+                name="symbol"
+                class="select select-bordered w-1/4"
+              >
+                <ng-container *ngFor="let s of symbols">
+                  <option [value]="s">{{ s }}</option>
+                </ng-container>
+              </select>
+            </label>
+            <label class="label">
+              <span class="label-text-alt"
+                >Max Claimable Amount: {{ creditAmount }}{{ symbol }}
+              </span>
+            </label>
+          </div>
+          <div class="modal-action">
+            <button class="btn btn-primary" [disabled]="formRef.invalid">Claim</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,7 +8,7 @@ import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import BigNumber from 'bignumber.js';
 import Long from 'long';
 
@@ -19,7 +19,7 @@ export class StakingService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
     private readonly txCommonService: TxCommonService,
-  ) { }
+  ) {}
 
   // Create Validator
   async createValidator(
@@ -28,7 +28,7 @@ export class StakingService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildCreateValidator(
       keyType,
       createValidatorData,
@@ -123,7 +123,9 @@ export class StakingService {
     }
 
     const pubKeyJson = JSON.parse(createValidatorData.pubkey);
-    const cosmosValConsPublicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({ key: pubKeyJson.key });
+    const cosmosValConsPublicKey = new cosmosclient.proto.cosmos.crypto.ed25519.PubKey({
+      key: pubKeyJson.key,
+    });
     const packedAnyCosmosValConsPublicKey =
       cosmosclient.codec.instanceToProtoAny(cosmosValConsPublicKey);
 
@@ -193,7 +195,7 @@ export class StakingService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null,
     privateKey: Uint8Array,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildEditValidator(editValidatorData, gas, fee, cosmosPublicKey);
 
@@ -288,7 +290,9 @@ export class StakingService {
       commission_rate: `${editValidatorData.rate}${'0000000000000000'}`,
       min_self_delegation: editValidatorData.min_self_delegation,
     };
-    const msgEditValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator(editValidatorTxData);
+    const msgEditValidator = new cosmosclient.proto.cosmos.staking.v1beta1.MsgEditValidator(
+      editValidatorTxData,
+    );
 
     const txBuilder = await this.txCommonService.buildTxBuilder(
       [msgEditValidator],
@@ -308,7 +312,7 @@ export class StakingService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildCreateDelegateTxBuilder(
       validatorAddress,
@@ -405,7 +409,7 @@ export class StakingService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
 
     const txBuilder = await this.buildRedelegateTxBuilder(
@@ -516,7 +520,7 @@ export class StakingService {
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     privateKey?: string,
-  ): Promise<InlineResponse20050> {
+  ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildUndelegateTxBuilder(
       validatorAddress,

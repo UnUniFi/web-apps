@@ -1,6 +1,11 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 
+export type UnunifiSelectCreateImportDialogData =
+  | 'select'
+  | 'import'
+  | 'importWithPrivateKey'
+  | 'create';
 @Component({
   selector: 'view-ununifi-select-create-import-dialog',
   templateUrl: './ununifi-select-create-import-dialog.component.html',
@@ -8,7 +13,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class UnunifiSelectCreateImportDialogComponent implements OnInit {
   options: {
-    value: 'select' | 'import' | 'importWithPrivateKey' | 'create';
+    value: UnunifiSelectCreateImportDialogData;
     name: string;
   }[] = [
     {
@@ -29,11 +34,16 @@ export class UnunifiSelectCreateImportDialogComponent implements OnInit {
     },
   ];
 
-  constructor(public matDialogRef: MatDialogRef<UnunifiSelectCreateImportDialogComponent>) {}
+  constructor(
+    public dialogRef: DialogRef<
+      UnunifiSelectCreateImportDialogData,
+      UnunifiSelectCreateImportDialogComponent
+    >,
+  ) {}
 
   ngOnInit(): void {}
 
-  onClickButton(value: 'select' | 'import' | 'importWithPrivateKey' | 'create'): void {
-    this.matDialogRef.close(value);
+  onClickButton(value: UnunifiSelectCreateImportDialogData): void {
+    this.dialogRef.close(value);
   }
 }

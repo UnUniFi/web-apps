@@ -16,7 +16,7 @@ mat-toolbar.toolbar {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 4;
+  z-index: 12;
 }
 
 .container {
@@ -29,6 +29,10 @@ mat-progress-spinner {
   margin: 1em auto;
 }
 
-mat-dialog-container {
-  background: #3734B0 !important;
+cdk-dialog-container {
+  display: block;
+  color: #000000 !important;
+  background: #ffffff !important;
+  border-radius: 4px;
+  padding: 24px;
 }

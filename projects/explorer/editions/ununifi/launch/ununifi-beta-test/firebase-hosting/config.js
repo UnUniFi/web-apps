@@ -6,13 +6,10 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-beta-test-v2.cauchye.net';
-// const domainCauchyEB = 'b.private-test.ununifi.cauchye.net';
-// const domainCauchyEC = 'c.private-test.ununifi.cauchye.net';
-// const domainCauchyED = 'd.private-test.ununifi.cauchye.net';
+const domainCauchyEA = 'ununifi-beta-test.cauchye.net';
 
-const chainID = 'ununifi-beta-test-v2';
-const chainName = 'UnUniFi (beta-test)';
+const chainID = 'ununifi-beta';
+const chainName = 'UnUniFi (Beta)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -48,6 +45,7 @@ const configs = [
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
+    chainName,
     bech32Prefix,
     minimumGasPrices: [
       {
@@ -57,21 +55,27 @@ const configs = [
     ],
     extension: {
       faucet: [
-        // Todo: After setup faucet, enable the following faucet.
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+          denom: 'ubtc',
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uguu',
+          creditAmount: 2000000,
+          maxCredit: 2000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000,
+          maxCredit: 2000000,
+        },
         // {
         //   hasFaucet: false,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
@@ -80,7 +84,7 @@ const configs = [
         //   maxCredit: 9,
         // },
         // {
-        //   hasFaucet: false,
+        //   hasFaucet: true,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
         //   denom: 'ueth',
         //   creditAmount: 1000,
@@ -95,185 +99,16 @@ const configs = [
         // },
       ],
       monitor: undefined,
+      nftMint: {
+        enabled: true,
+        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+      },
+      developer: {
+        enabled: false,
+        developerURL: `http://${domainCauchyEA}:3030`,
+      },
       navigations: [],
       messageModules,
     },
   },
-  // // CauchyE B node without Monitor
-  // {
-  //   id: domainCauchyEB,
-  //   restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-  //   websocketURL: `${location.protocol.replace(
-  //     'http',
-  //     'ws',
-  //   )}//${domainCauchyEB}:${websocketPort}`,
-  //   chainID,
-  //   bech32Prefix,
-  //   minimumGasPrices: [
-  //     {
-  //       denom: 'uguu',
-  //       amount: 0.015,
-  //     },
-  //   ],
-  //   extension: {
-  //     faucet: [
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
-  //         denom: 'ubtc',
-  //         creditAmount: 100, // amount to credit in max request
-  //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-  //         denom: 'uguu',
-  //         creditAmount: 2000000,
-  //         maxCredit: 1999999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetJpuPort}`,
-  //         denom: 'jpu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
-  //         denom: 'ueth',
-  //         creditAmount: 1000,
-  //         maxCredit: 999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetEuuPort}`,
-  //         denom: 'euu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //     ],
-  //     monitor: undefined,
-  //     navigations: [],
-  //     messageModules,
-  //   },
-  // },
-  // // CauchyE C node without Monitor
-  // {
-  //   id: domainCauchyEC,
-  //   restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-  //   websocketURL: `${location.protocol.replace(
-  //     'http',
-  //     'ws',
-  //   )}//${domainCauchyEC}:${websocketPort}`,
-  //   chainID: 'ununifi-8-private-test',
-  //   bech32Prefix,
-  //   minimumGasPrices: [
-  //     {
-  //       denom: 'uguu',
-  //       amount: 0.015,
-  //     },
-  //   ],
-  //   extension: {
-  //     faucet: [
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
-  //         denom: 'ubtc',
-  //         creditAmount: 100, // amount to credit in max request
-  //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
-  //         denom: 'uguu',
-  //         creditAmount: 2000000,
-  //         maxCredit: 1999999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetJpuPort}`,
-  //         denom: 'jpu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
-  //         denom: 'ueth',
-  //         creditAmount: 1000,
-  //         maxCredit: 999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetEuuPort}`,
-  //         denom: 'euu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //     ],
-  //     monitor: undefined,
-  //     navigations: [],
-  //     messageModules,
-  //   },
-  // },
-  // // CauchyE D node without Monitor
-  // {
-  //   id: domainCauchyED,
-  //   restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-  //   websocketURL: `${location.protocol.replace(
-  //     'http',
-  //     'ws',
-  //   )}//${domainCauchyED}:${websocketPort}`,
-  //   chainID,
-  //   bech32Prefix,
-  //   minimumGasPrices: [
-  //     {
-  //       denom: 'uguu',
-  //       amount: 0.015,
-  //     },
-  //   ],
-  //   extension: {
-  //     faucet: [
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
-  //         denom: 'ubtc',
-  //         creditAmount: 100, // amount to credit in max request
-  //         maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
-  //         denom: 'uguu',
-  //         creditAmount: 2000000,
-  //         maxCredit: 1999999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetJpuPort}`,
-  //         denom: 'jpu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
-  //         denom: 'ueth',
-  //         creditAmount: 1000,
-  //         maxCredit: 999,
-  //       },
-  //       {
-  //         hasFaucet: false,
-  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetEuuPort}`,
-  //         denom: 'euu',
-  //         creditAmount: 10,
-  //         maxCredit: 9,
-  //       },
-  //     ],
-  //     monitor: undefined,
-  //     navigations: [],
-  //     messageModules,
-  //   },
-  // },
 ];

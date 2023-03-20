@@ -7,7 +7,7 @@ import { CosmosWallet, WalletType } from '../../../wallets/wallet.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class TxCommonService {
     private readonly keplrService: KeplrService,
     private readonly metaMaskService: MetaMaskService,
     private readonly ununifiWalletService: UnunifiWalletService,
-  ) { }
+  ) {}
 
   canonicalizeAccAddress(address: string) {
     const canonicalized = address.replace(/\s+/g, '');
@@ -270,7 +270,7 @@ export class TxCommonService {
     };
   }
 
-  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<InlineResponse20050> {
+  async announceTx(txBuilder: cosmosclient.TxBuilder): Promise<BroadcastTx200Response> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     console.log(txBuilder);
 

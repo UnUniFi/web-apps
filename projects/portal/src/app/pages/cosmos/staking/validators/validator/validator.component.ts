@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./validator.component.css'],
 })
 export class ValidatorComponent implements OnInit {
-  validator$: Observable<InlineResponse20041Validators | undefined>;
+  validator$: Observable<StakingDelegatorValidators200ResponseValidatorsInner | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
     this.validator$ = this.route.params.pipe(

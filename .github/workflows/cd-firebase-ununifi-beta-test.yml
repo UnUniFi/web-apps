@@ -30,3 +30,5 @@ jobs:
       - run: npm ci
       - run: npm run build:all:prod:ununifi-beta-test
       - run: npx firebase deploy --only hosting:ununifi-beta-test --project=default --token=${{ secrets.FIREBASE_TOKEN }}
+      - run: npm run build:all:prod:stable
+      - run: npx firebase deploy --only hosting:ununifi-stable --project=default --token=${{ secrets.FIREBASE_TOKEN }}

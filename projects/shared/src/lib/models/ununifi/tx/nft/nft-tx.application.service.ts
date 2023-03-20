@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20050 } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -93,14 +93,16 @@ export class NftTxApplicationService {
     // // confirm fee only ununifi wallet type case
     // if (currentCosmosWallet.type === WalletType.ununifi) {
     //   const txFeeConfirmedResult = await this.dialog
-    //     .open(TxFeeConfirmDialogComponent, {
+    //     .open<{
+    //       fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    //       isConfirmed: boolean;
+    //     }>(TxFeeConfirmDialogComponent, {
     //       data: {
     //         fee,
     //         isConfirmed: false,
     //       },
     //     })
-    //     .afterClosed()
-    //     .toPromise();
+    //     .closed.toPromise();
     //   if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
     //     this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
     //     return;
@@ -110,7 +112,7 @@ export class NftTxApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

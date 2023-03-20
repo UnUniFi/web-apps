@@ -6,6 +6,8 @@ import { VoteRoutingModule } from './vote-routing.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+// TODO: should be renamed to AppGovModule
+// TODO: move into model/cosmos/gov
 @NgModule({
   declarations: [ProposalsComponent, ProposalComponent],
   imports: [CommonModule, VoteRoutingModule, VoteModule, ProposalModule],

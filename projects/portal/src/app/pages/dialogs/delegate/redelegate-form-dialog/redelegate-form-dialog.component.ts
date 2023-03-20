@@ -1,17 +1,20 @@
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20038,
-  InlineResponse20041Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { InactiveValidatorConfirmDialogComponent } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
+import {
+  InactiveValidatorConfirmDialogData,
+  InactiveValidatorConfirmDialogComponent,
+} from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
 import { RedelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -22,24 +25,24 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
 export class RedelegateFormDialogComponent implements OnInit {
-  validatorsList$: Observable<InlineResponse20041Validators[] | undefined>;
+  validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20038>;
+  delegations$: Observable<DelegatorDelegations200Response>;
   delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20041Validators | undefined;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
-    public matDialogRef: MatDialogRef<RedelegateFormDialogComponent>,
+    @Inject(DIALOG_DATA)
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
+    public dialogRef: DialogRef<string, RedelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
@@ -81,11 +84,10 @@ export class RedelegateFormDialogComponent implements OnInit {
     )?.status;
     if (validatorStatus != 'BOND_STATUS_BONDED') {
       const inactiveValidatorResult = await this.dialog
-        .open(InactiveValidatorConfirmDialogComponent, {
+        .open<InactiveValidatorConfirmDialogData>(InactiveValidatorConfirmDialogComponent, {
           data: { valAddress: $event.destinationValidator, isConfirmed: false },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
 
       if (inactiveValidatorResult === undefined || inactiveValidatorResult.isConfirmed === false) {
         this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
@@ -100,6 +102,6 @@ export class RedelegateFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

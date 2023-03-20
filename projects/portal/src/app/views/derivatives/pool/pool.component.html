@@ -1,0 +1,215 @@
+<div class="w-full">
+  <h2>Perpetual Futures</h2>
+  <div class="flex flex-row flex-wrap m-4">
+    <div class="mb-4 md:mb-0">
+      <h3>Pool Status</h3>
+      <div class="stats stats-vertical md:stats-horizontal shadow">
+        <div class="stat">
+          <div class="stat-title">Pool Market Cap</div>
+          <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
+        </div>
+
+        <!-- <div class="stat">
+          <div class="stat-title">24h Volume</div>
+          <div class="stat-value text-secondary">{{ pool?.volume_24hours | number }}</div>
+          <div class="stat-desc">USD</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">24h Fees</div>
+          <div class="stat-value text-secondary">{{ pool?.fees_24hours | number }}</div>
+          <div class="stat-desc">USD</div>
+        </div> -->
+      </div>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="w-full lg:w-1/2">
+      <h3>DLP Rates (1DLP=)</h3>
+      <div class="stats stats-vertical md:stats-horizontal shadow">
+        <ng-container *ngFor="let rate of dlpRates">
+          <div class="stat">
+            <div class="stat-title">{{ rate.denom | coinDenom }}</div>
+            <div class="stat-value text-info">{{ rate.amount | coinAmount }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <span class="flex-auto"></span>
+    <div class="w-full lg:w-1/2 lg:mt-4">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <h2 class="card-title">Liquidity Provider Token</h2>
+        <div class="tabs tabs-boxed">
+          <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
+            >Buy</a
+          >
+          <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
+            >Sell</a
+          >
+        </div>
+        <div class="card-body">
+          <ng-container *ngIf="tab === 'mint'">
+            <form
+              #mintRef="ngForm"
+              (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
+            >
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Enter amount to deposit</span>
+                </label>
+                <label class="input-group">
+                  <input
+                    #depositAmountRef
+                    required
+                    ngModel
+                    name="mint-amount"
+                    type="number"
+                    placeholder="0.123456"
+                    class="input input-bordered w-full"
+                    [min]="0"
+                    [max]="symbolBalancesMap?.[mintSymbol] || 0"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
+                  <select
+                    #depositSymbolRef
+                    required
+                    [(ngModel)]="mintSymbol"
+                    name="mint-symbol"
+                    class="select select-bordered"
+                  >
+                    <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+                      <option [value]="symbol">{{ symbol }}</option>
+                    </ng-container>
+                  </select>
+                </label>
+                <label class="label">
+                  <span class="label-text-alt">Available balance:</span>
+                  <span class="label-text-alt"
+                    >{{ symbolBalancesMap?.[depositSymbolRef.value] || 0 }}
+                    {{ depositSymbolRef.value }}
+                  </span>
+                </label>
+              </div>
+
+              <br />
+
+              <label
+                for="mint-model"
+                class="btn btn-primary w-full"
+                (click)="onEstimateMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
+              >
+                Buy DLP to earn fees
+              </label>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="mint-model" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">Are you sure to mint DLP?</h3>
+                  <p class="py-4" *ngIf="estimatedLPTAmount">
+                    Estimated DLP is {{ estimatedLPTAmount.amount | coin }} (Fee is
+                    {{ estimatedLPTAmount.fee | coin }}), OK?
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
+                    Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be
+                    deducted from this amount.
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedLPTAmount && !calculatedDLPAmount">
+                    The amount of DLP to be retrieved is unknown.
+                  </p>
+                  <div class="modal-action">
+                    <label for="mint-model" class="btn btn-outline">Cancel</label>
+                    <button class="btn btn-primary" [disabled]="mintRef.invalid">Mint</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+
+          <ng-container *ngIf="tab === 'burn'">
+            <form
+              #burnRef="ngForm"
+              (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
+            >
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Enter amount to sell</span>
+                </label>
+                <label class="input-group">
+                  <input
+                    #burnAmountRef
+                    required
+                    ngModel
+                    name="burn-amount"
+                    type="number"
+                    placeholder="0.12"
+                    class="input input-bordered w-full"
+                    [min]="0"
+                    [max]="dlpBalance"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
+                  <span>DLP</span>
+                </label>
+                <label class="label">
+                  <span class="label-text-alt">Available balance:</span>
+                  <span class="label-text-alt">
+                    {{ symbolBalancesMap?.['DLP'] || 0 }}
+                    DLP
+                  </span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Select symbol to redeem</span>
+                </label>
+                <select
+                  #redeemSymbolRef
+                  required
+                  [(ngModel)]="redeemSymbol"
+                  name="redeem-symbol"
+                  class="select select-bordered w-full"
+                >
+                  <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+                    <option [value]="symbol">{{ symbol }}</option>
+                  </ng-container>
+                </select>
+              </div>
+
+              <br />
+
+              <label
+                for="mint-model"
+                class="btn btn-primary w-full"
+                (click)="onEstimateBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
+              >
+                Sell DLP
+              </label>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="mint-model" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">Are you sure to burn DLP?</h3>
+                  <p class="py-4" *ngIf="estimatedRedeemAmount">
+                    Estimated {{ redeemSymbolRef.value }} is
+                    {{ estimatedRedeemAmount.amount | coin }} (Fee is
+                    {{ estimatedRedeemAmount.fee | coin }}), OK?
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedRedeemAmount && calculatedRedeemAmount">
+                    Estimated redeem amount is {{ calculatedRedeemAmount | number
+                    }}{{ redeemSymbolRef.value }}, and fees will be deducted from this amount.
+                  </p>
+                  <p class="py-4" *ngIf="!estimatedRedeemAmount && !calculatedRedeemAmount">
+                    The amount of {{ redeemSymbolRef.value }} to be retrieved is unknown.
+                  </p>
+                  <div class="modal-action">
+                    <label for="mint-model" class="btn btn-outline">Cancel</label>
+                    <button class="btn btn-primary" [disabled]="burnRef.invalid">Burn</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

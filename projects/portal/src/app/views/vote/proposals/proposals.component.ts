@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20027FinalTallyResult,
-  InlineResponse20027Proposals,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Proposals200ResponseProposalsInner,
 } from '@cosmos-client/core/esm/openapi';
 
 export interface ProposalContent {
@@ -18,8 +18,8 @@ export interface ProposalContent {
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  @Input() proposals?: InlineResponse20027Proposals[] | null;
-  @Input() tallies?: (InlineResponse20027FinalTallyResult | undefined)[] | null;
+  @Input() proposals?: Proposals200ResponseProposalsInner[] | null;
+  @Input() tallies?: (Proposals200ResponseProposalsInnerFinalTallyResult | undefined)[] | null;
   @Input() proposalContents?:
     | (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]
     | null;

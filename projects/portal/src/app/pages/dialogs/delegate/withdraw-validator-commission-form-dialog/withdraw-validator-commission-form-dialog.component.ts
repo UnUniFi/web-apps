@@ -1,7 +1,7 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import cosmosclient from '@cosmos-client/core';
-import { InlineResponse20041Validators } from '@cosmos-client/core/esm/openapi/api';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -18,12 +18,12 @@ import { map } from 'rxjs/operators';
 export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20041Validators | undefined;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20041Validators,
-    public matDialogRef: MatDialogRef<WithdrawValidatorCommissionFormDialogComponent>,
+    @Inject(DIALOG_DATA)
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
+    public dialogRef: DialogRef<string, WithdrawValidatorCommissionFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly distributionAppService: DistributionApplicationService,
@@ -41,6 +41,6 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

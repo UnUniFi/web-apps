@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InlineResponse2002Params } from 'ununifi-client/esm/openapi';
+import { AuctionParams200ResponseParams } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-auction',
@@ -8,7 +8,7 @@ import { InlineResponse2002Params } from 'ununifi-client/esm/openapi';
 })
 export class AuctionComponent implements OnInit {
   @Input()
-  params?: InlineResponse2002Params | null;
+  params?: AuctionParams200ResponseParams | null;
 
   constructor() {}
 

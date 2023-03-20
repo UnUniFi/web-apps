@@ -6,11 +6,15 @@ import { Observable, zip } from 'rxjs';
 import { filter, map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
-  InlineResponse200,
-  InlineResponse20013Price,
-  InlineResponse2002Params,
-  InlineResponse2004Cdp1,
-  InlineResponse200Auctions,
+  AuctionAll200Response,
+  AuctionAll200ResponseAuctionsInner,
+  AuctionParams200ResponseParams,
+  CdpAll200ResponseCdpInner,
+  Price200ResponsePrice,
+  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
+  EcosystemincentiveParams200ResponseParams,
+  IncentiveUnit200ResponseIncentiveUnit,
+  CdpAll200ResponseCdpInnerCdpCollateral,
 } from 'ununifi-client/esm/openapi';
 
 export const getCollateralParamsStream = (
@@ -29,6 +33,7 @@ export const getCollateralParamsStream = (
 
 @Injectable({ providedIn: 'root' })
 export class UnunifiRestService {
+  // TODO: split this into multiple services for each module (pawn-market-rest, yield-aggregator-rest, derivatives-rest)
   private restSdk$: Observable<CosmosSDK>;
 
   constructor(private cosmosSDK: CosmosSDKService) {
@@ -45,7 +50,7 @@ export class UnunifiRestService {
   getCdp$(
     address: AccAddress,
     collateralType: string,
-  ): Observable<InlineResponse2004Cdp1 | undefined> {
+  ): Observable<CdpAll200ResponseCdpInner | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.cdp.cdp(sdk, address, collateralType)),
       map((res) => res.data.cdp || undefined),
@@ -59,7 +64,7 @@ export class UnunifiRestService {
     );
   }
 
-  getAuctionParams$(): Observable<InlineResponse2002Params> {
+  getAuctionParams$(): Observable<AuctionParams200ResponseParams> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.auction.params(sdk)),
       map((res) => res.data.params!),
@@ -69,7 +74,7 @@ export class UnunifiRestService {
   getAllAuctions$(
     paginationOffset?: bigint | undefined,
     paginationLimit?: bigint | undefined,
-  ): Observable<InlineResponse200> {
+  ): Observable<AuctionAll200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         ununifi.rest.auction.allAuctions(sdk, undefined, paginationOffset, paginationLimit, true),
@@ -78,17 +83,66 @@ export class UnunifiRestService {
     );
   }
 
-  getAuction$(id: string): Observable<InlineResponse200Auctions | undefined> {
+  getAuction$(id: string): Observable<AuctionAll200ResponseAuctionsInner | undefined> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.auction.auction(sdk, id)),
       map((res) => res.data.auction),
     );
   }
 
-  getPrice$(marketID: string): Observable<InlineResponse20013Price> {
+  getPrice$(marketID: string): Observable<Price200ResponsePrice> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.pricefeed.price(sdk, marketID)),
       map((res) => res.data.price!),
+    );
+  }
+
+  getEcosystemIncentiveParams$(): Observable<EcosystemincentiveParams200ResponseParams> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.params(sdk)),
+      map((res) => res.data.params!),
+    );
+  }
+
+  getIncentiveUnit$(incentiveUnitId: string): Observable<IncentiveUnit200ResponseIncentiveUnit> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnit(sdk, incentiveUnitId)),
+      map((res) => res.data.incentive_unit!),
+    );
+  }
+
+  getAllRewards$(subjectAddr: string): Observable<CdpAll200ResponseCdpInnerCdpCollateral[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
+      map((res) => res.data.rewards?.rewards!),
+    );
+  }
+
+  getReward$(
+    subjectAddr: string,
+    denom: string,
+  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
+      map((res) => res.data.reward!),
+    );
+  }
+
+  getRecordedIncentiveUnitId$(classId: string, nftId: string): Observable<string> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
+      ),
+      map((res) => res.data.incentive_unit_id!),
+    );
+  }
+
+  listIncentiveUnitIdsByAddr$(
+    address: string,
+  ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnitIdsByAddr(sdk, address)),
+      map((res) => res.data.incentive_unit_ids_by_addr!),
     );
   }
 }

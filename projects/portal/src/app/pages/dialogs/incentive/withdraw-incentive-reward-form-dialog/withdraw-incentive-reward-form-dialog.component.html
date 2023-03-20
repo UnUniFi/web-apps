@@ -1,0 +1,9 @@
+<view-withdraw-incentive-reward-form-dialog
+  [denom]="denom"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [coins]="coins$ | async"
+  [uguuBalance]="uguuBalance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [reward]="reward$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-withdraw-incentive-reward-form-dialog>

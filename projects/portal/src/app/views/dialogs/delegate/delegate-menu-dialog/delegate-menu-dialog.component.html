@@ -1,6 +1,6 @@
-<mat-dialog-content>
+<div>
   <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+    <img class="w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Delegate Menu</div>
     <mat-list class="w-full">
       <mat-label>Validator</mat-label>
@@ -48,9 +48,7 @@
         <mat-list-item>
           <span class="column-name">Delegated Amount</span>
           <span class="flex-auto"></span>
-          <span class="column-value"
-            >{{ delegateAmount?.amount | number: '1.0-0' }} {{ delegateAmount?.denom }}</span
-          >
+          <span class="column-value">{{ delegateAmount | coin }}</span>
         </mat-list-item>
       </mat-list>
       <mat-list class="w-full">
@@ -73,7 +71,7 @@
           <mat-list-item *ngFor="let eachTotalReward of totalRewards?.total; last as last">
             <span class="column-name">Claimable Delegator Reward</span>
             <span class="flex-auto"></span>
-            <span>{{ eachTotalReward.amount | number: '1.0-0' }} {{ eachTotalReward.denom }}</span>
+            <span>{{ eachTotalReward | coin }}</span>
           </mat-list-item>
         </ng-template>
       </mat-list>
@@ -102,58 +100,47 @@
           >
             <span class="column-name">Claimable Validator Commission</span>
             <span class="flex-auto"></span>
-            <span>{{ commission.amount | number: '1.0-0' }} {{ commission.denom }}</span>
+            <span>{{ commission | coin }}</span>
           </mat-list-item>
         </ng-template>
       </mat-list>
     </ng-container>
+  </div>
 
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickDetailButton()"
-    >
-      <span class="text-black">More information</span>
-      Details
+  <div class="flex flex-col md:flex-row justify-start">
+    <button mat-stroked-button color="primary" class="px-4 m-2" (click)="onClickDetailButton()">
+      <span>More information</span>
     </button>
-    <button
-      mat-flat-button
-      class="inline-flex justify-between items-center w-full m-3 bg-white"
-      (click)="onClickDelegateButton()"
-    >
-      <span class="text-black">Delegate to this validator</span>
+    <button mat-flat-button color="primary" class="px-4 m-2" (click)="onClickDelegateButton()">
+      <span>Delegate to this validator</span>
     </button>
+  </div>
+  <div class="flex flex-col md:flex-row justify-start">
     <ng-container *ngIf="isDelegated">
-      <button
-        mat-flat-button
-        class="inline-flex justify-between items-center w-full m-3 bg-white"
-        (click)="onClickRedelegateButton()"
-      >
-        <span class="text-black">Redelegate to another validator</span>
+      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickRedelegateButton()">
+        <span>Redelegate to another validator</span>
+      </button>
+      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickUndelegateButton()">
+        <span>Undelegate from this validator</span>
       </button>
       <button
         mat-flat-button
-        class="inline-flex justify-between items-center w-full m-3 bg-white"
-        (click)="onClickUndelegateButton()"
-      >
-        <span class="text-black">Undelegate from this validator</span>
-      </button>
-      <button
-        mat-flat-button
-        class="inline-flex justify-between items-center w-full m-3 bg-white"
+        color="primary"
+        class="px-4 m-3"
         (click)="onClickWithdrawDelegatorRewardButton()"
       >
-        <span class="text-black">Claim delegator reward</span>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="isValidator">
-      <button
-        mat-flat-button
-        class="inline-flex justify-between items-center w-full m-3 bg-white"
-        (click)="onClickWithdrawValidatorCommissionButton()"
-      >
-        <span class="text-black">Claim validator commission</span>
+        <span>Claim delegator reward</span>
       </button>
     </ng-container>
   </div>
-</mat-dialog-content>
+  <ng-container *ngIf="isValidator">
+    <button
+      mat-flat-button
+      color="primary"
+      class="px-4 m-3"
+      (click)="onClickWithdrawValidatorCommissionButton()"
+    >
+      <span>Claim validator commission</span>
+    </button>
+  </ng-container>
+</div>

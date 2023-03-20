@@ -1,19 +1,23 @@
 import { WithdrawAllDelegatorRewardFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-all-delegator-reward-form-dialog/withdraw-all-delegator-reward-form-dialog.component';
 import { WithdrawDelegatorRewardFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-delegator-reward-form-dialog/withdraw-delegator-reward-form-dialog.component';
 import { WithdrawValidatorCommissionFormDialogComponent } from '../../pages/dialogs/delegate/withdraw-validator-commission-form-dialog/withdraw-validator-commission-form-dialog.component';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { DistributionService } from './distribution.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20050,
-  InlineResponse20041Validators,
+  BroadcastTx200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
@@ -25,38 +29,41 @@ export class DistributionApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly distribution: DistributionService,
     private readonly walletService: WalletService,
   ) {}
 
   async openWithdrawDelegatorRewardFormDialog(
-    validator: InlineResponse20041Validators,
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
-      .open(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
+      .open<string>(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
+      .closed.toPromise();
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawAllDelegatorRewardFormDialog(): Promise<void> {
     const txHash = await this.dialog
-      .open(WithdrawAllDelegatorRewardFormDialogComponent)
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
+      .open<string>(WithdrawAllDelegatorRewardFormDialogComponent)
+      .closed.toPromise();
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async openWithdrawValidatorCommissionFormDialog(
-    validator: InlineResponse20041Validators,
+    validator: StakingDelegatorValidators200ResponseValidatorsInner,
   ): Promise<void> {
     const txHash = await this.dialog
-      .open(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
+      .open<string>(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
+      .closed.toPromise();
+    if (txHash) {
+      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+    }
   }
 
   async withdrawDelegatorReward(
@@ -104,14 +111,13 @@ export class DistributionApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -121,7 +127,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -194,14 +200,13 @@ export class DistributionApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -211,7 +216,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -284,14 +289,13 @@ export class DistributionApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -301,7 +305,7 @@ export class DistributionApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20050 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

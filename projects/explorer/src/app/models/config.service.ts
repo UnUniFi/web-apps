@@ -30,9 +30,13 @@ export type Config = {
     monitor?: {
       monitorURL: string;
     };
-    nftMint: {
+    nftMint?: {
       enabled: boolean;
       nftClasses: string[];
+    };
+    developer?: {
+      enabled: boolean;
+      developerURL: string;
     };
     navigations: {
       name: string;

@@ -68,9 +68,9 @@
             <div *ngIf="isWinning" class="stat">
               <div class="stat-title">Settlement Shortfall Deadline</div>
               <div class="stat-value text-accent">
-                {{ listingInfo?.end_at | date : 'yyyy-M-d' }}
+                {{ listingInfo?.end_at | date : 'yyyy-MM-dd' }}
               </div>
-              <div class="stat-desc">{{ listingInfo?.end_at | date : 'h:mm:ss z' }}</div>
+              <div class="stat-desc">{{ listingInfo?.end_at | date : 'hh:mm:ss z' }}</div>
             </div>
           </div>
           <span class="flex-auto"></span>
@@ -131,7 +131,7 @@
                 <td class="text-secondary">{{ bidder.deposit_amount | coin }}</td>
                 <td class="text-secondary">{{ bidder.bid_amount | coin }}</td>
                 <td class="text-secondary">
-                  {{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}
+                  {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
                 </td>
                 <td class="text-secondary">{{ bidder.bidder }}</td>
               </ng-template>
@@ -140,7 +140,7 @@
                 <td>{{ bidder.deposit_lending_rate | percentage }}</td>
                 <td>{{ bidder.deposit_amount | coin }}</td>
                 <td>{{ bidder.bid_amount | coin }}</td>
-                <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
+                <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
                 <td>{{ bidder.bidder }}</td>
               </ng-template>
             </tr>

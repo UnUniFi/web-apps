@@ -40,7 +40,7 @@
             <span class="w-1/8 pr-4">{{ block?.block?.data?.txs?.length }}</span>
             <span class="flex-auto"></span>
             <span class="w-1/4 text-sm sm:text-base">
-              {{ block?.block?.header?.time | date: 'yy/MM/dd H:mm' }}
+              {{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}
             </span>
 
             <mat-divider *ngIf="!last"></mat-divider>

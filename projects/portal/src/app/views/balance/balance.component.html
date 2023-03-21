@@ -4,19 +4,28 @@
       <div class="card-body">
         <h2 class="card-title break-all flex flex-col md:flex-row">
           {{ walletId }}
-          <div
+          <!-- <div
             class="badge badge-primary mr-1 cursor-pointer hidden md:flex"
             (click)="copyClipboard(accAddress ? accAddress : '')"
           >
             {{ accAddress }}
-          </div>
+          </div> -->
         </h2>
-        <h3 class="breal-all flex md:hidden">{{ accAddress }}</h3>
+        <h3 class="mx-4 breal-all">
+          {{ accAddress }}
+          <button
+            mat-icon-button
+            type="button"
+            (click)="copyClipboard(accAddress ? accAddress : '')"
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </h3>
 
-        <div class="stats flex flex-col md:flex-row mb-4 w-full">
+        <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
           <div class="stat">
             <div class="stat-title">Wallet Type</div>
-            <div class="stat-value text-primary">{{ walletType | uppercase }}</div>
+            <div class="stat-value text-primary">{{ walletType }}</div>
             <div class="stat-desc"></div>
           </div>
           <div class="stat">
@@ -131,8 +140,11 @@
             <p class="text-lg text-error">No Balance!</p>
           </ng-template>
           <ng-template #filled>
-            <div class="stats flex flex-col md:flex-row mb-4 w-full">
-              <div class="stat" *ngFor="let balance of balances; let i = index">
+            <div class="stats stats-vertical md:stats-horizontal flex flex-wrap mb-4">
+              <div
+                class="stat w-full md:w-1/2 xl:w-1/4"
+                *ngFor="let balance of balances; let i = index"
+              >
                 <div class="stat-value">{{ balance.amount | coinAmount }}</div>
                 <div class="stat-desc">{{ balance.denom | coinDenom }}</div>
               </div>
@@ -193,8 +205,11 @@
             <p class="text-lg text-error">No Reward!</p>
           </ng-template>
           <ng-template #filledRewards>
-            <div class="stats flex flex-col md:flex-row mb-4 w-full">
-              <div class="stat" *ngFor="let reward of rewards?.total; let i = index">
+            <div class="stats stats-vertical md:stats-horizontal flex flex-wrap mb-4">
+              <div
+                class="stat w-full md:w-1/2 xl:w-1/4"
+                *ngFor="let reward of rewards?.total; let i = index"
+              >
                 <div class="stat-value text-secondary">{{ reward.amount | coinAmount }}</div>
                 <div class="stat-desc">{{ reward.denom | coinDenom }}</div>
               </div>

@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="stats flex flex-col md:flex-row shadow-xl mb-4 w-full">
+<div class="stats stats-vertical md:stats-horizontal shadow-xl mb-4 w-full">
   <div class="stat">
     <div class="stat-title">Entry Price</div>
     <div class="stat-value">{{ price | number }} {{ quoteSymbol }}</div>
@@ -302,7 +302,7 @@
   </div>
 </div>
 
-<div *ngIf="positions&&positions.length" class="flex flex-col md:flex-row justify-end">
+<div *ngIf="positions && positions.length" class="flex flex-col md:flex-row justify-end">
   <button class="btn btn-outline btn-info px-8 mr-4" routerLink="/derivatives/positions">
     View Positions Detail
   </button>
@@ -339,7 +339,7 @@
                 }}</span
               >
             </h2>
-            <div class="stats">
+            <div class="stats stats-vertical">
               <div class="stat">
                 <div class="stat-title">Margin Maintenance Rate</div>
                 <div class="stat-value">
@@ -347,8 +347,6 @@
                 </div>
                 <div class="stat-desc">Under 50% will initiate liquidation</div>
               </div>
-            </div>
-            <div class="stats">
               <div class="stat">
                 <div class="stat-title" *ngIf="!position.valuation_profit?.amount?.includes('-')">
                   Current Profit
@@ -365,8 +363,6 @@
                 </div>
                 <div class="stat-desc"></div>
               </div>
-            </div>
-            <div class="stats">
               <div class="stat">
                 <div class="stat-title">Opened Rate</div>
                 <div class="stat-value text-primary">
@@ -380,7 +376,7 @@
                 </div>
               </div>
             </div>
-            <div class="stats">
+            <div class="stats stats-vertical md:stats-horizontal">
               <div class="stat">
                 <div class="stat-title">Leverage</div>
                 <div class="stat-value text-secondary">{{ positionInstances![i]?.leverage }}x</div>
@@ -388,7 +384,7 @@
               <div class="stat">
                 <div class="stat-title">Date Opened</div>
                 <div class="stat-value text-accent">
-                  {{ position?.position?.opened_at | date : 'yyyy-MM-dd' }}
+                  {{ position?.position?.opened_at | date : 'MM/dd' }}
                 </div>
                 <div class="stat-desc">
                   {{ position?.position?.opened_at | date : 'hh:mm:ss z' }}

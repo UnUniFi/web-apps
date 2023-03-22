@@ -2,7 +2,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletService } from '../wallets/wallet.service';
 import { BankService } from './bank.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
@@ -145,12 +148,16 @@ export class BankApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully sent', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully sent', undefined, {
+    //   duration: 6000,
+    // });
 
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent token, please check your balance.' },
+        })
+        .closed.toPromise();
     }
   }
 }

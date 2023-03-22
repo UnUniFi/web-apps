@@ -1,4 +1,7 @@
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { WalletService } from '../wallets/wallet.service';
@@ -73,11 +76,18 @@ export class DerivativesApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully minted liquidity provider token.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully minted liquidity provider token.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully purchased DLP. Please check your balance. When you sell this, you will earn fee income.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -127,11 +137,15 @@ export class DerivativesApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully burned liquidity provider token.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully burned liquidity provider token.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sold yor DLP. Please check your balance.' },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -203,11 +217,18 @@ export class DerivativesApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully opened position.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully opened position.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully created the position. A swap fee is deducted from the margin every 24 hours.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -247,11 +268,15 @@ export class DerivativesApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully closed position.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully closed position.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully closed the position. Please check your balance.' },
+        })
+        .closed.toPromise();
     }
   }
 }

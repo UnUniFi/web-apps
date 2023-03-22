@@ -85,9 +85,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
     'BTC/USD': {
       autosize: true,
@@ -99,9 +101,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
     'ATOM/USD': {
       autosize: true,
@@ -113,9 +117,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
   };
 

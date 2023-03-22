@@ -26,7 +26,7 @@
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">NFT Class</span>
+              <span class="label-text">NFT Class (Collection)</span>
             </label>
             <label class="input-group">
               <select
@@ -36,6 +36,7 @@
                 name="nftClass"
                 class="select select-bordered w-full"
               >
+                <option disabled>Crypto Punks (Example)</option>
                 <ng-container *ngFor="let nftClass of classes">
                   <option [value]="nftClass">{{ nftClass }}</option>
                 </ng-container>

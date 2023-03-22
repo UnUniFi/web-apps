@@ -1,220 +1,200 @@
-<div class="flex justify-center">
-  <div class="text-base-content w-full">
-    <mat-card class="mb-4 mat-elevation-z8">
-      <mat-card-title>Lending Status</mat-card-title>
-      <mat-list>
-        <mat-list-item>
-          <span>Total Deposit:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2" *ngFor="let deposit of depositCoins">{{ deposit | coin }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span>Total Lending:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2" *ngFor="let lend of lendCoins">{{ lend | coin }}</span>
-          <span *ngIf="!lendCoins || !lendCoins.length">0Token</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item *ngIf="biddingNftsInfo?.bidding">
-          <span>Bidding:</span>
-          <span class="flex-auto"></span>
-          <span>{{ biddingNftsInfo?.bidding }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item *ngIf="biddingNftsInfo?.selling_decision">
-          <span>Selling Decision:</span>
-          <span class="flex-auto"></span>
-          <span>{{ biddingNftsInfo?.selling_decision }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item *ngIf="biddingNftsInfo?.end_listing">
-          <span>End Listing:</span>
-          <span class="flex-auto"></span>
-          <span>{{ biddingNftsInfo?.end_listing }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item *ngIf="biddingNftsInfo?.successful_bid">
-          <span>Sold Out:</span>
-          <span class="flex-auto"></span>
-          <span>{{ biddingNftsInfo?.successful_bid }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </mat-list>
-      <button
-        *ngIf="
-          biddingNftsInfo?.bidding ||
-          biddingNftsInfo?.selling_decision ||
-          biddingNftsInfo?.end_listing ||
-          biddingNftsInfo?.successful_bid
-        "
-        mat-flat-button
-        class="mt-4 px-8"
-        color="accent"
-        routerLink="lender"
+<div class="mx-auto max-w-screen-xl">
+  <div class="w-full md:w-auto mb-8">
+    <div class="text-base-content max-w-full">
+      <div
+        class="card lg:card-side bg-base-100 shadow-xl"
+        *ngIf="depositCoins && depositCoins.length"
       >
-        View Your Lending
-      </button>
-    </mat-card>
+        <div class="card-body">
+          <h2 class="card-title break-all">Deposit & Lending</h2>
+          <p>
+            When a bid is made, it is added to Deposit, and when the lister borrows, it is also
+            added to Lending.
+          </p>
+          <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+            <div class="stat" *ngFor="let deposit of depositCoins; let i = index">
+              <div class="stat-title">Deposit #{{ i + 1 }}</div>
+              <div class="stat-value text-primary">{{ deposit.amount | coinAmount }}</div>
+              <div class="stat-desc">{{ deposit.denom | coinDenom }}</div>
+            </div>
+            <div class="stat" *ngIf="!depositCoins || !depositCoins.length">
+              <div class="stat-title">Deposit</div>
+              <div class="stat-value">0</div>
+              <div class="stat-desc">token</div>
+            </div>
+            <div class="stat" *ngFor="let lend of lendCoins; let i = index">
+              <div class="stat-title">Deposit #{{ i + 1 }}</div>
+              <div class="stat-value text-secondary">{{ lend.amount | coinAmount }}</div>
+              <div class="stat-desc">{{ lend.denom | coinDenom }}</div>
+            </div>
+            <div class="stat" *ngIf="!lendCoins || !lendCoins.length">
+              <div class="stat-title">Lending</div>
+              <div class="stat-value">0</div>
+              <div class="stat-desc">token</div>
+            </div>
+          </div>
 
-    <mat-card class="mb-4 mat-elevation-z8">
-      <mat-card-title>Lend Tokens</mat-card-title>
-      <h3>Set Lending Parameter</h3>
-      <form #formRef="ngForm" (submit)="onSubmit()">
-        <div class="flex flex-row content-center items-center mb-4">
-          <mat-form-field class="w-1/2">
-            <mat-label>Lend (Deposit)</mat-label>
-            <input
-              matNativeControl
-              #depositRef
-              name="deposit"
-              [(ngModel)]="depositAmount"
-              [min]="0"
-              required
-            />
-            <mat-hint *ngIf="balances"
-              >Available balance: {{ balances[selectedDenom] || 0 }}{{ selectedDenom }}</mat-hint
-            >
-            <!-- <mat-error>Required!</mat-error> -->
-          </mat-form-field>
-          <mat-form-field class="w-1/2">
-            <mat-select [(value)]="selectedDenom" (selectionChange)="onChangeSymbol()">
-              <mat-option *ngFor="let denom of denoms" [value]="denom">
-                {{ denom }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <mat-form-field class="w-full">
-          <mat-label>Interest Rate</mat-label>
-          <input
-            matNativeControl
-            #interestRef
-            name="interest"
-            [(ngModel)]="interestRate"
-            [min]="0"
-            required
-          />
-          <!-- <mat-error>Required!</mat-error> -->
-          <span matSuffix>&nbsp;%</span>
-        </mat-form-field>
-        <mat-slider
-          thumbLabel
-          class="w-full"
-          [max]="20"
-          [min]="0"
-          [step]="0.1"
-          [(ngModel)]="interestRate"
-          name="leverage-slider"
-        >
-        </mat-slider>
-        <mat-form-field class="w-full">
-          <mat-label>Repayment Term</mat-label>
-          <input
-            matInput
-            [ngxMatDatetimePicker]="picker"
-            placeholder="Choose a date & time"
-            [(ngModel)]="datePicker"
-            name="picker"
-          />
-          <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker
-            #picker
-            [showSpinners]="true"
-            [showSeconds]="false"
-            [stepHour]="1"
-            [stepMinute]="1"
-            [stepSecond]="1"
-            [enableMeridian]="false"
-          ></ngx-mat-datetime-picker>
-        </mat-form-field>
-        <button mat-flat-button class="mt-4 px-8" color="primary">
-          <mat-icon>photo_library</mat-icon>
-          <span>Search NFTs</span>
-        </button>
-      </form>
-    </mat-card>
-
-    <!-- <mat-card *ngIf="!isSubmitted" class="mb-4 mat-elevation-z8">
-      <mat-card-title>Your Balance</mat-card-title>
-      <mat-list>
-        <mat-list-item *ngIf="balances === null">
-          <mat-spinner></mat-spinner>
-        </mat-list-item>
-        <mat-list-item *ngIf="balances === undefined"> No Balances! </mat-list-item>
-        <mat-list-item *ngIf="balances && balances.length === 0"> No Balances! </mat-list-item>
-        <ng-container *ngIf="balances && balances.length > 0">
-          <mat-list-item *ngFor="let balance of balances; last as last">
-            <span class="flex-auto"></span>
-            <span class="mr-2">{{ balance.amount | number : '1.0-0' }}</span>
-            <span>{{ balance.denom }}</span>
-            <mat-divider *ngIf="!last"></mat-divider>
-          </mat-list-item>
-        </ng-container>
-      </mat-list>
-    </mat-card> -->
-
-    <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
-
-    <ng-template #loading>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-    </ng-template>
-    <ng-template #loaded>
-      <ng-container
-        *ngIf="!listedClasses || listedClasses.length === 0; then empty; else filled"
-      ></ng-container>
-    </ng-template>
-
-    <ng-template #filled>
-      <div *ngIf="isSubmitted">
-        <h3>Listing NFT Collection</h3>
-        <div class="flex flex-wrap md:-ml-5">
-          <ng-container *ngFor="let class of listedClasses; index as i">
-            <mat-card class="mat-elevation-z8 text-center w-64 md:ml-5 mb-5 p-0">
-              <img
-                mat-card-image
-                *ngIf="classImages"
-                src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
-                class="object-cover h-64 m-0"
-                alt="image of the NFT class"
-              />
-              <mat-card-title class="py-1">
-                {{ class.name }}
-              </mat-card-title>
-              <mat-card-subtitle
-                *ngIf="class.class_id !== 'ununifi-debugUserClass'"
-                class="break-all font-semibold text-sm text-gray-500"
-              >
-                {{ class.class_id }}
-              </mat-card-subtitle>
-              <mat-card-subtitle
-                *ngIf="class.class_id === 'ununifi-debugUserClass'"
-                class="break-all font-semibold text-sm text-gray-500"
-              >
-                {{ class.class_id }}
-              </mat-card-subtitle>
-              <mat-card-content>
-                <p>{{ class.description }}</p>
-              </mat-card-content>
-              <mat-card-content class="mb-4">
-                <span class="flex-auto"></span>
-                <button class="text-blue-400" mat-button (click)="onClickClass(class.class_id)">
-                  View collection
-                </button>
-                <span class="flex-auto"></span>
-              </mat-card-content>
-            </mat-card>
-          </ng-container>
+          <h2 class="card-title break-all">Bidding Status</h2>
+          <p>
+            Shows the status of the NFT that you are bidding on, Waiting for Payment, and if you are
+            the highest bidder, please make payment. Click on View to see details for each NFT.
+          </p>
+          <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+            <div class="stat">
+              <div class="stat-title">Bidding</div>
+              <div class="stat-value text-primary">{{ biddingNftsInfo?.bidding }}</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Waiting for payment</div>
+              <div class="stat-value text-secondary">{{ biddingNftsInfo?.selling_decision }}</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">liquidating</div>
+              <div class="stat-value">{{ biddingNftsInfo?.end_listing }}</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Sold Out</div>
+              <div class="stat-value">{{ biddingNftsInfo?.successful_bid }}</div>
+              <div class="stat-desc"></div>
+            </div>
+          </div>
+          <div class="card-actions justify-end">
+            <button routerLink="lender" class="btn btn-outline btn-info">View</button>
+          </div>
         </div>
       </div>
-    </ng-template>
-    <ng-template #empty>
-      <mat-card *ngIf="isSubmitted">
-        <mat-card-content>
-          <p>There is no NFT holder to lend.</p>
-          <p>Try to change token type to lend.</p>
-        </mat-card-content>
-      </mat-card>
-    </ng-template>
+
+      <br />
+
+      <div class="card lg:card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title break-all">Lend Tokens</h2>
+          <form #formRef="ngForm" (submit)="onSubmit()">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Token</span>
+              </label>
+              <label class="input-group">
+                <input
+                  #depositRef
+                  class="input input-bordered w-full"
+                  name="deposit"
+                  [(ngModel)]="depositAmount"
+                  [min]="0.000001"
+                  [max]="balances![selectedDenom] || 0"
+                  required
+                />
+                <select
+                  #symbolRef
+                  required
+                  [(ngModel)]="selectedDenom"
+                  name="symbol"
+                  class="select select-bordered w-1/4"
+                  (change)="onChangeSymbol()"
+                >
+                  <ng-container *ngFor="let s of denoms">
+                    <option [value]="s">{{ s }}</option>
+                  </ng-container>
+                </select>
+              </label>
+              <label class="label">
+                <span class="label-text-alt"
+                  >Available balance: {{ balances![selectedDenom] || 0 }}{{ selectedDenom }}
+                </span>
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Interest Rate</span>
+              </label>
+              <label class="input-group">
+                <input
+                  #interestRef
+                  class="input input-bordered w-full"
+                  name="interest"
+                  [(ngModel)]="interestRate"
+                  [min]="0"
+                  required
+                />
+                <span>%</span>
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="20"
+                class="range mt-1"
+                [ngClass]="{
+                  'range-info': interestRate <= 2,
+                  'range-warning': 2 < interestRate && interestRate <= 5,
+                  'range-error': 5 < interestRate
+                }"
+                [(ngModel)]="interestRate"
+                name="slider"
+              />
+            </div>
+            <div class="card-actions justify-end mt-4">
+              <button class="btn btn-primary">
+                <mat-icon class="mr-2">photo_library</mat-icon>
+                Search NFTs
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <br />
+
+      <div class="flex flex-row flex-wrap -mr-12 -mb-12" *ngIf="isSubmitted">
+        <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
+        <ng-template #loading>
+          <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+        </ng-template>
+        <ng-template #loaded>
+          <ng-container
+            *ngIf="!listedClasses || listedClasses.length === 0; then empty; else filled"
+          ></ng-container>
+        </ng-template>
+
+        <ng-template #filled>
+          <div
+            *ngFor="let class of listedClasses; index as i"
+            class="pr-12 pb-12 w-full sm:w-1/2 md:w-1/3"
+          >
+            <div class="card w-full glass shadow-xl">
+              <figure class="aspect-square w-full">
+                <img
+                  *ngIf="classImages"
+                  src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
+                  alt="image of the NFT Class"
+                  class="h-full object-cover"
+                />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title break-all">
+                  {{ class.name || class.class_id }}
+                </h2>
+                <h3 class="break-all">{{ class.class_id }}</h3>
+                <p>{{ class.description }}</p>
+                <div class="card-actions justify-center">
+                  <button
+                    class="btn btn-outline btn-info px-8"
+                    (click)="onClickClass(class.class_id)"
+                  >
+                    View Collection
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #empty>
+          <p class="text-lg text-error">There is no NFT holder to lend.</p>
+          <p class="text-lg text-error">Try to change token type to lend.</p>
+        </ng-template>
+      </div>
+    </div>
   </div>
 </div>

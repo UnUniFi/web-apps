@@ -47,7 +47,7 @@
   <div class="card-body overflow-x-auto">
     <h2 class="card-title break-all">Pool Overview</h2>
     <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats flex flex-col md:flex-row">
+      <div class="stats stats-vertical md:stats-horizontal">
         <div class="stat">
           <div class="stat-title">Pool Value</div>
           <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
@@ -78,7 +78,7 @@
   <div class="card-body overflow-x-auto">
     <h2 class="card-title break-all">Perpetual Futures Overview</h2>
     <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats flex flex-col md:flex-row">
+      <div class="stats stats-vertical md:stats-horizontal">
         <div class="stat">
           <div class="stat-title">Total Long Position</div>
           <div

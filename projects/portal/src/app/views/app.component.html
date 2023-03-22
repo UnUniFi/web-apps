@@ -57,123 +57,128 @@
       </div>
     </div>
     <!-- Page content here -->
+    <<<<<<< HEAD
     <div class="flex justify-center">
-      <div class="w-full max-w-screen-xl p-8">
-        <ng-content></ng-content>
+      =======
+      <div class="bg-base-300 flex justify-center h-full">
+        >>>>>>> release
+        <div class="w-full max-w-screen-xl p-8">
+          <ng-content></ng-content>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="drawer-side h-full overflow-auto">
-    <label for="drawer-main" class="drawer-overlay"></label>
-    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
-      <!-- Sidebar content here -->
-      <form #formRef="ngForm" (submit)="onSubmitSearchResult()">
-        <div class="form-control">
-          <div class="input-group">
-            <input
-              #searchValueRef
-              id="searchValue"
-              name="searchValue"
-              [(ngModel)]="searchValue"
-              [matAutocomplete]="auto"
-              (ngModelChange)="onChangeInput(searchValueRef.value)"
-              (focus)="onFocusInput(searchValueRef.value)"
-              class="input input-bordered"
-            />
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected()">
-              <mat-option
-                *ngIf="searchResult?.searchValue !== '' && searchResult?.type !== ''"
-                [value]="searchResult?.searchValue"
+    <div class="drawer-side h-full overflow-auto">
+      <label for="drawer-main" class="drawer-overlay"></label>
+      <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
+        <!-- Sidebar content here -->
+        <form #formRef="ngForm" (submit)="onSubmitSearchResult()">
+          <div class="form-control">
+            <div class="input-group">
+              <input
+                #searchValueRef
+                id="searchValue"
+                name="searchValue"
+                [(ngModel)]="searchValue"
+                [matAutocomplete]="auto"
+                (ngModelChange)="onChangeInput(searchValueRef.value)"
+                (focus)="onFocusInput(searchValueRef.value)"
+                class="input input-bordered"
+              />
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected()">
+                <mat-option
+                  *ngIf="searchResult?.searchValue !== '' && searchResult?.type !== ''"
+                  [value]="searchResult?.searchValue"
+                >
+                  {{ searchResult?.type }} = {{ searchResult?.searchValue }}
+                </mat-option>
+              </mat-autocomplete>
+              <button
+                class="btn btn-square"
+                [disabled]="searchResult?.searchValue === '' || searchResult?.type === ''"
               >
-                {{ searchResult?.type }} = {{ searchResult?.searchValue }}
-              </mat-option>
-            </mat-autocomplete>
-            <button
-              class="btn btn-square"
-              [disabled]="searchResult?.searchValue === '' || searchResult?.type === ''"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-      <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/">
-          <span class="flex-none">
-            <mat-icon color="primary">other_houses</mat-icon>
-          </span>
-          <span class="flex-1">Balance</span>
-        </label>
-      </li>
-      <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/vote/proposals">
-          <span class="flex-none">
-            <mat-icon color="primary">how_to_vote</mat-icon>
-          </span>
-          <span class="flex-1">Vote</span>
-        </label>
-      </li>
-      <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/delegate/validators">
-          <span class="flex-none">
-            <mat-icon color="primary">savings</mat-icon>
-          </span>
-          <span class="flex-1">Delegate</span>
-        </label>
-      </li>
-      <li>
+        </form>
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="/">
+            <span class="flex-none">
+              <mat-icon color="primary">other_houses</mat-icon>
+            </span>
+            <span class="flex-1">Balance</span>
+          </label>
+        </li>
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="/vote/proposals">
+            <span class="flex-none">
+              <mat-icon color="primary">how_to_vote</mat-icon>
+            </span>
+            <span class="flex-1">Vote</span>
+          </label>
+        </li>
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="/delegate/validators">
+            <span class="flex-none">
+              <mat-icon color="primary">savings</mat-icon>
+            </span>
+            <span class="flex-1">Delegate</span>
+          </label>
+        </li>
+        <!-- <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/incentive">
           <span class="flex-none">
             <mat-icon color="primary">attach_money</mat-icon>
           </span>
           <span class="flex-1">Incentive</span>
         </label>
-      </li>
-      <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan">
-          <span class="flex-none">
-            <mat-icon color="primary">photo_library</mat-icon>
-          </span>
-          <span class="flex-1">NFT Backed Loan</span>
-        </label>
-      </li>
-      <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/perpetual-futures">
-          <span class="flex-none">
-            <mat-icon color="primary">show_chart</mat-icon>
-          </span>
-          <span class="flex-1">Derivatives</span>
-        </label>
-      </li>
-      <ng-template ngFor let-navigation [ngForOf]="navigations">
-        <ng-container *ngIf="navigation?.name && navigation?.link">
-          <li>
-            <label
-              for="drawer-main"
-              class="flex gap-4"
-              routerLink="{{ navigation.link.replace('/portal', '') }}"
-            >
-              <span class="flex-none">
-                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
-              </span>
-              <span class="flex-1">{{ navigation.name }}</span>
-            </label>
-          </li>
-        </ng-container>
-      </ng-template>
-    </ul>
+      </li> -->
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan">
+            <span class="flex-none">
+              <mat-icon color="primary">photo_library</mat-icon>
+            </span>
+            <span class="flex-1">NFT Backed Loan</span>
+          </label>
+        </li>
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/perpetual-futures">
+            <span class="flex-none">
+              <mat-icon color="primary">show_chart</mat-icon>
+            </span>
+            <span class="flex-1">Derivatives</span>
+          </label>
+        </li>
+        <ng-template ngFor let-navigation [ngForOf]="navigations">
+          <ng-container *ngIf="navigation?.name && navigation?.link">
+            <li>
+              <label
+                for="drawer-main"
+                class="flex gap-4"
+                routerLink="{{ navigation.link.replace('/portal', '') }}"
+              >
+                <span class="flex-none">
+                  <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                </span>
+                <span class="flex-1">{{ navigation.name }}</span>
+              </label>
+            </li>
+          </ng-container>
+        </ng-template>
+      </ul>
+    </div>
   </div>
 </div>

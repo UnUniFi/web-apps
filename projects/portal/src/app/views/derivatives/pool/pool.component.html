@@ -119,7 +119,7 @@
             <input type="checkbox" id="mint-model" class="modal-toggle" />
             <div class="modal modal-bottom sm:modal-middle">
               <div class="modal-box">
-                <h3 class="font-bold text-lg">Are you sure to mint DLP?</h3>
+                <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
                 <p class="py-4" *ngIf="estimatedLPTAmount">
                   Estimated DLP is {{ estimatedLPTAmount.amount | coin }} (Fee is
                   {{ estimatedLPTAmount.fee | coin }}), OK?
@@ -139,7 +139,7 @@
                 </p>
                 <div class="modal-action">
                   <label for="mint-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-primary" [disabled]="mintRef.invalid">Mint</button>
+                  <button class="btn btn-primary" [disabled]="mintRef.invalid">Buy</button>
                 </div>
               </div>
             </div>

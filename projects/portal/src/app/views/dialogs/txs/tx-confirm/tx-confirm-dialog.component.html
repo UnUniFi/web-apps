@@ -4,7 +4,7 @@
     <ng-container *ngIf="txData; then exist; else empty"></ng-container>
     <ng-template #exist>
       <div class="font-bold text-xl m-3">Transaction accepted!</div>
-      <div class="text-xl m-3">{{ txData?.msg }}</div>
+      <div class="text-xl m-3" style="white-space: pre-wrap">{{ txData?.msg }}</div>
       <form (submit)="onClickClose()">
         <div class="hidden md:block mockup-code text-primary-content mb-4">
           <pre><code class="break-all">{{ txData?.txHash }}</code></pre>
@@ -42,7 +42,7 @@
     <div class="card-body flex flex-col items-center">
       <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
       <h2 class="card-title">Transaction accepted!</h2>
-      <p>{{ txData?.msg }}</p>
+      <p style="white-space: pre-wrap">{{ txData?.msg }}</p>
       <form (submit)="onClickClose()">
         <div class="hidden md:block mockup-code text-primary-content mb-4">
           <pre><code class="break-all">{{ txData?.txHash }}</code></pre>

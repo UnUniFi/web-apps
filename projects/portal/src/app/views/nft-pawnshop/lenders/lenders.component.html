@@ -1,15 +1,13 @@
 <div class="mx-auto max-w-screen-xl">
   <div class="w-full md:w-auto mb-8">
     <div class="text-base-content max-w-full">
-      <div class="card lg:card-side bg-base-100 shadow-xl">
+      <div
+        class="card lg:card-side bg-base-100 shadow-xl"
+        *ngIf="depositCoins && depositCoins.length"
+      >
         <div class="card-body">
-          <h2 class="card-title break-all">Lending Status</h2>
+          <h2 class="card-title break-all">Deposit & Lending</h2>
           <p>
-            Check the total tokens deposited in the NFT and the status of your lending. Click on
-            View to see details for each NFT.
-          </p>
-          <h3 class="ml-4 font-bold text-lg">Deposit & Lending</h3>
-          <p class="ml-4">
             When a bid is made, it is added to Deposit, and when the lister borrows, it is also
             added to Lending.
           </p>
@@ -36,10 +34,10 @@
             </div>
           </div>
 
-          <h3 class="ml-4 font-bold text-lg">Bidding Status</h3>
-          <p class="ml-4">
+          <h2 class="card-title break-all">Bidding Status</h2>
+          <p>
             Shows the status of the NFT that you are bidding on, Waiting for Payment, and if you are
-            the highest bidder, please make payment.
+            the highest bidder, please make payment. Click on View to see details for each NFT.
           </p>
           <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
             <div class="stat">
@@ -74,7 +72,6 @@
       <div class="card lg:card-side bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title break-all">Lend Tokens</h2>
-          <h3 class="font-bold text-lg">Set Lending Parameters</h3>
           <form #formRef="ngForm" (submit)="onSubmit()">
             <div class="form-control">
               <label class="label">

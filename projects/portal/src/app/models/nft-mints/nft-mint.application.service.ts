@@ -1,4 +1,7 @@
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { NftMintService } from './nft-mint.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -52,11 +55,18 @@ export class NftMintApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully minted NFT.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully minted NFT.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully mint the NFT. Go to NFT Backed Loan, select Join as a Borrower, and list your NFT.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 }

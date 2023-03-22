@@ -1,48 +1,51 @@
-<div mat-dialog-content>
-  <mat-card class="mb-4 w-full">
-    <mat-card-header>
-      <img mat-card-avatar src="{{ classImage || 'assets/UnUniFi-logo.png' }}" />
-      <mat-card-title *ngIf="classID !== 'ununifi-debugUserClass'">{{
-        listedClass?.name
-      }}</mat-card-title>
-      <mat-card-title *ngIf="classID === 'ununifi-debugUserClass'">poc_s3_1</mat-card-title>
-      <mat-card-subtitle>{{ classID }}</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <p>{{ listedClass?.description }}</p>
-    </mat-card-content>
-    <mat-chip-list>
-      <mat-chip color="primary" selected>{{ listedClass?.nfts?.length }} Items</mat-chip>
-      <mat-chip color="accent" selected>Pool 0 GUU</mat-chip>
-      <mat-chip selected>APY 0 %</mat-chip>
-    </mat-chip-list>
-  </mat-card>
-</div>
-<mat-dialog-content>
-  <div class="flex flex-wrap">
-    <mat-card
-      class="mat-elevation-z8 text-center w-64 m-5 p-0"
-      *ngFor="let nft of listedClass?.nfts; index as i"
-    >
-      <img
-        mat-card-image
-        *ngIf="nftImages"
-        src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
-        class="object-cover h-64 m-0"
-        style="margin: 0%"
-        alt="image of the NFT class"
-      />
-      <mat-card-title class="mt-2 break-all">
-        {{ nft.id }}
-      </mat-card-title>
-      <mat-card-content class="mb-4">
-        <span class="flex-auto"></span>
-        <button class="text-blue-400" mat-button (click)="onSubmit(nft.id!)">
-          Lend this NFT's owner
-        </button>
-        <span class="flex-auto"></span>
-      </mat-card-content>
-    </mat-card>
+<div class="text-base-content max-w-full">
+  <div class="card lg:card-side bg-base-100 shadow-xl">
+    <div class="card-body w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-primary mr-1">{{ listedClass?.nfts?.length }} Items</div>
+        <!-- <div class="badge badge-lg mr-1">Pool {{ '0GUU' }}</div>
+        <div class="badge badge-lg mr-1">APY {{ '0' }}%</div> -->
+      </div>
+      <h2 class="card-title break-all">{{ listedClass?.name }}</h2>
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>ID</th>
+            <td>{{ classID }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</mat-dialog-content>
+
+  <br />
+
+  <div class="flex flex-wrap">
+    <div *ngFor="let nft of listedClass?.nfts; index as i" class="pr-12 pb-12 w-full">
+      <div class="card bg-base-100 w-full glass shadow-xl md:w-1/2">
+        <figure class="aspect-square w-full">
+          <img
+            *ngIf="nftImages"
+            src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
+            alt="image of the NFT"
+            class="h-full object-cover"
+          />
+          <img
+            *ngIf="!nftImages"
+            src="assets/UnUniFi-logo.png"
+            alt="image of the NFT"
+            class="h-full object-cover"
+          />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title break-all">{{ nft.id }}</h2>
+          <div class="card-actions justify-center">
+            <button class="btn btn-outline btn-info px-8" (click)="onSubmit(nft.id!)">
+              Bid to lend
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

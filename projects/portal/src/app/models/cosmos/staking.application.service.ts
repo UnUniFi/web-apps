@@ -8,7 +8,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
@@ -65,7 +68,14 @@ export class StakingApplicationService {
       .open<string>(DelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully delegated to the validator. Please check your balance and Delegation status.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -76,7 +86,14 @@ export class StakingApplicationService {
       .open<string>(RedelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully redelegated to the validator. Please check delegation status.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -87,7 +104,14 @@ export class StakingApplicationService {
       .open<string>(UndelegateFormDialogComponent, { data: validator })
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully undelegated to the validator. It takes a certain amount of time for the balance to reflect.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -273,10 +297,14 @@ export class StakingApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
+    // this.snackBar.open('Successfully create validator', undefined, { duration: 6000 });
 
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully created a new Validator.' },
+        })
+        .closed.toPromise();
     }
   }
 

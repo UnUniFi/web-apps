@@ -5,7 +5,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { DistributionService } from './distribution.service';
@@ -42,7 +45,14 @@ export class DistributionApplicationService {
       .open<string>(WithdrawDelegatorRewardFormDialogComponent, { data: validator })
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully withdraw your delegate reward, please check your balance.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -51,7 +61,14 @@ export class DistributionApplicationService {
       .open<string>(WithdrawAllDelegatorRewardFormDialogComponent)
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully withdraw all delegate rewards, please check your balance.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 
@@ -62,7 +79,14 @@ export class DistributionApplicationService {
       .open<string>(WithdrawValidatorCommissionFormDialogComponent, { data: validator })
       .closed.toPromise();
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully withdraw your validator commission, please check your balance.',
+          },
+        })
+        .closed.toPromise();
     }
   }
 

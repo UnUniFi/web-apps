@@ -1,5 +1,8 @@
 import { NftsDialogComponent } from '../../pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.component';
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { NftPawnshopService } from './nft-pawnshop.service';
@@ -88,11 +91,16 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully listed NFT.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully listed NFT.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully listed your NFT.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
     }
   }
 
@@ -132,11 +140,16 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully cancelled NFT listing.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully cancelled NFT listing.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully cancelled your NFT Listing.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'borrower']);
     }
   }
 
@@ -201,11 +214,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully placed bid.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully placed bid.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully accepted your bid. Please check your bidding status from Join as a Lender in NFT Backed-Loan.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classId, nftId]);
     }
   }
 
@@ -245,11 +266,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully cancelled bid.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully cancelled bid.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully cancelled your bid. Please check your bidding status from Join as a Lender in NFT Backed-Loan.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classId, nftId]);
     }
   }
 
@@ -289,11 +318,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully ended listing.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully ended listing.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully accepted the end of your NFT listing.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'borrower']);
     }
   }
 
@@ -333,11 +370,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully decided selling.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully decided selling.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully accepted your selling decision. \nIf the successful bidder pays the full amount of the bid price within the specified period, you will receive the tokens.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'borrower']);
     }
   }
 
@@ -382,11 +427,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully paid settlement shortfall.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully paid settlement shortfall.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully accepted your payment. After a short time, the status changes to Successful Bid. \nThe NFT will be added to your account after the specified delivery period.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'lenders']);
     }
   }
 
@@ -438,11 +491,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully borrowed.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully borrowed.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully borrowed tokens. Please be careful of the repayment deadline. \nIf refinancing is not possible, your NFT will be liquidated.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
     }
   }
 
@@ -494,11 +555,19 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    this.snackBar.open('Successfully repaid interests.', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully repaid interests.', undefined, {
+    //   duration: 6000,
+    // });
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully repaid tokens. Please check your repayment deadline as it will be updated.',
+          },
+        })
+        .closed.toPromise();
+      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
     }
   }
 }

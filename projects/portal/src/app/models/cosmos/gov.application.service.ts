@@ -5,6 +5,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
@@ -18,7 +22,6 @@ import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
-import { TxConfirmDialogComponent } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 
 @Injectable({
   providedIn: 'root',
@@ -38,17 +41,27 @@ export class GovApplicationService {
     const txHash = await this.dialog
       .open<string>(VoteFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-      if (txHash) {
-        await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
-      }  }
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your vote.' },
+        })
+        .closed.toPromise();
+    }
+  }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
       .open<string>(DepositFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-      if (txHash) {
-        await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
-      }  }
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your deposit to the proposal.' },
+        })
+        .closed.toPromise();
+    }
+  }
 
   // WIP
   async submitProposal(
@@ -134,11 +147,16 @@ export class GovApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
+    // this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
 
     if (txHash) {
-      await this.dialog.open<string>(TxConfirmDialogComponent, { data: txHash }).closed.toPromise();
-    }  }
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent your proposal.' },
+        })
+        .closed.toPromise();
+    }
+  }
 
   async Vote(
     proposalID: number,

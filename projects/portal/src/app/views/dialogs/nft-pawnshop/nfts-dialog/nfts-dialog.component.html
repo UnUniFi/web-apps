@@ -1,4 +1,4 @@
-<div class="text-base-content max-w-full">
+<div class="text-base-content max-w-xl">
   <div class="card lg:card-side bg-base-100 shadow-xl">
     <div class="card-body w-2/3">
       <div class="flex flex-row">
@@ -24,18 +24,9 @@
     <div *ngFor="let nft of listedClass?.nfts; index as i" class="pr-12 pb-12 w-full">
       <div class="card bg-base-100 w-full glass shadow-xl md:w-1/2">
         <figure class="aspect-square w-full">
-          <img
-            *ngIf="nftImages"
-            src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
-            alt="image of the NFT"
-            class="h-full object-cover"
-          />
-          <img
-            *ngIf="!nftImages"
-            src="assets/UnUniFi-logo.png"
-            alt="image of the NFT"
-            class="h-full object-cover"
-          />
+          <img *ngIf="nftImages" src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT"
+            class="h-full object-cover" />
+          <img *ngIf="!nftImages" src="assets/UnUniFi-logo.png" alt="image of the NFT" class="h-full object-cover" />
         </figure>
         <div class="card-body">
           <h2 class="card-title break-all">{{ nft.id }}</h2>

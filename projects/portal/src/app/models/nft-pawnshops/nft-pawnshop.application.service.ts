@@ -378,7 +378,7 @@ export class NftPawnshopApplicationService {
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
           data: {
             txHash: txHash,
-            msg: 'Successfully accepted your selling decision. If the successful bidder pays the full amount of the bid price within the specified period, you will receive the tokens',
+            msg: 'Successfully accepted your selling decision. \nIf the successful bidder pays the full amount of the bid price within the specified period, you will receive the tokens.',
           },
         })
         .closed.toPromise();
@@ -435,11 +435,11 @@ export class NftPawnshopApplicationService {
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
           data: {
             txHash: txHash,
-            msg: 'Successfully accepted your payment. The NFT will be added to your account after the specified delivery period.',
+            msg: 'Successfully accepted your payment. After a short time, the status changes to Successful Bid. \nThe NFT will be added to your account after the specified delivery period.',
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classId, nftId]);
+      this.router.navigate(['nft-backed-loan', 'lenders']);
     }
   }
 
@@ -499,7 +499,7 @@ export class NftPawnshopApplicationService {
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
           data: {
             txHash: txHash,
-            msg: 'Successfully borrowed tokens. Please be careful of the repayment deadline. If refinancing is not possible, your NFT will be liquidated.',
+            msg: 'Successfully borrowed tokens. Please be careful of the repayment deadline. \nIf refinancing is not possible, your NFT will be liquidated.',
           },
         })
         .closed.toPromise();

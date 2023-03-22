@@ -311,10 +311,7 @@
 <div class="flex justify-start">
   <div class="max-w-screen-xl w-full">
     <div class="flex flex-row flex-wrap -mr-12 -mb-12">
-      <div
-        *ngFor="let position of positions; let i = index"
-        class="pr-12 pb-12 w-full sm:w-1/2 lg:w-1/3"
-      >
+      <div *ngFor="let position of positions; let i = index" class="pr-12 pb-12 w-full md:w-1/2">
         <div class="card bg-base-100 w-full shadow-xl" *ngIf="position?.position?.id !== '10'">
           <div class="card-body">
             <div class="flex flex-row">
@@ -334,7 +331,7 @@
                   'text-primary': positionInstances![i]?.position_type === positionType.LONG,
                   'text-secondary': positionInstances![i]?.position_type === positionType.SHORT
                 }"
-                >{{ positionInstances![i]?.size | number : '1.0-6' }} {{ baseSymbol }}/{{
+                >{{ positionInstances![i]?.size | number: '1.0-6' }} {{ baseSymbol }}/{{
                   quoteSymbol
                 }}</span
               >
@@ -347,10 +344,8 @@
                 </div>
                 <div class="stat-desc">Under 50% will initiate liquidation</div>
               </div>
-              <div class="stat">
-                <div class="stat-title" *ngIf="!position.valuation_profit?.amount?.includes('-')">
-                  Current Profit
-                </div>
+              <div class="stat" *ngIf="!position.valuation_profit?.amount?.includes('-')">
+                <div class="stat-title">Current Profit</div>
                 <div class="stat-value text-info">
                   {{ position.valuation_profit | coin }}
                 </div>
@@ -384,10 +379,10 @@
               <div class="stat">
                 <div class="stat-title">Date Opened</div>
                 <div class="stat-value text-accent">
-                  {{ position?.position?.opened_at | date : 'MM/dd' }}
+                  {{ position?.position?.opened_at | date: 'MM/dd' }}
                 </div>
                 <div class="stat-desc">
-                  {{ position?.position?.opened_at | date : 'hh:mm:ss z' }}
+                  {{ position?.position?.opened_at | date: 'hh:mm:ss z' }}
                 </div>
               </div>
             </div>

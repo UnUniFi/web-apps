@@ -181,10 +181,14 @@
                 </h2>
                 <h3 class="break-all">{{ class.class_id }}</h3>
                 <p>{{ class.description }}</p>
-
-                <button class="btn btn-outline btn-info" (click)="onClickClass(class.class_id)">
-                  View Collection
-                </button>
+                <div class="card-actions justify-center">
+                  <button
+                    class="btn btn-outline btn-info px-8"
+                    (click)="onClickClass(class.class_id)"
+                  >
+                    View Collection
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
@@ -21,6 +22,7 @@ export class NftPawnshopApplicationService {
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
     private readonly dialog: Dialog,
+    private readonly loadingDialog: LoadingDialogService,
     private readonly bankQueryService: BankQueryService,
     private readonly pawnshopService: NftPawnshopService,
     private readonly txCommonApplication: TxCommonApplicationService,
@@ -569,5 +571,9 @@ export class NftPawnshopApplicationService {
         .closed.toPromise();
       this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
     }
+  }
+
+  private async waitSeconds(seconds: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
   }
 }

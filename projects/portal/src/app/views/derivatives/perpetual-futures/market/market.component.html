@@ -2,9 +2,13 @@
   <div class="w-full xl:w-auto xl:flex-auto xl:mr-8">
     <!-- TradingView Widget BEGIN -->
     <div class="tradingview-widget-container">
-      <div id="tradingview_5b3c4" style="height: 600px;"></div>
+      <div id="tradingview_5b3c4" style="height: 600px"></div>
       <div class="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE" rel="noopener" target="_blank"></a>
+        <a
+          href="https://www.tradingview.com/symbols/ETHUSD/?exchange=COINBASE"
+          rel="noopener"
+          target="_blank"
+        ></a>
         by TradingView
       </div>
     </div>
@@ -13,7 +17,7 @@
       <table class="table w-full">
         <thead>
           <tr>
-            <th>ID</th>
+            <td>ID</td>
             <td>
               Market<br />
               Long or Short
@@ -31,7 +35,11 @@
               Liquidation Price
             </td>
             <td>
-              <button class="btn btn-outline btn-info" routerLink="/derivatives/positions" *ngIf="positions?.length">
+              <button
+                class="btn btn-outline btn-info"
+                routerLink="/derivatives/positions"
+                *ngIf="positions?.length"
+              >
                 View Positions Detail
               </button>
             </td>
@@ -40,9 +48,7 @@
         <tbody>
           <ng-container *ngFor="let position of positions; let i = index">
             <tr>
-              <td>
-                #{{ position?.position?.id }}
-              </td>
+              <td>#{{ position?.position?.id }}</td>
               <td>
                 {{ baseSymbol }}/{{ quoteSymbol }}<br />
                 <ng-container *ngIf="positionInstances![i]?.position_type === positionType.LONG">
@@ -53,18 +59,22 @@
                 </ng-container>
               </td>
               <td>
-                {{ positionInstances![i]?.size | number: '1.0-6' }}<br />
+                {{ positionInstances![i]?.size | number : '1.0-6' }}<br />
                 <span
-                  [class]="{'text-success': !position.valuation_profit?.amount?.includes('-'), 'text-error': position.valuation_profit?.amount?.includes('-')}">
+                  [class]="{
+                    'text-success': !position.valuation_profit?.amount?.includes('-'),
+                    'text-error': position.valuation_profit?.amount?.includes('-')
+                  }"
+                >
                   {{ position.valuation_profit | coin }}
                 </span>
               </td>
               <td>
                 {{
-                calcMarketRate(
-                position.position?.opened_base_rate!,
-                position.position?.opened_quote_rate!
-                ) | number
+                  calcMarketRate(
+                    position.position?.opened_base_rate!,
+                    position.position?.opened_quote_rate!
+                  ) | number
                 }}
                 <br />
                 {{ positionInstances![i]?.leverage }}x
@@ -75,10 +85,17 @@
                 Coming Soon
               </td>
               <td>
-                <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline btn-error">
+                <label
+                  for="close-modal-{{ position?.position?.id }}"
+                  class="btn btn-outline btn-error"
+                >
                   Close Position
                 </label>
-                <input type="checkbox" id="close-modal-{{ position?.position?.id }}" class="modal-toggle" />
+                <input
+                  type="checkbox"
+                  id="close-modal-{{ position?.position?.id }}"
+                  class="modal-toggle"
+                />
                 <div class="modal modal-bottom sm:modal-middle">
                   <div class="modal-box">
                     <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
@@ -86,8 +103,13 @@
                       The position #{{ position?.position?.id }} is closed and settled, OK?
                     </p>
                     <div class="modal-action">
-                      <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline">Cancel</label>
-                      <button class="btn btn-secondary" (click)="onSubmitClose(position?.position?.id!)">
+                      <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
+                        >Cancel</label
+                      >
+                      <button
+                        class="btn btn-secondary"
+                        (click)="onSubmitClose(position?.position?.id!)"
+                      >
                         Close Position
                       </button>
                     </div>
@@ -125,14 +147,17 @@
 
     <div class="card bg-base-100 shadow-xl mb-4 w-full lg:w-auto">
       <div class="card-body">
-        <form #formRef="ngForm" (submit)="
-        onSubmitOpen(
-          sizeRef.valueAsNumber,
-          leverage,
-          marginAmountRef.valueAsNumber,
-          selectedPositionType
-        )
-      ">
+        <form
+          #formRef="ngForm"
+          (submit)="
+            onSubmitOpen(
+              sizeRef.valueAsNumber,
+              leverage,
+              marginAmountRef.valueAsNumber,
+              selectedPositionType
+            )
+          "
+        >
           <div class="form-control">
             <span class="label">
               <span class="label-text">Long or Short</span>
@@ -147,18 +172,19 @@
                 <div class="modal-box">
                   <h3 class="font-bold text-lg">What is Long and Short?</h3>
                   <p class="py-2">
-                    A long position is when you purchase an asset with the expectation that its value
-                    will increase over time. In this scenario, you would profit from the price
+                    A long position is when you purchase an asset with the expectation that its
+                    value will increase over time. In this scenario, you would profit from the price
                     appreciation.
                   </p>
                   <p class="py-2">
-                    A short position is when you sell an asset with the expectation that its value will
-                    decrease over time. In this case, you would profit from the price depreciation.
+                    A short position is when you sell an asset with the expectation that its value
+                    will decrease over time. In this case, you would profit from the price
+                    depreciation.
                   </p>
                   <p class="py-2">
                     Long Positions are used when investors' expectations about the future price
-                    movements of underlying Securities are positive, while Short Positions are used when
-                    the expectation regarding the Securities prices is bearish.
+                    movements of underlying Securities are positive, while Short Positions are used
+                    when the expectation regarding the Securities prices is bearish.
                   </p>
 
                   <div class="modal-action">
@@ -169,12 +195,18 @@
             </span>
 
             <div class="btn-group">
-              <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.LONG"
-                (click)="onTogglePositionType(positionType.LONG)">
+              <label
+                class="btn btn-outline w-1/2"
+                [class.btn-active]="selectedPositionType === positionType.LONG"
+                (click)="onTogglePositionType(positionType.LONG)"
+              >
                 <mat-icon class="hidden sm:flex">trending_up</mat-icon>Long
               </label>
-              <label class="btn btn-outline w-1/2" [class.btn-active]="selectedPositionType === positionType.SHORT"
-                (click)="onTogglePositionType(positionType.SHORT)">
+              <label
+                class="btn btn-outline w-1/2"
+                [class.btn-active]="selectedPositionType === positionType.SHORT"
+                (click)="onTogglePositionType(positionType.SHORT)"
+              >
                 <mat-icon class="hidden sm:flex">trending_down</mat-icon>Short
               </label>
             </div>
@@ -194,10 +226,10 @@
                 <div class="modal-box">
                   <h3 class="font-bold text-lg">What is position size?</h3>
                   <p class="py-4">
-                    A position size refers to the size of the investment made in any given trade. The
-                    position size will vary depending on the trader's risk tolerance, account size, and
-                    the asset being traded. In general, traders aim to minimize their risk by sizing
-                    positions appropriately.
+                    A position size refers to the size of the investment made in any given trade.
+                    The position size will vary depending on the trader's risk tolerance, account
+                    size, and the asset being traded. In general, traders aim to minimize their risk
+                    by sizing positions appropriately.
                   </p>
                   <div class="modal-action">
                     <label for="modal-position-size" class="btn">Understood</label>
@@ -207,10 +239,20 @@
             </span>
 
             <label class="input-group">
-              <input #sizeRef #sizeNgModelRef="ngModel" required [(ngModel)]="size" name="position-size" type="number"
-                placeholder="10" class="input input-bordered input-info input-lg w-full"
-                [class]="{'input-error': sizeNgModelRef.errors && sizeNgModelRef.touched}" [min]="0"
-                pattern="^[0-9]*\.?[0-9]{0,6}$" (input)="onSetMargin()" />
+              <input
+                #sizeRef
+                #sizeNgModelRef="ngModel"
+                required
+                [(ngModel)]="size"
+                name="position-size"
+                type="number"
+                placeholder="10"
+                class="input input-bordered input-info input-lg w-full"
+                [class]="{ 'input-error': sizeNgModelRef.errors && sizeNgModelRef.touched }"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                (input)="onSetMargin()"
+              />
               <span class="text-info">{{ baseSymbol }}</span>
             </label>
           </div>
@@ -231,10 +273,11 @@
                   <h3 class="font-bold text-lg">What is leverage?</h3>
                   <p class="py-4">
                     Leverage is the use of borrowed money to increase potential returns. In trading,
-                    leverage allows traders to control larger amounts of an asset with a smaller initial
-                    investment. This amplifies both gains and losses - increasing both the potential
-                    profitability and the potential risk. It is important for traders to exercise
-                    caution when using leverage, as it can magnify the impact of market volatility.
+                    leverage allows traders to control larger amounts of an asset with a smaller
+                    initial investment. This amplifies both gains and losses - increasing both the
+                    potential profitability and the potential risk. It is important for traders to
+                    exercise caution when using leverage, as it can magnify the impact of market
+                    volatility.
                   </p>
                   <div class="modal-action">
                     <label for="modal-leverage" class="btn">Understood</label>
@@ -243,16 +286,36 @@
               </div>
             </span>
             <label class="input-group">
-              <input #leverageNgModelRef="ngModel" type="number" placeholder="10" class="input input-bordered w-full"
-                [class]="{'input-error': leverageNgModelRef.errors && leverageNgModelRef.touched}" [min]="1" [max]="10"
-                pattern="^[1-9][0-9]*$" [step]="1" [(ngModel)]="leverage" name="leverage" (input)="onSetMargin()" />
+              <input
+                #leverageNgModelRef="ngModel"
+                type="number"
+                placeholder="10"
+                class="input input-bordered w-full"
+                [class]="{ 'input-error': leverageNgModelRef.errors && leverageNgModelRef.touched }"
+                [min]="1"
+                [max]="10"
+                pattern="^[1-9][0-9]*$"
+                [step]="1"
+                [(ngModel)]="leverage"
+                name="leverage"
+                (input)="onSetMargin()"
+              />
               <span>x</span>
             </label>
-            <input type="range" min="1" max="10" class="range mt-1" [ngClass]="{
-            'range-info': leverage <= 3,
-            'range-warning': 3 < leverage && leverage <= 5,
-            'range-error': 5 < leverage
-          }" [(ngModel)]="leverage" name="leverage-slider" (input)="onSetMargin()" />
+            <input
+              type="range"
+              min="1"
+              max="10"
+              class="range mt-1"
+              [ngClass]="{
+                'range-info': leverage <= 3,
+                'range-warning': 3 < leverage && leverage <= 5,
+                'range-error': 5 < leverage
+              }"
+              [(ngModel)]="leverage"
+              name="leverage-slider"
+              (input)="onSetMargin()"
+            />
           </div>
 
           <div class="form-control">
@@ -274,8 +337,8 @@
                     position.
                   </p>
                   <p class="py-2">
-                    By default, it is automatically entered to be 100%. If the price fluctuation drops
-                    below 50%, a loss cut is triggered and the position is settled.
+                    By default, it is automatically entered to be 100%. If the price fluctuation
+                    drops below 50%, a loss cut is triggered and the position is settled.
                   </p>
                   <div class="modal-action">
                     <label for="modal-margin" class="btn">Understood</label>
@@ -286,24 +349,41 @@
 
             <label class="input-group">
               <label class="btn btn-info" (click)="marginAmount = minMargin">Min</label>
-              <input #marginAmountRef #marginAmountNgModelRef="ngModel" required type="number" placeholder="10"
+              <input
+                #marginAmountRef
+                #marginAmountNgModelRef="ngModel"
+                required
+                type="number"
+                placeholder="10"
                 class="input input-bordered w-full"
-                [class]="{'input-error': marginAmountNgModelRef.errors && marginAmountNgModelRef.touched}"
-                [min]="minMargin" [max]="symbolBalancesMap?.[marginSymbol || ''] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$"
-                [(ngModel)]="marginAmount" name="margin" />
-              <select #marginSymbolRef required [(ngModel)]="marginSymbol" name="margin-symbol"
-                class="select select-bordered" (change)="onSetMargin()">
+                [class]="{
+                  'input-error': marginAmountNgModelRef.errors && marginAmountNgModelRef.touched
+                }"
+                [min]="minMargin"
+                [max]="symbolBalancesMap?.[marginSymbol || ''] || 0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="marginAmount"
+                name="margin"
+              />
+              <select
+                #marginSymbolRef
+                required
+                [(ngModel)]="marginSymbol"
+                name="margin-symbol"
+                class="select select-bordered"
+                (change)="onSetMargin()"
+              >
                 <option [value]="baseSymbol">{{ baseSymbol }}</option>
                 <option [value]="quoteSymbol">{{ quoteSymbol }}</option>
               </select>
             </label>
 
             <label class="label">
-              <span class="label-text-alt">
-                Available balance (Max margin):
-              </span>
-              <span class="label-text-alt"
-                [class]="{'text-error': (symbolBalancesMap?.[marginSymbol || ''] || 0)<marginAmount}">
+              <span class="label-text-alt"> Available balance (Max margin): </span>
+              <span
+                class="label-text-alt"
+                [class]="{'text-error': (symbolBalancesMap?.[marginSymbol || ''] || 0)<marginAmount}"
+              >
                 {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
                 {{ marginSymbol }}
               </span>
@@ -311,18 +391,23 @@
           </div>
 
           <div class="card-actions justify-end">
-            <button *ngIf="selectedPositionType === positionType.LONG" class="btn btn-primary px-8"
-              [disabled]="formRef.invalid">
+            <button
+              *ngIf="selectedPositionType === positionType.LONG"
+              class="btn btn-primary px-8"
+              [disabled]="formRef.invalid"
+            >
               Open Long position
             </button>
-            <button *ngIf="selectedPositionType === positionType.SHORT" class="btn btn-secondary px-8"
-              [disabled]="formRef.invalid">
+            <button
+              *ngIf="selectedPositionType === positionType.SHORT"
+              class="btn btn-secondary px-8"
+              [disabled]="formRef.invalid"
+            >
               Open Short position
             </button>
           </div>
         </form>
       </div>
     </div>
-
   </div>
 </div>

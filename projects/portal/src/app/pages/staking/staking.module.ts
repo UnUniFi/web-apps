@@ -15,6 +15,7 @@ import { StakingRoutingModule } from './staking-routing.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+// TODO: move into model/cosmos/staking
 @NgModule({
   declarations: [
     CreateValidatorComponent,

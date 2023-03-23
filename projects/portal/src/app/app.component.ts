@@ -1,14 +1,15 @@
+import { environment } from '../environments/environment';
 import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { WalletApplicationService } from './models/wallets/wallet.application.service';
+import { StoredWallet } from './models/wallets/wallet.model';
 import { WalletService } from './models/wallets/wallet.service';
 import { SearchResult } from './views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of, pipe } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
-import { StoredWallet } from './models/wallets/wallet.model';
+import { mergeMap, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -49,6 +50,20 @@ export class AppComponent implements OnInit {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.navigations$ = this.config$.pipe(
       map((config) => {
+        if (config?.extension?.developer?.enabled) {
+          config?.extension?.navigations.unshift({
+            name: 'Developers',
+            link: '/portal/developers',
+            icon: 'build',
+          });
+        }
+        if (config?.extension?.nftMint?.enabled) {
+          config.extension.navigations.unshift({
+            name: 'NFT Mint',
+            link: '/portal/nfts/mint',
+            icon: 'add_photo_alternate',
+          });
+        }
         if (config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet == true).length) {
           config.extension.navigations.unshift({
             name: 'Faucet',
@@ -244,5 +259,10 @@ export class AppComponent implements OnInit {
     this.configS.setCurrentConfig(value);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // tracking
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((params: any) => gtag('config', environment.gtagId, { page_path: params.url }));
+  }
 }

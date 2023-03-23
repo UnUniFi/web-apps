@@ -5,6 +5,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { WalletType } from '../wallets/wallet.model';
@@ -37,21 +41,39 @@ export class IncentiveApplicationService {
     const txHash = await this.dialog
       .open<string>(CreateUnitFormDialogComponent, { data: address })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully created the Ecosystem Incentive Unit.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async openWithdrawIncentiveRewardFormDialog(denom: string): Promise<void> {
     const txHash = await this.dialog
       .open<string>(WithdrawIncentiveRewardFormDialogComponent, { data: denom })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully withdraw your Ecosystem Incentive reward.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async openWithdrawIncentiveAllRewardsFormDialog(address: string): Promise<void> {
     const txHash = await this.dialog
       .open<string>(WithdrawIncentiveAllRewardsFormDialogComponent, { data: address })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully withdraw all Ecosystem Incentive rewards.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async Register(

@@ -1,6 +1,10 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+export interface InactiveValidatorConfirmDialogData {
+  valAddress: string;
+  isConfirmed: boolean;
+}
 @Component({
   selector: 'app-view-inactive-validator-confirm-dialog',
   templateUrl: './inactive-validator-confirm-dialog.component.html',
@@ -8,15 +12,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class InactiveValidatorConfirmDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: {
-      valAddress: string;
-      isConfirmed: boolean;
-    },
-    private readonly dialogRef: MatDialogRef<InactiveValidatorConfirmDialogComponent>,
-  ) { }
+    @Inject(DIALOG_DATA)
+    public readonly data: InactiveValidatorConfirmDialogData,
+    private readonly dialogRef: DialogRef<
+      InactiveValidatorConfirmDialogData,
+      InactiveValidatorConfirmDialogComponent
+    >,
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   okToSendTx(): void {
     this.data.isConfirmed = true;

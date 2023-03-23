@@ -64,11 +64,23 @@ const routes: Routes = [
       import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
   {
-    path: 'yield-aggregator',
+    path: 'nft-backed-loan',
     loadChildren: () =>
-      import('./pages/yield-aggregator/yield-aggregator.module').then(
-        (m) => m.AppYieldAggregatorModule,
-      ),
+      import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
+  },
+  {
+    path: 'nfts',
+    loadChildren: () => import('./pages/nfts/nfts.module').then((m) => m.AppNftsModule),
+  },
+  {
+    path: 'derivatives',
+    loadChildren: () =>
+      import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
+  },
+  {
+    path: 'developers',
+    loadChildren: () =>
+      import('./pages/developers/developers.module').then((m) => m.AppDevelopersModule),
   },
 ];
 

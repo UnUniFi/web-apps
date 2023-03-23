@@ -1,0 +1,41 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <h2>Developers (Only Stable & Alpha)</h2>
+  </div>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Node Operations</h2>
+        <ul class="menu bg-base-100 w-full p-4 rounded-box">
+          <li (click)="onRebuild()">
+            <a class="flex gap-4">
+              <span class="flex-none">
+                <mat-icon color="primary">build</mat-icon>
+              </span>
+              <span class="flex-1 text-lg">Rebuild</span>
+            </a>
+          </li>
+          <li (click)="onRestart()">
+            <a>
+              <span class="flex-none">
+                <mat-icon color="primary">replay</mat-icon>
+              </span>
+              <span class="flex-1 text-lg">Restart</span>
+            </a>
+          </li>
+        </ul>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <th>Version</th>
+                <td>{{ version }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

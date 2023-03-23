@@ -12,7 +12,8 @@
       <span class="flex-auto"></span>
       <mat-form-field>
         <mat-select [(value)]="selectedTxType" (valueChange)="onSelectedTxTypeChanged($event)">
-          <mat-option *ngFor="let txType of txTypeOptions" [value]="txType">{{ txType }}
+          <mat-option *ngFor="let txType of txTypeOptions" [value]="txType"
+            >{{ txType }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -34,7 +35,8 @@
           <mat-list-item routerLink="/txs/{{ tx.txhash }}">
             <span class="pr-4 font-mono truncate">{{ tx.txhash }}</span>
             <span class="flex-auto"></span>
-            <span class="break-all truncate font-mono">{{ tx.timestamp | date: 'yy/MM/dd H:mm' }}
+            <span class="break-all truncate font-mono"
+              >{{ tx.timestamp | date : 'yy/MM/dd hh:mm' }}
             </span>
             <mat-divider *ngIf="!last"></mat-divider>
           </mat-list-item>

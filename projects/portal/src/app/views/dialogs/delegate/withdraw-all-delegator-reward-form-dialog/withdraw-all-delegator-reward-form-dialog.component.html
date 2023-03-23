@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<div>
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Claim all delegator rewards</div>
@@ -20,9 +20,9 @@
           <span class="w-2/3 break-all text-sm sm:text-base"
             >{{ validator?.description?.moniker }}
           </span>
-          <span class="w-1/3 break-all text-sm sm:text-base text-right pl-4"
-            >{{ toNumber(delegation.delegation?.shares ?? '0') }}
-            {{ delegation.balance?.denom }}</span
+          <span class="w-1/3 text-sm sm:text-base text-right pl-4"
+            >{{ delegation.delegation?.shares ?? '0' | coinAmount
+            }}{{ delegation.balance?.denom | coinDenom }}</span
           >
         </mat-list-item>
       </ng-container>
@@ -42,7 +42,7 @@
   </mat-list>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
-    <h3 class="pt-3">Gas Settings</h3>
+    <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -105,10 +105,10 @@
         >
         </mat-slider>
       </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
 
-    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
+    <button mat-flat-button class="my-4 px-8" color="accent" [disabled]="formRef.invalid">
       Claim Delegator Rewards
     </button>
   </form>
-</mat-dialog-content>
+</div>

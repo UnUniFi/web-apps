@@ -29,7 +29,7 @@ export class BankService {
       const amount = symbolAmountMap[symbol].toFixed(denomUnit.exponent!).replace('.', '');
       return {
         denom,
-        amount,
+        amount: parseInt(amount).toString(),
       } as cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     });
 

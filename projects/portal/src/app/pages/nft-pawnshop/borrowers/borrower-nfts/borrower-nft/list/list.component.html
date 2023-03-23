@@ -1,0 +1,7 @@
+<view-list
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-list>

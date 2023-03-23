@@ -1,0 +1,14 @@
+<view-pool
+  [pool]="pool$ | async"
+  [params]="params$ | async"
+  [dlpRates]="dlpRates$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  [symbolMetadataMap]="symbolMetadataMap$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [estimatedLPTAmount]="estimatedLPTAmount$ | async"
+  [estimatedRedeemAmount]="estimatedRedeemAmount$ | async"
+  (estimateMint)="onEstimateMint($event)"
+  (estimateBurn)="onEstimateBurn($event)"
+  (mintLPT)="onMintLPT($event)"
+  (burnLPT)="onBurnLPT($event)"
+></view-pool>

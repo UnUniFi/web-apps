@@ -68,7 +68,7 @@
           <span class="whitespace-nowrap">Commission: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.rate | percent: '1.0-0' }}
+            {{ validator?.val?.commission?.commission_rates?.rate | percent : '1.0-0' }}
           </span>
           <mat-divider></mat-divider>
         </mat-list-item>
@@ -77,7 +77,7 @@
           <span class="whitespace-nowrap">Max Commission: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.max_rate | percent: '1.0-0' }}
+            {{ validator?.val?.commission?.commission_rates?.max_rate | percent : '1.0-0' }}
           </span>
           <mat-divider></mat-divider>
         </mat-list-item>
@@ -86,7 +86,7 @@
           <span class="break-words">Commission Updated: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.update_time | date: 'yyyy-M-d a h:mm:ss z' }}
+            {{ validator?.val?.commission?.update_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}
           </span>
           <mat-divider></mat-divider>
         </mat-list-item>
@@ -104,7 +104,7 @@
           <span class="break-words">Voting Power: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
-            {{ validator?.share | percent: '1.2-2' }}
+            {{ validator?.share | percent : '1.2-2' }}
           </span>
           <mat-divider></mat-divider>
         </mat-list-item>
@@ -112,7 +112,7 @@
         <mat-list-item>
           <span class="whitespace-nowrap">Staked: </span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.val?.tokens | number: '1.0-0' }}</span>
+          <span class="ml-2 break-all">{{ validator?.val?.tokens | coinAmount }}</span>
         </mat-list-item>
       </mat-list>
     </mat-card-content>

@@ -1,7 +1,7 @@
 import { MaterialModule } from '../../material.module';
 import {
   CreateValidatorMultipleComponent,
-  ValidatorDialog,
+  ValidatorDialogComponent,
 } from './create-validator-multiple.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -11,7 +11,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
-  declarations: [CreateValidatorMultipleComponent, ValidatorDialog],
+  declarations: [CreateValidatorMultipleComponent, ValidatorDialogComponent],
   imports: [
     CommonModule,
     FormsModule,

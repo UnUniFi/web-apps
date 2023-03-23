@@ -4,21 +4,15 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'percentage',
 })
 export class PercentagePipe implements PipeTransform {
-  transform(value: string | null | undefined): unknown {
+  transform(value: string | number | null | undefined): unknown {
     if (value === undefined || value === null) {
       return value;
     }
     if (!Number(value)) {
-      return '';
+      return '0%';
     }
 
     const percent = (Number(value) * 100).toLocaleString();
-    const index = percent.indexOf('.');
-    if (index == -1 && Number(percent)) {
-      return percent;
-    }
-    const numString = percent.substring(0, index);
-
-    return Number(numString).toLocaleString();
+    return percent.toLocaleString() + '%';
   }
 }

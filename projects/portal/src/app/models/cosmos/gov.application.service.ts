@@ -5,6 +5,10 @@ import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
 } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
@@ -37,14 +41,26 @@ export class GovApplicationService {
     const txHash = await this.dialog
       .open<string>(VoteFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your vote.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
       .open<string>(DepositFormDialogComponent, { data: proposalID })
       .closed.toPromise();
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your deposit to the proposal.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   // WIP
@@ -131,9 +147,15 @@ export class GovApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
+    // this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent your proposal.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async Vote(

@@ -4,7 +4,7 @@
 <div class="flex flex-col">
   <mat-card class="mb-4">
     <mat-nav-list>
-      <mat-list-item *ngIf="unitIds === undefined"> No Tokens! </mat-list-item>
+      <mat-list-item *ngIf="!unitIds"> No Tokens! </mat-list-item>
       <mat-list-item *ngIf="unitIds && unitIds.length === 0"> No Tokens! </mat-list-item>
       <ng-container *ngIf="unitIds && unitIds.length > 0">
         <ng-container *ngFor="let unitId of unitIds; last as last">
@@ -17,7 +17,7 @@
     </mat-nav-list>
   </mat-card>
 
-  <button class="mb-4" mat-flat-button color="accent" (click)="onClickCreate()">
+  <button class="mb-4" mat-flat-button color="primary" (click)="onClickCreate()">
     Create New Token
   </button>
 </div>

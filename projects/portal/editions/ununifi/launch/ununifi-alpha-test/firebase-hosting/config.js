@@ -5,10 +5,11 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const developerPort = location.protocol === 'https:' ? 3032 : 3030;
 
-const domainCauchyEA = 'ununifi-alpha-test-v3.cauchye.net';
+const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
 
-const chainID = 'ununifi-alpha-test-v3';
+const chainID = 'ununifi-alpha-test';
 const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
@@ -59,18 +60,54 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
           denom: 'ubtc',
-          creditAmount: 100, // amount to credit in max request
-          maxCredit: 99, // account has already maxCredit balance cannot claim anymore
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
         },
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 99,
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
         },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
+        //   denom: 'jpu',
+        //   creditAmount: 10,
+        //   maxCredit: 9,
+        // },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
+        //   denom: 'ueth',
+        //   creditAmount: 1000,
+        //   maxCredit: 999,
+        // },
+        // {
+        //   hasFaucet: false,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
+        //   denom: 'euu',
+        //   creditAmount: 10,
+        //   maxCredit: 9,
+        // },
       ],
       monitor: undefined,
+      nftMint: {
+        enabled: true,
+        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+      },
+      developer: {
+        enabled: true,
+        developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
+      },
       navigations: [],
       messageModules,
     },

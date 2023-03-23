@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="mb-8">
+  <div class="flex flex-col md:flex-row mb-4">
     <div class="stats shadow">
       <div class="stat">
         <div class="stat-title">Deposited</div>
@@ -12,6 +12,10 @@
         <div class="stat-desc"></div>
       </div>
     </div>
+    <span class="flex-auto"></span>
+    <button class="btn btn-outline btn-secondary px-8 my-4" routerLink="/yield-aggregator">
+      Top page
+    </button>
   </div>
 
   <h2>Vaults</h2>
@@ -50,7 +54,9 @@
       </div>
     </div>
   </div>
-  <div class="overflow-x-auto">
+
+  <h3>Select the Vault to deposit</h3>
+  <div class="overflow-x-auto mb-8">
     <table class="table w-full">
       <!-- head -->
       <thead>
@@ -64,7 +70,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="hover" routerLink="1">
+        <tr class="hover cursor-pointer" routerLink="1">
           <th>#1</th>
           <th>Dev axlUSDC</th>
           <th>axlUSDC</th>
@@ -72,7 +78,7 @@
           <td>$ 581,209</td>
           <td>129.75</td>
         </tr>
-        <tr class="hover" routerLink="2">
+        <tr class="hover cursor-pointer" routerLink="2">
           <th>#2</th>
           <th>Dev Cosmos</th>
           <th>ATOM</th>
@@ -80,7 +86,7 @@
           <td>$ 920,204</td>
           <td>36.03</td>
         </tr>
-        <tr class="hover" routerLink="3">
+        <tr class="hover cursor-pointer" routerLink="3">
           <th>#3</th>
           <th>Dev UnUniFi</th>
           <th>GUU</th>
@@ -91,9 +97,22 @@
       </tbody>
     </table>
   </div>
-</div>
 
-<!-- <h2 class="mb-0">Available Vaults</h2>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <h2 class="card-title">Create a Original Vault</h2>
+      <p>
+        You can create an original vault. You can set the Asset, Weights of Strategies & Commission
+        Rate. By creating a great Vault, you can earn commissions from your users.
+      </p>
+      <div class="card-actions justify-end">
+        <button class="btn btn-outline btn-info">View Strategies</button>
+        <button class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- <h2 class="mb-0">Available Vaults</h2>
 <div class="flex flex-wrap">
   <mat-card
     class="cursor-pointer card text-center w-64 m-5"
@@ -136,3 +155,4 @@
     </mat-card-content>
   </mat-card>
 </div> -->
+</div>

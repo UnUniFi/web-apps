@@ -48,11 +48,6 @@
                 <th>Started at</th>
                 <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
               </tr>
-
-              <tr>
-                <th class="text-primary">Value for you (POC)</th>
-                <td>{{ getPocValue() }}</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -248,11 +243,11 @@
                   />
                 </label>
 
-                <label class="label" *ngIf="!within3Days">
+                <!-- <label class="label" *ngIf="!within3Days">
                   <span class="label-text-alt text-error"
                     >Please set Expiration Date within 3 days.</span
                   >
-                </label>
+                </label> -->
               </div>
 
               <!-- <div class="form-control">
@@ -292,9 +287,7 @@
                   Simulate
                 </button>
                 <span class="w-full md:w-2"></span>
-                <button class="btn btn-primary" [disabled]="formRef.invalid || !within3Days">
-                  Make Offer
-                </button>
+                <button class="btn btn-primary" [disabled]="formRef.invalid">Make Offer</button>
               </div>
             </form>
           </div>

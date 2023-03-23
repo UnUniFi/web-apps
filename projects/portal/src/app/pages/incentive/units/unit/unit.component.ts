@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
-import { Observable, of } from 'rxjs';
+import { IncentiveQueryService } from 'projects/portal/src/app/models/incentives/incentive.query.service';
+import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { IncentiveUnit200ResponseIncentiveUnit } from 'ununifi-client/esm/openapi';
 
@@ -22,13 +22,13 @@ export class UnitComponent implements OnInit {
   txMemo$: Observable<string>;
   unit$: Observable<IncentiveUnit200ResponseIncentiveUnit>;
 
-  constructor(private route: ActivatedRoute, private ununifiRest: UnunifiRestService) {
+  constructor(private route: ActivatedRoute, private incentiveQuery: IncentiveQueryService) {
     this.unitId$ = this.route.params.pipe(map((params) => params.unit_id));
     this.txMemo$ = this.unitId$.pipe(
       map((id) => JSON.stringify({ version: 'v1', 'incentive-unit-id': id })),
     );
     this.unit$ = this.unitId$.pipe(
-      mergeMap((unitId) => this.ununifiRest.getIncentiveUnit$(unitId)),
+      mergeMap((unitId) => this.incentiveQuery.getIncentiveUnit$(unitId)),
     );
   }
 

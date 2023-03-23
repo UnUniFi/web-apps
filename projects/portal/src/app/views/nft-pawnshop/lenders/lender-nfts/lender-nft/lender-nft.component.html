@@ -28,11 +28,11 @@
               </tr>
               <tr>
                 <th>Minimum deposit rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate }}</td>
+                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
               </tr>
               <tr>
                 <th>Started at</th>
-                <td>{{ listingInfo?.started_at }}</td>
+                <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               </tr>
             </tbody>
           </table>

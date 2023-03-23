@@ -63,7 +63,7 @@ export class PoolComponent implements OnInit, OnChanges {
   @Output()
   burnLPT = new EventEmitter<BurnLPTEvent>();
 
-  tab: 'mint' | 'burn' = 'mint';
+  tab: 'buy' | 'sell' = 'buy';
   poolAcceptedSymbols: string[] = ['BTC', 'USDC'];
   mintSymbol: string = 'BTC';
   redeemSymbol: string = 'BTC';

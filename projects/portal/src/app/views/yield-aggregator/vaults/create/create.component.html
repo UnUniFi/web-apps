@@ -72,6 +72,23 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Select Strategies</span>
+              <!-- The button to open modal -->
+              <label for="modal-strategy"><mat-icon>help</mat-icon></label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-strategy" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the strategies?</h3>
+                  <p class="py-4">
+                    To create a new Vault, one or more strategies must be combined. It should be set
+                    up so that the total weighting is 100%.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-strategy" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <label class="input-group mb-2">
               <select class="select select-bordered w-1/2 lg:w-1/4">
@@ -81,20 +98,43 @@
                 <option>Mars</option>
                 <option>Jupiter</option>
               </select>
-              <input type="number" placeholder="12.123456" class="input input-bordered w-full" />
+              <input
+                type="number"
+                placeholder="100"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [(ngModel)]="firstStrategy.distRate"
+                class="input input-bordered w-full"
+              />
               <span>%</span>
+              <label class="btn btn-outline btn-disabled">
+                <mat-icon>star</mat-icon>
+              </label>
             </label>
-            <div *ngFor="let strategy of strategies">
+            <div *ngFor="let strategy of strategies; let i = index">
               <label class="input-group mb-2">
-                <select class="select select-bordered">
+                <select class="select select-bordered w-1/2 lg:w-1/4">
                   <option disabled selected>Select a strategy</option>
                   <option>Mercury</option>
                   <option>Venus</option>
                   <option>Mars</option>
                   <option>Jupiter</option>
                 </select>
-                <input type="number" placeholder="12.123456" class="input input-bordered w-full" />
+                <input
+                  type="number"
+                  placeholder="0"
+                  [min]="0"
+                  [max]="100"
+                  [step]="1"
+                  [(ngModel)]="strategy.distRate"
+                  name="strategyWeight"
+                  class="input input-bordered w-full"
+                />
                 <span>%</span>
+                <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                  <mat-icon>delete</mat-icon>
+                </label>
               </label>
             </div>
           </div>
@@ -105,6 +145,22 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Deposit</span>
+              <!-- The button to open modal -->
+              <label for="modal-deposit"><mat-icon>help</mat-icon></label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the deposit?</h3>
+                  <p class="py-4">
+                    The creator must deposit a specified amount of tokens in advance in the Vault.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-deposit" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <label class="input-group">
               <input type="number" value="0.1" disabled class="input input-bordered w-full" />
@@ -114,6 +170,20 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Fee</span>
+              <!-- The button to open modal -->
+              <label for="modal-fee"><mat-icon>help</mat-icon></label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-fee" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the fee?</h3>
+                  <p class="py-4">A specified fee is charged for the creation of a new Vault.</p>
+                  <div class="modal-action">
+                    <label for="modal-fee" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <label class="input-group">
               <input type="number" value="5" disabled class="input input-bordered w-full" />

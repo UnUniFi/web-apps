@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
-  firstStrategy = { id: '', distRate: 0 };
+  firstStrategy = { id: '', distRate: 100 };
   strategies: { id: string; distRate: number }[] = [];
   selectedSymbol = 'USDC';
 
@@ -16,5 +16,8 @@ export class CreateComponent implements OnInit {
 
   onClickAddStrategy() {
     this.strategies.push({ id: '', distRate: 0 });
+  }
+  onClickDeleteStrategy(index: number) {
+    this.strategies.splice(index, 1);
   }
 }

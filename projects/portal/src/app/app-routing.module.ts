@@ -58,25 +58,25 @@ const routes: Routes = [
     path: 'vote',
     loadChildren: () => import('./pages/vote/vote.module').then((m) => m.AppVoteModule),
   },
-  {
-    path: 'incentive',
-    loadChildren: () =>
-      import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
-  },
-  {
-    path: 'nft-backed-loan',
-    loadChildren: () =>
-      import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
-  },
-  {
-    path: 'nfts',
-    loadChildren: () => import('./pages/nfts/nfts.module').then((m) => m.AppNftsModule),
-  },
-  {
-    path: 'derivatives',
-    loadChildren: () =>
-      import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
-  },
+  // {
+  //   path: 'incentive',
+  //   loadChildren: () =>
+  //     import('./pages/incentive/incentive.module').then((m) => m.AppIncentiveModule),
+  // },
+  // {
+  //   path: 'nft-backed-loan',
+  //   loadChildren: () =>
+  //     import('./pages/nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
+  // },
+  // {
+  //   path: 'nfts',
+  //   loadChildren: () => import('./pages/nfts/nfts.module').then((m) => m.AppNftsModule),
+  // },
+  // {
+  //   path: 'derivatives',
+  //   loadChildren: () =>
+  //     import('./pages/derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
+  // },
   {
     path: 'developers',
     loadChildren: () =>

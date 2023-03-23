@@ -1,17 +1,24 @@
 <div class="mx-auto max-w-screen-xl">
   <h2>Place Bid to lend tokens</h2>
   <div class="text-base-content max-w-full">
-    <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <div class="card lg:card-side bg-base-100 shadow-xl mb-4 w-full xl:w-auto">
       <figure class="aspect-square w-full">
         <!-- img width setting not working -->
-        <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT" class="h-full object-cover" />
+        <img
+          src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+          alt="image of the NFT"
+          class="h-full object-cover"
+        />
       </figure>
       <div class="card-body w-full lg:w-2/3">
         <div class="flex flex-row">
           <div class="badge badge-lg badge-primary">
             {{ listingInfo?.state || 'NOT_LISTING' }}
           </div>
-          <div class="badge badge-lg badge-secondary ml-2" *ngIf="listingInfo?.owner === currentStoredWallet?.address">
+          <div
+            class="badge badge-lg badge-secondary ml-2"
+            *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+          >
             Your NFT
           </div>
         </div>
@@ -54,17 +61,26 @@
 
     <ng-container *ngIf="listingInfo?.owner !== currentStoredWallet?.address; else listerSelf">
       <div class="flex flex-row flex-wrap mb-8">
-        <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto xl:mr-8">
+        <div
+          #chartCardRef
+          class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto mb-4 xl:mr-8"
+        >
           <div class="card-body w-auto">
             <h3 class="card-title">Offers</h3>
           </div>
 
-          <google-chart *ngIf="chartData" [title]="chartTitle" [type]="chartType" [data]="chartData"
-            [columns]="chartColumns" [options]="chartOptions">
+          <google-chart
+            *ngIf="chartData"
+            [title]="chartTitle"
+            [type]="chartType"
+            [data]="chartData"
+            [columns]="chartColumns"
+            [options]="chartOptions"
+          >
           </google-chart>
         </div>
 
-        <div class="card bg-base-100 shadow-xl w-full xl:w-96">
+        <div class="card bg-base-100 shadow-xl w-full xl:w-96 mb-4">
           <div class="card-body">
             <h3 class="card-title">Make Offer</h3>
             <form #formRef="ngForm" (submit)="onSubmit()">
@@ -92,10 +108,18 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input #bidAmountNgModelRef="ngModel" required type="number" name="bidAmount" [(ngModel)]="bidAmount"
+                  <input
+                    #bidAmountNgModelRef="ngModel"
+                    required
+                    type="number"
+                    name="bidAmount"
+                    [(ngModel)]="bidAmount"
                     class="input input-bordered w-full"
-                    [class]="{'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.dirty}"
-                    pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                    [class]="{
+                      'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.dirty
+                    }"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
                   <span>{{ depositSymbol }}</span>
                 </label>
               </div>
@@ -121,10 +145,18 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input #depositAmountNgModelRef="ngModel" required type="number" name="depositAmount"
-                    [(ngModel)]="depositAmount" class="input input-bordered w-full"
-                    [class]="{'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.dirty}"
-                    pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                  <input
+                    #depositAmountNgModelRef="ngModel"
+                    required
+                    type="number"
+                    name="depositAmount"
+                    [(ngModel)]="depositAmount"
+                    class="input input-bordered w-full"
+                    [class]="{
+                      'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.dirty
+                    }"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  />
                   <span>{{ depositSymbol }}</span>
                 </label>
                 <label class="label">
@@ -155,10 +187,18 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input #interestRateNgModelRef="ngModel" required type="number" name="interestRate"
-                    [(ngModel)]="interestRate" class="input input-bordered w-full"
-                    [class]="{'input-error': interestRateNgModelRef.errors && interestRateNgModelRef.dirty}"
-                    pattern="^[0-9]*\.?[0-9]{0,4}$" />
+                  <input
+                    #interestRateNgModelRef="ngModel"
+                    required
+                    type="number"
+                    name="interestRate"
+                    [(ngModel)]="interestRate"
+                    class="input input-bordered w-full"
+                    [class]="{
+                      'input-error': interestRateNgModelRef.errors && interestRateNgModelRef.dirty
+                    }"
+                    pattern="^[0-9]*\.?[0-9]{0,4}$"
+                  />
                   <span>%</span>
                 </label>
               </div>
@@ -187,14 +227,29 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input required type="date" name="expiryDate" [(ngModel)]="date" class="input input-bordered w-3/5"
-                    (change)="onChangeDate()" />
-                  <input #timeRef type="time" required name="expiryTime" [(ngModel)]="time"
-                    class="input input-bordered w-2/5" (change)="onChangeDate()" />
+                  <input
+                    required
+                    type="date"
+                    name="expiryDate"
+                    [(ngModel)]="date"
+                    class="input input-bordered w-3/5"
+                    (change)="onChangeDate()"
+                  />
+                  <input
+                    #timeRef
+                    type="time"
+                    required
+                    name="expiryTime"
+                    [(ngModel)]="time"
+                    class="input input-bordered w-2/5"
+                    (change)="onChangeDate()"
+                  />
                 </label>
 
                 <label class="label" *ngIf="!within3Days">
-                  <span class="label-text-alt text-error">Please set Expiration Date within 3 days.</span>
+                  <span class="label-text-alt text-error"
+                    >Please set Expiration Date within 3 days.</span
+                  >
                 </label>
               </div>
 
@@ -268,7 +323,8 @@
           <tbody>
             <tr *ngFor="let bidder of bidders; let i = index">
               <ng-container
-                *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"></ng-container>
+                *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"
+              ></ng-container>
               <ng-template #color>
                 <th class="text-secondary">#{{ i + 1 }}</th>
                 <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>

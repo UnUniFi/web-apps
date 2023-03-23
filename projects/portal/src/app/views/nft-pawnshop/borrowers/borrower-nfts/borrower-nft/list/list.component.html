@@ -6,7 +6,11 @@
     <div class="text-base-content max-w-full">
       <div class="card lg:card-side bg-base-100 shadow-xl">
         <figure class="aspect-square w-full">
-          <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT" class="h-full object-cover" />
+          <img
+            src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+            alt="image of the NFT"
+            class="h-full object-cover"
+          />
         </figure>
         <div class="card-body w-2/3">
           <div class="flex flex-row">
@@ -62,7 +66,8 @@
                       <p class="py-4">
                         For example, imagine that you set it as 10%. Then some users offer the bid
                         to your NFT with a price of 2GUU. In this situation, that user has to
-                        deposit not less than 0.2GUU.
+                        deposit not less than 0.2GUU. That deposit amount is the amount of token you
+                        can borrow.
                       </p>
                       <div class="modal-action">
                         <label for="modal-minimum-deposit" class="btn">Understood</label>
@@ -71,9 +76,17 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input #minDepositRateNgModelRef="ngModel" required type="number" name="minDepositRate"
-                    [(ngModel)]="minDepositRate" placeholder="1.5" class="input input-bordered w-full"
-                    [class]="{'input-error': minDepositRateNgModelRef.errors}" pattern="^[0-9]*\.?[0-9]{0,4}$" />
+                  <input
+                    #minDepositRateNgModelRef="ngModel"
+                    required
+                    type="number"
+                    name="minDepositRate"
+                    [(ngModel)]="minDepositRate"
+                    placeholder="1.5"
+                    class="input input-bordered w-full"
+                    [class]="{ 'input-error': minDepositRateNgModelRef.errors }"
+                    pattern="^[0-9]*\.?[0-9]{0,4}$"
+                  />
                   <span>%</span>
                 </label>
               </div>

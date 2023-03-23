@@ -1,11 +1,10 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { IncentiveApplicationService } from 'projects/portal/src/app/models/incentives/incentive.application.service';
-import { UnunifiRestService } from 'projects/portal/src/app/models/ununifi-rest.service';
+import { IncentiveQueryService } from 'projects/portal/src/app/models/incentives/incentive.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { WithdrawAllRewardsOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.component';
@@ -32,10 +31,9 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
     public dialogRef: DialogRef<string, WithdrawIncentiveAllRewardsFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
-    private readonly snackBar: MatSnackBar,
     private readonly cosmosRest: CosmosRestService,
     private readonly incentiveApp: IncentiveApplicationService,
-    private ununifiRest: UnunifiRestService,
+    private incentiveQuery: IncentiveQueryService,
   ) {
     this.address = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -51,7 +49,7 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
       }),
     );
 
-    this.rewards$ = this.ununifiRest.getAllRewards$(this.address);
+    this.rewards$ = this.incentiveQuery.getAllRewards$(this.address);
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 

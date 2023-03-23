@@ -1,10 +1,10 @@
 import { IncentiveApplicationService } from '../../models/incentives/incentive.application.service';
-import { UnunifiRestService } from '../../models/ununifi-rest.service';
+import { IncentiveQueryService } from '../../models/incentives/incentive.query.service';
 import { StoredWallet } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/openapi';
 
@@ -22,7 +22,7 @@ export class IncentiveComponent implements OnInit {
   constructor(
     private readonly incentiveApp: IncentiveApplicationService,
     private readonly walletService: WalletService,
-    private ununifiRest: UnunifiRestService,
+    private incentiveQuery: IncentiveQueryService,
   ) {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
@@ -31,11 +31,11 @@ export class IncentiveComponent implements OnInit {
     );
     this.address$ = address$.pipe(map((addr) => addr.toString()));
     this.unitIds$ = address$.pipe(
-      mergeMap((address) => this.ununifiRest.listIncentiveUnitIdsByAddr$(address.toString())),
+      mergeMap((address) => this.incentiveQuery.listIncentiveUnitIdsByAddr$(address.toString())),
       map((res) => res.incentive_unit_ids),
     );
     this.rewards$ = address$.pipe(
-      mergeMap((address) => this.ununifiRest.getAllRewards$(address.toString())),
+      mergeMap((address) => this.incentiveQuery.getAllRewards$(address.toString())),
     );
   }
 

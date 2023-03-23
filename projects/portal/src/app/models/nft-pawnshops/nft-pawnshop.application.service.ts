@@ -268,9 +268,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    const dialogRef = this.loadingDialog.open('Loading');
-    await this.waitSeconds(5);
-    dialogRef.close();
     // this.snackBar.open('Successfully cancelled bid.', undefined, {
     //   duration: 6000,
     // });

@@ -82,6 +82,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/developers/developers.module').then((m) => m.AppDevelopersModule),
   },
+  {
+    path: 'yield-aggregator',
+    loadChildren: () =>
+      import('./pages/yield-aggregator/yield-aggregator.module').then(
+        (m) => m.AppYieldAggregatorModule,
+      ),
+  },
 ];
 
 @NgModule({

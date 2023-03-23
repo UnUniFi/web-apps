@@ -159,6 +159,14 @@
           <span class="flex-1">Derivatives</span>
         </label>
       </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/yield-aggregator">
+          <span class="flex-none">
+            <mat-icon color="primary">pie_chart</mat-icon>
+          </span>
+          <span class="flex-1">Yield Aggregator</span>
+        </label>
+      </li>
       <ng-template ngFor let-navigation [ngForOf]="navigations">
         <ng-container *ngIf="navigation?.name && navigation?.link">
           <li>

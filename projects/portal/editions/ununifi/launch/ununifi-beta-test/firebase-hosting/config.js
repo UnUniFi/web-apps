@@ -5,6 +5,7 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const developerPort = location.protocol === 'https:' ? 3032 : 3030;
 
 const domainCauchyEA = 'ununifi-beta-test.cauchye.net';
 
@@ -66,15 +67,15 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000,
-          maxCredit: 2000000,
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
         },
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uusdc',
-          creditAmount: 2000000,
-          maxCredit: 2000000,
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
         },
         // {
         //   hasFaucet: false,
@@ -102,6 +103,10 @@ const configs = [
       nftMint: {
         enabled: true,
         nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+      },
+      developer: {
+        enabled: false,
+        developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
       },
       navigations: [],
       messageModules,

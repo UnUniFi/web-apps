@@ -2,21 +2,22 @@
 <div class="card-body">
   <div class="flex flex-col items-center">
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <ng-container *ngIf="txHash; then exist; else empty"></ng-container>
+    <ng-container *ngIf="txData; then exist; else empty"></ng-container>
     <ng-template #exist>
-      <div class="font-bold text-xl m-3">Transaction has been sent successfully!</div>
+      <div class="font-bold text-xl m-3">Transaction accepted!</div>
+      <div class="text-xl m-3" style="white-space: pre-wrap">{{ txData?.msg }}</div>
       <form (submit)="onClickClose()">
         <div class="hidden md:block mockup-code text-primary-content mb-4">
-          <pre><code class="break-all">{{ txHash }}</code></pre>
+          <pre><code class="break-all">{{ txData?.txHash }}</code></pre>
           <div class="flex flex-row justify-end">
-            <label class="btn" (click)="copyClipboard(txHash!)">
+            <label class="btn" (click)="copyClipboard(txData?.txHash!)">
               <mat-icon>content_copy</mat-icon>Copy
             </label>
           </div>
         </div>
         <div class="flex flex-col md:hidden">
           <P class="text-md">Tx hash</P>
-          <p class="text-lg break-all">{{ txHash }}</p>
+          <p class="text-lg break-all">{{ txData?.txHash }}</p>
         </div>
 
         <div class="flex flex-col md:flex-row justify-end">
@@ -36,3 +37,35 @@
   </div>
 </div>
 </div>
+
+<!-- To Do use this one -->
+<!-- <div class="text-base-content max-w-full">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <h2 class="card-title">Transaction accepted!</h2>
+      <p style="white-space: pre-wrap">{{ txData?.msg }}</p>
+      <form (submit)="onClickClose()">
+        <div class="hidden md:block mockup-code text-primary-content mb-4">
+          <pre><code class="break-all">{{ txData?.txHash }}</code></pre>
+          <div class="flex flex-row justify-end">
+            <label class="btn" (click)="copyClipboard(txData?.txHash!)">
+              <mat-icon>content_copy</mat-icon>Copy
+            </label>
+          </div>
+        </div>
+        <div class="flex flex-col md:hidden">
+          <P class="text-md">Tx hash</P>
+          <p class="text-lg break-all">{{ txData?.txHash }}</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-end">
+          <label class="btn btn-outline btn-info px-8 mb-4 md:mr-4" (click)="onClickOpenTxDetail()"
+            >View</label
+          >
+          <button class="btn btn-secondary px-8">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> -->

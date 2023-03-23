@@ -1,67 +1,72 @@
-<div class="flex justify-center">
-  <div class="text-base-content max-w-full">
-    <div class="card lg:card-side bg-base-100 shadow-xl">
-      <figure class="aspect-square w-full">
-        <!-- img width setting not working -->
-        <img
-          src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
-          alt="image of the NFT"
-          class="h-full object-cover"
-        />
-      </figure>
-      <div class="card-body w-full lg:w-2/3">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary">{{ listingInfo?.state || 'NOT_LISTING' }}</div>
-          <div
-            class="badge badge-lg badge-secondary ml-2"
-            *ngIf="listingInfo?.owner === currentStoredWallet?.address"
-          >
-            Your NFT
-          </div>
-        </div>
-        <h2 class="card-title break-all">
-          {{ nftMetadata?.name || classID + '/' + nftID }}
-        </h2>
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr>
-                <th>Class ID</th>
-                <td>{{ classID }}</td>
-              </tr>
-              <tr>
-                <th>NFT ID</th>
-                <td>{{ nftID }}</td>
-              </tr>
-              <tr>
-                <th>Minimum Deposit Rate</th>
-                <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
-              </tr>
-              <tr>
-                <th>Owner</th>
-                <td>{{ listingInfo?.owner }}</td>
-              </tr>
-              <tr>
-                <th>Started at</th>
-                <td>{{ listingInfo?.started_at | date : 'yyyy-M-d a h:mm:ss z' }}</td>
-              </tr>
-
-              <tr>
-                <th class="text-primary">Value for you (POC)</th>
-                <td>{{ getPocValue() }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+<div class="mb-4">
+  <h2>Place Bid to lend tokens</h2>
+</div>
+<div class="card lg:card-side bg-base-100 shadow-xl mb-8 w-full xl:w-auto">
+  <figure class="aspect-square w-full">
+    <!-- img width setting not working -->
+    <img
+      src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+      alt="image of the NFT"
+      class="h-full object-cover"
+    />
+  </figure>
+  <div class="card-body w-full lg:w-2/3">
+    <div class="flex flex-row">
+      <div class="badge badge-lg badge-primary">
+        {{ listingInfo?.state || 'NOT_LISTING' }}
+      </div>
+      <div
+        class="badge badge-lg badge-secondary ml-2"
+        *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+      >
+        Your NFT
       </div>
     </div>
+    <h2 class="card-title break-all">
+      {{ nftMetadata?.name || classID + '/' + nftID }}
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>Class ID</th>
+            <td>{{ classID }}</td>
+          </tr>
+          <tr>
+            <th>NFT ID</th>
+            <td>{{ nftID }}</td>
+          </tr>
+          <tr>
+            <th>Minimum Deposit Rate</th>
+            <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
+          </tr>
+          <tr>
+            <th>Owner</th>
+            <td>{{ listingInfo?.owner }}</td>
+          </tr>
+          <tr>
+            <th>Started at</th>
+            <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-    <br />
+<div>
+  <ng-container *ngIf="listingInfo?.owner !== currentStoredWallet?.address; else listerSelf">
+    <div class="flex flex-row flex-wrap mb-8">
+      <div
+        #chartCardRef
+        class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto mb-4 xl:mr-8"
+      >
+        <div class="card-body w-auto">
+          <h3 class="card-title">Offers</h3>
+        </div>
 
-    <div class="flex flex-col xl:flex-row">
-      <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 xl:mb-0 xl:mr-4">
-        <h3 class="m-4 card-title">Offers</h3>
         <google-chart
+          class="mb-20"
           *ngIf="chartData"
           [title]="chartTitle"
           [type]="chartType"
@@ -72,10 +77,9 @@
         </google-chart>
       </div>
 
-      <span class="flex-auto"></span>
-      <div class="card bg-base-100 shadow-xl w-full xl:w-auto">
-        <h3 class="m-4 card-title">Make Offer</h3>
+      <div class="card bg-base-100 shadow-xl w-full xl:w-96 mb-4">
         <div class="card-body">
+          <h3 class="card-title">Make Offer</h3>
           <form #formRef="ngForm" (submit)="onSubmit()">
             <div class="form-control">
               <span class="label">
@@ -102,11 +106,15 @@
               </span>
               <label class="input-group">
                 <input
+                  #bidAmountNgModelRef="ngModel"
                   required
                   type="number"
                   name="bidAmount"
                   [(ngModel)]="bidAmount"
                   class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.touched
+                  }"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
                 <span>{{ depositSymbol }}</span>
@@ -135,11 +143,15 @@
               </span>
               <label class="input-group">
                 <input
+                  #depositAmountNgModelRef="ngModel"
                   required
                   type="number"
                   name="depositAmount"
                   [(ngModel)]="depositAmount"
                   class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                  }"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
                 <span>{{ depositSymbol }}</span>
@@ -173,11 +185,15 @@
               </span>
               <label class="input-group">
                 <input
+                  #interestRateNgModelRef="ngModel"
                   required
                   type="number"
                   name="interestRate"
                   [(ngModel)]="interestRate"
                   class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': interestRateNgModelRef.errors && interestRateNgModelRef.touched
+                  }"
                   pattern="^[0-9]*\.?[0-9]{0,4}$"
                 />
                 <span>%</span>
@@ -227,11 +243,9 @@
                 />
               </label>
 
-              <label class="label" *ngIf="!within3Days">
-                <span class="label-text-alt text-error"
-                  >Please set Expiration Date within 3 days.</span
-                >
-              </label>
+              <!-- <label class="label" *ngIf="!within3Days">
+                <span class="label-text-alt text-error">Please set Expiration Date within 3 days.</span>
+              </label> -->
             </div>
 
             <!-- <div class="form-control">
@@ -266,76 +280,65 @@
               </label>
             </div> -->
 
-            <br />
-            <div class="flex flex-col md:flex-row justify-end">
-              <button
-                type="button"
-                class="btn btn-primary btn-outline mb-2 md:-mb-2 md:mr-2 px-8"
-                (click)="onSimulate()"
-              >
+            <div class="flex flex-row flex-wrap justify-end mt-4">
+              <button type="button" class="btn btn-primary btn-outline" (click)="onSimulate()">
                 Simulate
               </button>
-              <button
-                *ngIf="listingInfo?.owner !== currentStoredWallet?.address"
-                class="btn btn-primary px-8"
-                [disabled]="formRef.invalid || !within3Days"
-              >
-                Make Offer
-              </button>
-              <button
-                *ngIf="listingInfo?.owner === currentStoredWallet?.address"
-                class="btn btn-disabled px-8"
-              >
-                Your Listing
-              </button>
+              <span class="w-full md:w-2"></span>
+              <button class="btn btn-primary" [disabled]="formRef.invalid">Make Offer</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-
-    <br />
-
-    <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
-      <div class="overflow-x-auto">
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th></th>
-              <td>Interest</td>
-              <td>Deposit</td>
-              <td>Bid price</td>
-              <td>Expiry</td>
-              <td>Bidder</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bidder of bidders; let i = index">
-              <ng-container
-                *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"
-              ></ng-container>
-              <ng-template #color>
-                <th class="text-secondary">#{{ i + 1 }}</th>
-                <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>
-                <td class="text-secondary">{{ bidder.deposit_amount | coin }}</td>
-                <td class="text-secondary">{{ bidder.bid_amount | coin }}</td>
-                <td class="text-secondary">
-                  {{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}
-                </td>
-                <td class="text-secondary">{{ bidder.bidder }}</td>
-              </ng-template>
-              <ng-template #normal>
-                <th>#{{ i + 1 }}</th>
-                <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-                <td>{{ bidder.deposit_amount | coin }}</td>
-                <td>{{ bidder.bid_amount | coin }}</td>
-                <td>{{ bidder.bidding_period | date : 'yyyy-M-d a h:mm z' }}</td>
-                <td>{{ bidder.bidder }}</td>
-              </ng-template>
-            </tr>
-          </tbody>
-        </table>
+  </ng-container>
+  <ng-template #listerSelf>
+    <div class="card bg-base-100 mb-8">
+      <div class="flex flex-row justify-center items-center h-96">
+        <p>You can't bid to your own NFT.</p>
       </div>
     </div>
+  </ng-template>
+</div>
+
+<div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th></th>
+          <td>Interest</td>
+          <td>Deposit</td>
+          <td>Bid price</td>
+          <td>Expiry</td>
+          <td>Bidder</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bidder of bidders; let i = index">
+          <ng-container
+            *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"
+          ></ng-container>
+          <ng-template #color>
+            <th class="text-secondary">#{{ i + 1 }}</th>
+            <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>
+            <td class="text-secondary">{{ bidder.deposit_amount | coin }}</td>
+            <td class="text-secondary">{{ bidder.bid_amount | coin }}</td>
+            <td class="text-secondary">
+              {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
+            </td>
+            <td class="text-secondary">{{ bidder.bidder }}</td>
+          </ng-template>
+          <ng-template #normal>
+            <th>#{{ i + 1 }}</th>
+            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+            <td>{{ bidder.deposit_amount | coin }}</td>
+            <td>{{ bidder.bid_amount | coin }}</td>
+            <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+            <td>{{ bidder.bidder }}</td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -1,4 +1,12 @@
 <div class="w-full">
+  <div class="flex flex-col md:flex-row justify-end">
+    <button class="btn btn-outline btn-secondary px-8 mr-4 mb-2" routerLink="/derivatives">
+      Top page
+    </button>
+    <button class="btn btn-outline btn-info px-8 mr-4 mb-2" routerLink="/derivatives/pool">
+      Pool (Buy / Sell DLP)
+    </button>
+  </div>
   <h2>Perpetual Futures</h2>
   <div class="form-control mb-4">
     <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>

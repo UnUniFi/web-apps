@@ -3,21 +3,26 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+export interface TxConfirmDialogData {
+  txHash: string;
+  msg: string;
+}
 @Component({
   selector: 'view-tx-confirm-dialog',
   templateUrl: './tx-confirm-dialog.component.html',
   styleUrls: ['./tx-confirm-dialog.component.css'],
 })
 export class TxConfirmDialogComponent implements OnInit {
-  txHash?: string;
+  txData?: TxConfirmDialogData;
   constructor(
     @Inject(DIALOG_DATA)
-    public readonly data: string,
+    public readonly data: TxConfirmDialogData,
     private readonly dialogRef: DialogRef<TxConfirmDialogComponent>,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
   ) {
-    this.txHash = data;
+    data.msg = data.msg + ' \nIf it is not reflected, wait a while and reload the page.';
+    this.txData = data;
   }
 
   ngOnInit(): void {}

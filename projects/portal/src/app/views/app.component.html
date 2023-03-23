@@ -1,6 +1,6 @@
-<div class="drawer drawer-mobile w-screen h-screen">
+<div class="drawer drawer-mobile w-screen h-screen bg-base-300">
   <input id="drawer-main" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content flex flex-col h-full overflow-auto">
+  <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
     <div class="navbar glass sticky top-0 z-20">
       <div class="flex-none lg:hidden">
@@ -57,7 +57,7 @@
       </div>
     </div>
     <!-- Page content here -->
-    <div class="bg-base-300 flex justify-center">
+    <div class="flex justify-center">
       <div class="w-full max-w-screen-xl p-8">
         <ng-content></ng-content>
       </div>
@@ -74,6 +74,7 @@
               #searchValueRef
               id="searchValue"
               name="searchValue"
+              placeholder="Search by Address/TxHash/Block"
               [(ngModel)]="searchValue"
               [matAutocomplete]="auto"
               (ngModelChange)="onChangeInput(searchValueRef.value)"
@@ -111,62 +112,66 @@
         </div>
       </form>
       <li>
-        <a class="flex gap-4" routerLink="/">
+        <label for="drawer-main" class="flex gap-4" routerLink="/">
           <span class="flex-none">
             <mat-icon color="primary">other_houses</mat-icon>
           </span>
           <span class="flex-1">Balance</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a class="flex gap-4" routerLink="/vote/proposals">
+        <label for="drawer-main" class="flex gap-4" routerLink="/vote/proposals">
           <span class="flex-none">
             <mat-icon color="primary">how_to_vote</mat-icon>
           </span>
           <span class="flex-1">Vote</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a class="flex gap-4" routerLink="/delegate/validators">
+        <label for="drawer-main" class="flex gap-4" routerLink="/delegate/validators">
           <span class="flex-none">
             <mat-icon color="primary">savings</mat-icon>
           </span>
           <span class="flex-1">Delegate</span>
-        </a>
+        </label>
       </li>
-      <li>
-        <a class="flex gap-4" routerLink="/incentive">
+      <!-- <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/incentive">
           <span class="flex-none">
             <mat-icon color="primary">attach_money</mat-icon>
           </span>
           <span class="flex-1">Incentive</span>
-        </a>
-      </li>
+        </label>
+      </li> -->
       <li>
-        <a class="flex gap-4" routerLink="/nft-backed-loan">
+        <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan">
           <span class="flex-none">
             <mat-icon color="primary">photo_library</mat-icon>
           </span>
           <span class="flex-1">NFT Backed Loan</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a class="flex gap-4" routerLink="/derivatives">
+        <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/perpetual-futures">
           <span class="flex-none">
             <mat-icon color="primary">show_chart</mat-icon>
           </span>
           <span class="flex-1">Derivatives</span>
-        </a>
+        </label>
       </li>
       <ng-template ngFor let-navigation [ngForOf]="navigations">
         <ng-container *ngIf="navigation?.name && navigation?.link">
           <li>
-            <a class="flex gap-4" routerLink="{{ navigation.link.replace('/portal', '') }}">
+            <label
+              for="drawer-main"
+              class="flex gap-4"
+              routerLink="{{ navigation.link.replace('/portal', '') }}"
+            >
               <span class="flex-none">
                 <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
               </span>
               <span class="flex-1">{{ navigation.name }}</span>
-            </a>
+            </label>
           </li>
         </ng-container>
       </ng-template>

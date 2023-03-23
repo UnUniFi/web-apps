@@ -27,7 +27,7 @@ export class MintComponent implements OnInit {
       map((wallet) => wallet.address),
     );
     const config$ = this.configService.config$;
-    this.classes$ = config$.pipe(map((config) => config?.extension?.nftMint.nftClasses));
+    this.classes$ = config$.pipe(map((config) => config?.extension?.nftMint?.nftClasses));
     this.selectedClass$ = this.classes$.pipe(map((classes) => (classes ? classes[0] : '')));
   }
 

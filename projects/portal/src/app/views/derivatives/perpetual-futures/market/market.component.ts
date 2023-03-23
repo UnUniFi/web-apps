@@ -85,9 +85,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
     'BTC/USD': {
       autosize: true,
@@ -99,9 +101,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
     'ATOM/USD': {
       autosize: true,
@@ -113,9 +117,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       locale: 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
-      hide_legend: true,
       save_image: false,
       container_id: 'tradingview_5b3c4',
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
     },
   };
 
@@ -173,13 +179,15 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
     switch (this.marginSymbol) {
       case this.baseSymbol:
         this.marginAmount =
-          Math.ceil((this.size / this.leverage) * Math.pow(10, 2)) / Math.pow(10, 2);
+          Math.ceil((this.size / this.leverage) * Math.pow(10, 6)) / Math.pow(10, 6);
         this.minMargin = this.marginAmount;
         // this.minMargin = this.marginAmount / 2;
         break;
       case this.quoteSymbol:
         // this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price?.price));
-        this.marginAmount = Math.ceil((this.size / this.leverage) * Number(this.price));
+        this.marginAmount =
+          Math.ceil((this.size / this.leverage) * Number(this.price) * Math.pow(10, 6)) /
+          Math.pow(10, 6);
         this.minMargin = this.marginAmount;
         // this.minMargin = this.marginAmount / 2;
         break;

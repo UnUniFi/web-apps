@@ -51,12 +51,12 @@
     </div>
     <div class="card bg-base-100 shadow-xl w-full mb-4">
       <div class="tabs tabs-boxed">
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">Buy</a>
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">Sell</a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'buy'" (click)="tab = 'buy'">Buy</a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'sell'" (click)="tab = 'sell'">Sell</a>
       </div>
       <div class="card-body">
-        <ng-container *ngIf="tab === 'mint'">
-          <form #mintRef="ngForm" (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)">
+        <ng-container *ngIf="tab === 'buy'">
+          <form #buyFormRef="ngForm" (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)">
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Enter amount to deposit</span>
@@ -66,9 +66,10 @@
                 </label>
               </label>
               <label class="input-group">
-                <input #depositAmountRef required ngModel name="mint-amount" type="number" placeholder="0.123456"
-                  class="input input-bordered w-full" [min]="0" [max]="symbolBalancesMap?.[mintSymbol] || 0"
-                  pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                <input #depositAmountRef #depositAmountNgModelRef="ngModel" required ngModel name="mint-amount"
+                  type="number" placeholder="0.123456" class="input input-bordered w-full"
+                  [class]="{'input-error': depositAmountNgModelRef.errors}" [min]="0"
+                  [max]="symbolBalancesMap?.[mintSymbol] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
                 <select #depositSymbolRef required [(ngModel)]="mintSymbol" name="mint-symbol"
                   class="select select-bordered">
                   <ng-container *ngFor="let symbol of poolAcceptedSymbols">
@@ -91,7 +92,7 @@
               </label>
             </div>
             <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="mint-model" class="modal-toggle" />
+            <input type="checkbox" id="buy-modal" class="modal-toggle" />
             <div class="modal modal-bottom sm:modal-middle">
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
@@ -111,16 +112,16 @@
                   Insufficient Balance!
                 </p>
                 <div class="modal-action">
-                  <label for="mint-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-primary" [disabled]="mintRef.invalid">Buy</button>
+                  <label for="buy-modal" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-primary" [disabled]="buyFormRef.invalid">Buy</button>
                 </div>
               </div>
             </div>
           </form>
         </ng-container>
 
-        <ng-container *ngIf="tab === 'burn'">
-          <form #burnRef="ngForm" (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
+        <ng-container *ngIf="tab === 'sell'">
+          <form #sellformRef="ngForm" (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Enter amount to sell</span>
@@ -129,8 +130,10 @@
                 </label>
               </label>
               <label class="input-group">
-                <input #burnAmountRef required ngModel name="burn-amount" type="number" placeholder="0.12"
-                  class="input input-bordered w-full" [min]="0" [max]="dlpBalance" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                <input #burnAmountRef #burnAmountNgModelRef="ngModel" required ngModel name="burn-amount" type="number"
+                  placeholder="0.12" class="input input-bordered w-full"
+                  [class]="{'input-error': burnAmountNgModelRef.errors}" [min]="0" [max]="dlpBalance"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$" />
                 <span>DLP</span>
               </label>
               <label class="label">
@@ -160,7 +163,7 @@
               </label>
             </div>
             <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="mint-model" class="modal-toggle" />
+            <input type="checkbox" id="sell-modal" class="modal-toggle" />
             <div class="modal modal-bottom sm:modal-middle">
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to sell DLP?</h3>
@@ -180,8 +183,8 @@
                   Insufficient DLP!
                 </p>
                 <div class="modal-action">
-                  <label for="mint-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-primary" [disabled]="burnRef.invalid">Sell</button>
+                  <label for="sell-modal" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-primary" [disabled]="sellformRef.invalid">Sell</button>
                 </div>
               </div>
             </div>

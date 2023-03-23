@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CreateComponent implements OnInit {
   firstStrategy = { id: '', distRate: 0 };
   strategies: { id: string; distRate: number }[] = [];
+  selectedSymbol = 'USDC';
 
   constructor() {}
 

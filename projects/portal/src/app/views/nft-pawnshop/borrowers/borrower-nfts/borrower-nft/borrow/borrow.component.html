@@ -82,7 +82,7 @@
                 <label class="input-group">
                   <input #borrowAmountRef="ngModel" required type="number" name="amount" [(ngModel)]="borrowAmount"
                     class="input input-bordered w-full"
-                    [class]="{'input-error': borrowAmountRef.errors && borrowAmountRef.dirty}"
+                    [class]="{'input-error': borrowAmountRef.errors && borrowAmountRef.touched}"
                     pattern="^[0-9]*\.?[0-9]{0,6}$" />
                   <span>{{ borrowDenom }}</span>
                 </label>

@@ -57,12 +57,16 @@
             <label class="label">
               <span class="label-text">Select Asset</span>
             </label>
-            <select class="select select-bordered w-full">
+            <select
+              class="select select-bordered w-full"
+              [(ngModel)]="selectedSymbol"
+              name="symbol"
+            >
               <option disabled selected>Select a asset's symbol</option>
-              <option>USDC</option>
-              <option>BTC</option>
-              <option>ATOM</option>
-              <option>GUU</option>
+              <option [value]="'USDC'">USDC</option>
+              <option [value]="'BTC'">BTC</option>
+              <option [value]="'ATOM'">ATOM</option>
+              <option [value]="'GUU'">GUU</option>
             </select>
           </div>
           <div class="form-control">
@@ -103,8 +107,8 @@
               <span class="label-text">Deposit</span>
             </label>
             <label class="input-group">
-              <input type="number" value="5" disabled class="input input-bordered w-full" />
-              <span>GUU</span>
+              <input type="number" value="0.1" disabled class="input input-bordered w-full" />
+              <span>{{ selectedSymbol }}</span>
             </label>
           </div>
           <div class="form-control">

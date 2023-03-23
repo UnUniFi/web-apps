@@ -51,19 +51,12 @@
     </div>
     <div class="card bg-base-100 shadow-xl w-full mb-4">
       <div class="tabs tabs-boxed">
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
-          >Buy</a
-        >
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
-          >Sell</a
-        >
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'buy'" (click)="tab = 'buy'">Buy</a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'sell'" (click)="tab = 'sell'">Sell</a>
       </div>
       <div class="card-body">
-        <ng-container *ngIf="tab === 'mint'">
-          <form
-            #mintRef="ngForm"
-            (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
-          >
+        <ng-container *ngIf="tab === 'buy'">
+          <form #buyFormRef="ngForm" (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)">
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Enter amount to deposit</span>
@@ -73,25 +66,12 @@
                 </label>
               </label>
               <label class="input-group">
-                <input
-                  #depositAmountRef
-                  required
-                  ngModel
-                  name="mint-amount"
-                  type="number"
-                  placeholder="0.123456"
-                  class="input input-bordered w-full"
-                  [min]="0"
-                  [max]="symbolBalancesMap?.[mintSymbol] || 0"
-                  pattern="^[0-9]*\.?[0-9]{0,6}$"
-                />
-                <select
-                  #depositSymbolRef
-                  required
-                  [(ngModel)]="mintSymbol"
-                  name="mint-symbol"
-                  class="select select-bordered"
-                >
+                <input #depositAmountRef #depositAmountNgModelRef="ngModel" required ngModel name="mint-amount"
+                  type="number" placeholder="0.123456" class="input input-bordered w-full"
+                  [class]="{'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched}" [min]="0"
+                  [max]="symbolBalancesMap?.[mintSymbol] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                <select #depositSymbolRef required [(ngModel)]="mintSymbol" name="mint-symbol"
+                  class="select select-bordered">
                   <ng-container *ngFor="let symbol of poolAcceptedSymbols">
                     <option [value]="symbol">{{ symbol }}</option>
                   </ng-container>
@@ -99,30 +79,30 @@
               </label>
               <label class="label">
                 <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt"
-                  >{{ symbolBalancesMap?.[depositSymbolRef.value] || 0 }}
+                <span class="label-text-alt">{{ symbolBalancesMap?.[depositSymbolRef.value] || 0 }}
                   {{ depositSymbolRef.value }}
                 </span>
               </label>
             </div>
 
             <div class="card-actions justify-end mt-4">
-              <label
-                for="mint-model"
-                class="btn btn-primary px-8"
-                (click)="onEstimateMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
-              >
-                Buy DLP to earn fees
+              <label hidden #buyModalLabel for="buy-modal"
+                (click)="onEstimateMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)">
+
               </label>
+              <button type="button" class="btn btn-primary" [disabled]="buyFormRef.invalid"
+                (click)="buyModalLabel.click()">
+                Buy DLP to earn fees
+              </button>
             </div>
             <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="mint-model" class="modal-toggle" />
+            <input type="checkbox" id="buy-modal" class="modal-toggle" />
             <div class="modal modal-bottom sm:modal-middle">
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
                 <p class="py-4" *ngIf="estimatedLPTAmount">
-                  Estimated DLP is {{ estimatedLPTAmount.amount | coin }} (Fee is
-                  {{ estimatedLPTAmount.fee | coin }}), OK?
+                  Estimated DLP amount is {{ estimatedLPTAmount.amount | coin }} (Fee is
+                  {{ estimatedLPTAmount.fee | coin }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
                   Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be
@@ -131,26 +111,21 @@
                 <p class="py-4" *ngIf="!estimatedLPTAmount && !calculatedDLPAmount">
                   The amount of DLP to be retrieved is unknown.
                 </p>
-                <p
-                  *ngIf="(symbolBalancesMap?.[mintSymbol] || 0) < depositAmountRef.valueAsNumber"
-                  class="text-lg text-error"
-                >
+                <p *ngIf="(symbolBalancesMap?.[mintSymbol] || 0) < depositAmountRef.valueAsNumber"
+                  class="text-lg text-error">
                   Insufficient Balance!
                 </p>
                 <div class="modal-action">
-                  <label for="mint-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-primary" [disabled]="mintRef.invalid">Buy</button>
+                  <label for="buy-modal" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-primary" [disabled]="buyFormRef.invalid">Buy</button>
                 </div>
               </div>
             </div>
           </form>
         </ng-container>
 
-        <ng-container *ngIf="tab === 'burn'">
-          <form
-            #burnRef="ngForm"
-            (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
-          >
+        <ng-container *ngIf="tab === 'sell'">
+          <form #sellformRef="ngForm" (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
             <div class="form-control">
               <label class="label">
                 <span class="label-text">Enter amount to sell</span>
@@ -159,18 +134,10 @@
                 </label>
               </label>
               <label class="input-group">
-                <input
-                  #burnAmountRef
-                  required
-                  ngModel
-                  name="burn-amount"
-                  type="number"
-                  placeholder="0.12"
-                  class="input input-bordered w-full"
-                  [min]="0"
-                  [max]="dlpBalance"
-                  pattern="^[0-9]*\.?[0-9]{0,6}$"
-                />
+                <input #burnAmountRef #burnAmountNgModelRef="ngModel" required ngModel name="burn-amount" type="number"
+                  placeholder="0.12" class="input input-bordered w-full"
+                  [class]="{'input-error': burnAmountNgModelRef.errors && burnAmountNgModelRef.touched}" [min]="0"
+                  [max]="dlpBalance" pattern="^[0-9]*\.?[0-9]{0,6}$" />
                 <span>DLP</span>
               </label>
               <label class="label">
@@ -185,13 +152,8 @@
               <label class="label">
                 <span class="label-text">Select symbol to redeem</span>
               </label>
-              <select
-                #redeemSymbolRef
-                required
-                [(ngModel)]="redeemSymbol"
-                name="redeem-symbol"
-                class="select select-bordered w-full"
-              >
+              <select #redeemSymbolRef required [(ngModel)]="redeemSymbol" name="redeem-symbol"
+                class="select select-bordered w-full">
                 <ng-container *ngFor="let symbol of poolAcceptedSymbols">
                   <option [value]="symbol">{{ symbol }}</option>
                 </ng-container>
@@ -199,23 +161,24 @@
             </div>
 
             <div class="card-actions justify-end mt-4">
-              <label
-                for="mint-model"
-                class="btn btn-primary px-8"
-                (click)="onEstimateBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
-              >
-                Sell DLP
+              <label #sellModalLabel hidden for="sell-modal"
+                (click)="onEstimateBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)">
+
               </label>
+              <button type="button" class="btn btn-primary" [disabled]="sellformRef.invalid"
+                (click)="sellModalLabel.click()">
+                Sell DLP
+              </button>
             </div>
             <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="mint-model" class="modal-toggle" />
+            <input type="checkbox" id="sell-modal" class="modal-toggle" />
             <div class="modal modal-bottom sm:modal-middle">
               <div class="modal-box">
-                <h3 class="font-bold text-lg">Are you sure to burn DLP?</h3>
+                <h3 class="font-bold text-lg">Are you sure to sell DLP?</h3>
                 <p class="py-4" *ngIf="estimatedRedeemAmount">
-                  Estimated {{ redeemSymbolRef.value }} is
+                  Estimated {{ redeemSymbolRef.value }} amount is
                   {{ estimatedRedeemAmount.amount | coin }} (Fee is
-                  {{ estimatedRedeemAmount.fee | coin }}), OK?
+                  {{ estimatedRedeemAmount.fee | coin }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedRedeemAmount && calculatedRedeemAmount">
                   Estimated redeem amount is {{ calculatedRedeemAmount | number
@@ -228,8 +191,8 @@
                   Insufficient DLP!
                 </p>
                 <div class="modal-action">
-                  <label for="mint-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-primary" [disabled]="burnRef.invalid">Burn</button>
+                  <label for="sell-modal" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-primary" [disabled]="sellformRef.invalid">Sell</button>
                 </div>
               </div>
             </div>

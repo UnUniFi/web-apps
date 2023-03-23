@@ -1,48 +1,52 @@
-<div class="text-base-content max-w-full">
+<div class="text-base-content max-w-xl max-h-screen">
   <div class="card lg:card-side bg-base-100 shadow-xl">
-    <div class="card-body w-2/3">
+    <div class="card-body w-full">
       <div class="flex flex-row">
         <div class="badge badge-lg badge-primary mr-1">{{ listedClass?.nfts?.length }} Items</div>
         <!-- <div class="badge badge-lg mr-1">Pool {{ '0GUU' }}</div>
         <div class="badge badge-lg mr-1">APY {{ '0' }}%</div> -->
       </div>
       <h2 class="card-title break-all">{{ listedClass?.name }}</h2>
-      <table class="table w-full">
-        <tbody>
-          <tr>
-            <th>ID</th>
-            <td>{{ classID }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto -my-4">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ classID }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <br />
 
-  <div class="flex flex-wrap">
-    <div *ngFor="let nft of listedClass?.nfts; index as i" class="pr-12 pb-12 w-full">
-      <div class="card bg-base-100 w-full glass shadow-xl md:w-1/2">
-        <figure class="aspect-square w-full">
-          <img
-            *ngIf="nftImages"
-            src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
-            alt="image of the NFT"
-            class="h-full object-cover"
-          />
-          <img
-            *ngIf="!nftImages"
-            src="assets/UnUniFi-logo.png"
-            alt="image of the NFT"
-            class="h-full object-cover"
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title break-all">{{ nft.id }}</h2>
-          <div class="card-actions justify-center">
-            <button class="btn btn-outline btn-info px-8" (click)="onSubmit(nft.id!)">
-              Bid to lend
-            </button>
+  <div class="overflow-y-auto max-h-96">
+    <div class="flex flex-row flex-wrap h-2/3">
+      <div *ngFor="let nft of listedClass?.nfts; let i = index" class="pr-4 pb-4 w-full md:w-1/2">
+        <div class="card bg-base-100 glass shadow-xl w-full h-80">
+          <figure class="aspect-square w-full">
+            <img
+              *ngIf="nftImages"
+              src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
+              alt="image of the NFT"
+              class="h-24 object-cover"
+            />
+            <img
+              *ngIf="!nftImages"
+              src="assets/UnUniFi-logo.png"
+              alt="image of the NFT"
+              class="h-24 object-cover"
+            />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title break-all">{{ nft.id }}</h2>
+            <div class="card-actions justify-center">
+              <button class="btn btn-outline btn-info px-8" (click)="onSubmit(nft.id!)">
+                Bid to lend
+              </button>
+            </div>
           </div>
         </div>
       </div>

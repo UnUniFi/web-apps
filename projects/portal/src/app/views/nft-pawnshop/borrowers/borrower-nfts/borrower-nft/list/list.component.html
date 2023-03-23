@@ -6,11 +6,7 @@
     <div class="text-base-content max-w-full">
       <div class="card lg:card-side bg-base-100 shadow-xl">
         <figure class="aspect-square w-full">
-          <img
-            src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
-            alt="image of the NFT"
-            class="h-full object-cover"
-          />
+          <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT" class="h-full object-cover" />
         </figure>
         <div class="card-body w-2/3">
           <div class="flex flex-row">
@@ -75,15 +71,9 @@
                   </div>
                 </span>
                 <label class="input-group">
-                  <input
-                    required
-                    type="number"
-                    name="minDepositRate"
-                    [(ngModel)]="minDepositRate"
-                    placeholder="1.5"
-                    class="input input-bordered w-full"
-                    pattern="^[0-9]*\.?[0-9]{0,4}$"
-                  />
+                  <input #minDepositRateNgModelRef="ngModel" required type="number" name="minDepositRate"
+                    [(ngModel)]="minDepositRate" placeholder="1.5" class="input input-bordered w-full"
+                    [class]="{'input-error': minDepositRateNgModelRef.errors}" pattern="^[0-9]*\.?[0-9]{0,4}$" />
                   <span>%</span>
                 </label>
               </div>

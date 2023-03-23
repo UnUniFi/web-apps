@@ -1,13 +1,10 @@
-<div class="dialog">
+<div class="card bg-base-100 shadow-xl">
+<div class="card-body">
   <div class="flex flex-row justify-center content-center items-center">
-    <div class="w-16 h-16 overflow-hidden">
-      <mat-progress-spinner
-        [diameter]="64"
-        [mode]="'indeterminate'"
-      ></mat-progress-spinner>
-    </div>
+    <div class="btn btn-ghost loading"></div>
     <p class="flex-auto m-4">
       {{ message$ | async }}
     </p>
   </div>
+</div>
 </div>

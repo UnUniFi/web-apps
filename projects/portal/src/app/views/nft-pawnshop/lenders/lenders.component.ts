@@ -63,7 +63,7 @@ export class LendersComponent implements OnInit {
 
   onSubmit() {
     this.isSubmitted = true;
-    this.appSubmit.emit(this.selectedDenom);
+    // this.appSubmit.emit(this.selectedDenom);
   }
 
   onChangeSymbol() {

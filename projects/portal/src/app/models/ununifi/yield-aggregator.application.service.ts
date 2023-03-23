@@ -1,13 +1,14 @@
-import { ConfigService } from '../config.service';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
-import { TxCommonService } from '../cosmos/tx-common.service';
-import { WalletService } from '../wallets/wallet.service';
 import { YieldAggregatorService } from './yield-aggregator.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,16 +16,13 @@ import { map, take } from 'rxjs/operators';
 export class YieldAggregatorApplicationService {
   constructor(
     private readonly router: Router,
-    private readonly snackBar: MatSnackBar,
-    private readonly walletService: WalletService,
     private readonly bankQueryService: BankQueryService,
     private readonly yieldAggregatorService: YieldAggregatorService,
-    private readonly txCommon: TxCommonService,
     private readonly txCommonApplication: TxCommonApplicationService,
-    private readonly config: ConfigService,
+    private readonly dialog: Dialog,
   ) {}
 
-  async deposit(symbol: string, amount: number) {
+  async depositToVault(vaultId: string, symbol: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -36,8 +34,9 @@ export class YieldAggregatorApplicationService {
       .pipe(take(1))
       .toPromise();
 
-    const msg = this.yieldAggregatorService.buildMsgDeposit(
+    const msg = this.yieldAggregatorService.buildMsgDepositToVault(
       address,
+      vaultId,
       symbol,
       amount,
       symbolMetadataMap,
@@ -58,18 +57,27 @@ export class YieldAggregatorApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
 
-    this.snackBar.open('Successfully listed NFT.', undefined, {
-      duration: 6000,
-    });
-    await this.router.navigate(['txs', txHash]);
+    await this.dialog
+      .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+        data: { txHash: txHash, msg: 'Successfully deposit to the vault.' },
+      })
+      .closed.toPromise();
+    this.router.navigate(['yield-aggregator']);
   }
 
-  async withdraw(symbol: string, amount: number) {
+  async withdrawFromVault(vaultId: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -81,10 +89,70 @@ export class YieldAggregatorApplicationService {
       .pipe(take(1))
       .toPromise();
 
-    const msg = this.yieldAggregatorService.buildMsgWithdraw(
+    const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(address, vaultId, amount);
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully withdraw from the vault.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['yield-aggregator']);
+    }
+  }
+
+  async createVault(
+    symbol: string,
+    strategies: any,
+    commissionRate: number,
+    feeAmount: number,
+    depositAmount: number,
+  ) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
+
+    const msg = this.yieldAggregatorService.buildMsgCreateVault(
       address,
       symbol,
-      amount,
+      strategies,
+      commissionRate,
+      feeAmount,
+      depositAmount,
       symbolMetadataMap,
     );
 
@@ -103,14 +171,121 @@ export class YieldAggregatorApplicationService {
       return;
     }
 
-    const txHash = await this.txCommonApplication.broadcast(msg, publicKey, account, gas, fee);
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
     if (!txHash) {
       return;
     }
 
-    this.snackBar.open('Successfully listed NFT.', undefined, {
-      duration: 6000,
-    });
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully created your new vault.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['yield-aggregator']);
+    }
+  }
+
+  async deleteVault(vaultId: string) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const msg = this.yieldAggregatorService.buildMsgDeleteVault(address, vaultId);
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully delete your vault.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['yield-aggregator']);
+    }
+  }
+
+  async transferVaultOwnership(vaultId: string, recipientAddress: string) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const msg = this.yieldAggregatorService.buildMsgTransferVaultOwnership(
+      address,
+      vaultId,
+      recipientAddress,
+    );
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully delete your vault.' },
+        })
+        .closed.toPromise();
+      this.router.navigate(['yield-aggregator']);
+    }
   }
 }

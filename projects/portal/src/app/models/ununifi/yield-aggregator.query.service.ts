@@ -1,7 +1,14 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap, pluck } from 'rxjs/operators';
+import ununifi from 'ununifi-client';
+import {
+  CdpAll200ResponseCdpInnerCdpCollateral,
+  StrategyAll200ResponseStrategiesInner,
+  VaultAll200ResponseVaultsInner,
+  YieldAggregatorParams200ResponseParams,
+} from 'ununifi-client/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +18,58 @@ export class YieldAggregatorQueryService {
 
   constructor(private readonly cosmosSDK: CosmosSDKService) {}
 
-  getParams$() {
-    return of({} as any);
+  getYieldAggregatorParam$(): Observable<YieldAggregatorParams200ResponseParams> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.params(sdk)),
+      map((res) => res.data.params!),
+    );
   }
 
-  getUserInfo$(address: string) {
-    return of({} as any);
+  listStrategies$(denom: string): Observable<StrategyAll200ResponseStrategiesInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategyAll(sdk, denom)),
+      map((res) => res.data.strategies!),
+    );
   }
 
-  getDailyReward$() {
-    return of({} as any);
+  getStrategy$(denom: string, id: string): Observable<StrategyAll200ResponseStrategiesInner> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategy(sdk, denom, id)),
+      map((res) => res.data.strategy!),
+    );
+  }
+
+  listVaults$(): Observable<VaultAll200ResponseVaultsInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.vaultAll(sdk)),
+      map((res) => res.data.vaults!),
+    );
+  }
+
+  getVault$(id: string): Observable<VaultAll200ResponseVaultsInner> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.vault(sdk, id)),
+      map((res) => res.data.vault!),
+    );
+  }
+
+  getEstimatedMintAmount$(
+    id: string,
+    amount: string,
+  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateMintAmount(sdk, id, amount)),
+      map((res) => res.data.mint_amount!),
+    );
+  }
+
+  getEstimatedRedeemAmount$(
+    id: string,
+    amount: string,
+  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount)),
+      map((res) => res.data.redeem_amount!),
+    );
   }
 }

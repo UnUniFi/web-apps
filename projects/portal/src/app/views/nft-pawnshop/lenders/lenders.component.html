@@ -76,8 +76,9 @@
               </label>
               <label class="input-group">
                 <input #depositRef #depositNgModelRef="ngModel" required name="deposit" [(ngModel)]="depositAmount"
-                  class="input input-bordered w-full" [class]="{'input-error': depositNgModelRef.errors}"
-                  [min]="0.000001" [max]="balances![selectedDenom] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                  class="input input-bordered w-full"
+                  [class]="{'input-error': depositNgModelRef.errors && depositNgModelRef.dirty}" [min]="0.000001"
+                  [max]="balances![selectedDenom] || 0" pattern="^[0-9]*\.?[0-9]{0,6}$" />
                 <select #symbolRef required [(ngModel)]="selectedDenom" name="symbol"
                   class="select select-bordered w-1/4" (change)="onChangeSymbol()">
                   <ng-container *ngFor="let s of denoms">
@@ -96,7 +97,8 @@
               </label>
               <label class="input-group">
                 <input #interestRef #interestNgModelRef="ngModel" required name="interest" [(ngModel)]="interestRate"
-                  class="input input-bordered w-full" [class]="{'input-error': interestNgModelRef.errors}" [min]="0"
+                  class="input input-bordered w-full"
+                  [class]="{'input-error': interestNgModelRef.errors && interestNgModelRef.dirty}" [min]="0"
                   pattern="^[0-9]*\.?[0-9]{0,6}$" />
                 <span>%</span>
               </label>

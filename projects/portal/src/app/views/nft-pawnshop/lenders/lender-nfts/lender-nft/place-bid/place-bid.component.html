@@ -54,16 +54,19 @@
 
     <ng-container *ngIf="listingInfo?.owner !== currentStoredWallet?.address; else listerSelf">
       <div class="flex flex-row flex-wrap mb-8">
-        <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-initial xl:flex-auto xl:mr-8">
-          <h3 class="m-4 card-title">Offers</h3>
+        <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto xl:mr-8">
+          <div class="card-body w-auto">
+            <h3 class="card-title">Offers</h3>
+          </div>
+
           <google-chart *ngIf="chartData" [title]="chartTitle" [type]="chartType" [data]="chartData"
             [columns]="chartColumns" [options]="chartOptions">
           </google-chart>
         </div>
 
         <div class="card bg-base-100 shadow-xl w-full xl:w-96">
-          <h3 class="card-title">Make Offer</h3>
           <div class="card-body">
+            <h3 class="card-title">Make Offer</h3>
             <form #formRef="ngForm" (submit)="onSubmit()">
               <div class="form-control">
                 <span class="label">
@@ -90,7 +93,8 @@
                 </span>
                 <label class="input-group">
                   <input #bidAmountNgModelRef="ngModel" required type="number" name="bidAmount" [(ngModel)]="bidAmount"
-                    class="input input-bordered w-full" [class]="{'input-error': bidAmountNgModelRef.errors}"
+                    class="input input-bordered w-full"
+                    [class]="{'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.dirty}"
                     pattern="^[0-9]*\.?[0-9]{0,6}$" />
                   <span>{{ depositSymbol }}</span>
                 </label>
@@ -119,7 +123,8 @@
                 <label class="input-group">
                   <input #depositAmountNgModelRef="ngModel" required type="number" name="depositAmount"
                     [(ngModel)]="depositAmount" class="input input-bordered w-full"
-                    [class]="{'input-error': depositAmountNgModelRef.errors}" pattern="^[0-9]*\.?[0-9]{0,6}$" />
+                    [class]="{'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.dirty}"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$" />
                   <span>{{ depositSymbol }}</span>
                 </label>
                 <label class="label">
@@ -152,7 +157,8 @@
                 <label class="input-group">
                   <input #interestRateNgModelRef="ngModel" required type="number" name="interestRate"
                     [(ngModel)]="interestRate" class="input input-bordered w-full"
-                    [class]="{'input-error': interestRateNgModelRef.errors}" pattern="^[0-9]*\.?[0-9]{0,4}$" />
+                    [class]="{'input-error': interestRateNgModelRef.errors && interestRateNgModelRef.dirty}"
+                    pattern="^[0-9]*\.?[0-9]{0,4}$" />
                   <span>%</span>
                 </label>
               </div>
@@ -224,12 +230,12 @@
                 </label>
               </div> -->
 
-              <div class="flex flex-col md:flex-row justify-end">
-                <button type="button" class="btn btn-primary btn-outline mb-2 md:-mb-2 md:mr-2 px-8"
-                  (click)="onSimulate()">
+              <div class="flex flex-row flex-wrap justify-end mt-4">
+                <button type="button" class="btn btn-primary btn-outline" (click)="onSimulate()">
                   Simulate
                 </button>
-                <button class="btn btn-primary px-8" [disabled]="formRef.invalid || !within3Days">
+                <span class="w-full md:w-2"></span>
+                <button class="btn btn-primary" [disabled]="formRef.invalid || !within3Days">
                   Make Offer
                 </button>
               </div>
@@ -239,7 +245,7 @@
       </div>
     </ng-container>
     <ng-template #listerSelf>
-      <div class="card mb-8">
+      <div class="card bg-base-100 mb-8">
         <div class="flex flex-row justify-center items-center h-96">
           <p>You can't bid to your own NFT.</p>
         </div>

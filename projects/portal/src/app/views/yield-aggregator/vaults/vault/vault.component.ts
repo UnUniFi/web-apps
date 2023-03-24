@@ -1,6 +1,6 @@
-import { VaultInfo } from '../vaults.component';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-vault',
@@ -8,7 +8,9 @@ import { ChartType } from 'angular-google-charts';
   styleUrls: ['./vault.component.css'],
 })
 export class VaultComponent implements OnInit {
-  vault: VaultInfo;
+  @Input()
+  vault?: VaultAll200ResponseVaultsInner | null;
+
   amount: string;
   assets: string[];
   selectedAsset: string;
@@ -23,26 +25,24 @@ export class VaultComponent implements OnInit {
   tab: 'mint' | 'burn' = 'mint';
 
   constructor() {
+    this.vault = {
+      id: '1',
+      denom: 'uusdc',
+      owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
+      owner_deposit: { amount: '1000000', denom: 'uusdc' },
+      withdraw_commission_rate: '0.02',
+      withdraw_reserve_rate: '0.015',
+      strategy_weights: [
+        { strategy_id: 'st01', weight: '0.6' },
+        { strategy_id: 'st02', weight: '0.4' },
+      ],
+    };
     this.amount = '0';
     this.assets = ['atom'];
     this.selectedAsset = this.assets[0];
     this.configs = ['APY'];
     this.selectedConfig = this.configs[0];
     this.isDeposit = true;
-    this.vault = {
-      name: 'Cosmos',
-      symbol: 'atom',
-      iconUrl:
-        'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg',
-      annualPercentageYield: '0.03',
-      totalValueLocked: '100000',
-      availableAmount: '20000',
-      depositedAmount: '0',
-      earnedAmount: '0',
-      coinType: 'ATOM',
-      description:
-        'Cosmos (ATOM) is a cryptocurrency that powers an ecosystem of blockchains designed to scale and interoperate with each other. The team aims to "create an Internet of Blockchains, a network of blockchains able to communicate with each other in a decentralized way." Cosmos is a proof-of-stake chain. ATOM holders can stake their tokens in order to maintain the network and receive more ATOM as a reward.',
-    };
     this.chartTitle = '';
     this.chartType = ChartType.LineChart;
     const now = new Date();
@@ -54,10 +54,21 @@ export class VaultComponent implements OnInit {
       [now.toLocaleDateString(), 1.6],
     ];
     this.chartColumnNames = ['Date', 'APY'];
-    this.chartOptions = this.createChartOption();
+  }
+
+  @ViewChild('chartCardRef') chartCardRef?: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    this.chartOptions = this.createChartOption(width);
   }
 
   ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    this.chartOptions = this.createChartOption(width);
+  }
 
   onToggleChange(value: string): void {
     if (value == 'deposit') {
@@ -72,23 +83,7 @@ export class VaultComponent implements OnInit {
     this.selectedConfig = config;
   }
 
-  @HostListener('window:resize', ['$event'])
-  onWindowResize() {
-    this.chartOptions = this.createChartOption();
-  }
-
-  createChartOption() {
-    const innerWidth = window.innerWidth;
-    let width: number;
-    if (innerWidth < 640) {
-      width = innerWidth;
-    } else if (innerWidth > 1440) {
-      width = 1000;
-    } else if (innerWidth > 1024) {
-      width = 800;
-    } else {
-      width = (innerWidth * 2) / 3;
-    }
+  createChartOption(width: number) {
     return {
       width: width,
       height: width / 2,

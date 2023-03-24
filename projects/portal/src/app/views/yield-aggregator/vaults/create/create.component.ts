@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CreateVaultRequest } from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
 
 @Component({
   selector: 'view-create',
@@ -6,11 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
+  @Output()
+  appCreate: EventEmitter<CreateVaultRequest>;
+
   firstStrategy = { id: '', distRate: 100 };
   strategies: { id: string; distRate: number }[] = [];
   selectedSymbol = 'USDC';
 
-  constructor() {}
+  constructor() {
+    this.appCreate = new EventEmitter();
+  }
 
   ngOnInit(): void {}
 

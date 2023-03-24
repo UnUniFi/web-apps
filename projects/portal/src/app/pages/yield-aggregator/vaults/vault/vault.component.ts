@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.application.service';
+import {
+  DepositToVaultRequest,
+  WithdrawFromVaultRequest,
+} from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.query.service';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -16,6 +21,7 @@ export class VaultComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private readonly iyaQuery: YieldAggregatorQueryService,
+    private readonly iyaApp: YieldAggregatorApplicationService,
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
@@ -35,4 +41,12 @@ export class VaultComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onDeposit(data: DepositToVaultRequest) {
+    this.iyaApp.depositToVault(data.vaultId, data.symbol, data.amount);
+  }
+
+  onWithdraw(data: WithdrawFromVaultRequest) {
+    this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
+  }
 }

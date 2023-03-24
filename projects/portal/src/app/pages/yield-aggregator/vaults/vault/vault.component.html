@@ -1,1 +1,5 @@
-<view-vault [vault]="vault$ | async"></view-vault>
+<view-vault
+  [vault]="vault$ | async"
+  (appDeposit)="onDeposit($event)"
+  (appWithdraw)="onWithdraw($event)"
+></view-vault>

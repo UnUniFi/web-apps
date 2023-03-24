@@ -1,5 +1,18 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import {
+  DepositToVaultRequest,
+  WithdrawFromVaultRequest,
+} from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -10,6 +23,10 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 export class VaultComponent implements OnInit {
   @Input()
   vault?: VaultAll200ResponseVaultsInner | null;
+  @Output()
+  appDeposit: EventEmitter<DepositToVaultRequest>;
+  @Output()
+  appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
 
   amount: string;
   assets: string[];
@@ -25,18 +42,8 @@ export class VaultComponent implements OnInit {
   tab: 'mint' | 'burn' = 'mint';
 
   constructor() {
-    this.vault = {
-      id: '1',
-      denom: 'uusdc',
-      owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
-      owner_deposit: { amount: '1000000', denom: 'uusdc' },
-      withdraw_commission_rate: '0.02',
-      withdraw_reserve_rate: '0.015',
-      strategy_weights: [
-        { strategy_id: 'st01', weight: '0.6' },
-        { strategy_id: 'st02', weight: '0.4' },
-      ],
-    };
+    this.appDeposit = new EventEmitter();
+    this.appWithdraw = new EventEmitter();
     this.amount = '0';
     this.assets = ['atom'];
     this.selectedAsset = this.assets[0];

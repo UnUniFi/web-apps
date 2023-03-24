@@ -1,5 +1,6 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-strategy',
@@ -7,6 +8,9 @@ import { ChartType } from 'angular-google-charts';
   styleUrls: ['./strategy.component.css'],
 })
 export class StrategyComponent implements OnInit {
+  @Input()
+  strategy?: StrategyAll200ResponseStrategiesInner | null;
+
   description: string;
   chartType: ChartType;
   chartTitle: string;

@@ -77,7 +77,7 @@ export class YieldAggregatorApplicationService {
     this.router.navigate(['yield-aggregator']);
   }
 
-  async withdrawFromVault(vaultId: string, amount: number) {
+  async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -129,8 +129,9 @@ export class YieldAggregatorApplicationService {
   }
 
   async createVault(
+    name: string,
     symbol: string,
-    strategies: any,
+    strategies: { id: string; weight: number }[],
     commissionRate: number,
     feeAmount: number,
     depositAmount: number,

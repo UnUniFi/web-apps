@@ -52,7 +52,7 @@ export class YieldAggregatorService {
   buildMsgCreateVault(
     senderAddress: string,
     symbol: string,
-    strategies: any,
+    strategies: { id: string; weight: number }[],
     commissionRate: number,
     fee: number,
     deposit: number,

@@ -1,5 +1,10 @@
 <view-vault
   [vault]="vault$ | async"
-  (appDeposit)="onDeposit($event)"
-  (appWithdraw)="onWithdraw($event)"
+  [symbol]="symbol$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [symbolMetadataMap]="symbolMetadataMap$ | async"
+  (changeDeposit)="onChangeDeposit($event)"
+  (changeWithdraw)="onChangeWithdraw($event)"
+  (appDeposit)="onSubmitDeposit($event)"
+  (appWithdraw)="onSubmitWithdraw($event)"
 ></view-vault>

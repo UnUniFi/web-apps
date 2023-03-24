@@ -8,7 +8,9 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { cosmos } from '@cosmos-client/core/esm/proto';
 import { ChartType } from 'angular-google-charts';
+import { YieldAggregatorChartService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.chart.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
@@ -23,43 +25,43 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 export class VaultComponent implements OnInit {
   @Input()
   vault?: VaultAll200ResponseVaultsInner | null;
+  @Input()
+  symbol?: string | null;
+  @Input()
+  symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  @Output()
+  changeDeposit: EventEmitter<number>;
   @Output()
   appDeposit: EventEmitter<DepositToVaultRequest>;
   @Output()
+  changeWithdraw: EventEmitter<number>;
+  @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
 
-  amount: string;
-  assets: string[];
-  selectedAsset: string;
-  isDeposit: boolean;
+  mintAmount: number;
+  burnAmount: number;
   chartType: ChartType;
   chartTitle: string;
   chartData: any[];
   chartColumnNames: any[];
   chartOptions: any;
-  configs: string[];
-  selectedConfig: string;
   tab: 'mint' | 'burn' = 'mint';
 
-  constructor() {
+  constructor(private readonly iyaChart: YieldAggregatorChartService) {
+    this.changeDeposit = new EventEmitter();
     this.appDeposit = new EventEmitter();
+    this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
-    this.amount = '0';
-    this.assets = ['atom'];
-    this.selectedAsset = this.assets[0];
-    this.configs = ['APY'];
-    this.selectedConfig = this.configs[0];
-    this.isDeposit = true;
+    this.mintAmount = 0;
+    this.burnAmount = 0;
     this.chartTitle = '';
     this.chartType = ChartType.LineChart;
-    const now = new Date();
-    const day1 = new Date(2023, 0, 1);
-    const day2 = new Date(2023, 0, 15);
-    this.chartData = [
-      [day1.toLocaleDateString(), 1.0],
-      [day2.toLocaleDateString(), 1.4],
-      [now.toLocaleDateString(), 1.6],
-    ];
+    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 480;
+    this.chartOptions = this.iyaChart.createChartOption(width);
+
+    this.chartData = this.iyaChart.createDummyChartData();
     this.chartColumnNames = ['Date', 'APY'];
   }
 
@@ -67,61 +69,37 @@ export class VaultComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.createChartOption(width);
+    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.createChartOption(width);
+    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
-  onToggleChange(value: string): void {
-    if (value == 'deposit') {
-      this.isDeposit = true;
-    }
-    if (value == 'withdraw') {
-      this.isDeposit = false;
-    }
+  onDepositAmountChange() {
+    this.changeDeposit.emit(this.mintAmount);
   }
 
-  onChangeConfig(config: string) {
-    this.selectedConfig = config;
+  onSubmitDeposit() {
+    this.appDeposit.emit({
+      vaultId: this.vault?.id!,
+      amount: this.mintAmount,
+      symbol: this.symbol!,
+    });
   }
 
-  createChartOption(width: number) {
-    return {
-      width: width,
-      height: width / 2,
-      backgroundColor: 'none',
-      colors: ['pink'],
-      lineWidth: 4,
-      pointSize: 6,
-      legend: {
-        position: 'bottom',
-        textStyle: {
-          color: 'white',
-          fontSize: 14,
-          bold: true,
-        },
-      },
-      hAxis: {
-        textStyle: {
-          color: 'white',
-          fontSize: 14,
-        },
-      },
-      vAxis: {
-        textStyle: {
-          color: 'white',
-          fontSize: 14,
-        },
-        baseline: 0,
-        baselineColor: 'white',
-        gridlines: { color: 'grey', count: -1 },
-      },
-      Animation: { duration: 1000, startup: true },
-    };
+  onWithdrawAmountChange() {
+    this.changeWithdraw.emit(this.burnAmount);
+  }
+
+  onSubmitWithdraw() {
+    this.appWithdraw.emit({
+      vaultId: this.vault?.id!,
+      amount: this.burnAmount,
+      symbol: this.symbol!,
+    });
   }
 }

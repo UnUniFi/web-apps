@@ -5,7 +5,7 @@
         <h2 class="card-title">
           {{ 'Vault Name' }}
           <div class="badge badge-primary">#{{ vault?.id }}</div>
-          <div class="badge badge-secondary">{{ vault?.denom | coinDenom }}</div>
+          <div class="badge badge-secondary">{{ symbol }}</div>
         </h2>
         <!-- <div class="stats">
           <div class="stat">
@@ -59,6 +59,16 @@
             </tbody>
           </table>
         </div>
+        <div class="flex w-full justify-center" #chartCardRef>
+          <google-chart
+            [title]="chartTitle"
+            [type]="chartType"
+            [data]="chartData"
+            [columns]="chartColumnNames"
+            [options]="chartOptions"
+          >
+          </google-chart>
+        </div>
       </div>
     </div>
   </div>
@@ -67,25 +77,42 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="tabs tabs-boxed w-full">
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
-          >Mint</a
+          >Deposit</a
         >
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
-          >Burn</a
+          >Withdraw</a
         >
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
-        <form>
+        <form #formRef="ngForm" (submit)="onSubmitDeposit()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
             </label>
             <label class="input-group">
-              <input type="number" placeholder="0.123456" class="input input-bordered w-full" />
-              <label class="label">axlUSDC</label>
+              <input
+                #depositAmountRef
+                #depositAmountNgModelRef="ngModel"
+                required
+                type="number"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                }"
+                [min]="0"
+                [max]="symbolBalancesMap?.[symbol || ''] || 0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="mintAmount"
+                name="mintAmount"
+                (input)="onDepositAmountChange()"
+              />
+              <label class="label">{{ symbol }}</label>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
-              <span class="label-text-alt">23.4 axlUSDC</span>
+              <span class="label-text-alt">
+                {{ symbolBalancesMap?.[symbol || ''] || 0 }}{{ symbol }}
+              </span>
             </label>
           </div>
 
@@ -95,28 +122,45 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="0" />
-              <span>YA/axlUSDC</span>
+              <span>YA/{{ symbol }}</span>
             </label>
           </div>
 
           <div class="card-actions justify-end mt-8">
-            <button class="btn btn-primary px-8">Deposit to mint</button>
+            <button class="btn btn-primary px-8">Deposit</button>
           </div>
         </form>
       </div>
       <div class="card-body" *ngIf="tab === 'burn'">
-        <form>
+        <form #formRef="ngForm" (submit)="onSubmitWithdraw()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
             </label>
             <label class="input-group">
-              <input type="number" placeholder="0.123456" class="input input-bordered w-full" />
-              <span>YA/axlUSDC</span>
+              <input
+                #withdrawAmountRef
+                #withdrawAmountNgModelRef="ngModel"
+                required
+                type="number"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
+                }"
+                [min]="0"
+                [max]="symbolBalancesMap?.['YA/'+ symbol || ''] || 0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="burnAmount"
+                name="burnAmount"
+                (input)="onWithdrawAmountChange()"
+              />
+              <span>YA/{{ symbol }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
-              <span class="label-text-alt">23.4 YA/axlUSDC</span>
+              <span class="label-text-alt"
+                >{{ symbolBalancesMap?.['YA/'+ symbol || ''] || 0 }}{{ 'YA/' + symbol }}
+              </span>
             </label>
           </div>
           <div class="form-control">
@@ -125,12 +169,12 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="0" />
-              <span>axlUSDC</span>
+              <span>{{ symbol }}</span>
             </label>
           </div>
 
           <div class="card-actions justify-end mt-8">
-            <button class="btn btn-secondary px-8">Burn to Redeem</button>
+            <button class="btn btn-secondary px-8">Withdraw</button>
           </div>
         </form>
       </div>

@@ -66,10 +66,10 @@ export class YieldAggregatorService {
       { [symbol]: fee },
       symbolMetadataMap,
     )[0];
-    const strategyWeights = strategies.map((strategy: { id: string; weight: any }) => {
+    const strategyWeights = strategies.map((strategy) => {
       return {
         strategy_id: Long.fromString(strategy.id),
-        weight: (Number(strategy.weight) / 100).toString(),
+        weight: (strategy.weight / 100).toString(),
       };
     });
     const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgCreateVault({

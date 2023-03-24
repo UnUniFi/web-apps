@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto my-8 flex xl:hidden">
+    <div class="overflow-x-auto my-8 flex flex-col xl:hidden">
       <table class="table w-full">
         <thead>
           <tr>
@@ -120,7 +120,7 @@
           </ng-container>
         </tbody>
       </table>
-      <p *ngIf="!positions?.length" class="text-center">There is no position.</p>
+      <p *ngIf="!positions?.length" class="text-center py-4">There is no position.</p>
     </div>
   </div>
   <div class="w-full xl:w-1/3">
@@ -412,7 +412,7 @@
   </div>
 
   <!-- over 1280px show table bottom -->
-  <div class="overflow-x-auto my-8 hidden xl:flex">
+  <div class="overflow-x-auto my-8 hidden xl:flex xl:flex-col">
     <table class="table w-full">
       <thead>
         <tr>
@@ -519,6 +519,6 @@
         </ng-container>
       </tbody>
     </table>
-    <p *ngIf="!positions?.length" class="text-center">There is no position.</p>
+    <p *ngIf="!positions?.length" class="text-center my-4">There is no position.</p>
   </div>
 </div>

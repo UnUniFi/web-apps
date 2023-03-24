@@ -46,12 +46,18 @@
         <a class="tab tab-lg tab-active">Create</a>
       </div>
       <div class="card-body">
-        <form>
+        <form #formRef="ngForm" (submit)="onSubmitCreate()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Vault Name</span>
             </label>
-            <input type="text" class="input input-bordered w-full" />
+            <input
+              type="text"
+              placeholder="e.g. GUU Lending"
+              class="input input-bordered w-full"
+              [(ngModel)]="name"
+              name="name"
+            />
           </div>
           <div class="form-control">
             <label class="label">
@@ -61,13 +67,31 @@
               class="select select-bordered w-full"
               [(ngModel)]="selectedSymbol"
               name="symbol"
+              (change)="onChangeSymbol()"
             >
-              <option disabled selected>Select a asset's symbol</option>
+              <option [value]="undefined" disabled>Select a asset's symbol</option>
               <option [value]="'USDC'">USDC</option>
               <option [value]="'BTC'">BTC</option>
-              <option [value]="'ATOM'">ATOM</option>
               <option [value]="'GUU'">GUU</option>
             </select>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Commission Rate</span>
+            </label>
+            <label class="input-group">
+              <input
+                type="number"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [(ngModel)]="commissionRate"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="commission"
+                class="input input-bordered w-full"
+              />
+              <span>%</span>
+            </label>
           </div>
           <div class="form-control">
             <label class="label">
@@ -104,7 +128,8 @@
                 [min]="0"
                 [max]="100"
                 [step]="1"
-                [(ngModel)]="firstStrategy.distRate"
+                [(ngModel)]="firstStrategy.weight"
+                name="strategy1Weight"
                 class="input input-bordered w-full"
               />
               <span>%</span>
@@ -112,7 +137,7 @@
                 <mat-icon>star</mat-icon>
               </label>
             </label>
-            <div *ngFor="let strategy of strategies; let i = index">
+            <div *ngFor="let strategy of selectedStrategies; let i = index">
               <label class="input-group mb-2">
                 <select class="select select-bordered w-1/2 lg:w-1/4">
                   <option disabled selected>Select a strategy</option>
@@ -127,7 +152,7 @@
                   [min]="0"
                   [max]="100"
                   [step]="1"
-                  [(ngModel)]="strategy.distRate"
+                  [(ngModel)]="strategy.weight"
                   name="strategyWeight"
                   class="input input-bordered w-full"
                 />
@@ -163,7 +188,13 @@
               </div>
             </label>
             <label class="input-group">
-              <input type="number" value="0.1" disabled class="input input-bordered w-full" />
+              <input
+                type="number"
+                name="deposit"
+                [(ngModel)]="depositAmount"
+                disabled
+                class="input input-bordered w-full"
+              />
               <span>{{ selectedSymbol }}</span>
             </label>
           </div>
@@ -186,12 +217,18 @@
               </div>
             </label>
             <label class="input-group">
-              <input type="number" value="5" disabled class="input input-bordered w-full" />
-              <span>GUU</span>
+              <input
+                type="number"
+                name="fee"
+                [(ngModel)]="feeAmount"
+                disabled
+                class="input input-bordered w-full"
+              />
+              <span>{{ selectedSymbol }}</span>
             </label>
           </div>
 
-          <div class="card-actions justify-end">
+          <div class="card-actions justify-end mt-4">
             <label for="create-model" class="btn btn-primary px-8"> Create a new Vault </label>
           </div>
 

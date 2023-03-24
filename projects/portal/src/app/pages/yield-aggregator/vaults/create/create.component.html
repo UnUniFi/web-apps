@@ -1,1 +1,7 @@
-<view-create (appCreate)="onCreate($event)"></view-create>
+<view-create
+  [strategies]="strategies$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [symbolMetadataMap]="symbolMetadataMap$ | async"
+  (appCreate)="onCreate($event)"
+  (changeDenom)="onChangeDenom($event)"
+></view-create>

@@ -1,7 +1,7 @@
 import { YieldAggregatorQueryService } from '../../../models/ununifi/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
@@ -30,6 +30,21 @@ export class VaultsComponent implements OnInit {
           : vaults,
       ),
     );
+    //dummy
+    this.vaults$ = of([
+      {
+        id: '1',
+        denom: 'uusdc',
+        owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
+        owner_deposit: { amount: '1000000', denom: 'uusdc' },
+        withdraw_commission_rate: '0.02',
+        withdraw_reserve_rate: '0.015',
+        strategy_weights: [
+          { strategy_id: 'st01', weight: '0.6' },
+          { strategy_id: 'st02', weight: '0.4' },
+        ],
+      },
+    ]);
   }
 
   ngOnInit(): void {}
@@ -40,6 +55,7 @@ export class VaultsComponent implements OnInit {
       queryParams: {
         search: value,
       },
+      queryParamsHandling: 'merge',
     });
   }
 }

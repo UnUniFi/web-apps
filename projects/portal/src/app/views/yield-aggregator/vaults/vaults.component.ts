@@ -1,18 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-export interface VaultInfo {
-  name: string;
-  symbol: string;
-  iconUrl: string;
-  annualPercentageYield: string;
-  totalValueLocked: string;
-  availableAmount: string;
-  depositedAmount: string;
-  earnedAmount: string;
-  coinType?: string;
-  description?: string;
-}
+import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-vaults',
@@ -20,36 +8,10 @@ export interface VaultInfo {
   styleUrls: ['./vaults.component.css'],
 })
 export class VaultsComponent implements OnInit {
-  vaults: VaultInfo[];
+  @Input()
+  vaults?: VaultAll200ResponseVaultsInner[] | null;
 
-  constructor(private router: Router) {
-    this.vaults = [
-      {
-        name: 'Cosmos',
-        symbol: 'atom',
-        iconUrl:
-          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg',
-
-        annualPercentageYield: '0.03',
-        totalValueLocked: '100000',
-        availableAmount: '20000',
-        depositedAmount: '0',
-        earnedAmount: '0',
-      },
-      {
-        name: 'Osmosis',
-        symbol: 'osmo',
-        iconUrl:
-          'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png',
-
-        annualPercentageYield: '0.05',
-        totalValueLocked: '60000',
-        availableAmount: '20000',
-        depositedAmount: '0',
-        earnedAmount: '0',
-      },
-    ];
-  }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 

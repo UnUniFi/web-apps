@@ -63,39 +63,26 @@
       <thead>
         <tr>
           <th></th>
-          <th>Name</th>
-          <th>Token</th>
-          <th>APY</th>
-          <th>TVL</th>
-          <th>Deposited</th>
+          <!-- <td>Name</td> -->
+          <td>Owner</td>
+          <td>Asset</td>
+          <td>Reserve Rate</td>
+          <td>Commission Rate</td>
         </tr>
       </thead>
       <tbody>
-        <tr class="hover cursor-pointer" routerLink="1">
-          <th>#1</th>
-          <th>Dev axlUSDC</th>
-          <th>axlUSDC</th>
-          <td>18.80%</td>
-          <td>$ 581,209</td>
-          <td>129.75</td>
-        </tr>
-        <tr class="hover cursor-pointer" routerLink="2">
-          <th>#2</th>
-          <th>Dev Cosmos</th>
-          <th>ATOM</th>
-          <td>23.45%</td>
-          <td>$ 920,204</td>
-          <td>36.03</td>
-        </tr>
-        <tr class="hover cursor-pointer" routerLink="3">
-          <th>#3</th>
-          <th>Dev UnUniFi</th>
-          <th>GUU</th>
-          <td>48.93%</td>
-          <td>$ 681,946</td>
-          <td>12.35</td>
-        </tr>
+        <ng-container *ngFor="let vault of vaults">
+          <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
+            <th>#{{ vault.id }}</th>
+            <!-- <td>{{ vault.name }}</td> -->
+            <td>{{ vault.owner }}</td>
+            <td>{{ vault.denom | coinDenom }}</td>
+            <td>{{ vault.withdraw_reserve_rate }}%</td>
+            <td>{{ vault.withdraw_commission_rate }}%</td>
+          </tr>
+        </ng-container>
       </tbody>
+      <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
     </table>
   </div>
 
@@ -107,9 +94,9 @@
         Rate. By creating a great Vault, you can earn commissions from your users.
       </p>
       <div class="card-actions justify-end">
-        <button class="btn btn-outline btn-info" routerLink="/yield-aggregator/strategies">
+        <!-- <button class="btn btn-outline btn-info" routerLink="/yield-aggregator/strategies">
           View Strategies
-        </button>
+        </button> -->
         <button class="btn btn-primary" routerLink="create">Create</button>
       </div>
     </div>

@@ -30,11 +30,11 @@ const routes: Routes = [
     component: VaultComponent,
   },
   {
-    path: 'strategies',
+    path: 'strategies/:denom',
     component: StrategiesComponent,
   },
   {
-    path: 'strategies/:strategy_id',
+    path: 'strategies/:denom/:strategy_id',
     component: StrategyComponent,
   },
 ];

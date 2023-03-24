@@ -166,6 +166,15 @@
           <label class="btn btn-outline w-1/2 lg:w-1/4 mb-4" (click)="onClickAddStrategy()">
             <mat-icon>add</mat-icon>
           </label>
+          <div class="card-actions justify-end">
+            <label
+              *ngIf="selectedSymbol"
+              class="btn btn-outline btn-info px-4"
+              routerLink="/yield-aggregator/strategies/{{ denom }}"
+            >
+              View Strategies
+            </label>
+          </div>
 
           <div class="form-control">
             <label class="label">
@@ -245,92 +254,6 @@
             </div>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-  <h3>Strategies</h3>
-  <div class="flex flex-row flex-wrap -mb-8">
-    <div class="pb-8 w-full mb-2">
-      <div class="card bg-base-100 shadow-xl w-full">
-        <div class="card-body">
-          <h2 class="card-title">Mars Lending</h2>
-
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-title">Allocation weight</div>
-              <div class="stat-value">0.563</div>
-              <div class="stat-desc"></div>
-            </div>
-            <div class="stat">
-              <div class="stat-title">APR</div>
-              <div class="stat-value">21.2%</div>
-              <div class="stat-desc"></div>
-            </div>
-          </div>
-
-          <div class="collapse collapse-arrow">
-            <input type="checkbox" />
-            <div class="collapse-title text-xl font-medium">Details</div>
-            <div class="collapse-content">
-              <div class="overflow-x-auto">
-                <table class="table w-full">
-                  <tbody>
-                    <tr>
-                      <th>Allocation volume</th>
-                      <td>345,231 axlUSDC</td>
-                    </tr>
-                    <tr>
-                      <th>Contract Address</th>
-                      <td>0x342491C093A640c7c2347c4FFA7D8b9cBC84D1EB</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pb-8 w-full mb-2">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <h2 class="card-title">Mercury Lending</h2>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-title">Allocation weight</div>
-            <div class="stat-value">0.563</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">APR</div>
-            <div class="stat-value">21.2%</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-
-        <div class="collapse collapse-arrow">
-          <input type="checkbox" />
-          <div class="collapse-title text-xl font-medium">Details</div>
-          <div class="collapse-content">
-            <div class="overflow-x-auto">
-              <table class="table w-full">
-                <tbody>
-                  <tr>
-                    <th>Allocation volume</th>
-                    <td>345,231 axlUSDC</td>
-                  </tr>
-                  <tr>
-                    <th>Contract Address</th>
-                    <td>0x342491C093A640c7c2347c4FFA7D8b9cBC84D1EB</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

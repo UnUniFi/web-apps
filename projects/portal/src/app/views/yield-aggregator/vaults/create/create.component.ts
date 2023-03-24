@@ -10,6 +10,8 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 })
 export class CreateComponent implements OnInit {
   @Input()
+  denom?: string | null;
+  @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;

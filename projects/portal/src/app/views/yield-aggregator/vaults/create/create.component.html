@@ -53,8 +53,13 @@
             </label>
             <input
               type="text"
+              required
+              #nameNgModelRef="ngModel"
               placeholder="e.g. GUU Lending"
               class="input input-bordered w-full"
+              [class]="{
+                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+              }"
               [(ngModel)]="name"
               name="name"
             />
@@ -64,6 +69,7 @@
               <span class="label-text">Select Asset</span>
             </label>
             <select
+              required
               class="select select-bordered w-full"
               [(ngModel)]="selectedSymbol"
               name="symbol"
@@ -81,6 +87,7 @@
             </label>
             <label class="input-group">
               <input
+                #commissionNgModelRef="ngModel"
                 type="number"
                 [min]="0"
                 [max]="100"
@@ -89,6 +96,9 @@
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="commission"
                 class="input input-bordered w-full"
+                [class]="{
+                  'input-error': commissionNgModelRef.errors && commissionNgModelRef.touched
+                }"
               />
               <span>%</span>
             </label>
@@ -134,7 +144,7 @@
               />
               <span>%</span>
               <label class="btn btn-outline btn-disabled">
-                <mat-icon>star</mat-icon>
+                <mat-icon>delete</mat-icon>
               </label>
             </label>
             <div *ngFor="let strategy of selectedStrategies; let i = index">
@@ -238,18 +248,26 @@
           </div>
 
           <div class="card-actions justify-end mt-4">
-            <label for="create-model" class="btn btn-primary px-8"> Create a new Vault </label>
+            <label #createModalLabel for="create-modal" hidden></label>
+            <button
+              type="button"
+              class="btn btn-primary px-8"
+              [disabled]="formRef.invalid"
+              (click)="createModalLabel.click()"
+            >
+              Create a new Vault
+            </button>
           </div>
 
           <!-- Put this part before </body> tag -->
-          <input type="checkbox" id="create-model" class="modal-toggle" />
+          <input type="checkbox" id="create-modal" class="modal-toggle" />
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">Are you sure to create this Vault?</h3>
               <p class="py-4">Vault Info</p>
               <div class="modal-action">
-                <label for="create-model" class="btn btn-outline">Cancel</label>
-                <button class="btn btn-primary">Create</button>
+                <label for="create-modal" class="btn btn-outline">Cancel</label>
+                <button class="btn btn-primary" [disabled]="formRef.invalid">Create</button>
               </div>
             </div>
           </div>

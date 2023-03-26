@@ -63,22 +63,22 @@
       <thead>
         <tr>
           <th></th>
-          <!-- <td>Name</td> -->
-          <td>Owner</td>
           <td>Asset</td>
           <td>Reserve Rate</td>
           <td>Commission Rate</td>
+          <!-- <td>Name</td> -->
+          <td>Owner</td>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let vault of vaults">
           <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
             <th>#{{ vault.id }}</th>
-            <!-- <td>{{ vault.name }}</td> -->
-            <td>{{ vault.owner }}</td>
             <td>{{ vault.denom | coinDenom }}</td>
             <td>{{ vault.withdraw_reserve_rate }}%</td>
             <td>{{ vault.withdraw_commission_rate }}%</td>
+            <!-- <td>{{ vault.name }}</td> -->
+            <td>{{ vault.owner }}</td>
           </tr>
         </ng-container>
       </tbody>

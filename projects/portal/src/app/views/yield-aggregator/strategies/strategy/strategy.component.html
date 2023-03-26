@@ -42,19 +42,14 @@
           </table>
         </div>
         <h3 class="mt-4">Historical APR</h3>
-        <google-chart
-          [title]="chartTitle"
-          [type]="chartType"
-          [data]="chartData"
-          [columns]="chartColumnNames"
-          [options]="chartOptions"
-        >
+        <google-chart [title]="chartTitle" [type]="chartType" [data]="chartData" [columns]="chartColumnNames"
+          [options]="chartOptions">
         </google-chart>
       </div>
     </div>
   </div>
 
-  <h3>Vaults</h3>
+  <h3>Vaults that contains this strategy</h3>
   <div class="flex flex-row flex-wrap -mb-8">
     <div class="pb-8 w-full">
       <div class="card bg-base-100 shadow-xl w-full">

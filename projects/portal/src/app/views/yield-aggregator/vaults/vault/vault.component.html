@@ -84,7 +84,7 @@
         >
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
-        <form #formRef="ngForm" (submit)="onSubmitDeposit()">
+        <form #depositFormRef="ngForm" (submit)="onSubmitDeposit()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
@@ -106,7 +106,7 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <label class="label">{{ symbol }}</label>
+              <span>{{ symbol }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
@@ -122,17 +122,19 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="0" />
-              <span>YA/{{ symbol }}</span>
+              <span>YA/{{ symbol }}/{{ vault?.id }}</span>
             </label>
           </div>
 
           <div class="card-actions justify-end mt-8">
-            <button class="btn btn-primary px-8">Deposit</button>
+            <button class="btn btn-primary px-8" [disabled]="depositFormRef.invalid">
+              Deposit
+            </button>
           </div>
         </form>
       </div>
       <div class="card-body" *ngIf="tab === 'burn'">
-        <form #formRef="ngForm" (submit)="onSubmitWithdraw()">
+        <form #withdrawFormRef="ngForm" (submit)="onSubmitWithdraw()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
@@ -154,7 +156,7 @@
                 name="burnAmount"
                 (input)="onWithdrawAmountChange()"
               />
-              <span>YA/{{ symbol }}</span>
+              <span>YA/{{ symbol }}/{{ vault?.id }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
@@ -174,13 +176,15 @@
           </div>
 
           <div class="card-actions justify-end mt-8">
-            <button class="btn btn-secondary px-8">Withdraw</button>
+            <button class="btn btn-secondary px-8" [disabled]="withdrawFormRef.invalid">
+              Withdraw
+            </button>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <h2>Strategies</h2>
+  <h2>Strategies this vault contains</h2>
   <div class="flex flex-row flex-wrap -mr-12 -mb-12">
     <div
       *ngFor="let strategy of vault?.strategy_weights; let i = index"

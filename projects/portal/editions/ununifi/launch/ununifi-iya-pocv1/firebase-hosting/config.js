@@ -6,10 +6,10 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
+const domainCauchyEA = '54.249.145.2';
 
-const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'ununifi-testnet-iya';
+const chainName = 'UnUniFi (IYA-Test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -101,7 +101,7 @@ const configs = [
       monitor: undefined,
       nftMint: {
         enabled: false,
-        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+        nftClasses: [],
       },
       developer: {
         enabled: true,

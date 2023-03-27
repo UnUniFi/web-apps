@@ -8,10 +8,10 @@ const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 const developerPort = location.protocol === 'https:' ? 3032 : 3030;
 
 // To Do write chain config
-const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
+const domainCauchyEA = '54.249.145.2';
 
-const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (Alpha-Test)';
+const chainID = 'ununifi-testnet-iya';
+const chainName = 'UnUniFi (IYA-Test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -102,7 +102,7 @@ const configs = [
       ],
       monitor: undefined,
       nftMint: {
-        enabled: true,
+        enabled: false,
         nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
       },
       developer: {

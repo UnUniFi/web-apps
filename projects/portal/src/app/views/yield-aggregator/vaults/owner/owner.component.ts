@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TransferVaultRequest } from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
+import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-owner',
@@ -7,10 +8,17 @@ import { TransferVaultRequest } from 'projects/portal/src/app/models/ununifi/yie
   styleUrls: ['./owner.component.css'],
 })
 export class OwnerComponent implements OnInit {
+  @Input()
+  address?: string | null;
+  @Input()
+  owner?: string | null;
+  @Input()
+  vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Output()
   appDelete: EventEmitter<string>;
   @Output()
   appTransfer: EventEmitter<TransferVaultRequest>;
+  recipientAddress?: string;
 
   constructor() {
     this.appDelete = new EventEmitter();
@@ -18,4 +26,18 @@ export class OwnerComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onSubmitTransfer(vaultId?: string) {
+    if (!this.recipientAddress || !vaultId) {
+      return;
+    }
+    this.appTransfer.emit({ vaultId, recipientAddress: this.recipientAddress });
+  }
+
+  onSubmitDelete(vaultId?: string) {
+    if (!vaultId) {
+      return;
+    }
+    this.appDelete.emit(vaultId);
+  }
 }

@@ -41,18 +41,18 @@ export class VaultComponent implements OnInit {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
     //dummy
-    this.vault$ = of({
-      id: '1',
-      denom: 'uusdc',
-      owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
-      owner_deposit: { amount: '1000000', denom: 'uusdc' },
-      withdraw_commission_rate: '0.02',
-      withdraw_reserve_rate: '0.015',
-      strategy_weights: [
-        { strategy_id: 'st01', weight: '0.6' },
-        { strategy_id: 'st02', weight: '0.4' },
-      ],
-    });
+    // this.vault$ = of({
+    //   id: '1',
+    //   denom: 'uusdc',
+    //   owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
+    //   owner_deposit: { amount: '1000000', denom: 'uusdc' },
+    //   withdraw_commission_rate: '0.02',
+    //   withdraw_reserve_rate: '0.015',
+    //   strategy_weights: [
+    //     { strategy_id: 'st01', weight: '0.6' },
+    //     { strategy_id: 'st02', weight: '0.4' },
+    //   ],
+    // });
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),

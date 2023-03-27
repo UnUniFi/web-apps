@@ -75,8 +75,8 @@
           <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
             <th>#{{ vault.id }}</th>
             <td>{{ vault.denom | coinDenom }}</td>
-            <td>{{ vault.withdraw_reserve_rate }}%</td>
-            <td>{{ vault.withdraw_commission_rate }}%</td>
+            <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
+            <td>{{ vault.withdraw_commission_rate | percentage }}</td>
             <!-- <td>{{ vault.name }}</td> -->
             <td>{{ vault.owner }}</td>
           </tr>

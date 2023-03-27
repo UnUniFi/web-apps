@@ -95,12 +95,16 @@
               </div>
             </label>
             <label class="input-group mb-2">
-              <select class="select select-bordered w-1/2 lg:w-1/4">
-                <option disabled selected>Select a strategy</option>
-                <option>Mercury</option>
-                <option>Venus</option>
-                <option>Mars</option>
-                <option>Jupiter</option>
+              <select
+                required
+                class="select select-bordered w-1/2 lg:w-1/4"
+                [(ngModel)]="firstStrategy.id"
+                name="firstStrategyId"
+              >
+                <option [value]="undefined" disabled>Select a strategy</option>
+                <ng-container *ngFor="let s of strategies">
+                  <option [value]="s">{{ s }}</option>
+                </ng-container>
               </select>
               <input
                 type="number"
@@ -119,12 +123,16 @@
             </label>
             <div *ngFor="let strategy of selectedStrategies; let i = index">
               <label class="input-group mb-2">
-                <select class="select select-bordered w-1/2 lg:w-1/4">
-                  <option disabled selected>Select a strategy</option>
-                  <option>Mercury</option>
-                  <option>Venus</option>
-                  <option>Mars</option>
-                  <option>Jupiter</option>
+                <select
+                  required
+                  class="select select-bordered w-1/2 lg:w-1/4"
+                  [(ngModel)]="strategy.id"
+                  name="strategy{{ i }}Id"
+                >
+                  <option [value]="undefined" disabled>Select a strategy</option>
+                  <ng-container *ngFor="let s of strategies">
+                    <option [value]="s">{{ s }}</option>
+                  </ng-container>
                 </select>
                 <input
                   type="number"

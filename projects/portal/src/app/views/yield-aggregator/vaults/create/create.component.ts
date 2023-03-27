@@ -28,8 +28,8 @@ export class CreateComponent implements OnInit {
   commissionRate = 0.5;
   depositAmount = 0.001;
   feeAmount = 0.0005;
-  firstStrategy = { id: '', weight: 100 };
-  selectedStrategies: { id: string; weight: number }[] = [];
+  firstStrategy: { id?: string; weight: number } = { id: undefined, weight: 100 };
+  selectedStrategies: { id?: string; weight: number }[] = [];
   selectedSymbol?: string;
 
   constructor() {
@@ -40,7 +40,7 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickAddStrategy() {
-    this.selectedStrategies.push({ id: '', weight: 0 });
+    this.selectedStrategies.push({ weight: 0 });
   }
   onClickDeleteStrategy(index: number) {
     this.selectedStrategies.splice(index, 1);
@@ -55,13 +55,26 @@ export class CreateComponent implements OnInit {
     }
   }
   onSubmitCreate() {
-    if (!this.name || !this.selectedSymbol) {
+    const strategies = this.selectedStrategies.slice();
+    strategies.unshift(this.firstStrategy);
+    strategies.filter((s) => s.id && s.weight > 0);
+    if (strategies.reduce((sum, s) => sum + s.weight, 0) !== 100) {
+      alert('The total of the strategies should be 100%.');
+      return;
+    }
+    const filteredStrategies = strategies.map((s) => ({ id: s.id!, weight: s.weight }));
+    if (!this.name) {
+      alert('Invalid Name.');
+      return;
+    }
+    if (!this.selectedSymbol) {
+      alert('Invalid Asset.');
       return;
     }
     this.appCreate.emit({
       name: this.name,
       symbol: this.selectedSymbol,
-      strategies: this.selectedStrategies,
+      strategies: filteredStrategies,
       commissionRate: this.commissionRate,
       feeAmount: this.feeAmount,
       depositAmount: this.depositAmount,

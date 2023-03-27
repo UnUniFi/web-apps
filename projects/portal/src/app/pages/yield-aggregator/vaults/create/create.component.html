@@ -1,4 +1,5 @@
 <view-create
+  [address]="address$ | async"
   [denom]="denom$ | async"
   [strategies]="strategies$ | async"
   [symbolBalancesMap]="symbolBalancesMap$ | async"

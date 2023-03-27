@@ -17,6 +17,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
+  address$: Observable<string>;
   denom$: Observable<string>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
@@ -30,13 +31,13 @@ export class CreateComponent implements OnInit {
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly iyaApp: YieldAggregatorApplicationService,
   ) {
-    const address$ = this.walletService.currentStoredWallet$.pipe(
+    this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
     this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
-    this.symbolBalancesMap$ = address$.pipe(
+    this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
     );
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();

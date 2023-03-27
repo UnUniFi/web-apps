@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { cosmos } from '@cosmos-client/core/esm/proto';
 
 export interface OptionConfig {
   name: string;
@@ -12,8 +13,13 @@ export interface OptionConfig {
   styleUrls: ['./yield-aggregator.component.css'],
 })
 export class YieldAggregatorComponent implements OnInit {
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+
   configs: OptionConfig[];
   selectedConfig: OptionConfig;
+  selectedSymbol?: string;
+  selectedDenom?: string | null;
 
   constructor() {
     this.configs = [
@@ -37,5 +43,12 @@ export class YieldAggregatorComponent implements OnInit {
 
   onChangeConfig(conf: OptionConfig) {
     this.selectedConfig = conf;
+  }
+
+  onChangeSymbol() {
+    if (!this.selectedSymbol) {
+      return;
+    }
+    this.selectedDenom = this.symbolMetadataMap?.[this.selectedSymbol].base;
   }
 }

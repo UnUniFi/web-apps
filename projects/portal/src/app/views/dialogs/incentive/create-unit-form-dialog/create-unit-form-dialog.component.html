@@ -134,7 +134,7 @@
               [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
               name="minimum-gas-denom"
               required
-              (valueChange)="onMinimumGasDenomChanged('')"
+              (ngModelChange)="onMinimumGasDenomChanged($event)"
             >
               <option
                 *ngFor="let minimumGasPriceOption of minimumGasPrices"

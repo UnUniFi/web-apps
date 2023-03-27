@@ -58,24 +58,24 @@ export class VaultComponent implements OnInit {
     this.burnAmount = 0;
     this.chartTitle = '';
     this.chartType = ChartType.LineChart;
-    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 480;
+    const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
     this.chartOptions = this.iyaChart.createChartOption(width);
 
     this.chartData = this.iyaChart.createDummyChartData();
     this.chartColumnNames = ['Date', 'APY'];
   }
 
-  @ViewChild('chartCardRef') chartCardRef?: ElementRef;
+  @ViewChild('charRef') chartRef?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    const width: number = this.chartRef!.nativeElement.offsetWidth;
     this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    const width: number = this.chartRef!.nativeElement.offsetWidth;
     this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 

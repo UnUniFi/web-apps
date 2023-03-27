@@ -1,1 +1,7 @@
-<view-strategy [strategy]="strategy$ | async"></view-strategy>
+<view-strategy
+  [strategy]="strategy$ | async"
+  [id]="id$ | async"
+  [symbol]="symbol$ | async"
+  [vaults]="vaults$ | async"
+  [weights]="weights$ | async"
+></view-strategy>

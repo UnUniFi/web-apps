@@ -1,100 +1,30 @@
 <div class="mx-auto max-w-screen-xl">
   <div class="flex flex-row flex-wrap mb-8">
-    <h2>Strategies</h2>
+    <h2>Strategies of {{ symbol || denom }}</h2>
   </div>
-  <!-- <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <h2 class="card-title break-all">All Available Strategies</h2>
-        <div class="stats flex flex-col md:flex-row">
-          <div class="stat">
-            <div class="stat-title">Average APY</div>
-            <div class="stat-value">12.34%</div>
-            <div class="stat-desc"></div>
+  <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+    <div
+      *ngFor="let strategy of strategies; let i = index"
+      class="pr-12 pb-12 w-full md:w-1/2 xl:w-1/3"
+    >
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <div class="flex flex-row">
+            <div class="badge badge-lg badge-primary mr-1">#{{ strategy.id }}</div>
           </div>
-          <div class="stat">
-            <div class="stat-title">Average TVL</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Total Deposited</div>
-            <div class="stat-value">$ 123</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Total Earnings</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
+          <h2 class="card-title break-all">
+            {{ strategy.name }}
+          </h2>
+
+          <button
+            routerLink="/yield-aggregator/strategies/{{ strategy.denom }}/{{ strategy.id }}"
+            class="btn btn-outline btn-info"
+          >
+            View
+          </button>
         </div>
       </div>
     </div>
-  </div>
--->
-
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#0</div>
-          <div class="badge badge-lg badge-secondary mr-1">USDC</div>
-        </div>
-        <h2 class="card-title">Mars Lending</h2>
-        <div class="stats flex flex-col md:flex-row">
-          <div class="stat">
-            <div class="stat-title">APR</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Capital Allocation</div>
-            <div class="stat-value text-primary">1234.56 axlUSDC</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Performance Fee</div>
-            <div class="stat-value">0.12%</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-
-        <div class="card-actions justify-end">
-          <button routerLink="0" class="btn btn-outline btn-info mx-8">View</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#1</div>
-          <div class="badge badge-lg badge-secondary mr-1">GUU</div>
-        </div>
-        <h2 class="card-title">Mercury Lending</h2>
-        <div class="stats flex flex-col md:flex-row">
-          <div class="stat">
-            <div class="stat-title">APR</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Capital Allocation</div>
-            <div class="stat-value text-primary">1234.56 axlUSDC</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Performance Fee</div>
-            <div class="stat-value">0.12%</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-        <div class="card-actions justify-end">
-          <button routerLink="1" class="btn btn-outline btn-info mx-8">View</button>
-        </div>
-      </div>
-    </div>
+    <p *ngIf="!strategies?.length">There is no strategy.</p>
   </div>
 </div>

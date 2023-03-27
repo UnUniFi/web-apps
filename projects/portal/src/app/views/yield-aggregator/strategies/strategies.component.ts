@@ -8,6 +8,10 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 })
 export class StrategiesComponent implements OnInit {
   @Input()
+  denom?: string | null;
+  @Input()
+  symbol?: string | null;
+  @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
 
   constructor() {}

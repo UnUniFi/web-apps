@@ -2,10 +2,8 @@ import { Config } from '../models/config.service';
 import { StoredWallet } from '../models/wallets/wallet.model';
 import { SearchResult } from './toolbar/toolbar.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
-import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import * as crypto from 'crypto';
-import { BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'view-app',
@@ -43,13 +41,12 @@ export class AppComponent implements OnInit {
   @Output()
   appChangeConfig: EventEmitter<string>;
 
-  @ViewChild('drawer')
-  sidenav!: MatSidenav;
+  // @ViewChild('drawer')
+  // sidenav!: MatSidenav;
+  // drawerMode$: BehaviorSubject<MatDrawerMode> = new BehaviorSubject('side' as MatDrawerMode);
+  // drawerOpened$ = new BehaviorSubject(true);
 
-  drawerMode$: BehaviorSubject<MatDrawerMode> = new BehaviorSubject('side' as MatDrawerMode);
-
-  drawerOpened$ = new BehaviorSubject(true);
-
+  apps: { name: string; link: string; icon: string }[];
   searchValue: string;
 
   constructor(private router: Router, private ngZone: NgZone) {
@@ -58,37 +55,41 @@ export class AppComponent implements OnInit {
       searchValue: '',
       type: '',
     };
+    this.apps = [
+      { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'photo_library' },
+      { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+    ];
     this.appSubmitSearchResult = new EventEmitter();
     this.appChangeInputValue = new EventEmitter();
     this.appConnectWallet = new EventEmitter();
     this.appChangeConfig = new EventEmitter();
 
-    window.onresize = (_) => {
-      this.ngZone.run(() => {
-        this.handleResizeWindow(window.innerWidth);
-      });
-    };
+    // window.onresize = (_) => {
+    //   this.ngZone.run(() => {
+    //     this.handleResizeWindow(window.innerWidth);
+    //   });
+    // };
 
-    combineLatest([this.drawerMode$, this.router.events]).subscribe(([drawerMode, event]) => {
-      if (drawerMode === 'over' && event instanceof NavigationEnd) {
-        this.sidenav?.close();
-      }
-    });
+    // combineLatest([this.drawerMode$, this.router.events]).subscribe(([drawerMode, event]) => {
+    //   if (drawerMode === 'over' && event instanceof NavigationEnd) {
+    //     this.sidenav?.close();
+    //   }
+    // });
   }
 
   ngOnInit() {
-    this.handleResizeWindow(window.innerWidth);
+    // this.handleResizeWindow(window.innerWidth);
   }
 
-  handleResizeWindow(width: number): void {
-    if (width < 640) {
-      this.drawerMode$.next('over');
-      this.drawerOpened$.next(false);
-    } else {
-      this.drawerMode$.next('side');
-      this.drawerOpened$.next(true);
-    }
-  }
+  // handleResizeWindow(width: number): void {
+  //   if (width < 640) {
+  //     this.drawerMode$.next('over');
+  //     this.drawerOpened$.next(false);
+  //   } else {
+  //     this.drawerMode$.next('side');
+  //     this.drawerOpened$.next(true);
+  //   }
+  // }
 
   getColorCode(storedWallet: StoredWallet) {
     const hash = crypto

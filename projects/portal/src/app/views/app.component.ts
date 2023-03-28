@@ -56,6 +56,7 @@ export class AppComponent implements OnInit {
       type: '',
     };
     this.apps = [
+      { name: 'Utilities', link: '/', icon: 'account_balance_wallet' },
       { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'photo_library' },
       { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
     ];

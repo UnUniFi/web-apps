@@ -1,1 +1,96 @@
-<p>app-utils works!</p>
+<div class="drawer w-screen h-screen bg-base-300">
+  <input id="drawer-main" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col min-h-full overflow-auto">
+    <!-- Navbar -->
+    <div class="navbar glass sticky top-0 z-20">
+      <div class="flex-none">
+        <label for="drawer-main" class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-6 h-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
+      </div>
+      <button class="align-middle" mat-icon-button routerLink="/">
+        <img class="p-1 w-10 h-10" src="assets/favicon.png" />
+      </button>
+      <div class="flex-1 px-2 mx-2 text-2xl">UnUniFi Portal</div>
+      <div class="flex-none">
+        <app-app-tool></app-app-tool>
+        <app-node-tool></app-node-tool>
+        <app-wallet-tool></app-wallet-tool>
+      </div>
+    </div>
+    <!-- Page content here -->
+    <div class="flex justify-center">
+      <div class="w-full max-w-screen-xl p-8">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-side h-full overflow-auto">
+    <label for="drawer-main" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-11/12 sm:w-1/2 md:1/3 xl:w-1/4 bg-base-200">
+      <!-- Sidebar content here -->
+      <app-search-tool></app-search-tool>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/">
+          <span class="flex-none">
+            <mat-icon color="primary">other_houses</mat-icon>
+          </span>
+          <span class="flex-1">Balance</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/vote/proposals">
+          <span class="flex-none">
+            <mat-icon color="primary">how_to_vote</mat-icon>
+          </span>
+          <span class="flex-1">Vote</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/delegate/validators">
+          <span class="flex-none">
+            <mat-icon color="primary">savings</mat-icon>
+          </span>
+          <span class="flex-1">Delegate</span>
+        </label>
+      </li>
+      <!-- <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/incentive">
+          <span class="flex-none">
+            <mat-icon color="primary">attach_money</mat-icon>
+          </span>
+          <span class="flex-1">Incentive</span>
+        </label>
+      </li> -->
+
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <li>
+            <label
+              for="drawer-main"
+              class="flex gap-4"
+              routerLink="{{ navigation.link.replace('/portal', '') }}"
+            >
+              <span class="flex-none">
+                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+              </span>
+              <span class="flex-1">{{ navigation.name }}</span>
+            </label>
+          </li>
+        </ng-container>
+      </ng-template>
+    </ul>
+  </div>
+</div>

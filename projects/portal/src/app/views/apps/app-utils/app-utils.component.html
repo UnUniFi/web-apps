@@ -51,7 +51,7 @@
         </label>
       </li>
       <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/vote/proposals">
+        <label for="drawer-main" class="flex gap-4" routerLink="/utilities/vote/proposals">
           <span class="flex-none">
             <mat-icon color="primary">how_to_vote</mat-icon>
           </span>
@@ -59,7 +59,7 @@
         </label>
       </li>
       <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/delegate/validators">
+        <label for="drawer-main" class="flex gap-4" routerLink="/utilities/delegate/validators">
           <span class="flex-none">
             <mat-icon color="primary">savings</mat-icon>
           </span>
@@ -67,7 +67,7 @@
         </label>
       </li>
       <!-- <li>
-        <label for="drawer-main" class="flex gap-4" routerLink="/incentive">
+        <label for="drawer-main" class="flex gap-4" routerLink="/utilities/incentive">
           <span class="flex-none">
             <mat-icon color="primary">attach_money</mat-icon>
           </span>
@@ -81,7 +81,7 @@
             <label
               for="drawer-main"
               class="flex gap-4"
-              routerLink="{{ navigation.link.replace('/portal', '') }}"
+              routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
             >
               <span class="flex-none">
                 <mat-icon color="accent">{{ navigation.icon }}</mat-icon>

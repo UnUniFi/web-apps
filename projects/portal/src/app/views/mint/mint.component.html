@@ -1,7 +1,7 @@
 <h2 class="mb-0">View CDPs</h2>
 <mat-card class="mb-4">
   <mat-nav-list>
-    <mat-list-item routerLink="/mint/cdps">You owned CDPs</mat-list-item>
+    <mat-list-item routerLink="cdps">You owned CDPs</mat-list-item>
   </mat-nav-list>
 </mat-card>
 
@@ -29,7 +29,7 @@
         <span class="ml-2 break-all">
           <span>{{ collateral.liquidation_ratio | floor }}</span>
           <span class="text-gray-300 text-sm"
-            >{{ collateral.liquidation_ratio | decimals: 6 }}
+            >{{ collateral.liquidation_ratio | decimals : 6 }}
           </span>
         </span>
       </mat-list-item>
@@ -37,7 +37,7 @@
       <mat-list-item>
         <span>Debt Limit:</span>
         <span class="flex-auto"></span>
-        <span>{{ collateral.debt_limit?.amount | number: '1.0-0' }}</span>
+        <span>{{ collateral.debt_limit?.amount | number : '1.0-0' }}</span>
         <span class="ml-1">{{ collateral.debt_limit?.denom }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
@@ -46,14 +46,14 @@
         <span class="flex-auto"></span>
         <span class="ml-2 break-all">
           <span>{{ collateral.stability_fee | floor }}</span>
-          <span class="text-gray-300 text-sm">{{ collateral.stability_fee | decimals: 15 }} </span>
+          <span class="text-gray-300 text-sm">{{ collateral.stability_fee | decimals : 15 }} </span>
         </span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
         <span>Auction Size:</span>
         <span class="flex-auto"></span>
-        <span>{{ collateral.auction_size | number: '1.0-0' }}</span>
+        <span>{{ collateral.auction_size | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
@@ -62,7 +62,7 @@
         <span class="ml-2 break-all">
           <span>{{ collateral.liquidation_penalty | floor }}</span>
           <span class="text-gray-300 text-sm"
-            >{{ collateral.liquidation_penalty | decimals: 6 }}
+            >{{ collateral.liquidation_penalty | decimals : 6 }}
           </span>
         </span>
       </mat-list-item>
@@ -85,7 +85,7 @@
         <span class="ml-2 break-all">
           <span>{{ collateral.keeper_reward_percentage | floor }}</span>
           <span class="text-gray-300 text-sm"
-            >{{ collateral.keeper_reward_percentage | decimals: 9 }}
+            >{{ collateral.keeper_reward_percentage | decimals : 9 }}
           </span>
         </span>
       </mat-list-item>
@@ -93,7 +93,7 @@
       <mat-list-item>
         <span>Check Collateralization Index Count:</span>
         <span class="flex-auto"></span>
-        <span>{{ collateral.check_collateralization_index_count | number: '1.0-0' }}</span>
+        <span>{{ collateral.check_collateralization_index_count | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
       <mat-list-item>
@@ -177,32 +177,32 @@
       <mat-list-item>
         <span>Global Debt Limit:</span>
         <span class="flex-auto"></span>
-        <span>{{ debt.global_debt_limit?.amount | number: '1.0-0' }}</span>
+        <span>{{ debt.global_debt_limit?.amount | number : '1.0-0' }}</span>
         <span class="ml-1">{{ debt.global_debt_limit?.denom }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
         <span>Surplus Auction Threshold:</span>
         <span class="flex-auto"></span>
-        <span>{{ debt.surplus_auction_threshold | number: '1.0-0' }}</span>
+        <span>{{ debt.surplus_auction_threshold | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
         <span>Surplus Auction Lot:</span>
         <span class="flex-auto"></span>
-        <span>{{ debt.surplus_auction_lot | number: '1.0-0' }}</span>
+        <span>{{ debt.surplus_auction_lot | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
         <span>Debt Auction Threshold:</span>
         <span class="flex-auto"></span>
-        <span>{{ debt.debt_auction_threshold | number: '1.0-0' }}</span>
+        <span>{{ debt.debt_auction_threshold | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>
         <span>Debt Auction Lot:</span>
         <span class="flex-auto"></span>
-        <span>{{ debt.debt_auction_lot | number: '1.0-0' }}</span>
+        <span>{{ debt.debt_auction_lot | number : '1.0-0' }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item>

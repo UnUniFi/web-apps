@@ -176,6 +176,20 @@ export class BankQueryService {
         name: 'OSMOSIS (IBC)',
         symbol: 'OSMO',
       },
+      {
+        description: 'UnUniFi Stake Token',
+        denom_units: [
+          {
+            denom: 'stake',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'stake',
+        display: 'GUU',
+        name: 'GUU (stake)',
+        symbol: 'GUU',
+      },
     ];
 
     return {

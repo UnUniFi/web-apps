@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'strategies/ibc/:ibc_denom/:strategy_id',
-    component: StrategiesComponent,
+    component: StrategyComponent,
   },
   {
     path: 'strategies/:denom/:strategy_id',

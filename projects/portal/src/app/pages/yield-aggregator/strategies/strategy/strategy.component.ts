@@ -17,8 +17,9 @@ import {
 export class StrategyComponent implements OnInit {
   id$: Observable<string>;
   denom$: Observable<string>;
+  ibcDenom$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
-  strategy$: Observable<StrategyAll200ResponseStrategiesInner>;
+  strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
 
@@ -30,12 +31,25 @@ export class StrategyComponent implements OnInit {
     const params$ = this.route.params;
     this.id$ = params$.pipe(map((params) => params.strategy_id));
     this.denom$ = params$.pipe(map((params) => params.denom));
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
-      map(([denom, denomMetadataMap]) => denomMetadataMap[denom].symbol),
+    this.ibcDenom$ = this.route.params.pipe(
+      map((params) => (params.ibc_denom ? 'ibc/' + params.ibc_denom : '')),
     );
-    this.strategy$ = params$.pipe(
-      mergeMap((params) => this.iyaQuery.getStrategy$(params.denom, params.strategy_id)),
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
+      map(([denom, ibcDenom, denomMetadataMap]) =>
+        ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
+      ),
+    );
+
+    const strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
+      mergeMap(([denom, ibcDenom]) =>
+        ibcDenom == ''
+          ? this.iyaQuery.listStrategies$(denom)
+          : this.iyaQuery.listStrategies$(ibcDenom),
+      ),
+    );
+    this.strategy$ = combineLatest([this.id$, strategies$]).pipe(
+      map(([id, strategies]) => strategies.find((s) => s.id == id)),
     );
     const allVaults$ = this.iyaQuery.listVaults$();
     this.vaults$ = combineLatest([allVaults$, this.id$]).pipe(

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-app-derivatives',
+  selector: 'view-app-derivatives',
   templateUrl: './app-derivatives.component.html',
   styleUrls: ['./app-derivatives.component.css']
 })

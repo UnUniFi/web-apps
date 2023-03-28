@@ -8,4 +8,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [WithdrawIncentiveAllRewardsFormDialogComponent],
 })
-export class WithdrawIncentiveAllRewardsFormDialogModule { }
+export class WithdrawIncentiveAllRewardsFormDialogModule {}

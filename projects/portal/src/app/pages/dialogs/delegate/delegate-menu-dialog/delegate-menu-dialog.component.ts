@@ -168,6 +168,6 @@ export class DelegateMenuDialogComponent implements OnInit {
 
   onSubmitDetail(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     this.dialogRef.close();
-    this.router.navigate(['delegate', 'validators', validator.operator_address]);
+    this.router.navigate(['utilities', 'delegate', 'validators', validator.operator_address]);
   }
 }

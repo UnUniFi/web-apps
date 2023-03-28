@@ -37,20 +37,20 @@ export class OwnerComponent implements OnInit {
     );
 
     //dummy
-    this.vaults$ = of([
-      {
-        id: '1',
-        denom: 'uusdc',
-        owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
-        owner_deposit: { amount: '1000000', denom: 'uusdc' },
-        withdraw_commission_rate: '0.02',
-        withdraw_reserve_rate: '0.015',
-        strategy_weights: [
-          { strategy_id: 'st01', weight: '0.6' },
-          { strategy_id: 'st02', weight: '0.4' },
-        ],
-      },
-    ]);
+    // this.vaults$ = of([
+    //   {
+    //     id: '1',
+    //     denom: 'uusdc',
+    //     owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
+    //     owner_deposit: { amount: '1000000', denom: 'uusdc' },
+    //     withdraw_commission_rate: '0.02',
+    //     withdraw_reserve_rate: '0.015',
+    //     strategy_weights: [
+    //       { strategy_id: 'st01', weight: '0.6' },
+    //       { strategy_id: 'st02', weight: '0.4' },
+    //     ],
+    //   },
+    // ]);
   }
 
   ngOnInit(): void {}

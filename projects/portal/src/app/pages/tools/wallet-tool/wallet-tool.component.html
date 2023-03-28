@@ -1,1 +1,4 @@
-<p>wallet-tool works!</p>
+<view-wallet-tool
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  (appConnectWallet)="onConnectWallet($event)"
+></view-wallet-tool>

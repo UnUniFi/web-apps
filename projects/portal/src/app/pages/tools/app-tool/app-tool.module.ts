@@ -1,15 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AppToolModule } from '../../../views/tools/app-tool/app-tool.module';
 import { AppToolComponent } from './app-tool.component';
-
-
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 @NgModule({
-  declarations: [
-    AppToolComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+  declarations: [AppToolComponent],
+  imports: [CommonModule, AppToolModule],
 })
-export class AppToolModule { }
+export class AppAppToolModule {}

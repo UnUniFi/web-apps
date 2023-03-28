@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-app-tool',
+  selector: 'view-app-tool',
   templateUrl: './app-tool.component.html',
-  styleUrls: ['./app-tool.component.css']
+  styleUrls: ['./app-tool.component.css'],
 })
 export class AppToolComponent implements OnInit {
+  apps: { name: string; link: string; icon: string }[];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
+    this.apps = [
+      { name: 'Utilities', link: '/', icon: 'account_balance_wallet' },
+      { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'photo_library' },
+      { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+    ];
   }
 
+  ngOnInit(): void {}
 }

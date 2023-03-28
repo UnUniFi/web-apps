@@ -1,1 +1,5 @@
-<p>search-tool works!</p>
+<view-search-tool
+  [searchResult]="searchResult$ | async"
+  (appSubmitSearchResult)="onSubmitSearchResult($event)"
+  (appChangeInputValue)="onChangeInputValue($event)"
+></view-search-tool>

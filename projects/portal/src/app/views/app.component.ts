@@ -101,10 +101,6 @@ export class AppComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
-  onChangeInputValue(inputValue: string) {
-    this.appChangeInputValue.emit(inputValue);
-  }
-
   onConnectWallet($event: {}) {
     this.appConnectWallet.emit($event);
   }

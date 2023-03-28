@@ -1,17 +1,13 @@
 <button class="btn gap-1 btn-ghost" (click)="onConnectWallet($event)">
   <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
   <ng-template #exist>
-    <mat-icon
-      matListIcon
-      class="ml-3"
-      [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
-    >
+    <mat-icon matListIcon class="sm:ml-3" [ngStyle]="{ color: getColorCode(currentStoredWallet!) }">
       circle
     </mat-icon>
     <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
   </ng-template>
   <ng-template #empty>
-    <mat-icon color="primary" class="ml-3">wallet</mat-icon>
+    <mat-icon color="primary" class="sm:ml-3">wallet</mat-icon>
     <span class="hidden md:inline">Connect wallet</span>
   </ng-template>
 </button>

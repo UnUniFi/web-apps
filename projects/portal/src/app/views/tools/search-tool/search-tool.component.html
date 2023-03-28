@@ -11,7 +11,7 @@
         [matAutocomplete]="auto"
         (ngModelChange)="onChangeInput(searchValueRef.value)"
         (focus)="onFocusInput(searchValueRef.value)"
-        class="input input-bordered"
+        class="input input-bordered w-full"
       />
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected()">
         <mat-option

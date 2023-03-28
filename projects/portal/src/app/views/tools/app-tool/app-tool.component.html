@@ -2,7 +2,7 @@
   <div tabindex="0" class="btn gap-1 btn-ghost">
     <mat-icon>apps</mat-icon>
   </div>
-  <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+  <ul tabindex="0" class="dropdown-content menu sm:p-2 shadow bg-base-100 rounded-box w-52">
     <li *ngFor="let app of apps">
       <a routerLink="{{ app.link }}">
         <mat-icon class="mr-2">{{ app.icon }}</mat-icon>

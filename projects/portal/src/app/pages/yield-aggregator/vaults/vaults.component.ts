@@ -1,3 +1,4 @@
+import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from '../../../models/ununifi/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,10 +13,12 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 })
 export class VaultsComponent implements OnInit {
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
+  symbols$: Observable<string[]>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
   ) {
     this.vaults$ = combineLatest([this.iyaQuery.listVaults$(), this.route.queryParams]).pipe(
@@ -28,6 +31,12 @@ export class VaultsComponent implements OnInit {
               return hasIdMatch || hasOwnerMatch || hasDenomMatch;
             })
           : vaults,
+      ),
+    );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
+      map(([vaults, denomMetadataMap]) =>
+        vaults.map((vault) => denomMetadataMap?.[vault.denom!].symbol || 'Invalid Asset'),
       ),
     );
 

@@ -10,6 +10,8 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 export class VaultsComponent implements OnInit {
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
+  @Input()
+  symbols?: string[] | null;
 
   constructor(private router: Router) {}
 

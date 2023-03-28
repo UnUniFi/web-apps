@@ -20,7 +20,7 @@
 
   <h2>Vaults</h2>
   <div class="bg-base-200 p-8 mb-8">
-    <div class="flex flex-row frex-wrap items-end">
+    <div class="flex flex-row flex-wrap items-end">
       <div class="form-control w-full max-w-xs">
         <label class="label">
           <span class="label-text">Search</span>
@@ -46,7 +46,6 @@
           </button>
         </div>
       </div>
-      <span class="flex-auto"></span>
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Only deposited</span>
@@ -71,10 +70,10 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let vault of vaults">
+        <ng-container *ngFor="let vault of vaults; let i = index">
           <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
             <th>#{{ vault.id }}</th>
-            <td>{{ vault.denom | coinDenom }}</td>
+            <td *ngIf="symbols">{{ symbols[i] }}</td>
             <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
             <td>{{ vault.withdraw_commission_rate | percentage }}</td>
             <!-- <td>{{ vault.name }}</td> -->

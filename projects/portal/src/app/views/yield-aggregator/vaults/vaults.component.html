@@ -21,12 +21,12 @@
   <h2>Vaults</h2>
   <div class="bg-base-200 p-8 mb-8">
     <div class="flex flex-row flex-wrap items-end">
-      <div class="form-control w-full max-w-xs">
+      <div class="form-control w-full md:max-w-xs">
         <label class="label">
           <span class="label-text">Search</span>
         </label>
         <div class="input-group">
-          <input type="text" placeholder="e.g. ATOM" class="input input-bordered" />
+          <input type="text" placeholder="e.g. ATOM" class="input input-bordered w-full" />
           <!-- <mat-autocomplete></mat-autocomplete> -->
           <button class="btn btn-square">
             <svg
@@ -46,11 +46,14 @@
           </button>
         </div>
       </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Only deposited</span>
-          <input type="checkbox" checked="checked" class="checkbox checkbox-primary" />
-        </label>
+      <div class="flex-auto flex flex-row">
+        <span class="flex-auto"></span>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <span class="label-text mr-1">Only deposited</span>
+            <input type="checkbox" checked="checked" class="checkbox checkbox-primary" />
+          </label>
+        </div>
       </div>
     </div>
   </div>

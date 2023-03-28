@@ -14,6 +14,8 @@ export class CreateComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
+  selectedSymbol?: string | null;
+  @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
@@ -30,7 +32,6 @@ export class CreateComponent implements OnInit {
   feeAmount = 0.0005;
   firstStrategy: { id?: string; weight: number } = { id: undefined, weight: 100 };
   selectedStrategies: { id?: string; weight: number }[] = [];
-  selectedSymbol?: string;
 
   constructor() {
     this.changeDenom = new EventEmitter();
@@ -50,6 +51,7 @@ export class CreateComponent implements OnInit {
       return;
     }
     const denom = this.symbolMetadataMap?.[this.selectedSymbol].base;
+    console.log(denom);
     if (denom) {
       this.changeDenom.emit(denom);
     }

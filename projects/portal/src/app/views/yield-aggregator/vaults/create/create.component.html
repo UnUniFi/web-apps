@@ -46,9 +46,7 @@
               (change)="onChangeSymbol()"
             >
               <option [value]="undefined" disabled>Select a asset's symbol</option>
-              <option [value]="'USDC'">USDC</option>
-              <option [value]="'BTC'">BTC</option>
-              <option [value]="'GUU'">GUU</option>
+              <option [value]="'OSMO'">OSMO</option>
             </select>
           </div>
           <div class="form-control">
@@ -94,16 +92,27 @@
                 </div>
               </div>
             </label>
+            <select
+              required
+              class="select select-bordered w-full sm:hidden"
+              [(ngModel)]="firstStrategy.id"
+              name="firstStrategyId"
+            >
+              <option [value]="undefined" disabled>Select a strategy</option>
+              <ng-container *ngFor="let s of strategies">
+                <option [value]="s.id">{{ s.name }}</option>
+              </ng-container>
+            </select>
             <label class="input-group mb-2">
               <select
                 required
-                class="select select-bordered w-1/2 lg:w-1/4"
+                class="select select-bordered w-1/4 hidden sm:block"
                 [(ngModel)]="firstStrategy.id"
                 name="firstStrategyId"
               >
                 <option [value]="undefined" disabled>Select a strategy</option>
                 <ng-container *ngFor="let s of strategies">
-                  <option [value]="s">{{ s }}</option>
+                  <option [value]="s.id">{{ s.name }}</option>
                 </ng-container>
               </select>
               <input
@@ -122,10 +131,21 @@
               </label>
             </label>
             <div *ngFor="let strategy of selectedStrategies; let i = index">
+              <select
+                required
+                class="select select-bordered w-full sm:hidden"
+                [(ngModel)]="strategy.id"
+                name="strategy{{ i }}Id"
+              >
+                <option [value]="undefined" disabled>Select a strategy</option>
+                <ng-container *ngFor="let s of strategies">
+                  <option [value]="s.id">{{ s.name }}</option>
+                </ng-container>
+              </select>
               <label class="input-group mb-2">
                 <select
                   required
-                  class="select select-bordered w-1/2 lg:w-1/4"
+                  class="select select-bordered w-1/4 hidden sm:block"
                   [(ngModel)]="strategy.id"
                   name="strategy{{ i }}Id"
                 >

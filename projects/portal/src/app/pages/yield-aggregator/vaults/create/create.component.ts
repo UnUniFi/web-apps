@@ -7,7 +7,7 @@ import { CreateVaultRequest } from 'projects/portal/src/app/models/ununifi/yield
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
 
@@ -19,6 +19,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
   denom$: Observable<string>;
+  selectedSymbol$: Observable<string>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
@@ -41,12 +42,15 @@ export class CreateComponent implements OnInit {
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
     );
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
+      map(([denom, denomMetadataMap]) => denomMetadataMap[denom].symbol || 'Invalid Asset'),
+    );
   }
 
   ngOnInit(): void {}
 
   onChangeDenom(denom: string): void {
-    console.log('denom');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

@@ -124,7 +124,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="0" />
-              <span>YA/{{ symbol }}/{{ vault?.id }}</span>
+              <span class="whitespace-nowrap">YA-{{ symbol }}-{{ vault?.id }}</span>
             </label>
           </div>
 
@@ -152,18 +152,18 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.['YA/'+ symbol || ''] || 0"
+                [max]="symbolBalancesMap?.['YA-'+ symbol || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
                 (input)="onWithdrawAmountChange()"
               />
-              <span>YA/{{ symbol }}/{{ vault?.id }}</span>
+              <span class="whitespace-nowrap">YA-{{ symbol }}-{{ vault?.id }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt"
-                >{{ symbolBalancesMap?.['YA/'+ symbol || ''] || 0 }}{{ 'YA/' + symbol }}
+                >{{ symbolBalancesMap?.['YA-'+ symbol || ''] || 0 }}{{ 'YA-' + symbol }}
               </span>
             </label>
           </div>

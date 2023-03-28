@@ -5,10 +5,10 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-const developerPort = location.protocol === 'https:' ? 3032 : 3030;
+const faucetStakePort = 8000;
 
 // To Do write chain config
-const domainCauchyEA = '54.249.145.2';
+const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
 
 const chainID = 'ununifi-testnet-iya';
 const chainName = 'UnUniFi (IYA-Test)';
@@ -59,25 +59,32 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
+          denom: 'stake',
+          creditAmount: 100,
+          maxCredit: 100,
         },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uusdc',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+        //   denom: 'ubtc',
+        //   creditAmount: 2000000, // amount to credit in max request
+        //   maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        // },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+        //   denom: 'uguu',
+        //   creditAmount: 2000000,
+        //   maxCredit: 2000000,
+        // },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+        //   denom: 'uusdc',
+        //   creditAmount: 2000000,
+        //   maxCredit: 2000000,
+        // },
         // {
         //   hasFaucet: false,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
@@ -103,11 +110,11 @@ const configs = [
       monitor: undefined,
       nftMint: {
         enabled: false,
-        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+        nftClasses: [],
       },
       developer: {
         enabled: true,
-        developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
+        developerURL: `http://${domainCauchyEA}:3030`,
       },
       navigations: [],
       messageModules,

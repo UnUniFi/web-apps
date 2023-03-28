@@ -30,7 +30,15 @@ const routes: Routes = [
     component: VaultComponent,
   },
   {
+    path: 'strategies/ibc/:ibc_denom',
+    component: StrategiesComponent,
+  },
+  {
     path: 'strategies/:denom',
+    component: StrategiesComponent,
+  },
+  {
+    path: 'strategies/ibc/:ibc_denom/:strategy_id',
     component: StrategiesComponent,
   },
   {

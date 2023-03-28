@@ -13,6 +13,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 })
 export class StrategiesComponent implements OnInit {
   denom$: Observable<string>;
+  ibcDenom$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 
@@ -22,11 +23,22 @@ export class StrategiesComponent implements OnInit {
     private readonly iyaQuery: YieldAggregatorQueryService,
   ) {
     this.denom$ = this.route.params.pipe(map((params) => params.denom));
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
-      map(([denom, denomMetadataMap]) => denomMetadataMap[denom].symbol),
+    this.ibcDenom$ = this.route.params.pipe(
+      map((params) => (params.ibc_denom ? 'ibc/' + params.ibc_denom : '')),
     );
-    this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
+      map(([denom, ibcDenom, denomMetadataMap]) =>
+        ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
+      ),
+    );
+    this.strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
+      mergeMap(([denom, ibcDenom]) =>
+        ibcDenom == ''
+          ? this.iyaQuery.listStrategies$(denom)
+          : this.iyaQuery.listStrategies$(ibcDenom),
+      ),
+    );
   }
 
   ngOnInit(): void {}

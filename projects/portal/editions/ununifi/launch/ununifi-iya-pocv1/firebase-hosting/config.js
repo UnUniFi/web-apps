@@ -6,7 +6,7 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = '54.249.145.2';
+const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
 
 const chainID = 'ununifi-testnet-iya';
 const chainName = 'UnUniFi (IYA-Test)';

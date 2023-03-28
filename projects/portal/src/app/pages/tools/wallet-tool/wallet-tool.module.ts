@@ -6,5 +6,6 @@ import { NgModule } from '@angular/core';
 @NgModule({
   declarations: [WalletToolComponent],
   imports: [CommonModule, WalletToolModule],
+  exports: [WalletToolComponent],
 })
 export class AppWalletToolModule {}

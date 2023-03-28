@@ -6,5 +6,6 @@ import { NgModule } from '@angular/core';
 @NgModule({
   declarations: [SearchToolComponent],
   imports: [CommonModule, SearchToolModule],
+  exports: [SearchToolComponent],
 })
 export class AppSearchToolModule {}

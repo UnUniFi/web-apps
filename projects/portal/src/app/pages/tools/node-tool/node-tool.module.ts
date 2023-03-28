@@ -6,5 +6,6 @@ import { NgModule } from '@angular/core';
 @NgModule({
   declarations: [NodeToolComponent],
   imports: [CommonModule, NodeToolModule],
+  exports: [NodeToolComponent],
 })
 export class AppNodeToolModule {}

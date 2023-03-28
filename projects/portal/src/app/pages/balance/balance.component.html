@@ -6,8 +6,11 @@
   [publicKey]="publicKey$ | async"
   [valAddress]="valAddress$ | async"
   [balances]="balances$ | async"
+  [balanceSymbols]="balanceSymbols$ | async"
   [rewards]="rewards$ | async"
   [faucets]="faucets$ | async"
+  [faucetSymbols]="faucetSymbols$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
   [nodeInfo]="nodeInfo$ | async"
   (appWithdrawAllDelegatorReward)="onSubmitWithdrawAllDelegatorReward()"
 ></view-balance>

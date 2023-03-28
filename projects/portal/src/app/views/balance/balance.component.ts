@@ -21,6 +21,7 @@ export class ViewBalanceComponent implements OnInit {
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
   @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() balanceSymbols?: string[] | null;
   @Input() rewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
   @Input() faucets?:
     | {
@@ -31,7 +32,9 @@ export class ViewBalanceComponent implements OnInit {
         maxCredit: number;
       }[]
     | null;
+  @Input() faucetSymbols?: string[] | null;
   @Input() nodeInfo?: GetNodeInfo200Response | null;
+  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {

@@ -96,29 +96,31 @@
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
               <div class="flex flex-row flex-wrap">
                 <a
-                  class="btn btn-outline w-full sm:w-auto"
+                  class="btn btn-outline w-full sm:w-64"
                   href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
                   target="_blank"
                 >
                   {{ strategy.name }}
                   <mat-icon>info</mat-icon>
                 </a>
-                <label class="input-group w-full sm:w-auto mb-2">
-                  <input
-                    type="number"
-                    placeholder="0"
-                    [min]="0"
-                    [max]="100"
-                    [step]="1"
-                    [(ngModel)]="strategy.weight"
-                    name="strategyWeight"
-                    class="input input-bordered w-full"
-                  />
-                  <span>%</span>
-                  <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
-                    <mat-icon>delete</mat-icon>
+                <div class="w-full sm:w-auto sm:flex-auto">
+                  <label class="input-group w-full mb-2">
+                    <input
+                      type="number"
+                      placeholder="0"
+                      [min]="0"
+                      [max]="100"
+                      [step]="1"
+                      [(ngModel)]="strategy.weight"
+                      name="strategyWeight"
+                      class="input input-bordered w-full"
+                    />
+                    <span>%</span>
+                    <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                      <mat-icon>delete</mat-icon>
+                    </label>
                   </label>
-                </label>
+                </div>
               </div>
             </ng-container>
 
@@ -126,7 +128,7 @@
               <label class="input-group mb-2 w-full sm:w-auto">
                 <select
                   required
-                  class="select select-bordered text-center w-48 sm:w-64"
+                  class="select select-bordered text-center w-auto sm:w-64"
                   [(ngModel)]="selectedStrategyId"
                   name="strategyId"
                 >

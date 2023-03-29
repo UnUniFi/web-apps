@@ -56,30 +56,26 @@ export class VaultComponent implements OnInit {
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);
     this.estimatedMintAmount$ = combineLatest([
+      vaultId$,
       this.vault$,
       this.mintAmount$.asObservable(),
       denomMetadataMap$,
     ]).pipe(
-      mergeMap(([vault, deposit, denomMetadataMap]) => {
-        const symbol = denomMetadataMap?.[vault.denom!].symbol;
+      mergeMap(([id, vault, deposit, denomMetadataMap]) => {
         const exponent =
           denomMetadataMap?.[vault.denom!].denom_units?.find((u) => u.denom == vault.denom)
             ?.exponent || 0;
-        return this.iyaQuery.getEstimatedMintAmount$(
-          symbol!,
-          (deposit * 10 ** exponent).toString(),
-        );
+        return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
     this.estimatedBurnAmount$ = combineLatest([
+      vaultId$,
       this.vault$,
       this.burnAmount$.asObservable(),
       denomMetadataMap$,
     ]).pipe(
-      mergeMap(([vault, burn, denomMetadataMap]) => {
-        const symbol = denomMetadataMap?.[vault.denom!].symbol;
-        const exponent = 6; // TODO: get exponent from denomMetadataMap
-        return this.iyaQuery.getEstimatedRedeemAmount$(symbol!, (burn * 10 ** exponent).toString());
+      mergeMap(([id, vault, burn, denomMetadataMap]) => {
+        return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
       }),
     );
   }

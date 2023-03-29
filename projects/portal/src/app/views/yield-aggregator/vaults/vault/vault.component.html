@@ -113,7 +113,7 @@
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[symbol || ''] || 0 }}{{ symbol }}
+                {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ symbol }}
               </span>
             </label>
           </div>
@@ -123,8 +123,8 @@
               <span class="label-text">You will receive</span>
             </label>
             <label class="input-group">
-              <input disabled class="input input-bordered w-full" value="0" />
-              <span class="whitespace-nowrap">YA-{{ symbol }}-{{ vault?.id }}</span>
+              <input disabled class="input input-bordered w-full" value="Coming Soon" />
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.id }}</span>
             </label>
           </div>
 
@@ -152,18 +152,19 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.['YA-'+ symbol || ''] || 0"
+                [max]="symbolBalancesMap?.['YA-VAULT-'+ vault?.id || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
                 (input)="onWithdrawAmountChange()"
               />
-              <span class="whitespace-nowrap">YA-{{ symbol }}-{{ vault?.id }}</span>
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.id }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt"
-                >{{ symbolBalancesMap?.['YA-'+ symbol || ''] || 0 }}{{ 'YA-' + symbol }}
+                >{{ symbolBalancesMap?.['YA-VAULT-'+ vault?.id] || 0 }}
+                {{ 'YA-VAULT-' + vault?.id }}
               </span>
             </label>
           </div>
@@ -172,7 +173,7 @@
               <span class="label-text">You will receive</span>
             </label>
             <label class="input-group">
-              <input disabled class="input input-bordered w-full" value="0" />
+              <input disabled class="input input-bordered w-full" value="Coming Soon" />
               <span>{{ symbol }}</span>
             </label>
           </div>

@@ -8,13 +8,6 @@
     >
       Manage Your Vaults
     </button>
-    <button
-      class="btn btn-outline btn-info px-8 mb-2"
-      routerLink="/yield-aggregator/strategies/{{ denom }}"
-      [disabled]="!selectedSymbol"
-    >
-      View Strategies
-    </button>
   </div>
 
   <div class="w-full md:w-auto mb-8">
@@ -100,16 +93,17 @@
               </div>
             </label>
 
-            <div *ngFor="let strategy of selectedStrategies; let i = index">
-              <div class="block sm:hidden">
-                <label
-                  class="btn btn-outline w-full sm:hidden"
-                  (click)="onClickOpenStrategyDetail(strategy.id)"
+            <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
+              <div class="flex flex-row flex-wrap">
+                <a
+                  class="btn btn-outline w-full sm:w-auto"
+                  href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
+                  target="_blank"
                 >
                   {{ strategy.name }}
                   <mat-icon>info</mat-icon>
-                </label>
-                <label class="input-group mb-2">
+                </a>
+                <label class="input-group w-full sm:w-auto mb-2">
                   <input
                     type="number"
                     placeholder="0"
@@ -126,55 +120,40 @@
                   </label>
                 </label>
               </div>
+            </ng-container>
 
-              <div class="hidden sm:block">
-                <label class="input-group mb-2">
-                  <label
-                    class="btn btn-outline w-64"
-                    (click)="onClickOpenStrategyDetail(strategy.id)"
-                  >
-                    {{ strategy.name }}
-                    <mat-icon class="ml-4" color="primary">info</mat-icon>
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="0"
-                    [min]="0"
-                    [max]="100"
-                    [step]="1"
-                    [(ngModel)]="strategy.weight"
-                    name="strategyWeight"
-                    class="input input-bordered w-full"
-                  />
-                  <span>%</span>
-                  <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
-                    <mat-icon>delete</mat-icon>
-                  </label>
-                </label>
-              </div>
+            <div class="flex flex-row flex-wrap">
+              <label class="input-group mb-2 w-full sm:w-auto">
+                <select
+                  required
+                  class="select select-bordered text-center w-48 sm:w-64"
+                  [(ngModel)]="selectedStrategyId"
+                  name="strategyId"
+                >
+                  <option [value]="undefined" disabled>Select a strategy</option>
+                  <ng-container *ngFor="let s of strategies">
+                    <option [value]="s.id">{{ s.name | uppercase }}</option>
+                  </ng-container>
+                </select>
+                <button
+                  type="button"
+                  class="btn btn-outline btn-primary"
+                  (click)="onClickAddStrategy()"
+                  [disabled]="!selectedStrategyId"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </label>
+              <span class="flex-auto"></span>
+              <a
+                class="btn btn-outline btn-info w-full sm:w-auto mb-2"
+                href="/portal/yield-aggregator/strategies/{{ denom }}"
+                target="_blank"
+                *ngIf="selectedSymbol"
+              >
+                View Strategies
+              </a>
             </div>
-
-            <label class="input-group mb-2">
-              <select
-                required
-                class="select select-bordered text-center w-48 sm:w-64"
-                [(ngModel)]="selectedStrategyId"
-                name="strategyId"
-              >
-                <option [value]="undefined" disabled>Select a strategy</option>
-                <ng-container *ngFor="let s of strategies">
-                  <option [value]="s.id">{{ s.name | uppercase }}</option>
-                </ng-container>
-              </select>
-              <button
-                type="button"
-                class="btn btn-outline btn-primary"
-                (click)="onClickAddStrategy()"
-                [disabled]="!selectedStrategyId"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </label>
           </div>
 
           <div class="form-control">

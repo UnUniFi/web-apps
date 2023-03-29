@@ -61,8 +61,7 @@ export class NftPawnshopApplicationService {
       listingType,
       bidSymbol,
       symbolMetadataMap,
-      // Todo fix * 10 ** 18
-      minimumDepositRate * 10 ** 18,
+      minimumDepositRate,
       autoRefinancing,
     );
 
@@ -183,8 +182,7 @@ export class NftPawnshopApplicationService {
       symbol,
       bidAmount,
       biddingPeriod,
-      // Todo fix * 10 ** 18
-      lendingRate * 10 ** 18,
+      lendingRate,
       automaticPayment,
       depositAmount,
       symbolMetadataMap,

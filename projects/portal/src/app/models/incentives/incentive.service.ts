@@ -22,7 +22,7 @@ export class IncentiveService {
   async register(
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weights: string[],
+    weights: number[],
     currentCosmosWallet: CosmosWallet,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -57,7 +57,7 @@ export class IncentiveService {
   async simulateToRegister(
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weight: string[],
+    weight: number[],
     cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
@@ -84,7 +84,7 @@ export class IncentiveService {
   async buildRegisterTxBuilder(
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weights: string[],
+    weights: number[],
     cosmosPublicKey: cosmosclient.PubKey,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -115,13 +115,14 @@ export class IncentiveService {
     senderAddress: string,
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weights: string[],
+    weights: number[],
   ): ununificlient.proto.ununifi.ecosystemincentive.MsgRegister {
+    const decWeight = weights.map((w) => this.txCommonService.numberToDecString(w));
     const msgRegister = new ununificlient.proto.ununifi.ecosystemincentive.MsgRegister({
       sender: senderAddress,
       incentive_unit_id: incentiveUnitId,
       subject_addrs: subjectAddresses,
-      weights: weights,
+      weights: decWeight,
     });
     return msgRegister;
   }

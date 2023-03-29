@@ -6,7 +6,7 @@ export type CreateIncentiveUnitOnSubmitEvent = {
   walletType: WalletType;
   unitID: string;
   subjectAddresses: string[];
-  weights: string[];
+  weights: number[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
@@ -91,7 +91,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
     );
     const weights = [this.firstRecipient.distRate]
       .concat(this.recipients.map((rec) => rec.distRate))
-      .map((weight) => (weight * 10 ** 16).toString());
+      .map((weight) => weight / 10 ** 2);
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       unitID: this.unitId,

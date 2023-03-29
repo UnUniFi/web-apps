@@ -79,7 +79,7 @@ export class IncentiveApplicationService {
   async Register(
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weights: string[],
+    weights: number[],
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {

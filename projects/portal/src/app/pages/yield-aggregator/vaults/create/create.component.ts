@@ -36,7 +36,7 @@ export class CreateComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
+    this.denom$ = this.route.queryParams.pipe(map((params) => params.denom || 'undefined'));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),

@@ -1,4 +1,5 @@
 import { BankService } from '../cosmos/bank.service';
+import { TxCommonService } from '../cosmos/tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
@@ -8,7 +9,10 @@ import ununificlient from 'ununifi-client';
   providedIn: 'root',
 })
 export class YieldAggregatorService {
-  constructor(private readonly bankService: BankService) {}
+  constructor(
+    private readonly bankService: BankService,
+    private readonly txCommonService: TxCommonService,
+  ) {}
 
   buildMsgDepositToVault(
     senderAddress: string,
@@ -55,21 +59,23 @@ export class YieldAggregatorService {
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     fee: number,
+    feeSymbol: string,
     deposit: number,
+    depositSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
     const coinDeposit = this.bankService.convertSymbolAmountMapToCoins(
-      { [symbol]: deposit },
+      { [depositSymbol]: deposit },
       symbolMetadataMap,
     )[0];
     const coinFee = this.bankService.convertSymbolAmountMapToCoins(
-      { [symbol]: fee },
+      { [feeSymbol]: fee },
       symbolMetadataMap,
     )[0];
     const strategyWeights = strategies.map((strategy) => {
       return {
         strategy_id: Long.fromString(strategy.id),
-        weight: (strategy.weight / 100).toString(),
+        weight: this.txCommonService.numberToDecString(strategy.weight / 100),
       };
     });
     const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgCreateVault({

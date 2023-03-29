@@ -16,7 +16,9 @@ export type CreateVaultRequest = {
   strategies: { id: string; weight: number }[];
   commissionRate: number;
   feeAmount: number;
+  feeSymbol: string;
   depositAmount: number;
+  depositSymbol: string;
 };
 
 export type TransferVaultRequest = {

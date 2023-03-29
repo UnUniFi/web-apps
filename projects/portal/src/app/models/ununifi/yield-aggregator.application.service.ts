@@ -134,7 +134,9 @@ export class YieldAggregatorApplicationService {
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     feeAmount: number,
+    feeSymbol: string,
     depositAmount: number,
+    depositSymbol: string,
   ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
@@ -153,32 +155,33 @@ export class YieldAggregatorApplicationService {
       strategies,
       commissionRate,
       feeAmount,
+      feeSymbol,
       depositAmount,
+      depositSymbol,
       symbolMetadataMap,
     );
 
-    const simulationResult = await this.txCommonApplication.simulate(
-      msg,
-      publicKey,
-      account,
-      minimumGasPrice,
-    );
-    if (!simulationResult) {
-      return;
-    }
-    const { gas, fee } = simulationResult;
+    // comment-out simulate
+    // const simulationResult = await this.txCommonApplication.simulate(
+    //   msg,
+    //   publicKey,
+    //   account,
+    //   minimumGasPrice,
+    // );
+    // if (!simulationResult) {
+    //   return;
+    // }
+    // const { gas, fee } = simulationResult;
 
-    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
-      return;
-    }
+    // if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+    //   return;
+    // }
 
     const txHash = await this.txCommonApplication.broadcast(
       msg,
       currentCosmosWallet,
       publicKey,
       account,
-      gas,
-      fee,
     );
     if (!txHash) {
       return;

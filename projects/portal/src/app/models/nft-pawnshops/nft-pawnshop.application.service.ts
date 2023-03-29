@@ -226,7 +226,7 @@ export class NftPawnshopApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classId, nftId]);
+      location.reload();
     }
   }
 
@@ -278,7 +278,7 @@ export class NftPawnshopApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classId, nftId]);
+      location.reload();
     }
   }
 

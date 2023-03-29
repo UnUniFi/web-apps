@@ -88,7 +88,7 @@ export class DerivativesApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['derivatives', 'pool']);
+      location.reload();
     }
   }
 
@@ -147,7 +147,7 @@ export class DerivativesApplicationService {
           data: { txHash: txHash, msg: 'Successfully sold yor DLP. Please check your balance.' },
         })
         .closed.toPromise();
-      this.router.navigate(['derivatives', 'pool']);
+      location.reload();
     }
   }
 
@@ -231,6 +231,7 @@ export class DerivativesApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -282,6 +283,7 @@ export class DerivativesApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 }

@@ -12,6 +12,10 @@ export class CoinPipe implements PipeTransform {
       const decimalAmount = Number(amount) / 1000000;
       const symbolDenom = denom.slice(1).toUpperCase();
       return decimalAmount + symbolDenom;
+    } else if (value && value.amount && value.denom && value.denom == 'stake') {
+      const amount = value.amount;
+      const decimalAmount = Number(amount) / 1000000;
+      return decimalAmount + 'GUU ';
     } else if (value && value.amount && value.denom && value.denom.charAt(0) !== 'u') {
       return value.amount + value.denom.toUpperCase();
     } else {

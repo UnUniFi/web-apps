@@ -5,6 +5,7 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const faucetStakePort = 8000;
 
 const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
 
@@ -49,7 +50,7 @@ const configs = [
     bech32Prefix,
     minimumGasPrices: [
       {
-        denom: 'uguu',
+        denom: 'stake',
         amount: 0.015,
       },
     ],
@@ -57,25 +58,32 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
+          denom: 'stake',
+          creditAmount: 100,
+          maxCredit: 100,
         },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000,
-          maxCredit: 2000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uusdc',
-          creditAmount: 2000000,
-          maxCredit: 2000000,
-        },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+        //   denom: 'ubtc',
+        //   creditAmount: 2000000, // amount to credit in max request
+        //   maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        // },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+        //   denom: 'uguu',
+        //   creditAmount: 2000000,
+        //   maxCredit: 2000000,
+        // },
+        // {
+        //   hasFaucet: true,
+        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
+        //   denom: 'uusdc',
+        //   creditAmount: 2000000,
+        //   maxCredit: 2000000,
+        // },
         // {
         //   hasFaucet: false,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,

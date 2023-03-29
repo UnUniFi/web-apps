@@ -186,9 +186,9 @@ export class BankQueryService {
           },
         ],
         base: 'stake',
-        display: 'GUU',
+        display: 'GUU ',
         name: 'GUU (stake)',
-        symbol: 'GUU',
+        symbol: 'GUU ',
       },
     ];
 

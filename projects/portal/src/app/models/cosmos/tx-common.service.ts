@@ -329,4 +329,8 @@ export class TxCommonService {
 
     return result.data;
   }
+
+  numberToDecString(num: number) {
+    return (num * 10 ** 18).toString();
+  }
 }

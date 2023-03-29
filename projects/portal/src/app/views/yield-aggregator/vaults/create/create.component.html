@@ -200,11 +200,11 @@
               <input
                 type="number"
                 name="deposit"
-                [(ngModel)]="depositAmount"
+                [(ngModel)]="deposit && deposit.amount"
                 disabled
                 class="input input-bordered w-full"
               />
-              <span>{{ selectedSymbol }}</span>
+              <span>{{ deposit?.symbol }}</span>
             </label>
           </div>
           <div class="form-control">
@@ -229,11 +229,11 @@
               <input
                 type="number"
                 name="fee"
-                [(ngModel)]="feeAmount"
+                [(ngModel)]="fee && fee.amount"
                 disabled
                 class="input input-bordered w-full"
               />
-              <span>{{ selectedSymbol }}</span>
+              <span>{{ fee?.symbol }}</span>
             </label>
           </div>
 

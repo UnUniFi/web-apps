@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.application.service';
 import { CreateVaultRequest } from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.query.service';
@@ -23,10 +24,14 @@ export class CreateComponent implements OnInit {
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  commissionRate$: Observable<number>;
+  deposit$: Observable<{ symbol: string; amount: number }>;
+  fee$: Observable<{ symbol: string; amount: number }>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private readonly bank: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly walletService: WalletService,
     private readonly iyaQuery: YieldAggregatorQueryService,
@@ -45,6 +50,18 @@ export class CreateComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
       map(([denom, denomMetadataMap]) => denomMetadataMap[denom].symbol || 'Invalid Asset'),
+    );
+    const params$ = this.iyaQuery.getYieldAggregatorParam$();
+    this.commissionRate$ = params$.pipe(map((params) => Number(params.commission_rate) * 100));
+    this.deposit$ = combineLatest([params$, denomMetadataMap$]).pipe(
+      map(([params, denomMetadataMap]) =>
+        this.bank.convertCoinToSymbolAmount(params.vault_creation_deposit!, denomMetadataMap),
+      ),
+    );
+    this.fee$ = combineLatest([params$, denomMetadataMap$]).pipe(
+      map(([params, denomMetadataMap]) =>
+        this.bank.convertCoinToSymbolAmount(params.vault_creation_fee!, denomMetadataMap),
+      ),
     );
   }
 
@@ -67,7 +84,9 @@ export class CreateComponent implements OnInit {
       data.strategies,
       data.commissionRate,
       data.feeAmount,
+      data.feeSymbol,
       data.depositAmount,
+      data.depositSymbol,
     );
   }
 }

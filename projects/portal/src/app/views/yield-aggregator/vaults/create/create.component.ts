@@ -18,6 +18,12 @@ export class CreateComponent implements OnInit {
   @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
   @Input()
+  commissionRate?: number | null;
+  @Input()
+  deposit?: { symbol: string; amount: number } | null;
+  @Input()
+  fee?: { symbol: string; amount: number } | null;
+  @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
@@ -27,9 +33,6 @@ export class CreateComponent implements OnInit {
   appCreate: EventEmitter<CreateVaultRequest>;
 
   name?: string;
-  commissionRate = 0.5;
-  depositAmount = 0.001;
-  feeAmount = 0.0005;
   firstStrategy: { id?: string; weight: number } = { id: undefined, weight: 100 };
   selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
 
@@ -81,13 +84,19 @@ export class CreateComponent implements OnInit {
       alert('Invalid Asset.');
       return;
     }
+    if (!this.fee || !this.deposit) {
+      alert('Invalid Fee or Deposit.');
+      return;
+    }
     this.appCreate.emit({
       name: this.name,
       symbol: this.selectedSymbol,
       strategies: filteredStrategies,
-      commissionRate: this.commissionRate,
-      feeAmount: this.feeAmount,
-      depositAmount: this.depositAmount,
+      commissionRate: Number(this.commissionRate),
+      feeAmount: this.fee.amount,
+      feeSymbol: this.fee.symbol,
+      depositAmount: this.deposit.amount,
+      depositSymbol: this.deposit.symbol,
     });
   }
 

@@ -99,82 +99,83 @@
                 </div>
               </div>
             </label>
-            <select
-              required
-              class="select select-bordered text-center w-full sm:hidden"
-              [(ngModel)]="firstStrategy.id"
-              name="firstStrategyId"
-            >
-              <option [value]="undefined" disabled>Select a strategy</option>
-              <ng-container *ngFor="let s of strategies">
-                <option [value]="s.id">{{ s.name | uppercase }}</option>
-              </ng-container>
-            </select>
+
+            <div *ngFor="let strategy of selectedStrategies; let i = index">
+              <div class="block sm:hidden">
+                <label
+                  class="btn btn-outline w-full sm:hidden"
+                  (click)="onClickOpenStrategyDetail(strategy.id)"
+                >
+                  {{ strategy.name }}
+                  <mat-icon>info</mat-icon>
+                </label>
+                <label class="input-group mb-2">
+                  <input
+                    type="number"
+                    placeholder="0"
+                    [min]="0"
+                    [max]="100"
+                    [step]="1"
+                    [(ngModel)]="strategy.weight"
+                    name="strategyWeight"
+                    class="input input-bordered w-full"
+                  />
+                  <span>%</span>
+                  <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                    <mat-icon>delete</mat-icon>
+                  </label>
+                </label>
+              </div>
+
+              <div class="hidden sm:block">
+                <label class="input-group mb-2">
+                  <label
+                    class="btn btn-outline w-64"
+                    (click)="onClickOpenStrategyDetail(strategy.id)"
+                  >
+                    {{ strategy.name }}
+                    <mat-icon class="ml-4" color="primary">info</mat-icon>
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    [min]="0"
+                    [max]="100"
+                    [step]="1"
+                    [(ngModel)]="strategy.weight"
+                    name="strategyWeight"
+                    class="input input-bordered w-full"
+                  />
+                  <span>%</span>
+                  <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                    <mat-icon>delete</mat-icon>
+                  </label>
+                </label>
+              </div>
+            </div>
+
             <label class="input-group mb-2">
               <select
                 required
-                class="select select-bordered text-center w-64 hidden sm:block"
-                [(ngModel)]="firstStrategy.id"
-                name="firstStrategyId"
+                class="select select-bordered text-center w-48 sm:w-64"
+                [(ngModel)]="selectedStrategyId"
+                name="strategyId"
               >
                 <option [value]="undefined" disabled>Select a strategy</option>
                 <ng-container *ngFor="let s of strategies">
                   <option [value]="s.id">{{ s.name | uppercase }}</option>
                 </ng-container>
               </select>
-              <input
-                type="number"
-                placeholder="100"
-                [min]="0"
-                [max]="100"
-                [step]="1"
-                [(ngModel)]="firstStrategy.weight"
-                name="strategy1Weight"
-                class="input input-bordered w-full"
-              />
-              <span>%</span>
-              <label class="btn btn-outline btn-disabled">
-                <mat-icon>delete</mat-icon>
-              </label>
-            </label>
-            <div *ngFor="let strategy of selectedStrategies; let i = index">
-              <label
-                class="btn btn-outline w-full sm:hidden"
-                (click)="onClickOpenStrategyDetail(strategy.id)"
+              <button
+                type="button"
+                class="btn btn-outline btn-primary"
+                (click)="onClickAddStrategy()"
+                [disabled]="!selectedStrategyId"
               >
-                {{ strategy.name }}
-              </label>
-              <label class="input-group mb-2">
-                <label
-                  class="btn btn-outline w-64 hidden sm:flex"
-                  (click)="onClickOpenStrategyDetail(strategy.id)"
-                >
-                  {{ strategy.name }}
-                </label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  [min]="0"
-                  [max]="100"
-                  [step]="1"
-                  [(ngModel)]="strategy.weight"
-                  name="strategyWeight"
-                  class="input input-bordered w-full"
-                />
-                <span>%</span>
-                <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
-                  <mat-icon>delete</mat-icon>
-                </label>
-              </label>
-            </div>
+                <mat-icon>add</mat-icon>
+              </button>
+            </label>
           </div>
-          <label
-            *ngIf="firstStrategy.id"
-            class="btn btn-outline w-1/2 lg:w-64 mb-4"
-            (click)="onClickAddStrategy()"
-          >
-            <mat-icon>add</mat-icon>
-          </label>
 
           <div class="form-control">
             <label class="label">
@@ -253,8 +254,11 @@
           <input type="checkbox" id="create-modal" class="modal-toggle" />
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
-              <h3 class="font-bold text-lg">Are you sure to create this Vault?</h3>
-              <p class="py-4">Vault Info</p>
+              <h3 class="font-bold text-lg">Are you sure to create this Vault, OK?</h3>
+              <p class="py-4">
+                A deposit of {{ deposit?.amount }}{{ deposit?.symbol }} & a fee {{ fee?.amount
+                }}{{ fee?.symbol }} will be deducted from your balance.
+              </p>
               <div class="modal-action">
                 <label for="create-modal" class="btn btn-outline">Cancel</label>
                 <button class="btn btn-primary" [disabled]="formRef.invalid">Create</button>

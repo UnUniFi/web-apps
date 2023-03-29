@@ -33,7 +33,7 @@ export class CreateComponent implements OnInit {
   appCreate: EventEmitter<CreateVaultRequest>;
 
   name?: string;
-  firstStrategy: { id?: string; weight: number } = { id: undefined, weight: 100 };
+  selectedStrategyId?: string;
   selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
 
   constructor() {
@@ -44,13 +44,13 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickAddStrategy() {
-    if (!this.firstStrategy) {
+    if (!this.selectedStrategyId) {
       alert('Please select a strategy.');
       return;
     }
     this.selectedStrategies.push({
-      id: this.firstStrategy.id,
-      name: this.strategies?.find((s) => s.id === this.firstStrategy.id)?.name,
+      id: this.selectedStrategyId,
+      name: this.strategies?.find((s) => s.id === this.selectedStrategyId)?.name,
       weight: 0,
     });
   }
@@ -69,7 +69,6 @@ export class CreateComponent implements OnInit {
   }
   onSubmitCreate() {
     const strategies = this.selectedStrategies.slice();
-    strategies.unshift(this.firstStrategy);
     strategies.filter((s) => s.id && s.weight > 0);
     if (strategies.reduce((sum, s) => sum + s.weight, 0) !== 100) {
       alert('The total of the strategies should be 100%.');

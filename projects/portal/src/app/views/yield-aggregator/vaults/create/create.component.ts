@@ -31,7 +31,7 @@ export class CreateComponent implements OnInit {
   depositAmount = 0.001;
   feeAmount = 0.0005;
   firstStrategy: { id?: string; weight: number } = { id: undefined, weight: 100 };
-  selectedStrategies: { id?: string; weight: number }[] = [];
+  selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
 
   constructor() {
     this.changeDenom = new EventEmitter();
@@ -41,7 +41,15 @@ export class CreateComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickAddStrategy() {
-    this.selectedStrategies.push({ weight: 0 });
+    if (!this.firstStrategy) {
+      alert('Please select a strategy.');
+      return;
+    }
+    this.selectedStrategies.push({
+      id: this.firstStrategy.id,
+      name: this.strategies?.find((s) => s.id === this.firstStrategy.id)?.name,
+      weight: 0,
+    });
   }
   onClickDeleteStrategy(index: number) {
     this.selectedStrategies.splice(index, 1);
@@ -81,5 +89,13 @@ export class CreateComponent implements OnInit {
       feeAmount: this.feeAmount,
       depositAmount: this.depositAmount,
     });
+  }
+
+  onClickOpenStrategyDetail(id?: string) {
+    const rootPath = window.location.origin;
+    window.open(
+      rootPath + '/portal/yield-aggregator/strategies/' + this.denom + '/' + id,
+      '_blank',
+    );
   }
 }

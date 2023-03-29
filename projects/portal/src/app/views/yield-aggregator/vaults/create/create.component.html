@@ -3,10 +3,17 @@
     <h2>Create a New Vault</h2>
     <span class="flex-auto"></span>
     <button
-      class="btn btn-secondary btn-outline px-8"
+      class="btn btn-secondary btn-outline px-8 mr-2 mb-2"
       routerLink="/yield-aggregator/vaults/owner/{{ address }}"
     >
       Manage Your Vaults
+    </button>
+    <button
+      class="btn btn-outline btn-info px-8 mb-2"
+      routerLink="/yield-aggregator/strategies/{{ denom }}"
+      [disabled]="!selectedSymbol"
+    >
+      View Strategies
     </button>
   </div>
 
@@ -94,25 +101,25 @@
             </label>
             <select
               required
-              class="select select-bordered w-full sm:hidden"
+              class="select select-bordered text-center w-full sm:hidden"
               [(ngModel)]="firstStrategy.id"
               name="firstStrategyId"
             >
               <option [value]="undefined" disabled>Select a strategy</option>
               <ng-container *ngFor="let s of strategies">
-                <option [value]="s.id">{{ s.name }}</option>
+                <option [value]="s.id">{{ s.name | uppercase }}</option>
               </ng-container>
             </select>
             <label class="input-group mb-2">
               <select
                 required
-                class="select select-bordered w-1/4 hidden sm:block"
+                class="select select-bordered text-center w-64 hidden sm:block"
                 [(ngModel)]="firstStrategy.id"
                 name="firstStrategyId"
               >
                 <option [value]="undefined" disabled>Select a strategy</option>
                 <ng-container *ngFor="let s of strategies">
-                  <option [value]="s.id">{{ s.name }}</option>
+                  <option [value]="s.id">{{ s.name | uppercase }}</option>
                 </ng-container>
               </select>
               <input
@@ -131,29 +138,19 @@
               </label>
             </label>
             <div *ngFor="let strategy of selectedStrategies; let i = index">
-              <select
-                required
-                class="select select-bordered w-full sm:hidden"
-                [(ngModel)]="strategy.id"
-                name="strategy{{ i }}Id"
+              <label
+                class="btn btn-outline w-full sm:hidden"
+                (click)="onClickOpenStrategyDetail(strategy.id)"
               >
-                <option [value]="undefined" disabled>Select a strategy</option>
-                <ng-container *ngFor="let s of strategies">
-                  <option [value]="s.id">{{ s.name }}</option>
-                </ng-container>
-              </select>
+                {{ strategy.name }}
+              </label>
               <label class="input-group mb-2">
-                <select
-                  required
-                  class="select select-bordered w-1/4 hidden sm:block"
-                  [(ngModel)]="strategy.id"
-                  name="strategy{{ i }}Id"
+                <label
+                  class="btn btn-outline w-64 hidden sm:flex"
+                  (click)="onClickOpenStrategyDetail(strategy.id)"
                 >
-                  <option [value]="undefined" disabled>Select a strategy</option>
-                  <ng-container *ngFor="let s of strategies">
-                    <option [value]="s.id">{{ s.name }}</option>
-                  </ng-container>
-                </select>
+                  {{ strategy.name }}
+                </label>
                 <input
                   type="number"
                   placeholder="0"
@@ -171,18 +168,13 @@
               </label>
             </div>
           </div>
-          <label class="btn btn-outline w-1/2 lg:w-1/4 mb-4" (click)="onClickAddStrategy()">
+          <label
+            *ngIf="firstStrategy.id"
+            class="btn btn-outline w-1/2 lg:w-64 mb-4"
+            (click)="onClickAddStrategy()"
+          >
             <mat-icon>add</mat-icon>
           </label>
-          <div class="card-actions justify-end">
-            <label
-              *ngIf="selectedSymbol"
-              class="btn btn-outline btn-info px-4"
-              routerLink="/yield-aggregator/strategies/{{ denom }}"
-            >
-              View Strategies
-            </label>
-          </div>
 
           <div class="form-control">
             <label class="label">

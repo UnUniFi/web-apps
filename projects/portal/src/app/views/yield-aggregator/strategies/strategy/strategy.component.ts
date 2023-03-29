@@ -37,20 +37,20 @@ export class StrategyComponent implements OnInit {
     this.chartType = ChartType.LineChart;
     this.chartData = this.iyaChart.createDummyChartData();
     this.chartColumnNames = ['Date', 'APR'];
-    const width: number = this.cardRef?.nativeElement.offsetWidth || 640;
-    this.chartOptions = this.iyaChart.createChartOption(width);
+    const width: number = this.cardRef?.nativeElement.offsetWidth || 480;
+    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
-  @ViewChild('cardRef') cardRef?: ElementRef;
+  @ViewChild('chartRef') cardRef?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     const width: number = this.cardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.iyaChart.createChartOption(width);
+    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
   ngOnInit(): void {}
   ngOnChanges(): void {
     const width: number = this.cardRef!.nativeElement.offsetWidth;
     console.log(width);
-    this.chartOptions = this.iyaChart.createChartOption(width);
+    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 }

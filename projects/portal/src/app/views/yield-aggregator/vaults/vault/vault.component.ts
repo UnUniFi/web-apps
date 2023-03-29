@@ -65,7 +65,7 @@ export class VaultComponent implements OnInit {
     this.chartColumnNames = ['Date', 'APY'];
   }
 
-  @ViewChild('charRef') chartRef?: ElementRef;
+  @ViewChild('chartRef') chartRef?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     const width: number = this.chartRef!.nativeElement.offsetWidth;

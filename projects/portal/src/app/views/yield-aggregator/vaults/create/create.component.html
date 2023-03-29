@@ -151,7 +151,7 @@
                 >
                   <option [value]="undefined" disabled>Select a strategy</option>
                   <ng-container *ngFor="let s of strategies">
-                    <option [value]="s">{{ s }}</option>
+                    <option [value]="s.id">{{ s.name }}</option>
                   </ng-container>
                 </select>
                 <input

@@ -166,7 +166,7 @@ export class BankQueryService {
         description: 'uosmo IBC denom',
         denom_units: [
           {
-            denom: 'uosmo',
+            denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
             exponent: 6,
             aliases: [],
           },
@@ -189,6 +189,20 @@ export class BankQueryService {
         display: 'GUU ',
         name: 'GUU (stake)',
         symbol: 'GUU ',
+      },
+      {
+        description: 'YA OSMO 0 Token',
+        denom_units: [
+          {
+            denom: 'ya/ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518/0',
+            exponent: 0,
+            aliases: [],
+          },
+        ],
+        base: 'ya/ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518/0',
+        display: 'YA-OSMO-0 ',
+        name: 'YA (OSMO-0)',
+        symbol: 'YA-OSMO-0',
       },
     ];
 

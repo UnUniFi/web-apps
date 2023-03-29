@@ -60,10 +60,16 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
           denom: 'stake',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 3000,
+          maxCredit: 3000,
         },
-        // {
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
+          denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
+          creditAmount: 10000000,
+          maxCredit: 10000000,
+        }, // {
         //   hasFaucet: true,
         //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
         //   denom: 'ubtc',

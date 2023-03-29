@@ -74,7 +74,7 @@ export class YieldAggregatorApplicationService {
         data: { txHash: txHash, msg: 'Successfully deposit to the vault.' },
       })
       .closed.toPromise();
-    this.router.navigate(['yield-aggregator']);
+    this.router.navigate(['yield-aggregator', 'vaults', vaultId]);
   }
 
   async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
@@ -124,7 +124,7 @@ export class YieldAggregatorApplicationService {
           data: { txHash: txHash, msg: 'Successfully withdraw from the vault.' },
         })
         .closed.toPromise();
-      this.router.navigate(['yield-aggregator']);
+      this.router.navigate(['yield-aggregator', 'vaults', vaultId]);
     }
   }
 
@@ -193,7 +193,7 @@ export class YieldAggregatorApplicationService {
           data: { txHash: txHash, msg: 'Successfully created your new vault.' },
         })
         .closed.toPromise();
-      this.router.navigate(['yield-aggregator']);
+      this.router.navigate(['yield-aggregator', 'vaults']);
     }
   }
 
@@ -239,7 +239,7 @@ export class YieldAggregatorApplicationService {
           data: { txHash: txHash, msg: 'Successfully delete your vault.' },
         })
         .closed.toPromise();
-      this.router.navigate(['yield-aggregator']);
+      this.router.navigate(['yield-aggregator', 'vaults']);
     }
   }
 
@@ -289,7 +289,7 @@ export class YieldAggregatorApplicationService {
           data: { txHash: txHash, msg: 'Successfully delete your vault.' },
         })
         .closed.toPromise();
-      this.router.navigate(['yield-aggregator']);
+      this.router.navigate(['yield-aggregator', 'vaults']);
     }
   }
 }

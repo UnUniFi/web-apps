@@ -51,7 +51,7 @@ const configs = [
     bech32Prefix,
     minimumGasPrices: [
       {
-        denom: 'uguu',
+        denom: 'stake',
         amount: 0.015,
       },
     ],

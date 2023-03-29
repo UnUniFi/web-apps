@@ -50,35 +50,36 @@ export class AppComponent implements OnInit {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.navigations$ = this.config$.pipe(
       map((config) => {
+        const navigation = config?.extension?.navigations.slice();
         if (config?.extension?.developer?.enabled) {
-          config?.extension?.navigations.unshift({
+          navigation?.unshift({
             name: 'Developers',
             link: '/portal/developers',
             icon: 'build',
           });
         }
         if (config?.extension?.nftMint?.enabled) {
-          config.extension.navigations.unshift({
+          navigation?.unshift({
             name: 'NFT Mint',
             link: '/portal/nfts/mint',
             icon: 'add_photo_alternate',
           });
         }
         if (config?.extension?.faucet?.filter((faucet) => faucet.hasFaucet == true).length) {
-          config.extension.navigations.unshift({
+          navigation?.unshift({
             name: 'Faucet',
             link: '/portal/faucet',
             icon: 'clean_hands',
           });
         }
         if (config?.extension?.monitor != undefined) {
-          config.extension.navigations.unshift({
+          navigation?.unshift({
             name: 'Monitor',
             link: '/portal/monitor',
             icon: 'monitor',
           });
         }
-        return config?.extension?.navigations;
+        return navigation;
       }),
     );
 

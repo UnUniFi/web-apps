@@ -64,6 +64,7 @@ export class YieldAggregatorService {
     depositSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
+    const denom = symbolMetadataMap[symbol].base;
     const coinDeposit = this.bankService.convertSymbolAmountMapToCoins(
       { [depositSymbol]: deposit },
       symbolMetadataMap,
@@ -80,7 +81,7 @@ export class YieldAggregatorService {
     });
     const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgCreateVault({
       sender: senderAddress,
-      denom: coinDeposit.denom,
+      denom: denom,
       commission_rate: commissionRate.toString(),
       strategy_weights: strategyWeights,
       fee: coinFee,

@@ -190,21 +190,24 @@ export class BankQueryService {
         name: 'GUU (stake)',
         symbol: 'GUU ',
       },
-      {
-        description: 'YA OSMO 0 Token',
+    ];
+
+    for (let i = 0; i < 100; i++) {
+      metadatas.push({
+        description: 'Yield Aggregator Vault #' + i + 'Token',
         denom_units: [
           {
-            denom: 'ya/ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518/0',
+            denom: 'yield-aggregator/vaults/' + i,
             exponent: 0,
             aliases: [],
           },
         ],
-        base: 'ya/ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518/0',
-        display: 'YA-OSMO-0 ',
-        name: 'YA (OSMO-0)',
-        symbol: 'YA-OSMO-0',
-      },
-    ];
+        base: 'yield-aggregator/vaults/' + i,
+        display: 'YA-Vault-' + i,
+        name: 'YA Vault #' + i,
+        symbol: 'YA-VAULT-' + i,
+      });
+    }
 
     return {
       data: {

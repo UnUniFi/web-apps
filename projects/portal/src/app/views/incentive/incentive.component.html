@@ -8,7 +8,7 @@
       <mat-list-item *ngIf="unitIds && unitIds.length === 0"> No Tokens! </mat-list-item>
       <ng-container *ngIf="unitIds && unitIds.length > 0">
         <ng-container *ngFor="let unitId of unitIds; last as last">
-          <mat-list-item routerLink="/incentive/units/{{ unitId }}">
+          <mat-list-item routerLink="units/{{ unitId }}">
             <span>{{ unitId }}</span>
             <mat-divider *ngIf="!last"></mat-divider>
           </mat-list-item>

@@ -17,7 +17,7 @@
   <ng-template #exist>
     <mat-nav-list>
       <ng-container *ngFor="let auction of auctions">
-        <mat-list-item routerLink="/auction/auctions/{{ auction?.base_auction?.id }}">
+        <mat-list-item routerLink="{{ auction?.base_auction?.id }}">
           <span class="pr-4">{{ auction?.base_auction?.id }}</span>
           <span class="flex-auto"></span>
           <span class="break-all truncate">

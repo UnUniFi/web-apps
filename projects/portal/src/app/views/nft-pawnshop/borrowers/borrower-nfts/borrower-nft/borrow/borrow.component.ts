@@ -37,6 +37,8 @@ export class BorrowComponent implements OnInit {
   @Input()
   borrowAmount?: number | null;
   @Input()
+  selectedBorrowAmount?: number | null;
+  @Input()
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;

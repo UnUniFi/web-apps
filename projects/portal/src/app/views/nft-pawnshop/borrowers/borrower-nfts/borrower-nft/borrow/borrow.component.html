@@ -3,8 +3,13 @@
 </div>
 
 <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
-  <figure class="aspect-square w-full">
-    <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT" class="h-full object-cover" />
+  <figure class="aspect-square w-1/2 lg:w-1/4">
+    <!-- img width setting not working -->
+    <img
+      src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+      alt="image of the NFT"
+      class="object-cover"
+    />
   </figure>
   <div class="card-body w-full lg:w-2/3">
     <div class="flex flex-row">
@@ -41,8 +46,14 @@
 <div class="flex flex-col lg:flex-row mb-8">
   <div #chartCardRef class="card bg-base-100 shadow-xl w-full lg:w-2/3 mb-4 lg:mb-0 lg:mr-4">
     <h3 class="m-4 card-title">Deposits</h3>
-    <google-chart *ngIf="chartData" [title]="chartTitle" [type]="chartType" [data]="chartData" [columns]="chartColumns"
-      [options]="chartOptions">
+    <google-chart
+      *ngIf="chartData"
+      [title]="chartTitle"
+      [type]="chartType"
+      [data]="chartData"
+      [columns]="chartColumns"
+      [options]="chartOptions"
+    >
     </google-chart>
   </div>
 
@@ -63,11 +74,11 @@
               <div class="modal-box">
                 <h3 class="font-bold text-lg">What is the borrow amount?</h3>
                 <p class="py-4">
-                  NFT listers can borrow tokens from the bid deposit. Borrowing will be made
-                  in order of bids with lower interest rates. You must pay interest in
-                  addition to the borrowed tokens by the repayment deadline. If you are unable
-                  to repay, the NFT will be liquidated, but if there are other available bids,
-                  refinancing will be carried out.
+                  NFT listers can borrow tokens from the bid deposit. Borrowing will be made in
+                  order of bids with lower interest rates. You must pay interest in addition to the
+                  borrowed tokens by the repayment deadline. If you are unable to repay, the NFT
+                  will be liquidated, but if there are other available bids, refinancing will be
+                  carried out.
                 </p>
                 <div class="modal-action">
                   <label for="modal-bid-price" class="btn">Understood</label>
@@ -76,11 +87,24 @@
             </div>
           </span>
           <label class="input-group">
-            <input #borrowAmountRef="ngModel" required type="number" name="amount" [(ngModel)]="borrowAmount"
+            <input
+              #borrowAmountRef="ngModel"
+              required
+              type="number"
+              name="amount"
+              [(ngModel)]="selectedBorrowAmount"
+              [max]="borrowAmount || 0"
+              [min]="0"
+              [step]="1"
               class="input input-bordered w-full"
-              [class]="{'input-error': borrowAmountRef.errors && borrowAmountRef.touched}"
-              pattern="^[0-9]*\.?[0-9]{0,6}$" />
+              [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
+            />
             <span>{{ borrowDenom }}</span>
+          </label>
+          <label class="label">
+            <span class="label-text-alt">max borrowing amount:</span>
+            <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
           </label>
         </div>
 
@@ -97,10 +121,14 @@
           </div>
         </div>
         <div class="flex flex-col md:flex-row justify-end">
-          <button type="button" class="btn btn-secondary btn-outline mb-2 md:-mb-2 md:mr-2 px-8" (click)="onSimulate()">
+          <button
+            type="button"
+            class="btn btn-secondary btn-outline mb-2 md:-mb-2 md:mr-2 px-8"
+            (click)="onSimulate()"
+          >
             Simulate
           </button>
-          <button class="btn btn-secondary px-8">Borrow</button>
+          <button class="btn btn-secondary px-8" [disabled]="formRef.invalid">Borrow</button>
         </div>
       </form>
     </div>

@@ -10,8 +10,8 @@ export class AppToolComponent implements OnInit {
 
   constructor() {
     this.apps = [
-      { name: 'Utilities', link: '/', icon: 'account_balance_wallet' },
-      { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'photo_library' },
+      { name: 'Utilities', link: '/', icon: 'assistant' },
+      { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
       { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
     ];
   }

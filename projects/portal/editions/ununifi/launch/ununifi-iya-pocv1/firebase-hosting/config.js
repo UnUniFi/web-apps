@@ -5,7 +5,7 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-const faucetStakePort = location.protocol === 'https:' ? 8000 : 7000;
+const faucetStakePort = location.protocol === 'https:' ? 7000 : 8000;
 
 const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
 

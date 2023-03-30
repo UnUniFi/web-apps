@@ -69,17 +69,18 @@
     <h2 class="card-title break-all">Lend Tokens</h2>
     <div class="form-control">
       <label class="cursor-pointer label">
-        <span class="label-text">Advanced Search</span>
+        <span class="label-text mr-2">Advanced Search</span>
         <input
           type="checkbox"
           class="toggle toggle-primary"
           name="openSearch"
-          [(ngModel)]="isOpenedSearch"
+          [(ngModel)]="isFiltered"
         />
+        <span class="flex-auto"></span>
       </label>
     </div>
 
-    <form #formRef="ngForm" (submit)="onSubmit()" *ngIf="isOpenedSearch">
+    <form #formRef="ngForm" (submit)="onSubmit()" *ngIf="isFiltered">
       <div class="form-control">
         <label class="label">
           <span class="label-text">Token</span>

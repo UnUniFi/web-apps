@@ -43,7 +43,7 @@ export class LendersComponent implements OnInit {
   interestRate: number;
   datePicker: Date;
   isSubmitted: boolean;
-  isOpenedSearch: boolean;
+  isFiltered: boolean;
 
   constructor() {
     this.appSubmit = new EventEmitter();
@@ -58,7 +58,7 @@ export class LendersComponent implements OnInit {
     now.setSeconds(0);
     this.datePicker = now;
     this.isSubmitted = false;
-    this.isOpenedSearch = false;
+    this.isFiltered = false;
   }
 
   ngOnInit(): void {}

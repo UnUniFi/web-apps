@@ -63,13 +63,13 @@
             (submit)="onSubmitMint(depositSymbolRef.value, depositAmountRef.valueAsNumber)"
           >
             <div class="form-control">
-              <label class="label">
+              <span class="label">
                 <span class="label-text">Enter amount to deposit</span>
                 <!-- The button to open modal -->
-                <label for="modal-dlp" class="label-text">
+                <label for="modal-dlp" class="label-text cursor-pointer">
                   <mat-icon>help</mat-icon>
                 </label>
-              </label>
+              </span>
               <label class="input-group">
                 <input
                   #depositAmountRef
@@ -162,12 +162,12 @@
             (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
           >
             <div class="form-control">
-              <label class="label">
+              <span class="label">
                 <span class="label-text">Enter amount to sell</span>
-                <label for="modal-dlp" class="label-text">
+                <label for="modal-dlp" class="label-text cursor-pointer">
                   <mat-icon>help</mat-icon>
                 </label>
-              </label>
+              </span>
               <label class="input-group">
                 <input
                   #burnAmountRef

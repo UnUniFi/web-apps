@@ -43,6 +43,10 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  isAlreadySelectedStrategy(strategyId: string) {
+    return this.selectedStrategies.some((s) => s.id === strategyId);
+  }
+
   onClickAddStrategy() {
     if (!this.selectedStrategyId) {
       alert('Please select a strategy.');
@@ -53,10 +57,15 @@ export class CreateComponent implements OnInit {
       name: this.strategies?.find((s) => s.id === this.selectedStrategyId)?.name,
       weight: 0,
     });
+    this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
+
+    this.selectedStrategyId = undefined;
   }
+
   onClickDeleteStrategy(index: number) {
     this.selectedStrategies.splice(index, 1);
   }
+
   onChangeSymbol() {
     if (!this.selectedSymbol) {
       return;
@@ -67,6 +76,7 @@ export class CreateComponent implements OnInit {
       this.changeDenom.emit(denom);
     }
   }
+
   onSubmitCreate() {
     const strategies = this.selectedStrategies.slice();
     strategies.filter((s) => s.id && s.weight > 0);

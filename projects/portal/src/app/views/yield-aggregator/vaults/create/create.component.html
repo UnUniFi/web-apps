@@ -134,7 +134,9 @@
                 >
                   <option [value]="undefined" disabled>Select a strategy</option>
                   <ng-container *ngFor="let s of strategies">
-                    <option [value]="s.id">{{ s.name | uppercase }}</option>
+                    <option [value]="s.id" [disabled]="isAlreadySelectedStrategy(s.id || '')">
+                      {{ s.name | uppercase }}
+                    </option>
                   </ng-container>
                 </select>
                 <button

@@ -47,6 +47,7 @@ export class GovApplicationService {
           data: { txHash: txHash, msg: 'Successfully accepted your vote.' },
         })
         .closed.toPromise();
+        location.reload();
     }
   }
 
@@ -60,6 +61,7 @@ export class GovApplicationService {
           data: { txHash: txHash, msg: 'Successfully accepted your deposit to the proposal.' },
         })
         .closed.toPromise();
+        location.reload();
     }
   }
 

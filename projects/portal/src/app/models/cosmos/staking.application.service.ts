@@ -76,6 +76,7 @@ export class StakingApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -94,6 +95,7 @@ export class StakingApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -112,6 +114,7 @@ export class StakingApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -305,6 +308,7 @@ export class StakingApplicationService {
           data: { txHash: txHash, msg: 'Successfully created a new Validator.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 

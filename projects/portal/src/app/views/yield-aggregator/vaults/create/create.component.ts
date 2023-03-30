@@ -98,12 +98,4 @@ export class CreateComponent implements OnInit {
       depositSymbol: this.deposit.symbol,
     });
   }
-
-  onClickOpenStrategyDetail(id?: string) {
-    const rootPath = window.location.origin;
-    window.open(
-      rootPath + '/portal/yield-aggregator/strategies/' + this.denom + '/' + id,
-      '_blank',
-    );
-  }
 }

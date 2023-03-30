@@ -37,6 +37,8 @@ export class BorrowComponent implements OnInit {
   @Input()
   borrowAmount?: number | null;
   @Input()
+  selectedBorrowAmount?: number | null;
+  @Input()
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;
@@ -93,7 +95,7 @@ export class BorrowComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.borrowAmount || !this.borrowDenom) {
+    if (!this.selectedBorrowAmount || !this.borrowDenom) {
       alert('Some values are invalid!');
       return;
     }
@@ -101,7 +103,7 @@ export class BorrowComponent implements OnInit {
       classID: this.classID,
       nftID: this.nftID,
       symbol: this.borrowDenom,
-      amount: this.borrowAmount,
+      amount: this.selectedBorrowAmount,
     });
   }
 
@@ -109,7 +111,7 @@ export class BorrowComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.borrowAmount || !this.borrowDenom) {
+    if (!this.selectedBorrowAmount || !this.borrowDenom) {
       alert('Some values are invalid!');
       return;
     }
@@ -117,7 +119,7 @@ export class BorrowComponent implements OnInit {
       classID: this.classID,
       nftID: this.nftID,
       symbol: this.borrowDenom,
-      amount: this.borrowAmount,
+      amount: this.selectedBorrowAmount,
     });
   }
 }

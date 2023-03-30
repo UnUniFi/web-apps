@@ -25,7 +25,7 @@ export class YieldAggregatorService {
       { [symbol]: amount },
       symbolMetadataMap,
     )[0];
-    const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgDepositToVault({
+    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgDepositToVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
       amount: coin,
@@ -44,7 +44,7 @@ export class YieldAggregatorService {
     //   { [symbol]: amount },
     //   symbolMetadataMap,
     // )[0];
-    const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgWithdrawFromVault({
+    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
       lp_token_amount: amount.toString(),
@@ -79,7 +79,7 @@ export class YieldAggregatorService {
         weight: this.txCommonService.numberToDecString(strategy.weight / 100),
       };
     });
-    const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgCreateVault({
+    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgCreateVault({
       sender: senderAddress,
       denom: denom,
       commission_rate: commissionRate.toString(),
@@ -91,7 +91,7 @@ export class YieldAggregatorService {
   }
 
   buildMsgDeleteVault(senderAddress: string, vaultId: string) {
-    const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgDeleteVault({
+    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgDeleteVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
     });
@@ -100,7 +100,7 @@ export class YieldAggregatorService {
   }
 
   buildMsgTransferVaultOwnership(senderAddress: string, vaultId: string, recipientAddress: string) {
-    const msg = new ununificlient.proto.ununifi.chain.yieldaggregator.MsgTransferVaultOwnership({
+    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgTransferVaultOwnership({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
       recipient: recipientAddress,

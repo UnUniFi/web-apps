@@ -92,12 +92,19 @@
               required
               type="number"
               name="amount"
-              [(ngModel)]="borrowAmount"
+              [(ngModel)]="selectedBorrowAmount"
+              [max]="borrowAmount || 0"
+              [min]="0"
+              [step]="1"
               class="input input-bordered w-full"
               [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
               pattern="^[0-9]*\.?[0-9]{0,6}$"
             />
             <span>{{ borrowDenom }}</span>
+          </label>
+          <label class="label">
+            <span class="label-text-alt">max borrowing amount:</span>
+            <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
           </label>
         </div>
 
@@ -121,7 +128,7 @@
           >
             Simulate
           </button>
-          <button class="btn btn-secondary px-8">Borrow</button>
+          <button class="btn btn-secondary px-8" [disabled]="formRef.invalid">Borrow</button>
         </div>
       </form>
     </div>

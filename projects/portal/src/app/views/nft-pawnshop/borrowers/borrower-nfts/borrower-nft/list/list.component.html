@@ -37,7 +37,7 @@
   <div class="card bg-base-100 shadow-xl w-full lg:w-1/2">
     <h3 class="m-4 card-title">List this NFT</h3>
     <div class="card-body">
-      <form (submit)="onSubmit()">
+      <form #formRef="ngForm" (submit)="onSubmit()">
         <div class="form-control">
           <label class="label">
             <span class="label-text">Select Bid Currency</span>
@@ -78,7 +78,9 @@
               type="number"
               name="minDepositRate"
               [(ngModel)]="minDepositRate"
-              placeholder="1.5"
+              [max]="50"
+              [min]="0"
+              [step]="1"
               class="input input-bordered w-full"
               [class]="{ 'input-error': minDepositRateNgModelRef.errors }"
               pattern="^[0-9]*\.?[0-9]{0,4}$"
@@ -88,7 +90,7 @@
         </div>
 
         <br />
-        <button class="btn btn-primary w-full px-8">List NFT</button>
+        <button class="btn btn-primary w-full px-8" [disabled]="formRef.invalid">List NFT</button>
       </form>
     </div>
   </div>

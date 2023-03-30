@@ -1,7 +1,7 @@
-<div class="drawer w-screen h-screen bg-base-300">
+<div class="drawer w-screen h-screen bg-base-300" data-theme="synthwave">
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
-    <div class="navbar bg-primary text-primary-content sticky top-0 z-20">
+    <div class="navbar glass sticky top-0 z-20">
       <button class="align-middle md:ml-10" mat-icon-button routerLink="/">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
@@ -13,10 +13,8 @@
       </div>
     </div>
     <!-- Page content here -->
-    <div class="flex justify-center">
-      <div class="w-full max-w-screen-xl p-8">
-        <ng-content></ng-content>
-      </div>
+    <div class="w-full max-w-screen-xl mx-auto p-8">
+      <ng-content></ng-content>
     </div>
   </div>
 </div>

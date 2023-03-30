@@ -5,7 +5,6 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-const faucetStakePort = location.protocol === 'https:' ? 7000 : 8000;
 
 // To Do write chain config
 const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
@@ -59,14 +58,14 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
           denom: 'stake',
           creditAmount: 3000,
           maxCredit: 3000,
         },
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetStakePort}`,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
           denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
           creditAmount: 10000000,
           maxCredit: 10000000,

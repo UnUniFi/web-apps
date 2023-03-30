@@ -1,8 +1,8 @@
-<div class="drawer w-screen h-screen bg-base-300">
+<div class="drawer w-screen h-screen bg-base-300" data-theme="business">
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
-    <div class="navbar bg-info text-info-content sticky top-0 z-20">
-      <button class="align-middle md:ml-10" mat-icon-button routerLink="/">
+    <div class="navbar glass sticky top-0 z-20">
+      <button class="align-middle md:ml-10" mat-icon-button routerLink="/derivatives">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
       <div class="flex-1 px-2 mx-2 text-2xl">UnUniFi Derivatives</div>
@@ -13,10 +13,8 @@
       </div>
     </div>
     <!-- Page content here -->
-    <div class="flex justify-center">
-      <div class="w-full max-w-screen-xl p-8">
-        <ng-content></ng-content>
-      </div>
+    <div class="w-full max-w-screen-xl mx-auto p-8">
+      <ng-content></ng-content>
     </div>
   </div>
 </div>

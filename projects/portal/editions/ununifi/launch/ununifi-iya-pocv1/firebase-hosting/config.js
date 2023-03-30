@@ -64,7 +64,7 @@ const configs = [
         },
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
+          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
           creditAmount: 10000000,
           maxCredit: 10000000,

@@ -72,10 +72,12 @@
             </label>
           </div>
           <div class="form-control">
-            <label class="label">
+            <span class="label">
               <span class="label-text">Select Strategies</span>
               <!-- The button to open modal -->
-              <label for="modal-strategy"><mat-icon>help</mat-icon></label>
+              <label for="modal-strategy" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
 
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="modal-strategy" class="modal-toggle" />
@@ -91,7 +93,7 @@
                   </div>
                 </div>
               </div>
-            </label>
+            </span>
 
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
               <div class="flex flex-row flex-wrap">
@@ -159,10 +161,12 @@
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <span class="label">
               <span class="label-text">Deposit</span>
               <!-- The button to open modal -->
-              <label for="modal-deposit"><mat-icon>help</mat-icon></label>
+              <label for="modal-deposit" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
 
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="modal-deposit" class="modal-toggle" />
@@ -177,7 +181,7 @@
                   </div>
                 </div>
               </div>
-            </label>
+            </span>
             <label class="input-group">
               <input
                 type="number"
@@ -190,10 +194,12 @@
             </label>
           </div>
           <div class="form-control">
-            <label class="label">
+            <span class="label">
               <span class="label-text">Fee</span>
               <!-- The button to open modal -->
-              <label for="modal-fee"><mat-icon>help</mat-icon></label>
+              <label for="modal-fee" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
 
               <!-- Put this part before </body> tag -->
               <input type="checkbox" id="modal-fee" class="modal-toggle" />
@@ -206,7 +212,7 @@
                   </div>
                 </div>
               </div>
-            </label>
+            </span>
             <label class="input-group">
               <input
                 type="number"

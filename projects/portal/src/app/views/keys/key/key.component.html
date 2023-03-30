@@ -35,7 +35,7 @@
   <mat-card class="mb-4">
     <mat-nav-list>
       <mat-list-item
-        routerLink="/faucet"
+        routerLink="../../faucet"
         [queryParams]="{
           address: accAddress?.toString(),
           denom: faucet.denom,
@@ -56,7 +56,7 @@
 
 <mat-card>
   <mat-nav-list>
-    <mat-list-item routerLink="/accounts/{{ accAddress?.toString() }}">
+    <mat-list-item routerLink="../../accounts/{{ accAddress?.toString() }}">
       <mat-icon color="accent">account_balance_wallet </mat-icon>
       <span class="ml-2">Show Account Info</span>
     </mat-list-item>

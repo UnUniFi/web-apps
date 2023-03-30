@@ -33,7 +33,7 @@ export class TxConfirmDialogComponent implements OnInit {
 
   onClickOpenTxDetail() {
     const rootPath = window.location.origin;
-    window.open(rootPath + '/portal/txs/' + this.data, '_blank');
+    window.open(rootPath + '/portal/utilities/txs/' + this.data.txHash, '_blank');
   }
 
   copyClipboard(value: string) {

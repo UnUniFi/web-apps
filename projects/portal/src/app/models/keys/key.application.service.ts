@@ -66,7 +66,7 @@ export class KeyApplicationService {
       duration: 6000,
     });
 
-    await this.router.navigate(['keys']);
+    await this.router.navigate(['utilities', 'keys']);
   }
 
   sign(data: string, privateKey: Uint8Array): string {

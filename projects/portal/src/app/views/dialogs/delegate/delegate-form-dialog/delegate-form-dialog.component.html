@@ -4,58 +4,74 @@
     <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-xl m-3">Delegate to this validator</div>
   </div>
-  <mat-list>
-    <mat-label>To. (Validator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ validator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">To. (Validator)</span>
+    </label>
+    <ul class="menu bg-base-100" >
+      <li class="disabled"><a class="text-base-content items-center">
+        <span
+          class="material-icons"
+          [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
+          circle
+        </span>
+        {{ validator?.description?.moniker }}
+      </a></li>
+    </ul>
+  </div>
 
-  <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ currentStoredWallet?.id }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">From. (Delegator)</span>
+    </label>
+    <ul class="menu bg-base-100" >
+      <li class="disabled"><a class="text-base-content items-center">
+        <span
+          class="material-icons"
+          [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">
+          circle
+        </span>
+        {{ currentStoredWallet?.id }}
+      </a></li>
+    </ul>
+  </div>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
     <div class="flex flex-col content-content lg:flex-row">
-      <mat-form-field class="flex-auto">
-        <mat-label>Delegate Amount</mat-label>
+      <div class="form-control flex-auto">
+        <label class="label">
+          <span class="label-text">Delegate Amount</span>
+        </label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.amount"
           name="delegate-amount"
-          matInput
           type="number"
-          pattern="^\d+(\.\d{1,6})?$"
+          placeholder="Type here"
+          class="input input-bordered input-sm"
+          [(ngModel)]="selectedAmount && selectedAmount.amount"
           [min]="0"
           required
+          pattern="^\d+(\.\d{1,6})?$"
         />
-        <mat-hint
-          >Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom }}</mat-hint
-        >
-      </mat-form-field>
-      <mat-form-field class="flex-auto">
-        <mat-label>Delegate Token</mat-label>
+        <label class="label">
+          <span class="label-text text-xs">
+            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom }}
+          </span>
+        </label>
+      </div>
+      <div class="form-control flex-auto">
+        <label class="label">
+          <span class="label-text">Delegate Token</span>
+        </label>
         <input
-          [(ngModel)]="selectedAmount && selectedAmount.denom"
           name="delegate-denom"
-          matInput
           type="text"
+          placeholder="Type here"
+          class="input input-bordered input-sm"
+          [(ngModel)]="selectedAmount && selectedAmount.denom"
           required
           readonly
         />
-      </mat-form-field>
+      </div>
     </div>
 
     <!-- <h3 class="pt-3">Gas Settings</h3>
@@ -123,7 +139,7 @@
       </mat-expansion-panel>
     </mat-accordion> -->
 
-    <button mat-flat-button class="my-4 px-8" color="primary" [disabled]="formRef.invalid">
+    <button class="btn btn-primary" [disabled]="formRef.invalid">
       Delegate
     </button>
   </form>

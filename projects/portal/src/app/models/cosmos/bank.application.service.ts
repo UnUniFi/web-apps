@@ -158,6 +158,7 @@ export class BankApplicationService {
           data: { txHash: txHash, msg: 'Successfully sent token, please check your balance.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 }

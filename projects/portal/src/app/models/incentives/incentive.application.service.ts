@@ -47,6 +47,7 @@ export class IncentiveApplicationService {
           data: { txHash: txHash, msg: 'Successfully created the Ecosystem Incentive Unit.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -60,6 +61,7 @@ export class IncentiveApplicationService {
           data: { txHash: txHash, msg: 'Successfully withdraw your Ecosystem Incentive reward.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -73,13 +75,14 @@ export class IncentiveApplicationService {
           data: { txHash: txHash, msg: 'Successfully withdraw all Ecosystem Incentive rewards.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
   async Register(
     incentiveUnitId: string,
     subjectAddresses: string[],
-    weights: string[],
+    weights: number[],
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {

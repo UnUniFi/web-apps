@@ -1,5 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { BankService } from '../cosmos/bank.service';
+import { TxCommonService } from '../cosmos/tx-common.service';
 import { Nfts } from './nft-pawnshop.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -14,6 +15,7 @@ import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 export class NftPawnshopService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
+    private readonly txCommon: TxCommonService,
     private readonly bankService: BankService,
     private http: HttpClient,
   ) {}
@@ -94,7 +96,7 @@ export class NftPawnshopService {
       },
       listing_type: listingType,
       bid_token: bidDenom,
-      minimum_deposit_rate: minimumDepositRate.toString(),
+      minimum_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
       automatic_refinancing: autoRefinancing,
     });
 
@@ -143,7 +145,7 @@ export class NftPawnshopService {
       },
       bid_amount: bid,
       bidding_period: biddingPeriodTimestamp,
-      deposit_lending_rate: lendingRate.toString(),
+      deposit_lending_rate: this.txCommon.numberToDecString(lendingRate),
       automatic_payment: automaticPayment,
       deposit_amount: deposit,
     });

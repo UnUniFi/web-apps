@@ -88,6 +88,7 @@ export class DerivativesApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -146,6 +147,7 @@ export class DerivativesApplicationService {
           data: { txHash: txHash, msg: 'Successfully sold yor DLP. Please check your balance.' },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -229,6 +231,7 @@ export class DerivativesApplicationService {
           },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 
@@ -274,9 +277,13 @@ export class DerivativesApplicationService {
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
-          data: { txHash: txHash, msg: 'Successfully closed the position. Please check your balance.' },
+          data: {
+            txHash: txHash,
+            msg: 'Successfully closed the position. Please check your balance.',
+          },
         })
         .closed.toPromise();
+      location.reload();
     }
   }
 }

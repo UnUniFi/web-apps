@@ -1,7 +1,7 @@
 <h2 class="mb-0">View Auctions</h2>
 <mat-card class="mb-4">
   <mat-nav-list>
-    <mat-list-item routerLink="/auction/auctions">Auctions List</mat-list-item>
+    <mat-list-item routerLink="auctions">Auctions List</mat-list-item>
   </mat-nav-list>
 </mat-card>
 
@@ -14,7 +14,9 @@
       <span class="flex-auto"></span>
       <span class="ml-2 break-all">
         <span>{{ params?.increment_collateral | floor }}</span>
-        <span class="text-gray-300 text-sm">{{ params?.increment_collateral | decimals: 9 }} </span>
+        <span class="text-gray-300 text-sm"
+          >{{ params?.increment_collateral | decimals : 9 }}
+        </span>
       </span>
     </mat-list-item>
     <mat-divider [inset]="true"></mat-divider>
@@ -23,7 +25,7 @@
       <span class="flex-auto"></span>
       <span class="ml-2 break-all">
         <span>{{ params?.increment_debt | floor }}</span>
-        <span class="text-gray-300 text-sm">{{ params?.increment_debt | decimals: 9 }} </span>
+        <span class="text-gray-300 text-sm">{{ params?.increment_debt | decimals : 9 }} </span>
       </span>
     </mat-list-item>
     <mat-divider [inset]="true"></mat-divider>
@@ -32,7 +34,7 @@
       <span class="flex-auto"></span>
       <span class="ml-2 break-all">
         <span>{{ params?.increment_surplus | floor }}</span>
-        <span class="text-gray-300 text-sm">{{ params?.increment_surplus | decimals: 9 }} </span>
+        <span class="text-gray-300 text-sm">{{ params?.increment_surplus | decimals : 9 }} </span>
       </span>
     </mat-list-item>
   </mat-list>

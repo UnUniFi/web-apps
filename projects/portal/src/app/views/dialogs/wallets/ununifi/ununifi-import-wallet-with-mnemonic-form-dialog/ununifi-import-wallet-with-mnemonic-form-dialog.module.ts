@@ -1,4 +1,3 @@
-import { MaterialModule } from '../../../../material.module';
 import { UnunifiImportWalletWithMnemonicFormDialogComponent } from './ununifi-import-wallet-with-mnemonic-form-dialog.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
@@ -7,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UnunifiImportWalletWithMnemonicFormDialogComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, ClipboardModule],
+  imports: [CommonModule, FormsModule, ClipboardModule],
   exports: [UnunifiImportWalletWithMnemonicFormDialogComponent],
 })
-export class UnunifiImportWalletWithMnemonicFormDialogModule {}
+export class UnunifiImportWalletWithMnemonicFormDialogModule { }

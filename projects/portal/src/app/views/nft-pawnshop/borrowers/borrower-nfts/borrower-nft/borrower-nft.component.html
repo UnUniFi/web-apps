@@ -3,8 +3,13 @@
     <h2>Status of Your listed NFT</h2>
   </div>
   <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
-    <figure class="aspect-square w-full">
-      <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="" class="h-full object-cover" />
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+        alt="image of the NFT"
+        class="object-cover"
+      />
     </figure>
     <div class="card-body w-2/3">
       <div class="flex flex-row">

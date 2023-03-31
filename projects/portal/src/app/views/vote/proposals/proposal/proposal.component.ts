@@ -41,6 +41,8 @@ export class ProposalComponent implements OnInit {
   @Output()
   appClickDeposit: EventEmitter<number>;
 
+  voteDetailEnabled = false;
+
   constructor() {
     this.appClickVote = new EventEmitter();
     this.appClickDeposit = new EventEmitter();

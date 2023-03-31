@@ -13,7 +13,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import { Vault200Response, VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-vault',
@@ -22,7 +22,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 })
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
-  vault$: Observable<VaultAll200ResponseVaultsInner>;
+  vault$: Observable<Vault200Response>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbol$: Observable<string | null | undefined>;
@@ -50,7 +50,7 @@ export class VaultComponent implements OnInit {
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
-      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.denom!].symbol),
+      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol),
     );
 
     this.mintAmount$ = new BehaviorSubject(0);
@@ -63,8 +63,9 @@ export class VaultComponent implements OnInit {
     ]).pipe(
       mergeMap(([id, vault, deposit, denomMetadataMap]) => {
         const exponent =
-          denomMetadataMap?.[vault.denom!].denom_units?.find((u) => u.denom == vault.denom)
-            ?.exponent || 0;
+          denomMetadataMap?.[vault.vault?.denom!].denom_units?.find(
+            (u) => u.denom == vault.vault?.denom,
+          )?.exponent || 0;
         return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );

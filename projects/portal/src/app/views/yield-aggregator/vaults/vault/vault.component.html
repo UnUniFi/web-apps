@@ -4,8 +4,8 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">
-          Vault #{{ vault?.id }}
-          <div class="badge badge-primary">#{{ vault?.id }}</div>
+          Vault #{{ vault?.vault?.id }}
+          <div class="badge badge-primary">#{{ vault?.vault?.id }}</div>
           <div class="badge badge-secondary">{{ symbol }}</div>
         </h2>
         <!-- <div class="stats">
@@ -35,27 +35,43 @@
             <tbody>
               <tr>
                 <th>Vault ID</th>
-                <td>{{ vault?.id }}</td>
+                <td>{{ vault?.vault?.id }}</td>
               </tr>
               <tr>
+                <th>Vault Address</th>
+                <td>{{ vault?.vault_address }}</td>
+              </tr>
+              <!-- <tr>
                 <th>Vault Name</th>
                 <td>{{ 'Coming soon' }}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <th>Owner</th>
-                <td>{{ vault?.owner }}</td>
+                <td>{{ vault?.vault?.owner }}</td>
               </tr>
               <tr>
                 <th>Owner's Deposit</th>
-                <td>{{ vault?.owner_deposit | coin }}</td>
+                <td>{{ vault?.vault?.owner_deposit | coin }}</td>
               </tr>
               <tr>
                 <th>Withdraw Commission Rate</th>
-                <td>{{ vault?.withdraw_commission_rate | percentage }}</td>
+                <td>{{ vault?.vault?.withdraw_commission_rate | percentage }}</td>
               </tr>
               <tr>
                 <th>Withdraw Reserve Rate</th>
-                <td>{{ vault?.withdraw_reserve_rate | percentage }}</td>
+                <td>{{ vault?.vault?.withdraw_reserve_rate | percentage }}</td>
+              </tr>
+              <tr>
+                <th>Total Bonded Amount</th>
+                <td>{{ vault?.total_bonded_amount }}</td>
+              </tr>
+              <tr>
+                <th>Total Unbonding Amount</th>
+                <td>{{ vault?.total_unbonding_amount }}</td>
+              </tr>
+              <tr>
+                <th>Total Withdrawal Amount</th>
+                <td>{{ vault?.total_withdrawal_balance }}</td>
               </tr>
             </tbody>
           </table>
@@ -124,7 +140,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="Coming Soon" />
-              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.id }}</span>
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
             </label>
           </div>
 
@@ -152,19 +168,19 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.['YA-VAULT-'+ vault?.id || ''] || 0"
+                [max]="symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
                 (input)="onWithdrawAmountChange()"
               />
-              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.id }}</span>
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt"
-                >{{ symbolBalancesMap?.['YA-VAULT-'+ vault?.id] || 0 }}
-                {{ 'YA-VAULT-' + vault?.id }}
+                >{{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
+                {{ 'YA-VAULT-' + vault?.vault?.id }}
               </span>
             </label>
           </div>
@@ -190,7 +206,7 @@
   <h2>Strategies this vault contains</h2>
   <div class="flex flex-row flex-wrap -mr-12 -mb-12">
     <div
-      *ngFor="let strategy of vault?.strategy_weights; let i = index"
+      *ngFor="let strategy of vault?.vault?.strategy_weights; let i = index"
       class="pr-12 pb-12 w-full md:w-1/2 xl:w-1/3"
     >
       <div class="card bg-base-100 shadow-xl w-full">
@@ -198,7 +214,7 @@
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">{{ strategy.strategy_id }}</div>
           </div>
-          <h2 class="card-title break-all">Strategy #{{ strategy.strategy_id }}</h2>
+          <h2 class="card-title break-all">{{ getStrategyInfo(strategy.strategy_id)?.name }}</h2>
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Allocation weight</div>
@@ -208,7 +224,9 @@
           </div>
 
           <button
-            routerLink="/yield-aggregator/strategies/{{ vault?.denom }}/{{ strategy.strategy_id }}"
+            routerLink="/yield-aggregator/strategies/{{ vault?.vault?.denom }}/{{
+              strategy.strategy_id
+            }}"
             class="btn btn-outline btn-info"
           >
             View

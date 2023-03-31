@@ -6,6 +6,7 @@ import ununifi from 'ununifi-client';
 import {
   CdpAll200ResponseCdpInnerCdpCollateral,
   StrategyAll200ResponseStrategiesInner,
+  Vault200Response,
   VaultAll200ResponseVaultsInner,
   YieldAggregatorParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
@@ -46,10 +47,10 @@ export class YieldAggregatorQueryService {
     );
   }
 
-  getVault$(id: string): Observable<VaultAll200ResponseVaultsInner> {
+  getVault$(id: string): Observable<Vault200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.vault(sdk, id)),
-      map((res) => res.data.vault!),
+      map((res) => res.data),
     );
   }
 

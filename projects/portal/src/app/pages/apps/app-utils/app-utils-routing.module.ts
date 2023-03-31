@@ -68,17 +68,17 @@ const routes: Routes = [
     component: AppUtilsComponent,
     loadChildren: () => import('../../vote/vote.module').then((m) => m.AppVoteModule),
   },
-  {
-    path: 'incentive',
-    component: AppUtilsComponent,
-    loadChildren: () =>
-      import('../../incentive/incentive.module').then((m) => m.AppIncentiveModule),
-  },
-  {
-    path: 'nfts',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../nfts/nfts.module').then((m) => m.AppNftsModule),
-  },
+  // {
+  //   path: 'incentive',
+  //   component: AppUtilsComponent,
+  //   loadChildren: () =>
+  //     import('../../incentive/incentive.module').then((m) => m.AppIncentiveModule),
+  // },
+  // {
+  //   path: 'nfts',
+  //   component: AppUtilsComponent,
+  //   loadChildren: () => import('../../nfts/nfts.module').then((m) => m.AppNftsModule),
+  // },
   {
     path: 'developers',
     component: AppUtilsComponent,

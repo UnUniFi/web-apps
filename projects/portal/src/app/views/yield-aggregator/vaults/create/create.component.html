@@ -1,6 +1,11 @@
 <div class="mx-auto max-w-screen-xl">
   <div class="flex flex-row flex-wrap mb-8">
-    <h2>Create a New Vault</h2>
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li routerLink=".."><a>Vaults</a></li>
+        <li>Create a New Vault</li>
+      </ul>
+    </div>
     <span class="flex-auto"></span>
     <button
       class="btn btn-secondary btn-outline px-8 mr-2 mb-2"
@@ -56,6 +61,7 @@
             <label class="input-group">
               <input
                 #commissionNgModelRef="ngModel"
+                required
                 type="number"
                 [min]="0"
                 [max]="100"
@@ -109,12 +115,11 @@
                   <label class="input-group w-full mb-2">
                     <input
                       type="number"
-                      placeholder="0"
                       [min]="0"
                       [max]="100"
                       [step]="1"
                       [(ngModel)]="strategy.weight"
-                      name="strategyWeight"
+                      name="strategy{{ i }}Weight"
                       class="input input-bordered w-full"
                     />
                     <span>%</span>
@@ -129,14 +134,14 @@
             <div class="flex flex-row flex-wrap">
               <label class="input-group mb-2 w-full sm:w-auto">
                 <select
-                  required
+                  [required]="selectedStrategies.length === 0"
                   class="select select-bordered text-center w-auto sm:w-64"
                   [(ngModel)]="selectedStrategyId"
                   name="strategyId"
                 >
                   <option [value]="undefined" disabled>Select a strategy</option>
                   <ng-container *ngFor="let s of strategies">
-                    <option [value]="s.id" [disabled]="isAlreadySelectedStrategy(s.id || '')">
+                    <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
                       {{ s.name | uppercase }}
                     </option>
                   </ng-container>
@@ -151,14 +156,15 @@
                 </button>
               </label>
               <span class="flex-auto"></span>
-              <a
+              <button
+                type="button"
                 class="btn btn-outline btn-info w-full sm:w-auto mb-2"
-                href="/portal/yield-aggregator/strategies/{{ denom }}"
-                target="_blank"
-                *ngIf="selectedSymbol"
+                [disabled]="!selectedSymbol"
               >
-                View Strategies
-              </a>
+                <a href="/portal/yield-aggregator/strategies/{{ denom }}" target="_blank">
+                  View Strategies
+                </a>
+              </button>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-<h2 class="mb-0">Delegations</h2>
+<h2>Delegations</h2>
 <ng-container *ngIf="delegations === null; then loading; else loadedDelegations"> </ng-container>
 <ng-template #loadedDelegations>
   <ng-container
@@ -58,7 +58,7 @@
 >
 </ng-container>
 <ng-template #existUnbonding>
-  <h2 class="mb-0">OnGoing Unbonding</h2>
+  <h2>OnGoing Unbonding</h2>
   <div class="overflow-x-auto mb-8">
     <table class="table w-full">
       <!-- head -->
@@ -104,8 +104,8 @@
 </ng-template>
 <ng-template #emptyUnbonding></ng-template>
 
-<div class="flex flex-row items-end mb-2">
-  <h2 class="mb-0">Validators</h2>
+<div class="flex flex-row items-end">
+  <h2>Validators</h2>
   <span class="flex-auto"></span>
   <div class="btn-group">
     <label class="btn btn-outline w-1/2" [class.btn-active]="active" (click)="onToggleActive(true)">

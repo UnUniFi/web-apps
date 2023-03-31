@@ -1,6 +1,9 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
-    <h2>Strategies of {{ symbol || denom }}</h2>
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="/yield-aggregator/vaults"><a>Vaults</a></li>
+      <li>Strategies of {{ symbol || denom }}</li>
+    </ul>
   </div>
   <div class="flex flex-row flex-wrap -mr-12 -mb-12">
     <div

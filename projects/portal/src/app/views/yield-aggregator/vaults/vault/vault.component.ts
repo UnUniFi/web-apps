@@ -44,8 +44,8 @@ export class VaultComponent implements OnInit {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
 
-  mintAmount: number;
-  burnAmount: number;
+  mintAmount?: number;
+  burnAmount?: number;
   chartType: ChartType;
   chartTitle: string;
   chartData: any[];
@@ -58,8 +58,6 @@ export class VaultComponent implements OnInit {
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
-    this.mintAmount = 0;
-    this.burnAmount = 0;
     this.chartTitle = '';
     this.chartType = ChartType.LineChart;
     const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
@@ -88,6 +86,9 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitDeposit() {
+    if (!this.mintAmount) {
+      return;
+    }
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.mintAmount,
@@ -100,6 +101,9 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitWithdraw() {
+    if (!this.burnAmount) {
+      return;
+    }
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.burnAmount,

@@ -1,5 +1,13 @@
 <div class="mx-auto max-w-screen-xl">
-  <h2>Strategy Detail</h2>
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="/yield-aggregator/vaults"><a>Vaults</a></li>
+      <li routerLink="..">
+        <a>Strategies of {{ symbol }}</a>
+      </li>
+      <li>{{ strategy?.name }}</li>
+    </ul>
+  </div>
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div #cardRef class="card-body">

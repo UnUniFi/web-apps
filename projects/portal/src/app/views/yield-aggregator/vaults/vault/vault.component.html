@@ -63,15 +63,15 @@
               </tr>
               <tr>
                 <th>Total Bonded Amount</th>
-                <td>{{ vault?.total_bonded_amount }}</td>
+                <td>{{ vault?.total_bonded_amount | coinAmount }} {{ symbol }}</td>
               </tr>
               <tr>
                 <th>Total Unbonding Amount</th>
-                <td>{{ vault?.total_unbonding_amount }}</td>
+                <td>{{ vault?.total_unbonding_amount | coinAmount }} {{ symbol }}</td>
               </tr>
               <tr>
                 <th>Total Withdrawal Amount</th>
-                <td>{{ vault?.total_withdrawal_balance }}</td>
+                <td>{{ vault?.total_withdrawal_balance | coinAmount }} {{ symbol }}</td>
               </tr>
             </tbody>
           </table>

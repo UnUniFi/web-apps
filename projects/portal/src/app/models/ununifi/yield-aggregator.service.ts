@@ -37,17 +37,18 @@ export class YieldAggregatorService {
   buildMsgWithdrawFromVault(
     senderAddress: string,
     vaultId: string,
+    symbol: string,
     amount: number,
-    // symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    // const coin = this.bankService.convertSymbolAmountMapToCoins(
-    //   { [symbol]: amount },
-    //   symbolMetadataMap,
-    // )[0];
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
-      lp_token_amount: amount.toString(),
+      lp_token_amount: coin.amount,
     });
 
     return msg;

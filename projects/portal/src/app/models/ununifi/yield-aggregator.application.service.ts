@@ -74,7 +74,7 @@ export class YieldAggregatorApplicationService {
         data: { txHash: txHash, msg: 'Successfully deposit to the vault.' },
       })
       .closed.toPromise();
-    this.router.navigate(['yield-aggregator', 'vaults', vaultId]);
+    location.reload();
   }
 
   async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
@@ -89,7 +89,13 @@ export class YieldAggregatorApplicationService {
       .pipe(take(1))
       .toPromise();
 
-    const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(address, vaultId, amount);
+    const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
+      address,
+      vaultId,
+      symbol,
+      amount,
+      symbolMetadataMap,
+    );
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,
@@ -124,7 +130,7 @@ export class YieldAggregatorApplicationService {
           data: { txHash: txHash, msg: 'Successfully withdraw from the vault.' },
         })
         .closed.toPromise();
-      this.router.navigate(['yield-aggregator', 'vaults', vaultId]);
+      location.reload();
     }
   }
 

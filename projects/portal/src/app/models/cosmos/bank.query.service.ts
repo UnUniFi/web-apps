@@ -198,7 +198,7 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'yield-aggregator/vaults/' + i,
-            exponent: 0,
+            exponent: 6,
             aliases: [],
           },
         ],

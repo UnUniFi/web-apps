@@ -32,11 +32,13 @@ export class CreateComponent implements OnInit {
   @Output()
   appCreate: EventEmitter<CreateVaultRequest>;
 
+  reserveRate?: number;
   name?: string;
   selectedStrategyId?: string;
   selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
 
   constructor() {
+    this.reserveRate = 10;
     this.changeDenom = new EventEmitter();
     this.appCreate = new EventEmitter();
   }
@@ -97,11 +99,15 @@ export class CreateComponent implements OnInit {
       alert('Invalid Fee or Deposit.');
       return;
     }
+    if (!this.reserveRate) {
+      return;
+    }
     this.appCreate.emit({
       name: this.name,
       symbol: this.selectedSymbol,
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),
+      reserveRate: Number(this.reserveRate),
       feeAmount: this.fee.amount,
       feeSymbol: this.fee.symbol,
       depositAmount: this.deposit.amount,

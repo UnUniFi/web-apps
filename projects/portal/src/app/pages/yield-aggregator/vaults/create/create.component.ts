@@ -83,6 +83,7 @@ export class CreateComponent implements OnInit {
       data.symbol,
       data.strategies,
       data.commissionRate,
+      data.reserveRate,
       data.feeAmount,
       data.feeSymbol,
       data.depositAmount,

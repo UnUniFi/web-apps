@@ -59,6 +59,7 @@ export class YieldAggregatorService {
     symbol: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
+    reserveRate: number,
     fee: number,
     feeSymbol: string,
     deposit: number,
@@ -80,10 +81,13 @@ export class YieldAggregatorService {
         weight: this.txCommonService.numberToDecString(strategy.weight / 100),
       };
     });
+    const decCommission = this.txCommonService.numberToDecString(commissionRate / 100);
+    const decReserve = this.txCommonService.numberToDecString(reserveRate / 100);
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgCreateVault({
       sender: senderAddress,
       denom: denom,
-      commission_rate: commissionRate.toString(),
+      commission_rate: decCommission,
+      withdraw_reserve_rate: decReserve,
       strategy_weights: strategyWeights,
       fee: coinFee,
       deposit: coinDeposit,

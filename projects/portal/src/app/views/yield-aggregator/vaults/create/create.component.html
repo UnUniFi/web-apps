@@ -78,6 +78,30 @@
             </label>
           </div>
           <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Withdraw Reserve Rate</span>
+            </label>
+            <label class="input-group">
+              <input
+                #reserveNgModelRef="ngModel"
+                required
+                type="number"
+                placeholder="30.123456"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [(ngModel)]="reserveRate"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="reserve"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': reserveNgModelRef.errors && reserveNgModelRef.touched
+                }"
+              />
+              <span>%</span>
+            </label>
+          </div>
+          <div class="form-control">
             <span class="label">
               <span class="label-text">Select Strategies</span>
               <!-- The button to open modal -->

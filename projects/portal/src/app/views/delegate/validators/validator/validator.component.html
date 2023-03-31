@@ -14,109 +14,81 @@
       {{ validator?.val?.description?.moniker }}
     </h2>
     <span class="flex-auto"></span>
-    <mat-chip-list>
-      <mat-chip *ngIf="validator?.inList" color="accent" selected> Active </mat-chip>
-      <mat-chip *ngIf="!validator?.inList" color="warn" selected> inactive </mat-chip>
-    </mat-chip-list>
-    <!-- <span
-      *ngIf="validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-blue-500"
-    >
-      Active
-    </span>
-    <span
-      *ngIf="!validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-red-500"
-    >
-      Inactive
-    </span> -->
+    <span *ngIf="validator?.inList" class="badge badge-info">Active</span>
+    <span *ngIf="!validator?.inList" class="badge badge-error">Inactive</span>
   </div>
 
-  <mat-card class="mb-4">
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">Validator Address: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ validator?.val?.operator_address }}</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-      <mat-list-item>
-        <span class="break-words">Account Address: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ accAddress }}</span>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+  <div class="overflow-x-auto mb-4">
+    <table class="table w-full">
+      <tbody>
+        <tr>
+          <th>Validator Address</th>
+          <td>
+            {{ validator?.val?.operator_address }}
+            <button
+              mat-icon-button
+              type="button"
+              (click)="copyClipboard(validator?.val?.operator_address || '')"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <th>Account Address</th>
+          <td>
+            {{ accAddress }}
+            <button
+              mat-icon-button
+              type="button"
+              (click)="copyClipboard(accAddress?.toString() || '')"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Rank: </span>
-          <span class="flex-auto"></span>
-          #<span class="ml-1 break-all">{{ validator?.rank }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Website: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.val?.description?.website }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Commission: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.rate | percent : '1.0-0' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Max Commission: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.max_rate | percent : '1.0-0' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="break-words">Commission Updated: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.update_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="break-words">Minimum Self Delegation: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.min_self_delegation }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="break-words">Voting Power: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.share | percent : '1.2-2' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Staked: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.val?.tokens | coinAmount }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto mb-4">
+    <table class="table w-full">
+      <tbody>
+        <tr>
+          <th>Rank</th>
+          <td>#{{ validator?.rank }}</td>
+        </tr>
+        <tr>
+          <th>Website</th>
+          <td>{{ validator?.val?.description?.website }}</td>
+        </tr>
+        <tr>
+          <th>Commission</th>
+          <td>{{ validator?.val?.commission?.commission_rates?.rate | percent : '1.0-0' }}</td>
+        </tr>
+        <tr>
+          <th>Max Commission</th>
+          <td>{{ validator?.val?.commission?.commission_rates?.max_rate | percent : '1.0-0' }}</td>
+        </tr>
+        <tr>
+          <th>Commission Updated</th>
+          <td>{{ validator?.val?.commission?.update_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+        </tr>
+        <tr>
+          <th>Minimum Self Delegation</th>
+          <td>{{ validator?.val?.min_self_delegation }}</td>
+        </tr>
+        <tr>
+          <th>Voting Power</th>
+          <td>{{ validator?.share | percent : '1.2-2' }}</td>
+        </tr>
+        <tr>
+          <th>Staked</th>
+          <td>{{ validator?.val?.tokens | coinAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ng-template>
 
 <ng-template #notFound>

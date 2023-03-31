@@ -6,7 +6,9 @@
       <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
     </ng-template>
     <ng-template #loaded>
-      <ng-container *ngIf="!biddingNfts || biddingNfts.length === 0; then empty; else filled"></ng-container>
+      <ng-container
+        *ngIf="!biddingNfts || biddingNfts.length === 0; then empty; else filled"
+      ></ng-container>
     </ng-template>
 
     <ng-template #filled>
@@ -15,8 +17,12 @@
           <span class="indicator-item badge badge-primary">{{ nft.state }}</span>
           <div class="card w-full glass shadow-xl">
             <figure class="aspect-square w-full">
-              <img *ngIf="nftImages" src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT"
-                class="h-full object-cover" />
+              <img
+                *ngIf="nftImages"
+                src="{{ nftImages[i] || 'assets/UnUniFi-logo.png' }}"
+                alt="image of the NFT"
+                class="h-full object-cover"
+              />
             </figure>
             <div class="card-body">
               <h2 *ngIf="nftsMetadata" class="card-title break-all">
@@ -25,8 +31,10 @@
               <h2 *ngIf="!nftsMetadata" class="card-title break-all">
                 {{ nft.nft_id?.class_id + '/' + nft.nft_id?.nft_id }}
               </h2>
-              <button class="btn btn-outline btn-primary"
-                routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}">
+              <button
+                class="btn btn-outline btn-primary"
+                routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
+              >
                 View
               </button>
             </div>

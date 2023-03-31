@@ -153,7 +153,7 @@
         </ng-template>
 
         <div class="card-actions justify-end">
-          <button class="btn btn-primary px-8" routerLink="/delegate/validators">
+          <button class="btn btn-primary px-8" routerLink="delegate/validators">
             <mat-icon class="mr-2">savings</mat-icon>Delegate
           </button>
         </div>
@@ -171,7 +171,7 @@
           <ng-container *ngFor="let faucet of faucets; let i = index">
             <li>
               <a
-                routerLink="/faucet"
+                routerLink="faucet"
                 [queryParams]="{
                   denom: faucet.denom,
                   amount: faucet.creditAmount

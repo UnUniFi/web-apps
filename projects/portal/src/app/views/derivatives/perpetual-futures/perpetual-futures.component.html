@@ -1,44 +1,49 @@
-<div class="w-full">
-  <div class="flex flex-col md:flex-row justify-end">
-    <button class="btn btn-outline btn-secondary px-8 mr-4 mb-2" routerLink="/derivatives">
-      Top page
-    </button>
-    <button class="btn btn-outline btn-info px-8 mr-4 mb-2" routerLink="/derivatives/pool">
-      Pool (Buy / Sell DLP)
-    </button>
-  </div>
+<div class="flex flex-row flex-wrap justify-end">
   <h2>Perpetual Futures</h2>
-  <div class="form-control mb-4">
-    <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>
-    <ng-template #loading>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-    </ng-template>
-    <ng-template #loaded>
-      <ng-container *ngIf="!markets || markets.length === 0; then empty; else filled">
-      </ng-container>
-    </ng-template>
-    <ng-template #empty>
-      <p>No market is available</p>
-    </ng-template>
-    <ng-template #filled>
-      <label class="label">
-        <span class="label-text">Select market</span>
-      </label>
-      <select
-        #marketRef
-        class="select select-bordered w-full max-w-xs"
-        (change)="onChangeMarket(marketRef.value)"
-        [value]="selectedMarket"
-      >
-        <option disabled [value]="undefined">Please Select</option>
-        <ng-container *ngFor="let m of markets">
-          <option [value]="m">{{ m }}</option>
-        </ng-container>
-      </select>
-    </ng-template>
-  </div>
-  <ng-content class="mb-4"></ng-content>
+  <span class="flex-auto"></span>
+  <button
+    class="btn btn-outline btn-secondary px-8 mb-2 w-full xl:w-auto"
+    routerLink="/derivatives"
+  >
+    Top page
+  </button>
+  <div class="w-0 xl:w-4"></div>
+  <button
+    class="btn btn-outline btn-info px-8 mb-2 w-full xl:w-auto"
+    routerLink="/derivatives/pool"
+  >
+    Pool (Buy / Sell DLP)
+  </button>
 </div>
+<div class="form-control mb-4">
+  <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  </ng-template>
+  <ng-template #loaded>
+    <ng-container *ngIf="!markets || markets.length === 0; then empty; else filled"> </ng-container>
+  </ng-template>
+  <ng-template #empty>
+    <p>No market is available</p>
+  </ng-template>
+  <ng-template #filled>
+    <label class="label">
+      <span class="label-text">Select market</span>
+    </label>
+    <select
+      #marketRef
+      class="select select-bordered w-full max-w-xs"
+      (change)="onChangeMarket(marketRef.value)"
+      [value]="selectedMarket"
+    >
+      <option disabled [value]="undefined">Please Select</option>
+      <ng-container *ngFor="let m of markets">
+        <option [value]="m">{{ m }}</option>
+      </ng-container>
+    </select>
+  </ng-template>
+</div>
+<ng-content class="mb-4"></ng-content>
 
 <!-- <mat-card class="mb-4">
   <mat-list>

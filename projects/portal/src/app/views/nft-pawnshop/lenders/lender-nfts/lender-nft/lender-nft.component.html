@@ -1,6 +1,11 @@
 <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
-  <figure class="aspect-square w-full">
-    <img src="{{ nftImage || 'assets/UnUniFi-logo.png' }}" alt="image of the NFT" class="h-full object-cover" />
+  <figure class="aspect-square w-1/2 lg:w-1/4">
+    <!-- img width setting not working -->
+    <img
+      src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+      alt="image of the NFT"
+      class="object-cover"
+    />
   </figure>
   <div class="card-body w-2/3">
     <div class="flex flex-row">
@@ -66,15 +71,22 @@
       <div *ngIf="!bidDetail && !isWinning" class="card-actions justify-end">
         <button routerLink="place-bid" class="btn btn-primary px-8">Make Offer</button>
       </div>
-      <div *ngIf="
+      <div
+        *ngIf="
           bidDetail &&
           !bidDetail.borrowings?.length &&
           !isWinning &&
           listingInfo?.state === 'BIDDING'
-        " class="card-actions flex flex-row">
+        "
+        class="card-actions flex flex-row"
+      >
         <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>
         <span class="flex-auto"></span>
-        <button *ngIf="bidders && bidders.length > 1" class="btn btn-secondary px-8" (click)="onSubmitCancelBid()">
+        <button
+          *ngIf="bidders && bidders.length > 1"
+          class="btn btn-secondary px-8"
+          (click)="onSubmitCancelBid()"
+        >
           Cancel Offer
         </button>
       </div>
@@ -102,7 +114,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let bidder of bidders; let i = index">
-          <ng-container *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"></ng-container>
+          <ng-container
+            *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"
+          ></ng-container>
           <ng-template #color>
             <th class="text-secondary">#{{ i + 1 }}</th>
             <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>

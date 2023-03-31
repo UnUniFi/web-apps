@@ -47,6 +47,7 @@ export class PlaceBidComponent implements OnInit {
   bidAmount?: number | null;
   depositAmount?: number | null;
   depositSymbol?: string | null;
+  minimumDeposit: number;
   interestRate?: number | null;
   datePicker?: Date | null;
   date?: string;
@@ -102,7 +103,7 @@ export class PlaceBidComponent implements OnInit {
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
-
+    this.minimumDeposit = 0;
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
@@ -191,11 +192,12 @@ export class PlaceBidComponent implements OnInit {
     });
   }
 
-  toSimpleString(date: Date) {
-    return (
-      [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('/') +
-      ' ' +
-      date.toLocaleTimeString()
-    );
+  calculateMinimumDeposit() {
+    if (!this.bidAmount || !this.listingInfo?.minimum_deposit_rate) {
+      this.minimumDeposit = 0;
+      return;
+    }
+    const rate = Number(this.listingInfo.minimum_deposit_rate);
+    this.minimumDeposit = this.bidAmount * rate;
   }
 }

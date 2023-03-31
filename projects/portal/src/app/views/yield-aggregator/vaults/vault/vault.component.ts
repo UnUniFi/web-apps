@@ -15,7 +15,11 @@ import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  StrategyAll200ResponseStrategiesInner,
+  Vault200Response,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-vault',
@@ -24,7 +28,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 })
 export class VaultComponent implements OnInit {
   @Input()
-  vault?: VaultAll200ResponseVaultsInner | null;
+  vault?: Vault200Response | null;
   @Input()
   symbol?: string | null;
   @Input()
@@ -85,7 +89,7 @@ export class VaultComponent implements OnInit {
 
   onSubmitDeposit() {
     this.appDeposit.emit({
-      vaultId: this.vault?.id!,
+      vaultId: this.vault?.vault?.id!,
       amount: this.mintAmount,
       symbol: this.symbol!,
     });
@@ -97,9 +101,13 @@ export class VaultComponent implements OnInit {
 
   onSubmitWithdraw() {
     this.appWithdraw.emit({
-      vaultId: this.vault?.id!,
+      vaultId: this.vault?.vault?.id!,
       amount: this.burnAmount,
       symbol: this.symbol!,
     });
+  }
+
+  getStrategyInfo(id?: string): StrategyAll200ResponseStrategiesInner | undefined {
+    return this.vault?.strategies?.find((strategy) => strategy.id === id);
   }
 }

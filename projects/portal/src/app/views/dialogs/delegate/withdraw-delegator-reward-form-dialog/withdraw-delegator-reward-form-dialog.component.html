@@ -5,29 +5,37 @@
     <div class="font-bold text-xl m-3">Claim delegator reward</div>
   </div>
 
-  <mat-list>
-    <mat-label>To. (Validator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ validator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">To. (Validator)</span>
+    </label>
+    <ul class="menu bg-base-100" >
+      <li class="disabled"><a class="text-base-content items-center">
+        <span
+          class="material-icons"
+          [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
+          circle
+        </span>
+        {{ validator?.description?.moniker }}
+      </a></li>
+    </ul>
+  </div>
 
-  <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ currentStoredWallet?.id }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text">From. (Delegator)</span>
+    </label>
+    <ul class="menu bg-base-100" >
+      <li class="disabled"><a class="text-base-content items-center">
+        <span
+          class="material-icons"
+          [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">
+          circle
+        </span>
+        {{ currentStoredWallet?.id }}
+      </a></li>
+    </ul>
+  </div>
 
   <form #formRef="ngForm" (submit)="onSubmit()">
     <!-- <h3 class="pt-3">Gas Settings</h3>
@@ -94,8 +102,10 @@
         </mat-slider>
       </mat-expansion-panel>
     </mat-accordion> -->
-
-    <button mat-flat-button class="my-4 px-8" color="accent" [disabled]="formRef.invalid">
+    <button
+      class="btn btn-secondary"
+      [disabled]="formRef.invalid"
+    >
       Claim Delegator Reward
     </button>
   </form>

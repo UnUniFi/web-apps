@@ -1,0 +1,113 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Send Tokens</h2>
+        <!-- <h3>Balance</h3>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <ng-container *ngFor="let symbol of balanceSymbols">
+                <tr>
+                  <th>{{ symbol }}</th>
+                  <td>{{ symbolBalancesMap?.[symbol] }}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div> -->
+        <form #formRef="ngForm" (submit)="onSubmitSend()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter the Destination Address</span>
+            </label>
+            <input
+              type="text"
+              required
+              #addressNgModelRef="ngModel"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': addressNgModelRef.errors && addressNgModelRef.touched
+              }"
+              [(ngModel)]="toAddress"
+              name="toAddress"
+            />
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Select Tokens</span>
+            </span>
+
+            <ng-container *ngFor="let token of selectedTokens; let i = index">
+              <div class="flex flex-row flex-wrap">
+                <div class="w-full sm:w-auto sm:flex-auto">
+                  <label class="input-group w-full">
+                    <input
+                      #tokenNgModelRef="ngModel"
+                      type="number"
+                      required
+                      placeholder="12.123456"
+                      [min]="0"
+                      [max]="symbolBalancesMap?.[token.symbol] || 0"
+                      [step]="1"
+                      pattern="^[0-9]*\.?[0-9]{0,6}$"
+                      [(ngModel)]="token.amount"
+                      name="amount{{ i }}"
+                      class="input input-bordered w-full"
+                      [class]="{
+                        'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
+                      }"
+                    />
+                    <span class="w-36">{{ token.symbol }}</span>
+                    <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
+                      <mat-icon>delete</mat-icon>
+                    </label>
+                  </label>
+                </div>
+              </div>
+              <label class="label">
+                <span class="label-text-alt">
+                  Available {{ symbolBalancesMap?.[token.symbol] || 0 }} {{ token.symbol }}
+                </span>
+              </label>
+            </ng-container>
+
+            <div class="flex flex-row flex-wrap">
+              <label class="input-group mb-2 w-full sm:w-auto">
+                <select
+                  [required]="selectedTokens?.length === 0"
+                  class="select select-bordered text-center w-auto"
+                  [(ngModel)]="selectedSymbol"
+                  name="strategyId"
+                >
+                  <option [value]="undefined" disabled>Select a token</option>
+                  <ng-container *ngFor="let s of balanceSymbols">
+                    <option [value]="s" *ngIf="!isAlreadySelectedSymbol(s)">
+                      {{ s }}
+                    </option>
+                  </ng-container>
+                </select>
+                <button
+                  type="button"
+                  class="btn btn-outline btn-primary"
+                  (click)="onClickAddToken()"
+                  [disabled]="!selectedSymbol"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </label>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button
+              class="btn btn-primary px-8"
+              [disabled]="!selectedTokens?.length || formRef.invalid"
+            >
+              Send
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -23,9 +23,12 @@
       <button class="align-middle" mat-icon-button routerLink="/">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
-      <div class="flex-1 px-2 mx-2 text-2xl">UnUniFi Portal</div>
+      <div class="flex-1 mx-2 text-2xl">
+        <div class="hidden xl:block pr-2">UnUniFi</div>
+        <div>Portal</div>
+      </div>
       <div class="flex-none">
-        <app-app-tool></app-app-tool>
+        <app-app-tool class="hidden sm:block"></app-app-tool>
         <app-node-tool></app-node-tool>
         <app-wallet-tool></app-wallet-tool>
       </div>
@@ -35,17 +38,29 @@
       <ng-content></ng-content>
     </div>
   </div>
+
   <div class="drawer-side h-full overflow-auto">
     <label for="drawer-main" class="drawer-overlay"></label>
     <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
       <!-- Sidebar content here -->
       <app-search-tool class="w-full"></app-search-tool>
+      <li class="menu-title">
+        <span>Utilities</span>
+      </li>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/">
           <span class="flex-none">
             <mat-icon color="primary">other_houses</mat-icon>
           </span>
           <span class="flex-1">Balance</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/utilities/send">
+          <span class="flex-none">
+            <mat-icon color="primary">send</mat-icon>
+          </span>
+          <span class="flex-1">Send Token</span>
         </label>
       </li>
       <li>
@@ -73,6 +88,23 @@
         </label>
       </li> -->
 
+      <li class="menu-title block md:hidden">
+        <span>Apps</span>
+      </li>
+      <ng-container *ngFor="let app of apps">
+        <li *ngIf="app.name !== 'Utilities'" class="block md:hidden">
+          <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
+            <span class="flex-none">
+              <mat-icon color="primary">{{ app.icon }}</mat-icon>
+            </span>
+            <span class="flex-1">{{ app.name }}</span>
+          </label>
+        </li>
+      </ng-container>
+
+      <li class="menu-title">
+        <span>Testnet</span>
+      </li>
       <ng-template ngFor let-navigation [ngForOf]="navigations">
         <ng-container *ngIf="navigation?.name && navigation?.link">
           <li>

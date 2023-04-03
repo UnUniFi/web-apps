@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { apps } from '../../tools/app-tool/app-tool.component';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'view-app-derivatives',
   templateUrl: './app-derivatives.component.html',
-  styleUrls: ['./app-derivatives.component.css']
+  styleUrls: ['./app-derivatives.component.css'],
 })
 export class AppDerivativesComponent implements OnInit {
+  @Input()
+  navigations?: { name: string; link: string; icon: string }[] | null;
 
-  constructor() { }
+  apps: { name: string; link: string; icon: string }[];
 
-  ngOnInit(): void {
+  constructor() {
+    this.apps = apps;
   }
 
+  ngOnInit(): void {}
 }

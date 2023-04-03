@@ -2,12 +2,13 @@ import { MaterialModule } from '../../../material.module';
 import { ProposalComponent } from './proposal.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatChipsModule } from '@angular/material/chips';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [ProposalComponent],
-  imports: [CommonModule, RouterModule, MaterialModule, MatChipsModule],
+  imports: [CommonModule, RouterModule, FormsModule, MaterialModule, PipesModule],
   exports: [ProposalComponent],
 })
 export class ProposalModule {}

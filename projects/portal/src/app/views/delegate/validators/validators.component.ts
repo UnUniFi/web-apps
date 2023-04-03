@@ -33,11 +33,13 @@ export class ValidatorsComponent implements OnInit {
 
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
-
   @Output()
   appClickValidator: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
 
+  active: boolean;
+
   constructor() {
+    this.active = true;
     this.toggleActiveChange = new EventEmitter();
     this.appClickValidator = new EventEmitter();
   }
@@ -63,13 +65,9 @@ export class ValidatorsComponent implements OnInit {
     return Number(str);
   }
 
-  onToggleChange(value: string) {
-    if (value == 'active') {
-      this.toggleActiveChange.emit(true);
-    }
-    if (value == 'inactive') {
-      this.toggleActiveChange.emit(false);
-    }
+  onToggleActive(active: boolean) {
+    this.active = active;
+    this.toggleActiveChange.emit(active);
   }
 
   onClickValidator(validator: StakingDelegatorValidators200ResponseValidatorsInner) {

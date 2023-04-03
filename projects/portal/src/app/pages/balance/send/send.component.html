@@ -1,0 +1,6 @@
+<view-send
+  [address]="address$ | async"
+  [balanceSymbols]="balanceSymbols$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  (appSend)="onSubmitSend($event)"
+></view-send>

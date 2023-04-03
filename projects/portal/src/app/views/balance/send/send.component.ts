@@ -8,13 +8,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class SendComponent implements OnInit {
   @Input() address?: string | null;
+  @Input() toAddress?: string | null;
+  @Input() selectedTokens?: { symbol: string; amount?: number }[] | null;
   @Input() balanceSymbols?: string[] | null;
   @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output() appSend: EventEmitter<BankSendRequest>;
-
-  distAddress?: string;
   selectedSymbol?: string;
-  selectedTokens: { symbol: string; amount?: number }[] = [];
 
   constructor() {
     this.appSend = new EventEmitter();
@@ -23,7 +22,7 @@ export class SendComponent implements OnInit {
   ngOnInit(): void {}
 
   isAlreadySelectedSymbol(symbol: string) {
-    return this.selectedTokens.some((s) => s.symbol === symbol);
+    return this.selectedTokens?.some((s) => s.symbol === symbol);
   }
 
   onClickAddToken() {
@@ -31,26 +30,26 @@ export class SendComponent implements OnInit {
       alert('Please select a token.');
       return;
     }
-    this.selectedTokens.push({
+    this.selectedTokens?.push({
       symbol: this.selectedSymbol,
     });
-    this.selectedTokens.sort((a, b) => a.symbol!.localeCompare(b.symbol!));
+    this.selectedTokens?.sort((a, b) => a.symbol!.localeCompare(b.symbol!));
 
     this.selectedSymbol = undefined;
   }
 
   onClickDeleteToken(index: number) {
-    this.selectedTokens.splice(index, 1);
+    this.selectedTokens?.splice(index, 1);
   }
 
   onSubmitSend() {
-    if (!this.distAddress) {
+    if (!this.toAddress) {
       return;
     }
-    const amounts = this.selectedTokens.filter((s) => s.amount) as {
+    const amounts = this.selectedTokens?.filter((s) => s.amount) as {
       symbol: string;
       amount: number;
     }[];
-    this.appSend.emit({ toAddress: this.distAddress!, symbolAmounts: amounts });
+    this.appSend.emit({ toAddress: this.toAddress, symbolAmounts: amounts });
   }
 }

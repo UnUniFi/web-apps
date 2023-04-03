@@ -29,8 +29,8 @@
               [class]="{
                 'input-error': addressNgModelRef.errors && addressNgModelRef.touched
               }"
-              [(ngModel)]="distAddress"
-              name="distAddress"
+              [(ngModel)]="toAddress"
+              name="toAddress"
             />
           </div>
           <div class="form-control">
@@ -75,7 +75,7 @@
             <div class="flex flex-row flex-wrap">
               <label class="input-group mb-2 w-full sm:w-auto">
                 <select
-                  [required]="selectedTokens.length === 0"
+                  [required]="selectedTokens?.length === 0"
                   class="select select-bordered text-center w-auto"
                   [(ngModel)]="selectedSymbol"
                   name="strategyId"
@@ -101,7 +101,7 @@
           <div class="card-actions justify-end mt-4">
             <button
               class="btn btn-primary px-8"
-              [disabled]="!selectedTokens.length || formRef.invalid"
+              [disabled]="!selectedTokens?.length || formRef.invalid"
             >
               Send
             </button>

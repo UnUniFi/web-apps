@@ -4,6 +4,7 @@ import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -14,10 +15,13 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class SendComponent implements OnInit {
   address$: Observable<string>;
+  toAddress$: Observable<string>;
+  selectedTokens$: Observable<{ symbol: string; amount?: number }[]>;
   balanceSymbols$: Observable<string[] | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
 
   constructor(
+    private route: ActivatedRoute,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly bankApp: BankApplicationService,
@@ -25,6 +29,10 @@ export class SendComponent implements OnInit {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
+    );
+    this.toAddress$ = this.route.queryParams.pipe(map((queryParams) => queryParams.toAddress));
+    this.selectedTokens$ = this.route.queryParams.pipe(
+      map((queryParams) => queryParams.amounts || []),
     );
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),

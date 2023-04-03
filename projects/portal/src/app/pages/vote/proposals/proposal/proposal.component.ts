@@ -13,7 +13,7 @@ import {
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -49,6 +49,18 @@ export class ProposalComponent implements OnInit {
     this.tallyParams$ = this.usecase.tallyParams$;
     this.votes$ = this.usecase.votes$(proposalID$);
     this.votingParams$ = this.usecase.votingParams$;
+    this.proposal$ = of({
+      proposal_id: '1',
+      content: { type_url: 'cosmos.gov.v1beta1.TextProposal', value: 'test' },
+      status: 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
+      final_tally_result: { yes: '30', abstain: '1', no: '3', no_with_veto: '1' },
+      submit_time: '2021-05-01T00:00:00Z',
+      deposit_end_time: '2021-05-01T00:00:00Z',
+      total_deposit: [{ denom: 'uguu', amount: '1' }],
+      voting_start_time: '2021-05-01T00:00:00Z',
+      voting_end_time: '2021-05-01T00:00:00Z',
+    });
+    this.tally$ = of({ yes: '50', no: '30', abstain: '0', no_with_veto: '5' });
   }
 
   ngOnInit(): void {}

@@ -89,6 +89,26 @@
           </label>
         </li>
       </ng-container>
+
+      <li class="menu-title">
+        <span>Testnet</span>
+      </li>
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <li>
+            <label
+              for="drawer-main"
+              class="flex gap-4"
+              routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+            >
+              <span class="flex-none">
+                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+              </span>
+              <span class="flex-1">{{ navigation.name }}</span>
+            </label>
+          </li>
+        </ng-container>
+      </ng-template>
     </ul>
   </div>
 </div>

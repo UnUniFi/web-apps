@@ -1,5 +1,5 @@
 import { apps } from '../../tools/app-tool/app-tool.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'view-app-derivatives',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app-derivatives.component.css'],
 })
 export class AppDerivativesComponent implements OnInit {
+  @Input()
+  navigations?: { name: string; link: string; icon: string }[] | null;
+
   apps: { name: string; link: string; icon: string }[];
 
   constructor() {

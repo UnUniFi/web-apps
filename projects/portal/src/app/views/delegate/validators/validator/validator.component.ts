@@ -1,5 +1,7 @@
 import { validatorType } from '../validators.component';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -16,7 +18,7 @@ export class ValidatorComponent implements OnInit {
   @Input()
   accAddress?: cosmosclient.AccAddress | null;
 
-  constructor() {}
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 
   ngOnInit(): void {}
 
@@ -28,5 +30,15 @@ export class ValidatorComponent implements OnInit {
       .toString('hex');
 
     return `#${hash.substr(0, 6)}`;
+  }
+
+  copyClipboard(value: string) {
+    if (value.length > 0) {
+      this.clipboard.copy(value);
+      this.snackBar.open('Copied to clipboard', undefined, {
+        duration: 3000,
+      });
+    }
+    return false;
   }
 }

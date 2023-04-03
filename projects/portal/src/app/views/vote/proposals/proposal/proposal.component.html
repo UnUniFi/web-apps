@@ -3,207 +3,180 @@
   <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <div class="flex flex-row">
-    <h2># {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}</h2>
-    <span class="flex-auto"></span>
-    <mat-chip-list>
-      <mat-chip color="primary" selected>{{
-        proposal?.status?.replace('PROPOSAL_STATUS_', '')
-      }}</mat-chip>
-    </mat-chip-list>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body w-full">
+      <h2 class="card-title break-all">
+        # {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}
+        <span class="badge badge-info">
+          {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
+        </span>
+      </h2>
+      <p style="white-space: pre-wrap">{{ unpackContent(proposal?.content).description }}</p>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <th>Type</th>
+              <td>
+                {{
+                  proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
+                }}
+              </td>
+            </tr>
+            <tr>
+              <th>Submitted</th>
+              <td>{{ proposal?.submit_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+            </tr>
+            <tr>
+              <th>End Deposit</th>
+              <td>{{ proposal?.deposit_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+            </tr>
+            <tr>
+              <th>Start Voting</th>
+              <td>{{ proposal?.voting_start_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+            </tr>
+            <tr>
+              <th>End Voting</th>
+              <td>{{ proposal?.voting_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <h3>Details</h3>
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Type </span>
-          <span class="flex-auto"></span>
-          <span>{{
-            proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
-          }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Submitted: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.submit_time }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Start Voting: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.voting_start_time }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>End Voting: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.voting_end_time }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Deposit End Time: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.deposit_end_time }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-
-  <h3>Description</h3>
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <span class="break-all">{{ unpackContent(proposal?.content).description }}</span>
-    </mat-card-content>
-  </mat-card>
-
   <h3>Votes</h3>
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Yes: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.yes }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>No with Veto: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.no_with_veto }}</span>
-        </mat-list-item>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body w-full">
+      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+        <div class="stat">
+          <div class="stat-title">Yes</div>
+          <div class="stat-value text-success">
+            <mat-icon>thumb_up</mat-icon>
+            {{ tally?.yes }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">No</div>
+          <div class="stat-value text-warning">
+            <mat-icon>thumb_down</mat-icon>
+            {{ tally?.no }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">No with Veto</div>
+          <div class="stat-value text-error">
+            <mat-icon>not_interested</mat-icon>
+            {{ tally?.no_with_veto }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Abstain</div>
+          <div class="stat-value text-primary">
+            <mat-icon>subtitles_off</mat-icon>
+            {{ tally?.abstain }}
+          </div>
+          <div class="stat-desc"></div>
+        </div>
+      </div>
 
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>No: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.no }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Abstain: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.abstain }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+      <div class="overflow-x-auto mb-4" *ngIf="tallyParams">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <td>Quorum</td>
+              <td>Threshold</td>
+              <td>Veto Threshold</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ tallyParams.quorum }}</td>
+              <td>{{ tallyParams.threshold }}</td>
+              <td>{{ tallyParams.veto_threshold }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Voting Period: </span>
-          <span class="flex-auto"></span>
-          <span>{{ votingParams?.voting_period }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
+      <label class="cursor-pointer label">
+        <span class="label-text mr-2">Voting Details</span>
+        <input
+          type="checkbox"
+          class="toggle toggle-primary"
+          name="openSearch"
+          [(ngModel)]="voteDetailEnabled"
+        />
+        <span class="flex-auto"></span>
+      </label>
 
-        <mat-list-item>
-          <span>Quorum: </span>
-          <span class="flex-auto"></span>
-          <span>{{ toNumber(tallyParams?.quorum ?? '0') }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
+      <div class="overflow-x-auto" *ngIf="voteDetailEnabled">
+        <table class="table w-full">
+          <tbody>
+            <ng-container *ngFor="let vote of votes">
+              <tr>
+                <th>{{ vote.voter }}</th>
+                <td>{{ vote.option?.replace('VOTE_OPTION_', '') }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <p class="ml-4">There is no vote.</p>
+      </div>
 
-        <mat-list-item>
-          <span>Threshold: </span>
-          <span class="flex-auto"></span>
-          <span>{{ toNumber(tallyParams?.threshold ?? '0') }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-
-        <mat-list-item>
-          <span>Veto Threshold: </span>
-          <span class="flex-auto"></span>
-          <span>{{ toNumber(tallyParams?.veto_threshold ?? '0') }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-
-  <button
-    class="w-full mb-4"
-    mat-flat-button
-    color="primary"
-    (click)="onClickVote(proposal?.proposal_id!)"
-  >
-    <mat-icon>how_to_vote</mat-icon>
-    <span>Vote</span>
-  </button>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-secondary px-8"
+          (click)="onClickVote(proposal?.proposal_id!)"
+        >
+          <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
+        </button>
+      </div>
+    </div>
+  </div>
 
   <h3>deposits</h3>
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <ng-container *ngIf="!proposal?.total_deposit?.length">
-          <mat-list-item>
-            <span>No Deposit</span>
-          </mat-list-item>
-        </ng-container>
-        <ng-container *ngFor="let total of proposal?.total_deposit">
-          <mat-list-item>
-            <span>Total Deposit:</span>
-            <span class="flex-auto"></span>
-            <span>{{ total.amount }} {{ total.denom }}</span>
-          </mat-list-item>
-        </ng-container>
-        <mat-divider [inset]="true"></mat-divider>
-        <ng-container *ngFor="let min of depositParams?.min_deposit">
-          <mat-list-item>
-            <span>Minimum Deposit:</span>
-            <span class="flex-auto"></span>
-            <span>{{ min.amount }} {{ min.denom }}</span>
-          </mat-list-item>
-        </ng-container>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Max Deposit Period:</span>
-          <span class="flex-auto"></span>
-          <span>{{ depositParams?.max_deposit_period }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body w-full">
+      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+        <div class="stat" *ngFor="let total of proposal?.total_deposit">
+          <div class="stat-title">Total Deposit</div>
+          <div class="stat-value">{{ total.amount | coinAmount }}</div>
+          <div class="stat-desc">{{ total.denom | coinDenom }}</div>
+        </div>
+        <div class="stat" *ngFor="let min of depositParams?.min_deposit">
+          <div class="stat-title">Minimum Deposit</div>
+          <div class="stat-value">{{ min.amount | coinAmount }}</div>
+          <div class="stat-desc">{{ min.denom | coinDenom }}</div>
+        </div>
+      </div>
 
-  <mat-card class="mb-4">
-    <mat-list>
-      <ng-container *ngFor="let deposit of deposits; last as last">
-        <ng-container *ngFor="let amount of deposit.amount">
-          <mat-list-item>
-            <span>{{ deposit.depositor }}:</span>
-            <span class="flex-auto"></span>
-            <span>{{ amount.amount }} {{ amount.denom }}</span>
-          </mat-list-item>
-        </ng-container>
-        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
-      </ng-container>
-    </mat-list>
-  </mat-card>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <ng-container *ngFor="let deposit of deposits; last as last">
+              <ng-container *ngFor="let amount of deposit.amount">
+                <tr>
+                  <th>{{ deposit.depositor }}</th>
+                  <td>{{ amount | coin }}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
 
-  <button
-    class="w-full mb-4"
-    mat-flat-button
-    color="primary"
-    (click)="onClickDeposit(proposal?.proposal_id!)"
-  >
-    <mat-icon>add</mat-icon>
-    <span>Deposit</span>
-  </button>
-
-  <h3>Vote</h3>
-  <mat-card>
-    <mat-list>
-      <ng-container *ngFor="let vote of votes; last as last">
-        <mat-list-item>
-          <span class="break-all">{{ vote.voter }}: </span>
-          <span class="flex-auto"></span>
-          <span>{{ vote.option?.replace('VOTE_OPTION_', '') }}</span>
-        </mat-list-item>
-        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
-      </ng-container>
-    </mat-list>
-  </mat-card>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-info px-8"
+          (click)="onClickDeposit(proposal?.proposal_id!)"
+        >
+          <mat-icon class="mr-2">add</mat-icon>Deposit
+        </button>
+      </div>
+    </div>
+  </div>
 </ng-template>

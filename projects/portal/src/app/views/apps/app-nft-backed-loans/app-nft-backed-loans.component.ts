@@ -1,3 +1,4 @@
+import { apps } from '../../tools/app-tool/app-tool.component';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app-nft-backed-loans.component.css'],
 })
 export class AppNftBackedLoansComponent implements OnInit {
-  constructor() {}
+  apps: { name: string; link: string; icon: string }[];
+
+  constructor() {
+    this.apps = apps;
+  }
 
   ngOnInit(): void {}
 }

@@ -132,23 +132,4 @@ export class BankService {
     });
     return msgSend;
   }
-
-  buildMsgBankSend(
-    fromAddress: string,
-    toAddress: string,
-    symbolAmounts: { symbol: string; amount: number }[],
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): cosmosclient.proto.cosmos.bank.v1beta1.MsgSend {
-    const map: { [symbol: string]: number } = {};
-    for (const s of symbolAmounts) {
-      map[s.symbol] = s.amount;
-    }
-    const coins = this.convertSymbolAmountMapToCoins(map, symbolMetadataMap);
-    const msgSend = new cosmosclient.proto.cosmos.bank.v1beta1.MsgSend({
-      from_address: fromAddress,
-      to_address: toAddress,
-      amount: coins,
-    });
-    return msgSend;
-  }
 }

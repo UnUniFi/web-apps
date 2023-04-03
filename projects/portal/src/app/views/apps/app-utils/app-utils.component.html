@@ -80,11 +80,11 @@
         </label>
       </li> -->
 
-      <li class="menu-title">
+      <li class="menu-title block md:hidden">
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
-        <li *ngIf="app.name !== 'Utilities'">
+        <li *ngIf="app.name !== 'Utilities'" class="block md:hidden">
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
               <mat-icon color="primary">{{ app.icon }}</mat-icon>

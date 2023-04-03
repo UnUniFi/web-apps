@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', component: BalanceComponent },
-  { path: 'bank/send', component: SendComponent },
+  { path: 'send', component: SendComponent },
 ];
 
 @NgModule({

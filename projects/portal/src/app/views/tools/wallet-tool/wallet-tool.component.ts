@@ -12,6 +12,8 @@ import * as crypto from 'crypto';
 export class WalletToolComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
+  @Input()
+  symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output()
   appConnectWallet: EventEmitter<{}>;
   @Output()

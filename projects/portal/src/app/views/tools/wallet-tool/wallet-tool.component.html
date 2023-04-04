@@ -11,7 +11,7 @@
       </mat-icon>
       <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
     </label>
-    <div tabindex="0" class="dropdown-content md:p-2 w-64 md:w-auto">
+    <div tabindex="0" class="dropdown-content md:p-2 w-screen md:w-auto">
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
           <div class="flex flex-row flex-wrap">
@@ -40,6 +40,16 @@
               <mat-icon>content_copy</mat-icon>
             </button>
           </h3>
+
+          <div class="stats stats-vertical md:stats-horizontal" *ngIf="symbolBalancesMap">
+            <div class="stat">
+              <div class="stat-title">Available</div>
+              <div class="stat-value text-secondary">
+                {{ symbolBalancesMap['GUU'] || 0 }}
+              </div>
+              <div class="stat-desc">GUU</div>
+            </div>
+          </div>
 
           <div class="card-actions justify-end">
             <button class="btn gap-1 btn-error btn-outline" (click)="onDisconnectWallet($event)">

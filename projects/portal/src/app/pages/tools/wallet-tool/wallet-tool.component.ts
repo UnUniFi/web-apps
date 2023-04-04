@@ -25,4 +25,8 @@ export class WalletToolComponent implements OnInit {
   async onConnectWallet($event: {}) {
     await this.walletApplicationService.connectWalletDialog();
   }
+
+  async onDisconnectWallet($event: {}) {
+    await this.walletApplicationService.disconnectWallet();
+  }
 }

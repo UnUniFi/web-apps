@@ -1,4 +1,5 @@
 <view-wallet-tool
   [currentStoredWallet]="currentStoredWallet$ | async"
   (appConnectWallet)="onConnectWallet($event)"
+  (appDisconnectWallet)="onDisconnectWallet($event)"
 ></view-wallet-tool>

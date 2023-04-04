@@ -7,15 +7,17 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">Exemplary traders Settings</h2>
-        <table class="table w-full">
-          <tbody>
-            <tr>
-              <th>Address</th>
-              <td>ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w</td>
-            </tr>
-          </tbody>
-        </table>
         <form>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Address</span>
+            </label>
+            <input
+              disabled
+              class="input input-bordered"
+              value="ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
+            />
+          </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Trader Name</span>
@@ -39,9 +41,9 @@
               <input
                 type="number"
                 name="rate"
-                [(ngModel)]="newRate"
+                [(ngModel)]="commissionRate"
                 [min]="0"
-                [max]="commissionRate || 0"
+                [max]="100"
                 [step]="0.1"
                 class="input input-bordered w-full"
               />
@@ -52,14 +54,12 @@
               placeholder="1"
               type="range"
               min="0"
-              max="commissionRate"
-              [(ngModel)]="newRate"
+              max="10"
+              [(ngModel)]="commissionRate"
               [ngClass]="{
-                'range-info': newRate || 0 <= (commissionRate || 0) / 2,
-                'range-warning':
-                  (commissionRate || 0) / 2 < (newRate || 0) &&
-                  (newRate || 0) < (commissionRate || 0),
-                'range-error': newRate === commissionRate
+                'range-info': commissionRate || 0 < 5,
+                'range-warning': 5 <= (commissionRate || 0) && (commissionRate || 0) < 10,
+                'range-error': 10 <= (commissionRate || 0)
               }"
               class="range mt-1"
               name="rate-slider"

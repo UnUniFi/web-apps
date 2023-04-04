@@ -10,12 +10,12 @@ const routes: Routes = [
     component: TradersComponent,
   },
   {
-    path: 'traders/:address',
-    component: TraderComponent,
-  },
-  {
     path: 'traders/create',
     component: CreateComponent,
+  },
+  {
+    path: 'traders/:address',
+    component: TraderComponent,
   },
 ];
 

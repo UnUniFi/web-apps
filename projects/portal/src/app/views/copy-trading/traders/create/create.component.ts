@@ -7,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateComponent implements OnInit {
   commissionRate?: number;
-  newRate?: number;
 
   constructor() {}
 

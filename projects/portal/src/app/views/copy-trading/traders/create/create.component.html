@@ -1,1 +1,75 @@
-<p>create works!</p>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <h2>Become an Exemplary Trader</h2>
+  </div>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Exemplary traders Settings</h2>
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <th>Address</th>
+              <td>ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w</td>
+            </tr>
+          </tbody>
+        </table>
+        <form>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Trader Name</span>
+            </label>
+            <input class="input input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Description</span>
+            </label>
+            <textarea
+              class="textarea textarea-bordered"
+              placeholder="Exemplary Trader Description"
+            ></textarea>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter New Commission Rate</span>
+            </label>
+            <label class="input-group">
+              <input
+                type="number"
+                name="rate"
+                [(ngModel)]="newRate"
+                [min]="0"
+                [max]="commissionRate || 0"
+                [step]="0.1"
+                class="input input-bordered w-full"
+              />
+              <span>%</span>
+            </label>
+
+            <input
+              placeholder="1"
+              type="range"
+              min="0"
+              max="commissionRate"
+              [(ngModel)]="newRate"
+              [ngClass]="{
+                'range-info': newRate || 0 <= (commissionRate || 0) / 2,
+                'range-warning':
+                  (commissionRate || 0) / 2 < (newRate || 0) &&
+                  (newRate || 0) < (commissionRate || 0),
+                'range-error': newRate === commissionRate
+              }"
+              class="range mt-1"
+              name="rate-slider"
+            />
+          </div>
+          <div class="modal-action">
+            <button class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

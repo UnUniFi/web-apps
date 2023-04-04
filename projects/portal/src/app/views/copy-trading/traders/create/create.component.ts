@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create.component.css'],
 })
 export class CreateComponent implements OnInit {
+  commissionRate?: number;
+  newRate?: number;
+
   constructor() {}
 
   ngOnInit(): void {}

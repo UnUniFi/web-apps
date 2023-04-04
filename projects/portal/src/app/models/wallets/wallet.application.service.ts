@@ -33,6 +33,12 @@ export class WalletApplicationService {
     private loadingDialog: LoadingDialogService,
   ) {}
 
+  async disconnectWallet(): Promise<void> {
+    await this.walletService.deleteStoredWallet();
+    window.location.reload();
+    return;
+  }
+
   async connectWalletDialog(): Promise<void> {
     const selectedWalletType = await this.openConnectWalletStartDialog();
 

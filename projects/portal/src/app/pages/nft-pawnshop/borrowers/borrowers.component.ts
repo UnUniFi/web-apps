@@ -34,7 +34,7 @@ export class BorrowersComponent implements OnInit {
       mergeMap((address) =>
         this.pawnshopQuery
           .listAllListedNfts$()
-          .pipe(map((nfts) => nfts.filter((nft) => nft.owner == address))),
+          .pipe(map((nfts) => nfts.filter((nft) => nft.listing?.owner == address))),
       ),
     );
   }

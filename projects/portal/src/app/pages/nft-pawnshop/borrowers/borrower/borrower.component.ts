@@ -48,7 +48,7 @@ export class BorrowerComponent implements OnInit {
       mergeMap((address) =>
         this.pawnshopQuery
           .listAllListedNfts$()
-          .pipe(map((nfts) => nfts.filter((nft) => nft.owner == address))),
+          .pipe(map((nfts) => nfts.filter((nft) => nft.listing?.owner == address))),
       ),
     );
 
@@ -56,8 +56,11 @@ export class BorrowerComponent implements OnInit {
       mergeMap((nfts) =>
         Promise.all(
           nfts.map(async (nft) => {
-            if (nft.nft_id && nft.nft_id.class_id && nft.nft_id.nft_id) {
-              const res = await this.pawnshopQuery.getNft(nft.nft_id.class_id, nft.nft_id.nft_id);
+            if (nft.listing?.nft_id?.class_id && nft.listing?.nft_id?.nft_id) {
+              const res = await this.pawnshopQuery.getNft(
+                nft.listing.nft_id.class_id,
+                nft.listing.nft_id.nft_id,
+              );
               return res.nft?.uri;
             } else {
               return '';

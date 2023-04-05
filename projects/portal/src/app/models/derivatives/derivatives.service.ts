@@ -1,5 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { BankService } from '../cosmos/bank.service';
+import { TxCommonService } from '../cosmos/tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
@@ -10,6 +11,7 @@ import ununificlient from 'ununifi-client';
 export class DerivativesService {
   constructor(
     private readonly cosmosSDK: CosmosSDKService,
+    private readonly txCommonService: TxCommonService,
     private readonly bankService: BankService,
   ) {}
 
@@ -40,7 +42,7 @@ export class DerivativesService {
     )[0];
 
     const msgMintLiquidityProviderToken =
-      new ununificlient.proto.ununifi.derivatives.MsgMintLiquidityProviderToken({
+      new ununificlient.proto.ununifi.derivatives.MsgDepositToPool({
         sender: senderAddress,
         amount: coin,
       });
@@ -62,30 +64,23 @@ export class DerivativesService {
     const redeemDenom = symbolMetadataMap?.[redeemSymbol].base;
 
     const msgMintLiquidityProviderToken =
-      new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
+      new ununificlient.proto.ununifi.derivatives.MsgWithdrawFromPool({
         sender: senderAddress,
-        amount: coin.amount,
+        lpt_amount: coin.amount,
         redeem_denom: redeemDenom,
       });
     return msgMintLiquidityProviderToken;
   }
 
   buildPerpetualFuturesPositionInstance(
-    baseSymbol: string,
     positionType: ununificlient.proto.ununifi.derivatives.PositionType,
     size: number,
     leverage: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const position = this.bankService.convertSymbolAmountMapToCoins(
-      { [baseSymbol]: size },
-      symbolMetadataMap,
-    )[0];
-
     const perpetualFuturesPositionInstance =
       new ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance({
         position_type: positionType,
-        size: position.amount,
+        size: this.txCommonService.numberToDecString(size),
         leverage: Math.floor(leverage),
       });
     return perpetualFuturesPositionInstance;

@@ -6,9 +6,9 @@ import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawn
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
-import { first, map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import {
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
   Loan200Response,
   Liquidation200ResponseLiquidations,
@@ -22,7 +22,7 @@ import {
 export class BorrowerNftComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loan$: Observable<Loan200Response>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;

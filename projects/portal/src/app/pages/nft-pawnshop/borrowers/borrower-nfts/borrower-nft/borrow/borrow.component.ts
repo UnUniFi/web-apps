@@ -9,7 +9,7 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
 } from 'ununifi-client/esm/openapi';
@@ -22,7 +22,7 @@ import {
 export class BorrowComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loans$: Observable<Loans200ResponseLoansInner[]>;
   nftMetadata$: Observable<Metadata>;
@@ -48,7 +48,9 @@ export class BorrowComponent implements OnInit {
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!)),
+        bidders.sort(
+          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
+        ),
       ),
     );
     this.borrowAmount$ = this.bidders$.pipe(

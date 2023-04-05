@@ -1,49 +1,65 @@
 <div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Claim all delegator rewards</div>
-  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Claim all delegator rewards</div>
+    </div>
 
-  <mat-list>
-    <mat-label>Available Rewards</mat-label>
-    <ng-container *ngFor="let delegation of delegations; last as last">
-      <ng-container *ngFor="let validator of delegatedValidators">
-        <mat-list-item
-          *ngIf="delegation.delegation?.validator_address === validator?.operator_address"
-        >
-          <mat-icon
-            matListIcon
-            [ngStyle]="{ color: getColorCode(delegation.delegation?.validator_address ?? '') }"
-          >
-            circle
-          </mat-icon>
-          <span class="w-2/3 break-all text-sm sm:text-base"
-            >{{ validator?.description?.moniker }}
-          </span>
-          <span class="w-1/3 text-sm sm:text-base text-right pl-4"
-            >{{ delegation.delegation?.shares ?? '0' | coinAmount
-            }}{{ delegation.balance?.denom | coinDenom }}</span
-          >
-        </mat-list-item>
-      </ng-container>
-    </ng-container>
-  </mat-list>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Available Rewards</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <ng-container *ngFor="let delegation of delegations; last as last">
+          <ng-container *ngFor="let validator of delegatedValidators">
+            <li
+              class="disabled"
+              *ngIf="delegation.delegation?.validator_address === validator?.operator_address"
+            >
+              <a class="text-base-content items-center">
+                <span
+                  class="material-icons"
+                  [ngStyle]="{
+                    color: getColorCode(delegation.delegation?.validator_address ?? '')
+                  }"
+                >
+                  circle
+                </span>
+                <span class="w-2/3 break-all text-sm sm:text-base"
+                  >{{ validator?.description?.moniker }}
+                </span>
+                <span class="w-1/3 text-sm sm:text-base text-right pl-4"
+                  >{{ delegation.delegation?.shares ?? '0' | coinAmount
+                  }}{{ delegation.balance?.denom | coinDenom }}</span
+                >
+              </a>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
 
-  <mat-list>
-    <mat-label>Delegator</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-        >circle</mat-icon
-      >
-      <div mat-line>
-        <span>{{ currentStoredWallet?.id }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Delegator</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+            >
+              circle
+            </span>
+            {{ currentStoredWallet?.id }}
+          </a>
+        </li>
+      </ul>
+    </div>
 
-  <form #formRef="ngForm" (submit)="onSubmit()">
-    <!-- <h3 class="pt-3">Gas Settings</h3>
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -108,9 +124,11 @@
       </mat-expansion-panel>
     </mat-accordion> -->
 
-    <button mat-flat-button class="my-4 px-8" color="accent" [disabled]="formRef.invalid">
-      Claim Delegator Rewards
-    </button>
-  </form>
-</div>
+      <div class="card-actions justify-end">
+        <button class="btn btn-secondary px-8" [disabled]="formRef.invalid">
+          Claim Delegator Rewards
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

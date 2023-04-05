@@ -148,8 +148,8 @@
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
                 <p class="py-4" *ngIf="estimatedLPTAmount">
-                  Estimated DLP amount is {{ estimatedLPTAmount.amount | coin }} (Fee is
-                  {{ estimatedLPTAmount.fee | coin }}), do you proceed?
+                  Estimated DLP amount is {{ estimatedLPTAmount.estimated_dlp_amount | coin }} (Fee
+                  is {{ estimatedLPTAmount.deposit_fee | coin }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
                   Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be

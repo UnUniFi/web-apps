@@ -12,6 +12,7 @@ import {
   Liquidation200ResponseLiquidations,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   Loan200Response,
   Loans200ResponseLoansInner,
   NftmarketParams200ResponseParams,
@@ -31,14 +32,20 @@ export class NftPawnshopQueryService {
     );
   }
 
-  getNftListing$(classID: string, nftID: string): Observable<ListedNfts200ResponseListingsInner> {
+  getNftListing$(
+    classID: string,
+    nftID: string,
+  ): Observable<ListedNfts200ResponseListingsInnerListing> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.nftListing(sdk, classID, nftID)),
       map((res) => res.data.listing!),
     );
   }
 
-  async getNftListing(classID: string, nftID: string): Promise<ListedNfts200ResponseListingsInner> {
+  async getNftListing(
+    classID: string,
+    nftID: string,
+  ): Promise<ListedNfts200ResponseListingsInnerListing> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const res = await ununifi.rest.nftmarket.nftListing(sdk, classID, nftID);
     return res.data.listing!;

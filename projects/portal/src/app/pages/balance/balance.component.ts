@@ -1,13 +1,18 @@
+import { CosmosRestService } from '../../models/cosmos-rest.service';
+import { BankQueryService } from '../../models/cosmos/bank.query.service';
+import { BankService } from '../../models/cosmos/bank.service';
 import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
-import { WalletType } from '../../models/wallets/wallet.model';
+import { StoredWallet, WalletType } from '../../models/wallets/wallet.model';
+import { WalletService } from '../../models/wallets/wallet.service';
+import { throughMap } from '../../utils/pipes';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import {
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   GetNodeInfo200Response,
 } from '@cosmos-client/core/esm/openapi';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-balance',
@@ -21,10 +26,11 @@ export class BalanceComponent implements OnInit {
   accountTypeName$: Observable<string | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
-  balances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
-  rewards$: Observable<
-    CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null | undefined
-  >;
+  balanceSymbols$: Observable<string[] | undefined>;
+  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  rewardSymbols$: Observable<string[] | undefined>;
+  symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
+  faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
     | {
         hasFaucet: boolean;
@@ -38,18 +44,59 @@ export class BalanceComponent implements OnInit {
   nodeInfo$: Observable<GetNodeInfo200Response>;
 
   constructor(
+    private readonly walletService: WalletService,
+    private readonly bank: BankService,
+    private readonly bankQuery: BankQueryService,
+    private readonly rest: CosmosRestService,
     private usecase: BalanceUsecaseService,
     private readonly distributionAppService: DistributionApplicationService,
   ) {
-    this.walletId$ = this.usecase.walletId$;
-    this.walletType$ = this.usecase.walletType$;
-    this.accAddress$ = this.usecase.accAddress$;
-    this.publicKey$ = this.usecase.publicKey$;
-    this.valAddress$ = this.usecase.valAddress$;
-    this.balances$ = this.usecase.balances$;
-    this.rewards$ = this.usecase.rewards$;
+    const wallet$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+    );
+    const address$ = wallet$.pipe(map((wallet) => wallet.address));
+    this.walletId$ = wallet$.pipe(map((wallet) => wallet.id));
+    this.walletType$ = wallet$.pipe(map((wallet) => wallet.type));
+    this.accAddress$ = wallet$.pipe(map((wallet) => wallet.address));
+    this.publicKey$ = wallet$.pipe(map((wallet) => wallet.public_key));
+    const cosmosWallet$ = wallet$.pipe(
+      throughMap((storedWallet) =>
+        this.walletService.convertStoredWalletToCosmosWallet(storedWallet),
+      ),
+    );
+    this.valAddress$ = cosmosWallet$.pipe(
+      throughMap((wallet) => wallet.address.toValAddress().toString()),
+    );
+    this.symbolBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
+    );
+    const balance$ = address$.pipe(mergeMap((address) => this.bankQuery.getBalance$(address!)));
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.balanceSymbols$ = combineLatest([balance$, denomMetadataMap$]).pipe(
+      map(([balances, denomMetadataMap]) =>
+        balances?.map((b) => denomMetadataMap?.[b.denom!].symbol || 'Invalid Token'),
+      ),
+    );
+    const rewards$ = cosmosWallet$.pipe(
+      mergeMap((wallet) => this.rest.getDelegationTotalRewards$(wallet?.address!)),
+    );
+    this.rewardSymbols$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
+      map(([rewards, denomMetadataMap]) =>
+        rewards?.total?.map((r) => denomMetadataMap?.[r.denom!].symbol || 'Invalid Token'),
+      ),
+    );
+    this.symbolRewardsMap$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
+      map(([rewards, denomMetadataMap]) =>
+        this.bank.convertCoinsToSymbolAmount(rewards?.total!, denomMetadataMap),
+      ),
+    );
     this.faucets$ = this.usecase.faucets$;
-    this.nodeInfo$ = this.usecase.nodeInfo$;
+    this.faucetSymbols$ = combineLatest([this.faucets$, denomMetadataMap$]).pipe(
+      map(([faucets, denomMetadataMap]) =>
+        faucets?.map((f) => denomMetadataMap?.[f.denom!].symbol || 'Invalid Token'),
+      ),
+    );
+    this.nodeInfo$ = this.rest.getNodeInfo$();
     this.accountTypeName$ = this.usecase.accountTypeName$;
   }
 

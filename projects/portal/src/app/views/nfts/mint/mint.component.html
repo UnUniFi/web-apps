@@ -28,20 +28,18 @@
             <label class="label">
               <span class="label-text">NFT Class (Collection)</span>
             </label>
-            <label class="input-group">
-              <select
-                #classRef
-                required
-                [(ngModel)]="selectedClass"
-                name="nftClass"
-                class="select select-bordered w-full"
-              >
-                <option disabled>Crypto Punks (Example)</option>
-                <ng-container *ngFor="let nftClass of classes">
-                  <option [value]="nftClass">{{ nftClass }}</option>
-                </ng-container>
-              </select>
-            </label>
+            <select
+              #classRef
+              required
+              [(ngModel)]="selectedClass"
+              name="nftClass"
+              class="select select-bordered w-full"
+            >
+              <option disabled>Crypto Punks (Example)</option>
+              <ng-container *ngFor="let nftClass of classes">
+                <option [value]="nftClass">{{ nftClass }}</option>
+              </ng-container>
+            </select>
           </div>
           <div class="form-control">
             <label class="label">

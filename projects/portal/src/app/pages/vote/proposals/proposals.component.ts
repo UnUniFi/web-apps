@@ -4,12 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import {
-  Proposals200ResponseProposalsInnerFinalTallyResult,
-  Proposals200ResponseProposalsInner,
-  Proposals200ResponseProposalsInnerStatusEnum,
-} from '@cosmos-client/core/esm/openapi/api';
-import { combineLatest, Observable, of } from 'rxjs';
+import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi/api';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -38,32 +34,7 @@ export class ProposalsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly govAppService: GovApplicationService,
   ) {
-    const proposals: Proposals200ResponseProposalsInner[] = [
-      {
-        proposal_id: '1',
-        content: { type_url: 'cosmos.gov.v1beta1.TextProposal', value: 'test' },
-        status: 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
-        final_tally_result: { yes: '30', abstain: '1', no: '3', no_with_veto: '1' },
-        submit_time: '2021-05-01T00:00:00Z',
-        deposit_end_time: '2021-05-01T00:00:00Z',
-        total_deposit: [{ denom: 'uguu', amount: '1' }],
-        voting_start_time: '2021-05-01T00:00:00Z',
-        voting_end_time: '2021-05-01T00:00:00Z',
-      },
-      {
-        proposal_id: '2',
-        content: { type_url: 'cosmos.gov.v1beta1.TextProposal', value: 'test' },
-        status: 'PROPOSAL_STATUS_PASSED',
-        final_tally_result: { yes: '40', abstain: '5', no: '2', no_with_veto: '1' },
-        submit_time: '2021-05-01T00:00:00Z',
-        deposit_end_time: '2021-05-01T00:00:00Z',
-        total_deposit: [{ denom: 'uguu', amount: '1' }],
-        voting_start_time: '2021-05-01T00:00:00Z',
-        voting_end_time: '2021-05-01T00:00:00Z',
-      },
-    ];
-    this.proposals$ = of(proposals);
-    // this.proposals$ = this.usecase.proposals$;
+    this.proposals$ = this.usecase.proposals$;
     this.pageLength$ = this.usecase.pageLength$(this.proposals$);
     this.pageSize$ = this.route.queryParams.pipe(
       map((params) => {
@@ -112,10 +83,6 @@ export class ProposalsComponent implements OnInit {
         }),
       ),
     );
-    this.tallies$ = of([
-      { yes: 10, no: 2, abstain: 3, noWithVeto: 4, max: 10 },
-      { yes: 10, no: 10, abstain: 2, noWithVeto: 5, max: 10 },
-    ]);
   }
 
   ngOnInit(): void {}

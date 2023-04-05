@@ -10,7 +10,7 @@
     routerLink="../lenders/lender"
   >
     <mat-icon class="mr-2">gavel</mat-icon>
-    Bidding Status
+    Lending Status
   </button>
   <div class="w-0 xl:w-4"></div>
   <button
@@ -18,7 +18,7 @@
     routerLink="../borrowers/borrower"
   >
     <mat-icon class="mr-2">add</mat-icon>
-    Listing NFT
+    Borrowing
   </button>
 </div>
 
@@ -59,8 +59,12 @@
         </label>
         <select #stateRef [(ngModel)]="state" name="state" class="select select-bordered">
           <option [value]="undefined" disabled>Select a Bid State</option>
-          <option [value]="'LISTING'">No Bid</option>
-          <option [value]="'BIDDING'">With Bids</option>
+          <option [value]="undefined">All State</option>
+          <option [value]="'LISTING'">LISTING (No Bid)</option>
+          <option [value]="'BIDDING'">BIDDING (With Bids)</option>
+          <option [value]="'SELLING_DECISION'">SELLING DECISION (Wait for Payment)</option>
+          <option [value]="'SUCCESSFUL_BID'">SUCCESSFUL BID (Transferring)</option>
+          <option [value]="'END_LISTING'">END LISTING (Being Liquidated)</option>
         </select>
         <label class="label">
           <span class="label-text">Started After</span>
@@ -85,7 +89,7 @@
       </div>
       <div class="form-control">
         <label class="label">
-          <span class="label-text">Min Interest Rate (coming soon)</span>
+          <span class="label-text">Min Interest Rate (Coming soon)</span>
         </label>
         <label class="input-group">
           <input
@@ -108,6 +112,10 @@
         />
       </div>
       <div class="card-actions justify-end mt-4">
+        <button type="button" class="btn btn-warning btn-outline" (click)="onRefresh()">
+          <mat-icon class="mr-2">refresh</mat-icon>
+          Refresh
+        </button>
         <button class="btn btn-primary">
           <mat-icon class="mr-2">photo_library</mat-icon>
           Search NFTs

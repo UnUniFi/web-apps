@@ -1,1 +1,10 @@
-<view-nfts [listedNfts]="listedNfts$ | async"></view-nfts>
+<view-nfts
+  [listedNfts]="listedNfts$ | async"
+  [keyword]="keyword$ | async"
+  [state]="state$ | async"
+  [date]="date$ | async"
+  [time]="time$ | async"
+  [isSearchBoxOpened]="isSearchBoxOpened$ | async"
+  (searchNfts)="appSearchNfts($event)"
+  (refresh)="appRefreshPage()"
+></view-nfts>

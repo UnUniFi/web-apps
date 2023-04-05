@@ -9,6 +9,9 @@ import { PlaceBidModule } from '../../views/nft-pawnshop/lenders/lender-nfts/len
 import { LenderModule } from '../../views/nft-pawnshop/lenders/lender/lender.module';
 import { LendersModule } from '../../views/nft-pawnshop/lenders/lenders.module';
 import { NftPawnshopModule } from '../../views/nft-pawnshop/nft-pawnshop.module';
+import { ClassModule } from '../../views/nft-pawnshop/nfts/class/class.module';
+import { NftModule } from '../../views/nft-pawnshop/nfts/class/nft/nft.module';
+import { NftsModule } from '../../views/nft-pawnshop/nfts/nfts.module';
 import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
 import { BorrowerNftComponent } from './borrowers/borrower-nfts/borrower-nft/borrower-nft.component';
 import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
@@ -21,10 +24,11 @@ import { LenderComponent } from './lenders/lender/lender.component';
 import { LendersComponent } from './lenders/lenders.component';
 import { NftPawnshopRoutingModule } from './nft-pawnshop-routing.module';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
+import { ClassComponent } from './nfts/class/class.component';
+import { NftComponent } from './nfts/class/nft/nft.component';
+import { NftsComponent } from './nfts/nfts.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { NftsComponent } from './nfts/nfts.component';
-import { NftsModule } from '../../views/nft-pawnshop/nfts/nfts.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,9 @@ import { NftsModule } from '../../views/nft-pawnshop/nfts/nfts.module';
     ListComponent,
     BorrowComponent,
     RepayComponent,
-    NftsComponent
+    NftsComponent,
+    ClassComponent,
+    NftComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +61,9 @@ import { NftsModule } from '../../views/nft-pawnshop/nfts/nfts.module';
     ListModule,
     BorrowModule,
     RepayModule,
-    NftsModule
+    NftsModule,
+    ClassModule,
+    NftModule,
   ],
 })
 export class AppNftPawnshopModule {}

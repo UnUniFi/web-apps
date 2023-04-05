@@ -1,4 +1,3 @@
-import { MaterialModule } from '../../../../material.module';
 import { UnunifiImportWalletWithPrivateKeyFormDialogComponent } from './ununifi-import-wallet-with-private-key-form-dialog.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
@@ -7,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UnunifiImportWalletWithPrivateKeyFormDialogComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, ClipboardModule],
+  imports: [CommonModule, FormsModule, ClipboardModule],
   exports: [UnunifiImportWalletWithPrivateKeyFormDialogComponent],
 })
-export class UnunifiImportWalletWithPrivateKeyFormDialogModule {}
+export class UnunifiImportWalletWithPrivateKeyFormDialogModule { }

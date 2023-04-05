@@ -1,112 +1,108 @@
 <div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Undelegate from this validator</div>
-  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Undelegate from this validator</div>
+    </div>
 
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text">To. (Validator)</span>
-    </label>
-    <ul class="menu bg-base-100" >
-      <li class="disabled"><a class="text-base-content items-center">
-        <span
-          class="material-icons"
-          [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
-          circle
-        </span>
-        {{ validator?.description?.moniker }}
-      </a></li>
-    </ul>
-  </div>
-
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text">From. (Delegator)</span>
-    </label>
-    <ul class="menu bg-base-100" >
-      <li class="disabled"><a class="text-base-content items-center">
-        <span
-          class="material-icons"
-          [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">
-          circle
-        </span>
-        {{ currentStoredWallet?.id }}
-      </a></li>
-    </ul>
-  </div>
-
-  <ng-container
-    *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding"
-  >
-  </ng-container>
-
-  <ng-template #unbonding>
     <div class="form-control w-full">
       <label class="label">
-        <span class="label-text">Unbonding Date</span>
+        <span class="label-text">To. (Validator)</span>
       </label>
-      <ul class="menu bg-base-100" >
-        <li class="disabled"><a class="text-base-content items-center">
-          {{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-MM-dd a hh:mm:ss z'}}
-        </a></li>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+            >
+              circle
+            </span>
+            {{ validator?.description?.moniker }}
+          </a>
+        </li>
       </ul>
     </div>
-  </ng-template>
 
-  <ng-template #beforeUnbonding>
     <div class="form-control w-full">
       <label class="label">
-        <span class="label-text">Unbonding Date (estimated.)</span>
+        <span class="label-text">From. (Delegator)</span>
       </label>
-      <ul class="menu bg-base-100" >
-        <li class="disabled"><a class="text-base-content items-center">
-          {{ estimatedUnbondingData | date : 'yyyy-MM-dd a hh:mm:ss z' }}
-        </a></li>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+            >
+              circle
+            </span>
+            {{ currentStoredWallet?.id }}
+          </a>
+        </li>
       </ul>
     </div>
-  </ng-template>
 
-  <form #formRef="ngForm" (submit)="onSubmit()">
-    <div class="flex flex-col content-content lg:flex-row">
-      <div class="form-control flex-auto">
+    <ng-container
+      *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding"
+    >
+    </ng-container>
+
+    <ng-template #unbonding>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Unbonding Date</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              {{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-MM-dd a hh:mm:ss z'}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+
+    <ng-template #beforeUnbonding>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Unbonding Date (estimated.)</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              {{ estimatedUnbondingData | date : 'yyyy-MM-dd a hh:mm:ss z' }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <div class="form-control w-full">
         <label class="label">
           <span class="label-text">UnDelegate Amount</span>
         </label>
-        <input
-          name="undelegate-amount"
-          type="number"
-          placeholder="Type here"
-          class="input input-bordered input-sm"
-          [(ngModel)]="selectedAmount && selectedAmount.amount"
-          [min]="0"
-          required
-          pattern="^\d+(\.\d{1,6})?$"
-        />
-        <label class="label">
-          <span class="label-text text-xs">
-            Delegated Amount: {{ delegateAmount | coin }}
-          </span>
+        <label class="input-group">
+          <input
+            name="undelegate-amount"
+            type="number"
+            placeholder="Type here"
+            class="input input-bordered input-sm w-full"
+            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [min]="0"
+            required
+            pattern="^\d+(\.\d{1,6})?$"
+          />
+          <span>{{ selectedAmount?.denom }}</span>
         </label>
-      </div>
-      <div class="form-control flex-auto">
-        <label class="label">
-          <span class="label-text">Delegate Token</span>
-        </label>
-        <input
-          name="delegate-denom"
-          type="text"
-          placeholder="Type here"
-          class="input input-bordered input-sm"
-          [(ngModel)]="selectedAmount && selectedAmount.denom"
-          required
-          readonly
-        />
-      </div>
-    </div>
 
-    <!-- <h3 class="pt-3">Gas Settings</h3>
+        <label class="label">
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+        </label>
+      </div>
+
+      <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -144,13 +140,9 @@
         </mat-slider>
       </mat-expansion-panel>
     </mat-accordion> -->
-
-    <button
-      class="btn btn-secondary"
-      [disabled]="formRef.invalid"
-    >
-      Undelegate
-    </button>
-  </form>
-</div>
+      <div class="card-actions justify-end">
+        <button class="btn btn-error px-8" [disabled]="formRef.invalid">Undelegate</button>
+      </div>
+    </form>
+  </div>
 </div>

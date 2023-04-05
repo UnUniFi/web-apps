@@ -1,44 +1,50 @@
 <div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Claim delegator reward</div>
-  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Claim delegator reward</div>
+    </div>
 
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text">To. (Validator)</span>
-    </label>
-    <ul class="menu bg-base-100" >
-      <li class="disabled"><a class="text-base-content items-center">
-        <span
-          class="material-icons"
-          [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
-          circle
-        </span>
-        {{ validator?.description?.moniker }}
-      </a></li>
-    </ul>
-  </div>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">To. (Validator)</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+            >
+              circle
+            </span>
+            {{ validator?.description?.moniker }}
+          </a>
+        </li>
+      </ul>
+    </div>
 
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text">From. (Delegator)</span>
-    </label>
-    <ul class="menu bg-base-100" >
-      <li class="disabled"><a class="text-base-content items-center">
-        <span
-          class="material-icons"
-          [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">
-          circle
-        </span>
-        {{ currentStoredWallet?.id }}
-      </a></li>
-    </ul>
-  </div>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">From. (Delegator)</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+            >
+              circle
+            </span>
+            {{ currentStoredWallet?.id }}
+          </a>
+        </li>
+      </ul>
+    </div>
 
-  <form #formRef="ngForm" (submit)="onSubmit()">
-    <!-- <h3 class="pt-3">Gas Settings</h3>
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -102,12 +108,11 @@
         </mat-slider>
       </mat-expansion-panel>
     </mat-accordion> -->
-    <button
-      class="btn btn-secondary"
-      [disabled]="formRef.invalid"
-    >
-      Claim Delegator Reward
-    </button>
-  </form>
-</div>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary px-8" [disabled]="formRef.invalid">
+          Claim Delegator Reward
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

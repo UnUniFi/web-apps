@@ -1,81 +1,70 @@
 <div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Redelegate to another validator</div>
-
-    <div class="form-control w-full">
-      <label class="label">
-        <span class="label-text">Before</span>
-      </label>
-      <ul class="menu bg-base-100" >
-        <li class="disabled"><a class="text-base-content items-center">
-          <span
-            class="material-icons"
-            [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
-            circle
-          </span>
-          &nbsp;{{ validator?.description?.moniker }}
-        </a></li>
-      </ul>
-    </div>
-
-    <div class="form-control w-full">
-      <label class="label">
-        <span class="label-text">After</span>
-      </label>
-      <select
-        name="selected-validator"
-        class="select select-bordered"
-        [(ngModel)]="selectedValidator"
-        required
-        (ngModelChange)="onMinimumGasDenomChanged($event)"
-      >
-        <option
-          *ngFor="let val of validatorsList"
-          [value]="val"
-        >
-          {{ val.description?.moniker }}
-        </option>
-      </select>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Redelegate to another validator</div>
     </div>
 
     <form #formRef="ngForm" (submit)="onSubmit()">
-      <div class="flex flex-col content-content lg:flex-row">
-        <div class="form-control flex-auto">
-          <label class="label">
-            <span class="label-text">ReDelegate Amount</span>
-          </label>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Before</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              <span
+                class="material-icons"
+                [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+              >
+                circle
+              </span>
+              &nbsp;{{ validator?.description?.moniker }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">After {{ validatorsList![0] !== validator }}</span>
+        </label>
+        <select
+          name="selected-validator"
+          class="select select-bordered"
+          [(ngModel)]="selectedValidator"
+          required
+          (ngModelChange)="onMinimumGasDenomChanged($event)"
+        >
+          <ng-container *ngFor="let val of validatorsList">
+            <option *ngIf="val.operator_address !== validator?.operator_address" [value]="val">
+              {{ val.description?.moniker }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">ReDelegate Amount</span>
+        </label>
+        <label class="input-group">
           <input
             name="redelegate-amount"
             type="number"
             placeholder="Type here"
-            class="input input-bordered input-sm"
+            class="input input-bordered input-sm w-full"
             [(ngModel)]="selectedAmount && selectedAmount.amount"
             [min]="0"
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <label class="label">
-            <span class="label-text text-xs">
-              Delegated Amount: {{ delegateAmount | coin }}
-            </span>
-          </label>
-        </div>
-        <div class="form-control flex-auto ml-2">
-          <label class="label">
-            <span class="label-text">Delegate Token</span>
-          </label>
-          <input
-            name="delegate-denom"
-            type="text"
-            placeholder="Type here"
-            class="input input-bordered input-sm"
-            [(ngModel)]="selectedAmount && selectedAmount.denom"
-            required
-            readonly
-          />
-        </div>
+          <span>{{ selectedAmount?.denom }}</span>
+        </label>
+
+        <label class="label">
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+        </label>
       </div>
 
       <!-- <h3 class="pt-3">Gas Settings</h3>
@@ -143,14 +132,15 @@
         </mat-expansion-panel>
       </mat-accordion> -->
 
-      <button
-        class="btn btn-secondary"
-        [disabled]="formRef.invalid"
-        [disabled]="selectedValidator === validator?.operator_address"
-      >
-        Redelegate
-      </button>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-secondary px-8"
+          [disabled]="formRef.invalid"
+          [disabled]="selectedValidator === validator?.operator_address"
+        >
+          Redelegate
+        </button>
+      </div>
     </form>
   </div>
-</div>
 </div>

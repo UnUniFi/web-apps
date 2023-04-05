@@ -23,6 +23,8 @@ import { NftPawnshopRoutingModule } from './nft-pawnshop-routing.module';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NftsComponent } from './nfts/nfts.component';
+import { NftsModule } from '../../views/nft-pawnshop/nfts/nfts.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { NgModule } from '@angular/core';
     ListComponent,
     BorrowComponent,
     RepayComponent,
+    NftsComponent
   ],
   imports: [
     CommonModule,
@@ -52,6 +55,7 @@ import { NgModule } from '@angular/core';
     ListModule,
     BorrowModule,
     RepayModule,
+    NftsModule
   ],
 })
 export class AppNftPawnshopModule {}

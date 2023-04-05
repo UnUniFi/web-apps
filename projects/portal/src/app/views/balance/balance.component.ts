@@ -20,8 +20,11 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input() rewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
+  @Input() balanceSymbols?: string[] | null;
+  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input() rewardSymbols?: string[] | null;
+  @Input() symbolRewardsMap?: { [symbol: string]: number } | null;
+  @Input() faucetSymbols?: string[] | null;
   @Input() faucets?:
     | {
         hasFaucet: boolean;

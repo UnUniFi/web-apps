@@ -11,10 +11,10 @@
   </ng-template>
 
   <ng-template #filled>
-    <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+    <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
       <div
         *ngFor="let nft of ownNfts?.nfts; let i = index"
-        class="pr-12 pb-12 md:w-1/3 lg:w-1/4 xl:w-1/5"
+        class="sm:pr-12 pb-12 md:w-1/3 lg:w-1/4 xl:w-1/5"
       >
         <div class="card w-full glass shadow-xl">
           <figure class="aspect-square w-full">
@@ -69,10 +69,10 @@
     ></ng-container>
   </ng-template>
   <ng-template #filledListing>
-    <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+    <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
       <div
         *ngFor="let nft of listedOwnNfts; let i = index"
-        class="pr-12 pb-12 md:w-1/3 lg:w-1/4 xl:w-1/5"
+        class="sm:pr-12 pb-12 md:w-1/3 lg:w-1/4 xl:w-1/5"
       >
         <div class="card w-full glass shadow-xl">
           <figure class="aspect-square w-full">

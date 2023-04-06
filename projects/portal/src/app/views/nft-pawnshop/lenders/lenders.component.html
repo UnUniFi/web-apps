@@ -1,4 +1,20 @@
-<h2>Lending</h2>
+<div class="flex flex-row flex-wrap justify-end">
+  <h2>Lending</h2>
+  <span class="flex-auto"></span>
+  <button
+    class="btn btn-outline btn-accent px-8 mb-2 hidden md:block w-full xl:w-auto"
+    routerLink="/nft-backed-loan"
+  >
+    Top page
+  </button>
+  <div class="w-0 xl:w-4"></div>
+  <button
+    class="btn btn-outline btn-secondary px-8 mb-2 hidden md:block w-full xl:w-auto"
+    routerLink="/nft-backed-loan/borrowers/borrower"
+  >
+    Borrowing
+  </button>
+</div>
 <div
   class="card lg:card-side bg-base-100 shadow-xl mb-8"
   *ngIf="depositCoins && depositCoins.length"

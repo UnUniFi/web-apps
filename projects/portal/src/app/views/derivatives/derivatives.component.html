@@ -1,55 +1,20 @@
-<h2 class="mb-0">Derivatives Dashboard</h2>
-<div class="flex justify-center">
-  <div class="max-w-full text-base-content">
-    <ng-container *ngFor="let config of configs">
-      <div class="card lg:card-side bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title break-all">{{ config.name }}</h2>
-          <p style="white-space: pre-wrap">{{ config.description }}</p>
-          <div class="card-actions justify-end">
-            <button
-              *ngIf="config.name === 'Perpetual Futures'"
-              class="btn btn-primary"
-              routerLink="{{ config.route }}"
-            >
-              <mat-icon>show_chart</mat-icon>
-              <span class="ml-2">Trade</span>
-            </button>
-            <!-- The button to open modal -->
-            <label class="btn"
-              ><a
-                href="https://cauchye.notion.site/Derivatives-Manual-8a1501a5b8cf49e9a39dc46d6e41a22e"
-                target="_blank"
-                >Read more</a
-              ></label
-            >
-            <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="modal-deposit" class="modal-toggle" />
-            <div class="modal modal-bottom sm:modal-middle">
-              <div class="modal-box">
-                <h3 class="font-bold text-lg">NFT-Backed Loan Borrow</h3>
-                <p class="py-4">Coming soon!</p>
-                <div class="modal-action">
-                  <label for="modal-deposit" class="btn">Understood</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br />
-    </ng-container>
-  </div>
-</div>
-
-<div class="card bg-base-100 shadow-xl">
-  <div class="card-body overflow-x-auto">
-    <h2 class="card-title break-all">Pool Overview</h2>
-    <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats stats-vertical md:stats-horizontal">
+<h2 class="mb-0">Derivatives</h2>
+<div class="flex justify-center items-center flex-wrap">
+  <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3">
+    <img
+      alt="Liquidity Pool"
+      src="https://img.freepik.com/free-vector/financial-investment-market-trends-analysis-investing-lucrative-areas-focusing-profitable-projects-businesswoman-funding-business-project-concept-illustration_335657-2078.jpg"
+      class="w-full h-64 object-cover"
+    />
+    <div class="card-body h-full">
+      <h2 class="card-title text-black">Liquidity Pool</h2>
+      <p class="text-gray-700 text-base mb-4">
+        A pool of tokens used as a source of liquidity for traders. Enables trading without the need
+        for buyers and sellers to find counterparts.
+      </p>
+      <div class="stats stats-vertical md:stats-horizontal bg-white">
         <div class="stat">
-          <div class="stat-title">Pool Value</div>
+          <div class="stat-title text-black">Pool Value</div>
           <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
           <div class="stat-desc"></div>
         </div>
@@ -64,124 +29,147 @@
           <div class="stat-desc"></div>
         </div> -->
       </div>
-      <span class="flex-auto"></span>
-      <div class="card-actions justify-end">
-        <button class="btn btn-secondary px-8" routerLink="pool">View Pool</button>
+      <button class="btn btn-info btn-outline w-full" routerLink="pool">
+        <span>View</span>
+      </button>
+    </div>
+  </div>
+  <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3">
+    <img
+      alt="Perpetual Futures"
+      src="https://img.freepik.com/free-vector/crypto-trading-bot-abstract-concept-illustration_335657-2172.jpg"
+      class="w-full h-64 object-cover"
+    />
+    <div class="card-body h-full">
+      <h2 class="card-title text-black">
+        Perpetual Futures
+        <!-- The button to open modal -->
+        <label for="modal-perpetual-futures" class="label-text cursor-pointer">
+          <mat-icon class="text-black">help</mat-icon>
+        </label>
+      </h2>
+      <!-- Put this part before </body> tag -->
+      <input type="checkbox" id="modal-perpetual-futures" class="modal-toggle" />
+      <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+          <p>
+            Perpetual futures are a type of cryptocurrency trading contract that allows traders to
+            take positions on future price movements. These contracts have no expiration date, and
+            traders are able to maintain positions indefinitely by depositing funds with the
+            exchange.
+          </p>
+          <p>
+            Perpetual futures contracts typically require margin, making them a high-risk,
+            high-reward investment product. Additionally, leverage can be employed for these
+            contracts, meaning even small price movements can result in significant gains or losses,
+            necessitating careful trading practices.
+          </p>
+          <div class="modal-action">
+            <label for="modal-perpetual-futures" class="btn">Understood</label>
+          </div>
+        </div>
       </div>
+      <p class="text-gray-700 text-base mb-4">
+        A financial instrument used for long-term trading of assets without delivery.
+      </p>
+      <button class="btn btn-primary btn-outline w-full" routerLink="perpetual-futures">
+        <mat-icon>show_chart</mat-icon><span>Trade</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3">
+    <img
+      alt="Perpetual Options"
+      src="https://img.freepik.com/free-vector/cryptocurrency-market-abstract-concept-illustration_335657-3835.jpg"
+      class="w-full h-64 object-cover"
+    />
+    <div class="card-body h-full">
+      <h2 class="card-title text-black">
+        Perpetual Options (Coming Soon!)
+        <!-- The button to open modal -->
+        <label for="modal-perpetual-options" class="label-text cursor-pointer">
+          <mat-icon class="text-black">help</mat-icon>
+        </label>
+      </h2>
+      <!-- Put this part before </body> tag -->
+      <input type="checkbox" id="modal-perpetual-options" class="modal-toggle" />
+      <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">What is Perpetual Options?</h3>
+          <p>
+            Perpetual options are a type of cryptocurrency trading contract that allows traders to
+            take positions on future price movements. These contracts have no expiration date, and
+            traders are able to maintain positions indefinitely by depositing funds with the
+            exchange.
+          </p>
+          <p>
+            Perpetual options, like traditional options contracts, allow for the exchange of
+            underlying and quote currencies, and the ability to settle prices at a specific future
+            date.
+          </p>
+          <p>
+            These contracts come in two varieties, allowing traders to hedge against potential
+            future price increases with purchasing options and against potential price decreases
+            with selling options.
+          </p>
+          <p>
+            Perpetual options trading comes with significant risk, and requires ample knowledge and
+            experience. Proper utilization of exchange-provided margin and leverage is also
+            critical.
+          </p>
+          <div class="modal-action">
+            <label for="modal-perpetual-options" class="btn">Understood</label>
+          </div>
+        </div>
+      </div>
+      <p class="text-gray-700 text-base mb-4">
+        A type of options contract that does not have an expiry date.
+      </p>
+      <button class="btn btn-disabled w-full text-white">
+        <mat-icon>show_chart</mat-icon><span>Trade</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3">
+    <img
+      alt="Copy Trading"
+      src="https://img.freepik.com/free-vector/cryptocurrency-trading-desk-abstract-concept-illustration_335657-2170.jpg"
+      class="w-full h-64 object-cover"
+    />
+    <div class="card-body h-full">
+      <h2 class="card-title text-black">
+        Copy Trading (Coming Soon!)
+        <!-- The button to open modal -->
+        <label for="modal-copy-trading" class="label-text cursor-pointer">
+          <mat-icon class="text-black">help</mat-icon>
+        </label>
+      </h2>
+      <!-- Put this part before </body> tag -->
+      <input type="checkbox" id="modal-copy-trading" class="modal-toggle" />
+      <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+          <p>
+            Copy Trading allows beginner or inexperienced traders to automatically copy and execute
+            trades made by professional traders. This technique enables novice investors to improve
+            their trading skills and earn profit while observing how experienced traders make
+            successful trades.
+          </p>
+          <div class="modal-action">
+            <label for="modal-copy-trading" class="btn">Understood</label>
+          </div>
+        </div>
+      </div>
+      <p class="text-gray-700 text-base mb-4">
+        A type of trading in which an individual copies the trades or strategies of another trader,
+        with the aim of replicating their success.
+      </p>
+      <button class="btn btn-disabled text-white w-full">
+        <span>Use</span>
+      </button>
     </div>
   </div>
 </div>
-
-<br />
-
-<div class="card bg-base-100 shadow-xl">
-  <div class="card-body overflow-x-auto">
-    <h2 class="card-title break-all">Perpetual Futures Overview</h2>
-    <div class="flex flex-col xl:flex-row items-center">
-      <div class="stats stats-vertical md:stats-horizontal">
-        <div class="stat">
-          <div class="stat-title">Total Long Position</div>
-          <div
-            class="stat-value text-primary"
-            *ngIf="perpetualFuturesParams?.long_positions?.denom === 'usd'"
-          >
-            $ {{ perpetualFuturesParams?.long_positions?.amount | number }}
-          </div>
-          <div
-            class="stat-value text-primary"
-            *ngIf="perpetualFuturesParams?.long_positions?.denom !== 'usd'"
-          >
-            {{ perpetualFuturesParams?.long_positions | coin }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Total Short Position</div>
-          <div
-            class="stat-value text-secondary"
-            *ngIf="perpetualFuturesParams?.short_positions?.denom === 'usd'"
-          >
-            $ {{ perpetualFuturesParams?.short_positions?.amount | number }}
-          </div>
-          <div
-            class="stat-value text-secondary"
-            *ngIf="perpetualFuturesParams?.short_positions?.denom !== 'usd'"
-          >
-            {{ perpetualFuturesParams?.short_positions | coin }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-      </div>
-      <span class="flex-auto"></span>
-      <div class="card-actions justify-end">
-        <button class="btn btn-primary px-8" routerLink="positions">View Positions</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- <h3 class="mb-0 ml-4">Tokens</h3>
-<div class="flex flex-wrap">
-  <mat-card
-    class="mat-elevation-z8 text-center hover:shadow-xl w-64 m-5"
-    *ngFor="let tokenInfo of tokenInfos"
-  >
-    <mat-card-header>
-      <img mat-card-avatar src="{{ tokenInfo.iconUrl }}" />
-      <mat-card-title>{{ tokenInfo.name }}</mat-card-title>
-      <mat-card-subtitle>{{ tokenInfo.symbol }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Price:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">$ {{ tokenInfo.price }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Pool:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">$ {{ tokenInfo.pool }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Weight:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">{{ tokenInfo.weight }}%</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</div>
-
-<div class="flex flex-wrap">
-  <mat-card class="text-center hover:shadow-xl w-64 m-5" *ngFor="let token of tokens">
-    <mat-card-header>
-      <img mat-card-avatar src="{{ token.iconUrl }}" />
-      <mat-card-title>{{ token.name }}</mat-card-title>
-      <mat-card-subtitle>{{ token.symbol }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Price:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.price }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">24h Volume:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.volume24h }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">24h Fees:</span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all text-sm sm:text-base">$ {{ token.fees24h }}%</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</div> -->

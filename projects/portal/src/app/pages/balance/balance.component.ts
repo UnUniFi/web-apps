@@ -26,7 +26,9 @@ export class BalanceComponent implements OnInit {
   accountTypeName$: Observable<string | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
+  balanceSymbols$: Observable<string[] | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  rewardSymbols$: Observable<string[] | undefined>;
   symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
   faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
@@ -68,9 +70,20 @@ export class BalanceComponent implements OnInit {
     this.symbolBalancesMap$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );
+    const balance$ = address$.pipe(mergeMap((address) => this.bankQuery.getBalance$(address!)));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.balanceSymbols$ = combineLatest([balance$, denomMetadataMap$]).pipe(
+      map(([balances, denomMetadataMap]) =>
+        balances?.map((b) => denomMetadataMap?.[b.denom!].symbol || 'Invalid Token'),
+      ),
+    );
     const rewards$ = cosmosWallet$.pipe(
       mergeMap((wallet) => this.rest.getDelegationTotalRewards$(wallet?.address!)),
+    );
+    this.rewardSymbols$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
+      map(([rewards, denomMetadataMap]) =>
+        rewards?.total?.map((r) => denomMetadataMap?.[r.denom!].symbol || 'Invalid Token'),
+      ),
     );
     this.symbolRewardsMap$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
       map(([rewards, denomMetadataMap]) =>

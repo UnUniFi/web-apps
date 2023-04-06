@@ -78,7 +78,9 @@
     <span class="flex-auto"></span>
     <!-- The button to open modal -->
     <div class="card-actions justify-end">
-      <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline btn-error"
+      <label
+        for="close-modal-{{ position?.position?.id }}"
+        class="btn btn-outline btn-error w-full md:w-auto md:px-8"
         >Close Position</label
       >
     </div>
@@ -90,7 +92,9 @@
         <h3 class="font-bold text-lg">Are you sure to close this position?</h3>
         <p class="py-4">The position #{{ position?.position?.id }} is closed and settled, OK?</p>
         <div class="modal-action">
-          <label for="close-modal-{{ position?.position?.id }}" class="btn btn-outline"
+          <label
+            for="close-modal-{{ position?.position?.id }}"
+            class="btn btn-outline w-full md:w-auto md:px-8"
             >Cancel</label
           >
           <button class="btn btn-secondary" (click)="onClickClose()">Close Position</button>

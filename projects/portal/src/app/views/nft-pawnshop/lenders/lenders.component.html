@@ -1,13 +1,9 @@
+<h2>Lending</h2>
 <div
   class="card lg:card-side bg-base-100 shadow-xl mb-8"
   *ngIf="depositCoins && depositCoins.length"
 >
   <div class="card-body">
-    <h2 class="card-title break-all">Deposit & Lending</h2>
-    <p>
-      When a bid is made, it is added to Deposit, and when the lister borrows, it is also added to
-      Lending.
-    </p>
     <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
       <div class="stat" *ngFor="let deposit of depositCoins; let i = index">
         <div class="stat-title">Deposit #{{ i + 1 }}</div>
@@ -31,11 +27,6 @@
       </div>
     </div>
 
-    <h2 class="card-title break-all">Bidding Status</h2>
-    <p>
-      Shows the status of the NFT that you are bidding on, Waiting for Payment, and if you are the
-      highest bidder, please make payment. Click on View to see details for each NFT.
-    </p>
     <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
       <div class="stat">
         <div class="stat-title">Bidding</div>
@@ -66,7 +57,6 @@
 
 <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
   <div class="card-body">
-    <h2 class="card-title break-all">Lend Tokens</h2>
     <div class="form-control">
       <label class="cursor-pointer label">
         <span class="label-text mr-2">Advanced Search</span>

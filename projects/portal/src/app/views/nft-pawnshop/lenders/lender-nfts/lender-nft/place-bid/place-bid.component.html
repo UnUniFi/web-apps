@@ -29,19 +29,23 @@
       <table class="table w-full">
         <tbody>
           <tr>
-            <td>Class ID</td>
+            <th>Class ID</th>
             <td>{{ classID }}</td>
           </tr>
           <tr>
-            <td>NFT ID</td>
+            <th>NFT ID</th>
             <td>{{ nftID }}</td>
           </tr>
           <tr>
-            <td>Minimum deposit rate</td>
+            <th>Minimum Deposit Rate</th>
             <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
           </tr>
           <tr>
-            <td>Started at</td>
+            <th>Owner</th>
+            <td>{{ listingInfo?.owner }}</td>
+          </tr>
+          <tr>
+            <th>Started at</th>
             <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
           </tr>
         </tbody>
@@ -301,17 +305,12 @@
               </label>
             </div> -->
 
-            <div class="card-actions justify-end mt-4">
-              <button
-                type="button"
-                class="btn btn-primary btn-outline w-full md:w-auto md:px-8"
-                (click)="onSimulate()"
-              >
+            <div class="flex flex-row flex-wrap justify-end mt-4">
+              <button type="button" class="btn btn-primary btn-outline" (click)="onSimulate()">
                 Simulate
               </button>
-              <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
-                Make Offer
-              </button>
+              <span class="w-full md:w-2"></span>
+              <button class="btn btn-primary" [disabled]="formRef.invalid">Make Offer</button>
             </div>
           </form>
         </div>

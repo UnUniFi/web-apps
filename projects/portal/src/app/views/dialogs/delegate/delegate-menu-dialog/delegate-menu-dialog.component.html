@@ -135,58 +135,39 @@
       </ng-container>
     </div>
 
-    <div class="flex flex-row flex-wrap justify-center">
-      <button
-        class="btn btn-info btn-outline w-full md:w-1/3 md:px-8 m-1"
-        (click)="onClickDetailButton()"
-      >
-        <mat-icon class="mr-2">info</mat-icon>
+    <div class="flex flex-row flex-wrap justify-start">
+      <button class="btn btn-info btn-outline px-8 m-1" (click)="onClickDetailButton()">
         <span>More info</span>
       </button>
-
-      <button
-        class="btn btn-secondary btn-outline w-full md:w-1/3 md:px-8 m-1"
-        (click)="onClickDelegateButton()"
-      >
-        <mat-icon class="mr-2">how_to_vote</mat-icon>
+      <button class="btn btn-primary btn-outline px-8 m-1" (click)="onClickDelegateButton()">
         <span>Delegate</span>
       </button>
-
-      <div class="w-full flex justify-center">
-        <button
-          class="btn btn-primary btn-outline w-1/2 md:w-1/3 md:px-8 m-1"
-          *ngIf="isDelegated"
-          (click)="onClickRedelegateButton()"
-        >
-          <mat-icon class="mr-2">picture_in_picture_alt</mat-icon>
-          <span>Redelegate</span>
-        </button>
-
-        <button
-          class="btn btn-error btn-outline w-1/2 md:w-1/3 md:px-8 m-1"
-          *ngIf="isDelegated"
-          (click)="onClickUndelegateButton()"
-        >
-          <mat-icon class="mr-2">delete_sweep</mat-icon>
-          <span>Undelegate</span>
-        </button>
-      </div>
-
       <button
-        class="btn btn-primary w-full md:w-2/3 md:px-8 m-1"
+        class="btn btn-secondary btn-outline px-8 m-1"
+        *ngIf="isDelegated"
+        (click)="onClickRedelegateButton()"
+      >
+        <span>Redelegate</span>
+      </button>
+      <button
+        class="btn btn-error btn-outline px-8 m-1"
+        *ngIf="isDelegated"
+        (click)="onClickUndelegateButton()"
+      >
+        <span>Undelegate</span>
+      </button>
+      <button
+        class="btn btn-primary px-8 m-1"
         *ngIf="isDelegated"
         (click)="onClickWithdrawDelegatorRewardButton()"
       >
-        <mat-icon class="mr-2">attach_money</mat-icon>
         <span>Claim delegator reward</span>
       </button>
-
       <button
-        class="btn btn-secondary w-full md:w-2/3 md:px-8 m-1"
+        class="btn btn-secondary px-8 m-1"
         *ngIf="isValidator"
         (click)="onClickWithdrawValidatorCommissionButton()"
       >
-        <mat-icon class="mr-2">monetization_on</mat-icon>
         <span>Claim validator commission</span>
       </button>
     </div>

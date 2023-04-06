@@ -52,10 +52,7 @@
           </div>
 
           <div class="card-actions justify-end">
-            <button
-              class="btn gap-1 btn-error btn-outline w-full md:w-auto md:px-8"
-              (click)="onDisconnectWallet($event)"
-            >
+            <button class="btn gap-1 btn-error btn-outline" (click)="onDisconnectWallet($event)">
               Disconnect
             </button>
           </div>
@@ -65,10 +62,7 @@
   </div>
 </ng-template>
 <ng-template #empty>
-  <button
-    class="btn gap-1 btn-info btn-outline w-full md:w-auto md:px-8"
-    (click)="onConnectWallet($event)"
-  >
+  <button class="btn gap-1 btn-ghost" (click)="onConnectWallet($event)">
     <mat-icon color="primary" class="md:ml-3">wallet</mat-icon>
     <span class="hidden md:inline">Connect wallet</span>
   </button>

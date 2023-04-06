@@ -1,14 +1,14 @@
 <div class="card bg-base-100 shadow-xl w-full" *ngIf="position?.position?.id !== '10'">
   <div class="card-body">
-    <div class="flex flex-row">
-      <div class="badge badge-lg badge-accent mr-1">#{{ position?.position?.id }}</div>
-      <div class="badge badge-lg mr-1">Perpetual Futures</div>
+    <div class="flex flex-row flex-wrap">
+      <div class="badge badge-lg badge-accent m-1">#{{ position?.position?.id }}</div>
+      <div class="badge badge-lg m-1">Perpetual Futures</div>
 
       <ng-container *ngIf="positionInstance?.position_type === positionType.LONG">
-        <div class="badge badge-lg badge-primary">Long</div>
+        <div class="badge badge-lg badge-primary m-1">Long</div>
       </ng-container>
       <ng-container *ngIf="positionInstance?.position_type === positionType.SHORT">
-        <div class="badge badge-lg badge-secondary">Short</div>
+        <div class="badge badge-lg badge-secondary m-1">Short</div>
       </ng-container>
     </div>
     <h2 class="card-title">

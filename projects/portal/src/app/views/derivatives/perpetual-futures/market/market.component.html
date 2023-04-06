@@ -411,4 +411,11 @@
     </table>
     <p *ngIf="!positions?.length" class="text-center py-4">There is no position.</p>
   </div>
+  <button
+    class="btn btn-secondary w-full md:hidden mt-4"
+    routerLink="/derivatives/positions"
+    [disabled]="!positions?.length"
+  >
+    View Positions
+  </button>
 </div>

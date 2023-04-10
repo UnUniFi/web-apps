@@ -43,7 +43,6 @@ export class WalletApplicationService {
     const selectedWalletType = await this.openConnectWalletStartDialog();
 
     if (!selectedWalletType) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return;
     }
 
@@ -57,7 +56,6 @@ export class WalletApplicationService {
       const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 
       if (!selectOrImportOrCreate) {
-        this.snackBar.open('Dialog was canceled!', 'Close');
         return;
       }
 
@@ -117,7 +115,6 @@ export class WalletApplicationService {
   async ununifiSelectWallet(): Promise<boolean> {
     const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
     if (!selectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
@@ -128,7 +125,6 @@ export class WalletApplicationService {
   async ununifiImportWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiImportWalletWithMnemonicDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
@@ -152,7 +148,6 @@ export class WalletApplicationService {
   async ununifiImportWalletWithPrivateKey(): Promise<boolean> {
     const privateWallet = await this.openUnunifiImportWalletWithPrivateKeyDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupPrivateKeyDialog(privateWallet);
@@ -176,7 +171,6 @@ export class WalletApplicationService {
   async ununifiCreateWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiCreateWalletDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
@@ -200,7 +194,6 @@ export class WalletApplicationService {
   async keplrConnectWallet(): Promise<boolean> {
     const connectedStoredWallet = await this.keplrService.connectWallet();
     if (!connectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);

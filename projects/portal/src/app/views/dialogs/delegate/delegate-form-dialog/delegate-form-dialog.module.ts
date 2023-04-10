@@ -1,3 +1,4 @@
+import { MaterialModule } from '../../../material.module';
 import { DelegateFormDialogComponent } from './delegate-form-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -6,7 +7,7 @@ import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [DelegateFormDialogComponent],
-  imports: [CommonModule, FormsModule, PipesModule],
+  imports: [CommonModule, FormsModule, PipesModule, MaterialModule],
   exports: [DelegateFormDialogComponent],
 })
 export class DelegateFormDialogModule {}

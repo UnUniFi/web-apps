@@ -31,39 +31,36 @@ export type OpenPositionEvent = {
 export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   baseSymbol?: string | null;
-
   @Input()
   quoteSymbol?: string | null;
-
+  @Input()
+  selectedMarket?: string | null;
+  @Input()
+  availableMarkets?: string[] | null;
   @Input()
   params?: ununificlient.proto.ununifi.derivatives.IParams | null;
-
   @Input()
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IBreakdown | null;
-
   @Input()
   price?: number | null;
   // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
-
   @Input()
   positions?: AllPositions200ResponsePositionsInner[] | null;
-
   @Input()
   positionInstances?:
     | (ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | undefined)[]
     | null;
-
   @Input()
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
-
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
 
   @Output()
   openPosition = new EventEmitter<OpenPositionEvent>();
-
   @Output()
   closePosition = new EventEmitter<string>();
+  @Output()
+  changeMarket = new EventEmitter<string>();
 
   selectedPositionType = ununificlient.proto.ununifi.derivatives.PositionType.LONG;
   size = 1;
@@ -209,6 +206,10 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
       size,
       leverage,
     });
+  }
+
+  onChangeMarket(market: string): void {
+    this.changeMarket.emit(market);
   }
 
   calcMarketRate(base: string, quote: string): number {

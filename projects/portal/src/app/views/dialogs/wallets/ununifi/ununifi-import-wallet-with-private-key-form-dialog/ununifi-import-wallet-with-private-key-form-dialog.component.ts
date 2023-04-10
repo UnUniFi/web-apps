@@ -135,4 +135,8 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
       },
     );
   }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 }

@@ -1,112 +1,124 @@
-<div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Withdraw Incentive Reward</div>
+<div class="card bg-base-100 shadow-xl overflow-y-auto max-h-screen">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
-
-  <form #formRef="ngForm" (submit)="onSubmit()">
-    <ul class="menu bg-base-100 w-full">
-      <li>
-        <a>
-          <span class="column-name">Selected Token:</span>
-          <span class="flex-auto w-1/4"></span>
-          <span class="column-value truncate">{{ denom }}</span>
-        </a>
-      </li>
-      <li>
-        <a>
-          <span class="column-name">Rewards:</span>
-          <span class="flex-auto"></span>
-          <span class="column-value">{{ reward?.amount }}{{ reward?.denom }}</span>
-        </a>
-      </li>
-    </ul>
-
-    <h3 class="pt-3">Gas Settings</h3>
-    <div class="form-control w-full">
-      <label class="label">
-        <span class="label-text">Gas Ratio</span>
-      </label>
-      <input
-        name="gas-ratio"
-        type="number"
-        placeholder="Type here"
-        class="input input-bordered input-sm w-full"
-        [(ngModel)]="gasRatio"
-        required
-      />
-    </div>
-    <div class="btn-group w-full mt-2">
-      <label class="btn flex-auto"
-        [class.btn-active]="gasRatio === 0"
-        (click)="changeGasRatio(0)">Low</label>
-      <label class="btn flex-auto"
-        [class.btn-active]="gasRatio === 1.1"
-        (click)="changeGasRatio(1.1)">Middle</label>
-      <label class="btn flex-auto"
-        [class.btn-active]="gasRatio === 2"
-        (click)="changeGasRatio(2)">High</label>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Withdraw Incentive Reward</div>
     </div>
 
-    <div tabindex="0" class="collapse collapse-arrow rounded-box bg-base-200 text-base-content mt-2">
-      <input type="checkbox" class="peer" />
-      <div class="collapse-title flex items-center">
-        <div class="text-xl flex-auto">Advanced</div><div class="flex-auto text-xs">Change Default Gas Price</div>
-      </div>
-      <div class="collapse-content">
-        <div class="flex flex-col content-content lg:flex-row">
-          <div class="form-control flex-auto">
-            <label class="label">
-              <span class="label-text">Gas Denom</span>
-            </label>
-            <select
-              class="select select-bordered select-sm"
-              [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
-              name="minimum-gas-denom"
-              required
-              (ngModelChange)="onMinimumGasDenomChanged($event)"
-            >
-              <option
-                *ngFor="let minimumGasPriceOption of minimumGasPrices"
-                [value]="minimumGasPriceOption.denom"
-              >
-                {{ minimumGasPriceOption.denom }}
-              </option>
-            </select>
-          </div>
-          <div class="form-control flex-auto">
-            <label class="label">
-              <span class="label-text">Gas Price</span>
-            </label>
-            <input
-              #minimumGasPriceRef
-              name="minimum-gas-price"
-              type="number"
-              placeholder="Type here"
-              class="input input-bordered input-sm"
-              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
-              [min]="0"
-              required
-            />
-          </div>
-        </div>
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <ul class="menu bg-base-100 w-full">
+        <li>
+          <a>
+            <span class="column-name">Selected Token:</span>
+            <span class="flex-auto w-1/4"></span>
+            <span class="column-value truncate">{{ denom }}</span>
+          </a>
+        </li>
+        <li>
+          <a>
+            <span class="column-name">Rewards:</span>
+            <span class="flex-auto"></span>
+            <span class="column-value">{{ reward?.amount }}{{ reward?.denom }}</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3 class="pt-3">Gas Settings</h3>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Gas Ratio</span>
+        </label>
         <input
-          name="minimum-gas-price-slider"
-          class="range range-secondary w-full mt-4"
-          type="range"
-          max="1"
-          min="0"
-          step="0.015"
-          value="0.015"
-          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          name="gas-ratio"
+          type="number"
+          placeholder="Type here"
+          class="input input-bordered input-sm w-full"
+          [(ngModel)]="gasRatio"
+          required
         />
       </div>
-    </div>
+      <div class="btn-group w-full mt-2">
+        <label class="btn flex-auto" [class.btn-active]="gasRatio === 0" (click)="changeGasRatio(0)"
+          >Low</label
+        >
+        <label
+          class="btn flex-auto"
+          [class.btn-active]="gasRatio === 1.1"
+          (click)="changeGasRatio(1.1)"
+          >Middle</label
+        >
+        <label class="btn flex-auto" [class.btn-active]="gasRatio === 2" (click)="changeGasRatio(2)"
+          >High</label
+        >
+      </div>
 
-    <button class="btn btn-accent btn-block mt-2" [disabled]="formRef.invalid">
-      Withdraw All
-    </button>
-  </form>
-</div>
+      <div
+        tabindex="0"
+        class="collapse collapse-arrow rounded-box bg-base-200 text-base-content mt-2"
+      >
+        <input type="checkbox" class="peer" />
+        <div class="collapse-title flex items-center">
+          <div class="text-xl flex-auto">Advanced</div>
+          <div class="flex-auto text-xs">Change Default Gas Price</div>
+        </div>
+        <div class="collapse-content">
+          <div class="flex flex-col content-content lg:flex-row">
+            <div class="form-control flex-auto">
+              <label class="label">
+                <span class="label-text">Gas Denom</span>
+              </label>
+              <select
+                class="select select-bordered select-sm"
+                [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
+                name="minimum-gas-denom"
+                required
+                (ngModelChange)="onMinimumGasDenomChanged($event)"
+              >
+                <option
+                  *ngFor="let minimumGasPriceOption of minimumGasPrices"
+                  [value]="minimumGasPriceOption.denom"
+                >
+                  {{ minimumGasPriceOption.denom }}
+                </option>
+              </select>
+            </div>
+            <div class="form-control flex-auto">
+              <label class="label">
+                <span class="label-text">Gas Price</span>
+              </label>
+              <input
+                #minimumGasPriceRef
+                name="minimum-gas-price"
+                type="number"
+                placeholder="Type here"
+                class="input input-bordered input-sm"
+                [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+                [min]="0"
+                required
+              />
+            </div>
+          </div>
+          <input
+            name="minimum-gas-price-slider"
+            class="range range-secondary w-full mt-4"
+            type="range"
+            max="1"
+            min="0"
+            step="0.015"
+            value="0.015"
+            [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+          />
+        </div>
+      </div>
+
+      <button class="btn btn-accent btn-block mt-2" [disabled]="formRef.invalid">
+        Withdraw All
+      </button>
+    </form>
+  </div>
 </div>

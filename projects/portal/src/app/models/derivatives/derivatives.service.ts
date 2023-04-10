@@ -15,6 +15,23 @@ export class DerivativesService {
     private readonly bankService: BankService,
   ) {}
 
+  listAvailableMarkets(
+    denomMetadataMap: {
+      [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+    },
+    markets: ununificlient.proto.ununifi.derivatives.IMarket[],
+  ) {
+    return markets.map((market) => {
+      const baseMetadata = denomMetadataMap?.[market.base_denom || ''];
+      const quoteMetadata = denomMetadataMap?.[market.quote_denom || ''];
+      if (baseMetadata && quoteMetadata) {
+        return baseMetadata.symbol + '/' + quoteMetadata.symbol;
+      } else {
+        return market.base_denom + '/' + market.quote_denom;
+      }
+    });
+  }
+
   getMarginSymbol(
     baseSymbol: string,
     quoteSymbol: string,

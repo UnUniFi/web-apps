@@ -30,6 +30,8 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   nftID?: string | null;
   @Input()
+  symbol?: string | null;
+  @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
   balance?: number | null;
@@ -46,14 +48,12 @@ export class PlaceBidComponent implements OnInit {
 
   bidAmount?: number | null;
   depositAmount?: number | null;
-  depositSymbol?: string | null;
   minimumDeposit: number;
   interestRate?: number | null;
   datePicker?: Date | null;
   date?: string;
   time?: string;
   autoPayment?: boolean;
-  within3Days?: boolean;
 
   chartType: ChartType;
   chartTitle: string;
@@ -69,30 +69,7 @@ export class PlaceBidComponent implements OnInit {
     private readonly pawnshopChart: NftPawnshopChartService,
     private readonly pawnshopPoc: NftPawnshopPocService,
   ) {
-    const lendAmount = localStorage.getItem('lendAmount');
-    this.depositAmount = lendAmount ? Number(lendAmount) : null;
-    this.depositSymbol = localStorage.getItem('lendSymbol');
-    const lendRate = localStorage.getItem('lendRate');
-    this.interestRate = lendRate ? Number(lendRate) : null;
-    const lendTerm = localStorage.getItem('lendTerm');
-    this.datePicker = lendTerm ? new Date(lendTerm) : null;
-    if (this.datePicker) {
-      this.date =
-        this.datePicker.getFullYear().toString().padStart(4, '0') +
-        '-' +
-        (this.datePicker.getMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        this.datePicker.getDate().toString().padStart(2, '0');
-      this.time =
-        this.datePicker.getHours().toString().padStart(2, '0') +
-        ':' +
-        this.datePicker.getDate().toString().padStart(2, '0');
-    }
     this.autoPayment = true;
-    const now = new Date();
-    now.setDate(now.getDate() + 3);
-    this.within3Days = this.datePicker ? this.datePicker < now : false;
-
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -122,15 +99,6 @@ export class PlaceBidComponent implements OnInit {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  onChangeDate() {
-    console.log(this.date, this.time);
-    const biddingPeriod = new Date(this.date + 'T' + this.time);
-    const now = new Date();
-    console.log(biddingPeriod);
-    now.setDate(now.getDate() + 3);
-    this.within3Days = biddingPeriod < now;
-  }
-
   getPocValue() {
     if (this.currentStoredWallet && this.classID && this.nftID) {
       return this.pawnshopPoc.getPocValue(
@@ -147,7 +115,7 @@ export class PlaceBidComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.depositSymbol || !this.bidAmount || !this.date || !this.time || !this.interestRate) {
+    if (!this.symbol || !this.bidAmount || !this.date || !this.time || !this.interestRate) {
       alert('Some values are invalid!');
       return;
     }
@@ -155,7 +123,7 @@ export class PlaceBidComponent implements OnInit {
     this.appSimulate.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.depositSymbol,
+      symbol: this.symbol,
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,
@@ -169,7 +137,7 @@ export class PlaceBidComponent implements OnInit {
       return;
     }
     if (
-      !this.depositSymbol ||
+      !this.symbol ||
       !this.depositAmount ||
       !this.bidAmount ||
       !this.date ||
@@ -180,10 +148,14 @@ export class PlaceBidComponent implements OnInit {
       return;
     }
     const biddingPeriod = new Date(this.date + 'T' + this.time);
+    if (biddingPeriod < new Date()) {
+      alert('Bidding period should be in the future!');
+      return;
+    }
     this.appSubmit.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.depositSymbol,
+      symbol: this.symbol,
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,

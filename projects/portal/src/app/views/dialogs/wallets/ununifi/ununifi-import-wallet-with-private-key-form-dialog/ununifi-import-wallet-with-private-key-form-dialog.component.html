@@ -1,4 +1,4 @@
-<div class="card bg-base-100 shadow-xl overflow-y-auto max-h-screen">
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
       <mat-icon>close</mat-icon>
@@ -89,7 +89,6 @@
                 </label>
                 <button class="btn btn-sm btn-ghost" (click)="copyClipboard(privateKeyRef.value)">
                   <span class="material-icons">content_copy</span>
-                  <span>copy</span>
                 </button>
               </div>
               <label class="label">

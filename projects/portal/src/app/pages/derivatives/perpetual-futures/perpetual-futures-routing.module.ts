@@ -7,12 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: PerpetualFuturesComponent,
-    children: [
-      {
-        path: ':baseSymbol/:quoteSymbol',
-        component: MarketComponent,
-      },
-    ],
+  },
+  {
+    path: ':baseSymbol/:quoteSymbol',
+    component: MarketComponent,
   },
 ];
 

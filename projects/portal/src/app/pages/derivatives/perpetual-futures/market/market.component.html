@@ -8,6 +8,9 @@
   [price]="price$ | async"
   [positions]="positions$ | async"
   [positionInstances]="positionInstances$ | async"
+  [selectedMarket]="selectedMarket$ | async"
+  [availableMarkets]="availableMarkets$ | async"
   (openPosition)="onOpenPosition($event)"
   (closePosition)="onClosePosition($event)"
+  (changeMarket)="onChangeMarket($event)"
 ></view-market>

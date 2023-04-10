@@ -18,20 +18,20 @@
       <table class="table w-full">
         <tbody>
           <tr>
-            <th>Class ID</th>
+            <td>Class ID</td>
             <td>{{ classID }}</td>
           </tr>
           <tr>
-            <th>NFT ID</th>
+            <td>NFT ID</td>
             <td>{{ nftID }}</td>
           </tr>
           <tr>
-            <th>Minimum deposit rate</th>
+            <td>Minimum deposit rate</td>
             <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
           </tr>
           <tr>
-            <th>Started at</th>
-            <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+            <td>Started at</td>
+            <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
           </tr>
         </tbody>
       </table>

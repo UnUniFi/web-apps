@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -29,7 +30,7 @@ export class NftsDialogComponent implements OnInit {
   @Output()
   appSubmit: EventEmitter<string>;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
   }
 
@@ -37,5 +38,9 @@ export class NftsDialogComponent implements OnInit {
 
   onSubmit(nftID: string) {
     this.appSubmit.emit(nftID);
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

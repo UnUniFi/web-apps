@@ -21,7 +21,7 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   inputPrivateKey: string = '';
   isPasswordVisible: boolean = false;
   step: number = 0;
-  steps: String[] = ["Save your private key", "Check", "Next"];
+  steps: String[] = ['Save your private key', 'Check', 'Next'];
 
   now = new Date();
   sec = this.now.getSeconds();
@@ -39,9 +39,9 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
       UnunifiBackupPrivateKeyWizardDialogComponent
     >,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickSubmit(): void {
     const walletBackupResult: StoredWallet & {
@@ -118,11 +118,15 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
     if (this.steps.length - 1 > this.step) {
       this.step++;
     } else {
-      this.onClickSubmit()
+      this.onClickSubmit();
     }
   }
 
   back(): void {
     this.step--;
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

@@ -29,23 +29,19 @@
       <table class="table w-full">
         <tbody>
           <tr>
-            <th>Class ID</th>
+            <td>Class ID</td>
             <td>{{ classID }}</td>
           </tr>
           <tr>
-            <th>NFT ID</th>
+            <td>NFT ID</td>
             <td>{{ nftID }}</td>
           </tr>
           <tr>
-            <th>Minimum Deposit Rate</th>
+            <td>Minimum deposit rate</td>
             <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
           </tr>
           <tr>
-            <th>Owner</th>
-            <td>{{ listingInfo?.owner }}</td>
-          </tr>
-          <tr>
-            <th>Started at</th>
+            <td>Started at</td>
             <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
           </tr>
         </tbody>
@@ -110,6 +106,7 @@
                 <input
                   #bidAmountNgModelRef="ngModel"
                   required
+                  placeholder="123.123456"
                   type="number"
                   name="bidAmount"
                   [(ngModel)]="bidAmount"
@@ -122,7 +119,7 @@
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                   (input)="calculateMinimumDeposit()"
                 />
-                <span>{{ depositSymbol }}</span>
+                <span>{{ symbol }}</span>
               </label>
             </div>
             <div class="form-control">
@@ -151,6 +148,7 @@
               <label class="input-group">
                 <input
                   #depositAmountNgModelRef="ngModel"
+                  placeholder="12.123456"
                   required
                   type="number"
                   name="depositAmount"
@@ -164,7 +162,7 @@
                   }"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
-                <span>{{ depositSymbol }}</span>
+                <span>{{ symbol }}</span>
               </label>
               <label class="label">
                 <span class="label-text-alt">Minimum Deposit: </span>
@@ -172,12 +170,12 @@
                   class="label-text-alt"
                   [class]="{ 'text-error': depositAmountNgModelRef.errors }"
                 >
-                  {{ minimumDeposit }} {{ depositSymbol }}
+                  {{ minimumDeposit }} {{ symbol }}
                 </span>
               </label>
               <label class="label -mt-4">
                 <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt">{{ balance }} {{ depositSymbol }}</span>
+                <span class="label-text-alt">{{ balance }} {{ symbol }}</span>
               </label>
             </div>
             <div class="form-control">
@@ -210,6 +208,7 @@
                   required
                   type="number"
                   name="interestRate"
+                  placeholder="5.5"
                   [(ngModel)]="interestRate"
                   [min]="0"
                   [step]="0.5"
@@ -255,7 +254,6 @@
                   name="expiryDate"
                   [(ngModel)]="date"
                   class="input input-bordered w-3/5"
-                  (change)="onChangeDate()"
                 />
                 <input
                   #timeRef
@@ -264,13 +262,8 @@
                   name="expiryTime"
                   [(ngModel)]="time"
                   class="input input-bordered w-2/5"
-                  (change)="onChangeDate()"
                 />
               </label>
-
-              <!-- <label class="label" *ngIf="!within3Days">
-                <span class="label-text-alt text-error">Please set Expiration Date within 3 days.</span>
-              </label> -->
             </div>
 
             <!-- <div class="form-control">
@@ -305,12 +298,17 @@
               </label>
             </div> -->
 
-            <div class="flex flex-row flex-wrap justify-end mt-4">
-              <button type="button" class="btn btn-primary btn-outline" (click)="onSimulate()">
+            <div class="card-actions justify-end mt-4">
+              <button
+                type="button"
+                class="btn btn-primary btn-outline w-full md:w-auto md:px-8"
+                (click)="onSimulate()"
+              >
                 Simulate
               </button>
-              <span class="w-full md:w-2"></span>
-              <button class="btn btn-primary" [disabled]="formRef.invalid">Make Offer</button>
+              <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+                Make Offer
+              </button>
             </div>
           </form>
         </div>

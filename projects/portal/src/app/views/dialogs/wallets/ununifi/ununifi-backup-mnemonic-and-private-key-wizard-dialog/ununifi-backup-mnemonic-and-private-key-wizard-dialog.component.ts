@@ -20,7 +20,7 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
   checked: boolean = false;
   inputMnemonic: string = '';
   step: number = 0;
-  steps: String[] = ["Save your mnemonic", "Check", "Next"];
+  steps: String[] = ['Save your mnemonic', 'Check', 'Next'];
 
   now = new Date();
   sec = this.now.getSeconds();
@@ -40,9 +40,9 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
       UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent
     >,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickSubmit(): void {
     const walletBackupResult: StoredWallet & {
@@ -123,11 +123,15 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
     if (this.steps.length - 1 > this.step) {
       this.step++;
     } else {
-      this.onClickSubmit()
+      this.onClickSubmit();
     }
   }
 
   back(): void {
     this.step--;
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

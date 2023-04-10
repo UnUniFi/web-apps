@@ -28,7 +28,6 @@ export class WalletApplicationService {
     const selectedWalletType = await this.openConnectWalletStartDialog();
 
     if (!selectedWalletType) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return;
     }
 
@@ -73,7 +72,6 @@ export class WalletApplicationService {
   async keplrConnectWallet(): Promise<boolean> {
     const connectedStoredWallet = await this.keplrService.connectWallet();
     if (!connectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);

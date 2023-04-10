@@ -155,4 +155,8 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
       },
     );
   }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 }

@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
@@ -29,7 +30,7 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
   availableDenoms?: string[];
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
@@ -76,5 +77,9 @@ export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

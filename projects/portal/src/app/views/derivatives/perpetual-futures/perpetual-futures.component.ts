@@ -7,7 +7,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 
 @Component({
@@ -18,16 +17,10 @@ import ununificlient from 'ununifi-client';
 export class PerpetualFuturesComponent implements OnInit, OnChanges {
   @Input()
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesResponse | null;
-
   @Input()
   params?: ununificlient.proto.ununifi.derivatives.IPerpetualFuturesParams | null;
-
-  @Input()
-  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
-
   @Input()
   markets?: string[] | null;
-
   @Input()
   selectedMarket?: string | null;
 

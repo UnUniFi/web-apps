@@ -42,4 +42,8 @@ export class UnunifiKeyFormDialogComponent implements OnInit {
       this.dialogRef.close(privateWallet);
     });
   }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 }

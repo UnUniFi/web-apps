@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
@@ -44,7 +45,7 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Output()
   appDetail: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appDelegate = new EventEmitter();
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
@@ -104,5 +105,9 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appDetail.emit(this.selectedValidator);
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

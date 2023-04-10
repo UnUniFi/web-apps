@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -40,7 +41,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
   recipients: IncentiveDist[];
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.firstRecipient = { address: '', distRate: 0 };
     this.recipients = [];
     this.appSubmit = new EventEmitter();
@@ -112,5 +113,9 @@ export class CreateUnitFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

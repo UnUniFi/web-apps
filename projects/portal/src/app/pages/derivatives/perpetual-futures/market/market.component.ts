@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { DerivativesApplicationService } from 'projects/portal/src/app/models/derivatives/derivatives.application.service';
 import { DerivativesQueryService } from 'projects/portal/src/app/models/derivatives/derivatives.query.service';
+import { DerivativesService } from 'projects/portal/src/app/models/derivatives/derivatives.service';
 import { PricefeedQueryService } from 'projects/portal/src/app/models/pricefeeds/pricefeed.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -18,6 +19,9 @@ import ununificlient from 'ununifi-client';
   styleUrls: ['./market.component.css'],
 })
 export class MarketComponent implements OnInit {
+  selectedMarket$ = this.route.params.pipe(
+    map((params) => params.baseSymbol + '/' + params.quoteSymbol),
+  );
   baseSymbol$ = this.route.params.pipe(map((params) => params.baseSymbol));
   quoteSymbol$ = this.route.params.pipe(map((params) => params.quoteSymbol));
 
@@ -27,11 +31,23 @@ export class MarketComponent implements OnInit {
   );
 
   params$ = this.derivativesQuery.getDerivativesParams$();
+  denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+  availableMarkets$ = combineLatest([this.params$, this.denomMetadataMap$]).pipe(
+    map(([params, metadata]) =>
+      this.derivatives.listAvailableMarkets(metadata, params.perpetual_futures?.markets || []),
+    ),
+  );
 
   symbolBalancesMap$ = this.address$.pipe(
     mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
   );
   symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+  baseDenom$ = combineLatest([this.baseSymbol$, this.symbolMetadataMap$]).pipe(
+    map(([baseSymbol, symbolMetadataMap]) => symbolMetadataMap[baseSymbol].base),
+  );
+  quoteDenom$ = combineLatest([this.quoteSymbol$, this.symbolMetadataMap$]).pipe(
+    map(([quoteSymbol, symbolMetadataMap]) => symbolMetadataMap[quoteSymbol].base),
+  );
 
   info$ = zip(this.baseSymbol$, this.quoteSymbol$, this.symbolMetadataMap$).pipe(
     mergeMap(([baseSymbol, quoteSymbol, symbolMetadataMap]) =>
@@ -63,24 +79,20 @@ export class MarketComponent implements OnInit {
   );
 
   markets$ = this.pricefeedQuery.listAllMarkets$();
-  marketId$ = combineLatest([
-    this.markets$,
-    this.baseSymbol$,
-    this.quoteSymbol$,
-    this.symbolMetadataMap$,
-  ]).pipe(
+  marketId$ = combineLatest([this.markets$, this.baseDenom$, this.quoteDenom$]).pipe(
     map(
-      ([markets, baseSymbol, quoteSymbol, symbolMetadataMap]) =>
-        markets.find(
-          (market) =>
-            market.base_asset == symbolMetadataMap[baseSymbol].base! &&
-            market.quote_asset == symbolMetadataMap[quoteSymbol].base!,
-        )?.market_id,
+      ([markets, base, quote]) =>
+        markets.find((market) => market.base_asset == base && market.quote_asset == quote)
+          ?.market_id,
     ),
   );
   timer$ = timer(0, 1000 * 30);
-  basePrice$ = this.timer$.pipe(mergeMap((_) => this.pricefeedQuery.getPrice$('ubtc:usd')));
-  quotePrice$ = this.timer$.pipe(mergeMap((_) => this.pricefeedQuery.getPrice$('uusdc:usd')));
+  basePrice$ = combineLatest([this.baseDenom$, this.timer$]).pipe(
+    mergeMap(([denom, _]) => this.pricefeedQuery.getPrice$(denom + ':usd')),
+  );
+  quotePrice$ = combineLatest([this.quoteDenom$, this.timer$]).pipe(
+    mergeMap(([denom, _]) => this.pricefeedQuery.getPrice$(denom + ':usd')),
+  );
   price$ = combineLatest([this.basePrice$, this.quotePrice$]).pipe(
     map(([base, quote]) => Number(base.price) / Number(quote.price)),
   );
@@ -121,15 +133,15 @@ export class MarketComponent implements OnInit {
   );
 
   constructor(
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly pricefeedQuery: PricefeedQueryService,
+    private readonly derivatives: DerivativesService,
     private readonly derivativesQuery: DerivativesQueryService,
     private readonly derivativesApplication: DerivativesApplicationService,
-  ) {
-    this.price$.subscribe((a) => console.log(a));
-  }
+  ) {}
 
   ngOnInit(): void {}
 
@@ -147,5 +159,12 @@ export class MarketComponent implements OnInit {
 
   async onClosePosition($event: string) {
     await this.derivativesApplication.closePosition($event);
+  }
+
+  onChangeMarket(market: string) {
+    const slashIndex = market.indexOf('/');
+    const base = market.slice(0, slashIndex);
+    const quote = market.slice(slashIndex + 1);
+    this.router.navigate(['/derivatives/perpetual-futures', base, quote]);
   }
 }

@@ -1,5 +1,72 @@
+<h2>Perpetual Futures</h2>
 <div class="flex-auto flex flex-row flex-wrap">
   <div class="w-full xl:w-auto xl:flex-auto xl:mr-8">
+    <div class="stats stats-vertical md:stats-horizontal w-full mb-4">
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Perpetual</span>
+          <!-- The button to open modal -->
+          <label for="modal-perpetual" class="label-text cursor-pointer">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-perpetual" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+              <p class="py-2">
+                Perpetual futures are a type of cryptocurrency trading contract that allows traders
+                to take positions on future price movements. These contracts have no expiration
+                date, and traders are able to maintain positions indefinitely by depositing funds
+                with the exchange.
+              </p>
+              <p class="py-2">
+                Perpetual futures contracts typically require margin, making them a high-risk,
+                high-reward investment product. Additionally, leverage can be employed for these
+                contracts, meaning even small price movements can result in significant gains or
+                losses, necessitating careful trading practices.
+              </p>
+
+              <div class="modal-action">
+                <label for="modal-perpetual" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+        <label class="input-group">
+          <select
+            class="select select-info select-lg w-full"
+            #marketRef
+            (change)="onChangeMarket(marketRef.value)"
+            [value]="selectedMarket"
+          >
+            <option disabled [value]="undefined">Please Select</option>
+            <ng-container *ngFor="let m of availableMarkets">
+              <option [value]="m">{{ m }}</option>
+            </ng-container>
+          </select>
+        </label>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title"></div>
+        <div class="stat-value text-primary">{{ price | number }}</div>
+        <div class="stat-desc">{{ quoteSymbol }}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Borrow Fee</div>
+        <div class="stat-value text-primary">
+          {{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}
+        </div>
+        <div class="stat-desc"></div>
+      </div>
+      <!-- <div class="stat">
+        <div class="stat-title">Available Liquidity</div>
+        <div class="stat-value text-secondary"></div>
+        <div class="stat-desc"></div>
+      </div> -->
+    </div>
     <!-- TradingView Widget BEGIN -->
     <div class="tradingview-widget-container">
       <div id="tradingview_5b3c4" style="height: 480px"></div>
@@ -14,27 +81,6 @@
     </div>
   </div>
   <div class="w-full xl:w-1/3">
-    <div class="overflow-x-auto mb-8">
-      <table class="table w-full">
-        <tbody>
-          <tr>
-            <th>Entry Price</th>
-            <td>{{ price | number }} {{ quoteSymbol }}</td>
-          </tr>
-
-          <!-- <tr>
-            <th>Borrow Fee</th>
-            <td>{{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}</td>
-          </tr>
-
-          <tr>
-            <th>Available Liquidity</th>
-            <td>{{ pool | coin }}</td>
-          </tr> -->
-        </tbody>
-      </table>
-    </div>
-
     <div class="card bg-base-100 shadow-xl mb-4 w-full lg:w-auto">
       <div class="card-body">
         <form
@@ -137,7 +183,7 @@
                 name="position-size"
                 type="number"
                 placeholder="10"
-                class="input input-bordered input-info input-lg w-full"
+                class="input input-bordered input-info w-full"
                 [class]="{ 'input-error': sizeNgModelRef.errors && sizeNgModelRef.touched }"
                 [min]="0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
@@ -302,7 +348,7 @@
   </div>
 
   <!-- table show bottom -->
-  <div class="overflow-x-auto w-full xl:w-2/3 xl:pr-8 xl:-mt-36">
+  <div class="overflow-x-auto w-full xl:w-2/3 xl:pr-8">
     <table class="table w-full">
       <thead>
         <tr>

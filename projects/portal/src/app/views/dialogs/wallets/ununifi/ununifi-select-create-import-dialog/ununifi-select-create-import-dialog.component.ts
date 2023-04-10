@@ -41,7 +41,11 @@ export class UnunifiSelectCreateImportDialogComponent implements OnInit {
     >,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 
   onClickButton(value: UnunifiSelectCreateImportDialogData): void {
     this.dialogRef.close(value);

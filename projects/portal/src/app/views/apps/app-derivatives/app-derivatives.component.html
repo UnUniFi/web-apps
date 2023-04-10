@@ -21,6 +21,92 @@
           </svg>
         </label>
       </div>
+      <div class="dropdown hidden md:block">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h7"
+            />
+          </svg>
+        </label>
+        <ul tabindex="0" class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <!-- Sidebar content here -->
+          <li>
+            <label class="flex gap-4" routerLink="/derivatives">
+              <span class="flex-none">
+                <mat-icon color="primary">other_houses</mat-icon>
+              </span>
+              <span class="flex-1">Derivatives</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/derivatives/perpetual-futures">
+              <span class="flex-none">
+                <mat-icon color="primary">sync_alt</mat-icon>
+              </span>
+              <span class="flex-1">Perpetual Futures</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/derivatives/positions">
+              <span class="flex-none">
+                <mat-icon color="primary">playlist_add_check</mat-icon>
+              </span>
+              <span class="flex-1">Positions</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/derivatives/pool">
+              <span class="flex-none">
+                <mat-icon color="primary">pool</mat-icon>
+              </span>
+              <span class="flex-1">Pool</span>
+            </label>
+          </li>
+
+          <li class="menu-title">
+            <span>Apps</span>
+          </li>
+          <ng-container *ngFor="let app of apps">
+            <li *ngIf="app.name !== 'Derivatives'">
+              <label class="flex gap-4" routerLink="{{ app.link }}">
+                <span class="flex-none">
+                  <mat-icon color="primary">{{ app.icon }}</mat-icon>
+                </span>
+                <span class="flex-1">{{ app.name }}</span>
+              </label>
+            </li>
+          </ng-container>
+
+          <li class="menu-title">
+            <span>Testnet</span>
+          </li>
+          <ng-template ngFor let-navigation [ngForOf]="navigations">
+            <ng-container *ngIf="navigation?.name && navigation?.link">
+              <li>
+                <label
+                  class="flex gap-4"
+                  routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+                >
+                  <span class="flex-none">
+                    <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                  </span>
+                  <span class="flex-1">{{ navigation.name }}</span>
+                </label>
+              </li>
+            </ng-container>
+          </ng-template>
+        </ul>
+      </div>
       <button class="align-middle" mat-icon-button routerLink="/derivatives">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
@@ -44,8 +130,13 @@
     <label for="drawer-main" class="drawer-overlay"></label>
     <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
       <!-- Sidebar content here -->
-      <li class="menu-title">
-        <span>Derivatives</span>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/derivatives">
+          <span class="flex-none">
+            <mat-icon color="primary">other_houses</mat-icon>
+          </span>
+          <span class="flex-1">Derivatives</span>
+        </label>
       </li>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/perpetual-futures">

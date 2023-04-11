@@ -36,7 +36,7 @@
         </span>
         <label class="input-group">
           <select
-            class="select select-info select-lg w-full"
+            class="select select-info w-full"
             #marketRef
             (change)="onChangeMarket(marketRef.value)"
             [value]="selectedMarket"
@@ -56,7 +56,7 @@
       </div>
       <div class="stat">
         <div class="stat-title">Borrow Fee</div>
-        <div class="stat-value text-primary">
+        <div class="stat-value text-secondary">
           {{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}
         </div>
         <div class="stat-desc"></div>

@@ -5,6 +5,7 @@ import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import Decimal from 'decimal.js';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,25 @@ export class BankService {
     });
 
     return coins;
+  }
+
+  convertCoinsToSymbolAmount(
+    coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): { [symbol: string]: number } {
+    const map: { [symbol: string]: number } = {};
+    coins.map((b) => {
+      const metadata = denomMetadataMap[b.denom!];
+      const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
+
+      if (denomUnit) {
+        const amount = new Decimal(b.amount!);
+        map[metadata.symbol!] = Number(
+          amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+        );
+      }
+    });
+    return map;
   }
 
   async simulateToSend(

@@ -53,6 +53,7 @@ export interface IWalletInfrastructure {
   setCurrentWallet(wallet: Wallet): Promise<void>;
 
   setStoredWallet(storedWallet: StoredWallet): Promise<void>;
+  deleteStoredWallet(): Promise<void>;
   setCosmosWallet(cosmosWallet: CosmosWallet): Promise<void>;
   setWallet(wallet: Wallet): Promise<void>;
 }
@@ -174,6 +175,10 @@ export class WalletService {
 
   async setStoredWallet(storedWallet: StoredWallet): Promise<void> {
     return this.iWalletInfrastructure.setStoredWallet(storedWallet);
+  }
+
+  async deleteStoredWallet(): Promise<void> {
+    return this.iWalletInfrastructure.deleteStoredWallet();
   }
 
   async setCosmosWallet(cosmosWallet: CosmosWallet): Promise<void> {

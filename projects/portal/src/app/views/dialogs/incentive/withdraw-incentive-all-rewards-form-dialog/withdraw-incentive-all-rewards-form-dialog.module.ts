@@ -1,5 +1,5 @@
 import { MaterialModule } from '../../../material.module';
-import { WithdrawIncentiveAllRewardsFormDialogComponent} from './withdraw-incentive-all-rewards-form-dialog.component';
+import { WithdrawIncentiveAllRewardsFormDialogComponent } from './withdraw-incentive-all-rewards-form-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

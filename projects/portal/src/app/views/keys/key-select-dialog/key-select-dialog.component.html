@@ -1,4 +1,5 @@
-<div>
+<div class="card bg-base-100 shadow-xl">
+<div class="card-body">
   <mat-nav-list>
     <ng-template ngFor let-key [ngForOf]="data.keys">
       <mat-list-item (click)="onClickKey(key)">
@@ -11,4 +12,5 @@
       </mat-list-item>
     </ng-template>
   </mat-nav-list>
+</div>
 </div>

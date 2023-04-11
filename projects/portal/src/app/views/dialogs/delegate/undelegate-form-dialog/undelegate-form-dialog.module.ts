@@ -7,7 +7,7 @@ import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [UndelegateFormDialogComponent],
-  imports: [CommonModule, FormsModule, MaterialModule, PipesModule],
+  imports: [CommonModule, FormsModule, PipesModule, MaterialModule],
   exports: [UndelegateFormDialogComponent],
 })
 export class UndelegateFormDialogModule {}

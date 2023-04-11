@@ -6,7 +6,7 @@ import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [DelegateMenuDialogComponent],
-  imports: [CommonModule, MaterialModule, PipesModule],
+  imports: [CommonModule, PipesModule, MaterialModule],
   exports: [DelegateMenuDialogComponent],
 })
 export class DelegateMenuDialogModule {}

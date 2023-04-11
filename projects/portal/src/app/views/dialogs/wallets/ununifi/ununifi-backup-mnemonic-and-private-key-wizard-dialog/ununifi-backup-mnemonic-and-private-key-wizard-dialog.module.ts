@@ -3,11 +3,10 @@ import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from './ununi
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, MatStepperModule],
+  imports: [CommonModule, FormsModule, MaterialModule],
   exports: [UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent],
 })
 export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule {}

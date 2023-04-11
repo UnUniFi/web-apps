@@ -28,11 +28,3 @@ mat-toolbar.toolbar {
 mat-progress-spinner {
   margin: 1em auto;
 }
-
-cdk-dialog-container {
-  display: block;
-  color: #000000 !important;
-  background: #ffffff !important;
-  border-radius: 4px;
-  padding: 24px;
-}

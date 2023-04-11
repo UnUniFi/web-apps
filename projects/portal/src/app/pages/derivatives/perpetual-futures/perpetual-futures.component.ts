@@ -1,7 +1,8 @@
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { DerivativesQueryService } from '../../../models/derivatives/derivatives.query.service';
+import { DerivativesService } from '../../../models/derivatives/derivatives.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +21,9 @@ export class PerpetualFuturesComponent implements OnInit {
 
   denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   markets$ = combineLatest([this.params$, this.denomMetadataMap$]).pipe(
-    map(([params, metadata]) => params?.markets?.map((market) => this.getMarket(metadata, market))),
+    map(([params, metadata]) =>
+      this.derivatives.listAvailableMarkets(metadata, params?.markets || []),
+    ),
   );
   selectedMarket$ = this.markets$.pipe(
     map((markets) => {
@@ -34,9 +37,9 @@ export class PerpetualFuturesComponent implements OnInit {
   );
 
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly bankQuery: BankQueryService,
+    private readonly derivatives: DerivativesService,
     private readonly derivativesQuery: DerivativesQueryService,
   ) {}
 
@@ -47,20 +50,5 @@ export class PerpetualFuturesComponent implements OnInit {
     const base = market.slice(0, slashIndex);
     const quote = market.slice(slashIndex + 1);
     this.router.navigate(['/derivatives/perpetual-futures', base, quote]);
-  }
-
-  getMarket(
-    denomMetadataMap: {
-      [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
-    },
-    market: ununificlient.proto.ununifi.derivatives.IMarket,
-  ) {
-    const baseMetadata = denomMetadataMap?.[market.base_denom || ''];
-    const quoteMetadata = denomMetadataMap?.[market.quote_denom || ''];
-    if (baseMetadata && quoteMetadata) {
-      return baseMetadata.symbol + '/' + quoteMetadata.symbol;
-    } else {
-      return market.base_denom + '/' + market.quote_denom;
-    }
   }
 }

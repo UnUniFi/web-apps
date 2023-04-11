@@ -33,7 +33,6 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async ununifiSelectWallet(): Promise<boolean> {
     const selectedStoredWallet = await this.openUnunifiSelectWalletDialog();
     if (!selectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(selectedStoredWallet);
@@ -44,7 +43,6 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async ununifiImportWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiImportWalletWithMnemonicDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
@@ -68,7 +66,6 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async ununifiImportWalletWithPrivateKey(): Promise<boolean> {
     const privateWallet = await this.openUnunifiImportWalletWithPrivateKeyDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupPrivateKeyDialog(privateWallet);
@@ -92,7 +89,6 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
   private async ununifiCreateWallet(): Promise<boolean> {
     const privateWallet = await this.openUnunifiCreateWalletDialog();
     if (!privateWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
@@ -217,7 +213,6 @@ export class UnunifiWalletInfrastructureService implements IUnunifiWalletInfrast
     const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 
     if (!selectOrImportOrCreate) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
 

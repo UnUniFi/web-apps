@@ -9,7 +9,7 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   BidderBids200ResponseBidsInner,
@@ -24,6 +24,7 @@ import {
 export class PlaceBidComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
+  symbol$: Observable<string | null | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balance$: Observable<number>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
@@ -48,15 +49,19 @@ export class PlaceBidComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    const symbol = localStorage.getItem('lendSymbol');
-    this.balance$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
-      map((balanceMap) => balanceMap[symbol!]),
-    );
-
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+    );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
+      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+    );
+    const balanceMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    );
+    this.balance$ = zip(balanceMap$, this.symbol$).pipe(
+      map(([balance, symbol]) => balance[symbol || '']),
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),

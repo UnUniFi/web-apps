@@ -1,10 +1,11 @@
+import { MaterialModule } from '../../../material.module';
 import { ConnectWalletStartDialogComponent } from './connect-wallet-start-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [ConnectWalletStartDialogComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, MaterialModule],
   exports: [ConnectWalletStartDialogComponent],
 })
-export class ConnectWalletStartDialogModule { }
+export class ConnectWalletStartDialogModule {}

@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
@@ -47,7 +48,7 @@ export class RedelegateFormDialogComponent implements OnInit {
   selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['GUU'];
     this.gasRatio = 0;
@@ -114,5 +115,9 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

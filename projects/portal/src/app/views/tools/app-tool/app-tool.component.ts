@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 export const apps = [
   { name: 'Utilities', link: '/', icon: 'assistant' },
-  { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
+  { name: 'NFT Backed Loan', link: '/nft-backed-loan/lenders', icon: 'loyalty' },
   { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
 ];
 @Component({

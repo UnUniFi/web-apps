@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
@@ -32,7 +33,7 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
   availableDenoms?: string[];
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
@@ -79,5 +80,9 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

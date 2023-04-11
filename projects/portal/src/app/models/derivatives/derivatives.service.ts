@@ -57,7 +57,7 @@ export class DerivativesService {
     )[0];
 
     const msgMintLiquidityProviderToken =
-      new ununificlient.proto.ununifi.derivatives.MsgMintLiquidityProviderToken({
+      new ununificlient.proto.ununifi.derivatives.MsgDepositToPool({
         sender: senderAddress,
         amount: coin,
       });
@@ -79,9 +79,9 @@ export class DerivativesService {
     const redeemDenom = symbolMetadataMap?.[redeemSymbol].base;
 
     const msgMintLiquidityProviderToken =
-      new ununificlient.proto.ununifi.derivatives.MsgBurnLiquidityProviderToken({
+      new ununificlient.proto.ununifi.derivatives.MsgWithdrawFromPool({
         sender: senderAddress,
-        amount: coin.amount,
+        lpt_amount: coin.amount,
         redeem_denom: redeemDenom,
       });
     return msgMintLiquidityProviderToken;

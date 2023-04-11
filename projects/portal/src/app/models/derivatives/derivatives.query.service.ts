@@ -9,7 +9,6 @@ import {
   AllPositions200ResponsePositionsInner,
   DerivativesParams200ResponseParams,
   EstimateDLPTokenAmount200Response,
-  EstimateRedeemAmount200Response,
   PerpetualFutures200Response,
   PerpetualFuturesMarket200Response,
   Pool200Response,
@@ -45,7 +44,7 @@ export class DerivativesQueryService {
   getEstimateRedeemTokenAmount(
     redeemDenom: string,
     lptAmount: string,
-  ): Observable<EstimateRedeemAmount200Response> {
+  ): Observable<EstimateDLPTokenAmount200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         ununificlient.rest.derivatives.estimateRedeemAmount(sdk, redeemDenom, lptAmount),

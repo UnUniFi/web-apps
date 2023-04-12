@@ -1,1 +1,10 @@
-<view-trader></view-trader>
+<view-trader
+  [address]="address$ | async"
+  [exemplaryTraderAddress]="exemplaryTraderAddress$ | async"
+  [trader]="trader$ | async"
+  [tracing]="tracing$ | async"
+  [isTracing]="isTracing$ | async"
+  [userCount]="userCount$ | async"
+  [commissionRate]="commissionRate$ | async"
+  [description]="description$ | async"
+></view-trader>

@@ -1,98 +1,126 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
-    <h2>Exemplary traders</h2>
-  </div>
+  <h2>Exemplary traders</h2>
 
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#1</div>
-        </div>
-        <h2 class="card-title">UnUniFi Exemplary traders 1</h2>
+        <h2 class="card-title">{{ trader?.name }}</h2>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <td>Address</td>
-                <td>ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w</td>
+                <td>{{ exemplaryTraderAddress }}</td>
               </tr>
               <tr>
-                <td>Registered Date</td>
-                <td>2023-3-14 AM 12:50:08 GMT+9</td>
+                <td>Exemplary trader name</td>
+                <td>{{ trader?.name }}</td>
+              </tr>
+              <tr>
+                <td>Commission Fee</td>
+                <td>{{ trader?.profit_commission_rate | percent : '1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>Users</td>
+                <td>{{ userCount || 0 }}</td>
+              </tr>
+              <tr>
+                <td>Current APY</td>
+                <td>Coming Soon</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p>
-          The momentum trading strategy involves identifying a cryptocurrency that is on an upward
-          trend and has high trading volume. Traders can use technical analysis to identify these
-          trends through analyzing charts and indicators like moving averages, relative strength
-          index (RSI), and stochastic oscillators.
-        </p>
-        <p>
-          Once a promising cryptocurrency has been identified, the trader opens a position by buying
-          in at a relatively low price. The goal is to ride the upward trend and sell off the
-          position as the price continues to rise.
-        </p>
-        <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat">
-            <div class="stat-title">Current APY</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
+        <p>{{ trader?.description }}</p>
+
+        <ng-container>
+          <h2 class="card-title">Tracing Info</h2>
+          <div class="flex flex-row">
+            <div *ngIf="tracing?.reverse" class="badge badge-lg badge-error mr-1">Reverse</div>
           </div>
-          <div class="stat">
-            <div class="stat-title">Commission Fee</div>
-            <div class="stat-value">1.23%</div>
-            <div class="stat-desc"></div>
+          <div class="stats stats-vertical md:stats-horizontal">
+            <div class="stat">
+              <div class="stat-title">Size Coefficient</div>
+              <div class="stat-value text-primary">
+                x {{ tracing?.size_coefficient || 0 | number }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Leverage Coefficient</div>
+              <div class="stat-value text-secondary">
+                x {{ tracing?.leverage_coefficient || 0 | number }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
           </div>
-          <div class="stat">
-            <div class="stat-title">Users</div>
-            <div class="stat-value text-primary">1024</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
+        </ng-container>
 
         <div class="card-actions justify-end">
-          <label for="trace-model" class="btn btn-primary px-8"> Subscribe </label>
-          <label for="untrace-model" class="btn btn-outline btn-error px-8"> Unsubscribe </label>
-          <label for="update-model" class="btn btn-info px-8"> Update </label>
-          <label for="delete-model" class="btn btn-outline btn-error px-8"> Delete </label>
+          <label
+            *ngIf="address !== exemplaryTraderAddress && !isTracing"
+            for="trace-model"
+            class="btn btn-primary w-full md:w-auto md:px-8"
+          >
+            Subscribe
+          </label>
+          <label
+            *ngIf="isTracing"
+            for="untrace-model"
+            class="btn btn-outline btn-error w-full md:w-auto md:px-8"
+          >
+            Unsubscribe
+          </label>
+          <label
+            *ngIf="address === exemplaryTraderAddress"
+            for="update-model"
+            class="btn btn-info w-full md:w-auto md:px-8"
+          >
+            Update
+          </label>
+          <label
+            *ngIf="address === exemplaryTraderAddress"
+            for="delete-model"
+            class="btn btn-outline btn-error w-full md:w-auto md:px-8"
+          >
+            Delete
+          </label>
         </div>
         <input type="checkbox" id="trace-model" class="modal-toggle" />
         <div class="modal modal-bottom sm:modal-middle">
           <div class="modal-box">
             <h3 class="font-bold text-lg">Are you sure to subscribe this Trader?</h3>
-            <form>
+            <form #createFormRef="ngForm" (submit)="onClickCreateTracing()">
               <div class="form-control mb-2">
                 <label class="label">
                   <span class="label-text">Enter Coefficient of Position Size</span>
                 </label>
                 <label class="input-group">
+                  <span>x</span>
                   <input
+                    required
                     type="number"
-                    name="rate"
+                    name="size"
                     [(ngModel)]="sizeCoef"
                     [min]="0"
-                    [max]="1000"
-                    [step]="1"
+                    [step]="0.1"
                     class="input input-bordered w-full"
                   />
-                  <span>%</span>
                 </label>
 
                 <input
                   type="range"
-                  min="0"
-                  max="1000"
+                  [min]="0"
+                  [max]="10"
+                  [step]="0.1"
                   [(ngModel)]="sizeCoef"
                   [ngClass]="{
-                    'range-info': sizeCoef <= 200,
-                    'range-warning': 200 < sizeCoef && sizeCoef < 1000,
-                    'range-error': 1000 <= sizeCoef
+                    'range-info': sizeCoef <= 2,
+                    'range-warning': 2 < sizeCoef && sizeCoef < 10,
+                    'range-error': 10 <= sizeCoef
                   }"
                   class="range mt-1"
-                  name="rate-slider"
+                  name="size-slider"
                 />
               </div>
               <div class="form-control">
@@ -100,31 +128,42 @@
                   <span class="label-text">Enter Coefficient of Leverage</span>
                 </label>
                 <label class="input-group">
+                  <span>x</span>
                   <input
                     placeholder="100"
                     type="number"
-                    name="rate"
+                    name="leverage"
                     [(ngModel)]="leverageCoef"
                     [min]="0"
-                    [max]="1000"
-                    [step]="1"
+                    [step]="0.1"
                     class="input input-bordered w-full"
                   />
-                  <span>%</span>
                 </label>
                 <input
                   type="range"
-                  min="0"
-                  max="10"
+                  [min]="0"
+                  [max]="10"
+                  [step]="0.1"
                   [(ngModel)]="leverageCoef"
                   [ngClass]="{
-                    'range-info': leverageCoef <= 200,
-                    'range-warning': 200 < leverageCoef && leverageCoef < 1000,
-                    'range-error': 1000 <= leverageCoef
+                    'range-info': leverageCoef <= 2,
+                    'range-warning': 2 < leverageCoef && leverageCoef < 10,
+                    'range-error': 10 <= leverageCoef
                   }"
                   class="range mt-1"
-                  name="rate-slider"
+                  name="leverage-slider"
                 />
+              </div>
+              <div class="form-control mt-4">
+                <label class="label"> <span class="label-text mr-2">Reverse</span></label>
+                <label class="input-group">
+                  <input
+                    type="checkbox"
+                    class="toggle toggle-error"
+                    name="reverse"
+                    [(ngModel)]="isReverse"
+                  />
+                </label>
               </div>
               <div class="modal-action">
                 <label for="trace-model" class="btn btn-outline">Cancel</label>
@@ -138,12 +177,10 @@
         <div class="modal modal-bottom sm:modal-middle">
           <div class="modal-box">
             <h3 class="font-bold text-lg">Are you sure to unsubscribe this Trader?</h3>
-            <form>
-              <div class="modal-action">
-                <label for="untrace-model" class="btn btn-outline">Cancel</label>
-                <button class="btn btn-error">Unsubscribe</button>
-              </div>
-            </form>
+            <div class="modal-action">
+              <label for="untrace-model" class="btn btn-outline">Cancel</label>
+              <button class="btn btn-error" (click)="onClickDeleteTracing()">Unsubscribe</button>
+            </div>
           </div>
         </div>
 
@@ -151,12 +188,10 @@
         <div class="modal modal-bottom sm:modal-middle">
           <div class="modal-box">
             <h3 class="font-bold text-lg">Are you sure to delete yor Exemplary trader?</h3>
-            <form>
-              <div class="modal-action">
-                <label for="delete-model" class="btn btn-outline">Cancel</label>
-                <button class="btn btn-error">Delete</button>
-              </div>
-            </form>
+            <div class="modal-action">
+              <label for="delete-model" class="btn btn-outline">Cancel</label>
+              <button class="btn btn-error" (click)="onClickDeleteTrader()">Delete</button>
+            </div>
           </div>
         </div>
 
@@ -166,12 +201,15 @@
             <h3 class="font-bold text-lg">
               Are you sure to update your Exemplary trader settings?
             </h3>
-            <form>
+            <form #updateFormRef="ngForm" (submit)="onClickUpdateTrader()">
               <div class="form-control">
                 <label class="label">
                   <span class="label-text">Enter New Description</span>
                 </label>
                 <textarea
+                  type="text"
+                  name="description"
+                  [(ngModel)]="description"
                   class="textarea textarea-bordered"
                   placeholder="Exemplary Trader Description"
                 ></textarea>
@@ -182,7 +220,9 @@
                 </label>
                 <label class="input-group">
                   <input
+                    required
                     type="number"
+                    placeholder="0.123456"
                     name="rate"
                     [(ngModel)]="newRate"
                     [min]="0"
@@ -204,7 +244,7 @@
                     'range-warning':
                       (commissionRate || 0) / 2 < (newRate || 0) &&
                       (newRate || 0) < (commissionRate || 0),
-                    'range-error': newRate === commissionRate
+                    'range-error': (commissionRate || 0) <= (newRate || 0)
                   }"
                   class="range mt-1"
                   name="rate-slider"

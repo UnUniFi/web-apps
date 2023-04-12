@@ -1,1 +1,6 @@
-<view-traders></view-traders>
+<view-traders
+  [address]="address$ | async"
+  [tracing]="tracing$ | async"
+  [exemplaryTraders]="exemplaryTraders$ | async"
+  [availableTracings]="availableTracings$ | async"
+></view-traders>

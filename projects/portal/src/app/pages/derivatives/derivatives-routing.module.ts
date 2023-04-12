@@ -25,6 +25,11 @@ const routes: Routes = [
         (m) => m.AppPerpetualFuturesModule,
       ),
   },
+  {
+    path: 'copy-trading',
+    loadChildren: () =>
+      import('../copy-trading/copy-trading.module').then((m) => m.AppCopyTradingModule),
+  },
 ];
 
 @NgModule({

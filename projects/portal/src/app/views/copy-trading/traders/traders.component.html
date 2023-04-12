@@ -12,14 +12,14 @@
             <div class="stat">
               <div class="stat-title">Size Coefficient</div>
               <div class="stat-value text-primary">
-                {{ tracing.size_coefficient | percent : '1.2-2' }}
+                x {{ tracing.size_coefficient || 0 | number }}
               </div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat">
               <div class="stat-title">Leverage Coefficient</div>
               <div class="stat-value text-info">
-                {{ tracing.leverage_coefficient | percent : '1.2-2' }}
+                x {{ tracing.leverage_coefficient || 0 | number }}
               </div>
               <div class="stat-desc"></div>
             </div>
@@ -47,10 +47,10 @@
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">Are you sure to unsubscribe this Trader?</h3>
-                <div class="modal-action">
-                  <label for="untrace-model" class="btn btn-outline">Cancel</label>
-                  <button class="btn btn-error" (click)="onClickDelete()">Unsubscribe</button>
-                </div>
+              <div class="modal-action">
+                <label for="untrace-model" class="btn btn-outline">Cancel</label>
+                <button class="btn btn-error" (click)="onClickDelete()">Unsubscribe</button>
+              </div>
             </div>
           </div>
         </div>
@@ -58,15 +58,15 @@
     </div>
   </ng-container>
 
-  <div class="flex flex-row flex-wrap">
+  <div class="flex flex-row flex-wrap mb-4">
     <h2>Exemplary Traders</h2>
     <span class="flex-auto"></span>
-    <button class="btn btn-outline btn-secondary px-8 mb-2 w-full xl:w-auto" routerLink="create">
+    <button class="btn btn-outline btn-secondary w-full md:w-auto md:px-8" routerLink="create">
       Become an Exemplary Trader
     </button>
   </div>
 
-  <ng-container *ngFor="let trader of exemplaryTraders">
+  <ng-container *ngFor="let trader of exemplaryTraders; let i = index">
     <div class="w-full md:w-auto mb-8">
       <div class="card bg-base-100 shadow-xl w-full">
         <div class="card-body">
@@ -74,13 +74,17 @@
           <div class="stats stats-vertical md:stats-horizontal">
             <div class="stat">
               <div class="stat-title">Commission Fee</div>
-              <div class="stat-value">{{ trader.profit_commission_rate | percent : '1.2-2' }}</div>
+              <div class="stat-value">
+                {{ trader.profit_commission_rate | percent : '1.2-2' }}
+              </div>
               <div class="stat-desc"></div>
             </div>
-            <div class="stat">
-              <div class="stat-title">Users</div>
-              <div class="stat-value text-primary">1024</div>
-              <div class="stat-desc"></div>
+            <div class="stat" *ngIf="userCounts">
+              <div class="stat-title"></div>
+              <div class="stat-value text-primary">
+                {{ userCounts[i] || 0 }}
+              </div>
+              <div class="stat-desc">Users</div>
             </div>
           </div>
 

@@ -14,7 +14,7 @@ export class TradersComponent implements OnInit {
   @Input() exemplaryTraders?: ExemplaryTraderAll200ResponseExemplaryTraderInner[] | null;
   @Input() tracing?: ExemplaryTraderTracing200ResponseTracingInner | null;
   @Input() tracingTrader?: ExemplaryTraderAll200ResponseExemplaryTraderInner | null;
-  @Input() availableTracings?: ExemplaryTraderTracing200ResponseTracingInner[] | null;
+  @Input() userCounts?: number[] | null;
   @Output() deleteTracing = new EventEmitter<{}>();
   constructor() {}
 

@@ -20,7 +20,7 @@ export class TradersComponent implements OnInit {
   exemplaryTraders$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner[]>;
   tracing$: Observable<ExemplaryTraderTracing200ResponseTracingInner>;
   tracingTrader$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner | undefined>;
-  availableTracings$: Observable<ExemplaryTraderTracing200ResponseTracingInner[]>;
+  userCounts$: Observable<number[]>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -36,10 +36,20 @@ export class TradersComponent implements OnInit {
       mergeMap((address) => this.copyTradingQuery.getTracing$(address)),
     );
     this.tracingTrader$ = combineLatest([this.tracing$, this.exemplaryTraders$]).pipe(
-      map(([tracing, traders]) => traders.find((trader) => trader.address == tracing.address)),
+      map(([tracing, traders]) =>
+        traders.find((trader) => trader.address == tracing.exemplary_trader),
+      ),
     );
 
-    this.availableTracings$ = this.copyTradingQuery.listAllTracings$();
+    const availableTracings$ = this.copyTradingQuery.listAllTracings$();
+    this.userCounts$ = combineLatest([this.exemplaryTraders$, availableTracings$]).pipe(
+      map(([traders, tracings]) =>
+        traders.map(
+          (trader) =>
+            tracings.filter((tracing) => tracing.exemplary_trader == trader.address).length,
+        ),
+      ),
+    );
   }
 
   ngOnInit(): void {}

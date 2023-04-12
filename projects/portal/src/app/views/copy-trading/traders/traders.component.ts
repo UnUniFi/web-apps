@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ExemplaryTraderAll200ResponseExemplaryTraderInner,
   ExemplaryTraderTracing200ResponseTracingInner,
@@ -11,11 +11,16 @@ import {
 })
 export class TradersComponent implements OnInit {
   @Input() address?: string | null;
-  @Input() tracing?: ExemplaryTraderTracing200ResponseTracingInner | null;
   @Input() exemplaryTraders?: ExemplaryTraderAll200ResponseExemplaryTraderInner[] | null;
+  @Input() tracing?: ExemplaryTraderTracing200ResponseTracingInner | null;
+  @Input() tracingTrader?: ExemplaryTraderAll200ResponseExemplaryTraderInner | null;
   @Input() availableTracings?: ExemplaryTraderTracing200ResponseTracingInner[] | null;
-
+  @Output() deleteTracing = new EventEmitter<{}>();
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClickDelete() {
+    this.deleteTracing.emit();
+  }
 }

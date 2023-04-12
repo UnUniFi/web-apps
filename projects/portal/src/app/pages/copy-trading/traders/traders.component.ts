@@ -3,7 +3,7 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   ExemplaryTraderAll200ResponseExemplaryTraderInner,
@@ -19,6 +19,7 @@ export class TradersComponent implements OnInit {
   address$: Observable<string>;
   exemplaryTraders$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner[]>;
   tracing$: Observable<ExemplaryTraderTracing200ResponseTracingInner>;
+  tracingTrader$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner | undefined>;
   availableTracings$: Observable<ExemplaryTraderTracing200ResponseTracingInner[]>;
 
   constructor(
@@ -30,12 +31,18 @@ export class TradersComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
+    this.exemplaryTraders$ = this.copyTradingQuery.listExemplaryTraders$();
     this.tracing$ = this.address$.pipe(
       mergeMap((address) => this.copyTradingQuery.getTracing$(address)),
     );
-    this.exemplaryTraders$ = this.copyTradingQuery.listExemplaryTraders$();
+    this.tracingTrader$ = combineLatest([this.tracing$, this.exemplaryTraders$]).pipe(
+      map(([tracing, traders]) => traders.find((trader) => trader.address == tracing.address)),
+    );
+
     this.availableTracings$ = this.copyTradingQuery.listAllTracings$();
   }
 
   ngOnInit(): void {}
+
+  onDeleteTracing() {}
 }

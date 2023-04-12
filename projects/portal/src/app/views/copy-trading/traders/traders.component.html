@@ -1,63 +1,64 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
+  <ng-container class="mb-4" *ngIf="tracing">
     <h2>Your Subscribing Trader</h2>
-  </div>
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#1</div>
-        </div>
-        <h2 class="card-title">UnUniFi Exemplary traders 1</h2>
-        <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat">
-            <div class="stat-title">Size Coefficient</div>
-            <div class="stat-value text-primary">10%</div>
-            <div class="stat-desc"></div>
+    <div class="w-full md:w-auto mb-8">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <div class="flex flex-row">
+            <div *ngIf="tracing.reverse" class="badge badge-lg badge-error mr-1">Reverse</div>
           </div>
-          <div class="stat">
-            <div class="stat-title">Leverage Coefficient</div>
-            <div class="stat-value text-info">100%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Current APY</div>
-            <div class="stat-value text-secondary">1.234%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Commission Fee</div>
-            <div class="stat-value">1.23%</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-
-        <div class="card-actions justify-end">
-          <button
-            routerLink="ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
-            class="btn btn-outline btn-info px-8"
-          >
-            View
-          </button>
-          <label for="untrace-model" class="btn btn-outline btn-error px-8"> Unsubscribe </label>
-        </div>
-        <input type="checkbox" id="untrace-model" class="modal-toggle" />
-        <div class="modal modal-bottom sm:modal-middle">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg">Are you sure to unsubscribe this Trader?</h3>
-            <form>
-              <div class="modal-action">
-                <label for="untrace-model" class="btn btn-outline">Cancel</label>
-                <button class="btn btn-error">Unsubscribe</button>
+          <h2 class="card-title">{{ tracingTrader?.name || tracing.address }}</h2>
+          <div class="stats stats-vertical md:stats-horizontal">
+            <div class="stat">
+              <div class="stat-title">Size Coefficient</div>
+              <div class="stat-value text-primary">
+                {{ tracing.size_coefficient | percent : '1.2-2' }}
               </div>
-            </form>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Leverage Coefficient</div>
+              <div class="stat-value text-info">
+                {{ tracing.leverage_coefficient | percent : '1.2-2' }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Commission Fee</div>
+              <div class="stat-value">
+                {{ tracingTrader?.profit_commission_rate | percent : '1.2-2' }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+          </div>
+
+          <div class="card-actions justify-end">
+            <button
+              routerLink="{{ tracing.address }}"
+              class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+            >
+              View
+            </button>
+            <label for="untrace-model" class="btn btn-outline btn-error w-full md:w-auto md:px-8">
+              Unsubscribe
+            </label>
+          </div>
+          <input type="checkbox" id="untrace-model" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Are you sure to unsubscribe this Trader?</h3>
+                <div class="modal-action">
+                  <label for="untrace-model" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-error" (click)="onClickDelete()">Unsubscribe</button>
+                </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 
-  <div class="flex flex-row flex-wrap mb-8">
+  <div class="flex flex-row flex-wrap">
     <h2>Exemplary Traders</h2>
     <span class="flex-auto"></span>
     <button class="btn btn-outline btn-secondary px-8 mb-2 w-full xl:w-auto" routerLink="create">
@@ -65,77 +66,34 @@
     </button>
   </div>
 
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#1</div>
-        </div>
-        <h2 class="card-title">UnUniFi Exemplary traders 1</h2>
-        <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat">
-            <div class="stat-title">Current APY</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
+  <ng-container *ngFor="let trader of exemplaryTraders">
+    <div class="w-full md:w-auto mb-8">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <h2 class="card-title">{{ trader.name }}</h2>
+          <div class="stats stats-vertical md:stats-horizontal">
+            <div class="stat">
+              <div class="stat-title">Commission Fee</div>
+              <div class="stat-value">{{ trader.profit_commission_rate | percent : '1.2-2' }}</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Users</div>
+              <div class="stat-value text-primary">1024</div>
+              <div class="stat-desc"></div>
+            </div>
           </div>
-          <div class="stat">
-            <div class="stat-title">Commission Fee</div>
-            <div class="stat-value">1.23%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Users</div>
-            <div class="stat-value text-primary">1024</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
 
-        <div class="card-actions justify-end">
-          <button
-            routerLink="ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
-            class="btn btn-outline btn-info px-8"
-          >
-            View
-          </button>
+          <div class="card-actions justify-end">
+            <button
+              routerLink="{{ trader.address }}"
+              class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+            >
+              View
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <div class="flex flex-row">
-          <div class="badge badge-lg badge-primary mr-1">#2</div>
-        </div>
-        <h2 class="card-title">UnUniFi Exemplary traders 2</h2>
-        <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat">
-            <div class="stat-title">Current APY</div>
-            <div class="stat-value text-secondary">10.23%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Commission Fee</div>
-            <div class="stat-value">1.23%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Users</div>
-            <div class="stat-value text-primary">24</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-
-        <div class="card-actions justify-end">
-          <button
-            routerLink="ununifi1v0h8j7x7kfys29kj4uwdudcc9y0nx6twwxahla"
-            class="btn btn-outline btn-info px-8"
-          >
-            View
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 </div>

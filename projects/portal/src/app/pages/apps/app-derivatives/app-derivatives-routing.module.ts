@@ -9,6 +9,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('../../derivatives/derivatives.module').then((m) => m.AppDerivativesModule),
   },
+  {
+    path: 'copy-trading',
+    component: AppDerivativesComponent,
+    loadChildren: () =>
+      import('../../copy-trading/copy-trading.module').then((m) => m.AppCopyTradingModule),
+  },
 ];
 
 @NgModule({

@@ -4,7 +4,7 @@ import { StoredWallet } from 'projects/shared/src/common';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   BidderBids200ResponseBidsInner,
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -20,7 +20,7 @@ export class LenderNftComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInner | null;
+  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()

@@ -1,0 +1,9 @@
+<view-traders
+  [address]="address$ | async"
+  [exemplaryTraders]="exemplaryTraders$ | async"
+  [myExemplaryTrader]="myExemplaryTrader$ | async"
+  [tracing]="tracing$ | async"
+  [tracingTrader]="tracingTrader$ | async"
+  [userCounts]="userCounts$ | async"
+  (deleteTracing)="onDeleteTracing()"
+></view-traders>

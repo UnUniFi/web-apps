@@ -1,0 +1,104 @@
+<div class="mx-auto max-w-screen-xl">
+  <ng-container class="mb-4" *ngIf="tracing">
+    <h2>Your Subscribing Trader</h2>
+    <div class="w-full md:w-auto mb-8">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <div class="flex flex-row">
+            <div *ngIf="tracing.reverse" class="badge badge-lg badge-error mr-1">Reverse</div>
+          </div>
+          <h2 class="card-title">{{ tracingTrader?.name || tracing.address }}</h2>
+          <div class="stats stats-vertical md:stats-horizontal">
+            <div class="stat">
+              <div class="stat-title">Size Coefficient</div>
+              <div class="stat-value text-primary">
+                x {{ tracing.size_coefficient || 0 | number }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Leverage Coefficient</div>
+              <div class="stat-value text-info">
+                x {{ tracing.leverage_coefficient || 0 | number }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Commission Fee</div>
+              <div class="stat-value">
+                {{ tracingTrader?.profit_commission_rate | percent : '1.2-2' }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+          </div>
+
+          <div class="card-actions justify-end">
+            <button
+              routerLink="{{ tracing.address }}"
+              class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+            >
+              View
+            </button>
+            <label for="untrace-model" class="btn btn-outline btn-error w-full md:w-auto md:px-8">
+              Unsubscribe
+            </label>
+          </div>
+          <input type="checkbox" id="untrace-model" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Are you sure to unsubscribe this Trader?</h3>
+              <div class="modal-action">
+                <label for="untrace-model" class="btn btn-outline">Cancel</label>
+                <button class="btn btn-error" (click)="onClickDelete()">Unsubscribe</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="flex flex-row flex-wrap mb-4">
+    <h2>Exemplary Traders</h2>
+    <span class="flex-auto"></span>
+    <button class="btn btn-outline btn-secondary w-full md:w-auto md:px-8" routerLink="create">
+      <span *ngIf="!myExemplaryTrader">Become an Exemplary Trader</span>
+      <span *ngIf="myExemplaryTrader">Manege your Exemplary Trader</span>
+    </button>
+  </div>
+
+  <ng-container *ngFor="let trader of exemplaryTraders; let i = index">
+    <div class="w-full md:w-auto mb-8">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <h2 class="card-title">{{ trader.name }}</h2>
+          <div class="stats stats-vertical md:stats-horizontal">
+            <div class="stat">
+              <div class="stat-title">Commission Fee</div>
+              <div class="stat-value">
+                {{ trader.profit_commission_rate | percent : '1.2-2' }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat" *ngIf="userCounts">
+              <div class="stat-title"></div>
+              <div class="stat-value text-primary">
+                {{ userCounts[i] || 0 }}
+              </div>
+              <div class="stat-desc">Users</div>
+            </div>
+          </div>
+
+          <div class="card-actions justify-end">
+            <button
+              routerLink="{{ trader.address }}"
+              class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+            >
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

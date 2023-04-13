@@ -8,12 +8,11 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { rewards } from 'ununifi-client/cjs/rest/nftmarket/module';
 import {
-  ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
   Liquidation200ResponseLiquidations,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -24,7 +23,7 @@ import {
 export class RepayComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loans$: Observable<Loans200ResponseLoansInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
@@ -52,7 +51,9 @@ export class RepayComponent implements OnInit {
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!)),
+        bidders.sort(
+          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
+        ),
       ),
     );
     this.loans$ = nftCombine$.pipe(

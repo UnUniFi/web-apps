@@ -1,0 +1,10 @@
+<view-create
+  [address]="address$ | async"
+  [myExemplaryTrader]="myExemplaryTrader$ | async"
+  [traderName]="traderName$ | async"
+  [traderDescription]="traderDescription$ | async"
+  [commissionRate]="commissionRate$ | async"
+  [newCommissionRate]="commissionRate$ | async"
+  (createExemplaryTrader)="onCreateTrader($event)"
+  (updateExemplaryTrader)="onUpdateTrader($event)"
+></view-create>

@@ -2,9 +2,8 @@ import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
-import { AccAddress } from '@cosmos-client/core/cjs/types';
-import { Observable, zip } from 'rxjs';
-import { filter, map, mergeMap, pluck } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 import {
   AllPositions200ResponsePositionsInner,

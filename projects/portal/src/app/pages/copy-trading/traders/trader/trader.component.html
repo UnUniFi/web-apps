@@ -1,0 +1,15 @@
+<view-trader
+  [address]="address$ | async"
+  [exemplaryTraderAddress]="exemplaryTraderAddress$ | async"
+  [trader]="trader$ | async"
+  [tracing]="tracing$ | async"
+  [isTracing]="isTracing$ | async"
+  [userCount]="userCount$ | async"
+  [commissionRate]="commissionRate$ | async"
+  [newCommissionRate]="commissionRate$ | async"
+  [description]="description$ | async"
+  (createTracing)="onCreateTracing($event)"
+  (deleteTracing)="onDeleteTracing()"
+  (updateTrader)="onUpdateTrader($event)"
+  (deleteTrader)="onDeleteTrader()"
+></view-trader>

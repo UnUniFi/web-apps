@@ -1,0 +1,96 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <h2 *ngIf="!myExemplaryTrader">Become an Exemplary Trader</h2>
+    <h2 *ngIf="myExemplaryTrader">Manage your Exemplary Trader</h2>
+  </div>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Exemplary traders Settings</h2>
+        <form #formRef="ngForm" (submit)="onClickButton()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Address</span>
+            </label>
+            <input
+              type="text"
+              name="address"
+              [(ngModel)]="address"
+              disabled
+              class="input input-bordered"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Trader Name</span>
+            </label>
+            <input
+              required
+              type="text"
+              name="name"
+              [(ngModel)]="traderName"
+              placeholder="Enter a unique name"
+              class="input input-bordered"
+              [disabled]="!!myExemplaryTrader"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Description</span>
+            </label>
+            <textarea
+              required
+              type="text"
+              name="description"
+              [(ngModel)]="traderDescription"
+              class="textarea textarea-bordered"
+              placeholder="Enter a description"
+            ></textarea>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter New Commission Rate</span>
+            </label>
+            <label class="input-group">
+              <input
+                required
+                type="number"
+                name="rate"
+                [(ngModel)]="newCommissionRate"
+                [min]="0"
+                [max]="commissionRate || 100"
+                [step]="0.1"
+                placeholder="e.g. 1.123456"
+                class="input input-bordered w-full"
+              />
+              <span>%</span>
+            </label>
+
+            <input
+              placeholder="1"
+              type="range"
+              min="0"
+              max="10"
+              [(ngModel)]="newCommissionRate"
+              [ngClass]="{
+                'range-info': !newCommissionRate || newCommissionRate < 5,
+                'range-warning':
+                  newCommissionRate && 5 <= newCommissionRate && newCommissionRate < 10,
+                'range-error': newCommissionRate && 10 <= newCommissionRate
+              }"
+              class="range mt-1"
+              name="rate-slider"
+            />
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+              <span *ngIf="!myExemplaryTrader">Register</span>
+              <span *ngIf="myExemplaryTrader">Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

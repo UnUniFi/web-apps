@@ -182,7 +182,7 @@
                 [(ngModel)]="size"
                 name="position-size"
                 type="number"
-                placeholder="10"
+                placeholder="e.g. 12.123456"
                 class="input input-bordered input-info w-full"
                 [class]="{ 'input-error': sizeNgModelRef.errors && sizeNgModelRef.touched }"
                 [min]="0"
@@ -225,7 +225,6 @@
               <input
                 #leverageNgModelRef="ngModel"
                 type="number"
-                placeholder="10"
                 class="input input-bordered w-full"
                 [class]="{ 'input-error': leverageNgModelRef.errors && leverageNgModelRef.touched }"
                 [min]="1"
@@ -290,7 +289,7 @@
                 #marginAmountNgModelRef="ngModel"
                 required
                 type="number"
-                placeholder="10"
+                placeholder="e.g. 12.123456"
                 class="input input-bordered w-full"
                 [class]="{
                   'input-error': marginAmountNgModelRef.errors && marginAmountNgModelRef.touched

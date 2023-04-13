@@ -65,7 +65,9 @@ export class NftsComponent implements OnInit {
     this.state$ = this.route.queryParams.pipe(map((params) => params.state));
     this.date$ = this.route.queryParams.pipe(map((params) => params.date));
     this.time$ = this.route.queryParams.pipe(map((params) => params.time));
-    this.isSearchBoxOpened$ = this.route.queryParams.pipe(map((params) => !!params));
+    this.isSearchBoxOpened$ = this.route.queryParams.pipe(
+      map((params) => params.keyword || params.state || params.date || params.time),
+    );
     const uris$ = this.listedNfts$.pipe(map((nfts) => nfts.map((nft) => nft.nft_info?.uri)));
     this.nftsMetadata$ = uris$.pipe(
       mergeMap((uris) =>

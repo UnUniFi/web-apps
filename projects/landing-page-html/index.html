@@ -246,6 +246,72 @@
     }
   </script>
 
+  <div id="disclaimer-popup" class="popup">
+    <div class="popup-content">
+      <h2 class="font-bold text-lg">Disclaimer</h2>
+      <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
+        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site. Please
+        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions in
+        their entirety.</p>
+      <p class="mt-2">I hereby confirm that by accessing the whitepaper and other informational materials, I will be
+        deemed to have
+        reviewed and accepted certain terms therein, including confirmations that I am not based in a jurisdiction where
+        such access would be prohibited or restricted in any manner.</p>
+
+      <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
+      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
+        cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
+        your non-essential cookies using the Cookie Settings on your browser.</p>
+      <div class="popup-buttons">
+        <button id="popup-accept" class="btn d-block btnLaunch mr-4">ACCEPT</button>
+        <button id="popup-reject" class="btn">REJECT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ポップアップの表示スクリプト -->
+  <script>
+    window.onload = function () {
+      // Cookieが設定されていなければポップアップを表示
+      if (!getCookie('disclaimer_accepted')) {
+        document.getElementById('disclaimer-popup').style.display = 'block';
+      }
+    };
+
+    // 同意ボタンを押したらCookieを設定してポップアップを非表示
+    document.getElementById('popup-accept').addEventListener('click', function () {
+      setCookie('disclaimer_accepted', true, 365);
+      document.getElementById('disclaimer-popup').style.display = 'none';
+    });
+
+    // 拒否ボタンを押したらページ遷移
+    document.getElementById('popup-reject').addEventListener('click', function () {
+      location.href = 'https://twitter.com/ununifi'; // 拒否時に遷移するURLを指定
+    });
+
+    // Cookieを設定する関数
+    function setCookie(name, value, days) {
+      var expires = '';
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+      }
+      document.cookie = name + '=' + (value || '') + expires + '; path=/';
+    }
+
+    // Cookieを取得する関数
+    function getCookie(name) {
+      var nameEQ = name + '=';
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+  </script>
 </body>
 
 </html>

@@ -29,7 +29,7 @@
         <input
           name="gas-ratio"
           type="number"
-          placeholder="Type here"
+          placeholder="e.g. 1.1"
           class="input input-bordered input-sm w-full"
           [(ngModel)]="gasRatio"
           required
@@ -88,7 +88,7 @@
                 #minimumGasPriceRef
                 name="minimum-gas-price"
                 type="number"
-                placeholder="Type here"
+                placeholder="e.g 0.123456"
                 class="input input-bordered input-sm"
                 [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
                 [min]="0"

@@ -1,0 +1,17 @@
+<view-nft
+  [address]="address$ | async"
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [bids]="bids$ | async"
+  [ownBid]="ownBid$ | async"
+  [loan]="loan$ | async"
+  [liquidation]="liquidation$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  [isWinning]="isWinning$ | async"
+  (appSubmitCancelBid)="onSubmitCancelBid($event)"
+  (appSubmitPayFullBid)="onSubmitPayFullBid($event)"
+  (appSubmitCancelListing)="onSubmitCancelListing($event)"
+  (appSubmitSell)="onSubmitSell($event)"
+></view-nft>

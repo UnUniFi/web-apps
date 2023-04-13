@@ -21,6 +21,7 @@ export class TraderComponent implements OnInit {
   @Input() isTracing?: boolean | null;
   @Input() userCount?: number | null;
   @Input() commissionRate?: number | null;
+  @Input() newCommissionRate?: number | null;
   @Input() description?: string | null;
   @Output() createTracing = new EventEmitter<CreateTracingRequest>();
   @Output() deleteTracing = new EventEmitter<{}>();
@@ -30,7 +31,6 @@ export class TraderComponent implements OnInit {
   sizeCoef: number = 1;
   leverageCoef: number = 1;
   isReverse: boolean = false;
-  newRate?: number;
 
   constructor() {}
 
@@ -53,13 +53,13 @@ export class TraderComponent implements OnInit {
   }
 
   onClickUpdateTrader() {
-    if (this.newRate === undefined) {
+    if (this.newCommissionRate === undefined || this.newCommissionRate === null) {
       return;
     }
     this.updateTrader.emit({
       name: this.trader?.name || '',
       description: this.description || '',
-      profitCommissionRate: this.newRate,
+      profitCommissionRate: this.newCommissionRate,
     });
   }
 

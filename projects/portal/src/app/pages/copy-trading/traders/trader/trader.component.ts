@@ -4,6 +4,11 @@ import { WalletService } from '../../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { CopyTradingApplicationService } from 'projects/portal/src/app/models/copy-trading/copy-trading.application.service';
+import {
+  CreateTracingRequest,
+  UpdateExemplaryTraderRequest,
+} from 'projects/portal/src/app/models/copy-trading/copy-trading.model';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -30,6 +35,7 @@ export class TraderComponent implements OnInit {
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
     private readonly copyTradingQuery: CopyTradingQueryService,
+    private readonly copyTradingApplication: CopyTradingApplicationService,
   ) {
     const currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.address$ = currentStoredWallet$.pipe(
@@ -62,4 +68,29 @@ export class TraderComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onCreateTracing(data: CreateTracingRequest) {
+    this.copyTradingApplication.createTracing(
+      data.exemplaryTrader,
+      data.sizeCoef,
+      data.leverageCoef,
+      data.reverse,
+    );
+  }
+
+  onDeleteTracing() {
+    this.copyTradingApplication.deleteTracing();
+  }
+
+  onUpdateTrader(data: UpdateExemplaryTraderRequest) {
+    this.copyTradingApplication.updateExemplaryTrader(
+      data.name,
+      data.description,
+      data.profitCommissionRate,
+    );
+  }
+
+  onDeleteTrader() {
+    this.copyTradingApplication.deleteExemplaryTrader();
+  }
 }

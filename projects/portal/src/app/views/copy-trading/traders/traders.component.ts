@@ -12,6 +12,7 @@ import {
 export class TradersComponent implements OnInit {
   @Input() address?: string | null;
   @Input() exemplaryTraders?: ExemplaryTraderAll200ResponseExemplaryTraderInner[] | null;
+  @Input() myExemplaryTrader?: ExemplaryTraderAll200ResponseExemplaryTraderInner | null;
   @Input() tracing?: ExemplaryTraderTracing200ResponseTracingInner | null;
   @Input() tracingTrader?: ExemplaryTraderAll200ResponseExemplaryTraderInner | null;
   @Input() userCounts?: number[] | null;

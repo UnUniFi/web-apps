@@ -1,3 +1,4 @@
+import { CopyTradingApplicationService } from '../../../models/copy-trading/copy-trading.application.service';
 import { CopyTradingQueryService } from '../../../models/copy-trading/copy-trading.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -18,6 +19,7 @@ import {
 export class TradersComponent implements OnInit {
   address$: Observable<string>;
   exemplaryTraders$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner[]>;
+  myExemplaryTrader$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner | undefined>;
   tracing$: Observable<ExemplaryTraderTracing200ResponseTracingInner>;
   tracingTrader$: Observable<ExemplaryTraderAll200ResponseExemplaryTraderInner | undefined>;
   userCounts$: Observable<number[]>;
@@ -25,6 +27,7 @@ export class TradersComponent implements OnInit {
   constructor(
     private readonly walletService: WalletService,
     private readonly copyTradingQuery: CopyTradingQueryService,
+    private readonly copyTradingApplication: CopyTradingApplicationService,
   ) {
     const currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.address$ = currentStoredWallet$.pipe(
@@ -32,6 +35,9 @@ export class TradersComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
     );
     this.exemplaryTraders$ = this.copyTradingQuery.listExemplaryTraders$();
+    this.myExemplaryTrader$ = combineLatest([this.address$, this.exemplaryTraders$]).pipe(
+      map(([address, traders]) => traders.find((trader) => trader.address == address)),
+    );
     this.tracing$ = this.address$.pipe(
       mergeMap((address) => this.copyTradingQuery.getTracing$(address)),
     );
@@ -54,5 +60,7 @@ export class TradersComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onDeleteTracing() {}
+  onDeleteTracing() {
+    this.copyTradingApplication.deleteTracing();
+  }
 }

@@ -6,5 +6,10 @@
   [isTracing]="isTracing$ | async"
   [userCount]="userCount$ | async"
   [commissionRate]="commissionRate$ | async"
+  [newCommissionRate]="commissionRate$ | async"
   [description]="description$ | async"
+  (createTracing)="onCreateTracing($event)"
+  (deleteTracing)="onDeleteTracing()"
+  (updateTrader)="onUpdateTrader($event)"
+  (deleteTrader)="onDeleteTrader()"
 ></view-trader>

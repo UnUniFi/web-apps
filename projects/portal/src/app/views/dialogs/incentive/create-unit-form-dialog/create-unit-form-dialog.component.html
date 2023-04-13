@@ -28,16 +28,19 @@
       <div class="flex flex-col content-content lg:flex-row">
         <div class="form-control flex-auto">
           <label class="label">
-            <span class="label-text">Distribution Rate (%)</span>
+            <span class="label-text">Distribution Rate</span>
           </label>
-          <input
-            name="dist-rate"
-            type="number"
-            placeholder="Type here"
-            class="input input-bordered input-sm w-full"
-            [(ngModel)]="firstRecipient.distRate"
-            required
-          />
+          <label class="input-group">
+            <input
+              name="dist-rate"
+              type="number"
+              placeholder="e.g. 12.123456"
+              class="input input-bordered input-sm w-full"
+              [(ngModel)]="firstRecipient.distRate"
+              required
+            />
+            <span>%</span>
+          </label>
         </div>
         <div class="form-control flex-auto">
           <label class="label">
@@ -63,14 +66,17 @@
           <!-- <label class="label">
           <span class="label-text label-sm">Distribution Rate (%)</span>
         </label> -->
-          <input
-            name="dist-rate"
-            type="number"
-            placeholder="Type here"
-            class="input input-bordered input-sm w-full"
-            [(ngModel)]="firstRecipient.distRate"
-            required
-          />
+          <label class="input-group">
+            <input
+              name="dist-rate"
+              type="number"
+              placeholder="e.g. 12.123456"
+              class="input input-bordered input-sm w-full"
+              [(ngModel)]="firstRecipient.distRate"
+              required
+            />
+            <span>%</span>
+          </label>
         </div>
         <div class="form-control flex-auto">
           <!-- <label class="label">
@@ -103,7 +109,7 @@
         <input
           name="gas-ratio"
           type="number"
-          placeholder="Type here"
+          placeholder="e.g. 1.1"
           class="input input-bordered input-sm w-full"
           [(ngModel)]="gasRatio"
           required
@@ -163,7 +169,7 @@
                 #minimumGasPriceRef
                 name="minimum-gas-price"
                 type="number"
-                placeholder="Type here"
+                placeholder="e.g. 0.123456"
                 class="input input-bordered input-sm"
                 [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
                 [min]="0"

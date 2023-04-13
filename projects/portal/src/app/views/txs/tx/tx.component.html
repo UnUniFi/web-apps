@@ -73,13 +73,13 @@
         <mat-list-item>
           <span class="whitespace-nowrap">Public Key: </span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ pubKey?.toString() }}</span>
+          <span class="ml-2 break-all">{{ pubKey | json }}</span>
           <mat-divider></mat-divider>
         </mat-list-item>
         <mat-list-item>
           <span class="whitespace-nowrap">Signature: </span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ signerInfo?.mode_info }}</span>
+          <span class="ml-2 break-all">{{ signerInfo?.mode_info | json }}</span>
         </mat-list-item>
       </mat-list>
     </mat-card>

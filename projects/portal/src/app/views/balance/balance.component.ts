@@ -1,12 +1,8 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import cosmosclient from '@cosmos-client/core';
-import {
-  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  GetNodeInfo200Response,
-} from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-balance',
@@ -20,9 +16,9 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input() balanceSymbols?: string[] | null;
-  @Input() rewards?: CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse | null;
+  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input() symbolRewardsMap?: { [symbol: string]: number } | null;
+  @Input() faucetSymbols?: string[] | null;
   @Input() faucets?:
     | {
         hasFaucet: boolean;
@@ -32,9 +28,7 @@ export class ViewBalanceComponent implements OnInit {
         maxCredit: number;
       }[]
     | null;
-  @Input() faucetSymbols?: string[] | null;
   @Input() nodeInfo?: GetNodeInfo200Response | null;
-  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {

@@ -1,5 +1,7 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as crypto from 'crypto';
 
 @Component({
@@ -10,11 +12,16 @@ import * as crypto from 'crypto';
 export class WalletToolComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
+  @Input()
+  symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output()
   appConnectWallet: EventEmitter<{}>;
+  @Output()
+  appDisconnectWallet: EventEmitter<{}>;
 
-  constructor() {
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
     this.appConnectWallet = new EventEmitter();
+    this.appDisconnectWallet = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -28,7 +35,21 @@ export class WalletToolComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
+  copyClipboard(value: string) {
+    if (value.length > 0) {
+      this.clipboard.copy(value);
+      this.snackBar.open('Copied to clipboard', undefined, {
+        duration: 3000,
+      });
+    }
+    return false;
+  }
+
   onConnectWallet($event: {}) {
     this.appConnectWallet.emit($event);
+  }
+
+  onDisconnectWallet($event: {}) {
+    this.appDisconnectWallet.emit($event);
   }
 }

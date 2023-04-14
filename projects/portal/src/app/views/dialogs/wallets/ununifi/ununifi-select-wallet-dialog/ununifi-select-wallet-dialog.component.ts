@@ -54,4 +54,8 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
   onClickWallet(storedWallet: StoredWallet): void {
     this.dialogRef.close(storedWallet);
   }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 }

@@ -43,4 +43,8 @@ export class ConnectWalletStartDialogComponent implements OnInit {
   onClickButton(walletType: WalletType): void {
     this.dialogRef.close(walletType);
   }
+
+  onClickClose() {
+    this.dialogRef.close();
+  }
 }

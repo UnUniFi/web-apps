@@ -19,6 +19,8 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
   saved: boolean = false;
   checked: boolean = false;
   inputMnemonic: string = '';
+  step: number = 0;
+  steps: String[] = ['Save your mnemonic', 'Check', 'Next'];
 
   now = new Date();
   sec = this.now.getSeconds();
@@ -115,5 +117,21 @@ export class UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent implements 
       this.checked = false;
       this.snackBar.open('Wrong mnemonic!', 'Close');
     }
+  }
+
+  next(): void {
+    if (this.steps.length - 1 > this.step) {
+      this.step++;
+    } else {
+      this.onClickSubmit();
+    }
+  }
+
+  back(): void {
+    this.step--;
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

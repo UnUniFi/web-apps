@@ -1,7 +1,5 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
-    <h2>NFT Mint (Only Testnet)</h2>
-  </div>
+  <h2>NFT Mint (Only Testnet)</h2>
 
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
@@ -28,20 +26,18 @@
             <label class="label">
               <span class="label-text">NFT Class (Collection)</span>
             </label>
-            <label class="input-group">
-              <select
-                #classRef
-                required
-                [(ngModel)]="selectedClass"
-                name="nftClass"
-                class="select select-bordered w-full"
-              >
-                <option disabled>Crypto Punks (Example)</option>
-                <ng-container *ngFor="let nftClass of classes">
-                  <option [value]="nftClass">{{ nftClass }}</option>
-                </ng-container>
-              </select>
-            </label>
+            <select
+              #classRef
+              required
+              [(ngModel)]="selectedClass"
+              name="nftClass"
+              class="select select-bordered w-full"
+            >
+              <option disabled>Crypto Punks (Example)</option>
+              <ng-container *ngFor="let nftClass of classes">
+                <option [value]="nftClass">{{ nftClass }}</option>
+              </ng-container>
+            </select>
           </div>
           <div class="form-control">
             <label class="label">
@@ -59,7 +55,9 @@
             </label>
           </div>
           <div class="modal-action">
-            <button class="btn btn-primary" [disabled]="formRef.invalid">Mint</button>
+            <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+              Mint a test NFT
+            </button>
           </div>
         </form>
       </div>

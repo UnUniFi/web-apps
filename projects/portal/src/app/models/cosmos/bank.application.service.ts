@@ -7,7 +7,9 @@ import {
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletService } from '../wallets/wallet.service';
+import { BankQueryService } from './bank.query.service';
 import { BankService } from './bank.service';
+import { TxCommonApplicationService } from './tx-common.application.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -29,8 +31,60 @@ export class BankApplicationService {
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly walletService: WalletService,
+    private readonly bankQueryService: BankQueryService,
     private readonly txCommon: TxCommonService,
+    private readonly txCommonApplication: TxCommonApplicationService,
   ) {}
+  async bankSend(toAddress: string, symbolAmounts: { symbol: string; amount: number }[]) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
+
+    const msg = this.bank.buildMsgBankSend(address, toAddress, symbolAmounts, symbolMetadataMap);
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent token, please check your balance.' },
+        })
+        .closed.toPromise();
+      location.reload();
+    }
+  }
 
   async send(
     toAddress: string,

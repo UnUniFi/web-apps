@@ -1,57 +1,76 @@
-<div>
-  <div class="flex flex-col items-center">
-    <img class="w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Delegate Menu</div>
-    <mat-list class="w-full">
-      <mat-label>Validator</mat-label>
-      <mat-list-item>
-        <mat-icon
-          matListIcon
-          [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
-        >
-          circle
-        </mat-icon>
-        <div mat-line>
-          <span>{{ selectedValidator?.description?.moniker }}</span>
-        </div>
-      </mat-list-item>
-      <mat-list-item>
-        <span class="column-name">Address</span>
-        <span class="flex-auto w-1/4"></span>
-        <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
-      </mat-list-item>
-      <mat-list-item>
-        <span class="column-name">Commission</span>
-        <span class="flex-auto"></span>
-        <span class="column-value">{{
-          selectedValidator?.commission?.commission_rates?.rate | percent
-        }}</span>
-      </mat-list-item>
-    </mat-list>
-    <ng-container *ngIf="selectedValidator?.description?.website; then existURL; else emptyURL">
-    </ng-container>
-    <ng-template #existURL>
-      <mat-nav-list class="w-full">
-        <a href="{{ selectedValidator?.description?.website }}" target="_blank">
-          <mat-list-item>
-            <span class="column-name"> Website </span>
-            <span class="flex-auto"></span>
-            <span class="column-value">{{ selectedValidator?.description?.website }}</span>
-          </mat-list-item>
-        </a>
-      </mat-nav-list>
-    </ng-template>
-    <ng-template #emptyURL> </ng-template>
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Delegate Menu</div>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Validator</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              <span
+                class="material-icons"
+                [style]="{ color: getColorCode(selectedValidator?.operator_address!) }"
+              >
+                circle
+              </span>
+              {{ selectedValidator?.description?.moniker }}
+            </a>
+          </li>
+          <li class="disabled">
+            <a class="text-base-content">
+              <span class="column-name">Address</span>
+              <span class="flex-auto w-1/4"></span>
+              <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
+            </a>
+          </li>
+          <li class="disabled">
+            <a class="text-base-content">
+              <span class="column-name">Commission</span>
+              <span class="flex-auto"></span>
+              <span class="column-value">{{
+                selectedValidator?.commission?.commission_rates?.rate | percent
+              }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <ng-container *ngIf="selectedValidator?.description?.website; then existURL; else emptyURL">
+      </ng-container>
+      <ng-template #existURL>
+        <ul class="menu bg-base-100 w-full">
+          <li>
+            <a
+              class="items-center"
+              href="{{ selectedValidator?.description?.website }}"
+              target="_blank"
+            >
+              <span class="column-name"> Website </span>
+              <span class="flex-auto"></span>
+              <span class="column-value">{{ selectedValidator?.description?.website }}</span>
+            </a>
+          </li>
+        </ul>
+      </ng-template>
+      <ng-template #emptyURL> </ng-template>
 
-    <ng-container *ngIf="isDelegated">
-      <mat-list class="w-full">
-        <mat-list-item>
-          <span class="column-name">Delegated Amount</span>
-          <span class="flex-auto"></span>
-          <span class="column-value">{{ delegateAmount | coin }}</span>
-        </mat-list-item>
-      </mat-list>
-      <mat-list class="w-full">
+      <ng-container *ngIf="isDelegated">
+        <ul class="menu bg-base-100 w-full">
+          <li class="disabled">
+            <a class="text-base-content">
+              <span class="column-name">Delegated Amount</span>
+              <span class="flex-auto"></span>
+              <span class="column-value">{{ delegateAmount | coin }}</span>
+            </a>
+          </li>
+        </ul>
         <ng-container
           *ngIf="
             (totalRewards?.total?.length || 0) > 0;
@@ -61,24 +80,30 @@
         >
         </ng-container>
         <ng-template #emptyTotalRewards>
-          <mat-list-item>
-            <span class="column-name">Claimable Delegator Reward</span>
-            <span class="flex-auto"></span>
-            <span>*This account has no claimable delegator reward</span>
-          </mat-list-item>
+          <ul class="menu bg-base-100 w-full">
+            <li class="disabled">
+              <a class="text-base-content">
+                <span class="column-name">Claimable Delegator Reward</span>
+                <span class="flex-auto"></span>
+                <span>*This account has no claimable delegator reward</span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
         <ng-template #existTotalRewards>
-          <mat-list-item *ngFor="let eachTotalReward of totalRewards?.total; last as last">
-            <span class="column-name">Claimable Delegator Reward</span>
-            <span class="flex-auto"></span>
-            <span>{{ eachTotalReward | coin }}</span>
-          </mat-list-item>
+          <ul class="menu bg-base-100 w-full">
+            <li class="disabled" *ngFor="let eachTotalReward of totalRewards?.total; last as last">
+              <a class="text-base-content">
+                <span class="column-name">Claimable Delegator Reward</span>
+                <span class="flex-auto"></span>
+                <span>{{ eachTotalReward | coin }}</span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
-      </mat-list>
-    </ng-container>
+      </ng-container>
 
-    <ng-container *ngIf="isValidator">
-      <mat-list class="w-full">
+      <ng-container *ngIf="isValidator">
         <ng-container
           *ngIf="
             (commission?.commission?.commission?.length || 0) > 0;
@@ -88,59 +113,85 @@
         >
         </ng-container>
         <ng-template #emptyCommission>
-          <mat-list-item>
-            <span class="column-name">Claimable Validator Commission</span>
-            <span class="flex-auto"></span>
-            <span>*This account has no commission</span>
-          </mat-list-item>
+          <ul class="menu bg-base-100 w-full">
+            <li class="disabled">
+              <a class="text-base-content">
+                <span class="column-name">Claimable Validator Commission</span>
+                <span class="flex-auto"></span>
+                <span>*This account has no commission</span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
         <ng-template #existCommission>
-          <mat-list-item
-            *ngFor="let commission of commission?.commission?.commission; last as last"
-          >
-            <span class="column-name">Claimable Validator Commission</span>
-            <span class="flex-auto"></span>
-            <span>{{ commission | coin }}</span>
-          </mat-list-item>
+          <ul class="menu bg-base-100 w-full">
+            <li
+              class="disabled"
+              *ngFor="let commission of commission?.commission?.commission; last as last"
+            >
+              <a class="text-base-content">
+                <span class="column-name">Claimable Validator Commission</span>
+                <span class="flex-auto"></span>
+                <span>{{ commission | coin }}</span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
-      </mat-list>
-    </ng-container>
-  </div>
+      </ng-container>
+    </div>
 
-  <div class="flex flex-col md:flex-row justify-start">
-    <button mat-stroked-button color="primary" class="px-4 m-2" (click)="onClickDetailButton()">
-      <span>More information</span>
-    </button>
-    <button mat-flat-button color="primary" class="px-4 m-2" (click)="onClickDelegateButton()">
-      <span>Delegate to this validator</span>
-    </button>
-  </div>
-  <div class="flex flex-col md:flex-row justify-start">
-    <ng-container *ngIf="isDelegated">
-      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickRedelegateButton()">
-        <span>Redelegate to another validator</span>
-      </button>
-      <button mat-flat-button color="accent" class="px-4 m-2" (click)="onClickUndelegateButton()">
-        <span>Undelegate from this validator</span>
-      </button>
+    <div class="flex flex-row flex-wrap justify-end">
       <button
-        mat-flat-button
-        color="primary"
-        class="px-4 m-3"
+        class="btn btn-info btn-outline w-full md:w-auto md:px-8 m-1"
+        (click)="onClickDetailButton()"
+      >
+        <mat-icon class="mr-2">info</mat-icon>
+        <span>More info</span>
+      </button>
+
+      <button
+        class="btn btn-secondary btn-outline w-full md:w-auto md:px-8 m-1"
+        (click)="onClickDelegateButton()"
+      >
+        <mat-icon class="mr-2">how_to_vote</mat-icon>
+        <span>Delegate</span>
+      </button>
+
+      <button
+        class="btn btn-primary btn-outline w-full md:w-auto md:px-8 m-1"
+        *ngIf="isDelegated"
+        (click)="onClickRedelegateButton()"
+      >
+        <mat-icon class="mr-2">picture_in_picture_alt</mat-icon>
+        <span>Redelegate</span>
+      </button>
+
+      <button
+        class="btn btn-error btn-outline w-full md:w-auto md:px-8 m-1"
+        *ngIf="isDelegated"
+        (click)="onClickUndelegateButton()"
+      >
+        <mat-icon class="mr-2">delete_sweep</mat-icon>
+        <span>Undelegate</span>
+      </button>
+
+      <button
+        class="btn btn-primary w-full md:w-auto md:px-8 m-1"
+        *ngIf="isDelegated"
         (click)="onClickWithdrawDelegatorRewardButton()"
       >
+        <mat-icon class="mr-2">attach_money</mat-icon>
         <span>Claim delegator reward</span>
       </button>
-    </ng-container>
+
+      <button
+        class="btn btn-secondary w-full md:w-auto md:px-8 m-1"
+        *ngIf="isValidator"
+        (click)="onClickWithdrawValidatorCommissionButton()"
+      >
+        <mat-icon class="mr-2">monetization_on</mat-icon>
+        <span>Claim validator commission</span>
+      </button>
+    </div>
   </div>
-  <ng-container *ngIf="isValidator">
-    <button
-      mat-flat-button
-      color="primary"
-      class="px-4 m-3"
-      (click)="onClickWithdrawValidatorCommissionButton()"
-    >
-      <span>Claim validator commission</span>
-    </button>
-  </ng-container>
 </div>

@@ -5,6 +5,7 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 
 // To Do write chain config
 const domainCauchyEA = 'ununifi-iya-poc-v1.cauchye.net';
@@ -120,7 +121,7 @@ const configs = [
       },
       developer: {
         enabled: true,
-        developerURL: `http://${domainCauchyEA}:3030`,
+        developerURL: `http://${domainCauchyEA}:${developerPort}`,
       },
       navigations: [],
       messageModules,

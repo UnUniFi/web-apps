@@ -2,14 +2,8 @@
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
-        <h2 class="card-title break-all flex flex-col md:flex-row">
+        <h2 class="card-title">
           {{ walletId }}
-          <!-- <div
-            class="badge badge-primary mr-1 cursor-pointer hidden md:flex"
-            (click)="copyClipboard(accAddress ? accAddress : '')"
-          >
-            {{ accAddress }}
-          </div> -->
         </h2>
         <h3 class="mx-4 break-all">
           {{ accAddress }}
@@ -21,27 +15,27 @@
             <mat-icon>content_copy</mat-icon>
           </button>
         </h3>
-
-        <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
-          <div class="stat">
-            <div class="stat-title">Wallet Type</div>
-            <div class="stat-value text-primary">{{ walletType }}</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Account Type</div>
-            <div class="stat-value">{{ accountTypeName }}</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Chain ID</div>
-            <div class="stat-value text-info">{{ nodeInfo?.default_node_info?.network }}</div>
-            <div class="stat-desc"></div>
-          </div>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <td>Wallet Type</td>
+                <td>{{ walletType }}</td>
+              </tr>
+              <tr>
+                <td>Account Type</td>
+                <td>{{ accountTypeName }}</td>
+              </tr>
+              <tr>
+                <td>Chain ID</td>
+                <td>{{ nodeInfo?.default_node_info?.network }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="card-actions justify-end">
           <!-- The button to open modal -->
-          <label for="modal-account" class="btn btn-outline btn-info px-8">
+          <label for="modal-account" class="btn btn-outline btn-info w-full md:w-auto md:px-8">
             <mat-icon class="mr-2">account_box</mat-icon> More Info
           </label>
         </div>
@@ -128,40 +122,33 @@
       <div class="card-body">
         <h2 class="card-title">Balances</h2>
 
-        <ng-container *ngIf="balanceSymbols === null; then loading; else loaded"></ng-container>
+        <ng-container *ngIf="symbolBalancesMap === null; then loading; else loaded"></ng-container>
         <ng-template #loading>
           <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
         </ng-template>
         <ng-template #loaded>
-          <ng-container
-            *ngIf="!balanceSymbols || balanceSymbols.length === 0; then empty; else filled"
-          ></ng-container>
+          <ng-container *ngIf="!symbolBalancesMap; then empty; else filled"></ng-container>
           <ng-template #empty>
             <p class="text-lg text-error">No Balance!</p>
           </ng-template>
           <ng-template #filled>
-            <div class="stats stats-vertical md:stats-horizontal flex flex-wrap mb-4">
-              <div
-                class="stat w-full md:w-1/2 xl:w-1/4"
-                *ngFor="let symbol of balanceSymbols; let i = index"
-              >
-                <div class="stat-value">{{ symbolBalancesMap?.[symbol] }}</div>
-                <div class="stat-desc">{{ symbol }}</div>
-              </div>
+            <div class="overflow-x-auto">
+              <table class="table w-full">
+                <tbody>
+                  <tr *ngFor="let balance of symbolBalancesMap | keyvalue">
+                    <th>{{ balance.key }}</th>
+                    <td>{{ balance.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </ng-template>
         </ng-template>
-
-        <div class="card-actions justify-end">
-          <button class="btn btn-primary px-8" routerLink="delegate/validators">
-            <mat-icon class="mr-2">savings</mat-icon>Delegate
-          </button>
-        </div>
       </div>
     </div>
   </div>
 
-  <div class="w-full md:w-auto mb-8" *ngIf="faucets && faucets.length > 0">
+  <div class="w-full md:w-auto mb-8" *ngIf="faucets && faucetSymbols && faucets.length > 0">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">Faucet</h2>
@@ -182,9 +169,7 @@
                   <mat-icon color="accent">clean_hands</mat-icon>
                 </span>
 
-                <span class="flex-1 text-lg" *ngIf="faucetSymbols"
-                  >Go to Faucet of {{ faucetSymbols[i] }}</span
-                >
+                <span class="flex-1 text-lg">Go to Faucet of {{ faucetSymbols[i] }}</span>
               </a>
             </li>
           </ng-container>
@@ -193,28 +178,36 @@
     </div>
   </div>
 
-  <div class="w-full md:w-auto mb-8">
+  <!-- Delegate not support now -->
+  <!-- <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">Delegate Rewards</h2>
 
-        <ng-container *ngIf="rewards === null; then loading; else loadedRewards"></ng-container>
+        <ng-container
+          *ngIf="rewardSymbols === null; then loading; else loadedRewards"
+        ></ng-container>
         <ng-template #loadedRewards>
           <ng-container
-            *ngIf="!rewards || rewards.total; then emptyRewards; else filledRewards"
+            *ngIf="
+              !rewardSymbols || rewardSymbols.length === 0;
+              then emptyRewards;
+              else filledRewards
+            "
           ></ng-container>
           <ng-template #emptyRewards>
             <p class="text-lg text-error">No Reward!</p>
           </ng-template>
           <ng-template #filledRewards>
-            <div class="stats stats-vertical md:stats-horizontal flex flex-wrap mb-4">
-              <div
-                class="stat w-full md:w-1/2 xl:w-1/4"
-                *ngFor="let reward of rewards?.total; let i = index"
-              >
-                <div class="stat-value text-secondary">{{ reward.amount | coinAmount }}</div>
-                <div class="stat-desc">{{ reward.denom | coinDenom }}</div>
-              </div>
+            <div class="overflow-x-auto">
+              <table class="table w-full">
+                <tbody>
+                  <tr *ngFor="let symbol of rewardSymbols">
+                    <th>{{ symbol }}</th>
+                    <td>{{ symbolRewardsMap?.[symbol] }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </ng-template>
         </ng-template>
@@ -223,12 +216,12 @@
           <button
             class="btn btn-secondary sm:px-8"
             (click)="onClickWithdrawAllDelegatorRewardButton()"
-            [disabled]="!rewards?.total?.length"
+            [disabled]="!rewardSymbols?.length"
           >
             <mat-icon class="mr-2">monetization_on</mat-icon>Claim All Rewards
           </button>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

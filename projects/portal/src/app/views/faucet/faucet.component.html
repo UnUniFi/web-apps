@@ -1,7 +1,5 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
-    <h2>Faucet (Only Testnet)</h2>
-  </div>
+  <h2>Faucet (Only Testnet)</h2>
 
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
@@ -60,7 +58,9 @@
             </label>
           </div>
           <div class="modal-action">
-            <button class="btn btn-primary" [disabled]="formRef.invalid">Claim</button>
+            <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+              Send Request
+            </button>
           </div>
         </form>
       </div>

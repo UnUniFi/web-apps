@@ -54,6 +54,25 @@ export class BankService {
     return { symbol, amount };
   }
 
+  convertCoinsToSymbolAmount(
+    coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): { [symbol: string]: number } {
+    const map: { [symbol: string]: number } = {};
+    coins.map((b) => {
+      const metadata = denomMetadataMap[b.denom!];
+      const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
+
+      if (denomUnit) {
+        const amount = new Decimal(b.amount!);
+        map[metadata.symbol!] = Number(
+          amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+        );
+      }
+    });
+    return map;
+  }
+
   async simulateToSend(
     fromAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     toAddress: cosmosclient.AccAddress,
@@ -147,6 +166,25 @@ export class BankService {
       from_address: fromAddress.toString(),
       to_address: toAddress.toString(),
       amount,
+    });
+    return msgSend;
+  }
+
+  buildMsgBankSend(
+    fromAddress: string,
+    toAddress: string,
+    symbolAmounts: { symbol: string; amount: number }[],
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): cosmosclient.proto.cosmos.bank.v1beta1.MsgSend {
+    const map: { [symbol: string]: number } = {};
+    for (const s of symbolAmounts) {
+      map[s.symbol] = s.amount;
+    }
+    const coins = this.convertSymbolAmountMapToCoins(map, symbolMetadataMap);
+    const msgSend = new cosmosclient.proto.cosmos.bank.v1beta1.MsgSend({
+      from_address: fromAddress,
+      to_address: toAddress,
+      amount: coins,
     });
     return msgSend;
   }

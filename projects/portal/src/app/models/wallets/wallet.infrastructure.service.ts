@@ -85,9 +85,10 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
   }
 
   convertStoredWalletToCosmosWallet(storedWallet: StoredWallet): CosmosWallet {
-    const public_key: CosmosWallet['public_key'] = new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
-      key: Uint8Array.from(Buffer.from(storedWallet.public_key, 'hex')),
-    });
+    const public_key: CosmosWallet['public_key'] =
+      new cosmosclient.proto.cosmos.crypto.secp256k1.PubKey({
+        key: Uint8Array.from(Buffer.from(storedWallet.public_key, 'hex')),
+      });
     const address: cosmosclient.AccAddress = cosmosclient.AccAddress.fromString(
       storedWallet.address,
     );
@@ -373,6 +374,22 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
       await this.db.table('wallets').put(storedWallet);
     } catch (error) {
       console.error(storedWallet);
+      console.error(error);
+    } finally {
+      await this.load();
+    }
+  }
+
+  async deleteStoredWallet(): Promise<void> {
+    try {
+      const existingCurrentStoredWallets = await this.db.table('current_wallets').toArray();
+      if (existingCurrentStoredWallets?.length) {
+        const primaryKeys = existingCurrentStoredWallets.map(
+          (existingCurrentStoredWallet) => existingCurrentStoredWallet.index,
+        );
+        await this.db.table('current_wallets').bulkDelete(primaryKeys);
+      }
+    } catch (error) {
       console.error(error);
     } finally {
       await this.load();

@@ -89,6 +89,24 @@ export class BankQueryService {
     );
   }
 
+  getSymbolImageMap(symbols?: string[]): {
+    [symbol: string]: string;
+  } {
+    const map: { [symbol: string]: string } = {};
+    const images = this.symbolImages();
+    if (!symbols) {
+      for (const img of images) {
+        map[img.symbol] = img.image;
+      }
+    } else {
+      for (const s of symbols) {
+        const img = images.find((i) => i.symbol === s);
+        map[s] = img?.image || '';
+      }
+    }
+    return map;
+  }
+
   // TODO: remove this after metadata is embed in bank module
   async _denomsMetadata() {
     const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
@@ -169,6 +187,40 @@ export class BankQueryService {
         metadatas,
       },
     };
+  }
+
+  symbolImages() {
+    const symbolImages = [
+      {
+        symbol: 'GUU',
+        image: 'assets/UnUniFi-logo.png',
+      },
+      {
+        symbol: 'BTC',
+        image:
+          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/btc.svg',
+      },
+      {
+        symbol: 'ETH',
+        image:
+          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/eth.svg',
+      },
+      {
+        symbol: 'USDC',
+        image:
+          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/usdc.svg',
+      },
+      {
+        symbol: 'ATOM',
+        image:
+          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg',
+      },
+      {
+        symbol: 'OSMO',
+        image: 'assets/osmosis-logo.svg',
+      },
+    ];
+    return symbolImages;
   }
 
   // TODO: remove this after metadata is embed in bank module

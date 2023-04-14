@@ -30,6 +30,10 @@
             <td>{{ nftID }}</td>
           </tr>
           <tr>
+            <td>Bid Token</td>
+            <td>{{ symbol }}</td>
+          </tr>
+          <tr>
             <td>Minimum deposit rate</td>
             <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
           </tr>
@@ -89,6 +93,11 @@
             </div>
           </span>
           <label class="input-group">
+            <span>
+              <div class="mask mask-circle w-8 h-8">
+                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+              </div>
+            </span>
             <input
               #borrowAmountRef="ngModel"
               required

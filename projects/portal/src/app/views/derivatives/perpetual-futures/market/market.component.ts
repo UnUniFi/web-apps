@@ -32,7 +32,11 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   baseSymbol?: string | null;
   @Input()
+  baseImage?: string | null;
+  @Input()
   quoteSymbol?: string | null;
+  @Input()
+  quoteImage?: string | null;
   @Input()
   selectedMarket?: string | null;
   @Input()

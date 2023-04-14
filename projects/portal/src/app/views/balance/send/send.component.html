@@ -42,6 +42,11 @@
               <div class="flex flex-row flex-wrap">
                 <div class="w-full sm:w-auto sm:flex-auto">
                   <label class="input-group w-full">
+                    <span *ngIf="symbolImageMap && symbolImageMap[token.symbol]">
+                      <div class="mask mask-circle w-8 h-8">
+                        <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
+                      </div>
+                    </span>
                     <input
                       #tokenNgModelRef="ngModel"
                       type="number"

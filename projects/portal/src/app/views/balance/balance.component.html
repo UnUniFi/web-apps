@@ -136,7 +136,19 @@
               <table class="table w-full">
                 <tbody>
                   <tr *ngFor="let balance of symbolBalancesMap | keyvalue">
-                    <th>{{ balance.key }}</th>
+                    <th>
+                      <div class="flex items-center space-x-3">
+                        <div
+                          class="avatar mr-2"
+                          *ngIf="symbolImageMap && symbolImageMap[balance.key]"
+                        >
+                          <div class="mask mask-circle w-8 h-8">
+                            <img src="{{ symbolImageMap[balance.key] }}" alt="Asset Symbol" />
+                          </div>
+                        </div>
+                        {{ balance.key }}
+                      </div>
+                    </th>
                     <td>{{ balance.value }}</td>
                   </tr>
                 </tbody>

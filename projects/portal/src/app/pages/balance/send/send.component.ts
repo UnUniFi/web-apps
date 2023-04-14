@@ -19,6 +19,7 @@ export class SendComponent implements OnInit {
   selectedTokens$: Observable<{ symbol: string; amount?: number }[]>;
   balanceSymbols$: Observable<string[] | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  symbolImageMap: { [symbol: string]: string };
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +38,7 @@ export class SendComponent implements OnInit {
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     const balance$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getBalance$(address!)),
     );

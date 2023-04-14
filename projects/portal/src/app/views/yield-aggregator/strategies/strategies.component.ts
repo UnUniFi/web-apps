@@ -12,6 +12,8 @@ export class StrategiesComponent implements OnInit {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolImage?: string | null;
+  @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
 
   constructor() {}

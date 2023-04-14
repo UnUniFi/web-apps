@@ -11,7 +11,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Input()
-  symbols?: string[] | null;
+  symbols?: { name: string; img: string }[] | null;
 
   constructor(private router: Router) {}
 

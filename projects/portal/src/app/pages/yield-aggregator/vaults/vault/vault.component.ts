@@ -26,6 +26,7 @@ export class VaultComponent implements OnInit {
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
   estimatedMintAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
@@ -52,7 +53,9 @@ export class VaultComponent implements OnInit {
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
       map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol),
     );
-
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
+    );
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);
     this.estimatedMintAmount$ = combineLatest([

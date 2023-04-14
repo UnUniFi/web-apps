@@ -12,6 +12,11 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div #cardRef class="card-body">
         <h2 class="card-title">
+          <div class="avatar">
+            <div class="mask mask-circle w-12 h-12">
+              <img src="{{ symbolImage }}" alt="Asset Symbol" />
+            </div>
+          </div>
           {{ strategy?.name }}
           <div class="badge badge-primary">#{{ id }}</div>
           <div class="badge badge-secondary">{{ symbol }}</div>
@@ -78,7 +83,14 @@
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">#{{ vault.id }}</div>
           </div>
-          <h2 class="card-title break-all">Vault #{{ vault.id }}</h2>
+          <h2 class="card-title break-all">
+            <div class="avatar">
+              <div class="mask mask-circle w-8 h-8">
+                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+              </div>
+            </div>
+            Vault #{{ vault.id }}
+          </h2>
 
           <div class="stats">
             <div class="stat" *ngIf="weights">

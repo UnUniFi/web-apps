@@ -80,7 +80,16 @@
         <ng-container *ngFor="let vault of vaults; let i = index">
           <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
             <th>#{{ vault.id }}</th>
-            <td *ngIf="symbols">{{ symbols[i] }}</td>
+            <td *ngIf="symbols">
+              <div class="flex items-center space-x-3">
+                <div class="avatar">
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                  </div>
+                </div>
+                {{ symbols[i].name }}
+              </div>
+            </td>
             <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
             <td>{{ vault.withdraw_commission_rate | percentage }}</td>
             <!-- <td>{{ vault.name }}</td> -->

@@ -13,7 +13,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 })
 export class VaultsComponent implements OnInit {
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
-  symbols$: Observable<string[]>;
+  symbols$: Observable<{ name: string; img: string }[]>;
 
   constructor(
     private router: Router,
@@ -36,11 +36,13 @@ export class VaultsComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
-        vaults.map((vault) => denomMetadataMap?.[vault.denom!].symbol || 'Invalid Asset'),
+        vaults.map((vault) => {
+          const symbol = denomMetadataMap?.[vault.denom!].symbol || 'Invalid Asset';
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
+          return { name: symbol, img: img };
+        }),
       ),
     );
-
-    this.vaults$.subscribe((vaults) => console.log(vaults));
   }
 
   ngOnInit(): void {}

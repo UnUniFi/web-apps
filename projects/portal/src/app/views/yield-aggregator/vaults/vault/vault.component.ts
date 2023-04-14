@@ -32,6 +32,8 @@ export class VaultComponent implements OnInit {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolImage?: string | null;
+  @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;

@@ -19,6 +19,7 @@ export class StrategyComponent implements OnInit {
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | null>;
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
@@ -40,7 +41,9 @@ export class StrategyComponent implements OnInit {
         ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
       ),
     );
-
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
+    );
     const strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
       mergeMap(([denom, ibcDenom]) =>
         ibcDenom == ''

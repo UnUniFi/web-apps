@@ -19,6 +19,8 @@ export class StrategyComponent implements OnInit {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolImage?: string | null;
+  @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Input()
   weights?: (string | undefined)[] | null;

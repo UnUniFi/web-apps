@@ -15,6 +15,7 @@ export class StrategiesComponent implements OnInit {
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | null>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 
   constructor(
@@ -31,6 +32,9 @@ export class StrategiesComponent implements OnInit {
       map(([denom, ibcDenom, denomMetadataMap]) =>
         ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
       ),
+    );
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
     );
     this.strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
       mergeMap(([denom, ibcDenom]) =>

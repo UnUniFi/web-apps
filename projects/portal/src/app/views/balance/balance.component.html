@@ -178,7 +178,14 @@
                 class="flex gap-4"
               >
                 <span class="flex-none">
-                  <mat-icon color="accent">clean_hands</mat-icon>
+                  <div
+                    class="avatar mr-2"
+                    *ngIf="symbolImageMap && symbolImageMap[faucetSymbols[i]]"
+                  >
+                    <div class="mask mask-circle w-8 h-8">
+                      <img src="{{ symbolImageMap[faucetSymbols[i]] }}" alt="Asset Symbol" />
+                    </div>
+                  </div>
                 </span>
 
                 <span class="flex-1 text-lg">Go to Faucet of {{ faucetSymbols[i] }}</span>

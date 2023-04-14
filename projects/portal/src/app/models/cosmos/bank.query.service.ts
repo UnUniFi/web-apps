@@ -262,7 +262,7 @@ export class BankQueryService {
       },
       {
         symbol: 'OSMO',
-        image: 'assets/osmosis-logo.png',
+        image: 'assets/osmosis-logo.svg',
       },
     ];
     return symbolImages;

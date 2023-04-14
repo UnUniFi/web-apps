@@ -37,6 +37,10 @@
             <td>{{ nftID }}</td>
           </tr>
           <tr>
+            <td>Bid Token</td>
+            <td>{{ symbol }}</td>
+          </tr>
+          <tr>
             <td>Minimum deposit rate</td>
             <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
           </tr>
@@ -103,6 +107,11 @@
                 </div>
               </span>
               <label class="input-group">
+                <span>
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  </div>
+                </span>
                 <input
                   #bidAmountNgModelRef="ngModel"
                   required
@@ -112,7 +121,7 @@
                   [(ngModel)]="bidAmount"
                   [min]="0"
                   [step]="1"
-                  class="input input-bordered w-full"
+                  class="input input-bordered input-info w-full"
                   [class]="{
                     'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.touched
                   }"
@@ -146,6 +155,11 @@
                 </div>
               </span>
               <label class="input-group">
+                <span>
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  </div>
+                </span>
                 <input
                   #depositAmountNgModelRef="ngModel"
                   placeholder="e.g. 12.123456"

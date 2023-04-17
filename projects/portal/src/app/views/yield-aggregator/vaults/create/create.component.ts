@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
-import { CreateVaultRequest } from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
+import { CreateVaultRequest } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi/api';
 
 @Component({

@@ -1,5 +1,5 @@
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
-import { YieldAggregatorQueryService } from '../../../models/ununifi/yield-aggregator.query.service';
+import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';

@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
-import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.application.service';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
-} from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
-import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.query.service';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+} from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
+import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { Vault200Response, VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';

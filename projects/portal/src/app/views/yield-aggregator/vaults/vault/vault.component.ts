@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { ChartType } from 'angular-google-charts';
-import { YieldAggregatorChartService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.chart.service';
+import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
-} from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
+} from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import {
   StrategyAll200ResponseStrategiesInner,
   Vault200Response,

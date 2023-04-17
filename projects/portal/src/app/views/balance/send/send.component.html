@@ -46,7 +46,7 @@
                       #tokenNgModelRef="ngModel"
                       type="number"
                       required
-                      placeholder="12.123456"
+                      placeholder="e.g. 12.123456"
                       [min]="0"
                       [max]="symbolBalancesMap?.[token.symbol] || 0"
                       [step]="1"
@@ -103,7 +103,7 @@
               class="btn btn-primary w-full md:w-auto md:px-8"
               [disabled]="!selectedTokens?.length || formRef.invalid"
             >
-              Send
+              Send your Tokens
             </button>
           </div>
         </form>

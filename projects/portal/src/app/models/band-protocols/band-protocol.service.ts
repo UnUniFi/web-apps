@@ -1,10 +1,5 @@
-import { BankService } from '../cosmos/bank.service';
-import { TxCommonService } from '../cosmos/tx-common.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
-import Long from 'long';
-import ununificlient from 'ununifi-client';
 
 export const rest = 'https://laozi1.bandchain.org/api';
 

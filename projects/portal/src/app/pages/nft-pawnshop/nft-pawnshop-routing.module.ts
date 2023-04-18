@@ -9,6 +9,7 @@ import { PlaceBidComponent } from './lenders/lender-nfts/lender-nft/place-bid/pl
 import { LenderComponent } from './lenders/lender/lender.component';
 import { LendersComponent } from './lenders/lenders.component';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
+import { NftComponent } from './nfts/class/nft/nft.component';
 import { NftsComponent } from './nfts/nfts.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -21,6 +22,26 @@ const routes: Routes = [
   {
     path: 'nfts',
     component: NftsComponent,
+  },
+  {
+    path: 'nfts/:class_id/:nft_id',
+    component: NftComponent,
+  },
+  {
+    path: 'nfts/:class_id/:nft_id/list',
+    component: ListComponent,
+  },
+  {
+    path: 'nfts/:class_id/:nft_id/borrow',
+    component: BorrowComponent,
+  },
+  {
+    path: 'nfts/:class_id/:nft_id/repay',
+    component: RepayComponent,
+  },
+  {
+    path: 'nfts/:class_id/:nft_id/place-bid',
+    component: PlaceBidComponent,
   },
   {
     path: 'lenders',

@@ -1,1 +1,38 @@
-<p>nft works!</p>
+<ng-container
+  *ngIf="address === null || listingInfo === null; then loading; else loaded"
+></ng-container>
+<ng-template #loading>
+  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="address === listingInfo?.owner; then lister; else bidder"></ng-container>
+  <ng-template #lister>
+    <view-lister-nft
+      [classID]="classID"
+      [nftID]="nftID"
+      [listingInfo]="listingInfo"
+      [bidders]="bids"
+      [loan]="loan"
+      [liquidation]="liquidation"
+      [nftMetadata]="nftMetadata"
+      [nftImage]="nftImage"
+      (appSubmitCancel)="onSubmitCancelListing()"
+      (appSubmitSell)="onSubmitSell()"
+    ></view-lister-nft>
+  </ng-template>
+  <ng-template #bidder>
+    <view-bidder-nft
+      [classID]="classID"
+      [nftID]="nftID"
+      [address]="address"
+      [listingInfo]="listingInfo"
+      [bidders]="bids"
+      [nftMetadata]="nftMetadata"
+      [nftImage]="nftImage"
+      [ownBid]="ownBid"
+      [isWinning]="isWinning"
+      (appSubmitCancelBid)="onSubmitCancelBid()"
+      (appSubmitPayFullBid)="onSubmitPayFullBid()"
+    ></view-bidder-nft>
+  </ng-template>
+</ng-template>

@@ -32,7 +32,7 @@ export class NftPawnshopApplicationService {
     const nftID = await this.dialog
       .open<string>(NftsDialogComponent, { data: classID })
       .closed.toPromise();
-    await this.router.navigate(['nft-backed-loan', 'lenders', 'nfts', classID, nftID, 'place-bid']);
+    await this.router.navigate(['nft-backed-loan', 'nfts', classID, nftID, 'place-bid']);
   }
 
   async listNft(
@@ -101,7 +101,7 @@ export class NftPawnshopApplicationService {
           data: { txHash: txHash, msg: 'Successfully listed your NFT.' },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
+      this.router.navigate(['nft-backed-loan', 'nfts', classId, nftId]);
     }
   }
 
@@ -439,7 +439,7 @@ export class NftPawnshopApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'lenders']);
+      this.router.navigate(['nft-backed-loan', 'lenders', 'lender']);
     }
   }
 
@@ -503,7 +503,7 @@ export class NftPawnshopApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
+      this.router.navigate(['nft-backed-loan', 'nfts', classId, nftId]);
     }
   }
 
@@ -567,7 +567,7 @@ export class NftPawnshopApplicationService {
           },
         })
         .closed.toPromise();
-      this.router.navigate(['nft-backed-loan', 'borrowers', 'nfts', classId, nftId]);
+      this.router.navigate(['nft-backed-loan', 'nfts', classId, nftId]);
     }
   }
 

@@ -79,7 +79,10 @@ export class DepositFormDialogComponent implements OnInit {
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: this.selectedAmount.denom,
+      },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });

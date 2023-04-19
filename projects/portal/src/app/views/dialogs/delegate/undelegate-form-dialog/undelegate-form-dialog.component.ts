@@ -91,7 +91,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.appSubmit.emit({
       amount: {
         amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: 'uguu',
+        denom: this.selectedAmount.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,

@@ -84,7 +84,7 @@ export class DelegateFormDialogComponent implements OnInit {
       walletType: this.currentStoredWallet?.type,
       amount: {
         amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: 'uguu',
+        denom: this.selectedAmount.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

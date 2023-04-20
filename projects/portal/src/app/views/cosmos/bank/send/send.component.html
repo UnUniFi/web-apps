@@ -13,19 +13,16 @@
     <ng-container *ngFor="let coin of coins">
       <mat-list-item>
         <span class="flex-auto"></span>
-        <span class="mr-2">{{ coin.amount | number: '1.0-0' }}</span>
+        <span class="mr-2">{{ coin.amount | number : '1.0-0' }}</span>
         <span>{{ coin.denom }}</span>
-        <span *ngIf="coin?.denom?.length == 3" class="mr-2"></span>
+        <span *ngIf="coin?.denom?.length === 3" class="mr-2"></span>
       </mat-list-item>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-list>
 
   <h4 class="pt-6 pb-0">Sending Form</h4>
-  <form
-    #formRef="ngForm"
-    (submit)="onSubmit(toAddressRef.value, minimumGasPriceRef.value)"
-  >
+  <form #formRef="ngForm" (submit)="onSubmit(toAddressRef.value, minimumGasPriceRef.value)">
     <mat-form-field class="w-full">
       <mat-label>To address</mat-label>
       <input #toAddressRef ngModel name="to-address" matInput required />
@@ -50,7 +47,7 @@
             name="amount-{{ i }}"
             matInput
             type="number"
-            pattern="^\d+$"
+            pattern="^\d+(\.\d{1,6})?$"
             [max]="(coins && coins[i].amount) || 0"
             [min]="0"
             required

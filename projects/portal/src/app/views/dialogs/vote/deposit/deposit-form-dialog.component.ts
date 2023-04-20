@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
@@ -39,7 +40,7 @@ export class DepositFormDialogComponent implements OnInit {
   selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
     this.availableDenoms = ['uguu'];
@@ -78,7 +79,10 @@ export class DepositFormDialogComponent implements OnInit {
     }
     this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: this.selectedAmount.denom,
+      },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });
@@ -94,5 +98,9 @@ export class DepositFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

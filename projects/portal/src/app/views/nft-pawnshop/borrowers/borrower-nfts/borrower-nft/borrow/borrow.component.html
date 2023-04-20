@@ -1,176 +1,194 @@
-<div class="mb-4">
-  <h2>Borrow</h2>
-</div>
-
-<div class="card lg:card-side bg-base-100 shadow-xl mb-8">
-  <figure class="aspect-square w-1/2 lg:w-1/4">
-    <!-- img width setting not working -->
-    <img
-      src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
-      alt="image of the NFT"
-      class="object-cover"
-    />
-  </figure>
-  <div class="card-body w-full lg:w-2/3">
-    <div class="flex flex-row">
-      <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
-    </div>
-    <h2 class="card-title break-all">
-      {{ nftMetadata?.name || classID + '/' + nftID }}
-    </h2>
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <tbody>
-          <tr>
-            <td>Class ID</td>
-            <td>{{ classID }}</td>
-          </tr>
-          <tr>
-            <td>NFT ID</td>
-            <td>{{ nftID }}</td>
-          </tr>
-          <tr>
-            <td>Bid Token</td>
-            <td>{{ symbol }}</td>
-          </tr>
-          <tr>
-            <td>Minimum deposit rate</td>
-            <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
-          </tr>
-          <tr>
-            <td>Started at</td>
-            <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="../../../../.."><a>Top</a></li>
+      <li routerLink="../../../../borrower"><a>Borrowing</a></li>
+      <li>{{ classID }}</li>
+      <li routerLink="..">
+        <a>{{ nftID }}</a>
+      </li>
+    </ul>
   </div>
-</div>
-
-<div class="flex flex-col lg:flex-row mb-8">
-  <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 lg:mb-0 lg:mr-4">
-    <h3 class="m-4 card-title">Deposits</h3>
-    <google-chart
-      *ngIf="chartData"
-      [title]="chartTitle"
-      [type]="chartType"
-      [data]="chartData"
-      [columns]="chartColumns"
-      [options]="chartOptions"
-    >
-    </google-chart>
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li></li>
+      <li>Borrow Tokens</li>
+    </ul>
   </div>
 
-  <span class="flex-auto"></span>
-  <div class="card bg-base-100 shadow-xl w-full xl:w-auto">
-    <h3 class="m-4 card-title">Borrow</h3>
-    <div class="card-body">
-      <form #formRef="ngForm" (submit)="onSubmit()">
-        <div class="form-control">
-          <span class="label">
-            <span class="label-text">Enter borrow amount</span>
-            <!-- The button to open modal -->
-            <label for="modal-bid-price" class="label-text cursor-pointer">
-              <mat-icon>help</mat-icon>
-            </label>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+        alt="image of the NFT"
+        class="object-cover"
+      />
+    </figure>
+    <div class="card-body w-full lg:w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-primary">{{ listingInfo?.state }}</div>
+      </div>
+      <h2 class="card-title break-all">
+        {{ nftMetadata?.name || classID + '/' + nftID }}
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <td>Class ID</td>
+              <td>{{ classID }}</td>
+            </tr>
+            <tr>
+              <td>NFT ID</td>
+              <td>{{ nftID }}</td>
+            </tr>
+            <tr>
+              <td>Bid Token</td>
+              <td>{{ symbol }}</td>
+            </tr>
+            <tr>
+              <td>Minimum deposit rate</td>
+              <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
+            </tr>
+            <tr>
+              <td>Started at</td>
+              <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <!-- Put this part before </body> tag -->
-            <input type="checkbox" id="modal-bid-price" class="modal-toggle" />
-            <div class="modal modal-bottom sm:modal-middle">
-              <div class="modal-box">
-                <h3 class="font-bold text-lg">What is the borrow amount?</h3>
-                <p class="py-4">
-                  NFT listers can borrow tokens from the bid deposit. Borrowing will be made in
-                  order of bids with lower interest rates. You must pay interest in addition to the
-                  borrowed tokens by the repayment deadline. If you are unable to repay, the NFT
-                  will be liquidated, but if there are other available bids, refinancing will be
-                  carried out.
-                </p>
-                <div class="modal-action">
-                  <label for="modal-bid-price" class="btn">Understood</label>
+    <div class="flex flex-col lg:flex-row mb-8">
+      <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 lg:mb-0 lg:mr-4">
+        <h3 class="m-4 card-title">Deposits</h3>
+        <google-chart
+          *ngIf="chartData"
+          [title]="chartTitle"
+          [type]="chartType"
+          [data]="chartData"
+          [columns]="chartColumns"
+          [options]="chartOptions"
+        >
+        </google-chart>
+      </div>
+
+      <span class="flex-auto"></span>
+      <div class="card bg-base-100 shadow-xl w-full xl:w-auto">
+        <h3 class="m-4 card-title">Borrow</h3>
+        <div class="card-body">
+          <form #formRef="ngForm" (submit)="onSubmit()">
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Enter borrow amount</span>
+                <!-- The button to open modal -->
+                <label for="modal-bid-price" class="label-text cursor-pointer">
+                  <mat-icon>help</mat-icon>
+                </label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-bid-price" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is the borrow amount?</h3>
+                    <p class="py-4">
+                      NFT listers can borrow tokens from the bid deposit. Borrowing will be made in
+                      order of bids with lower interest rates. You must pay interest in addition to
+                      the borrowed tokens by the repayment deadline. If you are unable to repay, the
+                      NFT will be liquidated, but if there are other available bids, refinancing
+                      will be carried out.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-bid-price" class="btn">Understood</label>
+                    </div>
+                  </div>
                 </div>
+              </span>
+              <label class="input-group">
+                <span>
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  </div>
+                </span>
+                <input
+                  #borrowAmountRef="ngModel"
+                  required
+                  type="number"
+                  name="amount"
+                  [(ngModel)]="selectedBorrowAmount"
+                  [max]="borrowAmount || 0"
+                  [min]="0"
+                  [step]="1"
+                  class="input input-bordered w-full"
+                  [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                />
+                <span>{{ borrowDenom }}</span>
+              </label>
+              <label class="label">
+                <span class="label-text-alt">max borrowing amount:</span>
+                <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
+              </label>
+            </div>
+
+            <div class="stats stats-vertical md:stats-horizontal justify-end my-4">
+              <div class="stat flex flex-col items-end">
+                <div class="stat-title">Average interest rate</div>
+                <div class="stat-value">{{ averageInterestRate | percentage }}</div>
+                <div class="stat-desc"></div>
+              </div>
+              <div class="stat flex flex-col items-end">
+                <div class="stat-title">Shortest expiry date</div>
+                <div class="stat-value">{{ shortestExpiryDate | date : 'yyyy-MM-dd' }}</div>
+                <div class="stat-desc">{{ shortestExpiryDate | date : 'a hh:mm:ss z' }}</div>
               </div>
             </div>
-          </span>
-          <label class="input-group">
-            <span>
-              <div class="mask mask-circle w-8 h-8">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
-              </div>
-            </span>
-            <input
-              #borrowAmountRef="ngModel"
-              required
-              type="number"
-              name="amount"
-              [(ngModel)]="selectedBorrowAmount"
-              [max]="borrowAmount || 0"
-              [min]="0"
-              [step]="1"
-              class="input input-bordered w-full"
-              [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
-              pattern="^[0-9]*\.?[0-9]{0,6}$"
-            />
-            <span>{{ borrowDenom }}</span>
-          </label>
-          <label class="label">
-            <span class="label-text-alt">max borrowing amount:</span>
-            <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
-          </label>
+            <div class="card-actions justify-end mt-4">
+              <button
+                type="button"
+                class="btn btn-secondary btn-outline w-full md:w-auto md:px-8"
+                (click)="onSimulate()"
+              >
+                Simulate
+              </button>
+              <button
+                class="btn btn-secondary w-full md:w-auto md:px-8"
+                [disabled]="formRef.invalid"
+              >
+                Borrow
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div class="stats stats-vertical md:stats-horizontal justify-end my-4">
-          <div class="stat flex flex-col items-end">
-            <div class="stat-title">Average interest rate</div>
-            <div class="stat-value">{{ averageInterestRate | percentage }}</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat flex flex-col items-end">
-            <div class="stat-title">Shortest expiry date</div>
-            <div class="stat-value">{{ shortestExpiryDate | date : 'yyyy-MM-dd' }}</div>
-            <div class="stat-desc">{{ shortestExpiryDate | date : 'a hh:mm:ss z' }}</div>
-          </div>
-        </div>
-        <div class="card-actions justify-end mt-4">
-          <button
-            type="button"
-            class="btn btn-secondary btn-outline w-full md:w-auto md:px-8"
-            (click)="onSimulate()"
-          >
-            Simulate
-          </button>
-          <button class="btn btn-secondary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
-            Borrow
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
 
-<div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
-  <div class="overflow-x-auto">
-    <table class="table w-full">
-      <thead>
-        <tr>
-          <th></th>
-          <td>Interest</td>
-          <td>Deposit</td>
-          <td>Bid price</td>
-          <td>Expiry</td>
-          <td>Bidder</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let bidder of bidders; let i = index">
-          <th>#{{ i + 1 }}</th>
-          <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-          <td>{{ bidder.deposit_amount | coin }}</td>
-          <td>{{ bidder.bid_amount | coin }}</td>
-          <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-          <td>{{ bidder.bidder }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <td>Interest</td>
+              <td>Deposit</td>
+              <td>Bid price</td>
+              <td>Expiry</td>
+              <td>Bidder</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bidder of bidders; let i = index">
+              <th>#{{ i + 1 }}</th>
+              <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+              <td>{{ bidder.deposit_amount | coin }}</td>
+              <td>{{ bidder.bid_amount | coin }}</td>
+              <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+              <td>{{ bidder.bidder }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

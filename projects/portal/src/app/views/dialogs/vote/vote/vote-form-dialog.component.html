@@ -1,114 +1,149 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="card-body">
+    <div class="card-actions justify-end md:hidden">
+      <button class="btn btn-square btn-ghost btn-sm">
+        <span class="material-icons" (click)="onClickClose()">close</span>
+      </button>
+    </div>
     <div class="flex flex-col items-center">
       <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
       <div class="font-bold text-xl m-3">Vote to this proposal</div>
     </div>
     <ng-container *ngIf="proposalContent">
-      <mat-list>
-        <mat-list-item>
-          <div mat-line>
-            <span># {{ proposal?.proposal_id }} {{ proposalContent.title }}</span>
-          </div>
-        </mat-list-item>
-      </mat-list>
+      <ul class="menu w-full">
+        <li class="disabled">
+          <a class="text-base-content">
+            # {{ proposal?.proposal_id }} {{ proposalContent.title }}
+          </a>
+        </li>
+      </ul>
     </ng-container>
 
-    <mat-list>
-      <mat-label>Voter</mat-label>
-      <mat-list-item>
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
-          >circle</mat-icon
-        >
-        <div mat-line>
-          <span>{{ currentStoredWallet?.address }}</span>
-        </div>
-      </mat-list-item>
-    </mat-list>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Voter</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+            >
+              circle
+            </span>
+            {{ currentStoredWallet?.address }}
+          </a>
+        </li>
+      </ul>
+    </div>
 
-    <h3 class="pt-3">Gas Settings</h3>
-    <mat-form-field class="w-full">
-      <mat-label>Gas Ratio</mat-label>
-      <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
-    </mat-form-field>
-    <mat-button-toggle-group class="flex mb-4" value="low">
-      <mat-button-toggle class="flex-auto" value="low" (click)="changeGasRatio(0)"
-        >Low</mat-button-toggle
+    <!-- <h3 class="pt-3">Gas Settings</h3>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">Gas Ratio</span>
+      </label>
+      <input
+        name="gas-ratio"
+        type="number"
+        placeholder="Type here"
+        class="input input-bordered input-sm w-full"
+        [(ngModel)]="gasRatio"
+        required
+      />
+    </div>
+    <div class="btn-group w-full mt-2">
+      <label class="btn flex-auto" [class.btn-active]="gasRatio === 0" (click)="changeGasRatio(0)"
+        >Low</label
       >
-      <mat-button-toggle class="flex-auto" value="middle" (click)="changeGasRatio(1.1)"
-        >Middle</mat-button-toggle
+      <label
+        class="btn flex-auto"
+        [class.btn-active]="gasRatio === 1.1"
+        (click)="changeGasRatio(1.1)"
+        >Middle</label
       >
-      <mat-button-toggle class="flex-auto" value="high" (click)="changeGasRatio(2)"
-        >High</mat-button-toggle
+      <label class="btn flex-auto" [class.btn-active]="gasRatio === 2" (click)="changeGasRatio(2)"
+        >High</label
       >
-    </mat-button-toggle-group>
+    </div>
 
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Advanced </mat-panel-title>
-          <mat-panel-description> Change Default Gas Price </mat-panel-description>
-        </mat-expansion-panel-header>
+    <div
+      tabindex="0"
+      class="collapse collapse-arrow rounded-box bg-base-200 text-base-content mt-2"
+    >
+      <input type="checkbox" class="peer" />
+      <div class="collapse-title flex items-center">
+        <div class="text-xl flex-auto">Advanced</div>
+        <div class="flex-auto text-sm">Change Default Gas Price</div>
+      </div>
+      <div class="collapse-content">
         <div class="flex flex-col content-content lg:flex-row">
-          <mat-form-field class="flex-auto">
-            <mat-label>Minimum Gas Denom</mat-label>
-            <mat-select
+          <div class="form-control flex-auto">
+            <label class="label">
+              <span class="label-text">Minimum Gas Denom</span>
+            </label>
+            <select
+              class="select select-bordered select-sm"
               [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
               name="minimum-gas-denom"
               required
-              (valueChange)="onMinimumGasDenomChanged($event)"
+              (ngModelChange)="onMinimumGasDenomChanged($event)"
             >
-              <mat-option
+              <option
                 *ngFor="let minimumGasPriceOption of minimumGasPrices"
                 [value]="minimumGasPriceOption.denom"
               >
                 {{ minimumGasPriceOption.denom }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="flex-auto">
-            <mat-label>Minimum Gas Price</mat-label>
+              </option>
+            </select>
+          </div>
+          <div class="form-control flex-auto">
+            <label class="label">
+              <span class="label-text">Minimum Gas Price</span>
+            </label>
             <input
-              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
               #minimumGasPriceRef
               name="minimum-gas-price"
-              matInput
               type="number"
+              placeholder="Type here"
+              class="input input-bordered input-sm"
+              [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
               [min]="0"
               required
             />
-          </mat-form-field>
+          </div>
         </div>
-        <mat-slider
-          class="w-full"
-          [max]="1"
-          [min]="0"
-          [step]="0.015"
-          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+        <input
           name="minimum-gas-price-slider"
-        >
-        </mat-slider>
-      </mat-expansion-panel>
-    </mat-accordion>
+          class="range range-secondary w-full mt-4"
+          type="range"
+          max="1"
+          min="0"
+          step="0.015"
+          value="0.015"
+          [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
+        />
+      </div>
+    </div> -->
 
-    <button class="w-full my-4" mat-flat-button color="primary" (click)="onSubmitYes()">
-      <mat-icon class="mr-2">thumb_up</mat-icon>
-      <span>Yes</span>
+    <button class="btn btn-success btn-block btn-sm mt-2" (click)="onSubmitYes()">
+      <span class="material-icons">thumb_up</span>
+      &nbsp;&nbsp;Yes
     </button>
 
-    <button class="w-full mb-4" mat-flat-button color="warn" (click)="onSubmitNoWithVeto()">
-      <mat-icon class="mr-2">thumb_down</mat-icon>
-      <span>No with Veto</span>
+    <button class="btn btn-warning btn-block btn-sm" (click)="onSubmitNo()">
+      <span class="material-icons">thumb_down</span>
+      &nbsp;&nbsp;No
     </button>
 
-    <button class="w-full mb-4" mat-flat-button color="accent" (click)="onSubmitNo()">
-      <mat-icon class="mr-2">thumb_down</mat-icon>
-      <span>No</span>
+    <button class="btn btn-error btn-block btn-sm" (click)="onSubmitNoWithVeto()">
+      <span class="material-icons">not_interested</span>
+      &nbsp;&nbsp;No with Veto
     </button>
 
-    <button class="w-full mb-4" mat-flat-button (click)="onSubmitAbstain()">
-      <mat-icon class="mr-2">subtitles_off</mat-icon>
-      <span>Abstain</span>
+    <button class="btn btn-primary btn-sm" (click)="onSubmitAbstain()">
+      <span class="material-icons">subtitles_off</span>
+      &nbsp;&nbsp;Abstain
     </button>
   </div>
 </div>

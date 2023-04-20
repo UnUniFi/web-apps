@@ -11,6 +11,7 @@ export class SendComponent implements OnInit {
   @Input() toAddress?: string | null;
   @Input() selectedTokens?: { symbol: string; amount?: number }[] | null;
   @Input() balanceSymbols?: string[] | null;
+  @Input() symbolImageMap?: { [symbol: string]: string };
   @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output() appSend: EventEmitter<BankSendRequest>;
   selectedSymbol?: string;

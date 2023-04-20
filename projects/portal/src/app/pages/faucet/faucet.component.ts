@@ -27,6 +27,7 @@ export class FaucetComponent implements OnInit {
   }>;
   creditAmount$: Observable<number>;
   maxCredit$: Observable<number>;
+  symbolImageMap: { [symbol: string]: string };
 
   constructor(
     private usecase: FaucetUseCaseService,
@@ -70,6 +71,7 @@ export class FaucetComponent implements OnInit {
         }
       }),
     );
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     this.faucetURL$ = this.usecase.faucetURL$(denom$);
     this.creditAmount$ = combineLatest([unit$, this.usecase.creditAmount$(denom$)]).pipe(
       map(([unit, amount]) => {

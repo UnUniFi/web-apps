@@ -32,6 +32,10 @@ export class RepayComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()
+  symbol?: string | null;
+  @Input()
+  symbolImage?: string | null;
+  @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   loans?: Loans200ResponseLoansInner[] | null;

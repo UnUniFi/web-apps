@@ -21,6 +21,10 @@ export class BorrowerNftComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInner | null;
   @Input()
+  symbol?: string | null;
+  @Input()
+  symbolImage?: string | null;
+  @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   loan?: Loan200Response | null;

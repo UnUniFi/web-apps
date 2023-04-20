@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
@@ -25,6 +26,8 @@ export class LenderNftComponent implements OnInit {
   address$: Observable<string>;
   classID$: Observable<string>;
   nftID$: Observable<string>;
+  symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | undefined>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
@@ -35,6 +38,7 @@ export class LenderNftComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
+    private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
@@ -50,6 +54,13 @@ export class LenderNftComponent implements OnInit {
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+    );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
+      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+    );
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),

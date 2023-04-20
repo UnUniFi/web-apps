@@ -31,6 +31,7 @@ export class FaucetComponent implements OnInit {
   } | null;
   @Input() creditAmount?: number | null;
   @Input() maxCredit?: number | null;
+  @Input() symbolImageMap?: { [symbol: string]: string };
 
   @Output() postFaucetRequested: EventEmitter<FaucetOnSubmitEvent> =
     new EventEmitter<FaucetOnSubmitEvent>();

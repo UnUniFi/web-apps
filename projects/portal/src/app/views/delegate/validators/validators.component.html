@@ -1,170 +1,178 @@
-<h2>Delegations</h2>
-<ng-container *ngIf="delegations === null; then loading; else loadedDelegations"> </ng-container>
-<ng-template #loadedDelegations>
+<div class="mx-auto max-w-screen-xl">
+  <h2>Delegations</h2>
+  <ng-container *ngIf="delegations === null; then loading; else loadedDelegations"> </ng-container>
+  <ng-template #loadedDelegations>
+    <ng-container
+      *ngIf="(delegations?.length || 0) > 0; then existDelegations; else emptyDelegations"
+    >
+    </ng-container>
+  </ng-template>
+  <ng-template #existDelegations>
+    <div class="overflow-x-auto mb-8">
+      <table class="table w-full">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <td>Validator</td>
+            <td>Amounts</td>
+            <td>Shares</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let delegation of delegations">
+            <ng-container *ngFor="let validator of delegatedValidators">
+              <tr
+                class="hover cursor-pointer"
+                *ngIf="delegation.delegation?.validator_address === validator?.operator_address"
+                (click)="onClickValidator(validator!)"
+              >
+                <th>
+                  <mat-icon
+                    matListIcon
+                    [ngStyle]="{
+                      color: getColorCode(delegation.delegation?.validator_address ?? '')
+                    }"
+                  >
+                    circle
+                  </mat-icon>
+                </th>
+                <td>{{ validator?.description?.moniker }}</td>
+                <td>{{ delegation.balance | coin }}</td>
+                <td>
+                  {{ delegation.delegation?.shares ?? '0' | coinAmount }}
+                  {{ delegation.balance?.denom | coinDenom }}
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+  <ng-template #emptyDelegations>
+    <p class="m-16">There is no delegations.</p>
+  </ng-template>
+
   <ng-container
-    *ngIf="(delegations?.length || 0) > 0; then existDelegations; else emptyDelegations"
+    *ngIf="(unbondingDelegations?.length || 0) > 0; then existUnbonding; else emptyUnbonding"
   >
   </ng-container>
-</ng-template>
-<ng-template #existDelegations>
-  <div class="overflow-x-auto mb-8">
-    <table class="table w-full">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th></th>
-          <td>Validator</td>
-          <td>Amounts</td>
-          <td>Shares</td>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let delegation of delegations">
-          <ng-container *ngFor="let validator of delegatedValidators">
-            <tr
-              class="hover cursor-pointer"
-              *ngIf="delegation.delegation?.validator_address === validator?.operator_address"
-              (click)="onClickValidator(validator!)"
-            >
-              <th>
-                <mat-icon
-                  matListIcon
-                  [ngStyle]="{
-                    color: getColorCode(delegation.delegation?.validator_address ?? '')
-                  }"
-                >
-                  circle
-                </mat-icon>
-              </th>
-              <td>{{ validator?.description?.moniker }}</td>
-              <td>{{ delegation.balance | coin }}</td>
-              <td>
-                {{ delegation.delegation?.shares ?? '0' | coinAmount }}
-                {{ delegation.balance?.denom | coinDenom }}
-              </td>
-            </tr>
-          </ng-container>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-</ng-template>
-<ng-template #emptyDelegations>
-  <p>There is no delegations.</p>
-</ng-template>
-
-<ng-container
-  *ngIf="(unbondingDelegations?.length || 0) > 0; then existUnbonding; else emptyUnbonding"
->
-</ng-container>
-<ng-template #existUnbonding>
-  <h2>OnGoing Unbonding</h2>
-  <div class="overflow-x-auto mb-8">
-    <table class="table w-full">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th></th>
-          <td>Validator</td>
-          <td>Date</td>
-          <td>Amount</td>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let unbondingDelegation of unbondingDelegations">
-          <ng-container *ngFor="let validator of delegatedValidators">
-            <tr
-              class="hover cursor-pointer"
-              *ngIf="unbondingDelegation?.unbond?.validator_address === validator?.operator_address"
-              (click)="onClickValidator(validator!)"
-            >
-              <th>
-                <mat-icon
-                  matListIcon
-                  [ngStyle]="{
-                    color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '')
-                  }"
-                >
-                  circle
-                </mat-icon>
-              </th>
-              <td>{{ validator?.description?.moniker }}</td>
-              <td>
-                {{ unbondingDelegation?.unbond?.entries?.[0]?.completion_time | date : 'yyyy-MM-dd a hh:mm:ss z'}}
-              </td>
-              <td>
-                {{ unbondingDelegation?.unbond?.entries?.[0]?.balance ?? '0' | coinAmount }}
-              </td>
-            </tr>
-          </ng-container>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-</ng-template>
-<ng-template #emptyUnbonding></ng-template>
-
-<div class="flex flex-row items-end">
-  <h2>Validators</h2>
-  <span class="flex-auto"></span>
-  <div class="btn-group">
-    <label class="btn btn-outline w-1/2" [class.btn-active]="active" (click)="onToggleActive(true)">
-      Active
-    </label>
-    <label
-      class="btn btn-outline w-1/2"
-      [class.btn-active]="!active"
-      (click)="onToggleActive(false)"
-    >
-      Inactive
-    </label>
-  </div>
-</div>
-<ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-</ng-template>
-<ng-template #loaded>
-  <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
-</ng-template>
-<ng-template #exist>
-  <div class="overflow-x-auto mb-8">
-    <table class="table w-full">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th></th>
-          <td>Validator</td>
-          <td>Voting Power</td>
-          <td>Tokens</td>
-          <td>Commission</td>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let validator of validators">
-          <tr class="hover cursor-pointer" (click)="onClickValidator(validator.val)">
-            <th>
-              <mat-icon
-                matListIcon
-                [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
-              >
-                circle
-              </mat-icon>
-            </th>
-            <td>{{ validator.val.description?.moniker }}</td>
-            <td>{{ validator.share | percent : '1.2-2' }}</td>
-            <td>
-              {{ validator.val.tokens | coinAmount }}
-            </td>
-            <td>
-              {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
-            </td>
+  <ng-template #existUnbonding>
+    <h2>OnGoing Unbonding</h2>
+    <div class="overflow-x-auto mb-8">
+      <table class="table w-full">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <td>Validator</td>
+            <td>Date</td>
+            <td>Amount</td>
           </tr>
-        </ng-container>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let unbondingDelegation of unbondingDelegations">
+            <ng-container *ngFor="let validator of delegatedValidators">
+              <tr
+                class="hover cursor-pointer"
+                *ngIf="
+                  unbondingDelegation?.unbond?.validator_address === validator?.operator_address
+                "
+                (click)="onClickValidator(validator!)"
+              >
+                <th>
+                  <mat-icon
+                    matListIcon
+                    [ngStyle]="{
+                      color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '')
+                    }"
+                  >
+                    circle
+                  </mat-icon>
+                </th>
+                <td>{{ validator?.description?.moniker }}</td>
+                <td>
+                  {{ unbondingDelegation?.unbond?.entries?.[0]?.completion_time | date : 'yyyy-MM-dd a hh:mm:ss z'}}
+                </td>
+                <td>
+                  {{ unbondingDelegation?.unbond?.entries?.[0]?.balance ?? '0' | coinAmount }}
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+  <ng-template #emptyUnbonding></ng-template>
+
+  <div class="flex flex-row flex-wrap items-end mb-4">
+    <h2>Validators</h2>
+    <span class="flex-auto"></span>
+    <div class="btn-group">
+      <label
+        class="btn btn-outline w-1/2"
+        [class.btn-active]="active"
+        (click)="onToggleActive(true)"
+      >
+        Active
+      </label>
+      <label
+        class="btn btn-outline w-1/2"
+        [class.btn-active]="!active"
+        (click)="onToggleActive(false)"
+      >
+        Inactive
+      </label>
+    </div>
   </div>
-</ng-template>
-<ng-template #empty>
-  <p>There is no validators.</p>
-</ng-template>
+  <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  </ng-template>
+  <ng-template #loaded>
+    <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
+  </ng-template>
+  <ng-template #exist>
+    <div class="overflow-x-auto mb-8">
+      <table class="table w-full">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <td>Validator</td>
+            <td>Voting Power</td>
+            <td>Tokens</td>
+            <td>Commission</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let validator of validators">
+            <tr class="hover cursor-pointer" (click)="onClickValidator(validator.val)">
+              <th>
+                <mat-icon
+                  matListIcon
+                  [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
+                >
+                  circle
+                </mat-icon>
+              </th>
+              <td>{{ validator.val.description?.moniker }}</td>
+              <td>{{ validator.share | percent : '1.2-2' }}</td>
+              <td>
+                {{ validator.val.tokens | coinAmount }}
+              </td>
+              <td>
+                {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+  <ng-template #empty>
+    <p class="m-16">There is no validators.</p>
+  </ng-template>
+</div>

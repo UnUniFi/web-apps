@@ -1,182 +1,193 @@
-<ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-</ng-template>
-<ng-template #loaded>
-  <div class="card bg-base-100 shadow-xl mb-4">
-    <div class="card-body w-full">
-      <h2 class="card-title break-all">
-        # {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}
-        <span class="badge badge-info">
-          {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
-        </span>
-      </h2>
-      <p style="white-space: pre-wrap">{{ unpackContent(proposal?.content).description }}</p>
-      <div class="overflow-x-auto">
-        <table class="table w-full">
-          <tbody>
-            <tr>
-              <th>Type</th>
-              <td>
-                {{
-                  proposalType?.substring(proposalType?.lastIndexOf('.')! + 1, proposalType?.length)
-                }}
-              </td>
-            </tr>
-            <tr>
-              <th>Submitted</th>
-              <td>{{ proposal?.submit_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-            </tr>
-            <tr>
-              <th>End Deposit</th>
-              <td>{{ proposal?.deposit_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-            </tr>
-            <tr>
-              <th>Start Voting</th>
-              <td>{{ proposal?.voting_start_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-            </tr>
-            <tr>
-              <th>End Voting</th>
-              <td>{{ proposal?.voting_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li routerLink=".."><a>Proposals</a></li>
+      <li># {{ proposal?.proposal_id }}</li>
+    </ul>
   </div>
-
-  <h3>Votes</h3>
-  <div class="card bg-base-100 shadow-xl mb-4">
-    <div class="card-body w-full">
-      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
-        <div class="stat">
-          <div class="stat-title">Yes</div>
-          <div class="stat-value text-success">
-            <mat-icon>thumb_up</mat-icon>
-            {{ tally?.yes }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">No</div>
-          <div class="stat-value text-warning">
-            <mat-icon>thumb_down</mat-icon>
-            {{ tally?.no }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">No with Veto</div>
-          <div class="stat-value text-error">
-            <mat-icon>not_interested</mat-icon>
-            {{ tally?.no_with_veto }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Abstain</div>
-          <div class="stat-value text-primary">
-            <mat-icon>subtitles_off</mat-icon>
-            {{ tally?.abstain }}
-          </div>
-          <div class="stat-desc"></div>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto mb-4" *ngIf="tallyParams">
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <td>Quorum</td>
-              <td>Threshold</td>
-              <td>Veto Threshold</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ tallyParams.quorum }}</td>
-              <td>{{ tallyParams.threshold }}</td>
-              <td>{{ tallyParams.veto_threshold }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <label class="cursor-pointer label">
-        <span class="label-text mr-2">Voting Details</span>
-        <input
-          type="checkbox"
-          class="toggle toggle-primary"
-          name="openSearch"
-          [(ngModel)]="voteDetailEnabled"
-        />
-        <span class="flex-auto"></span>
-      </label>
-
-      <div class="overflow-x-auto" *ngIf="voteDetailEnabled">
-        <table class="table w-full">
-          <tbody>
-            <ng-container *ngFor="let vote of votes">
+  <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  </ng-template>
+  <ng-template #loaded>
+    <div class="card bg-base-100 shadow-xl mb-4">
+      <div class="card-body w-full">
+        <h2 class="card-title break-all">
+          # {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}
+          <span class="badge badge-info">
+            {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
+          </span>
+        </h2>
+        <p style="white-space: pre-wrap">{{ unpackContent(proposal?.content).description }}</p>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
               <tr>
-                <th>{{ vote.voter }}</th>
-                <td>{{ vote.option?.replace('VOTE_OPTION_', '') }}</td>
+                <th>Type</th>
+                <td>
+                  {{
+                    proposalType?.substring(
+                      proposalType?.lastIndexOf('.')! + 1,
+                      proposalType?.length
+                    )
+                  }}
+                </td>
               </tr>
-            </ng-container>
-          </tbody>
-        </table>
-        <p class="ml-4">There is no vote.</p>
-      </div>
-
-      <div class="card-actions justify-end">
-        <button
-          class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
-          (click)="onClickVote(proposal?.proposal_id!)"
-        >
-          <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
-        </button>
+              <tr>
+                <th>Submitted</th>
+                <td>{{ proposal?.submit_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+              </tr>
+              <tr>
+                <th>End Deposit</th>
+                <td>{{ proposal?.deposit_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+              </tr>
+              <tr>
+                <th>Start Voting</th>
+                <td>{{ proposal?.voting_start_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+              </tr>
+              <tr>
+                <th>End Voting</th>
+                <td>{{ proposal?.voting_end_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <h3>deposits</h3>
-  <div class="card bg-base-100 shadow-xl mb-4">
-    <div class="card-body w-full">
-      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
-        <div class="stat" *ngFor="let total of proposal?.total_deposit">
-          <div class="stat-title">Total Deposit</div>
-          <div class="stat-value">{{ total.amount | coinAmount }}</div>
-          <div class="stat-desc">{{ total.denom | coinDenom }}</div>
+    <h3>Votes</h3>
+    <div class="card bg-base-100 shadow-xl mb-4">
+      <div class="card-body w-full">
+        <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+          <div class="stat">
+            <div class="stat-title">Yes</div>
+            <div class="stat-value text-success">
+              <mat-icon>thumb_up</mat-icon>
+              {{ tally?.yes }}
+            </div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">No</div>
+            <div class="stat-value text-warning">
+              <mat-icon>thumb_down</mat-icon>
+              {{ tally?.no }}
+            </div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">No with Veto</div>
+            <div class="stat-value text-error">
+              <mat-icon>not_interested</mat-icon>
+              {{ tally?.no_with_veto }}
+            </div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Abstain</div>
+            <div class="stat-value text-primary">
+              <mat-icon>subtitles_off</mat-icon>
+              {{ tally?.abstain }}
+            </div>
+            <div class="stat-desc"></div>
+          </div>
         </div>
-        <div class="stat" *ngFor="let min of depositParams?.min_deposit">
-          <div class="stat-title">Minimum Deposit</div>
-          <div class="stat-value">{{ min.amount | coinAmount }}</div>
-          <div class="stat-desc">{{ min.denom | coinDenom }}</div>
-        </div>
-      </div>
 
-      <div class="overflow-x-auto">
-        <table class="table w-full">
-          <tbody>
-            <ng-container *ngFor="let deposit of deposits; last as last">
-              <ng-container *ngFor="let amount of deposit.amount">
+        <div class="overflow-x-auto mb-4" *ngIf="tallyParams">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <td>Quorum</td>
+                <td>Threshold</td>
+                <td>Veto Threshold</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ tallyParams.quorum }}</td>
+                <td>{{ tallyParams.threshold }}</td>
+                <td>{{ tallyParams.veto_threshold }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <label class="cursor-pointer label">
+          <span class="label-text mr-2">Voting Details</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            name="openSearch"
+            [(ngModel)]="voteDetailEnabled"
+          />
+          <span class="flex-auto"></span>
+        </label>
+
+        <div class="overflow-x-auto" *ngIf="voteDetailEnabled">
+          <table class="table w-full">
+            <tbody>
+              <ng-container *ngFor="let vote of votes">
                 <tr>
-                  <th>{{ deposit.depositor }}</th>
-                  <td>{{ amount | coin }}</td>
+                  <th>{{ vote.voter }}</th>
+                  <td>{{ vote.option?.replace('VOTE_OPTION_', '') }}</td>
                 </tr>
               </ng-container>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+          <p class="ml-4">There is no vote.</p>
+        </div>
 
-      <div class="card-actions justify-end">
-        <button
-          class="btn btn-outline btn-info px-8"
-          (click)="onClickDeposit(proposal?.proposal_id!)"
-        >
-          <mat-icon class="mr-2">add</mat-icon>Deposit
-        </button>
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
+            (click)="onClickVote(proposal?.proposal_id!)"
+          >
+            <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template>
+
+    <h3>deposits</h3>
+    <div class="card bg-base-100 shadow-xl mb-4">
+      <div class="card-body w-full">
+        <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+          <div class="stat" *ngFor="let total of proposal?.total_deposit">
+            <div class="stat-title">Total Deposit</div>
+            <div class="stat-value">{{ total.amount | coinAmount }}</div>
+            <div class="stat-desc">{{ total.denom | coinDenom }}</div>
+          </div>
+          <div class="stat" *ngFor="let min of depositParams?.min_deposit">
+            <div class="stat-title">Minimum Deposit</div>
+            <div class="stat-value">{{ min.amount | coinAmount }}</div>
+            <div class="stat-desc">{{ min.denom | coinDenom }}</div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <ng-container *ngFor="let deposit of deposits; last as last">
+                <ng-container *ngFor="let amount of deposit.amount">
+                  <tr>
+                    <th>{{ deposit.depositor }}</th>
+                    <td>{{ amount | coin }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-outline btn-info px-8"
+            (click)="onClickDeposit(proposal?.proposal_id!)"
+          >
+            <mat-icon class="mr-2">add</mat-icon>Deposit
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

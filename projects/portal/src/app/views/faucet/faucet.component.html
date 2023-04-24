@@ -27,6 +27,11 @@
               <span class="label-text">Token</span>
             </label>
             <label class="input-group">
+              <span *ngIf="symbolImageMap && symbol && symbolImageMap[symbol]">
+                <div class="mask mask-circle w-8 h-8">
+                  <img src="{{ symbolImageMap[symbol] }}" alt="Asset Symbol" />
+                </div>
+              </span>
               <input
                 #amountRef
                 class="input input-bordered w-full"

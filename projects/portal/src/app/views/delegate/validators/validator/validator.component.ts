@@ -13,6 +13,9 @@ import * as crypto from 'crypto';
 })
 export class ValidatorComponent implements OnInit {
   @Input()
+  validatorAddress?: string | null;
+
+  @Input()
   validator?: validatorType | null;
 
   @Input()

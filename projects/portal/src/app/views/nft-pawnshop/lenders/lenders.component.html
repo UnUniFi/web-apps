@@ -1,213 +1,218 @@
-<div class="flex flex-row flex-wrap justify-end">
-  <div class="text-xl breadcrumbs">
-    <ul>
-      <li routerLink=".."><a>Top</a></li>
-      <li>Lending</li>
-    </ul>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap justify-end">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li routerLink=".."><a>Top</a></li>
+        <li>Lending</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <button
+      class="btn btn-outline btn-secondary px-8 mb-2 w-full xl:w-auto"
+      routerLink="/nft-backed-loan/borrowers/borrower"
+    >
+      Borrowing
+    </button>
   </div>
-  <span class="flex-auto"></span>
-  <button
-    class="btn btn-outline btn-secondary px-8 mb-2 w-full xl:w-auto"
-    routerLink="/nft-backed-loan/borrowers/borrower"
+  <div
+    class="card lg:card-side bg-base-100 shadow-xl mb-8"
+    *ngIf="depositCoins && depositCoins.length"
   >
-    Borrowing
-  </button>
-</div>
-<div
-  class="card lg:card-side bg-base-100 shadow-xl mb-8"
-  *ngIf="depositCoins && depositCoins.length"
->
-  <div class="card-body">
-    <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
-      <div class="stat" *ngFor="let deposit of depositCoins; let i = index">
-        <div class="stat-title">Deposit #{{ i + 1 }}</div>
-        <div class="stat-value text-primary">{{ deposit.amount | coinAmount }}</div>
-        <div class="stat-desc">{{ deposit.denom | coinDenom }}</div>
+    <div class="card-body">
+      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+        <div class="stat" *ngFor="let deposit of depositCoins; let i = index">
+          <div class="stat-title">Deposit #{{ i + 1 }}</div>
+          <div class="stat-value text-primary">{{ deposit.amount | coinAmount }}</div>
+          <div class="stat-desc">{{ deposit.denom | coinDenom }}</div>
+        </div>
+        <div class="stat" *ngIf="!depositCoins || !depositCoins.length">
+          <div class="stat-title">Deposit</div>
+          <div class="stat-value">0</div>
+          <div class="stat-desc">token</div>
+        </div>
+        <div class="stat" *ngFor="let lend of lendCoins; let i = index">
+          <div class="stat-title">Deposit #{{ i + 1 }}</div>
+          <div class="stat-value text-secondary">{{ lend.amount | coinAmount }}</div>
+          <div class="stat-desc">{{ lend.denom | coinDenom }}</div>
+        </div>
+        <div class="stat" *ngIf="!lendCoins || !lendCoins.length">
+          <div class="stat-title">Lending</div>
+          <div class="stat-value">0</div>
+          <div class="stat-desc">token</div>
+        </div>
       </div>
-      <div class="stat" *ngIf="!depositCoins || !depositCoins.length">
-        <div class="stat-title">Deposit</div>
-        <div class="stat-value">0</div>
-        <div class="stat-desc">token</div>
-      </div>
-      <div class="stat" *ngFor="let lend of lendCoins; let i = index">
-        <div class="stat-title">Deposit #{{ i + 1 }}</div>
-        <div class="stat-value text-secondary">{{ lend.amount | coinAmount }}</div>
-        <div class="stat-desc">{{ lend.denom | coinDenom }}</div>
-      </div>
-      <div class="stat" *ngIf="!lendCoins || !lendCoins.length">
-        <div class="stat-title">Lending</div>
-        <div class="stat-value">0</div>
-        <div class="stat-desc">token</div>
-      </div>
-    </div>
 
-    <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
-      <div class="stat">
-        <div class="stat-title">Bidding</div>
-        <div class="stat-value text-primary">{{ biddingNftsInfo?.bidding }}</div>
-        <div class="stat-desc"></div>
+      <div class="stats stats-vertical md:stats-horizontal mb-4 w-full">
+        <div class="stat">
+          <div class="stat-title">Bidding</div>
+          <div class="stat-value text-primary">{{ biddingNftsInfo?.bidding }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Waiting for payment</div>
+          <div class="stat-value text-secondary">{{ biddingNftsInfo?.selling_decision }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">liquidating</div>
+          <div class="stat-value">{{ biddingNftsInfo?.end_listing }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Sold Out</div>
+          <div class="stat-value">{{ biddingNftsInfo?.successful_bid }}</div>
+          <div class="stat-desc"></div>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-title">Waiting for payment</div>
-        <div class="stat-value text-secondary">{{ biddingNftsInfo?.selling_decision }}</div>
-        <div class="stat-desc"></div>
+      <div class="card-actions justify-end">
+        <button routerLink="lender" class="btn btn-outline btn-info">View</button>
       </div>
-      <div class="stat">
-        <div class="stat-title">liquidating</div>
-        <div class="stat-value">{{ biddingNftsInfo?.end_listing }}</div>
-        <div class="stat-desc"></div>
-      </div>
-      <div class="stat">
-        <div class="stat-title">Sold Out</div>
-        <div class="stat-value">{{ biddingNftsInfo?.successful_bid }}</div>
-        <div class="stat-desc"></div>
-      </div>
-    </div>
-    <div class="card-actions justify-end">
-      <button routerLink="lender" class="btn btn-outline btn-info">View</button>
     </div>
   </div>
-</div>
 
-<div class="card lg:card-side bg-base-100 shadow-xl mb-8">
-  <div class="card-body">
-    <div class="form-control">
-      <label class="cursor-pointer label">
-        <span class="label-text mr-2">Advanced Search</span>
-        <input
-          type="checkbox"
-          class="toggle toggle-primary"
-          name="openSearch"
-          [(ngModel)]="isFiltered"
-        />
-        <span class="flex-auto"></span>
-      </label>
-    </div>
-
-    <form #formRef="ngForm" (submit)="onSubmit()" *ngIf="isFiltered">
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
       <div class="form-control">
-        <label class="label">
-          <span class="label-text">Token</span>
-        </label>
-        <label class="input-group">
+        <label class="cursor-pointer label">
+          <span class="label-text mr-2">Advanced Search</span>
           <input
-            #depositRef
-            #depositNgModelRef="ngModel"
-            required
-            name="deposit"
-            [(ngModel)]="depositAmount"
-            class="input input-bordered w-full"
-            [class]="{ 'input-error': depositNgModelRef.errors && depositNgModelRef.touched }"
-            [min]="0.000001"
-            [max]="balances![selectedDenom] || 0"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            type="checkbox"
+            class="toggle toggle-primary"
+            name="openSearch"
+            [(ngModel)]="isFiltered"
           />
-          <select
-            #symbolRef
-            required
-            [(ngModel)]="selectedDenom"
-            name="symbol"
-            class="select select-bordered w-1/4"
-            (change)="onChangeSymbol()"
-          >
-            <ng-container *ngFor="let s of denoms">
-              <option [value]="s">{{ s }}</option>
-            </ng-container>
-          </select>
-        </label>
-        <label class="label">
-          <span class="label-text-alt"
-            >Available balance: {{ balances![selectedDenom] || 0 }}{{ selectedDenom }}
-          </span>
+          <span class="flex-auto"></span>
         </label>
       </div>
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">Interest Rate</span>
-        </label>
-        <label class="input-group">
-          <input
-            #interestRef
-            #interestNgModelRef="ngModel"
-            required
-            name="interest"
-            [(ngModel)]="interestRate"
-            class="input input-bordered w-full"
-            [class]="{ 'input-error': interestNgModelRef.errors && interestNgModelRef.touched }"
-            [min]="0"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
-          />
-          <span>%</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="20"
-          class="range mt-1"
-          [ngClass]="{
-            'range-info': interestRate <= 2,
-            'range-warning': 2 < interestRate && interestRate <= 5,
-            'range-error': 5 < interestRate
-          }"
-          [(ngModel)]="interestRate"
-          name="slider"
-        />
-      </div>
-      <div class="card-actions justify-end mt-4">
-        <button class="btn btn-primary w-full md:w-auto md:px-8">
-          <mat-icon class="mr-2">photo_library</mat-icon>
-          Search NFTs
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<div>
-  <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
-    <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
-    <ng-template #loading>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-    </ng-template>
-    <ng-template #loaded>
-      <ng-container
-        *ngIf="!listedClasses || listedClasses.length === 0; then empty; else filled"
-      ></ng-container>
-    </ng-template>
-
-    <ng-template #filled>
-      <div
-        *ngFor="let class of listedClasses; index as i"
-        class="sm:pr-12 pb-12 w-full sm:w-1/2 md:w-1/3"
-      >
-        <div class="card w-full glass shadow-xl">
-          <figure class="aspect-square w-full">
-            <img
-              *ngIf="classImages"
-              src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
-              alt="image of the NFT Class"
-              class="h-full object-cover"
+      <form #formRef="ngForm" (submit)="onSubmit()" *ngIf="isFiltered">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Token</span>
+          </label>
+          <label class="input-group">
+            <input
+              #depositRef
+              #depositNgModelRef="ngModel"
+              required
+              name="deposit"
+              [(ngModel)]="depositAmount"
+              class="input input-bordered w-full"
+              [class]="{ 'input-error': depositNgModelRef.errors && depositNgModelRef.touched }"
+              [min]="0.000001"
+              [max]="balances![selectedDenom] || 0"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
             />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title break-all">
-              {{ class.name || class.class_id }}
-            </h2>
-            <h3 class="break-all">{{ class.class_id }}</h3>
-            <p>{{ class.description }}</p>
-            <div class="card-actions justify-center">
-              <button class="btn btn-outline btn-info px-8" (click)="onClickClass(class.class_id)">
-                View Collection
-              </button>
+            <select
+              #symbolRef
+              required
+              [(ngModel)]="selectedDenom"
+              name="symbol"
+              class="select select-bordered w-1/4"
+              (change)="onChangeSymbol()"
+            >
+              <ng-container *ngFor="let s of denoms">
+                <option [value]="s">{{ s }}</option>
+              </ng-container>
+            </select>
+          </label>
+          <label class="label">
+            <span class="label-text-alt"
+              >Available balance: {{ balances![selectedDenom] || 0 }}{{ selectedDenom }}
+            </span>
+          </label>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Interest Rate</span>
+          </label>
+          <label class="input-group">
+            <input
+              #interestRef
+              #interestNgModelRef="ngModel"
+              required
+              name="interest"
+              [(ngModel)]="interestRate"
+              class="input input-bordered w-full"
+              [class]="{ 'input-error': interestNgModelRef.errors && interestNgModelRef.touched }"
+              [min]="0"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
+            />
+            <span>%</span>
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            class="range mt-1"
+            [ngClass]="{
+              'range-info': interestRate <= 2,
+              'range-warning': 2 < interestRate && interestRate <= 5,
+              'range-error': 5 < interestRate
+            }"
+            [(ngModel)]="interestRate"
+            name="slider"
+          />
+        </div>
+        <div class="card-actions justify-end mt-4">
+          <button class="btn btn-primary w-full md:w-auto md:px-8">
+            <mat-icon class="mr-2">photo_library</mat-icon>
+            Search NFTs
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
+      <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
+      <ng-template #loading>
+        <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      </ng-template>
+      <ng-template #loaded>
+        <ng-container
+          *ngIf="!listedClasses || listedClasses.length === 0; then empty; else filled"
+        ></ng-container>
+      </ng-template>
+
+      <ng-template #filled>
+        <div
+          *ngFor="let class of listedClasses; index as i"
+          class="sm:pr-12 pb-12 w-full sm:w-1/2 md:w-1/3"
+        >
+          <div class="card w-full glass shadow-xl">
+            <figure class="aspect-square w-full">
+              <img
+                *ngIf="classImages"
+                src="{{ classImages[i] || 'assets/UnUniFi-logo.png' }}"
+                alt="image of the NFT Class"
+                class="h-full object-cover"
+              />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title break-all">
+                {{ class.name || class.class_id }}
+              </h2>
+              <h3 class="break-all">{{ class.class_id }}</h3>
+              <p>{{ class.description }}</p>
+              <div class="card-actions justify-center">
+                <button
+                  class="btn btn-outline btn-info px-8"
+                  (click)="onClickClass(class.class_id)"
+                >
+                  View Collection
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </ng-template>
-    <ng-template #empty>
-      <p class="text-lg text-error">
-        There is no NFT holder to lend. Try to change token type to lend.
-      </p>
-    </ng-template>
+      </ng-template>
+      <ng-template #empty>
+        <p class="text-lg text-error">
+          There is no NFT holder to lend. Try to change token type to lend.
+        </p>
+      </ng-template>
+    </div>
   </div>
 </div>

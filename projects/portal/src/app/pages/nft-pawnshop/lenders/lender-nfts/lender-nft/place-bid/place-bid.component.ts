@@ -25,6 +25,7 @@ export class PlaceBidComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balance$: Observable<number>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
@@ -56,6 +57,9 @@ export class PlaceBidComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
       map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+    );
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
     const balanceMap$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),

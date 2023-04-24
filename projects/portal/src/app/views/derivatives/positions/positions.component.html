@@ -1,5 +1,10 @@
-<div class="w-full">
-  <h2>Your Positions</h2>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink=".."><a>Top</a></li>
+      <li>Positions</li>
+    </ul>
+  </div>
   <!-- <div class="flex flex-col md:flex-row items-center mb-8">
     <div class="stats">
       <div class="stat">
@@ -23,7 +28,7 @@
     </ng-container>
   </ng-template>
   <ng-template #empty>
-    <p>You have no position.</p>
+    <p class="m-16">You have no position.</p>
   </ng-template>
   <ng-template #filled>
     <ng-container *ngFor="let position of positions">

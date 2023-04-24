@@ -26,6 +26,7 @@ export class BalanceComponent implements OnInit {
   accountTypeName$: Observable<string | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
+  symbolImageMap: { [symbol: string]: string };
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
   faucetSymbols$: Observable<string[] | undefined>;
@@ -65,6 +66,7 @@ export class BalanceComponent implements OnInit {
     this.valAddress$ = cosmosWallet$.pipe(
       throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     this.symbolBalancesMap$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );

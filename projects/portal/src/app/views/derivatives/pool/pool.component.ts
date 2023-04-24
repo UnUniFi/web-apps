@@ -34,7 +34,7 @@ export class PoolComponent implements OnInit, OnChanges {
   params?: ununificlient.proto.ununifi.derivatives.IPoolParams | null;
 
   @Input()
-  dlpRates?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  dlpRates?: { [symbol: string]: number } | null | null;
 
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
@@ -44,6 +44,9 @@ export class PoolComponent implements OnInit, OnChanges {
 
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
+
+  @Input()
+  symbolImageMap?: { [symbol: string]: string } | null;
 
   @Input()
   estimatedLPTAmount?: EstimateDLPTokenAmount200Response | null;
@@ -88,12 +91,10 @@ export class PoolComponent implements OnInit, OnChanges {
   }
 
   onEstimateMint(symbol: string, amount: number) {
-    if (this.symbolMetadataMap && this.dlpRates) {
-      const metadata = this.symbolMetadataMap[symbol];
-      const rate = this.dlpRates?.find((rate) => rate.denom == metadata.base);
-      const denomUnit = metadata.denom_units?.find((u) => u.denom === metadata.base);
-      if (rate && rate.amount && rate.amount != '0') {
-        this.calculatedDLPAmount = (amount * 10 ** denomUnit?.exponent!) / Number(rate?.amount);
+    if (this.dlpRates) {
+      const rate = this.dlpRates[symbol];
+      if (rate) {
+        this.calculatedDLPAmount = amount / rate;
       } else {
         this.calculatedDLPAmount = 0;
       }
@@ -107,11 +108,9 @@ export class PoolComponent implements OnInit, OnChanges {
   }
 
   onEstimateBurn(amount: number, redeemSymbol: string) {
-    if (this.symbolMetadataMap && this.dlpRates) {
-      const metadata = this.symbolMetadataMap[redeemSymbol];
-      const rate = this.dlpRates.find((rate) => rate.denom == metadata.base);
-      const denomUnit = metadata.denom_units?.find((u) => u.denom === metadata.base);
-      this.calculatedRedeemAmount = (amount * Number(rate?.amount)) / 10 ** denomUnit?.exponent!;
+    if (this.dlpRates) {
+      const rate = this.dlpRates[redeemSymbol];
+      this.calculatedRedeemAmount = amount * rate;
     } else {
       this.calculatedRedeemAmount = 0;
     }

@@ -23,7 +23,13 @@ export class MarketComponent implements OnInit {
     map((params) => params.baseSymbol + '/' + params.quoteSymbol),
   );
   baseSymbol$ = this.route.params.pipe(map((params) => params.baseSymbol));
+  baseImage$ = this.baseSymbol$.pipe(
+    map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
+  );
   quoteSymbol$ = this.route.params.pipe(map((params) => params.quoteSymbol));
+  quoteImage$ = this.quoteSymbol$.pipe(
+    map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
+  );
 
   address$ = this.walletService.currentStoredWallet$.pipe(
     filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),

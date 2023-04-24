@@ -32,6 +32,8 @@ export class PlaceBidComponent implements OnInit {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolImage?: string | null;
+  @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
   balance?: number | null;

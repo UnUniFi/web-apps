@@ -1,74 +1,72 @@
 <div class="mx-auto max-w-screen-xl">
   <h2>Faucet (Only Testnet)</h2>
 
-  <div class="w-full md:w-auto mb-8">
-    <div class="card bg-base-100 shadow-xl w-full">
-      <div class="card-body">
-        <h2 class="card-title">Get a Tokens</h2>
-        <p>
-          You can obtain tokens that are only available on the testnet. It is not possible to get
-          more than the limit per address from the faucet.
-        </p>
-        <form #formRef="ngForm" (submit)="onPostFaucetRequested()">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Address</span>
-            </label>
+  <div class="card bg-base-100 shadow-xl w-full">
+    <div class="card-body">
+      <h2 class="card-title">Get a Tokens</h2>
+      <p>
+        You can obtain tokens that are only available on the testnet. It is not possible to get more
+        than the limit per address from the faucet.
+      </p>
+      <form #formRef="ngForm" (submit)="onPostFaucetRequested()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Address</span>
+          </label>
+          <input
+            #addressRef
+            class="input input-bordered"
+            name="address"
+            [(ngModel)]="address"
+            required
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Token</span>
+          </label>
+          <label class="input-group">
+            <span *ngIf="symbolImageMap && symbol && symbolImageMap[symbol]">
+              <div class="mask mask-circle w-8 h-8">
+                <img src="{{ symbolImageMap[symbol] }}" alt="Asset Symbol" />
+              </div>
+            </span>
             <input
-              #addressRef
-              class="input input-bordered"
-              name="address"
-              [(ngModel)]="address"
+              #amountRef
+              class="input input-bordered w-full"
+              name="amount"
+              [(ngModel)]="amount"
+              [min]="0.000001"
+              [max]="creditAmount ? creditAmount : 0"
+              (focus)="focusAmount = true"
+              (focusout)="focusAmount = false"
               required
             />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Token</span>
-            </label>
-            <label class="input-group">
-              <span *ngIf="symbolImageMap && symbol && symbolImageMap[symbol]">
-                <div class="mask mask-circle w-8 h-8">
-                  <img src="{{ symbolImageMap[symbol] }}" alt="Asset Symbol" />
-                </div>
-              </span>
-              <input
-                #amountRef
-                class="input input-bordered w-full"
-                name="amount"
-                [(ngModel)]="amount"
-                [min]="0.000001"
-                [max]="creditAmount ? creditAmount : 0"
-                (focus)="focusAmount = true"
-                (focusout)="focusAmount = false"
-                required
-              />
-              <select
-                #symbolRef
-                required
-                [(ngModel)]="symbol"
-                name="symbol"
-                class="select select-bordered w-1/4"
-                (change)="onSelectedDenomChanged()"
-              >
-                <ng-container *ngFor="let s of symbols">
-                  <option [value]="s">{{ s }}</option>
-                </ng-container>
-              </select>
-            </label>
-            <label class="label">
-              <span class="label-text-alt"
-                >Max Claimable Amount: {{ creditAmount }}{{ symbol }}
-              </span>
-            </label>
-          </div>
-          <div class="modal-action">
-            <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
-              Send Request
-            </button>
-          </div>
-        </form>
-      </div>
+            <select
+              #symbolRef
+              required
+              [(ngModel)]="symbol"
+              name="symbol"
+              class="select select-bordered w-1/4"
+              (change)="onSelectedDenomChanged()"
+            >
+              <ng-container *ngFor="let s of symbols">
+                <option [value]="s">{{ s }}</option>
+              </ng-container>
+            </select>
+          </label>
+          <label class="label">
+            <span class="label-text-alt"
+              >Max Claimable Amount: {{ creditAmount }}{{ symbol }}
+            </span>
+          </label>
+        </div>
+        <div class="modal-action">
+          <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+            Send Request
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

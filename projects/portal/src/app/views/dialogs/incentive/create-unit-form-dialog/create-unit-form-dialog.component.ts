@@ -42,7 +42,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
-    this.firstRecipient = { address: '', distRate: 0 };
+    this.firstRecipient = { address: '', distRate: 100 };
     this.recipients = [];
     this.appSubmit = new EventEmitter();
     this.availableDenoms = ['uguu'];
@@ -51,6 +51,9 @@ export class CreateUnitFormDialogComponent implements OnInit {
   }
 
   ngOnChanges(): void {
+    if (this.firstRecipient && this.currentStoredWallet) {
+      this.firstRecipient.address = this.currentStoredWallet.address;
+    }
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }

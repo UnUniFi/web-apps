@@ -7,16 +7,16 @@
   <div class="card-body">
     <div class="flex flex-col items-center">
       <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-      <div class="font-bold text-xl m-3">Create new incentive unit</div>
+      <div class="font-bold text-xl m-3">Register as an Ecosystem-Incentive recipient</div>
     </div>
 
     <form *ngIf="firstRecipient" #formRef="ngForm" (submit)="onSubmit()">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text">Incentive Uint ID</span>
+          <span class="label-text">Recipient Name</span>
         </label>
         <input
-          name="address"
+          name="unitId"
           type="text"
           placeholder="Type here"
           class="input input-bordered input-sm w-full"
@@ -25,14 +25,27 @@
         />
       </div>
 
-      <div class="flex flex-col content-content lg:flex-row">
+      <div class="flex flex-row flex-wrap items-center content-content">
+        <div class="form-control flex-auto">
+          <label class="label">
+            <span class="label-text">Recipient Address</span>
+          </label>
+          <input
+            name="first-address"
+            type="text"
+            placeholder="Type here"
+            class="input input-bordered input-sm w-full"
+            [(ngModel)]="firstRecipient.address"
+            required
+          />
+        </div>
         <div class="form-control flex-auto">
           <label class="label">
             <span class="label-text">Distribution Rate</span>
           </label>
           <label class="input-group">
             <input
-              name="dist-rate"
+              name="first-dist-rate"
               type="number"
               placeholder="e.g. 12.123456"
               class="input input-bordered input-sm w-full"
@@ -42,54 +55,42 @@
             <span>%</span>
           </label>
         </div>
-        <div class="form-control flex-auto">
-          <label class="label">
-            <span class="label-text">Recipient Address</span>
-          </label>
-          <input
-            name="address"
-            type="text"
-            placeholder="Type here"
-            class="input input-bordered input-sm w-full"
-            [(ngModel)]="firstRecipient.address"
-            required
-          />
-        </div>
+        <span class="w-8"></span>
       </div>
 
       <!-- Recipients Array  -->
       <div
-        class="flex flex-col content-content lg:flex-row items-center mt-2"
+        class="flex content-content flex-row flex-wrap items-center mt-2"
         *ngFor="let recipient of recipients; let i = index"
       >
+        <div class="form-control flex-auto">
+          <!-- <label class="label">
+        <span class="label-text">Recipient Address</span>
+      </label> -->
+          <input
+            name="address-{{ i }}"
+            type="text"
+            placeholder="Type here"
+            class="input input-bordered input-sm w-full"
+            [(ngModel)]="recipient.address"
+            required
+          />
+        </div>
         <div class="form-control flex-auto">
           <!-- <label class="label">
           <span class="label-text label-sm">Distribution Rate (%)</span>
         </label> -->
           <label class="input-group">
             <input
-              name="dist-rate"
+              name="dist-rate-{{ i }}"
               type="number"
               placeholder="e.g. 12.123456"
               class="input input-bordered input-sm w-full"
-              [(ngModel)]="firstRecipient.distRate"
+              [(ngModel)]="recipient.distRate"
               required
             />
             <span>%</span>
           </label>
-        </div>
-        <div class="form-control flex-auto">
-          <!-- <label class="label">
-          <span class="label-text">Recipient Address</span>
-        </label> -->
-          <input
-            name="address"
-            type="text"
-            placeholder="Type here"
-            class="input input-bordered input-sm w-full"
-            [(ngModel)]="firstRecipient.address"
-            required
-          />
         </div>
         <button class="btn btn-square btn-ghost btn-sm" (click)="onClickDeleteRecipient(i)">
           <span class="material-icons">delete</span>

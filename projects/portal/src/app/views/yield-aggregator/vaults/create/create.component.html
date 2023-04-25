@@ -162,8 +162,12 @@
                   class="select select-bordered text-center w-auto sm:w-64"
                   [(ngModel)]="selectedStrategyId"
                   name="strategyId"
+                  disabled="!selectedSymbol"
                 >
-                  <option [value]="undefined" disabled>Select a strategy</option>
+                  <option [value]="undefined" disabled>
+                    <span *ngIf="!selectedSymbol">Select an asset first!</span>
+                    <span *ngIf="selectedSymbol">Select a strategy</span>
+                  </option>
                   <ng-container *ngFor="let s of strategies">
                     <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
                       {{ s.name | uppercase }}

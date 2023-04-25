@@ -101,11 +101,11 @@
           </label>
         </div>
       </div>
-      <label class="btn btn-block btn-outline btn-secondary mt-2" (click)="onClickAddRecipient()">
+      <label class="btn btn-outline btn-secondary px-8 mt-2" (click)="onClickAddRecipient()">
         <span class="material-icons">add</span>Add Recipient
       </label>
 
-      <div class="form-control w-full">
+      <!-- <div class="form-control w-full">
         <label class="label">
           <span class="label-text">Gas Ratio</span>
         </label>
@@ -191,7 +191,7 @@
             [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
           />
         </div>
-      </div>
+      </div> -->
 
       <button class="btn btn-accent btn-block mt-2" [disabled]="formRef.invalid">Create</button>
     </form>

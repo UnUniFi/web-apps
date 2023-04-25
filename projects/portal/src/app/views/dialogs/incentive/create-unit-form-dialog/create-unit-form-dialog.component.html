@@ -19,14 +19,14 @@
           name="unitId"
           type="text"
           placeholder="Type here"
-          class="input input-bordered input-sm w-full"
+          class="input input-bordered w-full"
           [(ngModel)]="unitId"
           required
         />
       </div>
 
       <div class="flex flex-row flex-wrap items-center content-content">
-        <div class="form-control flex-auto">
+        <div class="form-control flex-auto mr-1">
           <label class="label">
             <span class="label-text">Recipient Address</span>
           </label>
@@ -34,7 +34,7 @@
             name="first-address"
             type="text"
             placeholder="Type here"
-            class="input input-bordered input-sm w-full"
+            class="input input-bordered w-full"
             [(ngModel)]="firstRecipient.address"
             required
           />
@@ -48,14 +48,16 @@
               name="first-dist-rate"
               type="number"
               placeholder="e.g. 12.123456"
-              class="input input-bordered input-sm w-full"
+              class="input input-bordered w-full"
               [(ngModel)]="firstRecipient.distRate"
               required
             />
             <span>%</span>
+            <button class="btn btn-square btn-outline btn-disabled">
+              <div class="material-icons">delete</div>
+            </button>
           </label>
         </div>
-        <span class="w-8"></span>
       </div>
 
       <!-- Recipients Array  -->
@@ -63,7 +65,7 @@
         class="flex content-content flex-row flex-wrap items-center mt-2"
         *ngFor="let recipient of recipients; let i = index"
       >
-        <div class="form-control flex-auto">
+        <div class="form-control flex-auto mr-1">
           <!-- <label class="label">
         <span class="label-text">Recipient Address</span>
       </label> -->
@@ -71,35 +73,35 @@
             name="address-{{ i }}"
             type="text"
             placeholder="Type here"
-            class="input input-bordered input-sm w-full"
+            class="input input-bordered w-full"
             [(ngModel)]="recipient.address"
             required
           />
         </div>
         <div class="form-control flex-auto">
           <!-- <label class="label">
-          <span class="label-text label-sm">Distribution Rate (%)</span>
+          <span class="label-text label">Distribution Rate (%)</span>
         </label> -->
           <label class="input-group">
             <input
               name="dist-rate-{{ i }}"
               type="number"
               placeholder="e.g. 12.123456"
-              class="input input-bordered input-sm w-full"
+              class="input input-bordered w-full"
               [(ngModel)]="recipient.distRate"
               required
             />
             <span>%</span>
+            <button
+              class="btn btn-square btn-outline btn-error"
+              (click)="onClickDeleteRecipient(i)"
+            >
+              <div class="material-icons">delete</div>
+            </button>
           </label>
         </div>
-        <button class="btn btn-square btn-ghost btn-sm" (click)="onClickDeleteRecipient(i)">
-          <span class="material-icons">delete</span>
-        </button>
       </div>
-      <label
-        class="btn btn-block btn-outline btn-secondary btn-sm mt-2"
-        (click)="onClickAddRecipient()"
-      >
+      <label class="btn btn-block btn-outline btn-secondary mt-2" (click)="onClickAddRecipient()">
         <span class="material-icons">add</span>Add Recipient
       </label>
 
@@ -111,7 +113,7 @@
           name="gas-ratio"
           type="number"
           placeholder="e.g. 1.1"
-          class="input input-bordered input-sm w-full"
+          class="input input-bordered w-full"
           [(ngModel)]="gasRatio"
           required
         />
@@ -139,7 +141,7 @@
         <input type="checkbox" class="peer" />
         <div class="collapse-title flex items-center">
           <div class="text-xl flex-auto">Advanced</div>
-          <div class="flex-auto text-sm">Change Default Gas Price</div>
+          <div class="flex-auto text">Change Default Gas Price</div>
         </div>
         <div class="collapse-content">
           <div class="flex flex-col content-content lg:flex-row">
@@ -148,7 +150,7 @@
                 <span class="label-text">Gas Denom</span>
               </label>
               <select
-                class="select select-bordered select-sm"
+                class="select select-bordered"
                 [(ngModel)]="selectedGasPrice && selectedGasPrice.denom"
                 name="minimum-gas-denom"
                 required
@@ -171,7 +173,7 @@
                 name="minimum-gas-price"
                 type="number"
                 placeholder="e.g. 0.123456"
-                class="input input-bordered input-sm"
+                class="input input-bordered"
                 [(ngModel)]="selectedGasPrice && selectedGasPrice.amount"
                 [min]="0"
                 required

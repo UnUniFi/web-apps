@@ -2,14 +2,14 @@ import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
-import { AccAddress } from '@cosmos-client/core/cjs/types';
-import { Observable, zip } from 'rxjs';
-import { filter, map, mergeMap, pluck } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 import {
   AllPositions200ResponsePositionsInner,
   DerivativesParams200ResponseParams,
   EstimateDLPTokenAmount200Response,
+  EstimateRedeemAmount200Response,
   PerpetualFutures200Response,
   PerpetualFuturesMarket200Response,
   Pool200Response,
@@ -45,7 +45,7 @@ export class DerivativesQueryService {
   getEstimateRedeemTokenAmount(
     redeemDenom: string,
     lptAmount: string,
-  ): Observable<EstimateDLPTokenAmount200Response> {
+  ): Observable<EstimateRedeemAmount200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
         ununificlient.rest.derivatives.estimateRedeemAmount(sdk, redeemDenom, lptAmount),

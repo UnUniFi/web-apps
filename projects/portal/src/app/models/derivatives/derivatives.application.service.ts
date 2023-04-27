@@ -172,13 +172,7 @@ export class DerivativesApplicationService {
       .toPromise();
 
     const perpetualFuturesPositionInstance =
-      this.derivativesService.buildPerpetualFuturesPositionInstance(
-        baseSymbol,
-        positionType,
-        size * 10 ** 12,
-        leverage,
-        symbolMetadataMap,
-      );
+      this.derivativesService.buildPerpetualFuturesPositionInstance(positionType, size, leverage);
 
     const positionInstance: cosmosclient.proto.google.protobuf.IAny =
       cosmosclient.codec.instanceToProtoAny(perpetualFuturesPositionInstance);

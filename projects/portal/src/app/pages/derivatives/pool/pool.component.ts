@@ -6,7 +6,6 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 

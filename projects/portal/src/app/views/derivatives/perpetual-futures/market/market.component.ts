@@ -223,8 +223,4 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   onSubmitClose(positionId: string) {
     this.closePosition.emit(positionId);
   }
-
-  calcMarginRate(decRate: string) {
-    return Number(decRate) / 10 ** 6;
-  }
 }

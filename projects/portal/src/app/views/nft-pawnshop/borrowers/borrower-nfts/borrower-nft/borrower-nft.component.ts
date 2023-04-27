@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
   Loan200Response,
   Liquidation200ResponseLiquidations,
@@ -19,7 +19,7 @@ export class BorrowerNftComponent implements OnInit {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInner | null;
+  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
   symbol?: string | null;
   @Input()

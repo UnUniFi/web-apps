@@ -48,7 +48,7 @@
               </h2>
               <button
                 class="btn btn-outline btn-info"
-                routerLink="../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
+                routerLink="../../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
               >
                 List
               </button>
@@ -97,16 +97,18 @@
               />
             </figure>
             <div class="card-body">
-              <span class="badge badge-primary">{{ nft.state }}</span>
+              <span class="badge badge-primary">{{ nft.listing?.state }}</span>
               <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
-                {{ listedOwnNftsMetadata[i].name + '/' + nft.nft_id?.nft_id }}
+                {{ listedOwnNftsMetadata[i].name + '/' + nft.listing?.nft_id?.nft_id }}
               </h2>
               <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
-                {{ nft.nft_id?.nft_id }}
+                {{ nft.listing?.nft_id?.nft_id }}
               </h2>
               <button
                 class="btn btn-outline btn-secondary"
-                routerLink="../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
+                routerLink="../../nfts/{{ nft.listing?.nft_id?.class_id }}/{{
+                  nft.listing?.nft_id?.nft_id
+                }}"
               >
                 View
               </button>

@@ -25,6 +25,26 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Vault Name</span>
+              <!-- The button to open modal -->
+              <label for="modal-name" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-name" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
+                  <p class="py-2">
+                    The Vault must have a unique name. Please give it a name that describes its
+                    purpose and how it will be operated.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-name" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <input
               type="text"
@@ -45,7 +65,11 @@
             </label>
             <select
               required
+              #assetNgModelRef="ngModel"
               class="select select-bordered w-full"
+              [class]="{
+                'select-error': assetNgModelRef.errors
+              }"
               [(ngModel)]="selectedSymbol"
               name="symbol"
               (change)="onChangeSymbol()"
@@ -57,6 +81,26 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Commission Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-commission" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-commission" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Commission Rate?</h3>
+                  <p class="py-2">
+                    The commission fee is a fee charged to the Vault users. You can choose what
+                    percentage of the deposits you want to charge as a commission.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-commission" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <label class="input-group">
               <input
@@ -80,6 +124,27 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Withdraw Reserve Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-reserve" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-reserve" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Reserve Rate?</h3>
+                  <p class="py-2">
+                    Determines the percentage of funds set aside for withdrawals. For example, if
+                    set at 10%, 10% of the funds will be left uninvested and 90% of the funds will
+                    be used for investment.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-reserve" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
             </label>
             <label class="input-group">
               <input

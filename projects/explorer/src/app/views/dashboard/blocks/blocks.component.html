@@ -8,9 +8,17 @@
       <div class="flex">
         <h2 class="card-title">Latest Blocks</h2>
         <span class="flex-auto"></span>
-        <mat-checkbox class="auto" color="primary" (change)="onCheckBoxAutoChange($event.checked)">
-          Auto
-        </mat-checkbox>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <input
+              #autoRef
+              type="checkbox"
+              class="checkbox mr-2"
+              (change)="onCheckBoxAutoChange(autoRef.checked)"
+            />
+            <span class="label-text">Auto</span>
+          </label>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="table w-full">

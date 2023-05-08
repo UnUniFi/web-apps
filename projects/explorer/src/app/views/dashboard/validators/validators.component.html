@@ -3,61 +3,63 @@
   <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <mat-card>
-    <div class="flex flex-row items-end">
-      <mat-card-header>
-        <mat-icon mat-card-avatar color="accent">construction</mat-icon>
-        <mat-card-title>Validators</mat-card-title>
-      </mat-card-header>
-      <span class="flex-auto"></span>
-      <mat-button-toggle-group #tgl="matButtonToggleGroup" (change)="onToggleChange(tgl.value)">
-        <mat-button-toggle value="active">Active</mat-button-toggle>
-        <mat-button-toggle value="inactive">Inactive</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <mat-list>
-      <mat-list-item>
-        <span class="w-6/12 lg:w-9/12 break-all text-base pl-8 pr-8">Validator</span>
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex">
+        <h2 class="card-title">Validators</h2>
         <span class="flex-auto"></span>
-        <span class="w-2/12 lg:w-3/12 text-right break-words text-sm">Voting Power</span>
-        <span class="w-2/12 lg:w-3/12 text-right break-all text-sm">Tokens</span>
-        <span class="w-2/12 lg:hidden text-right break-all text-xs">Commission</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
+        <div class="btn-group">
+          <button class="btn" [class]="{ 'btn-active': active }" (click)="onClickToggle()">
+            Active
+          </button>
+          <button class="btn" [class]="{ 'btn-active': !active }" (click)="onClickToggle()">
+            Inactive
+          </button>
+        </div>
+      </div>
 
-    <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
-    <ng-template #exist>
-      <mat-nav-list>
-        <mat-list-item *ngFor="let validator of validators; last as last"
-          routerLink="/validators/{{ validator.val.operator_address }}">
-          <span class="w-6/12 lg:w-9/12 flex">
-            <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
-              circle
-            </mat-icon>
-            <span class="break-all text-base mt-1">{{ validator.val.description?.moniker }}</span>
-          </span>
-          <span class="flex-auto"></span>
-          <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
-            validator.share | percent: '1.2-2'
-            }}</span>
-          <span class="flex-auto"></span>
-          <span class="w-2/12 lg:w-3/12 text-right break-all text-base">{{
-            validator.val.tokens | unitConversion
-            }}</span>
-          <span class="w-2/12 lg:hidden text-right break-all text-base">{{
-            validator.val.commission?.commission_rates?.rate | percent: '1.0-0'
-            }}</span>
-          <mat-divider *ngIf="!last"></mat-divider>
-        </mat-list-item>
-      </mat-nav-list>
-    </ng-template>
-    <ng-template #empty>
-      <mat-list>
-        <mat-list-item>
-          There is no validator.
-        </mat-list-item>
-      </mat-list>
-    </ng-template>
-  </mat-card>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <th></th>
+            <td>Validator</td>
+            <td>Voting Power</td>
+            <td>Tokens</td>
+            <td>Commission</td>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(validators?.length || 0) > 0; else empty">
+              <tr *ngFor="let validator of validators; last as last">
+                <th>
+                  <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
+                    circle
+                  </mat-icon>
+                </th>
+                <td>
+                  <a routerLink="/validators/{{ validator.val.operator_address }}">
+                    {{ validator.val.description?.moniker }}
+                  </a>
+                </td>
+                <td>
+                  {{ validator.share | percent : '1.2-2' }}
+                </td>
+                <td>
+                  {{ validator.val.tokens | unitConversion }}
+                </td>
+                <td>
+                  {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
+                </td>
+              </tr>
+            </ng-container>
+            <ng-template #empty>
+              <tr>
+                <th></th>
+                <td colspan="4">There is no validator.</td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </ng-template>

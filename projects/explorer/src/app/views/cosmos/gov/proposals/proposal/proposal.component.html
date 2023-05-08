@@ -5,127 +5,101 @@
 <ng-template #loaded>
   <h2>proposal: {{ proposal?.proposal_id }}</h2>
 
-  <mat-card>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Status: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.status }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <tr>
+        <th>Status</th>
+        <td>{{ proposal?.status }}</td>
+      </tr>
+    </table>
+  </div>
 
   <h3>Tally</h3>
 
-  <mat-card>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Yes: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.yes }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Abstain: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.abstain }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>No: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.no }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>No with Veto: </span>
-          <span class="flex-auto"></span>
-          <span>{{ tally?.no_with_veto }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <tr>
+        <th>Yes</th>
+        <td>{{ tally?.yes }}</td>
+      </tr>
+      <tr>
+        <th>Abstain</th>
+        <td>{{ tally?.abstain }}</td>
+      </tr>
+      <tr>
+        <th>No</th>
+        <td>{{ tally?.no }}</td>
+      </tr>
+      <tr>
+        <th>No with Veto</th>
+        <td>{{ tally?.no_with_veto }}</td>
+      </tr>
+    </table>
+  </div>
 
   <h3>Deposit</h3>
-  <mat-card>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Submit Time: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.submit_time }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Deposit End Time: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.deposit_end_time }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <tr>
+        <th>Submit Time</th>
+        <td>{{ proposal?.submit_time }}</td>
+      </tr>
+      <tr>
+        <th>Deposit End Time</th>
+        <td>{{ proposal?.deposit_end_time }}</td>
+      </tr>
+    </table>
+  </div>
 
   <h4>Total Deposit</h4>
-  <mat-card>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let total of proposal?.total_deposit">
-          <span>{{ total.amount }}</span>
-          <span class="flex-auto"></span>
-          <span>{{ total.denom }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <ng-container *ngFor="let total of proposal?.total_deposit">
+        <tr>
+          <td>{{ total.amount }}</td>
+          <td>{{ total.denom }}</td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
 
   <ng-container *ngFor="let deposit of deposits">
     <h4>Depositor: {{ deposit.depositor }}</h4>
-    <mat-card>
-      <mat-list>
-        <mat-list-item *ngFor="let amount of deposit.amount">
-          <span>{{ amount.amount }}</span>
-          <span class="flex-auto"></span>
-          <span>{{ amount.denom }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-      </mat-list>
-    </mat-card>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <ng-container *ngFor="let amount of deposit.amount">
+          <tr>
+            <td>{{ amount.amount }}</td>
+            <td>{{ amount.denom }}</td>
+          </tr>
+        </ng-container>
+      </table>
+    </div>
   </ng-container>
 
   <h3>Vote</h3>
-  <mat-card>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span>Vote Start Time: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.voting_start_time }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-list-item>
-          <span>Vote End Time: </span>
-          <span class="flex-auto"></span>
-          <span>{{ proposal?.voting_end_time }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <tr>
+        <th>Vote Start Time</th>
+        <td>{{ proposal?.voting_start_time }}</td>
+      </tr>
+      <tr>
+        <th>Vote End Time</th>
+        <td>{{ proposal?.voting_end_time }}</td>
+      </tr>
+    </table>
+  </div>
 
   <ng-container *ngFor="let vote of votes">
     <h4>voter: {{ vote.voter }}</h4>
-    <mat-card>
-      <mat-list>
-        <mat-list-item>
-          <span>Yes: </span>
-          <span class="flex-auto"></span>
-          <span>{{ vote.option }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-      </mat-list>
-    </mat-card>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tr>
+          <th>Is Yes</th>
+          <td>{{ vote.option }}</td>
+        </tr>
+      </table>
+    </div>
   </ng-container>
 </ng-template>

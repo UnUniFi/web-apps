@@ -21,7 +21,7 @@
                 name="id"
                 type="text"
                 placeholder="Type here"
-                class="input input-bordered input-sm w-full"
+                class="input input-bordered w-full"
                 [(ngModel)]="privateWallet.id"
                 required
                 pattern="^[a-z_][a-z_0-9]*$"
@@ -37,7 +37,7 @@
                 #walletTypeRef
                 name="walletType"
                 type="text"
-                class="input input-bordered input-sm w-full"
+                class="input input-bordered w-full"
                 [(ngModel)]="privateWallet.type"
                 required
                 readonly
@@ -93,7 +93,7 @@
                 <input
                   #privateKeyRef
                   name="password"
-                  class="input input-bordered input-sm w-full"
+                  class="input input-bordered w-full"
                   [type]="isPasswordVisible ? 'text' : 'password'"
                   [(ngModel)]="privateWallet.privateKey"
                   autocomplete="new-password"

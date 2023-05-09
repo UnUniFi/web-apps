@@ -1,55 +1,45 @@
-<h2 class="mb-4">Incentive Token Detail</h2>
-<h3 class="mb-0 ml-2">{{ unitId }}</h3>
-<mat-card class="mb-4">
-  <mat-card-title>txMemo</mat-card-title>
-  <mat-card-content>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">{{ txMemo }}</span>
-        <span class="flex-auto"></span>
-        <button mat-button type="button" matSuffix (click)="copyClipboard(txMemo!)">
-          <mat-icon>content_copy</mat-icon>
-          <span>copy</span>
-        </button>
-      </mat-list-item>
-    </mat-list>
-    <details>
-      <summary>Read More</summary>
-      <mat-card-content>
-        <p>
-          Add this JSON string to the txMemo in the MSG of the transaction sent from the app you
-          created.
-        </p>
-        <p>You will be rewarded when the transaction is processed successfully.</p>
-      </mat-card-content>
-    </details>
-  </mat-card-content>
-</mat-card>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li routerLink="../.."><a>Ecosystem-Incentive</a></li>
+      <li>{{ unitId }}</li>
+    </ul>
+  </div>
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">{{ unitId }}</h2>
 
-<ng-container *ngIf="unit === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-</ng-template>
-<ng-template #loaded>
-  <ng-container *ngIf="unit !== undefined; then exist; else notFound"> </ng-container>
-</ng-template>
-<ng-template #exist>
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <ng-container *ngFor="let subject of unit?.subject_info_lists; last as last">
-          <mat-list-item>
-            <span class="whitespace-nowrap">{{ subject.subject_addr }}:</span>
-            <span class="flex-auto"></span>
-            <span class="ml-1 break-all">{{ subject.weight | percentage }}%</span>
-          </mat-list-item>
-          <mat-divider *ngIf="!last"></mat-divider>
-        </ng-container>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</ng-template>
+      <ng-container *ngIf="txMemo">
+        <div class="mockup-code text-primary-content text-lg mb-4">
+          <pre><code class="break-all">{{ txMemo }}</code></pre>
+          <div class="flex flex-row justify-end">
+            <label class="btn" (click)="copyClipboard(txMemo)">
+              <mat-icon>content_copy</mat-icon>Copy
+            </label>
+          </div>
+        </div>
+      </ng-container>
+      <p>
+        Add this JSON string to the txMemo in the MSG of the transaction sent from the app you
+        developed. You will be rewarded when the transaction is processed successfully.
+      </p>
 
-<ng-template #notFound>
-  <p>404 Not Found</p>
-</ng-template>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <td>Rate</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subject of unit?.subject_info_lists">
+              <td>{{ subject.subject_addr }}</td>
+              <td>{{ subject.weight | percent : '1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

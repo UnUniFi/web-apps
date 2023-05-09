@@ -1,51 +1,97 @@
-<h2 class="mb-4">Ecosystem-Incentive</h2>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li>Ecosystem-Incentive</li>
+    </ul>
+  </div>
 
-<h3 class="mb-0 ml-2">Existing Incentive Tokens</h3>
-<div class="flex flex-col">
-  <mat-card class="mb-4">
-    <mat-nav-list>
-      <mat-list-item *ngIf="!unitIds"> No Tokens! </mat-list-item>
-      <mat-list-item *ngIf="unitIds && unitIds.length === 0"> No Tokens! </mat-list-item>
-      <ng-container *ngIf="unitIds && unitIds.length > 0">
-        <ng-container *ngFor="let unitId of unitIds; last as last">
-          <mat-list-item routerLink="units/{{ unitId }}">
-            <span>{{ unitId }}</span>
-            <mat-divider *ngIf="!last"></mat-divider>
-          </mat-list-item>
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">Incentive Recipient</h2>
+      <p>
+        Rewards can be earned by creating a recipient with a set distribution of rewards and using
+        them in front-end applications. Multiple addresses can be set to receive rewards.
+      </p>
+      <ng-container *ngIf="unitIds === null; then loading; else loaded"></ng-container>
+      <ng-template #loading>
+        <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      </ng-template>
+      <ng-template #loaded>
+        <ng-container *ngIf="!unitIds || unitIds.length === 0; then empty; else filled">
         </ng-container>
-      </ng-container>
-    </mat-nav-list>
-  </mat-card>
+      </ng-template>
 
-  <button class="mb-4" mat-flat-button color="primary" (click)="onClickCreate()">
-    Create New Token
-  </button>
+      <ng-template #empty> </ng-template>
+      <ng-template #filled>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>Recipient Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hover" *ngFor="let unitId of unitIds" routerLink="units/{{ unitId }}">
+                <td>{{ unitId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+      <div class="card-actions justify-end">
+        <button class="btn btn-outline btn-info px-8" (click)="onClickCreate()">
+          <span class="material-icons">add</span>
+          <span>Register</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">Rewards</h2>
+      <ng-container *ngIf="rewards === null; then loadingReward; else loadedReward"></ng-container>
+      <ng-template #loadingReward>
+        <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      </ng-template>
+      <ng-template #loadedReward>
+        <ng-container *ngIf="!rewards || rewards.length === 0; then emptyReward; else filledReward">
+        </ng-container>
+      </ng-template>
+
+      <ng-template #emptyReward>
+        <p>There is no reward.</p>
+      </ng-template>
+      <ng-template #filledReward>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th></th>
+                <th>Reward</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="hover"
+                *ngFor="let reward of rewards; let i = index"
+                (click)="onClickReward(reward.denom)"
+              >
+                <th>#{{ i + 1 }}</th>
+                <td>{{ reward | coin }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline btn-primary px-8" (click)="onClickAllRewards()">
+            <span class="material-icons">add</span>
+            <span>Withdraw All Rewards</span>
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
 </div>
-
-<h3 class="mb-0 ml-2">Available Rewards</h3>
-<mat-card class="mb-4">
-  <mat-nav-list>
-    <mat-list-item *ngIf="!rewards"> No Rewards! </mat-list-item>
-    <mat-list-item *ngIf="rewards && rewards.length === 0"> No Rewards! </mat-list-item>
-    <ng-container *ngIf="rewards && rewards.length > 0">
-      <mat-list-item
-        *ngFor="let reward of rewards; let i = index; last as last"
-        (click)="onClickReward(reward.denom)"
-      >
-        <span class="whitespace-nowrap">Reward #{{ i + 1 }}</span>
-        <span class="flex-auto"></span>
-        <span class="ml2 break-all">{{ reward?.amount }} {{ reward?.denom }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </ng-container>
-  </mat-nav-list>
-</mat-card>
-<button
-  *ngIf="rewards && rewards.length > 1"
-  class="mb-4 w-full"
-  mat-flat-button
-  color="accent"
-  (click)="onClickAllRewards()"
->
-  Withdraw All Rewards
-</button>

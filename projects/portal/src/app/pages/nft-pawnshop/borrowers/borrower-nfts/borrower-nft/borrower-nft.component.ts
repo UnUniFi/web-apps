@@ -9,7 +9,7 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { Observable, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
   Loan200Response,
   Liquidation200ResponseLiquidations,
@@ -23,7 +23,7 @@ import {
 export class BorrowerNftComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   symbol$: Observable<string | null | undefined>;
   symbolImage$: Observable<string | undefined>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;

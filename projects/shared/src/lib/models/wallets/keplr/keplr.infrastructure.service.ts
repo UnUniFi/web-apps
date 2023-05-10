@@ -63,23 +63,23 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       };
       const currencies = [
         {
-          coinDenom: 'GUU ',
-          coinMinimalDenom: 'stake',
+          coinDenom: 'GUU',
+          coinMinimalDenom: 'uguu',
           coinDecimals: 6,
           coinGeckoId: 'ununifi',
         },
       ];
       const feeCurrencies = [
         {
-          coinDenom: 'GUU ',
-          coinMinimalDenom: 'stake',
+          coinDenom: 'GUU',
+          coinMinimalDenom: 'uguu',
           coinDecimals: 6,
           coinGeckoId: 'ununifi',
         },
       ];
       const stakeCurrency = {
-        coinDenom: 'GUU ',
-        coinMinimalDenom: 'stake',
+        coinDenom: 'GUU',
+        coinMinimalDenom: 'uguu',
         coinDecimals: 6,
         coinGeckoId: 'ununifi',
       };

@@ -13,10 +13,10 @@ import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawn
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
-  ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
   Liquidation200ResponseLiquidations,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -30,7 +30,11 @@ export class RepayComponent implements OnInit {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInner | null;
+  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  @Input()
+  symbol?: string | null;
+  @Input()
+  symbolImage?: string | null;
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()

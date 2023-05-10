@@ -12,12 +12,13 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./validator.component.css'],
 })
 export class ValidatorComponent implements OnInit {
+  validatorAddress$: Observable<string>;
   validator$: Observable<validatorType | undefined>;
   accAddress$: Observable<cosmosclient.AccAddress | undefined>;
 
   constructor(private route: ActivatedRoute, private usecase: ValidatorUseCaseService) {
-    const validatorAddress$ = this.route.params.pipe(
-      map((params) => params.address),
+    this.validatorAddress$ = this.route.params.pipe(map((params) => params.address));
+    const validatorAddress$ = this.validatorAddress$.pipe(
       map((addr) => cosmosclient.ValAddress.fromString(addr)),
     );
     this.accAddress$ = this.usecase.accAddress$(validatorAddress$);

@@ -58,7 +58,7 @@
             name="delegate-amount"
             type="number"
             placeholder="e.g. 12.123456"
-            class="input input-bordered input-sm w-full"
+            class="input input-bordered w-full"
             [(ngModel)]="selectedAmount && selectedAmount.amount"
             [min]="0"
             required
@@ -69,7 +69,7 @@
 
         <label class="label">
           <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom }}
+            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom | coinDenom }}
           </span>
         </label>
       </div>

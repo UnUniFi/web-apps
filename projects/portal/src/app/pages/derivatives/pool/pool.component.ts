@@ -6,7 +6,6 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { BurnLPTEvent, MintLPTEvent } from '../../../views/derivatives/pool/pool.component';
 import { Component, OnInit } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -29,6 +28,7 @@ export class PoolComponent implements OnInit {
     mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
   );
   symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+  symbolImageMap = this.bankQuery.getSymbolImageMap();
   mintAmount: BehaviorSubject<MintLPTEvent> = new BehaviorSubject<MintLPTEvent>({
     amount: 1,
     symbol: 'BTC',
@@ -76,7 +76,11 @@ export class PoolComponent implements OnInit {
     }),
   );
 
-  dlpRates$ = this.derivativesQuery.listDLPRates();
+  dlpRates$ = combineLatest([this.derivativesQuery.listDLPRates(), this.denomMetadataMap$]).pipe(
+    map(([rates, denomMetadataMap]) =>
+      this.bankService.convertCoinsToSymbolAmount(rates, denomMetadataMap),
+    ),
+  );
 
   constructor(
     private readonly walletService: WalletService,

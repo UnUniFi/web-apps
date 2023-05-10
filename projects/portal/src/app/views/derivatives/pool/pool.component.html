@@ -1,6 +1,9 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-4">
-    <h2>Liquidity Pool</h2>
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink=".."><a>Top</a></li>
+      <li>Liquidity Pool</li>
+    </ul>
   </div>
 
   <div class="w-full md:w-auto mb-8">
@@ -53,10 +56,17 @@
         <h3>DLP Rates (1DLP=)</h3>
 
         <div class="stats stats-vertical md:stats-horizontal">
-          <ng-container *ngFor="let rate of dlpRates">
+          <ng-container *ngFor="let rate of dlpRates | keyvalue">
             <div class="stat">
-              <div class="stat-title">{{ rate.denom | coinDenom }}</div>
-              <div class="stat-value text-info">{{ rate.amount | coinAmount }}</div>
+              <div class="stat-title">
+                {{ rate.key }}
+              </div>
+              <div class="flex items-center stat-value text-info">
+                <div class="mask mask-circle w-8 h-8 mr-4" *ngIf="symbolImageMap">
+                  <img src="{{ symbolImageMap[rate.key] }}" alt="Asset Symbol" />
+                </div>
+                {{ rate.value }}
+              </div>
             </div>
           </ng-container>
         </div>
@@ -88,6 +98,11 @@
                 </label>
               </span>
               <label class="input-group">
+                <span *ngIf="symbolImageMap">
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImageMap[mintSymbol] }}" alt="Asset Symbol" />
+                  </div>
+                </span>
                 <input
                   #depositAmountRef
                   #depositAmountNgModelRef="ngModel"
@@ -148,8 +163,8 @@
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
                 <p class="py-4" *ngIf="estimatedLPTAmount">
-                  Estimated DLP amount is {{ estimatedLPTAmount.amount | coin }} (Fee is
-                  {{ estimatedLPTAmount.fee | coin }}), do you proceed?
+                  Estimated DLP amount is {{ estimatedLPTAmount.estimated_dlp_amount | coin }} (Fee
+                  is {{ estimatedLPTAmount.deposit_fee | coin }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
                   Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be
@@ -178,6 +193,29 @@
             #sellformRef="ngForm"
             (submit)="onSubmitBurn(burnAmountRef.valueAsNumber, redeemSymbolRef.value)"
           >
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Select symbol to redeem</span>
+              </label>
+              <label class="input-group">
+                <span *ngIf="symbolImageMap">
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImageMap[redeemSymbol] }}" alt="Asset Symbol" />
+                  </div>
+                </span>
+                <select
+                  #redeemSymbolRef
+                  required
+                  [(ngModel)]="redeemSymbol"
+                  name="redeem-symbol"
+                  class="select select-bordered"
+                >
+                  <ng-container *ngFor="let symbol of poolAcceptedSymbols">
+                    <option [value]="symbol">{{ symbol }}</option>
+                  </ng-container>
+                </select>
+              </label>
+            </div>
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Enter amount to sell</span>
@@ -211,22 +249,6 @@
                   DLP
                 </span>
               </label>
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Select symbol to redeem</span>
-              </label>
-              <select
-                #redeemSymbolRef
-                required
-                [(ngModel)]="redeemSymbol"
-                name="redeem-symbol"
-                class="select select-bordered w-full"
-              >
-                <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-                  <option [value]="symbol">{{ symbol }}</option>
-                </ng-container>
-              </select>
             </div>
 
             <div class="card-actions justify-end mt-4">

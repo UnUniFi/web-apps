@@ -16,6 +16,7 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
+  @Input() symbolImageMap?: { [symbol: string]: string };
   @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input() symbolRewardsMap?: { [symbol: string]: number } | null;
   @Input() faucetSymbols?: string[] | null;

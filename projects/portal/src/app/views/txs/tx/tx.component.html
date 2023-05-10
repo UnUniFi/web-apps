@@ -1,112 +1,142 @@
 <h2 class="mb-0">Transaction</h2>
-<mat-card class="mb-4">
-  <mat-list>
-    <mat-list-item>
-      <span class="whitespace-nowrap">TxHash:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-xs sm:text-base">{{ tx?.tx_response?.txhash }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Height: </span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all">{{ tx?.tx_response?.height }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Gas Used: </span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all">{{ tx?.tx_response?.gas_used }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Gas Wanted: </span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all">{{ tx?.tx_response?.gas_wanted }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Timestamp: </span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-xs sm:text-base">
-        {{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}
-      </span>
-    </mat-list-item>
-  </mat-list>
-</mat-card>
+<div class="card bg-base-100 text-base-content shadow-xl mb-4">
+  <div class="card-body">
+    <ul class="menu">
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          TxHash:
+          <span class="flex-auto"></span>
+          {{ tx?.tx_response?.txhash }}
+        </a>
+      </li>
+      <li class="disabled divider"></li>
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          Height:
+          <span class="flex-auto"></span>
+          {{ tx?.tx_response?.height }}
+        </a>
+      </li>
+      <li class="disabled divider"></li>
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          Gas Used:
+          <span class="flex-auto"></span>
+          {{ tx?.tx_response?.gas_used }}
+        </a>
+      </li>
+      <li class="disabled divider"></li>
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          Gas Wanted:
+          <span class="flex-auto"></span>
+          {{ tx?.tx_response?.gas_wanted }}
+        </a>
+      </li>
+      <li class="disabled divider"></li>
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          Timestamp:<span class="flex-auto"></span>
+          {{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <h3 class="ml-4 mb-0">Msgs</h3>
 <ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
   <ng-container *ngIf="unpackMsg(message) as msg">
-    <mat-card class="mb-4">
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Type: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ constructorName(msg) }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
-          <mat-list-item>
-            <span class="whitespace-nowrap">{{ data[0] }}</span>
-            <span class="flex-auto"></span>
-            <span class="ml-2 break-all text-xs sm:text-base">{{ data[1] | json }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </ng-template>
-      </mat-list>
-    </mat-card>
+    <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+      <div class="card-body">
+        <ul class="menu">
+          <li class="disabled">
+            <a class="text-base-content sm:text-base">
+              Type:
+              <span class="flex-auto"></span>
+              {{ constructorName(msg) }}
+            </a>
+          </li>
+          <li class="disabled divider"></li>
+          <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
+            <li class="disabled">
+              <a class="text-base-content sm:text-base">
+                {{ data[0] }}
+                <span class="flex-auto"></span>
+                {{ data[1] | json }}
+              </a>
+            </li>
+            <li class="disabled divider" *ngIf="!last"></li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
   </ng-container>
 </ng-template>
 
 <h3 class="ml-4 mb-0">Signatures</h3>
 <ng-template ngFor let-signerInfo [ngForOf]="tx?.tx?.auth_info?.signer_infos">
   <ng-container *ngIf="unpackKey(signerInfo.public_key) as pubKey">
-    <mat-card class="mb-4">
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Key Type: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ constructorName(pubKey) }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Public Key: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ pubKey?.toString() }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Signature: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ signerInfo?.mode_info }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+    <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+      <div class="card-body">
+        <ul class="menu">
+          <li class="disabled">
+            <a class="text-base-content sm:text-base">
+              Key Type:
+              <span class="flex-auto"></span>
+              {{ constructorName(pubKey) }}
+            </a>
+          </li>
+          <li class="disabled divider"></li>
+          <li class="disabled">
+            <a class="text-base-content sm:text-base">
+              Public Key:
+              <span class="flex-auto"></span>
+              {{ pubKey | json }}
+            </a>
+          </li>
+          <li class="disabled divider"></li>
+          <li class="disabled">
+            <a class="text-base-content sm:text-base">
+              Signature:
+              <span class="flex-auto"></span>
+              {{ signerInfo?.mode_info | json }}
+            </a>
+          </li>
+          <li class="disabled divider"></li>
+        </ul>
+      </div>
+    </div>
   </ng-container>
 </ng-template>
 
 <h3 class="ml-4 mb-0">Logs</h3>
 <ng-template ngFor let-log [ngForOf]="tx?.tx_response?.logs">
   <ng-template ngFor let-event [ngForOf]="log.events">
-    <mat-card class="mb-4">
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Type: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ event.type }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <ng-template ngFor let-attr [ngForOf]="event.attributes" let-last="last">
-          <mat-list-item>
-            <span class="whitespace-nowrap">{{ attr.key }}</span>
-            <span class="flex-auto"></span>
-            <span class="ml-2 break-all text-sm sm:text-base">{{ attr.value | json }}</span>
-            <mat-divider *ngIf="!last"></mat-divider>
-          </mat-list-item>
-        </ng-template>
-      </mat-list>
-    </mat-card>
+    <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+      <div class="card-body">
+        <ul class="menu">
+          <li class="disabled">
+            <a class="text-base-content sm:text-base">
+              Type:
+              <span class="flex-auto"></span>
+              {{ event.type }}
+            </a>
+          </li>
+          <li class="disabled divider"></li>
+          <ng-template ngFor let-attr [ngForOf]="event.attributes" let-last="last">
+            <li class="disabled">
+              <a class="text-base-content sm:text-base">
+                {{ attr.key }}
+                <span class="flex-auto"></span>
+                {{ attr.value | json }}
+              </a>
+            </li>
+            <li class="disabled divider" *ngIf="!last"></li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
   </ng-template>
 </ng-template>
 

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
-import { first, map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import {
-  ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
   Loan200Response,
   Liquidation200ResponseLiquidations,
@@ -22,7 +23,9 @@ import {
 export class BorrowerNftComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
+  symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | undefined>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loan$: Observable<Loan200Response>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
@@ -31,6 +34,7 @@ export class BorrowerNftComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
@@ -40,6 +44,13 @@ export class BorrowerNftComponent implements OnInit {
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+    );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
+      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+    );
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),

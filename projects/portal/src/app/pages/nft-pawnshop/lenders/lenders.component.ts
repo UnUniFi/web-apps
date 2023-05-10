@@ -14,6 +14,7 @@ import {
   BidderBids200ResponseBidsInner,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 export interface BidderNftsInfo {
@@ -34,7 +35,7 @@ export class LendersComponent implements OnInit {
   bidderBids$: Observable<BidderBids200ResponseBidsInner[]>;
   depositCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   lendCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
-  biddingNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
+  biddingNfts$: Observable<ListedNfts200ResponseListingsInnerListing[]>;
   biddingNftsInfo$: Observable<BidderNftsInfo>;
   rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   listedClasses$: Observable<ListedClass200Response[]>;
@@ -160,10 +161,10 @@ export class LendersComponent implements OnInit {
           return [];
         }
         const filteredNfts = nfts.filter(
-          (nft) => nft.bid_token == selectedMetadata.denom_units![0].denom,
+          (nft) => nft.listing?.bid_token == selectedMetadata.denom_units![0].denom,
         );
         return classes.filter((value) =>
-          filteredNfts.find((nft) => nft.nft_id?.class_id == value.class_id),
+          filteredNfts.find((nft) => nft.listing?.nft_id?.class_id == value.class_id),
         );
       }),
     );

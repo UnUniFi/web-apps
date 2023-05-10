@@ -3,53 +3,54 @@
   <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
 </ng-template>
 <ng-template #loaded>
-  <mat-card>
-    <div class="flex flex-row justify-between content-start items-start">
-      <mat-card-header>
-        <mat-icon mat-card-avatar>grid_view</mat-icon>
-        <mat-card-title>Latest Blocks</mat-card-title>
-      </mat-card-header>
-      <span class="flex-auto"></span>
-      <mat-checkbox class="auto" color="primary" (change)="onCheckBoxAutoChange($event.checked)">
-        Auto
-      </mat-checkbox>
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex">
+        <h2 class="card-title">Latest Blocks</h2>
+        <span class="flex-auto"></span>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <input
+              #autoRef
+              type="checkbox"
+              class="checkbox mr-2"
+              (change)="onCheckBoxAutoChange(autoRef.checked)"
+            />
+            <span class="label-text">Auto</span>
+          </label>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <th>Height</th>
+            <td>Proposer</td>
+            <td>Txs</td>
+            <td>Time</td>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(blocks?.length || 0) > 0; else empty">
+              <tr *ngFor="let block of blocks">
+                <th>
+                  <a routerLink="/blocks/{{ block?.block?.header?.height }}">
+                    {{ block?.block?.header?.height }}
+                  </a>
+                </th>
+                <td>
+                  {{ block?.block?.header?.proposer_address }}
+                </td>
+                <td>{{ block?.block?.data?.txs?.length }}</td>
+                <td>{{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}</td>
+              </tr>
+            </ng-container>
+            <ng-template #empty>
+              <tr>
+                <td colspan="5">There is no block.</td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <ng-container *ngIf="blocks === undefined || null; then empty; else exist"></ng-container>
-    <ng-template #exist>
-      <mat-list>
-        <mat-list-item>
-          <span class="break-all text-xs truncate pr-4">Height</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/2 break-all text-xs truncate pl-4">Proposer</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/8 break-all text-xs truncate">Num. Tx</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/4 break-all text-xs truncate">Time</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </mat-list>
-      <mat-nav-list>
-        <ng-container *ngFor="let block of blocks; last as last">
-          <mat-list-item routerLink="/blocks/{{ block?.block?.header?.height }}">
-            <span class="w-1/8 pr-4">{{ block?.block?.header?.height }}</span>
-            <span class="flex-auto"></span>
-            <span class="w-1/2 break-all truncate">{{
-              block?.block?.header?.proposer_address
-            }}</span>
-            <span class="flex-auto"></span>
-            <span class="w-1/8 pr-4">{{ block?.block?.data?.txs?.length }}</span>
-            <span class="flex-auto"></span>
-            <span class="w-1/4 text-sm sm:text-base">
-              {{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}
-            </span>
-
-            <mat-divider *ngIf="!last"></mat-divider>
-          </mat-list-item>
-        </ng-container>
-      </mat-nav-list>
-    </ng-template>
-    <ng-template #empty>
-      <p>There is no block.</p>
-    </ng-template>
-  </mat-card>
+  </div>
 </ng-template>

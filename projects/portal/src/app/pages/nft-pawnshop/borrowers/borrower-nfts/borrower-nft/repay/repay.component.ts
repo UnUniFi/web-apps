@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -8,12 +9,11 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { rewards } from 'ununifi-client/cjs/rest/nftmarket/module';
 import {
-  ListedNfts200ResponseListingsInner,
   BidderBids200ResponseBidsInner,
   Loans200ResponseLoansInner,
   Liquidation200ResponseLiquidations,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -24,7 +24,9 @@ import {
 export class RepayComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInner>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
+  symbol$: Observable<string | null | undefined>;
+  symbolImage$: Observable<string | undefined>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
   loans$: Observable<Loans200ResponseLoansInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
@@ -37,6 +39,7 @@ export class RepayComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
     private readonly pawnshopChart: NftPawnshopChartService,
@@ -48,11 +51,20 @@ export class RepayComponent implements OnInit {
     this.listingInfo$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
     );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
+      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+    );
+    this.symbolImage$ = this.symbol$.pipe(
+      map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
+    );
     this.bidders$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!)),
+        bidders.sort(
+          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
+        ),
       ),
     );
     this.loans$ = nftCombine$.pipe(

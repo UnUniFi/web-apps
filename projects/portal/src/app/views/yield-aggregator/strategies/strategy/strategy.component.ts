@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { YieldAggregatorChartService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.chart.service';
+import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
   StrategyAll200ResponseStrategiesInner,
   VaultAll200ResponseVaultsInner,

@@ -10,11 +10,12 @@ import {
 } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { ChartType } from 'angular-google-charts';
-import { YieldAggregatorChartService } from 'projects/portal/src/app/models/ununifi/yield-aggregator.chart.service';
+import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
+import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
-} from 'projects/portal/src/app/models/ununifi/yield-aggregator.model';
+} from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import {
   StrategyAll200ResponseStrategiesInner,
   Vault200Response,
@@ -37,6 +38,12 @@ export class VaultComponent implements OnInit {
   symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  @Input()
+  totalBondedAmount?: TokenAmountUSD | null;
+  @Input()
+  totalUnbondingAmount?: TokenAmountUSD | null;
+  @Input()
+  totalWithdrawalBalance?: TokenAmountUSD | null;
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()

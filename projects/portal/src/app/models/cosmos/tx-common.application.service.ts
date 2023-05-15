@@ -168,6 +168,29 @@ export class TxCommonApplicationService {
       if (txHash === undefined) {
         throw Error(txResult?.tx_response?.raw_log);
       }
+
+      // wait until tx is included in block
+      checkBlock: while (true) {
+        try {
+          const tx = await this.txCommon.getTx(txHash);
+          if (tx && tx.tx_response && tx.tx_response.height) {
+            while (true) {
+              const block = await this.txCommon.getLatestBlock();
+              if (
+                block.block?.header?.height &&
+                block.block.header.height >= tx.tx_response.height
+              ) {
+                break checkBlock;
+              }
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+
       return txHash;
     } catch (error) {
       console.error(error);

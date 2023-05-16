@@ -11,7 +11,10 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import {
+  BroadcastTx200Response,
+  CosmosTxV1beta1GetTxResponse,
+} from '@cosmos-client/core/esm/openapi';
 import { PubKey } from '@cosmos-client/core/esm/types';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { map, take } from 'rxjs/operators';
@@ -170,9 +173,10 @@ export class TxCommonApplicationService {
       }
 
       // wait until tx is included in block
+      let tx: CosmosTxV1beta1GetTxResponse | undefined;
       checkBlock: while (true) {
         try {
-          const tx = await this.txCommon.getTx(txHash);
+          tx = await this.txCommon.getTx(txHash);
           if (tx && tx.tx_response && tx.tx_response.height) {
             while (true) {
               const block = await this.txCommon.getLatestBlock();
@@ -189,6 +193,10 @@ export class TxCommonApplicationService {
           console.error(err);
         }
         await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+
+      if (tx.tx_response?.code != 0) {
+        throw Error(tx.tx_response?.raw_log);
       }
 
       return txHash;

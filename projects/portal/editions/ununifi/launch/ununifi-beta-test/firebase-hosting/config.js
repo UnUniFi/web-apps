@@ -105,7 +105,7 @@ const configs = [
         nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
       },
       developer: {
-        enabled: false,
+        enabled: true,
         developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
       },
       navigations: [],

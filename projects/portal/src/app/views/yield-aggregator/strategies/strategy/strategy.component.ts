@@ -13,7 +13,9 @@ import {
 })
 export class StrategyComponent implements OnInit {
   @Input()
-  strategy?: StrategyAll200ResponseStrategiesInner | null;
+  strategy?: any | null;
+  // TODO: fix this
+  // strategy?: StrategyAll200ResponseStrategiesInner | null;
   @Input()
   id?: string | null;
   @Input()

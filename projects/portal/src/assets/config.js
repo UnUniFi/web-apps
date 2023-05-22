@@ -11,7 +11,7 @@ const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
 
 const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (Alpha-Test)';
+const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

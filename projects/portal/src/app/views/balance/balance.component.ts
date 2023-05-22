@@ -1,12 +1,8 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import cosmosclient from '@cosmos-client/core';
-import {
-  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  GetNodeInfo200Response,
-} from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-balance',

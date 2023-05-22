@@ -180,7 +180,52 @@ export class BankQueryService {
         name: 'Liquidity Provider',
         symbol: 'DLP',
       },
+      {
+        description: 'uosmo IBC denom',
+        denom_units: [
+          {
+            denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
+        display: 'OSMO',
+        name: 'OSMOSIS (IBC)',
+        symbol: 'OSMO',
+      },
+      {
+        description: 'UnUniFi Stake Token',
+        denom_units: [
+          {
+            denom: 'stake',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'stake',
+        display: 'GUU ',
+        name: 'GUU (stake)',
+        symbol: 'GUU ',
+      },
     ];
+
+    for (let i = 0; i < 100; i++) {
+      metadatas.push({
+        description: 'Yield Aggregator Vault #' + i + 'Token',
+        denom_units: [
+          {
+            denom: 'yield-aggregator/vaults/' + i,
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'yield-aggregator/vaults/' + i,
+        display: 'YA-Vault-' + i,
+        name: 'YA Vault #' + i,
+        symbol: 'YA-VAULT-' + i,
+      });
+    }
 
     return {
       data: {

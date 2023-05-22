@@ -277,7 +277,7 @@ export class TxCommonService {
     // broadcast tx
     const result = await cosmosclient.rest.tx.broadcastTx(sdk, {
       tx_bytes: txBuilder.txBytes(),
-      mode: cosmosclient.rest.tx.BroadcastTxMode.Block,
+      mode: cosmosclient.rest.tx.BroadcastTxMode.Sync,
     });
 
     // check broadcast tx error

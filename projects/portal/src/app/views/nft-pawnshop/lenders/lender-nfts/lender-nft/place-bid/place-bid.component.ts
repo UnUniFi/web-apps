@@ -114,11 +114,20 @@ export class PlaceBidComponent implements OnInit {
   }
 
   onSimulate() {
-    if (!this.classID || !this.nftID) {
+    if (!this.classID || !this.nftID || !this.symbol) {
+      alert('Invalid NFT Info!');
       return;
     }
-    if (!this.symbol || !this.bidAmount || !this.date || !this.time || !this.interestRate) {
-      alert('Some values are invalid!');
+    if (!this.bidAmount) {
+      alert('Invalid Bid Price!');
+      return;
+    }
+    if (!this.interestRate) {
+      alert('Invalid Interest Rate!');
+      return;
+    }
+    if (!this.date || !this.time) {
+      alert('Invalid Expiration Date!');
       return;
     }
     const biddingPeriod = new Date(this.date + 'T' + this.time);

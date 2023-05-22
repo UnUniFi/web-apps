@@ -113,10 +113,11 @@ export class BorrowComponent implements OnInit {
 
   onSubmit() {
     if (!this.classID || !this.nftID) {
+      alert('Invalid NFT Info!');
       return;
     }
     if (!this.selectedBorrowAmount || !this.borrowDenom) {
-      alert('Some values are invalid!');
+      alert('Invalid Borrow Amount!');
       return;
     }
     this.appSubmit.emit({

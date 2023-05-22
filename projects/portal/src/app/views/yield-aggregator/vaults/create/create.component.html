@@ -75,7 +75,9 @@
               (change)="onChangeSymbol()"
             >
               <option [value]="undefined" disabled>Select a asset's symbol</option>
-              <option [value]="'OSMO'">OSMO</option>
+              <ng-container *ngFor="let balance of symbolBalancesMap | keyvalue">
+                <option [value]="balance.key">{{ balance.key }}</option>
+              </ng-container>
             </select>
           </div>
           <div class="form-control">
@@ -231,7 +233,10 @@
                 >
                   <option [value]="undefined" disabled>
                     <span *ngIf="!selectedSymbol">Select an asset first!</span>
-                    <span *ngIf="selectedSymbol">Select a strategy</span>
+                    <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
+                    <span *ngIf="selectedSymbol && !strategies?.length"
+                      >No strategy for {{ selectedSymbol }}</span
+                    >
                   </option>
                   <ng-container *ngFor="let s of strategies">
                     <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">

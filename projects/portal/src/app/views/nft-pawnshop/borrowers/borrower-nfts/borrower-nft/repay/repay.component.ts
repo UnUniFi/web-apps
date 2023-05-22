@@ -114,10 +114,11 @@ export class RepayComponent implements OnInit {
 
   onSubmit() {
     if (!this.classID || !this.nftID) {
+      alert('Invalid NFT Info!');
       return;
     }
     if (!this.repayAmount || !this.repayDenom) {
-      alert('Some values are invalid!');
+      alert('Invalid Repay Amount!');
       return;
     }
     this.appSubmit.emit({

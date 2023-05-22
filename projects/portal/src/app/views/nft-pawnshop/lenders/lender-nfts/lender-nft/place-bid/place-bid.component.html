@@ -277,19 +277,26 @@
                 </span>
                 <label class="input-group">
                   <input
+                    #dateNgModelRef="ngModel"
                     required
                     type="date"
                     name="expiryDate"
                     [(ngModel)]="date"
                     class="input input-bordered w-3/5"
+                    [class]="{
+                      'input-error': dateNgModelRef.errors && dateNgModelRef.touched
+                    }"
                   />
                   <input
-                    #timeRef
+                    #timeNgModelRef="ngModel"
                     type="time"
                     required
                     name="expiryTime"
                     [(ngModel)]="time"
                     class="input input-bordered w-2/5"
+                    [class]="{
+                      'input-error': timeNgModelRef.errors && timeNgModelRef.touched
+                    }"
                   />
                 </label>
               </div>

@@ -1,8 +1,7 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/openapi';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type WithdrawRewardOnSubmitEvent = {
   denom: string;
@@ -27,7 +26,7 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  reward?: CdpAll200ResponseCdpInnerCdpCollateral | null;
+  reward?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   @Output()
   appSubmit: EventEmitter<WithdrawRewardOnSubmitEvent>;

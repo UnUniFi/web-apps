@@ -1,10 +1,10 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
-  CdpAll200ResponseCdpInnerCdpCollateral,
   StrategyAll200ResponseStrategiesInner,
   Vault200Response,
   VaultAll200ResponseVaultsInner,
@@ -57,7 +57,7 @@ export class YieldAggregatorQueryService {
   getEstimatedMintAmount$(
     id: string,
     amount: string,
-  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateMintAmount(sdk, id, amount)),
       map((res) => res.data.mint_amount!),
@@ -67,7 +67,7 @@ export class YieldAggregatorQueryService {
   getEstimatedRedeemAmount$(
     id: string,
     amount: string,
-  ): Observable<CdpAll200ResponseCdpInnerCdpCollateral> {
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount)),
       map((res) => res.data.redeem_amount!),

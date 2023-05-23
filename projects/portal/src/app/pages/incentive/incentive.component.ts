@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-incentive',
@@ -17,7 +16,7 @@ export class IncentiveComponent implements OnInit {
   address$: Observable<string>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   unitIds$: Observable<string[] | undefined>;
-  rewards$: Observable<CdpAll200ResponseCdpInnerCdpCollateral[]>;
+  rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     private readonly incentiveApp: IncentiveApplicationService,

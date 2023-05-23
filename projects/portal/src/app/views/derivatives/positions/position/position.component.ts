@@ -10,7 +10,7 @@ import {
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import {
-  AllPositions200ResponsePositionsInner,
+  AddressPositions200ResponsePositionsInner,
   MarketAll200ResponseMarketsInner,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
@@ -22,7 +22,7 @@ import {
 })
 export class PositionComponent implements OnInit, OnChanges {
   @Input()
-  position?: AllPositions200ResponsePositionsInner | null;
+  position?: AddressPositions200ResponsePositionsInner | null;
 
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;

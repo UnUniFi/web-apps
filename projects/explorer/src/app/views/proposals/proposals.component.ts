@@ -19,7 +19,9 @@ export interface ProposalContent {
 })
 export class ProposalsComponent implements OnInit {
   @Input() proposals?: Proposals200ResponseProposalsInner[] | null;
-  @Input() tallies?: (Proposals200ResponseProposalsInnerFinalTallyResult | undefined)[] | null;
+  @Input() tallies?:
+    | { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
+    | null;
   @Input() proposalContents?:
     | (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]
     | null;

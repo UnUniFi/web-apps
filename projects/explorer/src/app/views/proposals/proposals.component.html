@@ -1,59 +1,89 @@
-<div class="flex flex-row items-end mb-2">
-  <h2 class="mb-0">Proposals</h2>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li>Proposals</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <!-- To Do Pagination Change  -->
+    <mat-paginator
+      class="mb-4 rounded-lg"
+      [length]="pageLength"
+      [pageSize]="pageSize"
+      [pageIndex]="pageNumber ? pageNumber - 1 : 0"
+      [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+      (page)="onPaginationChange($event)"
+    >
+    </mat-paginator>
+  </div>
+
+  <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  </ng-template>
+  <ng-template #loaded>
+    <ng-container *ngIf="(proposals?.length || 0) > 0; then exist; else empty"> </ng-container>
+  </ng-template>
+
+  <ng-template #exist>
+    <div *ngFor="let proposal of proposals; let i = index" class="w-full mb-4">
+      <div class="card glass w-full shadow-xl">
+        <div class="card-body">
+          <span class="badge badge-primary">
+            {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+          </span>
+          <h2 class="card-title break-all">
+            #{{ proposal.proposal_id }} {{ unpackContent(proposal?.content).title }}
+          </h2>
+          <div class="divider m-0">Tallies</div>
+          <div class="grid gap-3">
+            <div class="flex items-center p-1 w-full">
+              <mat-icon class="w-8 text-success">thumb_up</mat-icon>
+              <progress
+                max="{{ tallies![i].max }}"
+                value="{{ tallies![i].yes }}"
+                class="progress progress-success"
+              ></progress>
+            </div>
+            <div class="flex items-center p-1">
+              <mat-icon class="w-8 text-warning">thumb_down</mat-icon>
+              <progress
+                max="{{ tallies![i].max }}"
+                value="{{ tallies![i].no }}"
+                class="progress progress-warning"
+              ></progress>
+            </div>
+            <div class="flex items-center p-1">
+              <mat-icon class="w-8 text-error">not_interested</mat-icon>
+              <progress
+                max="{{ tallies![i].max }}"
+                value="{{ tallies![i].noWithVeto }}"
+                class="progress progress-error"
+              ></progress>
+            </div>
+            <div class="flex items-center p-1">
+              <mat-icon class="w-8 text-primary">subtitles_off</mat-icon>
+              <progress
+                max="{{ tallies![i].max }}"
+                value="{{ tallies![i].abstain }}"
+                class="progress progress-primary"
+              ></progress>
+            </div>
+          </div>
+          <div class="card-actions justify-end">
+            <button
+              class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+              routerLink="{{ proposal.proposal_id }}"
+            >
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #empty>
+    <p>There is no proposal.</p>
+  </ng-template>
 </div>
-<ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
-</ng-template>
-<ng-template #loaded>
-  <ng-container *ngIf="(proposals?.length || 0) > 0; then exist; else empty"> </ng-container>
-</ng-template>
-<ng-template #exist>
-  <mat-card>
-    <mat-nav-list>
-      <ng-container *ngFor="let proposal of proposals; let i = index; last as last">
-        <mat-list-item routerLink="{{ proposal.proposal_id }}">
-          <div matLine class="flex mb-2">
-            <span class="w-2/12"># {{ proposal.proposal_id }}</span>
-            <span class="w-7/12 text-center truncate">{{
-              unpackContent(proposal.content).title
-            }}</span>
-            <span class="w-3/12 text-right truncate"
-              >{{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
-            </span>
-          </div>
-          <div matLine class="flex">
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="primary">thumb_up</mat-icon>
-              <span class="truncate">{{ tallies![i]?.yes }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="warn">thumb_down</mat-icon>
-              <span class="truncate">{{ tallies![i]?.no_with_veto }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2" color="accent">thumb_down</mat-icon>
-              <span class="truncate">{{ tallies![i]?.no }}</span>
-            </span>
-            <span class="flex w-1/4 justify-start content-start">
-              <mat-icon class="mr-2">subtitles_off</mat-icon>
-              <span class="truncate">{{ tallies![i]?.abstain }}</span>
-            </span>
-          </div>
-        </mat-list-item>
-        <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
-      </ng-container>
-      <mat-paginator
-        [length]="pageLength"
-        [pageSize]="pageSize"
-        [pageIndex]="pageNumber ? pageNumber - 1 : 0"
-        [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-        (page)="onPaginationChange($event)"
-      >
-      </mat-paginator>
-    </mat-nav-list>
-  </mat-card>
-</ng-template>
-<ng-template #empty>
-  <p>There is no proposal.</p>
-</ng-template>

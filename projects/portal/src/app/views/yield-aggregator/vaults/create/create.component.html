@@ -195,12 +195,12 @@
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
               <div class="flex flex-row flex-wrap">
                 <a
-                  class="btn btn-outline w-full sm:w-64"
+                  class="btn btn-outline normal-case w-full sm:w-64"
                   href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
                   target="_blank"
                 >
                   {{ strategy.name }}
-                  <mat-icon>info</mat-icon>
+                  <mat-icon class="ml-2">info</mat-icon>
                 </a>
                 <div class="w-full sm:w-auto sm:flex-auto">
                   <label class="input-group w-full mb-2">
@@ -229,7 +229,6 @@
                   class="select select-bordered text-center w-auto sm:w-64"
                   [(ngModel)]="selectedStrategyId"
                   name="strategyId"
-                  disabled="!selectedSymbol"
                 >
                   <option [value]="undefined" disabled>
                     <span *ngIf="!selectedSymbol">Select an asset first!</span>

@@ -80,21 +80,27 @@
             <div class="stat-value text-primary">
               <td>{{ vault?.total_bonded_amount | coinAmount }} {{ symbol }}</td>
             </div>
-            <div class="stat-desc">${{ totalBondedAmount?.usdAmount | number }}</div>
+            <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
+              ${{ totalBondedAmount?.usdAmount | number }}
+            </div>
           </div>
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
             <div class="stat-value text-secondary">
               {{ vault?.total_unbonding_amount | coinAmount }} {{ symbol }}
             </div>
-            <div class="stat-desc">${{ totalUnbondingAmount?.usdAmount | number }}</div>
+            <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
+              ${{ totalUnbondingAmount?.usdAmount | number }}
+            </div>
           </div>
           <div class="stat">
             <div class="stat-title">Total Withdrawal Amount</div>
             <div class="stat-value text-info">
               {{ vault?.total_withdrawal_balance | coinAmount }} {{ symbol }}
             </div>
-            <div class="stat-desc">${{ totalWithdrawalBalance?.usdAmount | number }}</div>
+            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
+              ${{ totalWithdrawalBalance?.usdAmount | number }}
+            </div>
           </div>
         </div>
         <h3 class="mt-4">Historical APY (Demo)</h3>

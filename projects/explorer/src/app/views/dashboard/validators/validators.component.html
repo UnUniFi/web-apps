@@ -29,25 +29,27 @@
           </thead>
           <tbody>
             <ng-container *ngIf="(validators?.length || 0) > 0; else empty">
-              <tr *ngFor="let validator of validators; last as last">
+              <tr
+                *ngFor="let validator of validators; last as last"
+                class="hover cursor-pointer"
+                routerLink="/validators/{{ validator.val.operator_address }}"
+              >
                 <th>
                   <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
                     circle
                   </mat-icon>
                 </th>
                 <td>
-                  <a routerLink="/validators/{{ validator.val.operator_address }}">
-                    {{ validator.val.description?.moniker }}
-                  </a>
+                  {{ validator.val.description?.moniker }}
                 </td>
                 <td>
-                  {{ validator.share | percent : '1.2-2' }}
+                  {{ validator.share | percent: '1.2-2' }}
                 </td>
                 <td>
                   {{ validator.val.tokens | unitConversion }}
                 </td>
                 <td>
-                  {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
+                  {{ validator.val.commission?.commission_rates?.rate | percent: '1.0-0' }}
                 </td>
               </tr>
             </ng-container>

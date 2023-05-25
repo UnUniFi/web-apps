@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
-import { InlineResponse20075TxResponse } from '@cosmos-client/core/esm/openapi/api';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/explorer/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { BehaviorSubject, combineLatest, Observable, timer } from 'rxjs';
@@ -14,7 +14,7 @@ import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 })
 export class TxsComponent implements OnInit {
   pollingInterval = 30 * 60;
-  txs$?: Observable<InlineResponse20075TxResponse[] | undefined>;
+  txs$?: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
   txTypeOptions$?: Observable<string[] | undefined>;
   pageSize$: BehaviorSubject<number> = new BehaviorSubject(20);
   pageNumber$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -40,7 +40,7 @@ export class TxsComponent implements OnInit {
       this.selectedTxType$,
     ]).pipe(
       switchMap(([sdk, _pageNumber, _pageSize, selectedTxType]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -89,7 +89,7 @@ export class TxsComponent implements OnInit {
           return [];
         }
 
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],

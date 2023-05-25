@@ -1,16 +1,16 @@
 import { validatePrivateStoredWallet } from '../../../../../utils/validation';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
-import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import {
   createCosmosPrivateKeyFromString,
   createPrivateKeyStringFromMnemonic,
-} from 'projects/portal/src/app/utils/key';
+} from './../../../../../../../src/app/utils/key';
+import { KeyType } from './../../../../../models/keys/key.model';
+import { StoredWallet, WalletType } from './../../../../../models/wallets/wallet.model';
+import { WalletService } from './../../../../../models/wallets/wallet.service';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -29,7 +29,10 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
   wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithMnemonicFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiImportWalletWithMnemonicFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -99,7 +102,7 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
@@ -151,5 +154,9 @@ export class UnunifiImportWalletWithMnemonicFormDialogComponent implements OnIni
         subscription.unsubscribe();
       },
     );
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

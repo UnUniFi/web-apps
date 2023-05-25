@@ -1,0 +1,7 @@
+<view-owner
+  [address]="address$ | async"
+  [owner]="owner$ | async"
+  [vaults]="vaults$ | async"
+  (appDelete)="onDelete($event)"
+  (appTransfer)="onTransfer($event)"
+></view-owner>

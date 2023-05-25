@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'app-view-create-validator-simple',
@@ -35,24 +35,24 @@ export class CreateValidatorSimpleComponent implements OnInit {
   @Input() ip?: string | null;
   @Input() node_id?: string | null;
   @Input() pubkey?: string | null;
-  @Input() minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output() submitCreateValidator = new EventEmitter<
     CreateValidatorData & {
-      minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+      minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
       privateKey: string;
     }
   >();
 
   @ViewChild('fileInputRef') fileInputRef?: ElementRef;
 
-  minimumGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   file: File | null;
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-        privateKey: string;
-      })
+      privateKey: string;
+    })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -67,7 +67,7 @@ export class CreateValidatorSimpleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async onChangeFile($event: Event): Promise<void> {
     if ($event === null || $event.target === null) {
@@ -84,23 +84,24 @@ export class CreateValidatorSimpleComponent implements OnInit {
     if (!this.privateWallet?.privateKey) {
       this.snackBar.open(
         `Error: PrivateKey does not contained! Need to drag and drop correct wallet backup file!`,
+        'Close',
       );
       return;
     }
     if (this.privateWallet?.address && this.privateWallet?.address !== this.delegator_address) {
-      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`);
+      this.snackBar.open(`Error: Uploaded account info and node settings are mismatch!`, 'Close');
       return;
     }
     if (!this.minimumGasPrice?.amount) {
-      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`);
+      this.snackBar.open(`Error: minimumGasPrice.amount is invalid!`, 'Close');
       return;
     }
     if (!this.moniker) {
-      this.snackBar.open(`Error: moniker is invalid!`);
+      this.snackBar.open(`Error: moniker is invalid!`, 'Close');
       return;
     }
     if (!this.identity) {
-      this.snackBar.open(`Error: identity is invalid!`);
+      this.snackBar.open(`Error: identity is invalid!`, 'Close');
       return;
     }
     if (!this.website) {
@@ -113,47 +114,47 @@ export class CreateValidatorSimpleComponent implements OnInit {
       this.details = '';
     }
     if (!this.rate) {
-      this.snackBar.open(`Error: rate is invalid!`);
+      this.snackBar.open(`Error: rate is invalid!`, 'Close');
       return;
     }
     if (!this.max_rate) {
-      this.snackBar.open(`Error: max_rate is invalid!`);
+      this.snackBar.open(`Error: max_rate is invalid!`, 'Close');
       return;
     }
     if (!this.max_change_rate) {
-      this.snackBar.open(`Error: max_change_rate is invalid!`);
+      this.snackBar.open(`Error: max_change_rate is invalid!`, 'Close');
       return;
     }
     if (!this.min_self_delegation) {
-      this.snackBar.open(`Error: min_self_delegation is invalid!`);
+      this.snackBar.open(`Error: min_self_delegation is invalid!`, 'Close');
       return;
     }
     if (!this.delegator_address) {
-      this.snackBar.open(`Error: delegator_address is invalid!`);
+      this.snackBar.open(`Error: delegator_address is invalid!`, 'Close');
       return;
     }
     if (!this.validator_address) {
-      this.snackBar.open(`Error: validator_address is invalid!`);
+      this.snackBar.open(`Error: validator_address is invalid!`, 'Close');
       return;
     }
     if (!this.denom) {
-      this.snackBar.open(`Error: denom is invalid!`);
+      this.snackBar.open(`Error: denom is invalid!`, 'Close');
       return;
     }
     if (!this.amount) {
-      this.snackBar.open(`Error: amount is invalid!`);
+      this.snackBar.open(`Error: amount is invalid!`, 'Close');
       return;
     }
     if (!this.ip) {
-      this.snackBar.open(`Error: ip is invalid!`);
+      this.snackBar.open(`Error: ip is invalid!`, 'Close');
       return;
     }
     if (!this.node_id) {
-      this.snackBar.open(`Error: node_id is invalid!`);
+      this.snackBar.open(`Error: node_id is invalid!`, 'Close');
       return;
     }
     if (!this.pubkey) {
-      this.snackBar.open(`Error: pubkey is invalid!`);
+      this.snackBar.open(`Error: pubkey is invalid!`, 'Close');
       return;
     }
     await this.onSubmitCreateValidator(
@@ -204,7 +205,7 @@ export class CreateValidatorSimpleComponent implements OnInit {
     }
 
     if (this.minimumGasPrice === undefined) {
-      this.snackBar.open('Invalid gas fee!');
+      this.snackBar.open('Invalid gas fee!', 'Close');
       return;
     }
 

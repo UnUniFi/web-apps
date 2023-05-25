@@ -31,16 +31,16 @@
         <mat-list-item>
           <span class="whitespace-nowrap">Tokens: </span>
           <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.tokens | number: '1.0-0' }}</span>
+          <span class="ml-2 break-all">{{ validator?.tokens | number : '1.0-0' }}</span>
         </mat-list-item>
         <mat-divider [inset]="true"></mat-divider>
         <mat-list-item>
-          <span>Delegator Shares: </span>
+          <span>Claimable Delegator Reward: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all">
             <span>{{ validator?.delegator_shares | floor }}</span>
             <span class="text-gray-300 text-sm"
-              >{{ validator?.delegator_shares | decimals: 6 }}
+              >{{ validator?.delegator_shares | decimals : 6 }}
             </span>
           </span>
         </mat-list-item>
@@ -63,7 +63,7 @@
           <span>Unbonding Time: </span>
           <span class="flex-auto"></span>
           <span class="ml-2 break-all text-sm sm:text-base">
-            {{ validator?.unbonding_time | date: 'yyyy-M-d a h:mm:ss z' }}
+            {{ validator?.unbonding_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}
           </span>
         </mat-list-item>
       </mat-list>
@@ -80,7 +80,7 @@
           <span class="ml-2 break-all">
             <span>{{ validator?.commission?.commission_rates?.rate | floor }}</span>
             <span class="text-gray-300 text-sm"
-              >{{ validator?.commission?.commission_rates?.rate | decimals: 6 }}
+              >{{ validator?.commission?.commission_rates?.rate | decimals : 6 }}
             </span>
           </span>
         </mat-list-item>
@@ -91,7 +91,7 @@
           <span class="ml-2 break-all">
             <span>{{ validator?.commission?.commission_rates?.max_rate | floor }}</span>
             <span class="text-gray-300 text-sm"
-              >{{ validator?.commission?.commission_rates?.max_rate | decimals: 6 }}
+              >{{ validator?.commission?.commission_rates?.max_rate | decimals : 6 }}
             </span>
           </span>
         </mat-list-item>
@@ -102,7 +102,7 @@
           <span class="ml-2 break-all">
             <span>{{ validator?.commission?.commission_rates?.max_change_rate | floor }}</span>
             <span class="text-gray-300 text-sm"
-              >{{ validator?.commission?.commission_rates?.max_change_rate | decimals: 6 }}
+              >{{ validator?.commission?.commission_rates?.max_change_rate | decimals : 6 }}
             </span>
           </span>
         </mat-list-item>

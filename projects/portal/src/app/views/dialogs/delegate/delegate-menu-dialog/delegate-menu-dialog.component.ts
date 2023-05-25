@@ -1,8 +1,9 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
   CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod,
 } from '@cosmos-client/core/esm/openapi/api';
@@ -16,13 +17,13 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 })
 export class DelegateMenuDialogComponent implements OnInit {
   @Input()
-  selectedValidator?: InlineResponse20066Validators | null;
+  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   isDelegated?: boolean | null;
   @Input()
@@ -32,19 +33,19 @@ export class DelegateMenuDialogComponent implements OnInit {
   @Input()
   isValidator?: boolean | null;
   @Output()
-  appDelegate: EventEmitter<InlineResponse20066Validators>;
+  appDelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appRedelegate: EventEmitter<InlineResponse20066Validators>;
+  appRedelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appUndelegate: EventEmitter<InlineResponse20066Validators>;
+  appUndelegate: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appWithdrawDelegatorReward: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawDelegatorReward: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appWithdrawValidatorCommission: EventEmitter<InlineResponse20066Validators>;
+  appWithdrawValidatorCommission: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
   @Output()
-  appDetail: EventEmitter<InlineResponse20066Validators>;
+  appDetail: EventEmitter<StakingDelegatorValidators200ResponseValidatorsInner>;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appDelegate = new EventEmitter();
     this.appRedelegate = new EventEmitter();
     this.appUndelegate = new EventEmitter();
@@ -104,5 +105,9 @@ export class DelegateMenuDialogComponent implements OnInit {
       return;
     }
     this.appDetail.emit(this.selectedValidator);
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

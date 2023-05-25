@@ -1,0 +1,364 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li routerLink=".."><a>Vaults</a></li>
+        <li>Create a New Vault</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <button
+      class="btn btn-secondary btn-outline px-8 mr-2 mb-2"
+      routerLink="/yield-aggregator/vaults/owner/{{ address }}"
+    >
+      Manage Your Vaults
+    </button>
+  </div>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="tabs tabs-boxed w-full">
+        <a class="tab tab-lg tab-active">Create</a>
+      </div>
+      <div class="card-body">
+        <form #formRef="ngForm" (submit)="onSubmitCreate()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Vault Name</span>
+              <!-- The button to open modal -->
+              <label for="modal-name" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-name" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
+                  <p class="py-2">
+                    The Vault must have a unique name. Please give it a name that describes its
+                    purpose and how it will be operated.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-name" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              required
+              #nameNgModelRef="ngModel"
+              placeholder="e.g. GUU Lending"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+              }"
+              [(ngModel)]="name"
+              name="name"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Select Asset</span>
+            </label>
+            <select
+              required
+              #assetNgModelRef="ngModel"
+              class="select select-bordered w-full"
+              [class]="{
+                'select-error': assetNgModelRef.errors
+              }"
+              [(ngModel)]="selectedSymbol"
+              name="symbol"
+              (change)="onChangeSymbol()"
+            >
+              <option [value]="undefined" disabled>Select a asset's symbol</option>
+              <ng-container *ngFor="let balance of symbolBalancesMap | keyvalue">
+                <option [value]="balance.key">{{ balance.key }}</option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Commission Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-commission" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-commission" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Commission Rate?</h3>
+                  <p class="py-2">
+                    The commission fee is a fee charged to the Vault users. You can choose what
+                    percentage of the deposits you want to charge as a commission.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-commission" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <label class="input-group">
+              <input
+                #commissionNgModelRef="ngModel"
+                required
+                type="number"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [(ngModel)]="commissionRate"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="commission"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': commissionNgModelRef.errors && commissionNgModelRef.touched
+                }"
+              />
+              <span>%</span>
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Withdraw Reserve Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-reserve" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-reserve" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Reserve Rate?</h3>
+                  <p class="py-2">
+                    Determines the percentage of funds set aside for withdrawals. For example, if
+                    set at 10%, 10% of the funds will be left uninvested and 90% of the funds will
+                    be used for investment.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-reserve" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <label class="input-group">
+              <input
+                #reserveNgModelRef="ngModel"
+                required
+                type="number"
+                placeholder="30.123456"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [(ngModel)]="reserveRate"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="reserve"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': reserveNgModelRef.errors && reserveNgModelRef.touched
+                }"
+              />
+              <span>%</span>
+            </label>
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Select Strategies</span>
+              <!-- The button to open modal -->
+              <label for="modal-strategy" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-strategy" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the strategies?</h3>
+                  <p class="py-4">
+                    To create a new Vault, one or more strategies must be combined. It should be set
+                    up so that the total weighting is 100%.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-strategy" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+
+            <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
+              <div class="flex flex-row flex-wrap">
+                <a
+                  class="btn btn-outline normal-case w-full sm:w-64"
+                  href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
+                  target="_blank"
+                >
+                  {{ strategy.name }}
+                  <mat-icon class="ml-2">info</mat-icon>
+                </a>
+                <div class="w-full sm:w-auto sm:flex-auto">
+                  <label class="input-group w-full mb-2">
+                    <input
+                      type="number"
+                      [min]="0"
+                      [max]="100"
+                      [step]="1"
+                      [(ngModel)]="strategy.weight"
+                      name="strategy{{ i }}Weight"
+                      class="input input-bordered w-full"
+                    />
+                    <span>%</span>
+                    <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                      <mat-icon>delete</mat-icon>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="flex flex-row flex-wrap">
+              <label class="input-group mb-2 w-full sm:w-auto">
+                <select
+                  [required]="selectedStrategies.length === 0"
+                  class="select select-bordered text-center w-auto sm:w-64"
+                  [(ngModel)]="selectedStrategyId"
+                  name="strategyId"
+                >
+                  <option [value]="undefined" disabled>
+                    <span *ngIf="!selectedSymbol">Select an asset first!</span>
+                    <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
+                    <span *ngIf="selectedSymbol && !strategies?.length"
+                      >No strategy for {{ selectedSymbol }}</span
+                    >
+                  </option>
+                  <ng-container *ngFor="let s of strategies">
+                    <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
+                      {{ s.name | uppercase }}
+                    </option>
+                  </ng-container>
+                </select>
+                <button
+                  type="button"
+                  class="btn btn-outline btn-primary"
+                  (click)="onClickAddStrategy()"
+                  [disabled]="!selectedStrategyId"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </label>
+              <span class="flex-auto"></span>
+              <button
+                type="button"
+                class="btn btn-outline btn-info w-full sm:w-auto mb-2"
+                [disabled]="!selectedSymbol"
+              >
+                <a href="/portal/yield-aggregator/strategies/{{ denom }}" target="_blank">
+                  View Strategies
+                </a>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Deposit</span>
+              <!-- The button to open modal -->
+              <label for="modal-deposit" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the deposit?</h3>
+                  <p class="py-4">
+                    The creator must deposit a specified amount of tokens in advance in the Vault.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-deposit" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <label class="input-group">
+              <input
+                type="number"
+                name="deposit"
+                [(ngModel)]="deposit && deposit.amount"
+                disabled
+                class="input input-bordered w-full"
+              />
+              <span>{{ deposit?.symbol }}</span>
+            </label>
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Fee</span>
+              <!-- The button to open modal -->
+              <label for="modal-fee" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-fee" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the fee?</h3>
+                  <p class="py-4">A specified fee is charged for the creation of a new Vault.</p>
+                  <div class="modal-action">
+                    <label for="modal-fee" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <label class="input-group">
+              <input
+                type="number"
+                name="fee"
+                [(ngModel)]="fee && fee.amount"
+                disabled
+                class="input input-bordered w-full"
+              />
+              <span>{{ fee?.symbol }}</span>
+            </label>
+          </div>
+
+          <div class="card-actions justify-end mt-4">
+            <label #createModalLabel for="create-modal" hidden></label>
+            <button
+              type="button"
+              class="btn btn-primary px-8"
+              [disabled]="formRef.invalid"
+              (click)="createModalLabel.click()"
+            >
+              Create a new Vault
+            </button>
+          </div>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="create-modal" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Are you sure to create this Vault, OK?</h3>
+              <p class="py-4">
+                A deposit of {{ deposit?.amount }}{{ deposit?.symbol }} & a fee {{ fee?.amount
+                }}{{ fee?.symbol }} will be deducted from your balance.
+              </p>
+              <div class="modal-action">
+                <label for="create-modal" class="btn btn-outline">Cancel</label>
+                <button class="btn btn-primary" [disabled]="formRef.invalid">Create</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

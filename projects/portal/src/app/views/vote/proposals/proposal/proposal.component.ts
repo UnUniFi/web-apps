@@ -1,14 +1,14 @@
 import { ProposalContent } from '../proposals.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20052Proposals,
-  InlineResponse20054Deposits,
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20057Votes,
-  InlineResponse20051DepositParams,
-  InlineResponse20051TallyParams,
-  InlineResponse20051VotingParams,
+  Proposals200ResponseProposalsInner,
+  Deposits200ResponseDepositsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
+  GovParams200ResponseDepositParams,
+  GovParams200ResponseTallyParams,
+  GovParams200ResponseVotingParams,
 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -18,26 +18,30 @@ import {
 })
 export class ProposalComponent implements OnInit {
   @Input()
-  proposal?: InlineResponse20052Proposals | null;
+  proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
   proposalType?: string | null;
   @Input()
-  deposits?: InlineResponse20054Deposits[] | null;
+  deposits?: Deposits200ResponseDepositsInner[] | null;
   @Input()
-  depositParams?: InlineResponse20051DepositParams | null;
+  depositParams?: GovParams200ResponseDepositParams | null;
   @Input()
-  tally?: InlineResponse20052FinalTallyResult | null;
+  tally?: Proposals200ResponseProposalsInnerFinalTallyResult | null;
   @Input()
-  tallyParams?: InlineResponse20051TallyParams | null;
+  tallyParams?: GovParams200ResponseTallyParams | null;
   @Input()
-  votes?: InlineResponse20057Votes[] | null;
+  votes?: Votes200ResponseVotesInner[] | null;
   @Input()
-  votingParams?: InlineResponse20051VotingParams | null;
+  votingParams?: GovParams200ResponseVotingParams | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
   @Output()
   appClickDeposit: EventEmitter<number>;
+
+  voteDetailEnabled = false;
 
   constructor() {
     this.appClickVote = new EventEmitter();

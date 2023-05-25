@@ -1,3 +1,4 @@
+import { LoadingDialogService } from '../../../../components/loading-dialog';
 import { TxFeeConfirmDialogComponent } from '../../../../views/dialogs/cosmos/tx/common/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { LibViewListNftFormDialogComponent } from '../../../../views/dialogs/ununifi/tx/nft/list-nft-form-dialog/list-nft-form-dialog.component';
 import { LibViewNftMenuDialogComponent } from '../../../../views/dialogs/ununifi/tx/nft/nft-menu-dialog/nft-menu-dialog.component';
@@ -13,9 +14,8 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -48,7 +48,7 @@ export class NftTxApplicationService {
 
   async listNft(
     msgListNftData: MsgListNftData,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -65,8 +65,8 @@ export class NftTxApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -93,14 +93,16 @@ export class NftTxApplicationService {
     // // confirm fee only ununifi wallet type case
     // if (currentCosmosWallet.type === WalletType.ununifi) {
     //   const txFeeConfirmedResult = await this.dialog
-    //     .open(TxFeeConfirmDialogComponent, {
+    //     .open<{
+    //       fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    //       isConfirmed: boolean;
+    //     }>(TxFeeConfirmDialogComponent, {
     //       data: {
     //         fee,
     //         isConfirmed: false,
     //       },
     //     })
-    //     .afterClosed()
-    //     .toPromise();
+    //     .closed.toPromise();
     //   if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
     //     this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
     //     return;
@@ -110,7 +112,7 @@ export class NftTxApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

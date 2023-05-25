@@ -1,9 +1,8 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-balance',
@@ -17,7 +16,10 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input() symbolImageMap?: { [symbol: string]: string };
+  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input() symbolRewardsMap?: { [symbol: string]: number } | null;
+  @Input() faucetSymbols?: string[] | null;
   @Input() faucets?:
     | {
         hasFaucet: boolean;
@@ -27,9 +29,12 @@ export class ViewBalanceComponent implements OnInit {
         maxCredit: number;
       }[]
     | null;
-  @Input() nodeInfo?: InlineResponse20037 | null;
+  @Input() nodeInfo?: GetNodeInfo200Response | null;
+  @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
-  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
+    this.appWithdrawAllDelegatorReward = new EventEmitter();
+  }
 
   ngOnInit(): void {}
 
@@ -41,5 +46,9 @@ export class ViewBalanceComponent implements OnInit {
       });
     }
     return false;
+  }
+
+  onClickWithdrawAllDelegatorRewardButton() {
+    this.appWithdrawAllDelegatorReward.emit();
   }
 }

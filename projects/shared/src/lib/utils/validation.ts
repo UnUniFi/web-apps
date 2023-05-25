@@ -1,6 +1,6 @@
 import { StoredWallet } from '../models/wallets/wallet.model';
 import { createCosmosPrivateKeyFromString, createCosmosPublicKeyFromString } from './key';
-import { cosmosclient } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 
 export const validatePrivateStoredWallet = (
   privateStoredWallet: StoredWallet & { privateKey: string },

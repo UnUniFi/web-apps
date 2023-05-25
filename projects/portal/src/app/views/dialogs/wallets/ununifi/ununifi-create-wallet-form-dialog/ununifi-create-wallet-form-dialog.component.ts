@@ -1,16 +1,16 @@
-import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
-import * as bip39 from 'bip39';
-import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import { KeyType } from './../../../../../models/keys/key.model';
+import { StoredWallet, WalletType } from './../../../../../models/wallets/wallet.model';
+import { WalletService } from './../../../../../models/wallets/wallet.service';
 import {
   createCosmosPrivateKeyFromString,
   createPrivateKeyStringFromMnemonic,
-} from 'projects/portal/src/app/utils/key';
+} from './../../../../../utils/key';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
+import * as bip39 from 'bip39';
 
 @Component({
   selector: 'view-ununifi-create-wallet-form-dialog',
@@ -23,7 +23,10 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
   wallets$: Promise<StoredWallet[] | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiCreateWalletFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiCreateWalletFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -56,7 +59,7 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
@@ -86,5 +89,9 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
       privateWallet.id = id;
       this.dialogRef.close(privateWallet);
     });
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

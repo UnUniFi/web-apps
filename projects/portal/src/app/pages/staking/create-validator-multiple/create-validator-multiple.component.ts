@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GraphQLErrors, NetworkError } from '@apollo/client/errors';
 import { ErrorLink } from '@apollo/client/link/error';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Apollo, gql } from 'apollo-angular';
 import { GraphQLError } from 'graphql';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
@@ -14,7 +14,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 
 export type InterfaceCreateValidatorsDataItem = CreateValidatorData & {
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   privateKey: string;
 };
 
@@ -41,7 +41,7 @@ export class CreateValidatorMultipleComponent implements OnInit {
   success: boolean = false;
   loading: boolean = true;
   error: string = '';
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   redirectUrls: string[] = [];
   constructor(
     private readonly route: ActivatedRoute,
@@ -131,11 +131,10 @@ export class CreateValidatorMultipleComponent implements OnInit {
     )) as (string | undefined)[];
     const success = results.length > 0 && results.every((result: string | undefined) => !!result);
     if (success) {
-      this.redirectUrls = createValidatorsData.map((createValidatorData) => {
-        return location.port === '80' || location.port === '443' || location.port === ''
-          ? `${location.protocol}//${location.hostname}/explorer/validators/${createValidatorData.validator_address}`
-          : `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`;
-      });
+      this.redirectUrls = createValidatorsData.map(
+        (createValidatorData) =>
+          `${location.protocol}//${location.host}/explorer/validators/${createValidatorData.validator_address}`,
+      );
       this.setSuccess(true);
     } else {
       this.setError('Error: something went wrong. Reload and try again or contact us');

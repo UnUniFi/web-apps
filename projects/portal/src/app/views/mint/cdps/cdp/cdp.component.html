@@ -99,7 +99,7 @@
         <span class="column-name"> Fees Updated: </span>
         <span class="flex-auto"></span>
         <span class="column-value">
-          {{ cdp?.cdp?.fees_updated | date: 'yyyy-M-d a h:mm:ss z' }}
+          {{ cdp?.cdp?.fees_updated | date : 'yyyy-MM-dd a hh:mm:ss z' }}
         </span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
@@ -110,7 +110,7 @@
         <span class="column-value">
           <span class="ml-2 break-all">
             <span>{{ spotPrice?.price | floor }}</span>
-            <span class="text-gray-300 text-sm">{{ spotPrice?.price | decimals: 9 }} </span>
+            <span class="text-gray-300 text-sm">{{ spotPrice?.price | decimals : 9 }} </span>
           </span>
           [{{ spotPrice?.market_id }}]
         </span>
@@ -123,7 +123,7 @@
         <span class="column-value">
           <span class="ml-2 break-all">
             <span>{{ liquidationPrice?.price | floor }}</span>
-            <span class="text-gray-300 text-sm">{{ liquidationPrice?.price | decimals: 9 }} </span>
+            <span class="text-gray-300 text-sm">{{ liquidationPrice?.price | decimals : 9 }} </span>
           </span>
           [{{ liquidationPrice?.market_id }}]
         </span>
@@ -136,7 +136,7 @@
         <span class="ml-2 break-all">
           <span>{{ cdp?.collateralization_ratio | floor }}</span>
           <span class="text-gray-300 text-sm"
-            >{{ cdp?.collateralization_ratio | decimals: 9 }}
+            >{{ cdp?.collateralization_ratio | decimals : 9 }}
           </span>
         </span>
       </mat-list-item>

@@ -5,11 +5,11 @@ import { Key } from '../keys/key.model';
 import { KeyService } from '../keys/key.service';
 import { ICdpInfrastructure } from './cdp.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
-import { ununifi } from 'ununifi-client';
+import ununifi from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +25,11 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildCreateCDPTx(
       key,
       privateKey,
@@ -46,16 +46,16 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -75,10 +75,10 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk();
     const privKey = this.keyService.getPrivKey(key.type, privateKey);
@@ -86,7 +86,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk.rest, sender)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -102,23 +102,27 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgCreateCdp = new ununifi.cdp.MsgCreateCdp({
+    //Todo: make cdp.MsgCreateCdp
+    const msgCreateCdp: any = undefined;
+    /*
+    const msgCreateCdp = new ununifi.rest.cdp.MsgCreateCdp({
       sender: sender.toString(),
       collateral,
       principal,
       collateral_type: collateralType,
     });
+    */
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgCreateCdp)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -142,10 +146,10 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildDrawCDPTx(
       key,
       privateKey,
@@ -161,15 +165,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -188,9 +192,9 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    principal: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk();
     const privKey = this.keyService.getPrivKey(key.type, privateKey);
@@ -198,7 +202,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk.rest, sender)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -213,22 +217,26 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       throw Error('Unused Account or Unsupported Account Type!');
     }
 
-    const msgDrawDebt = new ununifi.cdp.MsgDrawDebt({
+    //Todo: make cdp.msgDrawDebt
+    const msgDrawDebt: any = undefined;
+    /*
+      const msgDrawDebt = new ununifi.rest.cdp.MsgDrawDebt({
       sender: sender.toString(),
       collateral_type: collateralType,
       principal,
-    });
+      });
+    */
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgDrawDebt)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -252,10 +260,10 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    repayment: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+    repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildRepayCDPTx(
       key,
       privateKey,
@@ -271,15 +279,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    repayment: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -298,9 +306,9 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     key: Key,
     privateKey: Uint8Array,
     collateralType: string,
-    repayment: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    repayment: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk();
     const privKey = this.keyService.getPrivKey(key.type, privateKey);
@@ -308,7 +316,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk.rest, sender)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -323,22 +331,26 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
       throw Error('Unused Account or Unsupported Account Type!');
     }
 
-    const msgRepayDebt = new ununifi.cdp.MsgRepayDebt({
+    // Todo: make cdp.MsgRepayDebt
+    const msgRepayDebt: any = undefined;
+    /*
+    const msgRepayDebt = new ununifi.rest.cdp.MsgRepayDebt({
       sender: sender.toString(),
       collateral_type: collateralType,
       payment: repayment,
     });
+    */
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgRepayDebt)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -363,10 +375,10 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): Promise<BroadcastTx200Response> {
     const txBUilder = await this.buildDepositCDPTx(
       key,
       privateKey,
@@ -384,15 +396,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -413,9 +425,9 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk();
     const privKey = this.keyService.getPrivKey(key.type, privateKey);
@@ -423,7 +435,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk.rest, sender)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -439,23 +451,27 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgDepositCDP = new ununifi.cdp.MsgDeposit({
+    // Todo: make cdp.MsgDeposit
+    const msgDepositCDP: any = undefined;
+    /*
+    const msgDepositCDP = new ununifi.rest.cdp.MsgDeposit({
       depositor: sender.toString(),
       owner: ownerAddr.toString(),
       collateral,
       collateral_type: collateralType,
     });
+    */
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgDepositCDP)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,
@@ -480,10 +496,10 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
-  ): Promise<InlineResponse20075> {
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+  ): Promise<BroadcastTx200Response> {
     const txBuilder = await this.buildWithdrawCDPTx(
       key,
       privateKey,
@@ -501,15 +517,15 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ): Promise<SimulatedTxResultResponse> {
-    const dummyFee: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyFee: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
-    const dummyGas: proto.cosmos.base.v1beta1.ICoin = {
+    const dummyGas: cosmosclient.proto.cosmos.base.v1beta1.ICoin = {
       denom: minimumGasPrice.denom,
       amount: '1',
     };
@@ -530,9 +546,9 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     privateKey: Uint8Array,
     ownerAddr: cosmosclient.AccAddress,
     collateralType: string,
-    collateral: proto.cosmos.base.v1beta1.ICoin,
-    gas: proto.cosmos.base.v1beta1.ICoin,
-    fee: proto.cosmos.base.v1beta1.ICoin,
+    collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
     const sdk = await this.cosmosSDK.sdk();
     const privKey = this.keyService.getPrivKey(key.type, privateKey);
@@ -540,7 +556,7 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     const sender = cosmosclient.AccAddress.fromPublicKey(privKey.pubKey());
 
     // get account info
-    const account = await rest.auth
+    const account = await cosmosclient.rest.auth
       .account(sdk.rest, sender)
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
@@ -556,23 +572,27 @@ export class CdpInfrastructureService implements ICdpInfrastructure {
     }
 
     // build tx
-    const msgWithdraw = new ununifi.cdp.MsgWithdraw({
+    //To do: make cdp.MsgWithdraw
+    const msgWithdraw: any = undefined;
+    /*
+    const msgWithdraw = new ununifi.rest.cdp.MsgWithdraw({
       depositor: sender.toString(),
       owner: ownerAddr.toString(),
       collateral,
       collateral_type: collateralType,
     });
+    */
 
-    const txBody = new proto.cosmos.tx.v1beta1.TxBody({
+    const txBody = new cosmosclient.proto.cosmos.tx.v1beta1.TxBody({
       messages: [cosmosclient.codec.instanceToProtoAny(msgWithdraw)],
     });
-    const authInfo = new proto.cosmos.tx.v1beta1.AuthInfo({
+    const authInfo = new cosmosclient.proto.cosmos.tx.v1beta1.AuthInfo({
       signer_infos: [
         {
           public_key: cosmosclient.codec.instanceToProtoAny(pubKey),
           mode_info: {
             single: {
-              mode: proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
+              mode: cosmosclient.proto.cosmos.tx.signing.v1beta1.SignMode.SIGN_MODE_DIRECT,
             },
           },
           sequence: baseAccount.sequence,

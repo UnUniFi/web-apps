@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { cosmosclient } from '@cosmos-client/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20052Proposals,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Proposals200ResponseProposalsInner,
 } from '@cosmos-client/core/esm/openapi';
 
 export interface ProposalContent {
@@ -17,13 +18,22 @@ export interface ProposalContent {
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  @Input()
-  proposals?: InlineResponse20052Proposals[] | null;
+  @Input() proposals?: Proposals200ResponseProposalsInner[] | null;
+  @Input() tallies?:
+    | { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
+    | null;
+  @Input() proposalContents?:
+    | (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]
+    | null;
+  @Input() pageSizeOptions?: number[] | null;
+  @Input() pageSize?: number | null;
+  @Input() pageNumber?: number | null;
+  @Input() pageLength?: number | null;
+  @Output() paginationChange: EventEmitter<PageEvent>;
 
-  @Input()
-  tallies?: (InlineResponse20052FinalTallyResult | undefined)[] | null;
-
-  constructor() {}
+  constructor() {
+    this.paginationChange = new EventEmitter();
+  }
 
   ngOnInit(): void {}
 
@@ -34,5 +44,9 @@ export class ProposalsComponent implements OnInit {
       console.error(error);
       return value as ProposalContent;
     }
+  }
+
+  onPaginationChange(pageEvent: PageEvent): void {
+    this.paginationChange.emit(pageEvent);
   }
 }

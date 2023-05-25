@@ -1,16 +1,16 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 export type validatorType = {
-  val: InlineResponse20066Validators;
+  val: StakingDelegatorValidators200ResponseValidatorsInner;
   share: number;
   inList: boolean;
   rank: number;
 };
 
 export type validatorWithShareType = {
-  val: InlineResponse20066Validators;
+  val: StakingDelegatorValidators200ResponseValidatorsInner;
   share: number;
 };
 
@@ -26,6 +26,8 @@ export class ValidatorsComponent implements OnInit {
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
 
+  active = true;
+
   constructor() {
     this.toggleActiveChange = new EventEmitter();
   }
@@ -36,7 +38,7 @@ export class ValidatorsComponent implements OnInit {
     }, 5000);
   }
 
-  getColorCode(validator: InlineResponse20066Validators) {
+  getColorCode(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
     const hash = crypto
       .createHash('sha256')
       .update(Buffer.from(validator.operator_address ?? ''))
@@ -46,12 +48,8 @@ export class ValidatorsComponent implements OnInit {
     return `#${hash.substr(0, 6)}`;
   }
 
-  onToggleChange(value: string) {
-    if (value == 'active') {
-      this.toggleActiveChange.emit(true);
-    }
-    if (value == 'inactive') {
-      this.toggleActiveChange.emit(false);
-    }
+  onClickToggle() {
+    this.active = !this.active;
+    this.toggleActiveChange.emit(this.active);
   }
 }

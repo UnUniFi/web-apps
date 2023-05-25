@@ -1,19 +1,26 @@
 import { DepositFormDialogComponent } from '../../pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.component';
 import { VoteFormDialogComponent } from '../../pages/dialogs/vote/vote-form-dialog/vote-form-dialog.component';
 import { convertHexStringToUint8Array } from '../../utils/converter';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { StoredWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { GovService } from './gov.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -23,7 +30,7 @@ export class GovApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly gov: GovService,
     private readonly walletApplicationService: WalletApplicationService,
@@ -32,23 +39,38 @@ export class GovApplicationService {
 
   async openVoteFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
-      .open(VoteFormDialogComponent, { data: proposalID })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
+      .open<string>(VoteFormDialogComponent, { data: proposalID })
+      .closed.toPromise();
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your vote.' },
+        })
+        .closed.toPromise();
+        location.reload();
+    }
   }
 
   async openDepositFormDialog(proposalID: number): Promise<void> {
     const txHash = await this.dialog
-      .open(DepositFormDialogComponent, { data: proposalID })
-      .afterClosed()
-      .toPromise();
-    await this.router.navigate(['txs', txHash]);
+      .open<string>(DepositFormDialogComponent, { data: proposalID })
+      .closed.toPromise();
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully accepted your deposit to the proposal.' },
+        })
+        .closed.toPromise();
+        location.reload();
+    }
   }
 
   // WIP
-  async submitProposal(minimumGasPrice: proto.cosmos.base.v1beta1.ICoin, gasRatio: number) {
-    const privateWallet: StoredWallet & { privateKey: string } =
+  async submitProposal(
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    gasRatio: number,
+  ) {
+    const privateWallet: (StoredWallet & { privateKey: string }) | undefined =
       await this.walletApplicationService.openUnunifiKeyFormDialog();
     if (!privateWallet || !privateWallet.privateKey) {
       this.snackBar.open('Failed to get Wallet info from dialog! Tray again!', 'Close');
@@ -64,8 +86,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -89,14 +111,13 @@ export class GovApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -105,7 +126,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Loading...');
 
-    let submitProposalResult: InlineResponse20075 | undefined;
+    let submitProposalResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -128,15 +149,21 @@ export class GovApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
+    // this.snackBar.open('Successfully submit proposal', undefined, { duration: 6000 });
 
-    await this.router.navigate(['txs', txHash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent your proposal.' },
+        })
+        .closed.toPromise();
+    }
   }
 
   async Vote(
     proposalID: number,
-    voteOption: proto.cosmos.gov.v1beta1.VoteOption,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -153,8 +180,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -180,14 +207,13 @@ export class GovApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -197,7 +223,7 @@ export class GovApplicationService {
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let voteResult: InlineResponse20075 | undefined;
+    let voteResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {
@@ -216,13 +242,14 @@ export class GovApplicationService {
     }
 
     this.snackBar.open('Successfully vote the proposal', undefined, { duration: 6000 });
-    await this.router.navigate(['txs', txHash]);
+    // await this.router.navigate(['txs', txHash]);
+    return txHash;
   }
 
   async Deposit(
     proposalID: number,
-    amount: proto.cosmos.base.v1beta1.ICoin,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -239,8 +266,8 @@ export class GovApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
 
@@ -266,14 +293,13 @@ export class GovApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -282,7 +308,7 @@ export class GovApplicationService {
 
     const dialogRef = this.loadingDialog.open('Sending');
 
-    let depositResult: InlineResponse20075 | undefined;
+    let depositResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
 
     try {

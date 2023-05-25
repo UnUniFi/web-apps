@@ -1,17 +1,18 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20066Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type RedelegateOnSubmitEvent = {
   destinationValidator: string;
-  amount: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20066Validators[];
+  amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  validatorList: StakingDelegatorValidators200ResponseValidatorsInner[];
   gasRatio: number;
 };
 
@@ -22,39 +23,39 @@ export type RedelegateOnSubmitEvent = {
 })
 export class RedelegateFormDialogComponent implements OnInit {
   @Input()
-  validatorsList?: InlineResponse20066Validators[] | null;
+  validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   uguuBalance?: string | null;
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: InlineResponse20066Validators;
+  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
+    this.availableDenoms = ['GUU'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
@@ -78,7 +79,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  onSubmit() {
     if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
@@ -91,10 +92,13 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.validatorsList) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       destinationValidator: this.selectedValidator.operator_address,
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: this.selectedAmount.denom,
+      },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
       gasRatio: this.gasRatio,
@@ -111,5 +115,9 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

@@ -2,8 +2,8 @@ name: Publish Explorer Docker image
 on:
   workflow_dispatch:
   ## disable Github Action related to Docker.
-  # release:
-  #   types: [published]
+  #release:
+  #  types: [published]
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub

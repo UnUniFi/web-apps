@@ -1,7 +1,9 @@
 import { validatorType } from '../validators.component';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 
 @Component({
@@ -11,16 +13,19 @@ import * as crypto from 'crypto';
 })
 export class ValidatorComponent implements OnInit {
   @Input()
+  validatorAddress?: string | null;
+
+  @Input()
   validator?: validatorType | null;
 
   @Input()
   accAddress?: cosmosclient.AccAddress | null;
 
-  constructor() {}
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 
   ngOnInit(): void {}
 
-  getColorCode(validator: InlineResponse20066Validators | undefined | null) {
+  getColorCode(validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined | null) {
     const hash = crypto
       .createHash('sha256')
       .update(Buffer.from(validator?.operator_address ?? ''))
@@ -28,5 +33,15 @@ export class ValidatorComponent implements OnInit {
       .toString('hex');
 
     return `#${hash.substr(0, 6)}`;
+  }
+
+  copyClipboard(value: string) {
+    if (value.length > 0) {
+      this.clipboard.copy(value);
+      this.snackBar.open('Copied to clipboard', undefined, {
+        duration: 3000,
+      });
+    }
+    return false;
   }
 }

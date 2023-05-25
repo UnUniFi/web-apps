@@ -1,18 +1,18 @@
-import { CosmosSDKService } from '../../models';
-import { Config, ConfigService } from '../../models/config.service';
-import { CosmosWallet, StoredWallet, WalletType } from '../../models/wallets/wallet.model';
+import { CosmosRestService } from '../../models/cosmos-rest.service';
+import { BankQueryService } from '../../models/cosmos/bank.query.service';
+import { BankService } from '../../models/cosmos/bank.service';
+import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
+import { StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
-import {
-  convertTypedAccountToTypedName,
-  convertUnknownAccountToBaseAccount,
-  convertUnknownAccountToTypedAccount,
-} from '../../utils/converter';
+import { throughMap } from '../../utils/pipes';
+import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20037 } from '@cosmos-client/core/esm/openapi';
-import { PubKey } from '@cosmos-client/core/esm/types';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import {
+  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
+  GetNodeInfo200Response,
+} from '@cosmos-client/core/esm/openapi';
+import { Observable, combineLatest } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-balance',
@@ -20,32 +20,16 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./balance.component.css'],
 })
 export class BalanceComponent implements OnInit {
-  config$: Observable<Config | undefined>;
-  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  currentCosmosWallet$: Observable<CosmosWallet | null | undefined>;
   walletId$: Observable<string | null | undefined>;
   walletType$: Observable<WalletType | null | undefined>;
-  cosmosPublicKey$: Observable<PubKey | null | undefined>;
-  publicKey$: Observable<string | null | undefined>;
-  cosmosAccAddress$: Observable<cosmosclient.AccAddress | null | undefined>;
   accAddress$: Observable<string | null | undefined>;
-  cosmosValAddress$: Observable<cosmosclient.ValAddress | null | undefined>;
-  valAddress$: Observable<string | null | undefined>;
-  cosmosUnknownAccount$: Observable<unknown | null | undefined>;
-  cosmosAccount$: Observable<
-    | proto.cosmos.auth.v1beta1.BaseAccount
-    | proto.cosmos.vesting.v1beta1.BaseVestingAccount
-    | proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
-    | proto.cosmos.vesting.v1beta1.DelayedVestingAccount
-    | proto.cosmos.vesting.v1beta1.PeriodicVestingAccount
-    | proto.cosmos.vesting.v1beta1.PermanentLockedAccount
-    | proto.cosmos.auth.v1beta1.ModuleAccount
-    | null
-    | undefined
-  >;
-  cosmosBaseAccount$: Observable<proto.cosmos.auth.v1beta1.BaseAccount | null | undefined>;
   accountTypeName$: Observable<string | null | undefined>;
-  balances$: Observable<proto.cosmos.base.v1beta1.ICoin[] | null | undefined>;
+  publicKey$: Observable<string | null | undefined>;
+  valAddress$: Observable<string | null | undefined>;
+  symbolImageMap: { [symbol: string]: string };
+  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
+  faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
     | {
         hasFaucet: boolean;
@@ -56,130 +40,61 @@ export class BalanceComponent implements OnInit {
       }[]
     | undefined
   >;
-  nodeInfo$: Observable<InlineResponse20037>;
+  nodeInfo$: Observable<GetNodeInfo200Response>;
 
   constructor(
-    private configService: ConfigService,
-    private cosmosSDK: CosmosSDKService,
-    private walletService: WalletService,
+    private readonly walletService: WalletService,
+    private readonly bank: BankService,
+    private readonly bankQuery: BankQueryService,
+    private readonly rest: CosmosRestService,
+    private usecase: BalanceUsecaseService,
+    private readonly distributionAppService: DistributionApplicationService,
   ) {
-    this.config$ = this.configService.config$;
-    const sdk$ = this.cosmosSDK.sdk$;
-    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    this.currentCosmosWallet$ = this.currentStoredWallet$.pipe(
-      map((storedWallet) =>
-        storedWallet
-          ? this.walletService.convertStoredWalletToCosmosWallet(storedWallet)
-          : storedWallet,
+    const wallet$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+    );
+    const address$ = wallet$.pipe(map((wallet) => wallet.address));
+    this.walletId$ = wallet$.pipe(map((wallet) => wallet.id));
+    this.walletType$ = wallet$.pipe(map((wallet) => wallet.type));
+    this.accAddress$ = wallet$.pipe(map((wallet) => wallet.address));
+    this.publicKey$ = wallet$.pipe(map((wallet) => wallet.public_key));
+    const cosmosWallet$ = wallet$.pipe(
+      throughMap((storedWallet) =>
+        this.walletService.convertStoredWalletToCosmosWallet(storedWallet),
       ),
     );
-    this.walletId$ = this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.id : storedWallet)),
+    this.valAddress$ = cosmosWallet$.pipe(
+      throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
-    this.walletType$ = this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.type : storedWallet)),
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
+    this.symbolBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );
-    this.cosmosPublicKey$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.public_key : cosmosWallet)),
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const rewards$ = cosmosWallet$.pipe(
+      mergeMap((wallet) => this.rest.getDelegationTotalRewards$(wallet?.address!)),
     );
-    this.publicKey$ = this.currentStoredWallet$.pipe(
-      map((storedWallet) => (storedWallet ? storedWallet.public_key : storedWallet)),
+    this.symbolRewardsMap$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
+      map(([rewards, denomMetadataMap]) =>
+        this.bank.convertCoinsToSymbolAmount(rewards?.total!, denomMetadataMap),
+      ),
     );
-    this.cosmosAccAddress$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.address : cosmosWallet)),
+    this.faucets$ = this.usecase.faucets$;
+    this.faucetSymbols$ = combineLatest([this.faucets$, denomMetadataMap$]).pipe(
+      map(([faucets, denomMetadataMap]) =>
+        faucets?.map((f) => denomMetadataMap?.[f.denom!].symbol || 'Invalid Token'),
+      ),
     );
-    this.accAddress$ = this.cosmosAccAddress$.pipe(
-      map((accAddress) => (accAddress ? accAddress.toString() : accAddress)),
-    );
-    this.cosmosValAddress$ = this.currentCosmosWallet$.pipe(
-      map((cosmosWallet) => (cosmosWallet ? cosmosWallet.address.toValAddress() : cosmosWallet)),
-    );
-    this.valAddress$ = this.cosmosValAddress$.pipe(
-      map((valAddress) => (valAddress ? valAddress.toString() : valAddress)),
-    );
-    this.cosmosUnknownAccount$ = combineLatest([sdk$, this.cosmosAccAddress$]).pipe(
-      mergeMap(([sdk, cosmosAccAddress]) => {
-        if (!cosmosAccAddress) {
-          return of(cosmosAccAddress);
-        }
-        return rest.auth
-          .account(sdk.rest, cosmosAccAddress)
-          .then((res) => {
-            console.log(res.data.account);
-            return res;
-          })
-          .then(
-            (res) =>
-              res.data &&
-              cosmosclient.codec.protoJSONToInstance(
-                cosmosclient.codec.castProtoJSONOfProtoAny(res.data.account),
-              ),
-          )
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
-      }),
-    );
-    this.cosmosAccount$ = this.cosmosUnknownAccount$.pipe(
-      map((cosmosUnknownAccount) => convertUnknownAccountToTypedAccount(cosmosUnknownAccount)),
-    );
-    this.cosmosBaseAccount$ = this.cosmosUnknownAccount$.pipe(
-      map((cosmosUnknownAccount) => convertUnknownAccountToBaseAccount(cosmosUnknownAccount)),
-    );
-    this.accountTypeName$ = this.cosmosAccount$.pipe(
-      map((cosmosAccount) => convertTypedAccountToTypedName(cosmosAccount)),
-    );
-    this.balances$ = combineLatest([sdk$, this.cosmosAccAddress$]).pipe(
-      mergeMap(([sdk, cosmosAccAddress]) => {
-        if (!cosmosAccAddress) {
-          return of(cosmosAccAddress);
-        }
-        return rest.bank
-          .allBalances(sdk.rest, cosmosAccAddress)
-          .then((res) => res.data.balances)
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          });
-      }),
-    );
-    this.faucets$ = combineLatest([this.config$, this.balances$]).pipe(
-      map(([config, balances]) => {
-        if (!config?.extension?.faucet?.length) {
-          return [];
-        }
-        const allFaucets = config.extension.faucet.filter((faucet) => faucet.hasFaucet);
-        if (balances === null) {
-          return [];
-        }
-        if (balances === undefined) {
-          return allFaucets;
-        }
-        if (balances.length === 0) {
-          return allFaucets;
-        }
-        return allFaucets?.filter((faucet) => {
-          const isNotFoundFaucetDenomBalance =
-            balances.find((balance) => balance.denom === faucet.denom) === undefined;
-          const faucetDenomBalanceAmount = balances.find(
-            (balance) => balance.denom === faucet.denom,
-          )?.amount;
-          const isLessThanMaxCreditFaucetDenomBalance = faucetDenomBalanceAmount
-            ? parseInt(faucetDenomBalanceAmount) <= faucet.maxCredit
-            : false;
-          if (isNotFoundFaucetDenomBalance || isLessThanMaxCreditFaucetDenomBalance) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-      }),
-    );
-    this.nodeInfo$ = sdk$.pipe(
-      mergeMap((sdk) => rest.tendermint.getNodeInfo(sdk.rest).then((res) => res.data)),
+    this.nodeInfo$ = this.rest.getNodeInfo$();
+    this.accountTypeName$ = this.usecase.accountTypeName$;
+    this.symbolBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );
   }
 
   ngOnInit(): void {}
+
+  onSubmitWithdrawAllDelegatorReward() {
+    this.distributionAppService.openWithdrawAllDelegatorRewardFormDialog();
+  }
 }

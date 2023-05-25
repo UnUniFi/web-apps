@@ -1,8 +1,12 @@
-<mat-dialog-content>
+<div class="card bg-base-100 shadow-xl">
+<div class="card-body">
   <div>
     The tx fee will be {{data.fee.amount}}{{data.fee.denom}}.
   </div>
   <div>Are you sure you want to send the tx with the fee?</div>
-  <button mat-flat-button class="w-2/5" color="primary" (click)="okToSendTx()">OK</button>
-  <button mat-flat-button class="w-2/5" (click)="cancelToSendTx()">Cancel</button>
-</mat-dialog-content>
+  <div class="text-center">
+    <button class="btn btn-primary w-2/5" (click)="okToSendTx()">OK</button>
+    <button class="btn w-2/5" (click)="cancelToSendTx()">Cancel</button>
+  </div>
+</div>
+</div>

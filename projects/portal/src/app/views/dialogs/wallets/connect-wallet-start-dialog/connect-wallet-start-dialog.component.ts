@@ -1,6 +1,6 @@
+import { WalletType } from './../../../../models/wallets/wallet.model';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 @Component({
   selector: 'app-connect-wallet-start-dialog',
@@ -36,11 +36,15 @@ export class ConnectWalletStartDialogComponent implements OnInit {
     },
   ];
 
-  constructor(public matDialogRef: MatDialogRef<ConnectWalletStartDialogComponent>) {}
+  constructor(public dialogRef: DialogRef<WalletType, ConnectWalletStartDialogComponent>) {}
 
   ngOnInit(): void {}
 
   onClickButton(walletType: WalletType): void {
-    this.matDialogRef.close(walletType);
+    this.dialogRef.close(walletType);
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

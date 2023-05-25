@@ -1,0 +1,64 @@
+<div class="mx-auto max-w-screen-xl">
+  <h2>NFT Mint (Only Testnet)</h2>
+
+  <div class="card bg-base-100 shadow-xl w-full">
+    <div class="card-body">
+      <h2 class="card-title">Get a trial NFT</h2>
+      <p>
+        To borrow tokens using the NFT Backed-Loan, it is necessary to list an NFT as collateral.
+        You can test this feature by issuing a trial NFT on the testnet.
+      </p>
+      <form #formRef="ngForm" (submit)="onSubmitNftMint()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Receiver Address</span>
+          </label>
+          <input
+            #addressRef
+            class="input input-bordered"
+            name="address"
+            [(ngModel)]="address"
+            required
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">NFT Class (Collection)</span>
+          </label>
+          <select
+            #classRef
+            required
+            [(ngModel)]="selectedClass"
+            name="nftClass"
+            class="select select-bordered w-full"
+          >
+            <option disabled>Crypto Punks (Example)</option>
+            <ng-container *ngFor="let nftClass of classes">
+              <option [value]="nftClass">{{ nftClass }}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">NFT ID</span>
+          </label>
+          <label class="input-group">
+            <input
+              #idRef
+              class="input input-bordered w-full"
+              name="nftId"
+              [(ngModel)]="nftId"
+              required
+            />
+            <label class="btn btn-outline btn-accent" (click)="autoID()">Regenerate</label>
+          </label>
+        </div>
+        <div class="modal-action">
+          <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+            Mint a test NFT
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

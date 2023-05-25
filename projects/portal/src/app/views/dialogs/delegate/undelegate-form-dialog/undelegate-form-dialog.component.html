@@ -1,69 +1,113 @@
-<mat-dialog-content>
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Undelegate from this validator</div>
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
-
-  <mat-list>
-    <mat-label>To. (Validator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">circle</mat-icon>
-      <div mat-line>
-        <span>{{ validator?.description?.moniker }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
-
-  <mat-list>
-    <mat-label>From. (Delegator)</mat-label>
-    <mat-list-item>
-      <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }">circle</mat-icon>
-      <div mat-line>
-        <span>{{ currentStoredWallet?.id }}</span>
-      </div>
-    </mat-list-item>
-  </mat-list>
-  <ng-container *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding">
-  </ng-container>
-
-  <ng-template #unbonding>
-    <mat-list>
-      <mat-label>Unbonding Date</mat-label>
-      <mat-list-item>
-        <span>{{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-M-d a h:mm:ss z'}}</span>
-      </mat-list-item>
-    </mat-list>
-  </ng-template>
-
-  <ng-template #beforeUnbonding>
-    <mat-list>
-      <mat-label>Unbonding Date (estimated.)</mat-label>
-      <mat-list-item>
-        <span>{{estimatedUnbondingData| date: 'yyyy-M-d a h:mm:ss z'}}</span>
-      </mat-list-item>
-    </mat-list>
-  </ng-template>
-
-  <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
-    <div class="flex flex-col content-content lg:flex-row">
-      <mat-form-field class="flex-auto">
-        <mat-label>Delegate Denom</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.denom" name="delegate-denom" matInput type="text" required
-          readonly />
-      </mat-form-field>
-      <mat-form-field class="flex-auto">
-        <mat-label>UnDelegate Amount</mat-label>
-        <input [(ngModel)]="selectedAmount && selectedAmount.amount" name="undelegate-amount" matInput type="number"
-          pattern="^\d+$" [min]="0" required />
-      </mat-form-field>
-      <mat-form-field class="flex-auto">
-        <mat-label>Delegated Amount</mat-label>
-        <input [(ngModel)]="delegateAmount && delegateAmount.amount" name="delegate-amount" matInput type="number"
-          pattern="^\d+$" [min]="0" required readonly />
-      </mat-form-field>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Undelegate from this validator</div>
     </div>
 
-    <h3 class="pt-3">Gas Settings</h3>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">To. (Validator)</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+            >
+              circle
+            </span>
+            {{ validator?.description?.moniker }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text">From. (Delegator)</span>
+      </label>
+      <ul class="menu bg-base-100">
+        <li class="disabled">
+          <a class="text-base-content items-center">
+            <span
+              class="material-icons"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
+            >
+              circle
+            </span>
+            {{ currentStoredWallet?.id }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <ng-container
+      *ngIf="unbondingDelegation?.unbond?.entries?.[0]; then unbonding; else beforeUnbonding"
+    >
+    </ng-container>
+
+    <ng-template #unbonding>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Unbonding Date</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              {{unbondingDelegation?.unbond?.entries?.[0]?.completion_time| date: 'yyyy-MM-dd a hh:mm:ss z'}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+
+    <ng-template #beforeUnbonding>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Unbonding Date (estimated.)</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              {{ estimatedUnbondingData | date : 'yyyy-MM-dd a hh:mm:ss z' }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">UnDelegate Amount</span>
+        </label>
+        <label class="input-group">
+          <input
+            name="undelegate-amount"
+            type="number"
+            placeholder="e.g. 12.123456"
+            class="input input-bordered w-full"
+            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [min]="0"
+            required
+            pattern="^\d+(\.\d{1,6})?$"
+          />
+          <span>{{ selectedAmount?.denom }}</span>
+        </label>
+
+        <label class="label">
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+        </label>
+      </div>
+
+      <!-- <h3 class="pt-3">Gas Settings</h3>
     <mat-form-field class="w-full">
       <mat-label>Gas Ratio</mat-label>
       <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -100,10 +144,12 @@
           [(ngModel)]="selectedGasPrice && selectedGasPrice.amount" name="minimum-gas-price-slider">
         </mat-slider>
       </mat-expansion-panel>
-    </mat-accordion>
-
-    <button mat-flat-button class="w-full mt-4" color="accent" [disabled]="formRef.invalid">
-      Delete Delegate
-    </button>
-  </form>
-</mat-dialog-content>
+    </mat-accordion> -->
+      <div class="card-actions justify-end mt-4">
+        <button class="btn btn-error w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+          Undelegate
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

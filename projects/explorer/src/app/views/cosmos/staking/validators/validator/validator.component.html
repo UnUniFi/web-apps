@@ -10,100 +10,63 @@
     <mat-icon class="mr-1" matListIcon [ngStyle]="{ color: getColorCode(validator?.val) }">
       circle
     </mat-icon>
-    <h2 class="mb-0">
+    <h2>
       {{ validator?.val?.description?.moniker }}
     </h2>
     <span class="flex-auto"></span>
-    <span
-      *ngIf="validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-blue-500"
-    >
-      Active
-    </span>
-    <span
-      *ngIf="!validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-red-500"
-    >
-      Inactive
-    </span>
+    <div class="badge badge-lg badge-primary" *ngIf="validator?.inList">Active</div>
+    <div class="badge badge-lg badge-secondary" *ngIf="!validator?.inList">Inactive</div>
   </div>
 
-  <mat-card class="mb-4">
-    <mat-list>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Validator Address: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ validator?.val?.operator_address }}</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Account Address: </span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all">{{ accAddress }}</span>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+  <div class="overflow-x-auto mb-4">
+    <table class="table w-full">
+      <tr>
+        <th>Validator Address</th>
+        <td>{{ validator?.val?.operator_address }}</td>
+      </tr>
+      <tr>
+        <th>Account Address</th>
+        <td>{{ accAddress }}</td>
+      </tr>
+    </table>
+  </div>
 
-  <mat-card class="mb-4">
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Rank: </span>
-          <span class="flex-auto"></span>
-          #<span class="ml-1 break-all">{{ validator?.rank }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Website: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.val?.description?.website }}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Commission: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.rate | percent: '1.0-0' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Max Commission: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.commission_rates?.max_rate | percent: '1.0-0' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Commission Updated: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.val?.commission?.update_time | date: 'yyyy-M-d a h:mm:ss z' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Voting Power: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">
-            {{ validator?.share | percent: '1.2-2' }}
-          </span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-
-        <mat-list-item>
-          <span class="whitespace-nowrap">Staked: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ validator?.val?.tokens | number: '1.0-0' }}</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+  <div class="overflow-x-auto mb-4">
+    <table class="table w-full">
+      <tr>
+        <th>Rank</th>
+        <td>{{ validator?.rank }}</td>
+      </tr>
+      <tr>
+        <th>Website</th>
+        <td>{{ validator?.val?.description?.website }}</td>
+      </tr>
+      <tr>
+        <th>Commission</th>
+        <td>
+          {{ validator?.val?.commission?.commission_rates?.rate | percent : '1.0-0' }}
+        </td>
+      </tr>
+      <tr>
+        <th>Max Commission</th>
+        <td>
+          {{ validator?.val?.commission?.commission_rates?.max_rate | percent : '1.0-0' }}
+        </td>
+      </tr>
+      <tr>
+        <th>Commission Updated</th>
+        <td>{{ validator?.val?.commission?.update_time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+      </tr>
+      <tr>
+        <th>Voting Power</th>
+        <td>{{ validator?.share | percent : '1.2-2' }}</td>
+      </tr>
+      <tr>
+        <th>Staked</th>
+        <td>{{ validator?.val?.tokens | number : '1.0-0' }}</td>
+      </tr>
+    </table>
+  </div>
 </ng-template>
 
 <ng-template #notFound>

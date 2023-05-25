@@ -1,0 +1,188 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex justify-center items-center flex-wrap">
+    <div
+      class="card bg-base-100 shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3"
+    >
+      <img
+        alt="Liquidity Pool"
+        src="https://img.freepik.com/free-vector/financial-investment-market-trends-analysis-investing-lucrative-areas-focusing-profitable-projects-businesswoman-funding-business-project-concept-illustration_335657-2078.jpg"
+        class="w-full h-64 object-cover"
+      />
+      <div class="card-body h-full">
+        <h2 class="card-title">Liquidity Pool</h2>
+        <p>
+          A pool of tokens used as a source of liquidity for traders. Enables trading without the
+          need for buyers and sellers to find counterparts.
+        </p>
+        <div class="stats stats-vertical md:stats-horizontal bg-base-100">
+          <div class="stat">
+            <div class="stat-title">Pool Value</div>
+            <div class="stat-value text-primary">$ {{ pool?.pool_market_cap?.total | number }}</div>
+            <div class="stat-desc"></div>
+          </div>
+          <!-- <div class="stat">
+          <div class="stat-title">24h Volume</div>
+          <div class="stat-value text-primary">$ {{ pool?.volume_24hours | number }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">24h Fees</div>
+          <div class="stat-value text-secondary">$ {{ pool?.fees_24hours | number }}</div>
+          <div class="stat-desc"></div>
+        </div> -->
+        </div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-info btn-outline w-full" routerLink="pool">
+            <span>View</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="card bg-base-100 shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3"
+    >
+      <img
+        alt="Perpetual Futures"
+        src="https://img.freepik.com/free-vector/crypto-trading-bot-abstract-concept-illustration_335657-2172.jpg"
+        class="w-full h-64 object-cover"
+      />
+      <div class="card-body h-full">
+        <h2 class="card-title">
+          Perpetual Futures
+          <!-- The button to open modal -->
+          <label for="modal-perpetual-futures" class="label-text cursor-pointer">
+            <mat-icon class="">help</mat-icon>
+          </label>
+        </h2>
+        <!-- Put this part before </body> tag -->
+        <input type="checkbox" id="modal-perpetual-futures" class="modal-toggle" />
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+            <p>
+              Perpetual futures are a type of cryptocurrency trading contract that allows traders to
+              take positions on future price movements. These contracts have no expiration date, and
+              traders are able to maintain positions indefinitely by depositing funds with the
+              exchange.
+            </p>
+            <p>
+              Perpetual futures contracts typically require margin, making them a high-risk,
+              high-reward investment product. Additionally, leverage can be employed for these
+              contracts, meaning even small price movements can result in significant gains or
+              losses, necessitating careful trading practices.
+            </p>
+            <div class="modal-action">
+              <label for="modal-perpetual-futures" class="btn">Understood</label>
+            </div>
+          </div>
+        </div>
+        <p>A financial instrument used for long-term trading of assets without delivery.</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary btn-outline w-full" routerLink="perpetual-futures">
+            <mat-icon class="mr-2">show_chart</mat-icon><span>Trade</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="card bg-base-100 shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3"
+    >
+      <img
+        alt="Perpetual Options"
+        src="https://img.freepik.com/free-vector/cryptocurrency-market-abstract-concept-illustration_335657-3835.jpg"
+        class="w-full h-64 object-cover"
+      />
+      <div class="card-body h-full">
+        <h2 class="card-title">
+          Perpetual Options (Coming Soon!)
+          <!-- The button to open modal -->
+          <label for="modal-perpetual-options" class="label-text cursor-pointer">
+            <mat-icon class="">help</mat-icon>
+          </label>
+        </h2>
+        <!-- Put this part before </body> tag -->
+        <input type="checkbox" id="modal-perpetual-options" class="modal-toggle" />
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">What is Perpetual Options?</h3>
+            <p>
+              Perpetual options are a type of cryptocurrency trading contract that allows traders to
+              take positions on future price movements. These contracts have no expiration date, and
+              traders are able to maintain positions indefinitely by depositing funds with the
+              exchange.
+            </p>
+            <p>
+              Perpetual options, like traditional options contracts, allow for the exchange of
+              underlying and quote currencies, and the ability to settle prices at a specific future
+              date.
+            </p>
+            <p>
+              These contracts come in two varieties, allowing traders to hedge against potential
+              future price increases with purchasing options and against potential price decreases
+              with selling options.
+            </p>
+            <p>
+              Perpetual options trading comes with significant risk, and requires ample knowledge
+              and experience. Proper utilization of exchange-provided margin and leverage is also
+              critical.
+            </p>
+            <div class="modal-action">
+              <label for="modal-perpetual-options" class="btn">Understood</label>
+            </div>
+          </div>
+        </div>
+        <p>A type of options contract that does not have an expiry date.</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-disabled w-full">
+            <mat-icon class="mr-2">show_chart</mat-icon><span>Trade</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="card bg-base-100 shadow-xl rounded-lg overflow-hidden w-full m-2 md:w-5/12 lg:w-1/3"
+    >
+      <img
+        alt="Copy Trading"
+        src="https://img.freepik.com/free-vector/cryptocurrency-trading-desk-abstract-concept-illustration_335657-2170.jpg"
+        class="w-full h-64 object-cover"
+      />
+      <div class="card-body h-full">
+        <h2 class="card-title">
+          Copy Trading (Coming Soon!)
+          <!-- The button to open modal -->
+          <label for="modal-copy-trading" class="label-text cursor-pointer">
+            <mat-icon class="">help</mat-icon>
+          </label>
+        </h2>
+        <!-- Put this part before </body> tag -->
+        <input type="checkbox" id="modal-copy-trading" class="modal-toggle" />
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+            <p>
+              Copy Trading allows beginner or inexperienced traders to automatically copy and
+              execute trades made by professional traders. This technique enables novice investors
+              to improve their trading skills and earn profit while observing how experienced
+              traders make successful trades.
+            </p>
+            <div class="modal-action">
+              <label for="modal-copy-trading" class="btn">Understood</label>
+            </div>
+          </div>
+        </div>
+        <p>
+          A type of trading in which an individual copies the trades or strategies of another
+          trader, with the aim of replicating their success.
+        </p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-disabled w-full">
+            <span>Use</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

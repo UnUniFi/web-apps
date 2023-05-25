@@ -1,11 +1,7 @@
 <div class="flex flex-row">
   <h2 class="mb-0">Auction</h2>
   <span class="flex-auto"></span>
-  <button
-    mat-flat-button
-    routerLink="/auction/auctions/{{ auction?.base_auction?.id }}/place-bid"
-    color="accent"
-  >
+  <button mat-flat-button routerLink="place-bid" color="accent">
     <mat-icon>add</mat-icon>
     <span>Place Bid</span>
   </button>
@@ -73,7 +69,7 @@
         <span class="column-name"> End Time: </span>
         <span class="flex-auto"></span>
         <span class="column-value">
-          {{ endTime | date: 'yyyy-M-d a h:mm:ss z' }}
+          {{ endTime | date : 'yyyy-MM-dd a hh:mm:ss z' }}
         </span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>
@@ -82,7 +78,7 @@
         <span class="column-name"> Max End Time: </span>
         <span class="flex-auto"></span>
         <span class="column-value">
-          {{ maxEndTime | date: 'yyyy-M-d a h:mm:ss z' }}
+          {{ maxEndTime | date : 'yyyy-MM-dd a hh:mm:ss z' }}
         </span>
       </mat-list-item>
       <mat-divider [inset]="true"></mat-divider>

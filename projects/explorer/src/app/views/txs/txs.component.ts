@@ -1,7 +1,7 @@
+import { PaginationInfo } from '../../pages/txs/txs.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { InlineResponse20075TxResponse } from '@cosmos-client/core/esm/openapi';
-import { PaginationInfo } from '../../pages/txs/txs.component';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-txs',
@@ -10,7 +10,7 @@ import { PaginationInfo } from '../../pages/txs/txs.component';
 })
 export class TxsComponent implements OnInit {
   @Input()
-  txs?: InlineResponse20075TxResponse[] | null;
+  txs?: BroadcastTx200ResponseTxResponse[] | null;
   @Input()
   txTypeOptions?: string[] | null;
   @Input()
@@ -34,7 +34,7 @@ export class TxsComponent implements OnInit {
     this.paginationChange = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSelectedTxTypeChanged(selectedTxType: string): void {
     this.selectedTxTypeChanged.emit(selectedTxType);

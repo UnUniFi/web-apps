@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UnunifiImportWalletWithPrivateKeyFormDialogComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, ClipboardModule],
+  imports: [CommonModule, FormsModule, ClipboardModule, MaterialModule],
   exports: [UnunifiImportWalletWithPrivateKeyFormDialogComponent],
 })
 export class UnunifiImportWalletWithPrivateKeyFormDialogModule {}

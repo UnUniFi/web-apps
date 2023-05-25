@@ -5,7 +5,11 @@
   [accountTypeName]="accountTypeName$ | async"
   [publicKey]="publicKey$ | async"
   [valAddress]="valAddress$ | async"
-  [balances]="balances$ | async"
+  [symbolImageMap]="symbolImageMap"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [symbolRewardsMap]="symbolRewardsMap$ | async"
   [faucets]="faucets$ | async"
+  [faucetSymbols]="faucetSymbols$ | async"
   [nodeInfo]="nodeInfo$ | async"
+  (appWithdrawAllDelegatorReward)="onSubmitWithdrawAllDelegatorReward()"
 ></view-balance>

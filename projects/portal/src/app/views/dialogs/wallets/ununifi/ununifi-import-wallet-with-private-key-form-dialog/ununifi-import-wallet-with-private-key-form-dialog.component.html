@@ -1,84 +1,108 @@
-<mat-dialog-content>
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Connect Your Wallet</div>
-    <div class="text-base m-3">Start earning high yield on your crypto</div>
-    <ng-container *ngIf="privateWallet$ | async as privateWallet">
-      <ng-container *ngIf="privateWallet">
-        <form #formRef="ngForm" (submit)="onClickButton(idRef.value)">
-          <mat-form-field class="w-full">
-            <mat-label>Wallet ID</mat-label>
-            <input
-              #idRef
-              name="id"
-              [(ngModel)]="privateWallet.id"
-              (change)="onChangeIdAndPrivateKey(idRef.value, privateKeyRef.value)"
-              matInput
-              required
-              pattern="^[a-z_][a-z_0-9]*$"
-              autocomplete="username"
-            />
-            <mat-error>^[a-z_][a-z_0-9]*$</mat-error>
-          </mat-form-field>
-
-          <mat-form-field class="w-full">
-            <mat-label>Wallet Type</mat-label>
-            <input
-              #walletTypeRef
-              name="walletType"
-              [(ngModel)]="privateWallet.type"
-              matInput
-              required
-              readonly
-            />
-          </mat-form-field>
-
-          <mat-form-field class="w-full">
-            <mat-label>Key Type</mat-label>
-            <mat-select
-              #keyTypeRef
-              [(ngModel)]="privateWallet.key_type"
-              name="keyType"
-              matInput
-              required
-              disabled
-            >
-              <mat-option [value]="'secp256k1'">Secp256k1</mat-option>
-              <mat-option [value]="'ed25519'" disabled>Ed25519</mat-option>
-              <mat-option [value]="'sr25519'" disabled>Sr25519</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field class="w-full mb-4 md:mb-0">
-            <mat-label>Private key</mat-label>
-            <input
-              #privateKeyRef
-              name="password"
-              [type]="isPasswordVisible ? 'text' : 'password'"
-              [(ngModel)]="privateWallet.privateKey"
-              (change)="onChangeIdAndPrivateKey(idRef.value, privateKeyRef.value)"
-              matInput
-              required
-              autocomplete="new-password"
-            />
-            <button mat-button type="button" matSuffix (click)="togglePasswordVisibility()">
-              <mat-icon>
-                {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
-              </mat-icon>
-            </button>
-            <button mat-button type="button" matSuffix (click)="copyClipboard(privateKeyRef.value)">
-              <mat-icon>content_copy</mat-icon>
-              <span>copy</span>
-            </button>
-            <mat-hint>
-              You must save this private key as a password using password manager built in the web
-              browser.
-            </mat-hint>
-          </mat-form-field>
-
-          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">Next</button>
-        </form>
-      </ng-container>
-    </ng-container>
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
-</mat-dialog-content>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Connect Your Wallet</div>
+      <div class="text-base m-3">Start earning high yield on your crypto</div>
+      <ng-container *ngIf="privateWallet$ | async as privateWallet">
+        <ng-container *ngIf="privateWallet">
+          <form #formRef="ngForm" (submit)="onClickButton(idRef.value)">
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text">Wallet ID</span>
+              </label>
+              <input
+                #idRef
+                name="id"
+                type="text"
+                placeholder="Type here"
+                class="input input-bordered w-full"
+                [(ngModel)]="privateWallet.id"
+                (change)="onChangeIdAndPrivateKey(idRef.value, privateKeyRef.value)"
+                required
+                pattern="^[a-z_][a-z_0-9]*$"
+                autocomplete="username"
+              />
+            </div>
+
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text">Wallet Type</span>
+              </label>
+              <input
+                #walletTypeRef
+                name="walletType"
+                type="text"
+                class="input input-bordered w-full"
+                [(ngModel)]="privateWallet.type"
+                required
+                readonly
+              />
+            </div>
+
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text">KeyType</span>
+              </label>
+              <select
+                class="select select-bordered select-sm"
+                #keyTypeRef
+                [(ngModel)]="privateWallet.key_type"
+                name="keyType"
+                required
+                disabled
+              >
+                <option [value]="'secp256k1'">Secp256k1</option>
+                <option [value]="'ed25519'" disabled>Ed25519</option>
+                <option [value]="'sr25519'" disabled>Sr25519</option>
+              </select>
+            </div>
+
+            <div class="form-control w-full">
+              <div class="label">
+                <span class="label-text">Private key</span>
+              </div>
+              <div class="inline-flex items-center">
+                <input
+                  #privateKeyRef
+                  name="password"
+                  class="input input-bordered w-full"
+                  [type]="isPasswordVisible ? 'text' : 'password'"
+                  [(ngModel)]="privateWallet.privateKey"
+                  (change)="onChangeIdAndPrivateKey(idRef.value, privateKeyRef.value)"
+                  required
+                  autocomplete="new-password"
+                />
+                <label class="swap">
+                  <input type="checkbox" (change)="togglePasswordVisibility()" />
+                  <div class="swap-on btn btn-sm btn-ghost">
+                    <span class="material-icons">visibility</span>
+                  </div>
+                  <div class="swap-off btn btn-sm btn-ghost">
+                    <span class="material-icons">visibility_off</span>
+                  </div>
+                </label>
+                <button class="btn btn-sm btn-ghost" (click)="copyClipboard(privateKeyRef.value)">
+                  <span class="material-icons">content_copy</span>
+                </button>
+              </div>
+              <label class="label">
+                <span class="label-text-alt"
+                  >You must save this private key as a password using password manager built in the
+                  web browser.</span
+                >
+              </label>
+            </div>
+
+            <button class="btn btn-block" [disabled]="formRef.invalid">Next</button>
+          </form>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

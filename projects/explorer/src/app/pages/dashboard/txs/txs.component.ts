@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
-import { InlineResponse20075TxResponse } from '@cosmos-client/core/esm/openapi/api';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/explorer/src/app/models/config.service';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { of, combineLatest, Observable, timer } from 'rxjs';
@@ -33,7 +33,7 @@ export class TxsComponent implements OnInit {
   paginationInfo$: Observable<PaginationInfo>;
   paginationInfoChanged$: Observable<PaginationInfo>;
   pageLength$: Observable<number | undefined>;
-  txs$?: Observable<InlineResponse20075TxResponse[] | undefined>;
+  txs$?: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
 
   constructor(
     private router: Router,
@@ -60,7 +60,7 @@ export class TxsComponent implements OnInit {
 
     this.txsTotalCount$ = combineLatest([sdk$, this.selectedTxTypeChanged$]).pipe(
       switchMap(([sdk, selectedTxType]) => {
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -128,7 +128,7 @@ export class TxsComponent implements OnInit {
           return of([]);
         }
 
-        return rest.tx
+        return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
             [`message.module='${selectedTxType}'`],
@@ -145,7 +145,6 @@ export class TxsComponent implements OnInit {
       }),
       map((latestTxs) => latestTxs?.reverse()),
     );
-    this.txs$.subscribe((a) => console.log(a));
   }
 
   ngOnInit(): void {}

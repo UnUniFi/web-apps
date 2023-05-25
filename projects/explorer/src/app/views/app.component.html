@@ -1,70 +1,85 @@
-<mat-drawer-container>
-  <mat-drawer
-    #drawer
-    class="mat-elevation-z16"
-    [mode]="(drawerMode$ | async) || 'over'"
-    [opened]="drawerOpened$ | async"
-  >
-    <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
+<div class="drawer drawer-mobile w-screen h-screen bg-base-300" data-theme="cmyk">
+  <input id="drawer-main" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col min-h-full overflow-auto">
+    <!-- Navbar -->
+    <div class="navbar glass sticky top-0 z-20">
+      <div class="flex-none lg:hidden">
+        <label for="drawer-main" class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-6 h-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
+      </div>
       <button class="align-middle" mat-icon-button routerLink="/">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
-      <h1 class="align-middle">UnUniFi Explorer</h1>
-    </mat-toolbar>
-
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Change Node</mat-label>
-      <mat-select [(value)]="selectedConfig" (valueChange)="onChangeConfig($event)">
-        <mat-option *ngFor="let conf of configs" [value]="conf">
-          {{ conf }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-nav-list>
-      <mat-list-item routerLink="/">
-        <mat-icon class="mr-2" color="primary">other_houses</mat-icon>Home
-      </mat-list-item>
-      <mat-list-item routerLink="/blocks">
-        <mat-icon class="mr-2" color="primary">account_tree</mat-icon>Blocks
-      </mat-list-item>
-      <mat-list-item routerLink="/txs">
-        <mat-icon class="mr-2" color="primary">mail</mat-icon>Transactions
-      </mat-list-item>
-      <mat-list-item routerLink="/validators">
-        <mat-icon class="mr-2" color="primary">savings</mat-icon>Validators
-      </mat-list-item>
-      <mat-list-item routerLink="/proposals">
-        <mat-icon class="mr-2" color="primary">message</mat-icon>Votes
-      </mat-list-item>
-      <ng-template ngFor let-navigation [ngForOf]="navigations">
-        <ng-container *ngIf="navigation?.name && navigation?.link">
-          <a mat-list-item [href]="navigation.link">
-            <mat-icon class="mr-2" color="primary"> {{ navigation.icon }}</mat-icon>
-            {{ navigation.name }}
-          </a>
-        </ng-container>
-      </ng-template>
-    </mat-nav-list>
-  </mat-drawer>
-
-  <mat-drawer-content class="mat-typography">
-    <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
-      <ng-container *ngIf="!(drawerOpened$ | async)">
-        <button mat-icon-button (click)="drawer.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </ng-container>
-      <view-toolbar
-        class="flex-auto"
-        [searchResult]="searchResult"
-        (appSubmitSearchResult)="onSubmitSearchResult($event)"
-        (appChangeInputValue)="onChangeInputValue($event)"
-      >
-      </view-toolbar>
-    </mat-toolbar>
-    <div class="container">
+      <div class="flex-1 mx-2 text-2xl">
+        <div class="hidden xl:block pr-2">UnUniFi</div>
+        <div>Explorer</div>
+      </div>
+      <app-node-tool></app-node-tool>
+    </div>
+    <!-- Page content here -->
+    <div class="w-full max-w-screen-xl mx-auto p-8">
       <ng-content></ng-content>
     </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </div>
+
+  <div class="drawer-side h-full overflow-auto">
+    <label for="drawer-main" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
+      <!-- Sidebar content here -->
+      <app-search-tool class="w-full"></app-search-tool>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/">
+          <span class="flex-none">
+            <mat-icon color="primary">other_houses</mat-icon>
+          </span>
+          <span class="flex-1">Home</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/blocks">
+          <span class="flex-none">
+            <mat-icon color="primary">account_tree</mat-icon>
+          </span>
+          <span class="flex-1">Blocks</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/txs">
+          <span class="flex-none">
+            <mat-icon color="primary">mail</mat-icon>
+          </span>
+          <span class="flex-1">Transactions</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/validators">
+          <span class="flex-none">
+            <mat-icon color="primary">savings</mat-icon>
+          </span>
+          <span class="flex-1">Validators</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/proposals">
+          <span class="flex-none">
+            <mat-icon color="primary">message</mat-icon>
+          </span>
+          <span class="flex-1">Votes</span>
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

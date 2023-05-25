@@ -8,8 +8,12 @@
     [inflation]="inflation$ | async"
   ></view-dashboard>
   <app-txs class="mb-4"></app-txs>
-  <div class="flex flex-col lg:flex-row">
-    <app-blocks class="mb-4 lg:mr-4 lg:w-1/2"></app-blocks>
-    <app-validators class="lg:w-1/2"></app-validators>
+  <div class="flex flex-row flex-wrap">
+    <div class="w-full lg:w-1/2 lg:pr-2 mb-4 lg:mb-0">
+      <app-blocks></app-blocks>
+    </div>
+    <div class="w-full lg:w-1/2 lg:pl-2">
+      <app-validators></app-validators>
+    </div>
   </div>
 </div>

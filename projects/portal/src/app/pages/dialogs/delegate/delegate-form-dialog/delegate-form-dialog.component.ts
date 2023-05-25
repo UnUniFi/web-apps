@@ -1,16 +1,19 @@
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
+import cosmosclient from '@cosmos-client/core';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { DelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/delegate-form-dialog/delegate-form-dialog.component';
-import { InactiveValidatorConfirmDialogComponent } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
-import { combineLatest, Observable } from 'rxjs';
+import {
+  InactiveValidatorConfirmDialogData,
+  InactiveValidatorConfirmDialogComponent,
+} from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -20,38 +23,31 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class DelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validatorsList$: Observable<InlineResponse20066Validators[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
-    public matDialogRef: MatDialogRef<DelegateFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
+    @Inject(DIALOG_DATA)
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
+    public dialogRef: DialogRef<string, DelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
-    this.validatorsList$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.staking.validators(sdk.rest)),
-      map((result) => result.data.validators),
-    );
+    this.validatorsList$ = this.cosmosRest.getValidators$();
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');
@@ -70,11 +66,10 @@ export class DelegateFormDialogComponent implements OnInit {
     )?.status;
     if (validatorStatus != 'BOND_STATUS_BONDED') {
       const inactiveValidatorResult = await this.dialog
-        .open(InactiveValidatorConfirmDialogComponent, {
+        .open<InactiveValidatorConfirmDialogData>(InactiveValidatorConfirmDialogComponent, {
           data: { valAddress: this.validator?.operator_address!, isConfirmed: false },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
 
       if (inactiveValidatorResult === undefined || inactiveValidatorResult.isConfirmed === false) {
         this.snackBar.open('Delegate was canceled', undefined, { duration: 6000 });
@@ -90,6 +85,6 @@ export class DelegateFormDialogComponent implements OnInit {
       $event.gasRatio,
     );
 
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

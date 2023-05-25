@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  InlineResponse20052Proposals,
-  InlineResponse20054Deposits,
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20057Votes,
+  Proposals200ResponseProposalsInner,
+  Deposits200ResponseDepositsInner,
+  Proposals200ResponseProposalsInnerFinalTallyResult,
+  Votes200ResponseVotesInner,
 } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -13,13 +13,13 @@ import {
 })
 export class ProposalComponent implements OnInit {
   @Input()
-  proposal?: InlineResponse20052Proposals | null;
+  proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
-  deposits?: InlineResponse20054Deposits[] | null;
+  deposits?: Deposits200ResponseDepositsInner[] | null;
   @Input()
-  tally?: InlineResponse20052FinalTallyResult | null;
+  tally?: Proposals200ResponseProposalsInnerFinalTallyResult | null;
   @Input()
-  votes?: InlineResponse20057Votes[] | null;
+  votes?: Votes200ResponseVotesInner[] | null;
 
   constructor() {}
 

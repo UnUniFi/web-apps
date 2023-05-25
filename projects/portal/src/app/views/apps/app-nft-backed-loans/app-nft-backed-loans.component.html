@@ -1,0 +1,205 @@
+<div class="drawer w-screen h-screen bg-base-300" data-theme="night">
+  <input id="drawer-main" type="checkbox" class="drawer-toggle" />
+
+  <div class="drawer-content flex flex-col min-h-full overflow-auto">
+    <!-- Navbar -->
+    <div class="navbar glass sticky top-0 z-20">
+      <div class="flex-none md:hidden">
+        <label for="drawer-main" class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-6 h-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
+      </div>
+      <div class="dropdown hidden md:block">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h7"
+            />
+          </svg>
+        </label>
+        <ul tabindex="0" class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <!-- Sidebar content here -->
+          <li>
+            <label class="flex gap-4" routerLink="/nft-backed-loan">
+              <span class="flex-none">
+                <mat-icon color="primary">other_houses</mat-icon>
+              </span>
+              <span class="flex-1">NFT Backed Loan</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/nft-backed-loan/nfts">
+              <span class="flex-none">
+                <mat-icon color="primary">search</mat-icon>
+              </span>
+              <span class="flex-1">Search NFT</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/nft-backed-loan/lenders/lender">
+              <span class="flex-none">
+                <mat-icon color="primary">gavel</mat-icon>
+              </span>
+              <span class="flex-1">Bidding & Lending</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/nft-backed-loan/borrowers/borrower">
+              <span class="flex-none">
+                <mat-icon color="primary">view_list</mat-icon>
+              </span>
+              <span class="flex-1">Listing & Borrowing</span>
+            </label>
+          </li>
+
+          <li class="menu-title">
+            <span>Apps</span>
+          </li>
+          <ng-container *ngFor="let app of apps">
+            <li *ngIf="app.name !== 'NFT Backed Loan'">
+              <label class="flex gap-4" routerLink="{{ app.link }}">
+                <span class="flex-none">
+                  <mat-icon color="primary">{{ app.icon }}</mat-icon>
+                </span>
+                <span class="flex-1">{{ app.name }}</span>
+              </label>
+            </li>
+          </ng-container>
+
+          <li class="menu-title">
+            <span>Testnet</span>
+          </li>
+          <ng-template ngFor let-navigation [ngForOf]="navigations">
+            <ng-container *ngIf="navigation?.name && navigation?.link">
+              <li>
+                <label
+                  class="flex gap-4"
+                  routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+                >
+                  <span class="flex-none">
+                    <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                  </span>
+                  <span class="flex-1">{{ navigation.name }}</span>
+                </label>
+              </li>
+            </ng-container>
+          </ng-template>
+        </ul>
+      </div>
+      <button class="align-middle" mat-icon-button routerLink="/nft-backed-loan">
+        <img class="p-1 w-10 h-10" src="assets/favicon.png" />
+      </button>
+      <div class="flex-1 mx-2 text-2xl">
+        <div class="block lg:hidden">NFT-Fi</div>
+        <div class="hidden lg:block">UnUniFi NFT Backed Loan</div>
+      </div>
+      <div class="flex-none">
+        <app-app-tool class="hidden md:block"></app-app-tool>
+        <app-node-tool></app-node-tool>
+        <app-wallet-tool></app-wallet-tool>
+      </div>
+    </div>
+    <!-- Page content here -->
+    <div class="w-full max-w-screen-xl mx-auto p-8">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div class="drawer-side h-full overflow-auto">
+    <label for="drawer-main" class="drawer-overlay"></label>
+    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
+      <!-- Sidebar content here -->
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan">
+          <span class="flex-none">
+            <mat-icon color="primary">other_houses</mat-icon>
+          </span>
+          <span class="flex-1">NFT Backed Loan</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan/nfts">
+          <span class="flex-none">
+            <mat-icon color="primary">search</mat-icon>
+          </span>
+          <span class="flex-1">Search NFT</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan/lenders/lender">
+          <span class="flex-none">
+            <mat-icon color="primary">gavel</mat-icon>
+          </span>
+          <span class="flex-1">Bidding & Lending</span>
+        </label>
+      </li>
+      <li>
+        <label
+          for="drawer-main"
+          class="flex gap-4"
+          routerLink="/nft-backed-loan/borrowers/borrower"
+        >
+          <span class="flex-none">
+            <mat-icon color="primary">view_list</mat-icon>
+          </span>
+          <span class="flex-1">Listing & Borrowing</span>
+        </label>
+      </li>
+
+      <li class="menu-title">
+        <span>Apps</span>
+      </li>
+      <ng-container *ngFor="let app of apps">
+        <li *ngIf="app.name !== 'NFT Backed Loan'">
+          <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
+            <span class="flex-none">
+              <mat-icon color="primary">{{ app.icon }}</mat-icon>
+            </span>
+            <span class="flex-1">{{ app.name }}</span>
+          </label>
+        </li>
+      </ng-container>
+
+      <li class="menu-title">
+        <span>Testnet</span>
+      </li>
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <li>
+            <label
+              for="drawer-main"
+              class="flex gap-4"
+              routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+            >
+              <span class="flex-none">
+                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+              </span>
+              <span class="flex-1">{{ navigation.name }}</span>
+            </label>
+          </li>
+        </ng-container>
+      </ng-template>
+    </ul>
+  </div>
+</div>

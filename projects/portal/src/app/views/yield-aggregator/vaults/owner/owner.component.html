@@ -1,0 +1,196 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="../.."><a>Vaults</a></li>
+      <li>{{ owner }}</li>
+    </ul>
+  </div>
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title break-all">Vaults Status</h2>
+        <h3>{{ owner }}</h3>
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">Average APY</div>
+            <div class="stat-value">12.34%</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Average TVL</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Deposited</div>
+            <div class="stat-value">$ 123</div>
+            <div class="stat-desc"></div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Earnings</div>
+            <div class="stat-value">$ 12.3</div>
+            <div class="stat-desc"></div>
+          </div>
+        </div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary px-8" routerLink="/yield-aggregator/vaults/create">
+            Create a New Vault
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="breal-all">Vaults created by {{ owner }}</h3>
+  <ng-container *ngFor="let vault of vaults">
+    <div class="w-full md:w-auto mb-8">
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <div class="flex flex-row">
+            <div class="badge badge-lg badge-primary mr-1">#{{ vault.id }}</div>
+            <div class="badge badge-lg badge-secondary mr-1">{{ vault.denom | coinDenom }}</div>
+          </div>
+          <h2 class="card-title">{{ vault.id }}</h2>
+          <!-- <div class="stats flex flex-col md:flex-row">
+            <div class="stat">
+              <div class="stat-title">APY</div>
+              <div class="stat-value text-secondary">12.34%</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">TVL</div>
+              <div class="stat-value text-primary">$ 1.23</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Deposits</div>
+              <div class="stat-value">$ 123.4</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Earnings</div>
+              <div class="stat-value text-primary">$ 12.3</div>
+              <div class="stat-desc"></div>
+            </div>
+          </div> -->
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <tbody>
+                <tr>
+                  <th>Vault ID</th>
+                  <td>{{ vault?.id }}</td>
+                </tr>
+                <tr>
+                  <th>Vault Name</th>
+                  <td>{{ 'Coming soon' }}</td>
+                </tr>
+                <tr>
+                  <th>Owner's Deposit</th>
+                  <td>{{ vault?.owner_deposit | coin }}</td>
+                </tr>
+                <tr>
+                  <th>Withdraw Commission Rate</th>
+                  <td>{{ vault?.withdraw_commission_rate | percentage }}</td>
+                </tr>
+                <tr>
+                  <th>Withdraw Reserve Rate</th>
+                  <td>{{ vault?.withdraw_reserve_rate | percentage }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Strategies</h3>
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Strategy Name (coming soon)</th>
+                  <th>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let strategy of vault.strategy_weights">
+                  <tr
+                    class="hover cursor-pointer"
+                    routerLink="/yield-aggregator/strategies/{{ vault.denom }}/{{
+                      strategy.strategy_id
+                    }}"
+                  >
+                    <th>#{{ strategy.strategy_id }}</th>
+                    <td>{{ 'Coming Soon' }}</td>
+                    <td>{{ strategy.weight | percentage }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-actions justify-end" *ngIf="owner === address">
+            <label for="transfer-modal-{{ vault.id }}" class="btn btn-outline btn-secondary mr-2"
+              >Transfer</label
+            >
+            <label for="delete-modal-{{ vault.id }}" class="btn btn-outline btn-error"
+              >Delete</label
+            >
+          </div>
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="transfer-modal-{{ vault.id }}" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">
+                Are you sure to transfer the ownership of this Vault?
+              </h3>
+              <form #transferFormRef="ngForm" (submit)="onSubmitTransfer(vault.id)">
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Enter Destination address</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    #recipientNgModelRef="ngModel"
+                    placeholder="Enter the recipient address (prefix: ununifi)"
+                    class="input input-bordered w-full"
+                    [class]="{
+                      'input-error': recipientNgModelRef.errors && recipientNgModelRef.touched
+                    }"
+                    [(ngModel)]="recipientAddress"
+                    name="recipient"
+                  />
+                </div>
+
+                <p class="py-4">
+                  The ownership of the vault #{{ vault.id }} will be transferred to the address, do
+                  you proceed?
+                </p>
+                <div class="modal-action">
+                  <label for="transfer-modal-{{ vault.id }}" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-secondary" [disabled]="transferFormRef.invalid">
+                    Transfer
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="delete-modal-{{ vault.id }}" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Are you sure to delete this Vault?</h3>
+              <form #deleteFormRef="ngForm" (submit)="onSubmitDelete(vault.id)">
+                <p class="py-4">The vault #{{ vault.id }} will be deleted, do you proceed?</p>
+                <div class="modal-action">
+                  <label for="delete-modal-{{ vault.id }}" class="btn btn-outline">Cancel</label>
+                  <button class="btn btn-error">Delete</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <p *ngIf="!vaults?.length" class="ml-4">There is no vault.</p>
+</div>

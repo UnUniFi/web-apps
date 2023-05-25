@@ -1,17 +1,20 @@
 import { createCosmosPrivateKeyFromString } from '../../utils/key';
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { SlashingService } from './slashing.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20075 } from '@cosmos-client/core/esm/openapi';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -21,7 +24,7 @@ export class SlashingApplicationService {
   constructor(
     private readonly loadingDialog: LoadingDialogService,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly txCommonService: TxCommonService,
     private readonly walletService: WalletService,
     private readonly slashingService: SlashingService,
@@ -29,7 +32,7 @@ export class SlashingApplicationService {
 
   async unjail(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
   ) {
     // get public key
@@ -46,8 +49,8 @@ export class SlashingApplicationService {
 
     // simulate
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     const dialogRefSimulating = this.loadingDialog.open('Simulating...');
     try {
       simulatedResultData = await this.slashingService.simulateToUnjail(
@@ -70,14 +73,13 @@ export class SlashingApplicationService {
     // confirm fee only ununifi wallet type case
     if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
-        .open(TxFeeConfirmDialogComponent, {
+        .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
             fee,
             isConfirmed: false,
           },
         })
-        .afterClosed()
-        .toPromise();
+        .closed.toPromise();
       if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
         this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
         return;
@@ -86,7 +88,7 @@ export class SlashingApplicationService {
 
     // send tx
     const dialogRef = this.loadingDialog.open('Sending...');
-    let txResult: InlineResponse20075 | undefined;
+    let txResult: BroadcastTx200Response | undefined;
     let txHash: string | undefined;
     try {
       txResult = await this.slashingService.unjail(validatorAddress, currentCosmosWallet, gas, fee);
@@ -110,7 +112,7 @@ export class SlashingApplicationService {
   // Note: feature for special customer
   async unjailSimple(
     validatorAddress: string,
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
     privateKey: string,
   ) {

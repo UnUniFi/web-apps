@@ -1,3 +1,4 @@
+import { LoadingDialogService } from '../../components/loading-dialog';
 import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
 import { KeplrService } from './keplr/keplr.service';
@@ -8,7 +9,6 @@ import { WalletService } from './wallet.service';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingDialogService } from 'ng-loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,6 @@ export class WalletApplicationService {
     const selectedWalletType = await this.openConnectWalletStartDialog();
 
     if (!selectedWalletType) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return;
     }
 
@@ -73,7 +72,6 @@ export class WalletApplicationService {
   async keplrConnectWallet(): Promise<boolean> {
     const connectedStoredWallet = await this.keplrService.connectWallet();
     if (!connectedStoredWallet) {
-      this.snackBar.open('Dialog was canceled!', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);

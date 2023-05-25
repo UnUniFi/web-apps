@@ -1,14 +1,14 @@
+import { KeyType } from './../../../../../models/keys/key.model';
+import { StoredWallet, WalletType } from './../../../../../models/wallets/wallet.model';
+import { WalletService } from './../../../../../models/wallets/wallet.service';
+import { createCosmosPrivateKeyFromString } from './../../../../../utils/key';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient } from '@cosmos-client/core';
-import { KeyType } from 'projects/portal/src/app/models/keys/key.model';
-import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { createCosmosPrivateKeyFromString } from 'projects/portal/src/app/utils/key';
 
 @Component({
   selector: 'view-ununifi-import-wallet-with-private-key-form-dialog',
@@ -25,7 +25,10 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
   wallets$: Observable<StoredWallet[] | null | undefined>;
 
   constructor(
-    private readonly dialogRef: MatDialogRef<UnunifiImportWalletWithPrivateKeyFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { mnemonic: string; privateKey: string },
+      UnunifiImportWalletWithPrivateKeyFormDialogComponent
+    >,
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
     private walletService: WalletService,
@@ -52,10 +55,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
         }
 
         try {
-          const cosmosPrivateKey = createCosmosPrivateKeyFromString(
-            KeyType.secp256k1,
-            privateKey,
-          );
+          const cosmosPrivateKey = createCosmosPrivateKeyFromString(KeyType.secp256k1, privateKey);
           if (!cosmosPrivateKey) {
             this.snackBar.open('Invalid privateKey!', 'Close');
             throw Error('Invalid privateKey!');
@@ -89,7 +89,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
@@ -134,5 +134,9 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
         subscription.unsubscribe();
       },
     );
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

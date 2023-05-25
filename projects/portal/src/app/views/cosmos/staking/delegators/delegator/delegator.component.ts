@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InlineResponse20063, InlineResponse20066 } from '@cosmos-client/core/esm/openapi';
+import {
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200Response,
+} from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-delegator',
@@ -8,10 +11,10 @@ import { InlineResponse20063, InlineResponse20066 } from '@cosmos-client/core/es
 })
 export class DelegatorComponent implements OnInit {
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: DelegatorDelegations200Response | null;
 
   @Input()
-  validators?: InlineResponse20066 | null;
+  validators?: StakingDelegatorValidators200Response | null;
 
   constructor() {}
 

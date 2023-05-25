@@ -1,16 +1,17 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20072,
-  InlineResponse20066Validators,
+  DelegatorDelegations200Response,
+  UnbondingDelegation200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type UndelegateOnSubmitEvent = {
-  amount: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
 
@@ -23,39 +24,39 @@ export class UndelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  delegations?: InlineResponse20063 | null;
+  delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: proto.cosmos.base.v1beta1.ICoin | null;
+  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   uguuBalance?: string | null;
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  unbondingDelegation?: InlineResponse20072 | null;
+  unbondingDelegation?: UnbondingDelegation200Response | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<UndelegateOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
-  estimatedUnbondingData: string = ""
+  estimatedUnbondingData: string = '';
   now = new Date();
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.availableDenoms = ['GUU'];
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     this.gasRatio = 0;
     this.now.setDate(this.now.getDate() + 14);
-    this.estimatedUnbondingData = this.now.toString()
+    this.estimatedUnbondingData = this.now.toString();
   }
 
   ngOnChanges(): void {
@@ -64,7 +65,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto
@@ -79,16 +80,19 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.gasRatio = ratio;
   }
 
-  onSubmit(minimumGasPrice: string) {
+  onSubmit() {
     if (!this.selectedAmount) {
       return;
     }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: this.selectedAmount.denom,
+      },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,
     });
@@ -104,5 +108,9 @@ export class UndelegateFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

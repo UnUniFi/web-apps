@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UnunifiImportWalletWithMnemonicFormDialogComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, ClipboardModule],
+  imports: [CommonModule, FormsModule, ClipboardModule, MaterialModule],
   exports: [UnunifiImportWalletWithMnemonicFormDialogComponent],
 })
 export class UnunifiImportWalletWithMnemonicFormDialogModule {}

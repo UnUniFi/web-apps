@@ -1,51 +1,78 @@
-<div class="flex flex-row justify-between content-start items-start">
-  <h2>Latest Blocks</h2>
-  <span class="flex-auto"></span>
-  <mat-checkbox class="auto" color="primary" (change)="onCheckBoxAutoChange($event.checked)">
-    Auto
-  </mat-checkbox>
-</div>
-
-<mat-card>
-  <ng-container *ngIf="blocks === undefined || null; then empty; else exist"></ng-container>
-  <ng-template #empty></ng-template>
-  <ng-template #exist>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-all truncate pr-4">Height</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/2 break-all truncate pl-4">Proposer</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/8 break-all truncate">Num. Tx</span>
-        <span class="flex-auto"></span>
-        <span class="w-1/4 break-all truncate">Time</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
-    <mat-nav-list>
-      <ng-container *ngFor="let block of blocks">
-        <mat-list-item routerLink="/blocks/{{ block?.block?.header?.height }}">
-          <span class="w-1/8 pr-4">{{ block?.block?.header?.height }}</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/2 break-all">{{ block?.block?.header?.proposer_address }}</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/8 pr-4">{{ block?.block?.data?.txs?.length }}</span>
-          <span class="flex-auto"></span>
-          <span class="w-1/4 text-sm sm:text-base">
-            {{ block?.block?.header?.time | date: 'yyyy-M-d a h:mm:ss z' }}
-          </span>
-
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </ng-container>
-      <mat-paginator
-        [length]="pageLength"
-        [pageSize]="pageSize"
-        [pageIndex]="pageNumber ? pageNumber - 1 : 0"
-        [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-        (page)="onPaginationChange($event)"
-      >
-      </mat-paginator>
-    </mat-nav-list>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li>Latest Blocks</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <!-- To Do Pagination Change  -->
+    <mat-paginator
+      class="mb-4 rounded-lg"
+      [length]="pageLength"
+      [pageSize]="pageSize"
+      [pageIndex]="pageNumber ? pageNumber - 1 : 0"
+      [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+      (page)="onPaginationChange($event)"
+    >
+    </mat-paginator>
+  </div>
+  <ng-container *ngIf="blocks === null; then loading; else loaded"> </ng-container>
+  <ng-template #loading>
+    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
   </ng-template>
-</mat-card>
+  <ng-template #loaded>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <div class="flex">
+          <h2 class="card-title"></h2>
+          <span class="flex-auto"></span>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <input
+                #autoRef
+                type="checkbox"
+                class="checkbox mr-2"
+                (change)="onCheckBoxAutoChange(autoRef.checked)"
+              />
+              <span class="label-text">Auto</span>
+            </label>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <th>Height</th>
+              <td>Proposer</td>
+              <td>Txs</td>
+              <td>Time</td>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="(blocks?.length || 0) > 0; else empty">
+                <tr
+                  *ngFor="let block of blocks"
+                  class="hover cursor-pointer"
+                  routerLink="/blocks/{{ block?.block?.header?.height }}"
+                >
+                  <th>
+                    {{ block?.block?.header?.height }}
+                  </th>
+                  <td>
+                    {{ block?.block?.header?.proposer_address }}
+                  </td>
+                  <td>{{ block?.block?.data?.txs?.length }}</td>
+                  <td>{{ block?.block?.header?.time | date: 'yy/MM/dd hh:mm' }}</td>
+                </tr>
+              </ng-container>
+              <ng-template #empty>
+                <tr>
+                  <td colspan="5">There is no block.</td>
+                </tr>
+              </ng-template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

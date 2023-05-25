@@ -1,0 +1,70 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink=".."><a>Top</a></li>
+      <li>Perpetual Futures</li>
+    </ul>
+  </div>
+  <div class="form-control mb-4">
+    <ng-container *ngIf="markets === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="!markets || markets.length === 0; then empty; else filled">
+      </ng-container>
+    </ng-template>
+    <ng-template #empty>
+      <p>No market is available</p>
+    </ng-template>
+    <ng-template #filled>
+      <div class="form-control">
+        <span class="label">
+          <span class="label-text">Perpetual</span>
+          <!-- The button to open modal -->
+          <label for="modal-perpetual" class="label-text cursor-pointer">
+            <mat-icon>help</mat-icon>
+          </label>
+
+          <!-- Put this part before </body> tag -->
+          <input type="checkbox" id="modal-perpetual" class="modal-toggle" />
+          <div class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">What is Perpetual Futures?</h3>
+              <p class="py-2">
+                Perpetual futures are a type of cryptocurrency trading contract that allows traders
+                to take positions on future price movements. These contracts have no expiration
+                date, and traders are able to maintain positions indefinitely by depositing funds
+                with the exchange.
+              </p>
+              <p class="py-2">
+                Perpetual futures contracts typically require margin, making them a high-risk,
+                high-reward investment product. Additionally, leverage can be employed for these
+                contracts, meaning even small price movements can result in significant gains or
+                losses, necessitating careful trading practices.
+              </p>
+
+              <div class="modal-action">
+                <label for="modal-perpetual" class="btn">Understood</label>
+              </div>
+            </div>
+          </div>
+        </span>
+        <label class="input-group">
+          <select
+            #marketRef
+            class="select select-info select-lg w-full max-w-xs"
+            (change)="onChangeMarket(marketRef.value)"
+            [value]="selectedMarket"
+          >
+            <option disabled [value]="undefined">Please Select</option>
+            <ng-container *ngFor="let m of markets">
+              <option [value]="m">{{ m }}</option>
+            </ng-container>
+          </select>
+        </label>
+      </div>
+    </ng-template>
+  </div>
+  <ng-content class="mb-4"></ng-content>
+</div>

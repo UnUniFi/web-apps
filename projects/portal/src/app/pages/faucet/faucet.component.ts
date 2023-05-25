@@ -1,11 +1,15 @@
+import { BankQueryService } from '../../models/cosmos/bank.query.service';
 import { FaucetApplicationService } from '../../models/faucets/faucet.application.service';
+import { StoredWallet } from '../../models/wallets/wallet.model';
+import { WalletService } from '../../models/wallets/wallet.service';
 import { FaucetOnSubmitEvent } from '../../views/faucet/faucet.component';
+import { FaucetUseCaseService } from './faucet.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Config, ConfigService } from 'projects/portal/src/app/models/config.service';
+import { cosmos } from '@cosmos-client/core/esm/proto';
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-faucet',
@@ -13,47 +17,70 @@ import { first, map } from 'rxjs/operators';
   styleUrls: ['./faucet.component.css'],
 })
 export class FaucetComponent implements OnInit {
-  config$: Observable<Config | undefined>;
-  denoms$: Observable<string[] | undefined>;
+  faucetURL$: Observable<string | undefined>;
   address$: Observable<string>;
-  denom$: BehaviorSubject<string>;
+  symbols$: Observable<string[] | undefined>;
+  symbol$: Observable<string>;
   amount$: Observable<number>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmos.bank.v1beta1.IMetadata;
+  }>;
   creditAmount$: Observable<number>;
   maxCredit$: Observable<number>;
+  symbolImageMap: { [symbol: string]: string };
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private configS: ConfigService,
+    private usecase: FaucetUseCaseService,
     private faucetApplication: FaucetApplicationService,
+    private readonly bankQuery: BankQueryService,
+    private readonly walletService: WalletService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
-    this.config$ = this.configS.config$;
-    this.denoms$ = this.config$.pipe(
-      map((config) => config?.extension?.faucet?.map((faucet) => faucet.denom)),
+    this.address$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => wallet.address),
+    );
+    const microAmount$ = this.route.queryParams.pipe(map((queryParams) => queryParams.amount));
+    const denom$ = this.route.queryParams.pipe(map((queryParams) => queryParams?.denom || 'uguu'));
+
+    const denoms$ = this.usecase.denoms$;
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    this.symbols$ = combineLatest([denoms$, denomMetadataMap$]).pipe(
+      map(([denoms, metadata]) =>
+        denoms?.map((denom) => {
+          const symbol = metadata[denom].symbol;
+          return symbol || denom;
+        }),
+      ),
+    );
+    this.symbol$ = combineLatest([denom$, denomMetadataMap$]).pipe(
+      map(([denom, metadata]) => metadata[denom].symbol || denom),
+    );
+    const unit$ = combineLatest([denom$, denomMetadataMap$]).pipe(
+      map(([denom, metadata]) => metadata[denom].denom_units?.find((u) => u.denom == denom)),
     );
 
-    this.address$ = this.route.queryParams.pipe(map((queryParams) => queryParams.address));
-    this.amount$ = this.route.queryParams.pipe(map((queryParams) => queryParams.amount));
-    this.denom$ = new BehaviorSubject('');
-    this.route.queryParams
-      .pipe(first())
-      .toPromise()
-      .then((params) => this.denom$?.next(params.denom));
-    this.creditAmount$ = combineLatest([this.config$, this.denom$?.asObservable()]).pipe(
-      map(([config, denom]) => {
-        const faucet = config?.extension?.faucet
-          ? config.extension.faucet.find((faucet) => faucet.denom === denom)
-          : undefined;
-        const creditAmount = faucet ? faucet.creditAmount : 0;
-        return creditAmount;
+    this.amount$ = combineLatest([unit$, microAmount$]).pipe(
+      map(([unit, microAmount]) => {
+        if (microAmount) {
+          return microAmount / 10 ** (unit?.exponent || 6);
+        } else {
+          return 0;
+        }
       }),
     );
-    this.maxCredit$ = combineLatest([this.config$, this.denom$.asObservable()]).pipe(
-      map(([config, denom]) => {
-        const faucet = config?.extension?.faucet
-          ? config.extension.faucet.find((faucet) => faucet.denom === denom)
-          : undefined;
-        const maxCredit = faucet ? faucet.maxCredit : 0;
-        return maxCredit;
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
+    this.faucetURL$ = this.usecase.faucetURL$(denom$);
+    this.creditAmount$ = combineLatest([unit$, this.usecase.creditAmount$(denom$)]).pipe(
+      map(([unit, amount]) => {
+        return amount / 10 ** (unit?.exponent || 6);
+      }),
+    );
+    this.maxCredit$ = combineLatest([unit$, this.usecase.maxCredit$(denom$)]).pipe(
+      map(([unit, amount]) => {
+        return amount / 10 ** (unit?.exponent || 6);
       }),
     );
   }
@@ -75,6 +102,12 @@ export class FaucetComponent implements OnInit {
   }
 
   appSelectedDenomChange(selectedDenom: string): void {
-    this.denom$?.next(selectedDenom);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        denom: selectedDenom,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

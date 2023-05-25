@@ -1,12 +1,12 @@
-import { ProposalContent } from '../../../vote/proposals/proposals.component';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
-import { InlineResponse20052Proposals } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type VoteOnSubmitEvent = {
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 };
 
@@ -17,17 +17,19 @@ export type VoteOnSubmitEvent = {
 })
 export class VoteFormDialogComponent implements OnInit {
   @Input()
-  proposal?: InlineResponse20052Proposals | null;
+  proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   uguuBalance?: string | null;
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   proposalID?: number | null;
+  @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appSubmitYes: EventEmitter<VoteOnSubmitEvent>;
@@ -38,12 +40,12 @@ export class VoteFormDialogComponent implements OnInit {
   @Output()
   appSubmitAbstain: EventEmitter<VoteOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmitYes = new EventEmitter();
     this.appSubmitNoWithVeto = new EventEmitter();
     this.appSubmitNo = new EventEmitter();
@@ -74,14 +76,6 @@ export class VoteFormDialogComponent implements OnInit {
 
   changeGasRatio(ratio: number) {
     this.gasRatio = ratio;
-  }
-
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch {
-      return null;
-    }
   }
 
   onSubmitYes() {
@@ -122,5 +116,9 @@ export class VoteFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

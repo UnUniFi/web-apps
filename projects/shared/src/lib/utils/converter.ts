@@ -1,4 +1,12 @@
-import { proto } from '@cosmos-client/core';
+import {
+  BaseAccount,
+  BaseVestingAccount,
+  ContinuousVestingAccount,
+  DelayedVestingAccount,
+  ModuleAccount,
+  PeriodicVestingAccount,
+  PermanentLockedAccount,
+} from './Account';
 
 export const convertHexStringToUint8Array = (hexString: string): Uint8Array | undefined => {
   try {
@@ -28,28 +36,28 @@ export const convertUint8ArrayToHexString = (uint8Array: Uint8Array): string | u
 export const convertUnknownAccountToTypedAccount = (
   unknownAccount: unknown,
 ):
-  | proto.cosmos.auth.v1beta1.BaseAccount
-  | proto.cosmos.vesting.v1beta1.BaseVestingAccount
-  | proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
-  | proto.cosmos.vesting.v1beta1.DelayedVestingAccount
-  | proto.cosmos.vesting.v1beta1.PeriodicVestingAccount
-  | proto.cosmos.vesting.v1beta1.PermanentLockedAccount
-  | proto.cosmos.auth.v1beta1.ModuleAccount
+  | BaseAccount
+  | BaseVestingAccount
+  | ContinuousVestingAccount
+  | DelayedVestingAccount
+  | PeriodicVestingAccount
+  | PermanentLockedAccount
+  | ModuleAccount
   | null
   | undefined => {
-  if (unknownAccount instanceof proto.cosmos.auth.v1beta1.BaseAccount) {
+  if (unknownAccount instanceof BaseAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.BaseVestingAccount) {
+  } else if (unknownAccount instanceof BaseVestingAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.ContinuousVestingAccount) {
+  } else if (unknownAccount instanceof ContinuousVestingAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.DelayedVestingAccount) {
+  } else if (unknownAccount instanceof DelayedVestingAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PeriodicVestingAccount) {
+  } else if (unknownAccount instanceof PeriodicVestingAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PermanentLockedAccount) {
+  } else if (unknownAccount instanceof PermanentLockedAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.auth.v1beta1.ModuleAccount) {
+  } else if (unknownAccount instanceof ModuleAccount) {
     return unknownAccount;
   } else if (unknownAccount === undefined) {
     return unknownAccount;
@@ -64,51 +72,43 @@ export const convertUnknownAccountToTypedAccount = (
 
 export const convertUnknownAccountToBaseAccount = (
   unknownAccount: unknown,
-): proto.cosmos.auth.v1beta1.BaseAccount | null | undefined => {
+): BaseAccount | null | undefined => {
   if (unknownAccount === undefined) {
     return unknownAccount;
   } else if (unknownAccount === null) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.auth.v1beta1.BaseAccount) {
+  } else if (unknownAccount instanceof BaseAccount) {
     return unknownAccount;
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.BaseVestingAccount) {
+  } else if (unknownAccount instanceof BaseVestingAccount) {
     if (unknownAccount.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(unknownAccount.base_account);
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.ContinuousVestingAccount) {
+    return new BaseAccount(unknownAccount.base_account);
+  } else if (unknownAccount instanceof ContinuousVestingAccount) {
     if (unknownAccount.base_vesting_account?.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(
-      unknownAccount.base_vesting_account?.base_account,
-    );
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.DelayedVestingAccount) {
+    return new BaseAccount(unknownAccount.base_vesting_account?.base_account);
+  } else if (unknownAccount instanceof DelayedVestingAccount) {
     if (unknownAccount.base_vesting_account?.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(
-      unknownAccount.base_vesting_account?.base_account,
-    );
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PeriodicVestingAccount) {
+    return new BaseAccount(unknownAccount.base_vesting_account?.base_account);
+  } else if (unknownAccount instanceof PeriodicVestingAccount) {
     if (unknownAccount.base_vesting_account?.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(
-      unknownAccount.base_vesting_account?.base_account,
-    );
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PermanentLockedAccount) {
+    return new BaseAccount(unknownAccount.base_vesting_account?.base_account);
+  } else if (unknownAccount instanceof PermanentLockedAccount) {
     if (unknownAccount.base_vesting_account?.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(
-      unknownAccount.base_vesting_account?.base_account,
-    );
-  } else if (unknownAccount instanceof proto.cosmos.auth.v1beta1.ModuleAccount) {
+    return new BaseAccount(unknownAccount.base_vesting_account?.base_account);
+  } else if (unknownAccount instanceof ModuleAccount) {
     if (unknownAccount.base_account === null) {
       return undefined;
     }
-    return new proto.cosmos.auth.v1beta1.BaseAccount(unknownAccount.base_account);
+    return new BaseAccount(unknownAccount.base_account);
   } else {
     console.error('Unsupported Account!');
     console.error(unknownAccount);
@@ -118,29 +118,29 @@ export const convertUnknownAccountToBaseAccount = (
 
 export const convertTypedAccountToTypedName = (
   unknownAccount:
-    | proto.cosmos.auth.v1beta1.BaseAccount
-    | proto.cosmos.vesting.v1beta1.BaseVestingAccount
-    | proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
-    | proto.cosmos.vesting.v1beta1.DelayedVestingAccount
-    | proto.cosmos.vesting.v1beta1.PeriodicVestingAccount
-    | proto.cosmos.vesting.v1beta1.PermanentLockedAccount
-    | proto.cosmos.auth.v1beta1.ModuleAccount
+    | BaseAccount
+    | BaseVestingAccount
+    | ContinuousVestingAccount
+    | DelayedVestingAccount
+    | PeriodicVestingAccount
+    | PermanentLockedAccount
+    | ModuleAccount
     | null
     | undefined,
 ): string | null | undefined => {
-  if (unknownAccount instanceof proto.cosmos.auth.v1beta1.BaseAccount) {
+  if (unknownAccount instanceof BaseAccount) {
     return 'BaseAccount';
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.BaseVestingAccount) {
+  } else if (unknownAccount instanceof BaseVestingAccount) {
     return 'BaseVestingAccount';
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.ContinuousVestingAccount) {
+  } else if (unknownAccount instanceof ContinuousVestingAccount) {
     return 'ContinuousVestingAccount';
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.DelayedVestingAccount) {
+  } else if (unknownAccount instanceof DelayedVestingAccount) {
     return 'DelayedVestingAccount';
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PeriodicVestingAccount) {
+  } else if (unknownAccount instanceof PeriodicVestingAccount) {
     return 'PeriodicVestingAccount';
-  } else if (unknownAccount instanceof proto.cosmos.vesting.v1beta1.PermanentLockedAccount) {
+  } else if (unknownAccount instanceof PermanentLockedAccount) {
     return 'PermanentLockedAccount';
-  } else if (unknownAccount instanceof proto.cosmos.auth.v1beta1.ModuleAccount) {
+  } else if (unknownAccount instanceof ModuleAccount) {
     return 'ModuleAccount';
   } else if (unknownAccount === undefined) {
     return unknownAccount;

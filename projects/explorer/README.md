@@ -6,12 +6,12 @@
 
 ## Environments
 
-| environment | url | branch |
-| - | - | - |
-| alpha-test | [https://alpha-test.ununifi.io/explorer/](https://alpha-test.ununifi.io/explorer/) | develop(latest) |
-| beta-test | [https://beta-test.ununifi.io/explorer/](https://beta-test.ununifi.io/explorer/) | release(latest) |
-| test | in preparation | main(latest) |
-| main(beta) | [https://ununifi.io/explorer/](https://ununifi.io/explorer/) | main |
+| environment | url                                                                                | branch          |
+| ----------- | ---------------------------------------------------------------------------------- | --------------- |
+| alpha-test  | [https://alpha-test.ununifi.io/explorer/](https://alpha-test.ununifi.io/explorer/) | develop(latest) |
+| beta-test   | [https://beta-test.ununifi.io/explorer/](https://beta-test.ununifi.io/explorer/)   | release(latest) |
+| test        | [https://test.ununifi.io/explorer/](https://test.ununifi.io/explorer/)             | main(latest)    |
+| main(beta)  | [https://ununifi.io/explorer/](https://ununifi.io/explorer/)                       | main            |
 
 ## Setup
 

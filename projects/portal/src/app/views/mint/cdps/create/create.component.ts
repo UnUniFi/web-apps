@@ -1,18 +1,18 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { Key } from 'projects/portal/src/app/models/keys/key.model';
-import { ununifi } from 'ununifi-client';
-import { InlineResponse2004Cdp1 } from 'ununifi-client/esm/openapi';
+import ununifi from 'ununifi-client';
+import { CdpAll200ResponseCdpInner } from 'ununifi-client/esm/openapi';
 
 export type CreateCdpOnSubmitEvent = {
   key: Key;
   privateKey: Uint8Array;
   collateralType: string;
-  collateral: proto.cosmos.base.v1beta1.ICoin;
-  principal: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  balances: proto.cosmos.base.v1beta1.ICoin[];
+  collateral: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  principal: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[];
 };
 
 @Component({
@@ -25,22 +25,22 @@ export class CreateComponent implements OnInit {
   key?: Key | null;
 
   @Input()
-  cdpParams?: ununifi.cdp.IParams | null;
+  cdpParams?: ununifi.proto.ununifi.cdp.IParams | null;
 
   @Input()
-  collateralParams?: ununifi.cdp.ICollateralParam[] | null;
+  collateralParams?: ununifi.proto.ununifi.cdp.ICollateralParam[] | null;
 
   @Input()
   selectedCollateralType?: string | null;
 
   @Input()
-  selectedCollateralParam?: ununifi.cdp.ICollateralParam | null;
+  selectedCollateralParam?: ununifi.proto.ununifi.cdp.ICollateralParam | null;
 
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
-  balances?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  balances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Input()
   principalLimit?: number | null;
@@ -49,7 +49,7 @@ export class CreateComponent implements OnInit {
   collateralLimit?: number | null;
 
   @Input()
-  cdp?: InlineResponse2004Cdp1 | null;
+  cdp?: CdpAll200ResponseCdpInner | null;
 
   @Output()
   appSubmit: EventEmitter<CreateCdpOnSubmitEvent>;
@@ -60,7 +60,7 @@ export class CreateComponent implements OnInit {
   @Output()
   appCollateralAmountChanged: EventEmitter<number>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
   constructor(private readonly snackBar: MatSnackBar) {
     this.appSubmit = new EventEmitter();

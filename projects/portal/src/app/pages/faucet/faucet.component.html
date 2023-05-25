@@ -1,11 +1,13 @@
 <app-view-faucet
-  [config]="config$ | async"
-  [denoms]="denoms$ | async"
+  [faucetURL]="faucetURL$ | async"
   [address]="address$ | async"
-  [denom]="denom$ | async"
+  [symbols]="symbols$ | async"
+  [symbol]="symbol$ | async"
   [amount]="amount$ | async"
+  [symbolMetadataMap]="symbolMetadataMap$ | async"
   [creditAmount]="creditAmount$ | async"
   [maxCredit]="maxCredit$ | async"
+  [symbolImageMap]="symbolImageMap"
   (postFaucetRequested)="appPostFaucetRequested($event)"
   (selectedDenomChanged)="appSelectedDenomChange($event)"
 ></app-view-faucet>

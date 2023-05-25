@@ -1,66 +1,51 @@
-<div class="flex flex-row items-end">
+<div class="flex flex-row items-center">
   <h2 class="mb-0">Block #{{ block?.block?.header?.height }}</h2>
   <span class="flex-auto"></span>
-  <mat-icon routerLink="/blocks/{{ previousBlock }}" class="mr-4" color="primary"
-    >navigate_before</mat-icon
-  >
-  <mat-icon routerLink="/blocks/{{ nextBlock }}" class="mr-2" color="primary"
-    >navigate_next</mat-icon
-  >
+  <button class="btn btn-circle" routerLink="/blocks/{{ previousBlock }}" class="mr-4">
+    <mat-icon color="primary"> navigate_before </mat-icon>
+  </button>
+  <button routerLink="/blocks/{{ nextBlock }}">
+    <mat-icon color="primary"> navigate_next </mat-icon>
+  </button>
 </div>
-<h3 class="ml-4 mb-0">Block details</h3>
-<mat-card class="mb-4">
-  <mat-list>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Time:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">
-        {{ block?.block?.header?.time | date: 'yyyy-M-d a h:mm:ss z' }}
-      </span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Height:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">{{ block?.block?.header?.height }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Number of Transactions:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-sm sm:text-base">{{ block?.block?.data?.txs?.length }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">BlockHash:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-xs sm:text-base">{{ block?.block_id?.hash }}</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-    <mat-list-item>
-      <span class="whitespace-nowrap">Proposer:</span>
-      <span class="flex-auto"></span>
-      <span class="ml-2 break-all text-xs sm:text-base">{{
-        block?.block?.header?.proposer_address
-      }}</span>
-    </mat-list-item>
-  </mat-list>
-</mat-card>
+<h3 class="my-2">Block details</h3>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <!-- <h2 class="card-title"></h2> -->
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tr>
+          <th>Block Height</th>
+          <td>{{ block?.block?.header?.height }}</td>
+        </tr>
+        <tr>
+          <th>Block Time</th>
+          <td>{{ block?.block?.header?.time | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+        </tr>
+        <tr>
+          <th>Block Hash</th>
+          <td>{{ block?.block_id?.hash }}</td>
+        </tr>
+        <tr>
+          <th>Block Proposer</th>
+          <td>{{ block?.block?.header?.proposer_address }}</td>
+        </tr>
+        <tr>
+          <th>Block Transactions</th>
+          <td>{{ block?.block?.data?.txs?.length }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
 
-<h3 class="mb-0 ml-4">Transactions</h3>
+<h3 class="my-2">Transactions</h3>
 <mat-card class="mb-2">
   <mat-list>
     <mat-list-item>
-      <span class="break-all truncate">Hash</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">Type</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">From</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate pr-10">To</span>
-      <span class="flex-auto"></span>
-      <span class="break-all truncate">Total Amount</span>
-
+      <span class="w-4/12 truncate pl-2">Hash</span>
+      <span class="w-4/12 truncate pl-2">Type</span>
+      <span class="w-4/12 truncate pl-2">From</span>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
@@ -83,45 +68,9 @@
         routerLink="/txs/{{ tx.txhash }}"
         *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
       >
-        <span class="pr-2 w-1/12 text-sm truncate">{{ tx.txhash }}</span>
-        <span class="flex-auto"></span>
-
-        <span class="w-1/6 truncate">{{ txTypes?.[i] }}</span>
-        <span class="flex-auto"></span>
-
-        <ng-container *ngIf="tx.logs?.[0]?.events?.[1]?.type === 'oracle_updated_price' ">
-          <span
-            class="w-1/5 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[0]?.attributes?.[2]?.value }}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/5 break-all truncate"
-            >{{tx.logs?.[0]?.events?.[1]?.attributes?.[0]?.value}}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/6 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[1]?.attributes?.[2]?.value }}</span
-          >
-        </ng-container>
-
-        <ng-container *ngIf="tx.logs?.[0]?.events?.[3]?.type  == 'transfer'">
-          <span
-            class="w-1/5 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[1]?.value }}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/5 break-all truncate"
-            >{{tx.logs?.[0]?.events?.[3]?.attributes?.[0]?.value}}</span
-          >
-          <span class="flex-auto"></span>
-          <span
-            class="w-1/6 break-all truncate"
-            >{{ tx.logs?.[0]?.events?.[3]?.attributes?.[2]?.value }}</span
-          >
-        </ng-container>
+        <span class="w-4/12 truncate text-sm">{{ tx.txhash }}</span>
+        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
+        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-nav-list>
@@ -129,7 +78,6 @@
 </mat-card>
 
 <!--
-
 <h3>Msgs</h3>
 <ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
   <ng-container *ngIf="unpackMsg(message) as msg">

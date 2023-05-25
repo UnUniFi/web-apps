@@ -3,7 +3,7 @@ import { KeyService } from './key.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +66,7 @@ export class KeyApplicationService {
       duration: 6000,
     });
 
-    await this.router.navigate(['keys']);
+    await this.router.navigate(['utilities', 'keys']);
   }
 
   sign(data: string, privateKey: Uint8Array): string {

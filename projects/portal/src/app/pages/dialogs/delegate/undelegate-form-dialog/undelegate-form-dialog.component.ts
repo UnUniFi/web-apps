@@ -1,18 +1,18 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { cosmosclient, proto, rest } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import {
-  InlineResponse20063,
-  InlineResponse20072,
-  InlineResponse20066Validators,
+  DelegatorDelegations200Response,
+  StakingDelegatorValidators200ResponseValidatorsInner,
+  UnbondingDelegation200Response,
 } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos/staking.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { UndelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
-import { of, combineLatest, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -22,22 +22,22 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class UndelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  delegations$: Observable<InlineResponse20063>;
-  delegateAmount$: Observable<proto.cosmos.base.v1beta1.ICoin | undefined>;
-  coins$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  delegations$: Observable<DelegatorDelegations200Response>;
+  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
-  unbondingDelegation$: Observable<InlineResponse20072 | undefined>;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
+  unbondingDelegation$: Observable<UnbondingDelegation200Response | undefined>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
-    public matDialogRef: MatDialogRef<UndelegateFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
+    @Inject(DIALOG_DATA)
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
+    public dialogRef: DialogRef<string, UndelegateFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly stakingAppService: StakingApplicationService,
+    private readonly cosmosRest: CosmosRestService,
   ) {
     this.validator = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -45,26 +45,18 @@ export class UndelegateFormDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    this.delegations$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.staking.delegatorDelegations(sdk.rest, address)),
-      map((res) => res.data),
+    this.delegations$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
-    this.unbondingDelegation$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => {
+
+    this.unbondingDelegation$ = address$.pipe(
+      mergeMap((address) => {
         const valAddressString = this.validator?.operator_address;
         if (!valAddressString) {
-          return of(undefined)
+          return of(undefined);
         }
         const valAddress = cosmosclient.ValAddress.fromString(valAddressString);
-        const unbondingDelegation = rest.staking.unbondingDelegation(
-          sdk.rest,
-          valAddress,
-          address,
-        ).then(res => res.data
-        ).catch((error) => {
-          console.error(error.message); return undefined
-        })
-        return unbondingDelegation
+        return this.cosmosRest.getUnbondingDelegation$(valAddress, address);
       }),
     );
     this.delegateAmount$ = this.delegations$.pipe(
@@ -76,11 +68,7 @@ export class UndelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-
-    this.coins$ = combineLatest([this.cosmosSDK.sdk$, address$]).pipe(
-      mergeMap(([sdk, address]) => rest.bank.allBalances(sdk.rest, address)),
-      map((result) => result.data.balances),
-    );
+    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     this.uguuBalance$ = this.coins$.pipe(
       map((coins) => {
         const balance = coins?.find((coin) => coin.denom == 'uguu');
@@ -91,7 +79,7 @@ export class UndelegateFormDialogComponent implements OnInit {
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmit($event: UndelegateOnSubmitEvent) {
     const txHash = await this.stakingAppService.undelegate(
@@ -100,6 +88,6 @@ export class UndelegateFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

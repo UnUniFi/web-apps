@@ -1,23 +1,9 @@
 {
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
-    ]
-  },
   "hosting": [
     {
       "target": "ununifi-alpha-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -26,10 +12,6 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
-        },
-        {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -40,11 +22,7 @@
     {
       "target": "ununifi-beta-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -53,10 +31,6 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
-        },
-        {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -67,11 +41,7 @@
     {
       "target": "ununifi-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -80,10 +50,6 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
-        },
-        {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -94,11 +60,7 @@
     {
       "target": "ununifi",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -107,10 +69,6 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
-        },
-        {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",
@@ -121,11 +79,7 @@
     {
       "target": "ununifi-8-private-test",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -136,10 +90,6 @@
           "destination": "/portal/index.html"
         },
         {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
-        },
-        {
           "source": "**",
           "destination": "/index.html"
         }
@@ -148,11 +98,83 @@
     {
       "target": "ununifi-9-beta-test-v1",
       "public": "dist/landing-page",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-nftfi-pocv1",
+      "public": "dist/landing-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-derivatives-pocv1",
+      "public": "dist/landing-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-stable",
+      "public": "dist/landing-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "ununifi-iya-poc-v1",
+      "public": "dist/landing-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -173,33 +195,12 @@
       ]
     }
   ],
-  "storage": {
-    "rules": "storage.rules"
-  },
   "emulators": {
-    "auth": {
-      "port": 9099
-    },
-    "functions": {
-      "port": 5001
-    },
-    "firestore": {
-      "port": 8080
-    },
     "hosting": {
-      "port": 5000
-    },
-    "pubsub": {
-      "port": 8085
-    },
-    "storage": {
-      "port": 9199
+      "port": 5010
     },
     "ui": {
       "enabled": true
     }
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
   }
 }

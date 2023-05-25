@@ -1,14 +1,12 @@
 import { GovApplicationService } from '../../../models/cosmos/gov.application.service';
+import { ProposalsUseCaseService } from './proposals.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { rest } from '@cosmos-client/core';
-import {
-  InlineResponse20052FinalTallyResult,
-  InlineResponse20052Proposals,
-} from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { PageEvent } from '@angular/material/paginator';
+import { Router, ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
+import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi/api';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-proposals',
@@ -16,36 +14,101 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<InlineResponse20052Proposals[]>;
-  tallies$: Observable<(InlineResponse20052FinalTallyResult | undefined)[]>;
+  paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  tallies$: Observable<
+    { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
+  >;
+  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
+  pageSize$: Observable<number>;
+  pageNumber$: Observable<number>;
+  pageLength$: Observable<number | undefined>;
+  pageSizeOptions = [5, 10, 15];
+
+  private proposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  private defaultPageSize = this.pageSizeOptions[1];
+  private defaultPageNumber = 1;
 
   constructor(
+    private router: Router,
+    private usecase: ProposalsUseCaseService,
     private readonly route: ActivatedRoute,
-    private readonly cosmosSDK: CosmosSDKService,
     private readonly govAppService: GovApplicationService,
   ) {
-    this.proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => rest.gov.proposals(sdk.rest)),
-      map((result) => result.data.proposals!.reverse()),
+    this.proposals$ = this.usecase.proposals$;
+    this.pageLength$ = this.usecase.pageLength$(this.proposals$);
+    this.pageSize$ = this.route.queryParams.pipe(
+      map((params) => {
+        const pageSize = Number(params.perPage);
+        if (this.pageSizeOptions.includes(pageSize)) {
+          return pageSize;
+        } else {
+          return this.defaultPageSize;
+        }
+      }),
     );
-    this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.proposals$]).pipe(
-      mergeMap(([sdk, proposals]) =>
-        Promise.all(
-          proposals.map((proposal) =>
-            rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
-              console.log(err);
-              return;
-            }),
-          ),
-        ),
+    this.pageNumber$ = combineLatest([
+      this.pageLength$,
+      this.pageSize$,
+      this.route.queryParams,
+    ]).pipe(
+      map(([pageLength, pageSize, params]) => {
+        if (pageLength === undefined) {
+          return this.defaultPageNumber;
+        }
+        const pages = Number(params.pages);
+        if (!pages) return this.defaultPageNumber;
+        if (pages > pageLength / pageSize + 1) return this.defaultPageNumber;
+        return pages;
+      }),
+    );
+    this.paginatedProposals$ = this.usecase.paginatedProposals$(
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    );
+    this.proposalContents$ = this.usecase.proposalContents$(
+      this.proposals$,
+      this.pageNumber$,
+      this.pageSize$,
+    );
+    this.tallies$ = this.usecase.tallies$(this.proposals$, this.pageNumber$, this.pageSize$).pipe(
+      map((tallies) =>
+        tallies.map((tally) => {
+          const yes = tally?.yes ? Number(tally.yes) : 0;
+          const no = tally?.no ? Number(tally.no) : 0;
+          const abstain = tally?.abstain ? Number(tally.abstain) : 0;
+          const noWithVeto = tally?.no_with_veto ? Number(tally.no_with_veto) : 0;
+          const max = Math.max(yes, no, abstain, noWithVeto);
+          return { yes, no, abstain, noWithVeto, max };
+        }),
       ),
-      map((result) => result.map((res) => res?.data.tally)),
     );
   }
 
   ngOnInit(): void {}
 
+  appPaginationChanged(pageEvent: PageEvent): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        perPage: pageEvent.pageSize,
+        pages: pageEvent.pageIndex + 1,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   onVoteProposal(proposalID: number) {
     this.govAppService.openVoteFormDialog(proposalID);
+  }
+
+  getPaginatedProposals(
+    proposals: Proposals200ResponseProposalsInner[],
+    pageNumber: number,
+    pageSize: number,
+  ): Proposals200ResponseProposalsInner[] {
+    const max = proposals.length - (pageNumber - 1) * pageSize;
+    const min = max - pageSize;
+    return proposals.filter((_, i) => min <= i && i < max).reverse();
   }
 }

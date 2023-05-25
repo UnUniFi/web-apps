@@ -1,0 +1,6 @@
+<view-wallet-tool
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  (appConnectWallet)="onConnectWallet($event)"
+  (appDisconnectWallet)="onDisconnectWallet($event)"
+></view-wallet-tool>

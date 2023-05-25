@@ -1,6 +1,6 @@
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -20,18 +20,28 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   checked: boolean = false;
   inputPrivateKey: string = '';
   isPasswordVisible: boolean = false;
+  step: number = 0;
+  steps: String[] = ['Save your private key', 'Check', 'Next'];
 
   now = new Date();
   sec = this.now.getSeconds();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     public readonly data: StoredWallet & { mnemonic: string; privateKey: string },
-    public matDialogRef: MatDialogRef<UnunifiBackupPrivateKeyWizardDialogComponent>,
+    public dialogRef: DialogRef<
+      StoredWallet & {
+        mnemonic: string;
+        privateKey: string;
+        checked: boolean;
+        saved: boolean;
+      },
+      UnunifiBackupPrivateKeyWizardDialogComponent
+    >,
     private readonly snackBar: MatSnackBar,
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onClickSubmit(): void {
     const walletBackupResult: StoredWallet & {
@@ -50,7 +60,7 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
       checked: this.checked,
       saved: this.saved,
     };
-    this.matDialogRef.close(walletBackupResult);
+    this.dialogRef.close(walletBackupResult);
   }
 
   savePrivateKey(): void {
@@ -102,5 +112,21 @@ export class UnunifiBackupPrivateKeyWizardDialogComponent implements OnInit {
   togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
     return false;
+  }
+
+  next(): void {
+    if (this.steps.length - 1 > this.step) {
+      this.step++;
+    } else {
+      this.onClickSubmit();
+    }
+  }
+
+  back(): void {
+    this.step--;
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

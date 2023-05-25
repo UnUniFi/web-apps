@@ -1,13 +1,18 @@
-import { getWithdrawLimit, getIssueLimit } from '../../../../utils/function';
-import { getSpotPriceStream, getLiquidationPriceStream } from '../../../../utils/stream';
+import { getIssueLimit, getWithdrawLimit } from '../../../../utils/function';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cosmosclient } from '@cosmos-client/core';
-import { CosmosSDKService } from 'projects/portal/src/app/models/index';
+import cosmosclient from '@cosmos-client/core';
+import {
+  getCollateralParamsStream,
+  UnunifiRestService,
+} from 'projects/portal/src/app/models/ununifi-rest.service';
 import { combineLatest, Observable, zip } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { rest, ununifi } from 'ununifi-client';
-import { InlineResponse2004Cdp1, InlineResponse2006Deposits } from 'ununifi-client/esm/openapi';
+import ununifi from 'ununifi-client';
+import {
+  CdpAll200ResponseCdpInner,
+  DepositAll200ResponseDepositsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-cdp',
@@ -18,26 +23,23 @@ export class CdpComponent implements OnInit {
   owner$: Observable<string>;
   collateralType$: Observable<string>;
   denom$: Observable<string>;
-  params$: Observable<ununifi.cdp.IParams>;
-  cdp$: Observable<InlineResponse2004Cdp1>;
-  deposits$: Observable<InlineResponse2006Deposits[]>;
+  cdpParams$: Observable<ununifi.proto.ununifi.cdp.IParams>;
+  cdp$: Observable<CdpAll200ResponseCdpInner>;
+  deposits$: Observable<DepositAll200ResponseDepositsInner[]>;
 
-  spotPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
-  liquidationPrice$: Observable<ununifi.pricefeed.ICurrentPrice>;
+  spotPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
+  liquidationPrice$: Observable<ununifi.proto.ununifi.pricefeed.ICurrentPrice>;
   withdrawLimit$: Observable<number>;
   issueLimit$: Observable<number>;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly cosmosSdk: CosmosSDKService,
+    private readonly ununifiRest: UnunifiRestService,
   ) {
     this.owner$ = this.route.params.pipe(map((params) => params['owner']));
     this.collateralType$ = this.route.params.pipe(map((params) => params['collateralType']));
-    this.params$ = this.cosmosSdk.sdk$.pipe(
-      mergeMap((sdk) => rest.ununifi.cdp.params(sdk.rest)),
-      map((data) => data.data.params!),
-    );
-    this.denom$ = combineLatest([this.collateralType$, this.params$]).pipe(
+    this.cdpParams$ = this.ununifiRest.getCdpParams$().pipe(map((res) => res!));
+    this.denom$ = combineLatest([this.collateralType$, this.cdpParams$]).pipe(
       map(([collateralType, params]) => {
         const matchedDenoms = params.collateral_params?.filter(
           (param) => param.type === collateralType,
@@ -45,48 +47,40 @@ export class CdpComponent implements OnInit {
         return matchedDenoms ? (matchedDenoms[0].denom ? matchedDenoms[0].denom : '') : '';
       }),
     );
-    const ownerAndCollateralType$ = combineLatest([
-      this.owner$,
-      this.collateralType$,
-      this.cosmosSdk.sdk$,
-    ]);
+    const ownerAndCollateralType$ = combineLatest([this.owner$, this.collateralType$]);
 
     this.cdp$ = ownerAndCollateralType$.pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp.cdp(
-          sdk.rest,
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getCdp$(cosmosclient.AccAddress.fromString(ownerAddr), collateralType),
+      ),
+      map((res) => res!),
+    );
+
+    this.deposits$ = ownerAndCollateralType$.pipe(
+      mergeMap(([ownerAddr, collateralType]) =>
+        this.ununifiRest.getAllDeposits$(
           cosmosclient.AccAddress.fromString(ownerAddr),
           collateralType,
         ),
       ),
-      map((res) => res.data.cdp!),
+      map((res) => res || []),
     );
 
-    this.deposits$ = ownerAndCollateralType$.pipe(
-      mergeMap(([ownerAddr, collateralType, sdk]) =>
-        rest.ununifi.cdp
-          .allDeposits(sdk.rest, cosmosclient.AccAddress.fromString(ownerAddr), collateralType)
-          .catch((error) => {
-            console.error(error);
-            return undefined;
-          }),
+    this.spotPrice$ = getCollateralParamsStream(this.collateralType$, this.cdpParams$).pipe(
+      mergeMap((collateralParams) => this.ununifiRest.getPrice$(collateralParams.spot_market_id)),
+    );
+
+    this.liquidationPrice$ = getCollateralParamsStream(this.collateralType$, this.cdpParams$).pipe(
+      mergeMap((collateralParams) =>
+        this.ununifiRest.getPrice$(collateralParams.liquidation_market_id),
       ),
-      map((res) => res?.data.deposits || []),
     );
 
-    this.spotPrice$ = this.cosmosSdk.sdk$.pipe(
-      mergeMap((sdk) => getSpotPriceStream(sdk.rest, this.collateralType$, this.params$)),
-    );
-
-    this.liquidationPrice$ = this.cosmosSdk.sdk$.pipe(
-      mergeMap((sdk) => getLiquidationPriceStream(sdk.rest, this.collateralType$, this.params$)),
-    );
-
-    this.withdrawLimit$ = zip(this.cdp$, this.params$, this.spotPrice$).pipe(
+    this.withdrawLimit$ = zip(this.cdp$, this.cdpParams$, this.spotPrice$).pipe(
       map(([cdp, params, price]) => getWithdrawLimit(cdp.cdp!, params, price)),
     );
 
-    this.issueLimit$ = zip(this.cdp$, this.params$, this.liquidationPrice$).pipe(
+    this.issueLimit$ = zip(this.cdp$, this.cdpParams$, this.liquidationPrice$).pipe(
       map(([cdp, params, price]) => getIssueLimit(cdp.cdp!, params, price)),
     );
   }

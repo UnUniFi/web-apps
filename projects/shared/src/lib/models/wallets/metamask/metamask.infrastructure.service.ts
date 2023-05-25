@@ -4,7 +4,7 @@ import { KeyType } from '../../keys/key.model';
 import { StoredWallet, WalletType } from '../wallet.model';
 import { IMetaMaskInfrastructureService } from './metamask.service';
 import { Injectable } from '@angular/core';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { take } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { take } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) { }
 
   private messageToDigest(message: string): Uint8Array {
     const messageHash = ethers.utils.hashMessage(message);
@@ -99,7 +99,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
 
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const txJson = txBuilder.toProtoJSON() as any;
 

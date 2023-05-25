@@ -1,0 +1,45 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li routerLink="../.."><a>Ecosystem-Incentive</a></li>
+      <li>{{ unitId }}</li>
+    </ul>
+  </div>
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">{{ unitId }}</h2>
+
+      <ng-container *ngIf="txMemo">
+        <div class="mockup-code text-primary-content text-lg mb-4">
+          <pre><code class="break-all">{{ txMemo }}</code></pre>
+          <div class="flex flex-row justify-end">
+            <label class="btn" (click)="copyClipboard(txMemo)">
+              <mat-icon>content_copy</mat-icon>Copy
+            </label>
+          </div>
+        </div>
+      </ng-container>
+      <p>
+        Add this JSON string to the txMemo in the MSG of the transaction sent from the app you
+        developed. You will be rewarded when the transaction is processed successfully.
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <td>Rate</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subject of unit?.subject_info_lists">
+              <td>{{ subject.subject_addr }}</td>
+              <td>{{ subject.weight | percent : '1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

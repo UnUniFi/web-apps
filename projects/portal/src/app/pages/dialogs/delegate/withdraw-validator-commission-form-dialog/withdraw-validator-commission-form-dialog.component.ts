@@ -1,8 +1,7 @@
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi/api';
-import { CosmosSDKService } from 'projects/portal/src/app/models';
+import cosmosclient from '@cosmos-client/core';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi/api';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { DistributionApplicationService } from 'projects/portal/src/app/models/cosmos/distribution.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -18,14 +17,13 @@ import { map } from 'rxjs/operators';
 })
 export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  minimumGasPrices$: Observable<proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  validator: InlineResponse20066Validators | undefined;
+  minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
+  validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public readonly data: InlineResponse20066Validators,
-    public matDialogRef: MatDialogRef<WithdrawValidatorCommissionFormDialogComponent>,
-    private readonly cosmosSDK: CosmosSDKService,
+    @Inject(DIALOG_DATA)
+    public readonly data: StakingDelegatorValidators200ResponseValidatorsInner,
+    public dialogRef: DialogRef<string, WithdrawValidatorCommissionFormDialogComponent>,
     private readonly walletService: WalletService,
     private readonly configS: ConfigService,
     private readonly distributionAppService: DistributionApplicationService,
@@ -43,6 +41,6 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
       $event.minimumGasPrice,
       $event.gasRatio,
     );
-    this.matDialogRef.close(txHash);
+    this.dialogRef.close(txHash);
   }
 }

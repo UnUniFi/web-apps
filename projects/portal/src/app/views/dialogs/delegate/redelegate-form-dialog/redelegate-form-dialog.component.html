@@ -1,87 +1,78 @@
-<mat-dialog-content>
-  <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
-    <div class="font-bold text-xl m-3">Redelegate to another validator</div>
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Redelegate to another validator</div>
+    </div>
 
-    <mat-form-field class="w-full">
-      <mat-label>Before</mat-label>
-
-      <mat-select [(ngModel)]="validator && validator.operator_address" name="validator" required>
-        <mat-option [value]="validator?.operator_address">
-          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
-            circle
-          </mat-icon>
-          {{ validator?.description?.moniker }}
-        </mat-option>
-        <mat-select-trigger>
-          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(validator?.operator_address!) }">
-            circle </mat-icon
-          >&nbsp;{{ validator?.description?.moniker }}
-        </mat-select-trigger>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="w-full">
-      <mat-label>After</mat-label>
-      <mat-select [(ngModel)]="selectedValidator" name="selected-validator" required>
-        <mat-option *ngFor="let val of validatorsList" [value]="val">
-          <mat-icon matPrefix [ngStyle]="{ color: getColorCode(val.operator_address!) }"
-            >circle</mat-icon
-          >
-          {{ val.description?.moniker }}
-        </mat-option>
-        <mat-select-trigger>
-          <mat-icon
-            matPrefix
-            [ngStyle]="{ color: getColorCode(selectedValidator?.operator_address!) }"
-          >
-            circle</mat-icon
-          >&nbsp;{{ selectedValidator?.description?.moniker }}
-        </mat-select-trigger>
-      </mat-select>
-    </mat-form-field>
-
-    <form #formRef="ngForm" (submit)="onSubmit(minimumGasPriceRef.value)">
-      <div class="flex flex-col content-content lg:flex-row">
-        <mat-form-field class="flex-auto">
-          <mat-label>Delegate Denom</mat-label>
-          <input
-            [(ngModel)]="selectedAmount && selectedAmount.denom"
-            name="delegate-denom"
-            matInput
-            type="text"
-            required
-            readonly
-          />
-        </mat-form-field>
-        <mat-form-field class="flex-auto">
-          <mat-label>ReDelegate Amount</mat-label>
-          <input
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
-            name="redelegate-amount"
-            matInput
-            type="number"
-            pattern="^\d+$"
-            [min]="0"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="flex-auto">
-          <mat-label>Delegated Amount</mat-label>
-          <input
-            [(ngModel)]="delegateAmount && delegateAmount.amount"
-            name="delegate-amount"
-            matInput
-            type="number"
-            pattern="^\d+$"
-            [min]="0"
-            required
-            readonly
-          />
-        </mat-form-field>
+    <form #formRef="ngForm" (submit)="onSubmit()">
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">Before</span>
+        </label>
+        <ul class="menu bg-base-100">
+          <li class="disabled">
+            <a class="text-base-content items-center">
+              <span
+                class="material-icons"
+                [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
+              >
+                circle
+              </span>
+              &nbsp;{{ validator?.description?.moniker }}
+            </a>
+          </li>
+        </ul>
       </div>
 
-      <h3 class="pt-3">Gas Settings</h3>
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">After {{ validatorsList![0] !== validator }}</span>
+        </label>
+        <select
+          name="selected-validator"
+          class="select select-bordered"
+          [(ngModel)]="selectedValidator"
+          required
+          (ngModelChange)="onMinimumGasDenomChanged($event)"
+        >
+          <ng-container *ngFor="let val of validatorsList">
+            <option *ngIf="val.operator_address !== validator?.operator_address" [value]="val">
+              {{ val.description?.moniker }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text">ReDelegate Amount</span>
+        </label>
+        <label class="input-group">
+          <input
+            name="redelegate-amount"
+            type="number"
+            placeholder="e.g. 12.123456"
+            class="input input-bordered w-full"
+            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [min]="0"
+            required
+            pattern="^\d+(\.\d{1,6})?$"
+          />
+          <span>{{ selectedAmount?.denom }}</span>
+        </label>
+
+        <label class="label">
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+        </label>
+      </div>
+
+      <!-- <h3 class="pt-3">Gas Settings</h3>
       <mat-form-field class="w-full">
         <mat-label>Gas Ratio</mat-label>
         <input [(ngModel)]="gasRatio" name="gas-ratio" matInput type="number" required />
@@ -144,17 +135,17 @@
           >
           </mat-slider>
         </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
 
-      <button
-        mat-flat-button
-        class="w-full mt-4"
-        color="accent"
-        [disabled]="formRef.invalid"
-        [disabled]="selectedValidator == validator?.operator_address"
-      >
-        Change Delegate
-      </button>
+      <div class="card-actions justify-end mt-4">
+        <button
+          class="btn btn-secondary w-full md:w-auto md:px-8"
+          [disabled]="formRef.invalid"
+          [disabled]="selectedValidator === validator?.operator_address"
+        >
+          Redelegate
+        </button>
+      </div>
     </form>
   </div>
-</mat-dialog-content>
+</div>

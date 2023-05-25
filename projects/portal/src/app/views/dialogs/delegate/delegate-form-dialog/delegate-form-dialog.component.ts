@@ -1,14 +1,15 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { proto } from '@cosmos-client/core';
-import { InlineResponse20066Validators } from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type DelegateOnSubmitEvent = {
   walletType: WalletType;
-  amount: proto.cosmos.base.v1beta1.ICoin;
-  minimumGasPrice: proto.cosmos.base.v1beta1.ICoin;
-  validatorList: InlineResponse20066Validators[];
+  amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  validatorList: StakingDelegatorValidators200ResponseValidatorsInner[];
   gasRatio: number;
 };
 
@@ -21,30 +22,30 @@ export class DelegateFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  validatorsList?: InlineResponse20066Validators[] | null;
+  validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
-  coins?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   uguuBalance?: string | null;
   @Input()
-  minimumGasPrices?: proto.cosmos.base.v1beta1.ICoin[] | null;
+  minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  validator?: InlineResponse20066Validators | null;
+  validator?: StakingDelegatorValidators200ResponseValidatorsInner | null;
 
   @Output()
   appSubmit: EventEmitter<DelegateOnSubmitEvent>;
 
-  selectedGasPrice?: proto.cosmos.base.v1beta1.ICoin;
+  selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   availableDenoms?: string[];
-  selectedAmount?: proto.cosmos.base.v1beta1.ICoin;
+  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
-  constructor() {
+  constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
+    this.availableDenoms = ['GUU'];
 
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
+    this.selectedAmount = { denom: 'GUU', amount: '0' };
     this.gasRatio = 0;
   }
 
@@ -78,10 +79,13 @@ export class DelegateFormDialogComponent implements OnInit {
     ) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
-      amount: this.selectedAmount,
+      amount: {
+        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
+        denom: this.selectedAmount.denom,
+      },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,
       gasRatio: this.gasRatio,
@@ -98,5 +102,9 @@ export class DelegateFormDialogComponent implements OnInit {
     if (this.selectedGasPrice) {
       this.selectedGasPrice.amount = amount;
     }
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

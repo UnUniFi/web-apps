@@ -1,0 +1,15 @@
+<view-lender-nft
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [symbol]="symbol$ | async"
+  [symbolImage]="symbolImage$ | async"
+  [bidders]="bidders$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  [bidDetail]="bidDetail$ | async"
+  [isWinning]="isWinning$ | async"
+  (appSubmitCancelBid)="onSubmitCancelBid($event)"
+  (appSubmitPayFullBid)="onSubmitPayFullBid($event)"
+></view-lender-nft>

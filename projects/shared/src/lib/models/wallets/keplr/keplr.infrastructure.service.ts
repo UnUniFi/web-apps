@@ -1,3 +1,4 @@
+import { LoadingDialogService } from '../../../components/loading-dialog';
 import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { ConfigService } from '../../config/config.service';
 import { KeyType } from '../../keys/key.model';
@@ -5,9 +6,8 @@ import { StoredWallet, WalletType } from '../wallet.model';
 import { IKeplrInfrastructureService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmosclient, proto } from '@cosmos-client/core';
+import cosmosclient from '@cosmos-client/core';
 import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
-import { LoadingDialogService } from 'ng-loading-dialog';
 
 export interface signKeplr {
   authInfoBytes: Uint8Array;
@@ -188,7 +188,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
 
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: proto.cosmos.auth.v1beta1.BaseAccount,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
     const signKeplr = await this.signDirect(

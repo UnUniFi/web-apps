@@ -1,0 +1,6 @@
+<view-mint
+  [address]="address$ | async"
+  [classes]="classes$ | async"
+  [selectedClass]="selectedClass$ | async"
+  (mintNft)="onMintNft($event)"
+></view-mint>

@@ -1,8 +1,8 @@
+import { StoredWallet } from './../../../../../models/wallets/wallet.model';
+import { WalletService } from './../../../../../models/wallets/wallet.service';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 
 @Component({
   selector: 'app-ununifi-key-form-dialog',
@@ -14,7 +14,10 @@ export class UnunifiKeyFormDialogComponent implements OnInit {
 
   constructor(
     private readonly walletService: WalletService,
-    private readonly dialogRef: MatDialogRef<UnunifiKeyFormDialogComponent>,
+    private readonly dialogRef: DialogRef<
+      StoredWallet & { privateKey: string },
+      UnunifiKeyFormDialogComponent
+    >,
     private readonly snackBar: MatSnackBar,
   ) {
     this.currentStoredWallet$ = this.walletService.getCurrentStoredWallet();
@@ -38,5 +41,9 @@ export class UnunifiKeyFormDialogComponent implements OnInit {
       };
       this.dialogRef.close(privateWallet);
     });
+  }
+
+  onClickClose() {
+    this.dialogRef.close();
   }
 }

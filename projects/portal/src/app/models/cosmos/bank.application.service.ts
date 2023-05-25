@@ -1,14 +1,23 @@
-import { TxFeeConfirmDialogComponent } from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxFeeConfirmDialogData,
+  TxFeeConfirmDialogComponent,
+} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+import {
+  TxConfirmDialogComponent,
+  TxConfirmDialogData,
+} from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
 import { WalletService } from '../wallets/wallet.service';
+import { BankQueryService } from './bank.query.service';
 import { BankService } from './bank.service';
+import { TxCommonApplicationService } from './tx-common.application.service';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
+import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { proto } from '@cosmos-client/core';
-import { LoadingDialogService } from 'ng-loading-dialog';
+import cosmosclient from '@cosmos-client/core';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -18,18 +27,70 @@ export class BankApplicationService {
   constructor(
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
-    private readonly dialog: MatDialog,
+    private readonly dialog: Dialog,
     private readonly loadingDialog: LoadingDialogService,
     private readonly bank: BankService,
     private readonly walletService: WalletService,
+    private readonly bankQueryService: BankQueryService,
     private readonly txCommon: TxCommonService,
+    private readonly txCommonApplication: TxCommonApplicationService,
   ) {}
+  async bankSend(toAddress: string, symbolAmounts: { symbol: string; amount: number }[]) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const symbolMetadataMap = await this.bankQueryService
+      .getSymbolMetadataMap$()
+      .pipe(take(1))
+      .toPromise();
+
+    const msg = this.bank.buildMsgBankSend(address, toAddress, symbolAmounts, symbolMetadataMap);
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent token, please check your balance.' },
+        })
+        .closed.toPromise();
+      location.reload();
+    }
+  }
 
   async send(
     toAddress: string,
-    amount: proto.cosmos.base.v1beta1.ICoin[],
-    minimumGasPrice: proto.cosmos.base.v1beta1.ICoin,
-    balances: proto.cosmos.base.v1beta1.ICoin[],
+    amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
+    minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    balances: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     gasRatio: number,
   ) {
     // TODO: firstValueFrom
@@ -67,8 +128,8 @@ export class BankApplicationService {
     }
 
     let simulatedResultData: SimulatedTxResultResponse;
-    let gas: proto.cosmos.base.v1beta1.ICoin;
-    let fee: proto.cosmos.base.v1beta1.ICoin;
+    let gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    let fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
     try {
       simulatedResultData = await this.bank.simulateToSend(
@@ -102,14 +163,13 @@ export class BankApplicationService {
 
     // ask the user to confirm the fee with a dialog
     const txFeeConfirmedResult = await this.dialog
-      .open(TxFeeConfirmDialogComponent, {
+      .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
         data: {
           fee,
           isConfirmed: false,
         },
       })
-      .afterClosed()
-      .toPromise();
+      .closed.toPromise();
 
     if (txFeeConfirmedResult === undefined || txFeeConfirmedResult.isConfirmed === false) {
       this.snackBar.open('Tx was canceled', undefined, { duration: 6000 });
@@ -118,7 +178,7 @@ export class BankApplicationService {
 
     // send tx
     const dialogRef = this.loadingDialog.open('Sending');
-    let txhash: string | undefined;
+    let txHash: string | undefined;
 
     try {
       const res = await this.bank.send(
@@ -129,8 +189,8 @@ export class BankApplicationService {
         gas,
         fee,
       );
-      txhash = res.tx_response?.txhash;
-      if (txhash === undefined) {
+      txHash = res.tx_response?.txhash;
+      if (txHash === undefined) {
         throw Error('Invalid txhash!');
       }
     } catch (error) {
@@ -142,10 +202,17 @@ export class BankApplicationService {
       dialogRef.close();
     }
 
-    this.snackBar.open('Successfully sent', undefined, {
-      duration: 6000,
-    });
+    // this.snackBar.open('Successfully sent', undefined, {
+    //   duration: 6000,
+    // });
 
-    await this.router.navigate(['txs', txhash]);
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: { txHash: txHash, msg: 'Successfully sent token, please check your balance.' },
+        })
+        .closed.toPromise();
+      location.reload();
+    }
   }
 }

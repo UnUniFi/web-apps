@@ -1,0 +1,9 @@
+<view-perpetual-futures
+  [info]="info$ | async"
+  [params]="params$ | async"
+  [markets]="markets$ | async"
+  [selectedMarket]="selectedMarket$ | async"
+  (changeMarket)="onChangeMarket($event)"
+>
+  <router-outlet></router-outlet>
+</view-perpetual-futures>

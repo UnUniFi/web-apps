@@ -88,7 +88,7 @@
         </label>
       </li> -->
 
-      <li class="menu-title">
+      <li class="menu-title" *ngIf="apps.length">
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
@@ -102,7 +102,7 @@
         </li>
       </ng-container>
 
-      <li class="menu-title">
+      <li class="menu-title" *ngIf="navigations?.length">
         <span>Testnet</span>
       </li>
       <ng-template ngFor let-navigation [ngForOf]="navigations">

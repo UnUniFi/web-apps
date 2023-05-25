@@ -26,7 +26,10 @@ export class ValidatorsComponent implements OnInit {
   @Output()
   toggleActiveChange: EventEmitter<boolean>;
 
+  active: boolean;
+
   constructor() {
+    this.active = true;
     this.toggleActiveChange = new EventEmitter();
   }
 
@@ -36,22 +39,18 @@ export class ValidatorsComponent implements OnInit {
     }, 5000);
   }
 
-  getColorCode(validator: StakingDelegatorValidators200ResponseValidatorsInner) {
+  getColorCode(valAddress: string) {
     const hash = crypto
       .createHash('sha256')
-      .update(Buffer.from(validator.operator_address ?? ''))
+      .update(Buffer.from(valAddress ?? ''))
       .digest()
       .toString('hex');
 
     return `#${hash.substr(0, 6)}`;
   }
 
-  onToggleChange(value: string) {
-    if (value == 'active') {
-      this.toggleActiveChange.emit(true);
-    }
-    if (value == 'inactive') {
-      this.toggleActiveChange.emit(false);
-    }
+  onToggleActive(active: boolean) {
+    this.active = active;
+    this.toggleActiveChange.emit(active);
   }
 }

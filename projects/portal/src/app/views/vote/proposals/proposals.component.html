@@ -43,7 +43,7 @@
                 {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
               </span>
               <h2 class="card-title break-all">
-                # {{ proposal.proposal_id }} {{ unpackContent(proposal?.content).title }}
+                #{{ proposal.proposal_id }} {{ unpackContent(proposal?.content).title }}
               </h2>
               <div class="divider m-0">Tallies</div>
               <div class="grid gap-3">
@@ -82,13 +82,13 @@
               </div>
               <div class="card-actions justify-end">
                 <button
-                  class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
+                  class="btn btn-outline btn-secondary w-full"
                   (click)="onClickVote(proposal.proposal_id!)"
                 >
                   <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
                 </button>
                 <button
-                  class="btn btn-outline btn-info w-full md:w-auto md:px-8"
+                  class="btn btn-outline btn-info w-full"
                   routerLink="{{ proposal.proposal_id }}"
                 >
                   View

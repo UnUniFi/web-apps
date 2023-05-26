@@ -31,6 +31,9 @@
         ],
         "ununifi-stable": [
           "ununifi-stable"
+        ],
+        "ununifi-iya-poc-v1": [
+          "ununifi-iya-poc-v1"
         ]
       }
     }

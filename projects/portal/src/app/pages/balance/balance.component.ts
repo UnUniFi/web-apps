@@ -87,6 +87,9 @@ export class BalanceComponent implements OnInit {
     );
     this.nodeInfo$ = this.rest.getNodeInfo$();
     this.accountTypeName$ = this.usecase.accountTypeName$;
+    this.symbolBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
+    );
   }
 
   ngOnInit(): void {}

@@ -50,12 +50,12 @@ export class RedelegateFormDialogComponent implements OnInit {
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['GUU'];
+    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'GUU', amount: '0' };
+    this.selectedAmount = { denom: 'uguu', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }

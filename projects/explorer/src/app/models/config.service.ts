@@ -59,13 +59,21 @@ export class ConfigService {
   constructor() {
     this.configs = configs;
     this.configSubject$ = new BehaviorSubject<Config | undefined>(undefined);
-    const randomConfig = configs[Math.floor(Math.random() * configs.length)];
-    this.configSubject$.next(randomConfig);
+    const configID = localStorage.getItem('configID');
+    const selectedConfig = this.configs.find((config) => config.id == configID);
+    if (configID && selectedConfig) {
+      this.configSubject$.next(selectedConfig);
+    } else {
+      const randomConfig = configs[Math.floor(Math.random() * configs.length)];
+      this.configSubject$.next(randomConfig);
+    }
     this.config$ = this.configSubject$.asObservable();
   }
 
   async setCurrentConfig(configID: string) {
     const selectedConfig = this.configs.find((config) => config.id == configID);
     this.configSubject$.next(selectedConfig);
+    localStorage.setItem('configID', configID);
+    location.reload();
   }
 }

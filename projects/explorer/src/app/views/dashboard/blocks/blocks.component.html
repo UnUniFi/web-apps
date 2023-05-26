@@ -30,17 +30,19 @@
           </thead>
           <tbody>
             <ng-container *ngIf="(blocks?.length || 0) > 0; else empty">
-              <tr *ngFor="let block of blocks">
+              <tr
+                *ngFor="let block of blocks"
+                class="hover cursor-pointer"
+                routerLink="/blocks/{{ block?.block?.header?.height }}"
+              >
                 <th>
-                  <a routerLink="/blocks/{{ block?.block?.header?.height }}">
-                    {{ block?.block?.header?.height }}
-                  </a>
+                  {{ block?.block?.header?.height }}
                 </th>
                 <td>
                   {{ block?.block?.header?.proposer_address }}
                 </td>
                 <td>{{ block?.block?.data?.txs?.length }}</td>
-                <td>{{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}</td>
+                <td>{{ block?.block?.header?.time | date: 'yy/MM/dd hh:mm' }}</td>
               </tr>
             </ng-container>
             <ng-template #empty>

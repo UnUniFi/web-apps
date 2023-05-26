@@ -80,7 +80,7 @@ export class MarketComponent implements OnInit {
       if (isLong) {
         selectDenom = symbolMetadataMap[quoteSymbol].base!;
       }
-      return pools.pool_market_cap?.breakdown?.find((pool) => pool.denom == selectDenom);
+      return pools.pool_market_cap?.asset_info?.find((pool) => pool.denom == selectDenom);
     }),
   );
 

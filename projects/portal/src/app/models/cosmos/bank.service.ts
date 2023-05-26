@@ -37,6 +37,23 @@ export class BankService {
     return coins;
   }
 
+  convertCoinToSymbolAmount(
+    coin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): { symbol: string; amount: number } {
+    if (!coin.denom || !coin.amount) {
+      throw Error();
+    }
+    const denomMetadata = denomMetadataMap[coin.denom];
+    const denomUnit = denomMetadata.denom_units?.find((unit) => unit.denom === coin.denom);
+    if (!denomUnit) {
+      throw Error();
+    }
+    const symbol = denomMetadata.symbol || '';
+    const amount = Number(new Decimal(coin.amount).dividedBy(10 ** denomUnit.exponent!).toFixed(6));
+    return { symbol, amount };
+  }
+
   convertCoinsToSymbolAmount(
     coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },

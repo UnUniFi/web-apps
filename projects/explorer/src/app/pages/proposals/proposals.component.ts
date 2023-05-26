@@ -20,8 +20,9 @@ export class ProposalsComponent implements OnInit {
   proposals$: Observable<Proposals200ResponseProposalsInner[]>;
   paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
   proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
-  tallies$: Observable<(Proposals200ResponseProposalsInnerFinalTallyResult | undefined)[]>;
-
+  tallies$: Observable<
+    { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
+  >;
   pageSizeOptions = [5, 10, 15];
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
@@ -93,6 +94,16 @@ export class ProposalsComponent implements OnInit {
         ),
       ),
       map((result) => result.map((res) => res?.data.tally)),
+      map((tallies) =>
+        tallies.map((tally) => {
+          const yes = tally?.yes ? Number(tally.yes) : 0;
+          const no = tally?.no ? Number(tally.no) : 0;
+          const abstain = tally?.abstain ? Number(tally.abstain) : 0;
+          const noWithVeto = tally?.no_with_veto ? Number(tally.no_with_veto) : 0;
+          const max = Math.max(yes, no, abstain, noWithVeto);
+          return { yes, no, abstain, noWithVeto, max };
+        }),
+      ),
     );
     this.proposalContents$ = combineLatest([
       this.proposals$,

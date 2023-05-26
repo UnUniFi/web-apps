@@ -170,6 +170,29 @@
           "destination": "/index.html"
         }
       ]
+    },
+    {
+      "target": "ununifi-iya-poc-v1",
+      "public": "dist/landing-page",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/explorer/**",
+          "destination": "/explorer/index.html"
+        },
+        {
+          "source": "/portal/**",
+          "destination": "/portal/index.html"
+        },
+        {
+          "source": "/marketplace/**",
+          "destination": "/marketplace/index.html"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     }
   ],
   "emulators": {

@@ -43,9 +43,9 @@ export class DelegateFormDialogComponent implements OnInit {
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['GUU'];
+    this.availableDenoms = ['uguu'];
 
-    this.selectedAmount = { denom: 'GUU', amount: '0' };
+    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 

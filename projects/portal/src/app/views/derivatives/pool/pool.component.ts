@@ -9,7 +9,10 @@ import {
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
-import { EstimateDLPTokenAmount200Response, EstimateRedeemAmount200Response } from 'ununifi-client/esm/openapi';
+import {
+  EstimateDLPTokenAmount200Response,
+  EstimateRedeemTokenAmount200Response,
+} from 'ununifi-client/esm/openapi';
 
 export type MintLPTEvent = {
   symbol: string;
@@ -52,7 +55,7 @@ export class PoolComponent implements OnInit, OnChanges {
   estimatedLPTAmount?: EstimateDLPTokenAmount200Response | null;
 
   @Input()
-  estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
+  estimatedRedeemAmount?: EstimateRedeemTokenAmount200Response | null;
 
   @Output()
   estimateMint = new EventEmitter<MintLPTEvent>();

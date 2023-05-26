@@ -1,19 +1,4 @@
-<!-- <mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
-      <ng-container *ngIf="(drawerOpened$ | async) === false">
-        <button mat-icon-button (click)="drawer.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </ng-container>
-      <view-toolbar
-        class="flex-auto"
-        [searchResult]="searchResult"
-        (appSubmitSearchResult)="onSubmitSearchResult($event)"
-        (appChangeInputValue)="onChangeInputValue($event)"
-      >
-      </view-toolbar>
-    </mat-toolbar> -->
-
-<div class="drawer drawer-mobile w-screen h-screen bg-base-300">
+<div class="drawer drawer-mobile w-screen h-screen bg-base-300" data-theme="cmyk">
   <input id="drawer-main" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
@@ -42,6 +27,7 @@
         <div class="hidden xl:block pr-2">UnUniFi</div>
         <div>Explorer</div>
       </div>
+      <app-node-tool></app-node-tool>
     </div>
     <!-- Page content here -->
     <div class="w-full max-w-screen-xl mx-auto p-8">
@@ -53,9 +39,7 @@
     <label for="drawer-main" class="drawer-overlay"></label>
     <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
       <!-- Sidebar content here -->
-      <li class="menu-title">
-        <span>Utilities</span>
-      </li>
+      <app-search-tool class="w-full"></app-search-tool>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/">
           <span class="flex-none">
@@ -96,26 +80,6 @@
           <span class="flex-1">Votes</span>
         </label>
       </li>
-
-      <li class="menu-title">
-        <span>Testnet</span>
-      </li>
-      <ng-template ngFor let-navigation [ngForOf]="navigations">
-        <ng-container *ngIf="navigation?.name && navigation?.link">
-          <li>
-            <label
-              for="drawer-main"
-              class="flex gap-4"
-              routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
-            >
-              <span class="flex-none">
-                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
-              </span>
-              <span class="flex-1">{{ navigation.name }}</span>
-            </label>
-          </li>
-        </ng-container>
-      </ng-template>
     </ul>
   </div>
 </div>

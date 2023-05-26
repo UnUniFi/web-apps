@@ -11,7 +11,11 @@ import { SimulatedTxResultResponse } from './tx-common.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
+import {
+  BroadcastTx200Response,
+  CosmosTxV1beta1GetTxResponse,
+  GetLatestBlock200Response,
+} from '@cosmos-client/core/esm/openapi';
 import Long from 'long';
 
 @Injectable({
@@ -319,7 +323,7 @@ export class TxCommonService {
     // broadcast tx
     const result = await cosmosclient.rest.tx.broadcastTx(sdk, {
       tx_bytes: txBuilder.txBytes(),
-      mode: cosmosclient.rest.tx.BroadcastTxMode.Block,
+      mode: cosmosclient.rest.tx.BroadcastTxMode.Sync,
     });
 
     // check broadcast tx error
@@ -328,6 +332,18 @@ export class TxCommonService {
     }
 
     return result.data;
+  }
+
+  async getTx(hash: string): Promise<CosmosTxV1beta1GetTxResponse> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const res = await cosmosclient.rest.tx.getTx(sdk, hash);
+    return res.data;
+  }
+
+  async getLatestBlock(): Promise<GetLatestBlock200Response> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const res = await cosmosclient.rest.tendermint.getLatestBlock(sdk);
+    return res.data;
   }
 
   numberToDecString(num: number) {

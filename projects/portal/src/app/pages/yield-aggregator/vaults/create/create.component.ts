@@ -20,7 +20,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
   denom$: Observable<string>;
-  selectedSymbol$: Observable<string>;
+  selectedSymbol$: Observable<string | undefined>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
@@ -41,7 +41,7 @@ export class CreateComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    this.denom$ = this.route.queryParams.pipe(map((params) => params.denom || 'undefined'));
+    this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
@@ -49,7 +49,13 @@ export class CreateComponent implements OnInit {
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
-      map(([denom, denomMetadataMap]) => denomMetadataMap[denom].symbol || 'Invalid Asset'),
+      map(([denom, denomMetadataMap]) => {
+        if (denom && denomMetadataMap) {
+          return denomMetadataMap[denom].symbol || 'Invalid Asset';
+        } else {
+          return undefined;
+        }
+      }),
     );
     const params$ = this.iyaQuery.getYieldAggregatorParam$();
     this.commissionRate$ = params$.pipe(map((params) => Number(params.commission_rate) * 100));

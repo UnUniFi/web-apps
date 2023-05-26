@@ -114,4 +114,11 @@ export class CreateComponent implements OnInit {
       depositSymbol: this.deposit.symbol,
     });
   }
+
+  isEmpty(obj: any): boolean {
+    if (!obj) {
+      return true;
+    }
+    return Object.keys(obj).length === 0;
+  }
 }

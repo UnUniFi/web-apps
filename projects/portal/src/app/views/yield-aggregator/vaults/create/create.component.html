@@ -73,12 +73,19 @@
               [(ngModel)]="selectedSymbol"
               name="symbol"
               (change)="onChangeSymbol()"
+              [disabled]="isEmpty(symbolBalancesMap)"
             >
-              <option [value]="undefined" disabled>Select a asset's symbol</option>
+              <option [value]="undefined" disabled>
+                <span *ngIf="isEmpty(symbolBalancesMap)">No token exists in your balance!</span>
+                <span *ngIf="!isEmpty(symbolBalancesMap)">Select a asset's symbol</span>
+              </option>
               <ng-container *ngFor="let balance of symbolBalancesMap | keyvalue">
                 <option [value]="balance.key">{{ balance.key }}</option>
               </ng-container>
             </select>
+            <label class="label" *ngIf="isEmpty(symbolBalancesMap)">
+              <span class="label-text-alt text-error">No token exists in your balance</span>
+            </label>
           </div>
           <div class="form-control">
             <label class="label">
@@ -229,6 +236,7 @@
                   class="select select-bordered text-center w-auto sm:w-64"
                   [(ngModel)]="selectedStrategyId"
                   name="strategyId"
+                  [disabled]="!selectedSymbol"
                 >
                   <option [value]="undefined" disabled>
                     <span *ngIf="!selectedSymbol">Select an asset first!</span>

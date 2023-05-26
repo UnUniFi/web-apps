@@ -52,8 +52,8 @@ export class UndelegateFormDialogComponent implements OnInit {
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
     // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['GUU'];
-    this.selectedAmount = { denom: 'GUU', amount: '0' };
+    this.availableDenoms = ['uguu'];
+    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
     this.now.setDate(this.now.getDate() + 14);
     this.estimatedUnbondingData = this.now.toString();

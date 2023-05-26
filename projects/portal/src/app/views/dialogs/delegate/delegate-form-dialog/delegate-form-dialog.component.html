@@ -64,7 +64,7 @@
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ selectedAmount?.denom }}</span>
+          <span>{{ selectedAmount?.denom | coinDenom }}</span>
         </label>
 
         <label class="label">

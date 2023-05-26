@@ -6,6 +6,8 @@
     "start": "ng serve",
     "start:explorer": "ng serve --project explorer",
     "start:portal": "ng serve --project portal",
+    "start:explorer:https": "ng serve --project explorer --ssl",
+    "start:portal:https": "ng serve --project portal --ssl",
     "start:landing-page": "rm -r dist ; mkdir dist && cp -r projects/landing-page-html dist/landing-page && firebase emulators:start --only hosting:ununifi-alpha-test ",
     "start:all": "npm run build:all && firebase emulators:start --only hosting:ununifi-alpha-test",
     "start:all:prod": "npm run build:all:prod && firebase emulators:start --only hosting:ununifi-alpha-test",

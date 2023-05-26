@@ -70,6 +70,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ng-playgound:build",
+            "sslKey": "./ssl/server.key",
+            "sslCert": "./ssl/server.crt"
+          },
           "configurations": {
             "production": {
               "browserTarget": "explorer:build:production"

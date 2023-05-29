@@ -44,6 +44,7 @@ export class WalletGuard implements CanActivate {
     }
 
     // end
+    this.router.navigate(['']);
     return true;
   }
 }

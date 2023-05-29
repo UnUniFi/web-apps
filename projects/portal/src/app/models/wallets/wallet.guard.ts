@@ -35,16 +35,15 @@ export class WalletGuard implements CanActivate {
       return true;
     }
 
-    // 2nd try
-    await this.walletApplicationService.connectWalletDialog();
-    const currentStoredWallet2: StoredWallet | undefined =
-      await this.walletService.getCurrentStoredWallet();
-    if (currentStoredWallet2) {
-      return true;
-    }
+    // // 2nd try
+    // await this.walletApplicationService.connectWalletDialog();
+    // const currentStoredWallet2: StoredWallet | undefined =
+    //   await this.walletService.getCurrentStoredWallet();
+    // if (currentStoredWallet2) {
+    //   return true;
+    // }
 
     // end
-    this.router.navigate(['']);
-    return true;
+    return false;
   }
 }

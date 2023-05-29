@@ -92,13 +92,13 @@ describe('WalletGuard when wallet is not stored', () => {
     expect(service).toBeTruthy();
   });
 
-  it('returns TRUE and The connect dialog is called 2 times', (done) => {
+  it('reload and The connect dialog is called 1 times', (done) => {
     const { service, mockWalletAppService } = setupUndefinedEnv();
     const route: any = undefined;
     const state: any = undefined;
     service.canActivate(route, state).then((res) => {
-      expect(mockWalletAppService.connectWalletDialog).toHaveBeenCalledTimes(2);
-      expect(res).toBe(true);
+      expect(mockWalletAppService.connectWalletDialog).toHaveBeenCalledTimes(1);
+      expect(res).toBe(false);
       done();
     });
   });

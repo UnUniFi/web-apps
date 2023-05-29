@@ -26,6 +26,7 @@
               required
               #addressNgModelRef="ngModel"
               class="input input-bordered w-full"
+              placeholder="e.g. ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
               [class]="{
                 'input-error': addressNgModelRef.errors && addressNgModelRef.touched
               }"
@@ -39,36 +40,34 @@
             </span>
 
             <ng-container *ngFor="let token of selectedTokens; let i = index">
-              <div class="flex flex-row flex-wrap">
-                <div class="w-full sm:w-auto sm:flex-auto">
-                  <label class="input-group w-full">
-                    <span *ngIf="symbolImageMap && symbolImageMap[token.symbol]">
-                      <div class="mask mask-circle w-8 h-8">
-                        <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
-                      </div>
-                    </span>
-                    <input
-                      #tokenNgModelRef="ngModel"
-                      type="number"
-                      required
-                      placeholder="e.g. 12.123456"
-                      [min]="0"
-                      [max]="symbolBalancesMap?.[token.symbol] || 0"
-                      [step]="1"
-                      pattern="^[0-9]*\.?[0-9]{0,6}$"
-                      [(ngModel)]="token.amount"
-                      name="amount{{ i }}"
-                      class="input input-bordered w-full"
-                      [class]="{
-                        'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
-                      }"
-                    />
-                    <span class="w-36">{{ token.symbol }}</span>
-                    <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
-                      <mat-icon>delete</mat-icon>
-                    </label>
+              <div class="w-full sm:w-auto sm:flex-auto">
+                <label class="input-group w-full">
+                  <span *ngIf="symbolImageMap && symbolImageMap[token.symbol]">
+                    <div class="mask mask-circle w-8 h-8">
+                      <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
+                    </div>
+                  </span>
+                  <input
+                    #tokenNgModelRef="ngModel"
+                    type="number"
+                    required
+                    placeholder="e.g. 12.123456"
+                    [min]="0"
+                    [max]="symbolBalancesMap?.[token.symbol] || 0"
+                    [step]="1"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    [(ngModel)]="token.amount"
+                    name="amount{{ i }}"
+                    class="input input-bordered w-full"
+                    [class]="{
+                      'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
+                    }"
+                  />
+                  <span class="w-36">{{ token.symbol }}</span>
+                  <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
+                    <mat-icon>delete</mat-icon>
                   </label>
-                </div>
+                </label>
               </div>
               <label class="label">
                 <span class="label-text-alt">
@@ -77,31 +76,32 @@
               </label>
             </ng-container>
 
-            <div class="flex flex-row flex-wrap">
-              <label class="input-group mb-2 w-full sm:w-auto">
-                <select
-                  [required]="selectedTokens?.length === 0"
-                  class="select select-bordered text-center w-auto"
-                  [(ngModel)]="selectedSymbol"
-                  name="strategyId"
-                >
-                  <option [value]="undefined" disabled>Select a token</option>
-                  <ng-container *ngFor="let s of balanceSymbols">
-                    <option [value]="s" *ngIf="!isAlreadySelectedSymbol(s)">
-                      {{ s }}
-                    </option>
-                  </ng-container>
-                </select>
-                <button
-                  type="button"
-                  class="btn btn-outline btn-primary"
-                  (click)="onClickAddToken()"
-                  [disabled]="!selectedSymbol"
-                >
-                  <mat-icon>add</mat-icon>
-                </button>
-              </label>
-            </div>
+            <label class="input-group mb-2 w-full sm:w-auto">
+              <select
+                [required]="selectedTokens?.length === 0"
+                class="select select-bordered text-center w-auto"
+                [(ngModel)]="selectedSymbol"
+                name="strategyId"
+              >
+                <option [value]="undefined" disabled>Select a token</option>
+                <ng-container *ngFor="let s of balanceSymbols">
+                  <option [value]="s" *ngIf="!isAlreadySelectedSymbol(s)">
+                    {{ s }}
+                  </option>
+                </ng-container>
+              </select>
+              <button
+                type="button"
+                class="btn btn-outline btn-primary"
+                (click)="onClickAddToken()"
+                [disabled]="!selectedSymbol"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </label>
+            <label class="label" *ngIf="selectedSymbol">
+              <span class="label-text-alt text-warning">Click + and enter the amount to send!</span>
+            </label>
           </div>
           <div class="card-actions justify-end mt-4">
             <button

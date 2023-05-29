@@ -1,9 +1,10 @@
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { cosmos } from '@cosmos-client/core/esm/proto';
 import { combineLatest, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -15,10 +16,13 @@ export class StrategiesComponent implements OnInit {
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
   symbol$: Observable<string | null | undefined>;
+  availableSymbols$: Observable<string[]>;
+  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbolImage$: Observable<string | null>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
@@ -27,23 +31,52 @@ export class StrategiesComponent implements OnInit {
     this.ibcDenom$ = this.route.params.pipe(
       map((params) => (params.ibc_denom ? 'ibc/' + params.ibc_denom : '')),
     );
+    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
       map(([denom, ibcDenom, denomMetadataMap]) =>
-        ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
+        ibcDenom == ''
+          ? denomMetadataMap[denom] && denomMetadataMap[denom].symbol
+          : denomMetadataMap[ibcDenom] && denomMetadataMap[ibcDenom].symbol,
       ),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
     );
-    this.strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
-      mergeMap(([denom, ibcDenom]) =>
-        ibcDenom == ''
-          ? this.iyaQuery.listStrategies$(denom)
-          : this.iyaQuery.listStrategies$(ibcDenom),
-      ),
+    const allStrategies$ = this.iyaQuery.listStrategies$('');
+    this.availableSymbols$ = combineLatest([allStrategies$, denomMetadataMap$]).pipe(
+      map(([allStrategies, denomMetadataMap]) => {
+        const symbols = allStrategies
+          .map((strategy) => {
+            const denomMetadata = denomMetadataMap[strategy.denom || ''];
+            if (denomMetadata) {
+              return denomMetadata.symbol;
+            } else {
+              return undefined;
+            }
+          })
+          .filter((symbol): symbol is string => typeof symbol == 'string');
+        return [...new Set(symbols)];
+      }),
+    );
+    this.strategies$ = combineLatest([allStrategies$, this.denom$, this.ibcDenom$]).pipe(
+      map(([strategies, denom, ibcDenom]) => {
+        if (ibcDenom == '') {
+          if (denom) {
+            return strategies.filter((strategy) => strategy.denom == denom);
+          } else {
+            return strategies;
+          }
+        } else {
+          return strategies.filter((strategy) => strategy.denom == ibcDenom);
+        }
+      }),
     );
   }
 
   ngOnInit(): void {}
+
+  onChangeDenom(denom: string): void {
+    this.router.navigate(['/yield-aggregator/strategies/' + denom]);
+  }
 }

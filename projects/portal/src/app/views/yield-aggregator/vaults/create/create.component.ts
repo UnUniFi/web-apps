@@ -14,6 +14,8 @@ export class CreateComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
+  availableSymbols?: string[] | null;
+  @Input()
   selectedSymbol?: string | null;
   @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
@@ -73,7 +75,6 @@ export class CreateComponent implements OnInit {
       return;
     }
     const denom = this.symbolMetadataMap?.[this.selectedSymbol].base;
-    console.log(denom);
     if (denom) {
       this.changeDenom.emit(denom);
     }
@@ -113,12 +114,5 @@ export class CreateComponent implements OnInit {
       depositAmount: this.deposit.amount,
       depositSymbol: this.deposit.symbol,
     });
-  }
-
-  isEmpty(obj: any): boolean {
-    if (!obj) {
-      return true;
-    }
-    return Object.keys(obj).length === 0;
   }
 }

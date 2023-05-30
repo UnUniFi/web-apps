@@ -125,6 +125,8 @@ export class TxsComponent implements OnInit {
         if (modifiedPageOffset <= 0 || modifiedPageSize <= 0) {
           return [];
         }
+        const pageNumber = paginationInfo.pageNumber.toString();
+        const limit = paginationInfo.pageSize.toString();
 
         return cosmosclient.rest.tx
           .getTxsEvent(
@@ -133,7 +135,11 @@ export class TxsComponent implements OnInit {
             undefined,
             modifiedPageOffset,
             temporaryWorkaroundPageSize,
-            true,
+            false,
+            // true, // reverse not working
+            // undefined,
+            // pageNumber,
+            // limit,
           )
           .then((res) => res.data.tx_responses)
           .catch((error) => {

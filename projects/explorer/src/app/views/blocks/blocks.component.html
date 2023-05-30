@@ -6,16 +6,31 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <!-- To Do Pagination Change  -->
-    <mat-paginator
-      class="mb-4 rounded-lg"
-      [length]="pageLength"
-      [pageSize]="pageSize"
-      [pageIndex]="pageNumber ? pageNumber - 1 : 0"
-      [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-      (page)="onPaginationChange($event)"
-    >
-    </mat-paginator>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Items per page</span>
+      </label>
+      <label class="input-group">
+        <select
+          class="select select-bordered select-primary w-20 sm:w-64"
+          [(ngModel)]="pageSize"
+          (change)="onPaginationChange()"
+        >
+          <option disabled selected>Select items amount</option>
+          <ng-container *ngFor="let size of pageSizeOptions">
+            <option [value]="size">{{ size }}</option>
+          </ng-container>
+        </select>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
+        <button class="btn btn-primary">Page {{ pageNumber || 1 }}</button>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+      </label>
+      <label class="label">
+        <span class="label-text-alt"
+          >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of {{ pageLength }}items</span
+        >
+      </label>
+    </div>
   </div>
   <ng-container *ngIf="blocks === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
@@ -61,7 +76,7 @@
                     {{ block?.block?.header?.proposer_address }}
                   </td>
                   <td>{{ block?.block?.data?.txs?.length }}</td>
-                  <td>{{ block?.block?.header?.time | date: 'yy/MM/dd hh:mm' }}</td>
+                  <td>{{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}</td>
                 </tr>
               </ng-container>
               <ng-template #empty>

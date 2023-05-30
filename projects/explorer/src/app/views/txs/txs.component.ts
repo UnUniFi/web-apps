@@ -11,8 +11,7 @@ import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openap
 export class TxsComponent implements OnInit {
   @Input()
   txs?: BroadcastTx200ResponseTxResponse[] | null;
-  @Input()
-  txTypeOptions?: string[] | null;
+  txTypeOptions: string[];
   @Input()
   selectedTxType?: string | null;
 
@@ -32,6 +31,7 @@ export class TxsComponent implements OnInit {
 
   constructor() {
     this.paginationChange = new EventEmitter();
+    this.txTypeOptions = ['bank', 'distribution', 'gov', 'ibc', 'staking'];
   }
 
   ngOnInit(): void {}

@@ -25,7 +25,7 @@ import {
   StakingDelegatorValidators200Response as DelegatorValidatorsResponse,
   StakingDelegatorValidators200ResponseValidatorsInner as Validators,
   UnbondingDelegation200Response as UnboundingDelegationResponse,
-  AccountsAreTheExistingAccountsInner as Accounts,
+  AccountInfo200ResponseInfoPubKey as Accounts,
   QueryTotalSupplyResponseIsTheResponseTypeForTheQueryTotalSupplyRPCMethod as TotalSupplyResponse,
   QueryValidatorCommissionResponseIsTheResponseTypeForTheQueryValidatorCommissionRPCMethod as ValidatorCommissionResponse,
 } from '@cosmos-client/core/esm/openapi';

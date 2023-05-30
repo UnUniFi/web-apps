@@ -48,3 +48,6 @@ Thumbs.db
 # firebase
 .firebase/*
 *.log
+ssl/server.key
+ssl/server.crt
+ssl/server.csr

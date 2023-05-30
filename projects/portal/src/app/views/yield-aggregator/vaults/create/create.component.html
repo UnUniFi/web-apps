@@ -73,10 +73,18 @@
               [(ngModel)]="selectedSymbol"
               name="symbol"
               (change)="onChangeSymbol()"
+              [disabled]="!availableSymbols?.length"
             >
-              <option [value]="undefined" disabled>Select a asset's symbol</option>
-              <ng-container *ngFor="let balance of symbolBalancesMap | keyvalue">
-                <option [value]="balance.key">{{ balance.key }}</option>
+              <option [value]="undefined" disabled>
+                <span *ngIf="!availableSymbols || !availableSymbols.length"
+                  >No Strategy on the chain</span
+                >
+                <span *ngIf="availableSymbols && availableSymbols.length"
+                  >Select a asset's symbol</span
+                >
+              </option>
+              <ng-container *ngFor="let symbol of availableSymbols">
+                <option [value]="symbol">{{ symbol }}</option>
               </ng-container>
             </select>
           </div>
@@ -185,6 +193,12 @@
                     To create a new Vault, one or more strategies must be combined. It should be set
                     up so that the total weighting is 100%.
                   </p>
+                  <p>
+                    For more information of all strategies, visit
+                    <a href="/portal/yield-aggregator/strategies" target="_blank">
+                      <u class="text-info">Strategies Page</u> </a
+                    >.
+                  </p>
                   <div class="modal-action">
                     <label for="modal-strategy" class="btn">Understood</label>
                   </div>
@@ -222,47 +236,39 @@
               </div>
             </ng-container>
 
-            <div class="flex flex-row flex-wrap">
-              <label class="input-group mb-2 w-full sm:w-auto">
-                <select
-                  [required]="selectedStrategies.length === 0"
-                  class="select select-bordered text-center w-auto sm:w-64"
-                  [(ngModel)]="selectedStrategyId"
-                  name="strategyId"
-                >
-                  <option [value]="undefined" disabled>
-                    <span *ngIf="!selectedSymbol">Select an asset first!</span>
-                    <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
-                    <span *ngIf="selectedSymbol && !strategies?.length"
-                      >No strategy for {{ selectedSymbol }}</span
-                    >
-                  </option>
-                  <ng-container *ngFor="let s of strategies">
-                    <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
-                      {{ s.name | uppercase }}
-                    </option>
-                  </ng-container>
-                </select>
-                <button
-                  type="button"
-                  class="btn btn-outline btn-primary"
-                  (click)="onClickAddStrategy()"
-                  [disabled]="!selectedStrategyId"
-                >
-                  <mat-icon>add</mat-icon>
-                </button>
-              </label>
-              <span class="flex-auto"></span>
-              <button
-                type="button"
-                class="btn btn-outline btn-info w-full sm:w-auto mb-2"
+            <label class="input-group mb-2 w-full sm:w-auto">
+              <select
+                [required]="selectedStrategies.length === 0"
+                class="select select-bordered text-center w-auto sm:w-64"
+                [(ngModel)]="selectedStrategyId"
+                name="strategyId"
                 [disabled]="!selectedSymbol"
               >
-                <a href="/portal/yield-aggregator/strategies/{{ denom }}" target="_blank">
-                  View Strategies
-                </a>
+                <option [value]="undefined" disabled>
+                  <span *ngIf="!selectedSymbol">Select an asset first!</span>
+                  <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
+                  <span *ngIf="selectedSymbol && !strategies?.length"
+                    >No strategy for {{ selectedSymbol }}</span
+                  >
+                </option>
+                <ng-container *ngFor="let s of strategies">
+                  <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
+                    {{ s.name | uppercase }}
+                  </option>
+                </ng-container>
+              </select>
+              <button
+                type="button"
+                class="btn btn-outline btn-primary"
+                (click)="onClickAddStrategy()"
+                [disabled]="!selectedStrategyId"
+              >
+                <mat-icon>add</mat-icon>
               </button>
-            </div>
+            </label>
+            <label class="label" *ngIf="selectedStrategyId">
+              <span class="label-text-alt text-warning">Click + to add a strategy!</span>
+            </label>
           </div>
 
           <div class="form-control">
@@ -297,6 +303,12 @@
               />
               <span>{{ deposit?.symbol }}</span>
             </label>
+            <label class="label">
+              <span class="label-text-alt">Available balance:</span>
+              <span class="label-text-alt">
+                {{ symbolBalancesMap?.[deposit?.symbol|| ''] || 0 }} {{ deposit?.symbol }}
+              </span>
+            </label>
           </div>
           <div class="form-control">
             <span class="label">
@@ -327,6 +339,12 @@
                 class="input input-bordered w-full"
               />
               <span>{{ fee?.symbol }}</span>
+            </label>
+            <label class="label">
+              <span class="label-text-alt">Available balance:</span>
+              <span class="label-text-alt">
+                {{ symbolBalancesMap?.[fee?.symbol|| ''] || 0 }} {{ fee?.symbol }}
+              </span>
             </label>
           </div>
 

@@ -1,3 +1,4 @@
+import { WalletGuard } from '../../models/wallets/wallet.guard';
 import { BorrowComponent } from './borrowers/borrower-nfts/borrower-nft/borrow/borrow.component';
 import { BorrowerNftComponent } from './borrowers/borrower-nfts/borrower-nft/borrower-nft.component';
 import { ListComponent } from './borrowers/borrower-nfts/borrower-nft/list/list.component';
@@ -30,18 +31,22 @@ const routes: Routes = [
   {
     path: 'nfts/:class_id/:nft_id/list',
     component: ListComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'nfts/:class_id/:nft_id/borrow',
     component: BorrowComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'nfts/:class_id/:nft_id/repay',
     component: RepayComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'nfts/:class_id/:nft_id/place-bid',
     component: PlaceBidComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'lenders',
@@ -50,6 +55,7 @@ const routes: Routes = [
   {
     path: 'lenders/lender',
     component: LenderComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'lenders/nfts/:class_id/:nft_id',
@@ -58,6 +64,7 @@ const routes: Routes = [
   {
     path: 'lenders/nfts/:class_id/:nft_id/place-bid',
     component: PlaceBidComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'borrowers',
@@ -66,6 +73,7 @@ const routes: Routes = [
   {
     path: 'borrowers/borrower',
     component: BorrowerComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'borrowers/nfts/:class_id/:nft_id',
@@ -74,14 +82,17 @@ const routes: Routes = [
   {
     path: 'borrowers/nfts/:class_id/:nft_id/list',
     component: ListComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'borrowers/nfts/:class_id/:nft_id/borrow',
     component: BorrowComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'borrowers/nfts/:class_id/:nft_id/repay',
     component: RepayComponent,
+    canActivate: [WalletGuard],
   },
 ];
 

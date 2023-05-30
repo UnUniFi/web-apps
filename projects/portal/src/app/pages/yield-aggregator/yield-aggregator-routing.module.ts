@@ -1,3 +1,4 @@
+import { WalletGuard } from '../../models/wallets/wallet.guard';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
   {
     path: 'vaults/create',
     component: CreateComponent,
+    canActivate: [WalletGuard],
   },
   {
     path: 'vaults/owner/:address',
@@ -28,6 +30,10 @@ const routes: Routes = [
   {
     path: 'vaults/:vault_id',
     component: VaultComponent,
+  },
+  {
+    path: 'strategies',
+    component: StrategiesComponent,
   },
   {
     path: 'strategies/ibc/:ibc_denom',

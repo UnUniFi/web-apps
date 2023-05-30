@@ -69,9 +69,7 @@ export class TxsComponent implements OnInit {
             undefined,
             true,
           )
-          .then((res) =>
-            res.data.pagination?.total ? BigInt(res.data.pagination?.total) : BigInt(0),
-          )
+          .then((res: any) => (res.data.total ? BigInt(res.data.total) : BigInt(0)))
           .catch((error) => {
             console.error(error);
             return BigInt(0);

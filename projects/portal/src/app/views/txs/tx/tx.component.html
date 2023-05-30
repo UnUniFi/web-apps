@@ -40,6 +40,14 @@
           {{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}
         </a>
       </li>
+      <li class="disabled divider"></li>
+      <li class="disabled">
+        <a class="text-base-content sm:text-base">
+          Raw Log:
+          <span class="flex-auto"></span>
+          {{ tx?.tx_response?.raw_log }}
+        </a>
+      </li>
     </ul>
   </div>
 </div>

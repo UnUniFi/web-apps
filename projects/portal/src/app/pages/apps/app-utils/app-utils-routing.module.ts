@@ -39,16 +39,6 @@ const routes: Routes = [
     loadChildren: () => import('../../faucet/faucet.module').then((m) => m.AppFaucetModule),
   },
   {
-    path: 'mint',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../mint/mint.module').then((m) => m.AppMintModule),
-  },
-  {
-    path: 'auction',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../auction/auction.module').then((m) => m.AppAuctionModule),
-  },
-  {
     path: 'staking',
     component: AppUtilsComponent,
     loadChildren: () => import('../../staking/staking.module').then((m) => m.AppStakingModule),

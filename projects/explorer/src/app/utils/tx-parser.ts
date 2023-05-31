@@ -1,7 +1,7 @@
 import { txTitle } from './../models/cosmos/tx-common.model';
 import cosmosclient from '@cosmos-client/core';
 import {
-  AccountsAreTheExistingAccountsInner,
+  AccountInfo200ResponseInfoPubKey,
   CosmosTxV1beta1Tx,
 } from '@cosmos-client/core/esm/openapi/api';
 
@@ -10,7 +10,7 @@ export const txParseMsgs = (tx: CosmosTxV1beta1Tx): txTitle[] | undefined => {
 };
 
 export const txParseProposalContent = (
-  message: AccountsAreTheExistingAccountsInner,
+  message: AccountInfo200ResponseInfoPubKey,
 ): cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined => {
   const content = cosmosclient.codec.protoJSONToInstance(
     cosmosclient.codec.castProtoJSONOfProtoAny(message),
@@ -22,7 +22,7 @@ export const txParseProposalContent = (
   }
 };
 
-export const txParseMsg = (message: AccountsAreTheExistingAccountsInner): txTitle => {
+export const txParseMsg = (message: AccountInfo200ResponseInfoPubKey): txTitle => {
   const instance = cosmosclient.codec.protoJSONToInstance(
     cosmosclient.codec.castProtoJSONOfProtoAny(message),
   );

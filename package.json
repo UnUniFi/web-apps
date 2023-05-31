@@ -54,7 +54,7 @@
     "@angular/platform-browser-dynamic": "~14.0.4",
     "@angular/router": "~14.0.4",
     "@apollo/client": "^3.0.0",
-    "@cosmos-client/core": "0.46.1",
+    "@cosmos-client/core": "0.47.1-rc1",
     "@metamask/detect-provider": "^1.2.0",
     "@ngneat/tailwind": "^7.0.3",
     "angular-google-charts": "^2.2.3",
@@ -78,7 +78,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tslib": "^2.3.0",
-    "ununifi-client": "^0.47.1-rc1",
+    "ununifi-client": "^0.47.1-rc3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

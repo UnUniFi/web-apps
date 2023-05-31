@@ -59,6 +59,7 @@ export class TxsComponent implements OnInit {
             undefined,
             undefined,
             undefined,
+            false,
             true,
           )
           .then((res) => res.data.tx_responses)

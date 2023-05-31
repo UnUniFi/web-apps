@@ -58,7 +58,7 @@ export class TxsComponent implements OnInit {
       map((txType) => txType),
     );
 
-    this.txsTotalCount$ = combineLatest([sdk$, this.selectedTxTypeChanged$]).pipe(
+    const txsResponse$ = combineLatest([sdk$, this.selectedTxTypeChanged$]).pipe(
       switchMap(([sdk, selectedTxType]) => {
         return cosmosclient.rest.tx
           .getTxsEvent(
@@ -69,12 +69,18 @@ export class TxsComponent implements OnInit {
             undefined,
             true,
           )
-          .then((res: any) => (res.data.total ? BigInt(res.data.total) : BigInt(0)))
+          .then((res) => {
+            return res.data;
+          })
           .catch((error) => {
             console.error(error);
-            return BigInt(0);
+            return undefined;
           });
       }),
+    );
+
+    this.txsTotalCount$ = txsResponse$.pipe(
+      map((txs) => (txs?.total ? BigInt(txs.total) : BigInt(0))),
     );
 
     this.pageLength$ = this.txsTotalCount$.pipe(
@@ -104,44 +110,16 @@ export class TxsComponent implements OnInit {
       map((paginationInfo) => paginationInfo),
     );
 
-    this.txs$ = this.paginationInfoChanged$.pipe(
-      withLatestFrom(sdk$, this.selectedTxType$, this.txsTotalCount$),
-      mergeMap(([paginationInfo, sdk, selectedTxType, txsTotalCount]) => {
-        const pageOffset =
-          txsTotalCount - BigInt(paginationInfo.pageSize) * BigInt(paginationInfo.pageNumber);
-        const modifiedPageOffset = pageOffset < 1 ? BigInt(1) : pageOffset;
-        const modifiedPageSize =
-          pageOffset < 1
-            ? pageOffset + BigInt(paginationInfo.pageSize)
-            : BigInt(paginationInfo.pageSize);
-        // Note: This is strange. This is temporary workaround way.
-        const temporaryWorkaroundPageSize =
-          txsTotalCount === BigInt(1) &&
-          modifiedPageOffset === BigInt(1) &&
-          modifiedPageSize === BigInt(1)
-            ? modifiedPageSize + BigInt(1)
-            : modifiedPageSize;
-
-        if (modifiedPageOffset <= 0 || modifiedPageSize <= 0) {
-          return [];
-        }
-
-        return cosmosclient.rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`message.module='${selectedTxType}'`],
-            undefined,
-            modifiedPageOffset,
-            temporaryWorkaroundPageSize,
-            true,
-          )
-          .then((res) => res.data.tx_responses)
-          .catch((error) => {
-            console.error(error);
-            return [];
-          });
-      }),
-      map((latestTxs) => latestTxs?.reverse()),
+    this.txs$ = combineLatest([txsResponse$, this.paginationInfoChanged$]).pipe(
+      map(([txsResponse, paginationInfo]) =>
+        txsResponse?.tx_responses
+          ? this.getPaginatedTxs(
+              txsResponse.tx_responses,
+              paginationInfo.pageNumber,
+              paginationInfo.pageSize,
+            )
+          : undefined,
+      ),
     );
   }
 
@@ -166,5 +144,15 @@ export class TxsComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  getPaginatedTxs(
+    txs: BroadcastTx200ResponseTxResponse[],
+    pageNumber: number,
+    pageSize: number,
+  ): BroadcastTx200ResponseTxResponse[] {
+    const max = txs.length - (pageNumber - 1) * pageSize;
+    const min = max - pageSize;
+    return txs.filter((_, i) => min <= i && i < max).reverse();
   }
 }

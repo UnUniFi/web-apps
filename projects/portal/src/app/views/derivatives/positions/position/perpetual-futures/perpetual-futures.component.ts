@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import {
-  AllPositions200ResponsePositionsInner,
+  AddressPositions200ResponsePositionsInner,
   MarketAll200ResponseMarketsInner,
   Price200ResponsePrice,
 } from 'ununifi-client/esm/openapi';
@@ -14,7 +14,7 @@ import {
 })
 export class PerpetualFuturesComponent implements OnInit {
   @Input()
-  position?: AllPositions200ResponsePositionsInner | null;
+  position?: AddressPositions200ResponsePositionsInner | null;
 
   @Input()
   positionInstance?: ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | null;

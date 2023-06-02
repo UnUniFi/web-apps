@@ -2,13 +2,13 @@ import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Nft, Nfts } from './nft-pawnshop.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
   BidderBids200ResponseBidsInner,
-  CdpAll200ResponseCdpInnerCdpCollateral,
   Liquidation200ResponseLiquidations,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
@@ -107,7 +107,7 @@ export class NftPawnshopQueryService {
     );
   }
 
-  listRewards$(address: string): Observable<CdpAll200ResponseCdpInnerCdpCollateral[]> {
+  listRewards$(address: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftmarket.rewards(sdk, address)),
       map((res) => res.data.rewards!),

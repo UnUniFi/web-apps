@@ -22,9 +22,6 @@ export class ProposalsComponent implements OnInit {
   @Input() tallies?:
     | { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
     | null;
-  @Input() proposalContents?:
-    | (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]
-    | null;
   @Input() pageSizeOptions?: number[] | null;
   @Input() pageSize?: number | null;
   @Input() pageNumber?: number | null;
@@ -39,16 +36,42 @@ export class ProposalsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onPaginationChange(pageEvent: PageEvent): void {
-    this.paginationChange.emit(pageEvent);
+  onPaginationChange($event?: number): void {
+    if (!this.pageNumber || !this.pageSize || !this.pageLength) {
+      return;
+    }
+    if ($event == 1) {
+      this.pageNumber -= 1;
+    } else if ($event == 2) {
+      this.pageNumber += 1;
+    }
+    if (this.pageNumber < 1) {
+      alert('This is the first page!');
+      this.pageNumber = 1;
+      return;
+    }
+    this.paginationChange.emit({
+      pageIndex: this.pageNumber - 1,
+      pageSize: this.pageSize,
+      length: this.pageLength,
+    });
   }
 
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch (error) {
-      console.error(error);
-      return value as ProposalContent;
+  calcItemsIndex(): { start: number; end: number } {
+    if (!this.pageNumber || !this.pageSize) {
+      return { start: 0, end: 0 };
+    } else {
+      const start = (this.pageNumber - 1) * this.pageSize + 1;
+      const end = this.pageNumber * this.pageSize;
+      return { start, end };
+    }
+  }
+
+  getProposalTitle(proposal: Proposals200ResponseProposalsInner): string {
+    if (proposal.content) {
+      return (proposal.content as any).title;
+    } else {
+      return '';
     }
   }
 

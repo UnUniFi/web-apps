@@ -5,7 +5,7 @@
 <ng-template #loaded>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <div class="flex">
+      <div class="flex flex-wrap">
         <h2 class="card-title">Validators</h2>
         <span class="flex-auto"></span>
         <div class="btn-group">
@@ -43,13 +43,13 @@
                   {{ validator.val.description?.moniker }}
                 </td>
                 <td>
-                  {{ validator.share | percent: '1.2-2' }}
+                  {{ validator.share | percent : '1.2-2' }}
                 </td>
                 <td>
                   {{ validator.val.tokens | unitConversion }}
                 </td>
                 <td>
-                  {{ validator.val.commission?.commission_rates?.rate | percent: '1.0-0' }}
+                  {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
                 </td>
               </tr>
             </ng-container>

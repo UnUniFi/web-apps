@@ -13,12 +13,24 @@
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
         <h2 class="card-title break-all">
-          # {{ proposal?.proposal_id }} {{ unpackContent(proposal?.content).title }}
+          # {{ proposal?.proposal_id }} {{ proposalContent?.title }}
           <span class="badge badge-info">
             {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
           </span>
         </h2>
-        <p style="white-space: pre-wrap">{{ unpackContent(proposal?.content).description }}</p>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr *ngFor="let content of proposalContent | keyvalue">
+                <th>{{ content.key }}</th>
+                <td>
+                  {{ jsonToSting(content.value) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>

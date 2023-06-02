@@ -36,8 +36,35 @@ export class BlocksComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onPaginationChange(pageEvent: PageEvent): void {
-    this.paginationChange.emit(pageEvent);
+  onPaginationChange($event?: number): void {
+    if (!this.pageNumber || !this.pageSize || !this.pageLength) {
+      return;
+    }
+    if ($event == 1) {
+      this.pageNumber -= 1;
+    } else if ($event == 2) {
+      this.pageNumber += 1;
+    }
+    if (this.pageNumber < 1) {
+      alert('This is the first page!');
+      this.pageNumber = 1;
+      return;
+    }
+    this.paginationChange.emit({
+      pageIndex: this.pageNumber - 1,
+      pageSize: this.pageSize,
+      length: this.pageLength,
+    });
+  }
+
+  calcItemsIndex(): { start: number; end: number } {
+    if (!this.pageNumber || !this.pageSize) {
+      return { start: 0, end: 0 };
+    } else {
+      const start = (this.pageNumber - 1) * this.pageSize + 1;
+      const end = this.pageNumber * this.pageSize;
+      return { start, end };
+    }
   }
 
   onCheckBoxAutoChange(checked: boolean) {

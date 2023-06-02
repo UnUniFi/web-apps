@@ -6,16 +6,31 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <!-- To Do Pagination Change  -->
-    <mat-paginator
-      class="mb-4 rounded-lg"
-      [length]="pageLength"
-      [pageSize]="pageSize"
-      [pageIndex]="pageNumber ? pageNumber - 1 : 0"
-      [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-      (page)="onPaginationChange($event)"
-    >
-    </mat-paginator>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Items per page</span>
+      </label>
+      <label class="input-group">
+        <select
+          class="select select-bordered select-primary w-20 sm:w-64"
+          [(ngModel)]="pageSize"
+          (change)="onPaginationChange()"
+        >
+          <option disabled selected>Select items amount</option>
+          <ng-container *ngFor="let size of pageSizeOptions">
+            <option [value]="size">{{ size }}</option>
+          </ng-container>
+        </select>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
+        <button class="btn btn-primary">Page {{ pageNumber || 1 }}</button>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+      </label>
+      <label class="label">
+        <span class="label-text-alt"
+          >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of {{ pageLength }}items</span
+        >
+      </label>
+    </div>
   </div>
 
   <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
@@ -34,7 +49,7 @@
             {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
           </span>
           <h2 class="card-title break-all">
-            #{{ proposal.proposal_id }} {{ unpackContent(proposal?.content).title }}
+            #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
           </h2>
           <div class="divider m-0">Tallies</div>
           <div class="grid gap-3">

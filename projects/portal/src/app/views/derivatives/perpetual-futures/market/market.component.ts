@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import ununificlient from 'ununifi-client';
-import { AllPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
+import { AddressPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
 
 declare const TradingView: any;
 
@@ -49,7 +49,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   price?: number | null;
   // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
   @Input()
-  positions?: AllPositions200ResponsePositionsInner[] | null;
+  positions?: AddressPositions200ResponsePositionsInner[] | null;
   @Input()
   positionInstances?:
     | (ununificlient.proto.ununifi.derivatives.PerpetualFuturesPositionInstance | undefined)[]

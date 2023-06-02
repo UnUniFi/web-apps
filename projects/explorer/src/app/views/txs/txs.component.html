@@ -6,32 +6,47 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <div class="form-control">
-      <select
-        class="select select-bordered text-center w-auto sm:w-64"
-        name="txType"
-        [(ngModel)]="selectedTxType"
-        (change)="onSelectedTxTypeChanged(selectedTxType!)"
-      >
-        <option [value]="undefined" disabled>
-          <span>Select Tx type</span>
-        </option>
-        <ng-container *ngFor="let txType of txTypeOptions">
-          <option [value]="txType">
-            {{ txType }}
+    <div class="form-control overflow-x-auto">
+      <label class="label">
+        <span class="label-text">Tx Type & Items per page</span>
+      </label>
+      <label class="input-group">
+        <select
+          class="select select-bordered select-primary text-center w-auto sm:w-64"
+          name="txType"
+          [(ngModel)]="selectedTxType"
+          (change)="onSelectedTxTypeChanged(selectedTxType!)"
+        >
+          <option [value]="undefined" disabled>
+            <span>Select Tx type</span>
           </option>
-        </ng-container>
-      </select>
+          <ng-container *ngFor="let txType of txTypeOptions">
+            <option [value]="txType">
+              {{ txType }}
+            </option>
+          </ng-container>
+        </select>
+        <select
+          class="select select-bordered select-primary w-20"
+          name="pageSize"
+          [(ngModel)]="pageInfo && pageInfo.pageSize"
+          (change)="onPaginationChange()"
+        >
+          <option disabled selected>Select items amount</option>
+          <ng-container *ngFor="let size of pageSizeOptions">
+            <option [value]="size">{{ size }}</option>
+          </ng-container>
+        </select>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
+        <button class="btn btn-primary">Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}</button>
+        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+      </label>
+      <label class="label">
+        <span class="label-text-alt"
+          >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of {{ pageLength }}items</span
+        >
+      </label>
     </div>
-    <!-- To Do update cosmos-client & enable pagination  -->
-    <!-- <mat-paginator
-      [length]="pageLength"
-      [pageSize]="pageInfo ? pageInfo.pageSize : 5"
-      [pageIndex]="pageInfo ? pageInfo.pageNumber - 1 : 0"
-      [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
-      (page)="onPaginationChange($event)"
-    >
-    </mat-paginator> -->
   </div>
   <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>

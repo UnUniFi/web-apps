@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-incentive',
@@ -12,7 +12,7 @@ export class IncentiveComponent implements OnInit {
   @Input()
   unitIds?: string[] | null;
   @Input()
-  rewards?: CdpAll200ResponseCdpInnerCdpCollateral[] | null;
+  rewards?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Output()
   appClickCreate: EventEmitter<string>;
   @Output()

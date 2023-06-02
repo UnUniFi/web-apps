@@ -10,7 +10,6 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { WithdrawAllRewardsOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.component';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { CdpAll200ResponseCdpInnerCdpCollateral } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-withdraw-incentive-all-rewards-form-dialog',
@@ -23,7 +22,7 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  rewards$: Observable<CdpAll200ResponseCdpInnerCdpCollateral[]>;
+  rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     @Inject(DIALOG_DATA)

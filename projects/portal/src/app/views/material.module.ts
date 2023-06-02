@@ -1,8 +1,3 @@
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -65,9 +60,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonToggleModule,
     MatGridListModule,
     MatChipsModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxMatTimepickerModule,
   ],
 })
 export class MaterialModule {}

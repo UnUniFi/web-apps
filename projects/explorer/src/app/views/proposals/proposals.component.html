@@ -49,7 +49,7 @@
             {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
           </span>
           <h2 class="card-title break-all">
-            #{{ proposal.proposal_id }} {{ unpackContent(proposal?.content).title }}
+            #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
           </h2>
           <div class="divider m-0">Tallies</div>
           <div class="grid gap-3">

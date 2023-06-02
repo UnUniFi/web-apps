@@ -24,7 +24,7 @@ import { map } from 'rxjs/operators';
 export class ProposalComponent implements OnInit {
   proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
   proposalType$: Observable<string | undefined>;
-  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
+  proposalContent$: Observable<any | undefined>;
   deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
   depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
   tally$: Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined>;
@@ -45,7 +45,8 @@ export class ProposalComponent implements OnInit {
     this.deposits$ = this.usecase.deposits$(proposalID$);
     this.depositParams$ = this.usecase.depositsParams$;
     this.tally$ = this.usecase.tally$(proposalID$);
-    this.proposalContent$ = this.usecase.proposalContent$(this.proposal$);
+    // todo set type proposal content
+    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
     this.tallyParams$ = this.usecase.tallyParams$;
     this.votes$ = this.usecase.votes$(proposalID$);
     this.votingParams$ = this.usecase.votingParams$;

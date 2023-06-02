@@ -11,7 +11,6 @@ import {
   GovParams200ResponseVotingParams,
 } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -23,7 +22,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 export class ProposalComponent implements OnInit {
   proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
   proposalType$: Observable<string | undefined>;
-  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
+  proposalContent$: Observable<any | undefined>;
   deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
   depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
   tally$: Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined>;
@@ -52,9 +51,8 @@ export class ProposalComponent implements OnInit {
       }),
     );
 
-    this.proposalContent$ = this.proposal$.pipe(
-      map((proposal) => txParseProposalContent(proposal?.content!)),
-    );
+    // todo set type proposal content
+    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
 
     this.deposits$ = combined$.pipe(
       mergeMap(([sdk, address]) => cosmosclient.rest.gov.deposits(sdk.rest, address)),

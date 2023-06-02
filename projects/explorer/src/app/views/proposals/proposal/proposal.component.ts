@@ -36,19 +36,16 @@ export class ProposalComponent implements OnInit {
   @Input()
   proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
+  voteDetailEnabled = false;
+
   constructor() {}
 
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch (error) {
-      console.error(error);
-      return value as ProposalContent;
+  jsonToSting(value: any) {
+    if (typeof value === 'string') {
+      return value;
+    } else {
+      return JSON.stringify(value);
     }
-  }
-
-  toNumber(str: string) {
-    return Number(str);
   }
 
   ngOnInit(): void {}

@@ -22,9 +22,6 @@ export class ProposalsComponent implements OnInit {
   @Input() tallies?:
     | { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
     | null;
-  @Input() proposalContents?:
-    | (cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]
-    | null;
   @Input() pageSizeOptions?: number[] | null;
   @Input() pageSize?: number | null;
   @Input() pageNumber?: number | null;
@@ -70,12 +67,11 @@ export class ProposalsComponent implements OnInit {
     }
   }
 
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch (error) {
-      console.error(error);
-      return value as ProposalContent;
+  getProposalTitle(proposal: Proposals200ResponseProposalsInner): string {
+    if (proposal.content) {
+      return (proposal.content as any).title;
+    } else {
+      return '';
     }
   }
 

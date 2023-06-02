@@ -18,7 +18,6 @@ export class ProposalsComponent implements OnInit {
   tallies$: Observable<
     { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
   >;
-  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
   pageLength$: Observable<number | undefined>;
@@ -62,11 +61,6 @@ export class ProposalsComponent implements OnInit {
       }),
     );
     this.paginatedProposals$ = this.usecase.paginatedProposals$(
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    );
-    this.proposalContents$ = this.usecase.proposalContents$(
       this.proposals$,
       this.pageNumber$,
       this.pageSize$,

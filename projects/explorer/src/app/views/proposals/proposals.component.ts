@@ -37,12 +37,11 @@ export class ProposalsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  unpackContent(value: any) {
-    try {
-      return cosmosclient.codec.protoJSONToInstance(value) as ProposalContent;
-    } catch (error) {
-      console.error(error);
-      return value as ProposalContent;
+  getProposalTitle(proposal: Proposals200ResponseProposalsInner): string {
+    if (proposal.content) {
+      return (proposal.content as any).title;
+    } else {
+      return '';
     }
   }
 

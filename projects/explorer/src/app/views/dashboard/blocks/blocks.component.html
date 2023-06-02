@@ -5,7 +5,7 @@
 <ng-template #loaded>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <div class="flex">
+      <div class="flex flex-wrap">
         <h2 class="card-title">Latest Blocks</h2>
         <span class="flex-auto"></span>
         <div class="form-control">
@@ -42,7 +42,7 @@
                   {{ block?.block?.header?.proposer_address }}
                 </td>
                 <td>{{ block?.block?.data?.txs?.length }}</td>
-                <td>{{ block?.block?.header?.time | date: 'yy/MM/dd hh:mm' }}</td>
+                <td>{{ block?.block?.header?.time | date : 'yy/MM/dd hh:mm' }}</td>
               </tr>
             </ng-container>
             <ng-template #empty>

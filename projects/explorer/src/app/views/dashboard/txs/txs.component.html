@@ -5,45 +5,56 @@
 <ng-template #loaded>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <div class="flex">
+      <div class="flex flex-wrap">
         <h2 class="card-title">Transactions</h2>
         <span class="flex-auto"></span>
-        <mat-form-field>
-          <mat-select [(value)]="selectedTxType" (valueChange)="onSelectedTxTypeChanged($event)">
-            <mat-option *ngFor="let txType of txTypeOptions" [value]="txType"
-              >{{ txType }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="form-control">
+          <select
+            class="select select-bordered text-center w-auto sm:w-64"
+            name="txType"
+            [(ngModel)]="selectedTxType"
+            (change)="onSelectedTxTypeChanged(selectedTxType!)"
+          >
+            <option [value]="undefined" disabled>
+              <span>Select Tx type</span>
+            </option>
+            <ng-container *ngFor="let txType of txTypeOptions">
+              <option [value]="txType">
+                {{ txType }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
       </div>
-      <ng-container *ngIf="(txs?.length || 0) > 0; then exist; else empty"> </ng-container>
-
-      <ng-template #exist>
-        <mat-list>
-          <mat-list-item>
-            <span class="break-all truncate pr-4">Tx Hash</span>
-            <span class="flex-auto"></span>
-            <span class="break-all truncate">Timestamp</span>
-            <mat-divider></mat-divider>
-          </mat-list-item>
-        </mat-list>
-
-        <mat-nav-list>
-          <ng-container *ngFor="let tx of txs; last as last">
-            <mat-list-item routerLink="/txs/{{ tx.txhash }}">
-              <span class="pr-4 font-mono truncate">{{ tx.txhash }}</span>
-              <span class="flex-auto"></span>
-              <span class="break-all truncate font-mono"
-                >{{ tx.timestamp | date : 'yy/MM/dd hh:mm' }}
-              </span>
-              <mat-divider *ngIf="!last"></mat-divider>
-            </mat-list-item>
-          </ng-container>
-        </mat-nav-list>
-      </ng-template>
-      <ng-template #empty>
-        <p>There is no transaction.</p>
-      </ng-template>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <th>TxHash</th>
+            <td>Timestamp</td>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(txs?.length || 0) > 0; else empty">
+              <tr
+                *ngFor="let tx of txs"
+                class="hover cursor-pointer"
+                routerLink="/txs/{{ tx.txhash }}"
+              >
+                <th>
+                  {{ tx.txhash }}
+                </th>
+                <td>
+                  {{ tx.timestamp | date : 'yy/MM/dd hh:mm' }}
+                </td>
+              </tr>
+            </ng-container>
+            <ng-template #empty>
+              <tr>
+                <td colspan="5">There is no transaction.</td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </ng-template>

@@ -28,7 +28,6 @@
     "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-8-private-test": "npm run build:all:prod && node copy-config ununifi-8-private-test",
     "build:all:prod:ununifi-test": "npm run build:all:prod && node copy-config ununifi-test",
-    "build:all:prod:ununifi-iya-pocv1": "npm run build:all:prod && node copy-config ununifi-iya-pocv1",
     "build:all:prod:ununifi-derivatives-pocv1": "npm run build:all:prod && node copy-config ununifi-derivatives-pocv1",
     "build:all:prod:ununifi-nftfi-pocv1": "npm run build:all:prod && node copy-config ununifi-nftfi-pocv1",
     "watch": "ng build --watch --configuration development",
@@ -43,7 +42,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-material-components/datetime-picker": "8.0",
     "@angular/animations": "~14.0.4",
     "@angular/cdk": "^14.0.4",
     "@angular/common": "~14.0.4",
@@ -55,7 +53,7 @@
     "@angular/platform-browser-dynamic": "~14.0.4",
     "@angular/router": "~14.0.4",
     "@apollo/client": "^3.0.0",
-    "@cosmos-client/core": "0.46.1",
+    "@cosmos-client/core": "0.47.1",
     "@metamask/detect-provider": "^1.2.0",
     "@ngneat/tailwind": "^7.0.3",
     "angular-google-charts": "^2.2.3",
@@ -79,7 +77,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tslib": "^2.3.0",
-    "ununifi-client": "^0.47.0-rc2",
+    "ununifi-client": "^2.1.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

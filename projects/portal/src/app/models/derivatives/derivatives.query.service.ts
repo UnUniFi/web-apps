@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 import {
-  AllPositions200ResponsePositionsInner,
+  AddressPositions200ResponsePositionsInner,
   DerivativesParams200ResponseParams,
   EstimateDLPTokenAmount200Response,
   EstimateRedeemTokenAmount200Response,
@@ -75,14 +75,14 @@ export class DerivativesQueryService {
     );
   }
 
-  listAllPositions$(): Observable<AllPositions200ResponsePositionsInner[]> {
+  listAllPositions$(): Observable<any[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununificlient.rest.derivatives.allPositions(sdk)),
       map((res) => res.data.positions!),
     );
   }
 
-  listAddressPositions$(address: string): Observable<AllPositions200ResponsePositionsInner[]> {
+  listAddressPositions$(address: string): Observable<AddressPositions200ResponsePositionsInner[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununificlient.rest.derivatives.addressPositions(sdk, address)),
       map((res) => res.data.positions!),

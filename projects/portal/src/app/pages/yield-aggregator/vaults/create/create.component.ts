@@ -20,6 +20,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
   denom$: Observable<string>;
+  availableSymbols$: Observable<string[]>;
   selectedSymbol$: Observable<string | undefined>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
@@ -43,15 +44,32 @@ export class CreateComponent implements OnInit {
     );
     this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
+    const allStrategies$ = this.iyaQuery.listStrategies$('');
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
     );
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.availableSymbols$ = combineLatest([allStrategies$, denomMetadataMap$]).pipe(
+      map(([allStrategies, denomMetadataMap]) => {
+        const symbols = allStrategies
+          .map((strategy) => {
+            const denomMetadata = denomMetadataMap[strategy.denom || ''];
+            if (denomMetadata) {
+              return denomMetadata.symbol;
+            } else {
+              return undefined;
+            }
+          })
+          .filter((symbol): symbol is string => typeof symbol == 'string');
+        return [...new Set(symbols)];
+      }),
+    );
+
     this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
       map(([denom, denomMetadataMap]) => {
         if (denom && denomMetadataMap) {
-          return denomMetadataMap[denom].symbol || 'Invalid Asset';
+          return denomMetadataMap[denom].symbol || undefined;
         } else {
           return undefined;
         }

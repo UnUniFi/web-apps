@@ -18,7 +18,6 @@ export class ProposalsComponent implements OnInit {
   tallies$: Observable<
     { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
   >;
-  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   pageSize$: Observable<number>;
   pageNumber$: Observable<number>;
   pageLength$: Observable<number | undefined>;
@@ -66,18 +65,13 @@ export class ProposalsComponent implements OnInit {
       this.pageNumber$,
       this.pageSize$,
     );
-    this.proposalContents$ = this.usecase.proposalContents$(
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    );
     this.tallies$ = this.usecase.tallies$(this.proposals$, this.pageNumber$, this.pageSize$).pipe(
       map((tallies) =>
         tallies.map((tally) => {
-          const yes = tally?.yes ? Number(tally.yes) : 0;
-          const no = tally?.no ? Number(tally.no) : 0;
-          const abstain = tally?.abstain ? Number(tally.abstain) : 0;
-          const noWithVeto = tally?.no_with_veto ? Number(tally.no_with_veto) : 0;
+          const yes = this.lnValue(tally?.yes);
+          const no = this.lnValue(tally?.no);
+          const abstain = this.lnValue(tally?.abstain);
+          const noWithVeto = this.lnValue(tally?.no_with_veto);
           const max = Math.max(yes, no, abstain, noWithVeto);
           return { yes, no, abstain, noWithVeto, max };
         }),
@@ -110,5 +104,15 @@ export class ProposalsComponent implements OnInit {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
     return proposals.filter((_, i) => min <= i && i < max).reverse();
+  }
+
+  lnValue(value?: string) {
+    if (!value) {
+      return 0;
+    } else if (!Number(value)) {
+      return 0;
+    } else {
+      return Math.log(Number(value));
+    }
   }
 }

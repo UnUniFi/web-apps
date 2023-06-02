@@ -11,8 +11,7 @@ import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openap
 export class TxsComponent implements OnInit {
   @Input()
   txs?: BroadcastTx200ResponseTxResponse[] | null;
-  @Input()
-  txTypeOptions?: string[] | null;
+  txTypeOptions: string[];
   @Input()
   selectedTxType?: string | null;
 
@@ -32,6 +31,7 @@ export class TxsComponent implements OnInit {
 
   constructor() {
     this.paginationChange = new EventEmitter();
+    this.txTypeOptions = ['bank', 'distribution', 'gov', 'ibc', 'staking'];
   }
 
   ngOnInit(): void {}
@@ -40,7 +40,34 @@ export class TxsComponent implements OnInit {
     this.selectedTxTypeChanged.emit(selectedTxType);
   }
 
-  onPaginationChange(pageEvent: PageEvent): void {
-    this.paginationChange.emit(pageEvent);
+  onPaginationChange($event?: number): void {
+    if (!this.pageInfo || !this.pageLength) {
+      return;
+    }
+    if ($event == 1) {
+      this.pageInfo.pageNumber -= 1;
+    } else if ($event == 2) {
+      this.pageInfo.pageNumber += 1;
+    }
+    if (this.pageInfo.pageNumber < 1) {
+      alert('This is the first page!');
+      this.pageInfo.pageNumber = 1;
+      return;
+    }
+    this.paginationChange.emit({
+      pageIndex: this.pageInfo.pageNumber - 1,
+      pageSize: this.pageInfo.pageSize,
+      length: this.pageLength,
+    });
+  }
+
+  calcItemsIndex(): { start: number; end: number } {
+    if (!this.pageInfo) {
+      return { start: 0, end: 0 };
+    } else {
+      const start = (this.pageInfo.pageNumber - 1) * this.pageInfo.pageSize + 1;
+      const end = this.pageInfo.pageNumber * this.pageInfo.pageSize;
+      return { start, end };
+    }
   }
 }

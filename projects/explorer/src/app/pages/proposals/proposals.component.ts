@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import {
-  Proposals200ResponseProposalsInnerFinalTallyResult,
-  Proposals200ResponseProposalsInner,
-} from '@cosmos-client/core/esm/openapi';
+import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { combineLatest, Observable, of } from 'rxjs';
@@ -17,9 +14,7 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  proposals$: Observable<Proposals200ResponseProposalsInner[]>;
   paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
-  proposalContents$: Observable<(cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined)[]>;
   tallies$: Observable<
     { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
   >;
@@ -35,12 +30,12 @@ export class ProposalsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly cosmosSDK: CosmosSDKService,
   ) {
-    this.proposals$ = this.cosmosSDK.sdk$.pipe(
+    const proposals$ = this.cosmosSDK.sdk$.pipe(
       mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
       map((result) => result.data.proposals!),
     );
 
-    this.pageLength$ = this.proposals$.pipe(
+    this.pageLength$ = proposals$.pipe(
       map((proposals) => (proposals.length ? proposals.length : undefined)),
     );
     this.pageSize$ = this.route.queryParams.pipe(
@@ -68,24 +63,15 @@ export class ProposalsComponent implements OnInit {
         return pages;
       }),
     );
-    this.paginatedProposals$ = combineLatest([
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    ]).pipe(
+    this.paginatedProposals$ = combineLatest([proposals$, this.pageNumber$, this.pageSize$]).pipe(
       map(([proposals, pageNumber, pageSize]) =>
         this.getPaginatedProposals(proposals, pageNumber, pageSize),
       ),
     );
-    this.tallies$ = combineLatest([
-      this.cosmosSDK.sdk$,
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    ]).pipe(
-      mergeMap(([sdk, proposals, pageNumber, pageSize]) =>
+    this.tallies$ = combineLatest([this.cosmosSDK.sdk$, this.paginatedProposals$]).pipe(
+      mergeMap(([sdk, proposals]) =>
         Promise.all(
-          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
+          proposals.map((proposal) =>
             cosmosclient.rest.gov.tallyresult(sdk.rest, proposal.proposal_id!).catch((err) => {
               console.log(err);
               return;
@@ -96,26 +82,13 @@ export class ProposalsComponent implements OnInit {
       map((result) => result.map((res) => res?.data.tally)),
       map((tallies) =>
         tallies.map((tally) => {
-          const yes = tally?.yes ? Number(tally.yes) : 0;
-          const no = tally?.no ? Number(tally.no) : 0;
-          const abstain = tally?.abstain ? Number(tally.abstain) : 0;
-          const noWithVeto = tally?.no_with_veto ? Number(tally.no_with_veto) : 0;
+          const yes = this.lnValue(tally?.yes);
+          const no = this.lnValue(tally?.no);
+          const abstain = this.lnValue(tally?.abstain);
+          const noWithVeto = this.lnValue(tally?.no_with_veto);
           const max = Math.max(yes, no, abstain, noWithVeto);
           return { yes, no, abstain, noWithVeto, max };
         }),
-      ),
-    );
-    this.proposalContents$ = combineLatest([
-      this.proposals$,
-      this.pageNumber$,
-      this.pageSize$,
-    ]).pipe(
-      mergeMap(([proposals, pageNumber, pageSize]) =>
-        combineLatest(
-          this.getPaginatedProposals(proposals, pageNumber, pageSize).map((proposal) =>
-            of(txParseProposalContent(proposal.content!)),
-          ),
-        ),
       ),
     );
   }
@@ -141,5 +114,15 @@ export class ProposalsComponent implements OnInit {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
     return proposals.filter((_, i) => min <= i && i < max).reverse();
+  }
+
+  lnValue(value?: string) {
+    if (!value) {
+      return 0;
+    } else if (!Number(value)) {
+      return 0;
+    } else {
+      return Math.log(Number(value));
+    }
   }
 }

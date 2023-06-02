@@ -77,7 +77,7 @@
               <tr
                 class="hover"
                 *ngFor="let reward of rewards; let i = index"
-                (click)="onClickReward(reward.denom)"
+                (click)="onClickReward(reward.denom!)"
               >
                 <th>#{{ i + 1 }}</th>
                 <td>{{ reward | coin }}</td>

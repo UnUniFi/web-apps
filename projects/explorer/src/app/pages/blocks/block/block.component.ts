@@ -33,21 +33,22 @@ export class BlockComponent implements OnInit {
   ) {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
     const config$ = this.configS.config$;
-    this.block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$, config$]).pipe(
-      mergeMap(([sdk, height, config]) =>
+    const block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$]).pipe(
+      mergeMap(([sdk, height]) =>
         cosmosclient.rest.tendermint
           .getBlockByHeight(sdk.rest, BigInt(height))
-          .then((res) => [res.data, config]),
+          .then((res) => res.data),
       ),
-      map(([blockData, config]) => {
-        const block = blockData as GetBlockByHeight200Response;
-        const conf = config as Config;
+    );
+    // hash & proposer encode
+    this.block$ = combineLatest([block$, config$]).pipe(
+      map(([block, config]) => {
         if (block.block?.header?.proposer_address) {
           const byteArray = Uint8Array.from(
             Buffer.from(block.block.header.proposer_address, 'base64'),
           );
           block.block.header.proposer_address = bech32.encode(
-            conf.bech32Prefix?.consPub || 'ununifivalconspub',
+            config?.bech32Prefix?.consPub || 'ununifivalconspub',
             bech32.toWords(byteArray),
           );
         }

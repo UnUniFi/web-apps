@@ -8,8 +8,8 @@ const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
 const domainCauchyEA = 'a.lcd.ununifi.cauchye.net';
 const domainCauchyEB = 'b.lcd.ununifi.cauchye.net';
-const domainCauchyEC = 'ununifi.mainnet.lcd-01.neukind.network';
-const domainCauchyED = 'ununifi.mainnet.lcd-02.neukind.network';
+const domainCauchyEC = 'ununifi.mainnet.lcd-01.kabab.io';
+const domainCauchyED = 'ununifi.mainnet.lcd-02.kabab.io';
 
 const chainID = 'ununifi-beta-v1';
 const chainName = 'UnUniFi';

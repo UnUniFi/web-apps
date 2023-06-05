@@ -1,3 +1,4 @@
+import { ConfigService } from '../../../models/config.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,6 +7,7 @@ import {
   GetLatestBlock200Response,
   GetBlockByHeight200Response,
 } from '@cosmos-client/core/esm/openapi';
+import * as bech32 from 'bech32';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { Observable, of, zip, timer, combineLatest, BehaviorSubject } from 'rxjs';
 import { filter, catchError, map, switchMap, mergeMap } from 'rxjs/operators';
@@ -36,6 +38,7 @@ export class BlocksComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cosmosSDK: CosmosSDKService,
+    private readonly configS: ConfigService,
   ) {
     this.isFirstAccess = true;
     const timerWithEnable$ = combineLatest([
@@ -45,6 +48,7 @@ export class BlocksComponent implements OnInit {
       filter(([n, enable]) => enable || this.isFirstAccess),
       map(([n, _]) => n),
     );
+    const config$ = this.configS.config$;
 
     this.latestBlock$ = combineLatest([timerWithEnable$, this.cosmosSDK.sdk$]).pipe(
       mergeMap(([n, sdk]) =>
@@ -108,7 +112,7 @@ export class BlocksComponent implements OnInit {
       }),
     );
 
-    this.blocks$ = combineLatest([this.firstBlockHeight$, this.pageSize$]).pipe(
+    const blocks$ = combineLatest([this.firstBlockHeight$, this.pageSize$]).pipe(
       map(([firstBlockHeight, pageSize]) => {
         if (firstBlockHeight === undefined) {
           return [];
@@ -135,6 +139,24 @@ export class BlocksComponent implements OnInit {
       catchError((error) => {
         console.error(error);
         return of(undefined);
+      }),
+    );
+
+    // proposer encode
+    this.blocks$ = combineLatest([blocks$, config$]).pipe(
+      map(([blocks, config]) => {
+        return blocks?.map((block) => {
+          if (block?.block?.header?.proposer_address) {
+            const byteArray = Uint8Array.from(
+              Buffer.from(block.block.header.proposer_address, 'base64'),
+            );
+            block.block.header.proposer_address = bech32.encode(
+              config?.bech32Prefix?.consPub || 'ununifivalconspub',
+              bech32.toWords(byteArray),
+            );
+          }
+          return block;
+        });
       }),
     );
   }

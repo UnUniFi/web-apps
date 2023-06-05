@@ -1,3 +1,5 @@
+import { ConfigService } from '../../../models/config.service';
+import { Config } from '../../../models/config.service';
 import { txTitle } from '../../../models/cosmos/tx-common.model';
 import { txParseMsg } from './../../../utils/tx-parser';
 import { Component, OnInit } from '@angular/core';
@@ -5,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { GetBlockByHeight200Response } from '@cosmos-client/core/esm/openapi';
 import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi/api';
+import * as bech32 from 'bech32';
 import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, filter, mergeMap } from 'rxjs/operators';
@@ -23,14 +26,41 @@ export class BlockComponent implements OnInit {
   txs$: Observable<CosmosTxV1beta1GetTxsEventResponse | undefined>;
   txTitles$: Observable<txTitle[] | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {
+  constructor(
+    private route: ActivatedRoute,
+    private cosmosSDK: CosmosSDKService,
+    private readonly configS: ConfigService,
+  ) {
     this.blockHeight$ = this.route.params.pipe(map((params) => params.block_height));
-    this.block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$]).pipe(
+    const config$ = this.configS.config$;
+    const block$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$]).pipe(
       mergeMap(([sdk, height]) =>
         cosmosclient.rest.tendermint
           .getBlockByHeight(sdk.rest, BigInt(height))
           .then((res) => res.data),
       ),
+    );
+    // hash & proposer encode
+    this.block$ = combineLatest([block$, config$]).pipe(
+      map(([block, config]) => {
+        if (block.block?.header?.proposer_address) {
+          const byteArray = Uint8Array.from(
+            Buffer.from(block.block.header.proposer_address, 'base64'),
+          );
+          block.block.header.proposer_address = bech32.encode(
+            config?.bech32Prefix?.consPub || 'ununifivalconspub',
+            bech32.toWords(byteArray),
+          );
+        }
+        return block;
+      }),
+      map((block) => {
+        if (block.block_id?.hash) {
+          const byteArray = Uint8Array.from(Buffer.from(block.block_id.hash, 'base64'));
+          block.block_id.hash = Buffer.from(byteArray).toString('hex').toUpperCase();
+        }
+        return block;
+      }),
     );
 
     this.txs$ = combineLatest([this.cosmosSDK.sdk$, this.blockHeight$, this.block$]).pipe(

@@ -57,7 +57,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
     let txHash: string | undefined;
     txHash = await this.incentiveApp.Register(
       $event.unitID,
-      $event.subjectAddresses,
+      $event.addresses,
       $event.weights,
       $event.minimumGasPrice,
       $event.gasRatio,

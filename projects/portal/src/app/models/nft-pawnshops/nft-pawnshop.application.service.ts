@@ -38,7 +38,7 @@ export class NftPawnshopApplicationService {
   async listNft(
     classId: string,
     nftId: string,
-    listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
+    listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType,
     bidSymbol: string,
     minimumDepositRate: number,
     autoRefinancing: boolean,

@@ -6,7 +6,7 @@ import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets
 export type CreateIncentiveUnitOnSubmitEvent = {
   walletType: WalletType;
   unitID: string;
-  subjectAddresses: string[];
+  addresses: string[];
   weights: number[];
   minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
@@ -90,7 +90,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
       alert('Please make the total of the percentages 100%');
       return;
     }
-    const subjectAddresses = [this.firstRecipient.address].concat(
+    const addresses = [this.firstRecipient.address].concat(
       this.recipients.map((rec) => rec.address),
     );
     const weights = [this.firstRecipient.distRate]
@@ -99,7 +99,7 @@ export class CreateUnitFormDialogComponent implements OnInit {
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       unitID: this.unitId,
-      subjectAddresses,
+      addresses,
       weights,
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,

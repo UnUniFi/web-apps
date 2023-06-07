@@ -1,4 +1,4 @@
-import { SearchResult } from '../../toolbar/toolbar.component';
+import { SearchResult } from '../../../pages/tools/search-tool/search-tool.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({

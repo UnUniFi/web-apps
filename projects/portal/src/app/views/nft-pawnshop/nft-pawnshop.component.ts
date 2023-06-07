@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
-  NftmarketParams200ResponseParams,
+  NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -12,7 +12,7 @@ import {
 })
 export class NftPawnshopComponent implements OnInit {
   @Input()
-  params?: NftmarketParams200ResponseParams | null;
+  params?: NftBackedLoanParams200ResponseParams | null;
   @Input()
   listedClasses?: ListedClass200Response[] | null;
   @Input()

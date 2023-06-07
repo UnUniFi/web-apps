@@ -7,9 +7,8 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
-  EcosystemincentiveParams200ResponseParams,
-  IncentiveUnit200ResponseIncentiveUnit,
-  IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr,
+  EcosystemIncentiveParams200ResponseParams,
+  RecipientContainer200ResponseRecipientContainer,
 } from 'ununifi-client/esm/openapi';
 
 @Injectable({ providedIn: 'root' })
@@ -19,23 +18,23 @@ export class IncentiveQueryService {
   constructor(private http: HttpClient, private cosmosSDK: CosmosSDKService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
-  getEcosystemIncentiveParams$(): Observable<EcosystemincentiveParams200ResponseParams> {
+  getEcosystemIncentiveParams$(): Observable<EcosystemIncentiveParams200ResponseParams> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.params(sdk)),
+      mergeMap((sdk) => ununifi.rest.ecosystemincentive.params(sdk)),
       map((res) => res.data.params!),
     );
   }
 
-  getIncentiveUnit$(incentiveUnitId: string): Observable<IncentiveUnit200ResponseIncentiveUnit> {
+  getRecipientContainer$(id: string): Observable<RecipientContainer200ResponseRecipientContainer> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnit(sdk, incentiveUnitId)),
-      map((res) => res.data.incentive_unit!),
+      mergeMap((sdk) => ununifi.rest.ecosystemincentive.recipientContainer(sdk, id)),
+      map((res) => res.data.recipient_container!),
     );
   }
 
   getAllRewards$(subjectAddr: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
+      mergeMap((sdk) => ununifi.rest.ecosystemincentive.allRewards(sdk, subjectAddr)),
       map((res) => res.data.rewards?.rewards!),
     );
   }
@@ -45,26 +44,17 @@ export class IncentiveQueryService {
     denom: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
+      mergeMap((sdk) => ununifi.rest.ecosystemincentive.reward(sdk, subjectAddr, denom)),
       map((res) => res.data.reward!),
     );
   }
 
-  getRecordedIncentiveUnitId$(classId: string, nftId: string): Observable<string> {
+  belongingRecipientContainerIdsByAddr$(address: string): Observable<string[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
-        ununifi.rest.ecosystemIncentive.recordedIncentiveUnitId(sdk, classId, nftId),
+        ununifi.rest.ecosystemincentive.belongingRecipientContainerIdsByAddr(sdk, address),
       ),
-      map((res) => res.data.incentive_unit_id!),
-    );
-  }
-
-  listIncentiveUnitIdsByAddr$(
-    address: string,
-  ): Observable<IncentiveUnitIdsByAddr200ResponseIncentiveUnitIdsByAddr> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.incentiveUnitIdsByAddr(sdk, address)),
-      map((res) => res.data.incentive_unit_ids_by_addr!),
+      map((res) => res.data.recipient_container_ids!),
     );
   }
 }

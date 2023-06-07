@@ -9,7 +9,6 @@ import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
-import BigNumber from 'bignumber.js';
 import Long from 'long';
 
 @Injectable({
@@ -71,13 +70,14 @@ export class StakingService {
   ): cosmosclient.proto.cosmos.staking.v1beta1.ICommissionRates {
     const pairs: [string, string][] = Object.entries(commission).map((pair: [string, string]) => {
       const [key, value] = pair;
-      const bnValue = new BigNumber(value);
-      const isValidValue = bnValue.gte(0) && bnValue.lte(1);
+      const longValue = Long.fromString(value);
+      const isValidValue = longValue.greaterThanOrEqual(0) && longValue.lessThanOrEqual(1);
       if (!isValidValue) {
         throw new Error(`Error: commission ${key} expected to be from 0 to 1, but got ${value}`);
       }
 
-      return [key, bnValue.times(1e18).toFixed(0)];
+      const multipliedValue = longValue.mul(1e18);
+      return [key, multipliedValue.toString()];
     });
     return Object.fromEntries(pairs);
   }

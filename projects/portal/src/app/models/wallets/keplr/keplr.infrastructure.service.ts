@@ -186,6 +186,12 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     return storedWallet;
   }
 
+  async checkWallet(): Promise<StoredWallet | null | undefined> {
+    const keyData = await this.getKey();
+    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
+    return storedWallet;
+  }
+
   async signTx(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,

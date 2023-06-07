@@ -20,8 +20,8 @@ export class IncentiveService {
 
   // register incentive token
   async register(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
+    recipientContainerId: string,
+    addresses: string[],
     weights: number[],
     currentCosmosWallet: CosmosWallet,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -30,8 +30,8 @@ export class IncentiveService {
   ): Promise<BroadcastTx200Response> {
     const cosmosPublicKey = currentCosmosWallet.public_key;
     const txBuilder = await this.buildRegisterTxBuilder(
-      incentiveUnitId,
-      subjectAddresses,
+      recipientContainerId,
+      addresses,
       weights,
       cosmosPublicKey,
       gas,
@@ -55,8 +55,8 @@ export class IncentiveService {
   }
 
   async simulateToRegister(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
+    recipientContainerId: string,
+    addresses: string[],
     weight: number[],
     cosmosPublicKey: cosmosclient.PubKey,
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -71,8 +71,8 @@ export class IncentiveService {
       amount: '1',
     };
     const simulatedTxBuilder = await this.buildRegisterTxBuilder(
-      incentiveUnitId,
-      subjectAddresses,
+      recipientContainerId,
+      addresses,
       weight,
       cosmosPublicKey,
       dummyGas,
@@ -82,8 +82,8 @@ export class IncentiveService {
   }
 
   async buildRegisterTxBuilder(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
+    recipientContainerId: string,
+    addresses: string[],
     weights: number[],
     cosmosPublicKey: cosmosclient.PubKey,
     gas: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -96,8 +96,8 @@ export class IncentiveService {
     const senderAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const msgRegister = this.buildMsgRegister(
       senderAddress.toString(),
-      incentiveUnitId,
-      subjectAddresses,
+      recipientContainerId,
+      addresses,
       weights,
     );
 
@@ -113,15 +113,15 @@ export class IncentiveService {
 
   buildMsgRegister(
     senderAddress: string,
-    incentiveUnitId: string,
-    subjectAddresses: string[],
+    recipientContainerId: string,
+    addresses: string[],
     weights: number[],
   ): ununificlient.proto.ununifi.ecosystemincentive.MsgRegister {
     const decWeight = weights.map((w) => this.txCommonService.numberToDecString(w));
     const msgRegister = new ununificlient.proto.ununifi.ecosystemincentive.MsgRegister({
       sender: senderAddress,
-      incentive_unit_id: incentiveUnitId,
-      subject_addrs: subjectAddresses,
+      recipient_container_id: recipientContainerId,
+      addresses: addresses,
       weights: decWeight,
     });
     return msgRegister;

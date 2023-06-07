@@ -81,14 +81,14 @@ export class NftPawnshopService {
     senderAddress: string,
     classId: string,
     nftId: string,
-    listingType: ununificlient.proto.ununifi.nftmarket.ListingType,
+    listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType,
     bidSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
     minimumDepositRate: number,
     autoRefinancing: boolean,
   ) {
     const bidDenom = symbolMetadataMap[bidSymbol].base;
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgListNft({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgListNft({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -104,7 +104,7 @@ export class NftPawnshopService {
   }
 
   buildMsgCancelNftListing(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgCancelNftListing({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgCancelNftListing({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -137,7 +137,7 @@ export class NftPawnshopService {
     )[0];
     const biddingPeriodTimestamp = this.convertDateToTimestamp(biddingPeriod);
 
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgPlaceBid({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgPlaceBid({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -154,7 +154,7 @@ export class NftPawnshopService {
   }
 
   buildMsgCancelBid(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgCancelBid({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgCancelBid({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -166,7 +166,7 @@ export class NftPawnshopService {
   }
 
   buildMsgEndNftListing(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgEndNftListing({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgEndNftListing({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -178,7 +178,7 @@ export class NftPawnshopService {
   }
 
   buildMsgSellingDecision(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgSellingDecision({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgSellingDecision({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -190,7 +190,7 @@ export class NftPawnshopService {
   }
 
   buildMsgPayFullBid(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgPayFullBid({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgPayFullBid({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -214,7 +214,7 @@ export class NftPawnshopService {
       symbolMetadataMap,
     )[0];
 
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgBorrow({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgBorrow({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -239,7 +239,7 @@ export class NftPawnshopService {
       symbolMetadataMap,
     )[0];
 
-    const msg = new ununificlient.proto.ununifi.nftmarket.MsgRepay({
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgRepay({
       sender: senderAddress,
       nft_id: {
         class_id: classId,

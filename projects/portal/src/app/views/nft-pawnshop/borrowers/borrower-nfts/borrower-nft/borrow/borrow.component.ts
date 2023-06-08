@@ -15,7 +15,6 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import {
   ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -37,8 +36,6 @@ export class BorrowComponent implements OnInit {
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  loans?: Loans200ResponseLoansInner[] | null;
-  @Input()
   borrowAmount?: number | null;
   @Input()
   selectedBorrowAmount?: number | null;
@@ -53,7 +50,6 @@ export class BorrowComponent implements OnInit {
   @Input()
   averageInterestRate?: number | null;
 
-  borrowDenom?: string;
   chartType: ChartType;
   chartTitle: string;
   chartColumns: any[];
@@ -65,7 +61,6 @@ export class BorrowComponent implements OnInit {
   appSubmit: EventEmitter<BorrowRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    this.borrowDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -99,14 +94,14 @@ export class BorrowComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.selectedBorrowAmount || !this.borrowDenom) {
+    if (!this.selectedBorrowAmount || !this.symbol) {
       alert('Some values are invalid!');
       return;
     }
     this.appSimulate.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.borrowDenom,
+      symbol: this.symbol,
       amount: this.selectedBorrowAmount,
     });
   }
@@ -116,14 +111,14 @@ export class BorrowComponent implements OnInit {
       alert('Invalid NFT Info!');
       return;
     }
-    if (!this.selectedBorrowAmount || !this.borrowDenom) {
+    if (!this.selectedBorrowAmount || !this.symbol) {
       alert('Invalid Borrow Amount!');
       return;
     }
     this.appSubmit.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.borrowDenom,
+      symbol: this.symbol,
       amount: this.selectedBorrowAmount,
     });
   }

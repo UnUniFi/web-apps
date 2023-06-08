@@ -76,29 +76,3 @@
     </mat-nav-list>
   </ng-template>
 </mat-card>
-
-<!--
-<h3>Msgs</h3>
-<ng-template ngFor let-message [ngForOf]="tx?.tx?.body?.messages">
-  <ng-container *ngIf="unpackMsg(message) as msg">
-    <mat-card>
-      <mat-list>
-        <mat-list-item>
-          <span class="whitespace-nowrap">Type: </span>
-          <span class="flex-auto"></span>
-          <span class="ml-2 break-all">{{ constructorName(msg) }}</span>
-        </mat-list-item>
-        <mat-divider [inset]="true"></mat-divider>
-        <ng-template ngFor let-data [ngForOf]="entries(msg)" let-last="last">
-          <mat-list-item>
-            <span class="whitespace-nowrap">{{ data[0] }}</span>
-            <span class="flex-auto"></span>
-            <span class="ml-2 break-all text-xs sm:text-base">{{ data[1] | json }}</span>
-          </mat-list-item>
-          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-        </ng-template>
-      </mat-list>
-    </mat-card>
-  </ng-container>
-</ng-template>
--->

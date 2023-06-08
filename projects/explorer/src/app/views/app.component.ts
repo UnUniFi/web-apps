@@ -1,5 +1,5 @@
 import { Config } from '../models/config.service';
-import { SearchResult } from './toolbar/toolbar.component';
+import { SearchResult } from '../pages/tools/search-tool/search-tool.component';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { MatDrawerMode, MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';

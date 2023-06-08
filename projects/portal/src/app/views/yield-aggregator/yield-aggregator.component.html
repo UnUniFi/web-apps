@@ -27,9 +27,9 @@
                 (change)="onChangeSymbol()"
               >
                 <option [value]="undefined" disabled>Select a asset</option>
-                <option [value]="'USDC'">USDC</option>
-                <option [value]="'BTC'">BTC</option>
-                <option [value]="'GUU'">GUU</option>
+                <ng-container *ngFor="let symbol of availableSymbols">
+                  <option [value]="symbol">{{ symbol }}</option>
+                </ng-container>
               </select>
               <button
                 class="btn btn-primary"

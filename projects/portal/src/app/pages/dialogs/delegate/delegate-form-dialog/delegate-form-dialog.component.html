@@ -1,8 +1,8 @@
 <view-delegate-form-dialog
   [currentStoredWallet]="currentStoredWallet$ | async"
   [validatorsList]="validatorsList$ | async"
-  [coins]="coins$ | async"
-  [uguuBalance]="uguuBalance$ | async"
+  [denom]="denom$ | async"
+  [balance]="balance$ | async"
   [minimumGasPrices]="minimumGasPrices$ | async"
   [validator]="validator"
   (appSubmit)="onSubmit($event)"

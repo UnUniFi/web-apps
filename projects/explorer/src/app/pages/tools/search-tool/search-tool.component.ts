@@ -1,11 +1,14 @@
 import { ConfigService } from '../../../models/config.service';
 import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
-import { SearchResult } from '../../../views/toolbar/toolbar.component';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
+export type SearchResult = {
+  searchValue: string;
+  type: string;
+};
 @Component({
   selector: 'app-search-tool',
   templateUrl: './search-tool.component.html',

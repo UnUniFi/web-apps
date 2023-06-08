@@ -9,6 +9,7 @@ export interface IKeplrInfrastructureService {
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ) => Promise<cosmosclient.TxBuilder>;
+  checkWallet: () => Promise<StoredWallet | null | undefined>;
 }
 
 @Injectable({
@@ -30,5 +31,9 @@ export class KeplrService {
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     return await this.iKeplrInfrastructureService.signTx(txBuilder, signerBaseAccount);
+  }
+
+  async checkWallet(): Promise<StoredWallet | null | undefined> {
+    return await this.iKeplrInfrastructureService.checkWallet();
   }
 }

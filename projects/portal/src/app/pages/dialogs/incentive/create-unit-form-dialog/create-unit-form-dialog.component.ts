@@ -7,7 +7,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { CreateIncentiveUnitOnSubmitEvent as RegisterIncentiveUnitOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/create-unit-form-dialog/create-unit-form-dialog.component';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-unit-form-dialog',
@@ -29,11 +29,6 @@ export class CreateUnitFormDialogComponent implements OnInit {
   ) {
     this.address = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    const address$ = this.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 

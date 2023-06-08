@@ -20,10 +20,6 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
-  @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   reward?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;

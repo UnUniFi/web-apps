@@ -15,13 +15,7 @@ export type WithdrawAllRewardsOnSubmitEvent = {
 })
 export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   @Input()
-  address?: string;
-  @Input()
   currentStoredWallet?: StoredWallet | null;
-  @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()

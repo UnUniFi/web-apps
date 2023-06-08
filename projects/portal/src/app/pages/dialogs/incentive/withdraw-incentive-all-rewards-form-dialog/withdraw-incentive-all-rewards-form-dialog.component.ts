@@ -19,8 +19,6 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   address: string;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
@@ -36,18 +34,6 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   ) {
     this.address = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    const address$ = this.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
-    this.uguuBalance$ = this.coins$.pipe(
-      map((coins) => {
-        const balance = coins?.find((coin) => coin.denom == 'uguu');
-        return balance ? balance.amount! : '0';
-      }),
-    );
-
     this.rewards$ = this.incentiveQuery.getAllRewards$(this.address);
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }

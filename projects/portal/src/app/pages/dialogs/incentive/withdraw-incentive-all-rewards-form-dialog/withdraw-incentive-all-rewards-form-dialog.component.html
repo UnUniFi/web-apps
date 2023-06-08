@@ -1,8 +1,5 @@
 <view-withdraw-incentive-all-rewards-form-dialog
-  [address]="address"
   [currentStoredWallet]="currentStoredWallet$ | async"
-  [coins]="coins$ | async"
-  [uguuBalance]="uguuBalance$ | async"
   [minimumGasPrices]="minimumGasPrices$ | async"
   [rewards]="rewards$ | async"
   (appSubmit)="onSubmit($event)"

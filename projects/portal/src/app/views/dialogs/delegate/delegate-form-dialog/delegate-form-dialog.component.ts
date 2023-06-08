@@ -36,7 +36,7 @@ export class DelegateFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<DelegateOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  delegateAmount?: string;
+  delegateAmount?: number;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
@@ -74,7 +74,6 @@ export class DelegateFormDialogComponent implements OnInit {
     ) {
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       amount: {

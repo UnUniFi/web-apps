@@ -29,11 +29,11 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  delegateCoin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denom?: string | null;
   @Input()
-  uguuBalance?: string | null;
+  balance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -43,19 +43,16 @@ export class RedelegateFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  redelegateAmount?: number;
   selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
@@ -83,7 +80,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.selectedValidator || !this.selectedValidator.operator_address) {
       return;
     }
-    if (!this.selectedAmount) {
+    if (!this.redelegateAmount) {
       return;
     }
     if (!this.selectedGasPrice) {
@@ -96,8 +93,8 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.appSubmit.emit({
       destinationValidator: this.selectedValidator.operator_address,
       amount: {
-        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: this.selectedAmount.denom,
+        amount: Math.floor(Number(this.redelegateAmount) * 1000000).toString(),
+        denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

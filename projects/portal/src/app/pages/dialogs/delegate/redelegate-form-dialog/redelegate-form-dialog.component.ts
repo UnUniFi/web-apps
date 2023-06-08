@@ -16,7 +16,7 @@ import {
   InactiveValidatorConfirmDialogComponent,
 } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
 import { RedelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/redelegate-form-dialog/redelegate-form-dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -28,9 +28,9 @@ export class RedelegateFormDialogComponent implements OnInit {
   validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<DelegatorDelegations200Response>;
-  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
-  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
+  delegateCoin$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  denom$: Observable<string | null | undefined>;
+  balance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
 
@@ -56,7 +56,7 @@ export class RedelegateFormDialogComponent implements OnInit {
     this.delegations$ = address$.pipe(
       mergeMap((address) => this.cosmosRest.getDelegatorDelegations$(address)),
     );
-    this.delegateAmount$ = this.delegations$.pipe(
+    this.delegateCoin$ = this.delegations$.pipe(
       map(
         (delegations) =>
           delegations.delegation_responses?.find(
@@ -65,12 +65,10 @@ export class RedelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
-    this.uguuBalance$ = this.coins$.pipe(
-      map((coins) => {
-        const balance = coins?.find((coin) => coin.denom == 'uguu');
-        return balance ? balance.amount! : '0';
-      }),
+    const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
+    this.denom$ = this.delegateCoin$.pipe(map((coin) => coin?.denom));
+    this.balance$ = combineLatest([coins$, this.denom$]).pipe(
+      map(([coins, denom]) => coins?.find((coin) => coin.denom === denom)),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

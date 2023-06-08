@@ -1,5 +1,11 @@
-<view-vote-form-dialog [proposal]="proposal$ | async" [proposalContent]="proposalContent$ | async"
-  [currentStoredWallet]="currentStoredWallet$ | async" [coins]="coins$ | async" [uguuBalance]="uguuBalance$ | async"
-  [minimumGasPrices]="minimumGasPrices$ | async" [proposalID]="proposalID" (appSubmitYes)="onSubmitYes($event)"
-  (appSubmitNoWithVeto)="onSubmitNoWithVeto($event)" (appSubmitNo)="onSubmitNo($event)"
-  (appSubmitAbstain)="onSubmitAbstain($event)"></view-vote-form-dialog>
+<view-vote-form-dialog
+  [proposal]="proposal$ | async"
+  [proposalContent]="proposalContent$ | async"
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [proposalID]="proposalID"
+  (appSubmitYes)="onSubmitYes($event)"
+  (appSubmitNoWithVeto)="onSubmitNoWithVeto($event)"
+  (appSubmitNo)="onSubmitNo($event)"
+  (appSubmitAbstain)="onSubmitAbstain($event)"
+></view-vote-form-dialog>

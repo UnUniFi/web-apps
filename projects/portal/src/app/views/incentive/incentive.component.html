@@ -80,7 +80,7 @@
                 (click)="onClickReward(reward.denom!)"
               >
                 <th>#{{ i + 1 }}</th>
-                <td>{{ reward | coin }}</td>
+                <td>{{ reward | coin | async }}</td>
               </tr>
             </tbody>
           </table>

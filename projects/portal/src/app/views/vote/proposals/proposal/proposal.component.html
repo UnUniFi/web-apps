@@ -183,7 +183,7 @@
                 <ng-container *ngFor="let amount of deposit.amount">
                   <tr>
                     <th>{{ deposit.depositor }}</th>
-                    <td>{{ amount | coin }}</td>
+                    <td>{{ amount | coin | async }}</td>
                   </tr>
                 </ng-container>
               </ng-container>

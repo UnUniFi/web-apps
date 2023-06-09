@@ -77,7 +77,9 @@
             class="stat"
           >
             <div class="stat-title">Lending Status</div>
-            <div class="stat-value text-primary">{{ bidDetail.borrowings[0].amount | coin }}</div>
+            <div class="stat-value text-primary">
+              {{ bidDetail.borrowings[0].amount | coin | async }}
+            </div>
           </div>
           <div *ngIf="isWinning" class="stat">
             <div class="stat-title">Settlement Shortfall Deadline</div>
@@ -140,8 +142,8 @@
             <ng-template #color>
               <th class="text-secondary">#{{ i + 1 }}</th>
               <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>
-              <td class="text-secondary">{{ bidder.deposit_amount | coin }}</td>
-              <td class="text-secondary">{{ bidder.bid_amount | coin }}</td>
+              <td class="text-secondary">{{ bidder.deposit_amount | coin | async }}</td>
+              <td class="text-secondary">{{ bidder.bid_amount | coin | async }}</td>
               <td class="text-secondary">
                 {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
               </td>
@@ -150,8 +152,8 @@
             <ng-template #normal>
               <th>#{{ i + 1 }}</th>
               <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-              <td>{{ bidder.deposit_amount | coin }}</td>
-              <td>{{ bidder.bid_amount | coin }}</td>
+              <td>{{ bidder.deposit_amount | coin | async }}</td>
+              <td>{{ bidder.bid_amount | coin | async }}</td>
               <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               <td>{{ bidder.bidder }}</td>
             </ng-template>

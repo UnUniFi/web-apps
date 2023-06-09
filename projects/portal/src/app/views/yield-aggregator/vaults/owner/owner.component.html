@@ -86,7 +86,7 @@
                 </tr>
                 <tr>
                   <th>Owner's Deposit</th>
-                  <td>{{ vault?.owner_deposit | coin }}</td>
+                  <td>{{ vault?.owner_deposit | coin | async }}</td>
                 </tr>
                 <tr>
                   <th>Withdraw Commission Rate</th>

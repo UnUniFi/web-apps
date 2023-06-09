@@ -103,7 +103,9 @@
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+          <span class="label-text text-xs">
+            Delegated Amount: {{ delegateAmount | coin | async }}
+          </span>
         </label>
       </div>
 

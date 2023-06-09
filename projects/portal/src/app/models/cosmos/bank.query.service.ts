@@ -6,6 +6,7 @@ import Decimal from 'decimal.js';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
+import { denomExponentMap } from './bank.model';
 
 declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
@@ -72,13 +73,12 @@ export class BankQueryService {
         const map: { [symbol: string]: number } = {};
         await Promise.all(
           balance.map(async (b) => {
-            const metadata = metadataMap[b.denom!];
-            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
-
-            if (denomUnit) {
-              const amount = new Decimal(b.amount!);
+            if (b.denom && b.amount) {
+              const metadata = metadataMap[b.denom];
+              const denomExponent = denomExponentMap[b.denom];
+              const amount = new Decimal(b.amount);
               map[metadata.symbol!] = Number(
-                amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+                amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),
               );
             }
           }),

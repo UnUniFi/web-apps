@@ -111,24 +111,32 @@ export class BankQueryService {
   async _denomsMetadata() {
     const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
       {
-        description: 'UnUniFi governance token',
-        denom_units: [
+        "description": "The governance token of UnUniFi protocol.",
+        "denom_units": [
           {
-            denom: 'uguu',
-            exponent: 6,
-            aliases: [],
+            "denom": "uguu",
+            "exponent": 0
           },
+          {
+            "denom": "guu",
+            "exponent": 6
+          }
         ],
-        base: 'uguu',
-        display: 'GUU',
-        name: 'UnUniFi',
-        symbol: 'GUU',
+        "base": "uguu",
+        "name": "UnUniFi",
+        "display": "guu",
+        "symbol": "GUU",
       },
       {
         description: 'The first cryptocurrency invented in 2008',
         denom_units: [
           {
             denom: 'ubtc',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'btc',
             exponent: 6,
             aliases: [],
           },
@@ -143,6 +151,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'uusd',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'usd',
             exponent: 6,
             aliases: [],
           },
@@ -155,6 +168,11 @@ export class BankQueryService {
       {
         description: 'Stablecoin pegged to the USD',
         denom_units: [
+          {
+            denom: 'uusdc',
+            exponent: 0,
+            aliases: [],
+          },
           {
             denom: 'uusdc',
             exponent: 6,
@@ -171,6 +189,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'udlp',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'dlp',
             exponent: 6,
             aliases: [],
           },
@@ -185,7 +208,7 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-            exponent: 6,
+            exponent: 0,
             aliases: [],
           },
         ],

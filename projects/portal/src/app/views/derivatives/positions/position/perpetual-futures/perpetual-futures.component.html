@@ -64,7 +64,9 @@
           <div class="stat-value text-primary">
             {{ position?.position?.remaining_margin?.amount | coinAmount }}
           </div>
-          <div class="stat-desc">{{ position?.position?.remaining_margin?.denom | coinDenom }}</div>
+          <div class="stat-desc">
+            {{ position?.position?.remaining_margin?.denom | coinDenom | async }}
+          </div>
         </div>
         <div class="stat">
           <div class="stat-title">Date Opened</div>

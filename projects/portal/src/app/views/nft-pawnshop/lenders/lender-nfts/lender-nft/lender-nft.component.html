@@ -65,7 +65,7 @@
             <div class="stat-value text-primary">
               {{ bidders[0].bid_amount?.amount | coinAmount }}
             </div>
-            <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom }}</div>
+            <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom | async }}</div>
           </div>
           <div class="stat">
             <div class="stat-title">Your Status</div>

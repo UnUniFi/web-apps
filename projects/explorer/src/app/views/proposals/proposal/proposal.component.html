@@ -148,12 +148,12 @@
           <div class="stat" *ngFor="let total of proposal?.total_deposit">
             <div class="stat-title">Total Deposit</div>
             <div class="stat-value">{{ total.amount | coinAmount }}</div>
-            <div class="stat-desc">{{ total.denom | coinDenom }}</div>
+            <div class="stat-desc">{{ total.denom | coinDenom | async }}</div>
           </div>
           <div class="stat" *ngFor="let min of depositParams?.min_deposit">
             <div class="stat-title">Minimum Deposit</div>
             <div class="stat-value">{{ min.amount | coinAmount }}</div>
-            <div class="stat-desc">{{ min.denom | coinDenom }}</div>
+            <div class="stat-desc">{{ min.denom | coinDenom | async }}</div>
           </div>
         </div>
 

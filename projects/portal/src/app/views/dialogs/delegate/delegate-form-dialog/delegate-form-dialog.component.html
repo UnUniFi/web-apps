@@ -64,12 +64,13 @@
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ selectedAmount?.denom | coinDenom | async }}</span>
         </label>
 
         <label class="label">
           <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom | coinDenom }}
+            Available Balance: {{ uguuBalance | coinAmount
+            }}{{ selectedAmount?.denom | coinDenom | async }}
           </span>
         </label>
       </div>

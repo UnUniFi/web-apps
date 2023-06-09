@@ -111,21 +111,21 @@ export class BankQueryService {
   async _denomsMetadata() {
     const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
       {
-        "description": "The governance token of UnUniFi protocol.",
-        "denom_units": [
+        description: 'The governance token of UnUniFi protocol.',
+        denom_units: [
           {
-            "denom": "uguu",
-            "exponent": 0
+            denom: 'uguu',
+            exponent: 0,
           },
           {
-            "denom": "guu",
-            "exponent": 6
-          }
+            denom: 'guu',
+            exponent: 6,
+          },
         ],
-        "base": "uguu",
-        "name": "UnUniFi",
-        "display": "guu",
-        "symbol": "GUU",
+        base: 'uguu',
+        name: 'UnUniFi',
+        display: 'guu',
+        symbol: 'GUU',
       },
       {
         description: 'The first cryptocurrency invented in 2008',
@@ -213,7 +213,7 @@ export class BankQueryService {
           },
         ],
         base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-        display: 'OSMO',
+        display: 'osmo',
         name: 'OSMOSIS (IBC)',
         symbol: 'OSMO',
       },
@@ -288,6 +288,21 @@ export class BankQueryService {
         metadata,
       },
     };
+  }
+
+  async getDenomMetadata(
+    denoms?: string[],
+  ): Promise<cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[]> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    if (!denoms) {
+      const res = await this._denomsMetadata();
+      return res.data.metadatas || [];
+    }
+
+    const res = await Promise.all(
+      denoms.map((denom) => this._denomMetadata(denom).then((res) => res.data.metadata!)),
+    );
+    return res;
   }
 
   getDenomMetadata$(

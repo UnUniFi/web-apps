@@ -21,8 +21,7 @@ export class CoinPipe implements PipeTransform {
         return value.amount + ' ' + value.denom;
       }
       return amount + ' ' + symbol;
-    } else {
-      return value;
     }
+    return value;
   }
 }

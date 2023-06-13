@@ -1,5 +1,9 @@
-<view-account [account]="account$ | async" [balances]="balances$ | async"></view-account>
+<view-account
+  [address]="address$ | async"
+  [account]="account$ | async"
+  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [symbolImageMap]="symbolImageMap"
+></view-account>
 <app-txs></app-txs>
-<app-distribution></app-distribution>
 <app-staking></app-staking>
-<!--<app-bank></app-bank>-->
+<app-distribution></app-distribution>

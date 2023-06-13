@@ -4,7 +4,6 @@ import { DistributionModule } from '../../views/accounts/account/distribution/di
 import { StakingModule } from '../../views/accounts/account/staking/staking.module';
 import { TxsModule } from '../../views/accounts/account/txs/txs.module';
 import { AccountComponent } from './account/account.component';
-import { BankComponent } from './account/bank/bank.component';
 import { DistributionComponent } from './account/distribution/distribution.component';
 import { StakingComponent } from './account/staking/staking.component';
 import { TxsComponent } from './account/txs/txs.component';
@@ -13,13 +12,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 @NgModule({
-  declarations: [
-    AccountComponent,
-    BankComponent,
-    StakingComponent,
-    DistributionComponent,
-    TxsComponent,
-  ],
+  declarations: [AccountComponent, StakingComponent, DistributionComponent, TxsComponent],
   imports: [
     CommonModule,
     AccountsRoutingModule,

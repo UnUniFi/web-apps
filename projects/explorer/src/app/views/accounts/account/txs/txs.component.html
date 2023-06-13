@@ -1,27 +1,37 @@
-<h2 class="mb-0">Transactions</h2>
-<ng-container
-  *ngIf="(txsWithPagination?.tx_responses?.length || 0) > 0; then exist; else empty"
-></ng-container>
-<ng-template #empty>
-  <p class="ml-4">*This account has no transactions</p>
-</ng-template>
-<ng-template #exist>
-  <mat-card class="mb-4">
-    <mat-list>
-      <mat-list-item>
-        <span class="break-all truncate pr-4">Block Height</span>
-        <span class="flex-auto"></span>
-        <span class="break-all truncate">Tx Hash</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
-    <mat-nav-list *ngFor="let tx of txsWithPagination?.tx_responses; last as last">
-      <mat-list-item routerLink="../../../txs/{{ tx.txhash }}">
-        <span class="pr-4 font-mono">{{ tx.height }}</span>
-        <span class="flex-auto"></span>
-        <span class="break-all truncate font-mono">{{ tx.txhash }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-card>
-</ng-template>
+<div class="card bg-base-100 shadow-xl mb-4">
+  <div class="card-body">
+    <h2 class="card-title">Transactions</h2>
+    <ng-container *ngIf="txsWithPagination === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container
+        *ngIf="!txsWithPagination?.tx_responses?.length; then empty; else filled"
+      ></ng-container>
+      <ng-template #empty>
+        <p class="ml-4">*This account has no transactions</p>
+      </ng-template>
+      <ng-template #filled>
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Block Height</th>
+              <td>Tx Hash</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let tx of txsWithPagination?.tx_responses"
+              class="hover cursor-pointer"
+              routerLink="{{ '/txs/' + tx.txhash }}"
+            >
+              <th>{{ tx.height }}</th>
+              <td>{{ tx.txhash }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

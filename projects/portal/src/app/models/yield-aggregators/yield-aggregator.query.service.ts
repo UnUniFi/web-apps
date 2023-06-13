@@ -21,55 +21,55 @@ export class YieldAggregatorQueryService {
 
   getYieldAggregatorParam$(): Observable<YieldAggregatorParams200ResponseParams> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.params(sdk)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.params(sdk)),
       map((res) => res.data.params!),
     );
   }
 
-  listStrategies$(denom: string): Observable<StrategyAll200ResponseStrategiesInner[]> {
+  listStrategies$(denom?: string): Observable<StrategyAll200ResponseStrategiesInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.strategyAll(sdk, denom)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategyAll(sdk, denom)),
       map((res) => res.data.strategies!),
     );
   }
 
-  getStrategy$(denom: string, id: string): Observable<StrategyAll200ResponseStrategiesInner> {
+  getStrategy$(id: string, denom?: string): Observable<StrategyAll200ResponseStrategiesInner> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.strategy(sdk, denom, id)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategy(sdk, id, denom)),
       map((res) => res.data.strategy!),
     );
   }
 
   listVaults$(): Observable<VaultAll200ResponseVaultsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.vaultAll(sdk)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.vaultAll(sdk)),
       map((res) => res.data.vaults!),
     );
   }
 
   getVault$(id: string): Observable<Vault200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.vault(sdk, id)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.vault(sdk, id)),
       map((res) => res.data),
     );
   }
 
   getEstimatedMintAmount$(
     id: string,
-    amount: string,
+    amount?: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.estimateMintAmount(sdk, id, amount)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateMintAmount(sdk, id, amount)),
       map((res) => res.data.mint_amount!),
     );
   }
 
   getEstimatedRedeemAmount$(
     id: string,
-    amount: string,
+    amount?: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldaggregator.estimateRedeemAmount(sdk, id, amount)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount)),
       map((res) => res.data.redeem_amount!),
     );
   }

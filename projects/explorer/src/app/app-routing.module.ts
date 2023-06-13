@@ -8,6 +8,10 @@ const routes: Routes = [
       import('./pages/dashboard/dashboard.module').then((m) => m.AppDashboardModule),
   },
   {
+    path: 'accounts',
+    loadChildren: () => import('./pages/accounts/accounts.module').then((m) => m.AppAccountsModule),
+  },
+  {
     path: 'blocks',
     loadChildren: () => import('./pages/blocks/blocks.module').then((m) => m.AppBlocksModule),
   },

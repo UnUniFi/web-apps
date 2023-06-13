@@ -13,7 +13,7 @@ import {
   InactiveValidatorConfirmDialogData,
   InactiveValidatorConfirmDialogComponent,
 } from 'projects/portal/src/app/views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -23,8 +23,8 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class DelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
+  denom$: Observable<string | undefined>;
+  balance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validatorsList$: Observable<StakingDelegatorValidators200ResponseValidatorsInner[] | undefined>;
   validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
@@ -47,15 +47,14 @@ export class DelegateFormDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
-    this.uguuBalance$ = this.coins$.pipe(
-      map((coins) => {
-        const balance = coins?.find((coin) => coin.denom == 'uguu');
-        return balance ? balance.amount! : '0';
-      }),
+    const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
+    const config$ = this.configS.config$;
+    this.denom$ = config$.pipe(map((config) => config?.minimumGasPrices[0].denom));
+    this.balance$ = combineLatest([coins$, this.denom$]).pipe(
+      map(([coins, denom]) => coins?.find((coin) => coin.denom === denom)),
     );
 
-    this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
+    this.minimumGasPrices$ = config$.pipe(map((config) => config?.minimumGasPrices));
   }
 
   ngOnInit(): void {}

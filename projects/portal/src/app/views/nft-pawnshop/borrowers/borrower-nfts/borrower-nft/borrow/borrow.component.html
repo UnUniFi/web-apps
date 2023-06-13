@@ -129,11 +129,13 @@
                 [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
               />
-              <span>{{ borrowDenom }}</span>
+              <span>{{ symbol }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">max borrowing amount:</span>
-              <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
+              <span class="label-text-alt"
+                >{{ borrowAmount?.toString() | coinAmount }} {{ symbol }}
+              </span>
             </label>
           </div>
 

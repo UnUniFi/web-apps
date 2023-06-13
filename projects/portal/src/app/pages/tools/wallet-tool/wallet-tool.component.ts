@@ -1,10 +1,11 @@
+import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { KeplrService } from '../../../models/wallets/keplr/keplr.service';
 import { WalletApplicationService } from '../../../models/wallets/wallet.application.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, combineLatest, from } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -14,6 +15,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class WalletToolComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
+  symbol$: Observable<string | null | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   keplrStoredWallet$: Observable<StoredWallet | null | undefined>;
 
@@ -22,11 +24,19 @@ export class WalletToolComponent implements OnInit {
     private readonly walletApplicationService: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly keplrService: KeplrService,
+    private readonly configService: ConfigService,
   ) {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
+    );
+    const denom$ = this.configService.config$.pipe(
+      map((config) => config?.minimumGasPrices?.[0]?.denom),
+    );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([denom$, denomMetadataMap$]).pipe(
+      map(([denom, metadata]) => metadata[denom || ''].symbol),
     );
     this.symbolBalancesMap$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),

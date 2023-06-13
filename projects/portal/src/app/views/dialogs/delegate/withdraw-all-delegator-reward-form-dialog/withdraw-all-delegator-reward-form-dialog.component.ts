@@ -35,12 +35,10 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<WithdrawAllDelegatorRewardOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 

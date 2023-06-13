@@ -20,32 +20,27 @@ export class DepositFormDialogComponent implements OnInit {
   @Input()
   proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
+  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
+  @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denom?: string | null;
   @Input()
-  uguuBalance?: string | null;
+  balance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   proposalID?: number | null;
-  @Input()
-  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appSubmit: EventEmitter<DepositOnSubmitEvent>;
 
+  depositAmount?: number;
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 
@@ -71,17 +66,16 @@ export class DepositFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.selectedAmount) {
+    if (!this.depositAmount) {
       return;
     }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    this.selectedAmount.amount = this.selectedAmount.amount?.toString();
     this.appSubmit.emit({
       amount: {
-        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: this.selectedAmount.denom,
+        amount: Math.floor(Number(this.depositAmount) * 1000000).toString(),
+        denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,

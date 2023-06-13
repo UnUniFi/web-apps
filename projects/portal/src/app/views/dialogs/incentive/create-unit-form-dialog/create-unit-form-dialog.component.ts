@@ -25,17 +25,12 @@ export class CreateUnitFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
-  @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<CreateIncentiveUnitOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
   unitId?: string;
   firstRecipient?: IncentiveDist;
   recipients: IncentiveDist[];
@@ -45,7 +40,6 @@ export class CreateUnitFormDialogComponent implements OnInit {
     this.firstRecipient = { address: '', distRate: 100 };
     this.recipients = [];
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
 
     this.gasRatio = 0;
   }

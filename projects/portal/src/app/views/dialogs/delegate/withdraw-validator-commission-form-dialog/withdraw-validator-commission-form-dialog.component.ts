@@ -35,7 +35,6 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 

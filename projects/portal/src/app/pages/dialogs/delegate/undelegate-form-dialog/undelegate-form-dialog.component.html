@@ -1,4 +1,11 @@
-<view-undelegate-form-dialog [currentStoredWallet]="currentStoredWallet$ | async" [delegations]="delegations$ | async"
-  [delegateAmount]="delegateAmount$ | async" [coins]="coins$ | async" [uguuBalance]="uguuBalance$ | async"
-  [minimumGasPrices]="minimumGasPrices$ | async" [unbondingDelegation]="unbondingDelegation$ | async"
-  [validator]="validator" (appSubmit)="onSubmit($event)"></view-undelegate-form-dialog>
+<view-undelegate-form-dialog
+  [currentStoredWallet]="currentStoredWallet$ | async"
+  [delegations]="delegations$ | async"
+  [delegateCoin]="delegateCoin$ | async"
+  [denom]="denom$ | async"
+  [balance]="balance$ | async"
+  [minimumGasPrices]="minimumGasPrices$ | async"
+  [unbondingDelegation]="unbondingDelegation$ | async"
+  [validator]="validator"
+  (appSubmit)="onSubmit($event)"
+></view-undelegate-form-dialog>

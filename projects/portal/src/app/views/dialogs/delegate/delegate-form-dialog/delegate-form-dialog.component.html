@@ -59,19 +59,16 @@
             type="number"
             placeholder="e.g. 12.123456"
             class="input input-bordered w-full"
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [(ngModel)]="delegateAmount"
             [min]="0"
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ selectedAmount?.denom | coinDenom | async }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
 
         <label class="label">
-          <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount
-            }}{{ selectedAmount?.denom | coinDenom | async }}
-          </span>
+          <span class="label-text text-xs"> Available Balance: {{ balance | coin | async }} </span>
         </label>
       </div>
 

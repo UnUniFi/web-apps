@@ -11,7 +11,6 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
   Liquidation200ResponseLiquidations,
   ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
@@ -28,7 +27,6 @@ export class RepayComponent implements OnInit {
   symbol$: Observable<string | null | undefined>;
   symbolImage$: Observable<string | undefined>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
-  loans$: Observable<Loans200ResponseLoansInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   repayAmount$: Observable<number>;
   nftMetadata$: Observable<Metadata>;
@@ -65,19 +63,6 @@ export class RepayComponent implements OnInit {
         bidders.sort(
           (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
         ),
-      ),
-    );
-    this.loans$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) =>
-        this.pawnshopQuery
-          .listAllLoans$()
-          .pipe(
-            map((loans) =>
-              loans.filter(
-                (loan) => loan.nft_id?.class_id == classID && loan.nft_id?.nft_id == nftID,
-              ),
-            ),
-          ),
       ),
     );
     this.liquidation$ = nftCombine$.pipe(

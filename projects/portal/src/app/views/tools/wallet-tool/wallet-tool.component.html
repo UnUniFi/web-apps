@@ -45,9 +45,9 @@
             <div class="stat">
               <div class="stat-title">Available</div>
               <div class="stat-value text-secondary">
-                {{ symbolBalancesMap['GUU'] || 0 }}
+                {{ symbolBalancesMap[symbol || ''] || 0 }}
               </div>
-              <div class="stat-desc">GUU</div>
+              <div class="stat-desc">{{ symbol }}</div>
             </div>
           </div>
 

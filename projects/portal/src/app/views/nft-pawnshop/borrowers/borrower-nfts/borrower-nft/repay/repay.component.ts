@@ -14,7 +14,6 @@ import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-p
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
   Liquidation200ResponseLiquidations,
   ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
@@ -38,8 +37,6 @@ export class RepayComponent implements OnInit {
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  loans?: Loans200ResponseLoansInner[] | null;
-  @Input()
   liquidation?: Liquidation200ResponseLiquidations | null;
   @Input()
   repayAmount?: number | null;
@@ -54,7 +51,6 @@ export class RepayComponent implements OnInit {
   @Input()
   averageInterestRate?: number | null;
 
-  repayDenom?: string;
   chartType: ChartType;
   chartTitle: string;
   chartColumns: any[];
@@ -66,7 +62,6 @@ export class RepayComponent implements OnInit {
   appSubmit: EventEmitter<RepayRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    this.repayDenom = 'GUU';
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -100,14 +95,14 @@ export class RepayComponent implements OnInit {
     if (!this.classID || !this.nftID) {
       return;
     }
-    if (!this.repayAmount || !this.repayDenom) {
+    if (!this.repayAmount || !this.symbol) {
       alert('Some values are invalid!');
       return;
     }
     this.appSimulate.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.repayDenom,
+      symbol: this.symbol,
       amount: this.repayAmount,
     });
   }
@@ -117,14 +112,14 @@ export class RepayComponent implements OnInit {
       alert('Invalid NFT Info!');
       return;
     }
-    if (!this.repayAmount || !this.repayDenom) {
+    if (!this.repayAmount || !this.symbol) {
       alert('Invalid Repay Amount!');
       return;
     }
     this.appSubmit.emit({
       classID: this.classID,
       nftID: this.nftID,
-      symbol: this.repayDenom,
+      symbol: this.symbol,
       amount: this.repayAmount,
     });
   }

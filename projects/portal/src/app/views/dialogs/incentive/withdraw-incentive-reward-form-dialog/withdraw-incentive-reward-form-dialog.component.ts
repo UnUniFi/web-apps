@@ -20,10 +20,6 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
-  @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   reward?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
@@ -32,13 +28,10 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<WithdrawRewardOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
-
     this.gasRatio = 0;
   }
 

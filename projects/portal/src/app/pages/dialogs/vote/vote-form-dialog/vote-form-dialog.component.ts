@@ -2,7 +2,6 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
-import { txParseProposalContent } from 'projects/explorer/src/app/utils/tx-parser';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -10,7 +9,7 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { VoteOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/vote/vote/vote-form-dialog.component';
 import { Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vote-form-dialog',
@@ -20,11 +19,9 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class VoteFormDialogComponent implements OnInit {
   proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   proposalID: number | undefined;
-  proposalContent$: Observable<cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | undefined>;
+  proposalContent$: Observable<any | undefined>;
 
   constructor(
     @Inject(DIALOG_DATA)
@@ -37,24 +34,8 @@ export class VoteFormDialogComponent implements OnInit {
   ) {
     this.proposalID = data;
     this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
-    this.proposalContent$ = this.proposal$.pipe(
-      map((proposal) => txParseProposalContent(proposal?.content!)),
-    );
+    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    const address$ = this.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
-    );
-
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
-
-    this.uguuBalance$ = this.coins$.pipe(
-      map((coins) => {
-        const balance = coins?.find((coin) => coin.denom == 'uguu');
-        return balance ? balance.amount! : '0';
-      }),
-    );
-
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 

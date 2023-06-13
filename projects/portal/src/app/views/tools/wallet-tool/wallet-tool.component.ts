@@ -18,6 +18,8 @@ export class WalletToolComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
+  symbol?: string | null;
+  @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input()
   keplrStoredWallet?: StoredWallet | null;

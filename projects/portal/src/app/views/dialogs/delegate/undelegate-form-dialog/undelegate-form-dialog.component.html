@@ -94,16 +94,16 @@
             type="number"
             placeholder="e.g. 12.123456"
             class="input input-bordered w-full"
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [(ngModel)]="undelegateAmount"
             [min]="0"
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom }}</span>
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin }} </span>
         </label>
       </div>
 

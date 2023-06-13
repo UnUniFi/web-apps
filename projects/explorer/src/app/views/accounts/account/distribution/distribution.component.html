@@ -1,79 +1,74 @@
-<h2 class="mb-0">Validator Rewards</h2>
-<ng-container
-  *ngIf="
-    (commission?.commission?.commission?.length || 0) > 0;
-    then existCommission;
-    else emptyCommission
-  "
->
-</ng-container>
-<ng-template #emptyCommission>
-  <p class="ml-4">*This account has no commission</p>
-</ng-template>
-<ng-template #existCommission>
-  <h3 class="ml-4 mb-0">Accumulated Commission</h3>
-  <mat-card class="mb-2">
-    <mat-list>
-      <mat-list-item *ngFor="let commission of commission?.commission?.commission; last as last">
-        <span>{{ commission.amount | number : '1.6-6' }}</span>
-        <span class="flex-auto"></span>
-        <span class="mr-2 break-all">
-          <span>{{ commission.amount }}</span>
-          <span class="text-gray-500 text-sm">{{ commission.amount }}</span>
-        </span>
-        <span>{{ commission.denom }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
-</ng-template>
+<div class="card bg-base-100 shadow-xl mb-4">
+  <div class="card-body">
+    <h2 class="card-title">Validator Rewards</h2>
+    <ng-container *ngIf="commission === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container
+        *ngIf="!commission?.commission?.commission?.length; then empty; else filled"
+      ></ng-container>
+      <ng-template #empty>
+        <p class="ml-4">*This account has no commission</p>
+      </ng-template>
 
-<ng-container
-  *ngIf="(rewards?.rewards?.rewards?.length || 0) > 0; then existRewards; else emptyRewards"
->
-</ng-container>
-<ng-template #emptyRewards>
-  <p class="ml-4">*This account has no outstanding rewards</p>
-</ng-template>
-<ng-template #existRewards>
-  <h3 class="ml-4 mb-0">Outstanding Rewards</h3>
-  <mat-card class="mb-2">
-    <mat-list>
-      <mat-list-item *ngFor="let reward of rewards?.rewards?.rewards; last as last">
-        <span>{{ reward.amount | number : '1.6-6' }}</span>
-        <span class="flex-auto"></span>
-        <span class="mr-2 break-all">
-          <span>{{ reward.amount }}</span>
-          <span class="text-gray-500 text-sm">{{ reward.amount }}</span>
-        </span>
-        <span>{{ reward.denom }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
-</ng-template>
+      <ng-template #filled>
+        <table class="table w-full">
+          <tr>
+            <th>Validator Accumulated Commission</th>
+            <td *ngFor="let c of commission?.commission?.commission">
+              {{ c | coin | async }}
+            </td>
+          </tr>
+        </table>
+      </ng-template>
+    </ng-template>
 
-<ng-container *ngIf="(slashes?.slashes?.length || 0) > 0; then existSlashes; else emptySlashes">
-</ng-container>
-<ng-template #emptySlashes>
-  <p class="ml-4">*This account has no slashes</p>
-</ng-template>
-<ng-template #existSlashes>
-  <h3 class="ml-4 mb-0">Slashing</h3>
-  <mat-card class="mb-4">
-    <mat-list *ngFor="let slash of slashes?.slashes; last as last">
-      <mat-list-item>
-        <span>Validator Period:</span>
-        <span class="flex-auto"></span>
-        <span>{{ slash.validator_period }}</span>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-      <mat-list-item>
-        <span>Fraction:</span>
-        <span class="flex-auto"></span>
-        <span>{{ slash.fraction }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
-</ng-template>
+    <ng-container *ngIf="rewards === null; then loading; else loadedReward"></ng-container>
+    <ng-template #loadedReward>
+      <ng-container
+        *ngIf="!rewards?.rewards?.rewards?.length; then emptyReward; else filledReward"
+      ></ng-container>
+      <ng-template #emptyReward>
+        <p class="ml-4">*There is no outstanding reward</p>
+      </ng-template>
+
+      <ng-template #filledReward>
+        <table class="table w-full">
+          <tr>
+            <th>Outstanding Reward (For Delegators)</th>
+            <td *ngFor="let r of rewards?.rewards?.rewards">
+              {{ r | coin | async }}
+            </td>
+          </tr>
+        </table>
+      </ng-template>
+    </ng-template>
+
+    <ng-container *ngIf="slashes === null; then loading; else loadedSlash"></ng-container>
+    <ng-template #loadedSlash>
+      <ng-container
+        *ngIf="!slashes?.slashes?.length; then emptySlash; else filledSlash"
+      ></ng-container>
+      <ng-template #emptySlash></ng-template>
+
+      <ng-template #filledSlash>
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Period</th>
+              <td>Fraction</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let slash of slashes?.slashes">
+              <th>{{ slash.validator_period }}</th>
+              <td>{{ slash.fraction }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

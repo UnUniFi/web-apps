@@ -38,10 +38,10 @@
                   </mat-icon>
                 </th>
                 <td>{{ validator?.description?.moniker }}</td>
-                <td>{{ delegation.balance | coin }}</td>
+                <td>{{ delegation.balance | coin | async }}</td>
                 <td>
                   {{ delegation.delegation?.shares ?? '0' | coinAmount }}
-                  {{ delegation.balance?.denom | coinDenom }}
+                  {{ delegation.balance?.denom | coinDenom | async }}
                 </td>
               </tr>
             </ng-container>

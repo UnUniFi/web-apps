@@ -52,10 +52,10 @@
             [min]="0"
             required
           />
-          <span>{{ denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
         <label class="label">
-          <span class="label-text text-xs"> Available Balance: {{ balance | coin }} </span>
+          <span class="label-text text-xs"> Available Balance: {{ balance | coin | async }} </span>
         </label>
       </div>
 

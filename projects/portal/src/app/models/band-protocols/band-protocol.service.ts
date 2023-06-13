@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
+import { denomExponentMap } from '../cosmos/bank.model';
 
 export const rest = 'https://laozi1.bandchain.org/api';
 export type TokenAmountUSD = { symbol: string; symbolAmount: number; usdAmount: number };
@@ -30,9 +31,10 @@ export class BandProtocolService {
   ): Promise<TokenAmountUSD> {
     const price = await this.getPrice(symbol);
     const denom = symbolMetadataMap?.[symbol].base;
-    const exponent = symbolMetadataMap?.[symbol].denom_units?.find(
-      (u) => u.denom == denom,
-    )?.exponent;
+    if (!denom) {
+      throw new Error(`Denom not found for symbol ${symbol}`);
+    }
+    const exponent = denomExponentMap[denom];
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const usdAmount = symbolAmount * price;
     return { symbol, symbolAmount, usdAmount };

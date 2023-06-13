@@ -64,11 +64,11 @@
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin }} </span>
+          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin | async }} </span>
         </label>
       </div>
 

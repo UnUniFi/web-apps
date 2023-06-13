@@ -6,7 +6,7 @@ import { BankQueryService } from '../models/cosmos/bank.query.service';
 })
 export class CoinDenomPipe implements PipeTransform {
   constructor(private readonly bankQueryService: BankQueryService) {}
-  async transform(value: string | undefined | null): Promise<unknown> {
+  async transform(value: string | undefined | null): Promise<string | null | undefined> {
     if (value) {
       const metadata = await this.bankQueryService.getDenomMetadata([value]);
       const symbol = metadata[0].symbol;

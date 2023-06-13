@@ -10,7 +10,7 @@ export class CoinPipe implements PipeTransform {
   constructor(private readonly bankQueryService: BankQueryService) {}
   async transform(
     value: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined | null,
-  ): Promise<unknown> {
+  ): Promise<string> {
     if (value && value.denom) {
       const denomExponents = denomExponentMap;
       const metadata = await this.bankQueryService.getDenomMetadata([value.denom]);
@@ -20,8 +20,8 @@ export class CoinPipe implements PipeTransform {
       if (!symbol) {
         return value.amount + ' ' + value.denom;
       }
-      return amount + ' ' + symbol;
+      return amount.toFixed(exponent) + ' ' + symbol;
     }
-    return value;
+    return '';
   }
 }

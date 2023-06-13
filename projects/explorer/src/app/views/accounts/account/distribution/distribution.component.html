@@ -1,0 +1,74 @@
+<div class="card bg-base-100 shadow-xl mb-4">
+  <div class="card-body">
+    <h2 class="card-title">Validator Rewards</h2>
+    <ng-container *ngIf="commission === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container
+        *ngIf="!commission?.commission?.commission?.length; then empty; else filled"
+      ></ng-container>
+      <ng-template #empty>
+        <p class="ml-4">*This account has no commission</p>
+      </ng-template>
+
+      <ng-template #filled>
+        <table class="table w-full">
+          <tr>
+            <th>Validator Accumulated Commission</th>
+            <td *ngFor="let c of commission?.commission?.commission">
+              {{ c | coin | async }}
+            </td>
+          </tr>
+        </table>
+      </ng-template>
+    </ng-template>
+
+    <ng-container *ngIf="rewards === null; then loading; else loadedReward"></ng-container>
+    <ng-template #loadedReward>
+      <ng-container
+        *ngIf="!rewards?.rewards?.rewards?.length; then emptyReward; else filledReward"
+      ></ng-container>
+      <ng-template #emptyReward>
+        <p class="ml-4">*There is no outstanding reward</p>
+      </ng-template>
+
+      <ng-template #filledReward>
+        <table class="table w-full">
+          <tr>
+            <th>Outstanding Reward (For Delegators)</th>
+            <td *ngFor="let r of rewards?.rewards?.rewards">
+              {{ r | coin | async }}
+            </td>
+          </tr>
+        </table>
+      </ng-template>
+    </ng-template>
+
+    <ng-container *ngIf="slashes === null; then loading; else loadedSlash"></ng-container>
+    <ng-template #loadedSlash>
+      <ng-container
+        *ngIf="!slashes?.slashes?.length; then emptySlash; else filledSlash"
+      ></ng-container>
+      <ng-template #emptySlash></ng-template>
+
+      <ng-template #filledSlash>
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Period</th>
+              <td>Fraction</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let slash of slashes?.slashes">
+              <th>{{ slash.validator_period }}</th>
+              <td>{{ slash.fraction }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

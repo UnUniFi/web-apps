@@ -5,18 +5,18 @@ import { denomExponentMap } from '../models/cosmos/bank.model';
   name: 'coinAmount',
 })
 export class CoinAmountPipe implements PipeTransform {
-  transform(value: string | undefined | null, denom?: string): unknown {
+  transform(value: string | undefined | null, denom?: string): string {
     if (denom) {
       const denomExponents = denomExponentMap;
       const exponent = denomExponents[denom];
       const amount = Number(value) / Math.pow(10, exponent);
-      return amount;
+      return amount.toFixed(exponent);
     }
     if (value) {
       // if no denom, assume micro
       const amount = Number(value) / Math.pow(10, 6);
-      return amount;
+      return amount.toFixed(6);
     }
-    return value;
+    return '';
   }
 }

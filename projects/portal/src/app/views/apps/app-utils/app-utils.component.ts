@@ -12,9 +12,7 @@ export class AppUtilsComponent implements OnInit {
   apps: { name: string; link: string; icon: string }[];
 
   constructor() {
-    // Disable apps for now
-    this.apps = [];
-    // this.apps = apps;
+    this.apps = apps;
   }
 
   ngOnInit(): void {}

@@ -54,11 +54,12 @@
             [min]="0"
             required
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ selectedAmount?.denom | coinDenom | async }}</span>
         </label>
         <label class="label">
           <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom | coinDenom }}
+            Available Balance: {{ uguuBalance | coinAmount
+            }}{{ selectedAmount?.denom | coinDenom | async }}
           </span>
         </label>
       </div>

@@ -48,7 +48,9 @@
         <div class="card-body">
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">#{{ vault.id }}</div>
-            <div class="badge badge-lg badge-secondary mr-1">{{ vault.denom | coinDenom }}</div>
+            <div class="badge badge-lg badge-secondary mr-1">
+              {{ vault.denom | coinDenom | async }}
+            </div>
           </div>
           <h2 class="card-title">{{ vault.id }}</h2>
           <!-- <div class="stats flex flex-col md:flex-row">
@@ -86,7 +88,7 @@
                 </tr>
                 <tr>
                   <th>Owner's Deposit</th>
-                  <td>{{ vault?.owner_deposit | coin }}</td>
+                  <td>{{ vault?.owner_deposit | coin | async }}</td>
                 </tr>
                 <tr>
                   <th>Withdraw Commission Rate</th>

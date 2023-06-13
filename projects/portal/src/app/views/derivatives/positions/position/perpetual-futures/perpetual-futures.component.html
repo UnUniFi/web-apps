@@ -32,18 +32,18 @@
         </div>
         <div class="stat">
           <div class="stat-title">Effective Margin</div>
-          <div class="stat-value text-primary">{{ position?.effective_margin | coin }}</div>
+          <div class="stat-value text-primary">{{ position?.effective_margin | coin | async }}</div>
         </div>
         <div class="stat" *ngIf="!position?.valuation_profit?.amount?.includes('-')">
           <div class="stat-title">Current Profit</div>
           <div class="stat-value text-info">
-            {{ position?.valuation_profit | coin }}
+            {{ position?.valuation_profit | coin | async }}
           </div>
         </div>
         <div class="stat" *ngIf="position?.valuation_profit?.amount?.includes('-')">
           <div class="stat-title">Current Loss</div>
           <div class="stat-value text-error">
-            {{ position?.valuation_profit | coin }}
+            {{ position?.valuation_profit | coin | async }}
           </div>
         </div>
       </div>
@@ -64,7 +64,9 @@
           <div class="stat-value text-primary">
             {{ position?.position?.remaining_margin?.amount | coinAmount }}
           </div>
-          <div class="stat-desc">{{ position?.position?.remaining_margin?.denom | coinDenom }}</div>
+          <div class="stat-desc">
+            {{ position?.position?.remaining_margin?.denom | coinDenom | async }}
+          </div>
         </div>
         <div class="stat">
           <div class="stat-title">Date Opened</div>

@@ -23,7 +23,7 @@
         <div class="stat" *ngFor="let deposit of depositCoins; let i = index">
           <div class="stat-title">Deposit #{{ i + 1 }}</div>
           <div class="stat-value text-primary">{{ deposit.amount | coinAmount }}</div>
-          <div class="stat-desc">{{ deposit.denom | coinDenom }}</div>
+          <div class="stat-desc">{{ deposit.denom | coinDenom | async }}</div>
         </div>
         <div class="stat" *ngIf="!depositCoins || !depositCoins.length">
           <div class="stat-title">Deposit</div>
@@ -33,7 +33,7 @@
         <div class="stat" *ngFor="let lend of lendCoins; let i = index">
           <div class="stat-title">Deposit #{{ i + 1 }}</div>
           <div class="stat-value text-secondary">{{ lend.amount | coinAmount }}</div>
-          <div class="stat-desc">{{ lend.denom | coinDenom }}</div>
+          <div class="stat-desc">{{ lend.denom | coinDenom | async }}</div>
         </div>
         <div class="stat" *ngIf="!lendCoins || !lendCoins.length">
           <div class="stat-title">Lending</div>

@@ -1,5 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { CosmosWallet } from '../wallets/wallet.model';
+import { denomExponentMap } from './bank.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
@@ -22,12 +23,8 @@ export class BankService {
   ): cosmosclient.proto.cosmos.base.v1beta1.ICoin[] {
     const coins = Object.keys(symbolAmountMap).map((symbol) => {
       const denom = symbolMetadataMap[symbol].base!;
-      const denomUnit = symbolMetadataMap[symbol].denom_units?.find((unit) => unit.denom === denom);
-      if (!denomUnit) {
-        throw Error();
-      }
-
-      const amount = symbolAmountMap[symbol].toFixed(denomUnit.exponent!).replace('.', '');
+      const denomExponent = denomExponentMap[denom];
+      const amount = symbolAmountMap[symbol].toFixed(denomExponent).replace('.', '');
       return {
         denom,
         amount: parseInt(amount).toString(),
@@ -41,16 +38,10 @@ export class BankService {
     coin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): { symbol: string; amount: number } {
-    if (!coin.denom || !coin.amount) {
-      throw Error();
-    }
-    const denomMetadata = denomMetadataMap[coin.denom];
-    const denomUnit = denomMetadata.denom_units?.find((unit) => unit.denom === coin.denom);
-    if (!denomUnit) {
-      throw Error();
-    }
-    const symbol = denomMetadata.symbol || '';
-    const amount = Number(new Decimal(coin.amount).dividedBy(10 ** denomUnit.exponent!).toFixed(6));
+    const denomMetadata = denomMetadataMap[coin.denom!];
+    const denomExponent = denomExponentMap[coin.denom!];
+    const symbol = denomMetadata.symbol!;
+    const amount = Number(new Decimal(coin.amount!).dividedBy(10 ** denomExponent).toFixed(6));
     return { symbol, amount };
   }
 
@@ -61,14 +52,10 @@ export class BankService {
     const map: { [symbol: string]: number } = {};
     coins.map((b) => {
       const metadata = denomMetadataMap[b.denom!];
-      const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
+      const denomExponent = denomExponentMap[b.denom!];
 
-      if (denomUnit) {
-        const amount = new Decimal(b.amount!);
-        map[metadata.symbol!] = Number(
-          amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
-        );
-      }
+      const amount = new Decimal(b.amount!);
+      map[metadata.symbol!] = Number(amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6));
     });
     return map;
   }

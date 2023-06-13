@@ -414,7 +414,7 @@
                     'text-error': position.valuation_profit?.amount?.includes('-')
                   }"
                 >
-                  {{ position.valuation_profit | coin }}
+                  {{ position.valuation_profit | coin | async }}
                 </span>
               </td>
               <td>

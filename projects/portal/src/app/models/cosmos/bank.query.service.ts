@@ -6,6 +6,7 @@ import Decimal from 'decimal.js';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
+import { denomExponentMap } from './bank.model';
 
 declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
@@ -72,13 +73,12 @@ export class BankQueryService {
         const map: { [symbol: string]: number } = {};
         await Promise.all(
           balance.map(async (b) => {
-            const metadata = metadataMap[b.denom!];
-            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
-
-            if (denomUnit) {
-              const amount = new Decimal(b.amount!);
+            if (b.denom && b.amount) {
+              const metadata = metadataMap[b.denom];
+              const denomExponent = denomExponentMap[b.denom];
+              const amount = new Decimal(b.amount);
               map[metadata.symbol!] = Number(
-                amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+                amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),
               );
             }
           }),
@@ -111,17 +111,20 @@ export class BankQueryService {
   async _denomsMetadata() {
     const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
       {
-        description: 'UnUniFi governance token',
+        description: 'The governance token of UnUniFi protocol.',
         denom_units: [
           {
             denom: 'uguu',
+            exponent: 0,
+          },
+          {
+            denom: 'guu',
             exponent: 6,
-            aliases: [],
           },
         ],
         base: 'uguu',
-        display: 'GUU',
         name: 'UnUniFi',
+        display: 'guu',
         symbol: 'GUU',
       },
       {
@@ -129,6 +132,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'ubtc',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'btc',
             exponent: 6,
             aliases: [],
           },
@@ -143,6 +151,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'uusd',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'usd',
             exponent: 6,
             aliases: [],
           },
@@ -155,6 +168,11 @@ export class BankQueryService {
       {
         description: 'Stablecoin pegged to the USD',
         denom_units: [
+          {
+            denom: 'uusdc',
+            exponent: 0,
+            aliases: [],
+          },
           {
             denom: 'uusdc',
             exponent: 6,
@@ -171,6 +189,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'udlp',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'dlp',
             exponent: 6,
             aliases: [],
           },
@@ -185,12 +208,12 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-            exponent: 6,
+            exponent: 0,
             aliases: [],
           },
         ],
         base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-        display: 'OSMO',
+        display: 'osmo',
         name: 'OSMOSIS (IBC)',
         symbol: 'OSMO',
       },
@@ -265,6 +288,21 @@ export class BankQueryService {
         metadata,
       },
     };
+  }
+
+  async getDenomMetadata(
+    denoms?: string[],
+  ): Promise<cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[]> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    if (!denoms) {
+      const res = await this._denomsMetadata();
+      return res.data.metadatas || [];
+    }
+
+    const res = await Promise.all(
+      denoms.map((denom) => this._denomMetadata(denom).then((res) => res.data.metadata!)),
+    );
+    return res;
   }
 
   getDenomMetadata$(

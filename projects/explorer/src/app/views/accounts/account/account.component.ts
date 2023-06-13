@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'view-account',
@@ -22,7 +24,7 @@ export class AccountComponent implements OnInit, OnChanges {
 
   txColumnKeys = ['height', 'txhash', 'timestamp', 'gas_wanted', 'gas_used'];
 
-  constructor() {}
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 
   ngOnInit(): void {}
 
@@ -54,5 +56,15 @@ export class AccountComponent implements OnInit, OnChanges {
       }
       this.publicKey = Buffer.from(publicKey.key).toString('hex');
     }
+  }
+
+  copyClipboard(value: string) {
+    if (value.length > 0) {
+      this.clipboard.copy(value);
+      this.snackBar.open('Copied to clipboard', undefined, {
+        duration: 3000,
+      });
+    }
+    return false;
   }
 }

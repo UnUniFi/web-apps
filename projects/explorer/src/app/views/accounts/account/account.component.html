@@ -1,7 +1,12 @@
 <h2 class="mb-0">Account Info</h2>
 <div class="card bg-base-100 shadow-xl mb-4">
   <div class="card-body">
-    <h2 class="card-title">{{ baseAccount?.address }}</h2>
+    <h2 class="card-title">
+      {{ address }}
+      <button mat-icon-button type="button" (click)="copyClipboard(address || '')">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </h2>
     <div class="overflow-x-auto">
       <table class="table w-full">
         <tr>

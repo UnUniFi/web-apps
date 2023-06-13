@@ -1,6 +1,5 @@
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ToolbarModule } from './views/toolbar/toolbar.module';
 import { ViewModule } from './views/view.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -18,7 +17,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatDialogModule,
     MatSnackBarModule,
     ViewModule,
-    ToolbarModule,
     HttpClientModule,
   ],
   providers: [],

@@ -15,6 +15,8 @@ export interface OptionConfig {
 export class YieldAggregatorComponent implements OnInit {
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  @Input()
+  availableSymbols?: string[] | null;
 
   configs: OptionConfig[];
   selectedConfig: OptionConfig;

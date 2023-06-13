@@ -44,7 +44,7 @@ export class CreateComponent implements OnInit {
     );
     this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
-    const allStrategies$ = this.iyaQuery.listStrategies$('');
+    const allStrategies$ = this.iyaQuery.listStrategies$();
     this.symbolBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
     );

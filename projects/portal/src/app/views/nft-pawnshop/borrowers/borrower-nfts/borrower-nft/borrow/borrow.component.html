@@ -129,11 +129,13 @@
                 [class]="{ 'input-error': borrowAmountRef.errors && borrowAmountRef.touched }"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
               />
-              <span>{{ borrowDenom }}</span>
+              <span>{{ symbol }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">max borrowing amount:</span>
-              <span class="label-text-alt">{{ borrowAmount || 0 }} {{ borrowDenom }} </span>
+              <span class="label-text-alt"
+                >{{ borrowAmount?.toString() | coinAmount }} {{ symbol }}
+              </span>
             </label>
           </div>
 
@@ -183,8 +185,8 @@
           <tr *ngFor="let bidder of bidders; let i = index">
             <th>#{{ i + 1 }}</th>
             <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-            <td>{{ bidder.deposit_amount | coin }}</td>
-            <td>{{ bidder.bid_amount | coin }}</td>
+            <td>{{ bidder.deposit_amount | coin | async }}</td>
+            <td>{{ bidder.bid_amount | coin | async }}</td>
             <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
             <td>{{ bidder.bidder }}</td>
           </tr>

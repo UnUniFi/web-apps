@@ -12,7 +12,6 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
-  Loans200ResponseLoansInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -27,7 +26,6 @@ export class BorrowComponent implements OnInit {
   symbol$: Observable<string | null | undefined>;
   symbolImage$: Observable<string | undefined>;
   bidders$: Observable<BidderBids200ResponseBidsInner[]>;
-  loans$: Observable<Loans200ResponseLoansInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   shortestExpiryDate$: Observable<Date>;
@@ -79,21 +77,7 @@ export class BorrowComponent implements OnInit {
           }
         }, 0),
       ),
-      map((amount) => amount / 1000000),
-    );
-
-    this.loans$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) =>
-        this.pawnshopQuery
-          .listAllLoans$()
-          .pipe(
-            map((loans) =>
-              loans.filter(
-                (loan) => loan.nft_id?.class_id == classID && loan.nft_id?.nft_id == nftID,
-              ),
-            ),
-          ),
-      ),
+      map((amount) => amount),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),

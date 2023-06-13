@@ -1,0 +1,45 @@
+<div class="card bg-base-100 shadow-xl mb-4">
+  <div class="card-body">
+    <h2 class="card-title">Delegator Rewards</h2>
+    <ng-container *ngIf="totalRewards === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="!totalRewards?.total?.length; then empty; else filled"></ng-container>
+      <ng-template #empty>
+        <p class="ml-4">*This account has no delegator reward</p>
+      </ng-template>
+
+      <ng-template #filled>
+        <table class="table w-full">
+          <tr>
+            <th>Total Rewards</th>
+            <td *ngFor="let eachTotalReward of totalRewards?.total">
+              {{ eachTotalReward | coin | async }}
+            </td>
+          </tr>
+        </table>
+
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Validator Address</th>
+              <td>Amount</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let reward of totalRewards?.rewards"
+              class="hover cursor-pointer"
+              routerLink="{{ '/validators/' + reward.validator_address }}"
+            >
+              <th>{{ reward.validator_address }}</th>
+              <td *ngFor="let eachReward of reward?.reward">{{ eachReward | coin | async }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

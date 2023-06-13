@@ -1,8 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { unitInfo } from 'projects/portal/src/app/pages/incentive/units/unit/unit.component';
-import { IncentiveUnit200ResponseIncentiveUnit } from 'ununifi-client/esm/openapi';
+import { RecipientContainer200ResponseRecipientContainer } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-unit',
@@ -15,7 +14,7 @@ export class UnitComponent implements OnInit {
   @Input()
   txMemo?: string | null;
   @Input()
-  unit?: IncentiveUnit200ResponseIncentiveUnit | null;
+  unit?: RecipientContainer200ResponseRecipientContainer | null;
 
   constructor(private clipboard: Clipboard, private readonly snackBar: MatSnackBar) {}
 

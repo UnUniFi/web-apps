@@ -21,10 +21,6 @@ export class VoteFormDialogComponent implements OnInit {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
-  @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
   proposalID?: number | null;
@@ -41,8 +37,6 @@ export class VoteFormDialogComponent implements OnInit {
   appSubmitAbstain: EventEmitter<VoteOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
@@ -50,10 +44,6 @@ export class VoteFormDialogComponent implements OnInit {
     this.appSubmitNoWithVeto = new EventEmitter();
     this.appSubmitNo = new EventEmitter();
     this.appSubmitAbstain = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 

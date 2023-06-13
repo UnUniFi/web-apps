@@ -6,6 +6,7 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -114,23 +115,14 @@ export class VaultComponent implements OnInit {
       vaultId$,
       this.vault$,
       this.mintAmount$.asObservable(),
-      denomMetadataMap$,
     ]).pipe(
-      mergeMap(([id, vault, deposit, denomMetadataMap]) => {
-        const exponent =
-          denomMetadataMap?.[vault.vault?.denom!].denom_units?.find(
-            (u) => u.denom == vault.vault?.denom,
-          )?.exponent || 0;
+      mergeMap(([id, vault, deposit]) => {
+        const exponent = denomExponentMap[vault.vault?.denom!];
         return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
-    this.estimatedBurnAmount$ = combineLatest([
-      vaultId$,
-      this.vault$,
-      this.burnAmount$.asObservable(),
-      denomMetadataMap$,
-    ]).pipe(
-      mergeMap(([id, vault, burn, denomMetadataMap]) => {
+    this.estimatedBurnAmount$ = combineLatest([vaultId$, this.burnAmount$.asObservable()]).pipe(
+      mergeMap(([id, burn]) => {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
       }),
     );

@@ -15,7 +15,7 @@ import {
   ListedNfts200ResponseListingsInnerListing,
   Loan200Response,
   Loans200ResponseLoansInner,
-  NftmarketParams200ResponseParams,
+  NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
 
 @Injectable({ providedIn: 'root' })
@@ -25,9 +25,9 @@ export class NftPawnshopQueryService {
   constructor(private http: HttpClient, private cosmosSDK: CosmosSDKService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
-  getNftmarketParam$(): Observable<NftmarketParams200ResponseParams> {
+  getNftBackedLoanParam$(): Observable<NftBackedLoanParams200ResponseParams> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.params(sdk)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.params(sdk)),
       map((res) => res.data.params!),
     );
   }
@@ -37,7 +37,7 @@ export class NftPawnshopQueryService {
     nftID: string,
   ): Observable<ListedNfts200ResponseListingsInnerListing> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.nftListing(sdk, classID, nftID)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.nftListing(sdk, classID, nftID)),
       map((res) => res.data.listing!),
     );
   }
@@ -47,69 +47,69 @@ export class NftPawnshopQueryService {
     nftID: string,
   ): Promise<ListedNfts200ResponseListingsInnerListing> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const res = await ununifi.rest.nftmarket.nftListing(sdk, classID, nftID);
+    const res = await ununifi.rest.nftbackedloan.nftListing(sdk, classID, nftID);
     return res.data.listing!;
   }
 
   listAllListedNfts$(): Observable<ListedNfts200ResponseListingsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedNfts(sdk)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedNfts(sdk)),
       map((res) => res.data.listings!),
     );
   }
 
   listAllListedClasses$(): Observable<ListedClass200Response[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedClasses(sdk)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedClasses(sdk)),
       map((res) => res.data.classes!),
     );
   }
 
   listListedClass$(classID: string, limit: number): Observable<ListedClass200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.listedClass(sdk, classID, limit)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedClass(sdk, classID, limit)),
       map((res) => res.data!),
     );
   }
 
   listNftBids$(classID: string, nftID: string): Observable<BidderBids200ResponseBidsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.nftBids(sdk, classID, nftID)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.nftBids(sdk, classID, nftID)),
       map((res) => res.data.bids!),
     );
   }
 
   listBidderBids$(address: string): Observable<BidderBids200ResponseBidsInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.bidderBids(sdk, address)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.bidderBids(sdk, address)),
       map((res) => res.data.bids!),
     );
   }
 
   listAllLoans$(): Observable<Loans200ResponseLoansInner[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.loans(sdk)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.loans(sdk)),
       map((res) => res.data.loans!),
     );
   }
 
   getLoan$(classID: string, nftID: string): Observable<Loan200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.loan(sdk, classID, nftID)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.loan(sdk, classID, nftID)),
       map((res) => res.data),
     );
   }
 
   getLiquidation$(classID: string, nftID: string): Observable<Liquidation200ResponseLiquidations> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.liquidation(sdk, classID, nftID)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.liquidation(sdk, classID, nftID)),
       map((res) => res.data.liquidations!),
     );
   }
 
   listRewards$(address: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftmarket.rewards(sdk, address)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.rewards(sdk, address)),
       map((res) => res.data.rewards!),
     );
   }

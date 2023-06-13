@@ -67,7 +67,7 @@
             <a class="text-base-content">
               <span class="column-name">Delegated Amount</span>
               <span class="flex-auto"></span>
-              <span class="column-value">{{ delegateAmount | coin }}</span>
+              <span class="column-value">{{ delegateAmount | coin | async }}</span>
             </a>
           </li>
         </ul>
@@ -96,7 +96,7 @@
               <a class="text-base-content">
                 <span class="column-name">Claimable Delegator Reward</span>
                 <span class="flex-auto"></span>
-                <span>{{ eachTotalReward | coin }}</span>
+                <span>{{ eachTotalReward | coin | async }}</span>
               </a>
             </li>
           </ul>
@@ -132,7 +132,7 @@
               <a class="text-base-content">
                 <span class="column-name">Claimable Validator Commission</span>
                 <span class="flex-auto"></span>
-                <span>{{ commission | coin }}</span>
+                <span>{{ commission | coin | async }}</span>
               </a>
             </li>
           </ul>

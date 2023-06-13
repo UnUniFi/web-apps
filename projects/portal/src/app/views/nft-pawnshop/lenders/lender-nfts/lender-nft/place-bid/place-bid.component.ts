@@ -101,18 +101,6 @@ export class PlaceBidComponent implements OnInit {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  getPocValue() {
-    if (this.currentStoredWallet && this.classID && this.nftID) {
-      return this.pawnshopPoc.getPocValue(
-        this.currentStoredWallet?.address,
-        this.classID,
-        this.nftID,
-      );
-    } else {
-      return '0GUU';
-    }
-  }
-
   onSimulate() {
     if (!this.classID || !this.nftID || !this.symbol) {
       alert('Invalid NFT Info!');

@@ -163,8 +163,9 @@
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Are you sure to buy DLP?</h3>
                 <p class="py-4" *ngIf="estimatedLPTAmount">
-                  Estimated DLP amount is {{ estimatedLPTAmount.estimated_dlp_amount | coin }} (Fee
-                  is {{ estimatedLPTAmount.deposit_fee | coin }}), do you proceed?
+                  Estimated DLP amount is
+                  {{ estimatedLPTAmount.estimated_dlp_amount | coin | async }} (Fee is
+                  {{ estimatedLPTAmount.deposit_fee | coin | async }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedLPTAmount && calculatedDLPAmount">
                   Estimated DLP amount is {{ calculatedDLPAmount | number }}DLP, and fees will be
@@ -275,8 +276,8 @@
                 <h3 class="font-bold text-lg">Are you sure to sell DLP?</h3>
                 <p class="py-4" *ngIf="estimatedRedeemAmount">
                   Estimated {{ redeemSymbolRef.value }} amount is
-                  {{ estimatedRedeemAmount.amount | coin }} (Fee is
-                  {{ estimatedRedeemAmount.fee | coin }}), do you proceed?
+                  {{ estimatedRedeemAmount.amount | coin | async }} (Fee is
+                  {{ estimatedRedeemAmount.fee | coin | async }}), do you proceed?
                 </p>
                 <p class="py-4" *ngIf="!estimatedRedeemAmount && calculatedRedeemAmount">
                   Estimated redeem amount is {{ calculatedRedeemAmount | number

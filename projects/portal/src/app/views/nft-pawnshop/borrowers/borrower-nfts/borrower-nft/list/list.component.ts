@@ -36,7 +36,7 @@ export class ListComponent implements OnInit {
     this.appSubmit.emit({
       classID: this.classID!,
       nftID: this.nftID!,
-      listingType: ununificlient.proto.ununifi.nftmarket.ListingType.DIRECT_ASSET_BORROW,
+      listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType.DIRECT_ASSET_BORROW,
       bidSymbol: this.bidSymbol,
       minimumDepositRate: this.minDepositRate / 100,
       autoRefinancing: true,

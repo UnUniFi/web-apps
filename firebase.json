@@ -77,82 +77,6 @@
       ]
     },
     {
-      "target": "ununifi-8-private-test",
-      "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "/explorer/**",
-          "destination": "/explorer/index.html"
-        },
-        {
-          "source": "/portal/**",
-          "destination": "/portal/index.html"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "ununifi-9-beta-test-v1",
-      "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "/explorer/**",
-          "destination": "/explorer/index.html"
-        },
-        {
-          "source": "/portal/**",
-          "destination": "/portal/index.html"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "ununifi-nftfi-pocv1",
-      "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "/explorer/**",
-          "destination": "/explorer/index.html"
-        },
-        {
-          "source": "/portal/**",
-          "destination": "/portal/index.html"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "ununifi-derivatives-pocv1",
-      "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "/explorer/**",
-          "destination": "/explorer/index.html"
-        },
-        {
-          "source": "/portal/**",
-          "destination": "/portal/index.html"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
       "target": "ununifi-stable",
       "public": "dist/landing-page",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
@@ -164,29 +88,6 @@
         {
           "source": "/portal/**",
           "destination": "/portal/index.html"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "ununifi-iya-poc-v1",
-      "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "/explorer/**",
-          "destination": "/explorer/index.html"
-        },
-        {
-          "source": "/portal/**",
-          "destination": "/portal/index.html"
-        },
-        {
-          "source": "/marketplace/**",
-          "destination": "/marketplace/index.html"
         },
         {
           "source": "**",

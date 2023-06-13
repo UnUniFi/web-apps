@@ -1,19 +1,9 @@
-import { TokenData } from '../../pages/derivatives/derivatives.component';
 import { Component, Input, OnInit } from '@angular/core';
 import {
   DerivativesParams200ResponseParams,
   PerpetualFutures200Response,
   Pool200Response,
 } from 'ununifi-client/esm/openapi';
-
-export interface TokenInfo {
-  name: string;
-  symbol: string;
-  iconUrl: string;
-  price: string;
-  pool: string;
-  weight: string;
-}
 
 export interface MarketConfig {
   name: string;
@@ -33,11 +23,6 @@ export class DerivativesComponent implements OnInit {
   pool?: Pool200Response | null;
   @Input()
   perpetualFuturesParams?: PerpetualFutures200Response | null;
-  @Input()
-  tokens?: TokenData[] | null;
-
-  @Input()
-  tokenInfos?: TokenInfo[] | null;
 
   configs: MarketConfig[];
   selectedConfig: MarketConfig;

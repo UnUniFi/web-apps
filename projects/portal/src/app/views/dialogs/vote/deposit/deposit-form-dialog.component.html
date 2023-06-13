@@ -12,9 +12,7 @@
     <ng-container *ngIf="proposalContent">
       <ul class="menu w-full">
         <li class="disabled">
-          <a class="text-base-content">
-            # {{ proposal?.proposal_id }} {{ proposalContent.title }}
-          </a>
+          <a class="text-base-content"> # {{ proposalID }} {{ proposalContent.title }} </a>
         </li>
       </ul>
     </ng-container>
@@ -49,17 +47,15 @@
             type="number"
             placeholder="Type here"
             class="input input-bordered w-full"
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [(ngModel)]="depositAmount"
             pattern="^\d+(\.\d{1,6})?$"
             [min]="0"
             required
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
         <label class="label">
-          <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom | coinDenom }}
-          </span>
+          <span class="label-text text-xs"> Available Balance: {{ balance | coin | async }} </span>
         </label>
       </div>
 

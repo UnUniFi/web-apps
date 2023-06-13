@@ -6,14 +6,12 @@ import { TxCommonApplicationService } from '../cosmos/tx-common.application.serv
 import { NftMintService } from './nft-mint.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NftMintApplicationService {
   constructor(
-    private readonly snackBar: MatSnackBar,
     private readonly dialog: Dialog,
     private readonly nftMintService: NftMintService,
     private readonly txCommonApplication: TxCommonApplicationService,

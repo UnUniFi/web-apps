@@ -1,5 +1,4 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
@@ -15,26 +14,26 @@ import {
 export class IncentiveQueryService {
   private restSdk$: Observable<CosmosSDK>;
 
-  constructor(private http: HttpClient, private cosmosSDK: CosmosSDKService) {
+  constructor(private cosmosSDK: CosmosSDKService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
   getEcosystemIncentiveParams$(): Observable<EcosystemIncentiveParams200ResponseParams> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemincentive.params(sdk)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.params(sdk)),
       map((res) => res.data.params!),
     );
   }
 
   getRecipientContainer$(id: string): Observable<RecipientContainer200ResponseRecipientContainer> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemincentive.recipientContainer(sdk, id)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.recipientContainer(sdk, id)),
       map((res) => res.data.recipient_container!),
     );
   }
 
   getAllRewards$(subjectAddr: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemincentive.allRewards(sdk, subjectAddr)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
       map((res) => res.data.rewards?.rewards!),
     );
   }
@@ -44,7 +43,7 @@ export class IncentiveQueryService {
     denom: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemincentive.reward(sdk, subjectAddr, denom)),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
       map((res) => res.data.reward!),
     );
   }
@@ -52,7 +51,7 @@ export class IncentiveQueryService {
   belongingRecipientContainerIdsByAddr$(address: string): Observable<string[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
-        ununifi.rest.ecosystemincentive.belongingRecipientContainerIdsByAddr(sdk, address),
+        ununifi.rest.ecosystemIncentive.belongingRecipientContainerIdsByAddr(sdk, address),
       ),
       map((res) => res.data.recipient_container_ids!),
     );

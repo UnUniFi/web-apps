@@ -2,6 +2,7 @@ import { validateAccAddress } from '../../utils/validation';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmos } from '@cosmos-client/core/esm/proto';
+import { denomExponentMap } from '../../models/cosmos/bank.model';
 
 export type Amount = {
   amount: number;
@@ -71,9 +72,14 @@ export class FaucetComponent implements OnInit {
       });
       return;
     }
-    const amountInt = Math.floor(
-      this.amount * 10 ** metadata.denom_units?.find((u) => u.denom == metadata.base)?.exponent!,
-    );
+    if (!metadata.base) {
+      this.matSnackBar.open('No metadata of ' + this.symbol, undefined, {
+        duration: 6000,
+      });
+      return;
+    }
+    const exponent = denomExponentMap[metadata.base];
+    const amountInt = Math.floor(this.amount * 10 ** exponent);
     if (amountInt > 0 && this.faucetURL) {
       this.postFaucetRequested.emit({
         address: this.address,

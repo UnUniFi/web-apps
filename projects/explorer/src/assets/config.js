@@ -7,11 +7,10 @@ const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 
-// To Do write chain config
-const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
+const domainCauchyEA = 'ununifi-beta-test.cauchye.net';
 
-const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (Alpha-Test)';
+const chainID = 'ununifi-beta';
+const chainName = 'UnUniFi (Beta)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -106,7 +105,7 @@ const configs = [
         nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
       },
       developer: {
-        enabled: true,
+        enabled: false,
         developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
       },
       navigations: [],

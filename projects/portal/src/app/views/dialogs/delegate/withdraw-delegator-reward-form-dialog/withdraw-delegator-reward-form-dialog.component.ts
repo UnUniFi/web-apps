@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -15,7 +15,7 @@ export type WithdrawDelegatorRewardOnSubmitEvent = {
   templateUrl: './withdraw-delegator-reward-form-dialog.component.html',
   styleUrls: ['./withdraw-delegator-reward-form-dialog.component.css'],
 })
-export class WithdrawDelegatorRewardFormDialogComponent implements OnInit {
+export class WithdrawDelegatorRewardFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

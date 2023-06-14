@@ -10,6 +10,7 @@ import {
   EventEmitter,
   Inject,
   Input,
+  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
@@ -42,7 +43,7 @@ export type InterfaceTemplateToRender = 'loading' | 'form' | 'success';
   templateUrl: './edit-validator-multiple.component.html',
   styleUrls: ['./edit-validator-multiple.component.css'],
 })
-export class ViewEditValidatorMultipleComponent implements OnInit {
+export class ViewEditValidatorMultipleComponent implements OnInit, OnChanges {
   @Input() nodes?: any[] | null;
   @Input() loading?: boolean;
   @Input() error?: string;

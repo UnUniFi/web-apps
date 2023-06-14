@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -22,7 +23,7 @@ import {
   templateUrl: './borrow.component.html',
   styleUrls: ['./borrow.component.css'],
 })
-export class BorrowComponent implements OnInit {
+export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   classID?: string | null;
   @Input()

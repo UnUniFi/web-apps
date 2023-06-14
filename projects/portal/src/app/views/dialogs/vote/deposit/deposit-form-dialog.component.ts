@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -17,7 +17,7 @@ export type DepositOnSubmitEvent = {
   templateUrl: './deposit-form-dialog.component.html',
   styleUrls: ['./deposit-form-dialog.component.css'],
 })
-export class DepositFormDialogComponent implements OnInit {
+export class DepositFormDialogComponent implements OnInit,OnChanges {
   @Input()
   proposal?: Proposals200ResponseProposalsInner | null;
   @Input()

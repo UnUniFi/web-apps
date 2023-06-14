@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -21,7 +21,7 @@ export type IncentiveDist = {
   templateUrl: './create-unit-form-dialog.component.html',
   styleUrls: ['./create-unit-form-dialog.component.css'],
 })
-export class CreateUnitFormDialogComponent implements OnInit {
+export class CreateUnitFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

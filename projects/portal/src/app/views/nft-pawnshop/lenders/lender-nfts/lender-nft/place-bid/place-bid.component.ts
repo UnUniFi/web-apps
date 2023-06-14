@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -23,7 +24,7 @@ import {
   templateUrl: './place-bid.component.html',
   styleUrls: ['./place-bid.component.css'],
 })
-export class PlaceBidComponent implements OnInit {
+export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   classID?: string | null;
   @Input()

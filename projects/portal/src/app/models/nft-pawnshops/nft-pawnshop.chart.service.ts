@@ -60,7 +60,13 @@ export class NftPawnshopChartService {
 
   createBidAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
-    const exponent = denomExponentMap[bidders[0].bid_amount?.denom!];
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     return bidders.map((bidder) => {
       if (
         bidder.bidding_period &&
@@ -81,7 +87,13 @@ export class NftPawnshopChartService {
   createDepositAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     const disableColor = '#BFBFBF';
-    const exponent = denomExponentMap[bidders[0].bid_amount?.denom!];
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     let data = [];
     for (let bidder of bidders) {
       if (
@@ -115,7 +127,13 @@ export class NftPawnshopChartService {
 
   createBorrowingAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
-    const exponent = denomExponentMap[bidders[0].bid_amount?.denom!];
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     return bidders.map((bidder) => {
       if (
         bidder.bidding_period &&

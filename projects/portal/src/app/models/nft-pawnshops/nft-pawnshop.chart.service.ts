@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
+import { denomExponentMap } from '../cosmos/bank.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +60,13 @@ export class NftPawnshopChartService {
 
   createBidAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     return bidders.map((bidder) => {
       if (
         bidder.bidding_period &&
@@ -67,7 +75,7 @@ export class NftPawnshopChartService {
         bidder.deposit_lending_rate
       ) {
         const date = new Date(bidder.bidding_period).toLocaleString();
-        const bidAmount = Number(bidder.bid_amount.amount) / 1000000;
+        const bidAmount = Number(bidder.bid_amount.amount) / 10 ** exponent;
         const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
         return [date, bidAmount, primaryColor, rate];
       } else {
@@ -79,6 +87,13 @@ export class NftPawnshopChartService {
   createDepositAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     const disableColor = '#BFBFBF';
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     let data = [];
     for (let bidder of bidders) {
       if (
@@ -88,11 +103,11 @@ export class NftPawnshopChartService {
         bidder.deposit_lending_rate
       ) {
         const date = new Date(bidder.bidding_period).toLocaleString();
-        const depositAmount = Number(bidder.deposit_amount.amount) / 1000000;
+        const depositAmount = Number(bidder.deposit_amount.amount) / 10 ** exponent;
         const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
         if (bidder.borrowings && bidder.borrowings.length) {
           const borrowedAmount = bidder.borrowings.reduce(
-            (sum, curr) => sum + Number(curr.amount?.amount) / 1000000,
+            (sum, curr) => sum + Number(curr.amount?.amount) / 10 ** exponent,
             0,
           );
           data.push([date, borrowedAmount, disableColor, rate]);
@@ -112,6 +127,13 @@ export class NftPawnshopChartService {
 
   createBorrowingAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
+    if (bidders.length === 0) {
+      return [];
+    }
+    if (!bidders[0].bid_amount?.denom) {
+      return [];
+    }
+    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
     return bidders.map((bidder) => {
       if (
         bidder.bidding_period &&
@@ -121,7 +143,8 @@ export class NftPawnshopChartService {
       ) {
         const date = new Date(bidder.bidding_period).toLocaleString();
         const borrowAmount =
-          bidder.borrowings.reduce((sum, curr) => sum + Number(curr.amount?.amount), 0) / 1000000;
+          bidder.borrowings.reduce((sum, curr) => sum + Number(curr.amount?.amount), 0) /
+          10 ** exponent;
         const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
         return [date, borrowAmount, primaryColor, rate];
       } else {

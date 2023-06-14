@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -9,6 +10,7 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { liquidation } from 'ununifi-client/cjs/rest/nftbackedloan/module';
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
@@ -37,6 +39,7 @@ export class RepayComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private readonly bankService: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
@@ -68,8 +71,15 @@ export class RepayComponent implements OnInit {
     this.liquidation$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getLiquidation$(classID, nftID)),
     );
-    this.repayAmount$ = this.liquidation$.pipe(
-      map((liq) => Number(liq.liquidation?.amount?.amount) / 1000000),
+
+    this.repayAmount$ = combineLatest([this.liquidation$, denomMetadataMap$]).pipe(
+      map(
+        ([liquidation, denomMetadataMap]) =>
+          this.bankService.convertCoinToSymbolAmount(
+            liquidation.liquidation?.amount || { amount: '0', denom: '' },
+            denomMetadataMap,
+          ).amount,
+      ),
     );
 
     const nftData$ = nftCombine$.pipe(

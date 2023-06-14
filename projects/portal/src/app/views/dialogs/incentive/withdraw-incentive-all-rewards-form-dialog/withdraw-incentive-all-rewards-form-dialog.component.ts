@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -13,7 +13,7 @@ export type WithdrawAllRewardsOnSubmitEvent = {
   templateUrl: './withdraw-incentive-all-rewards-form-dialog.component.html',
   styleUrls: ['./withdraw-incentive-all-rewards-form-dialog.component.css'],
 })
-export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
+export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit,OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

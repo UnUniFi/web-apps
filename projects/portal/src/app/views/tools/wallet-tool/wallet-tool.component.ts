@@ -1,6 +1,14 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Window as KeplrWindow } from '@keplr-wallet/types';
 import * as crypto from 'crypto';
@@ -14,7 +22,7 @@ declare global {
   templateUrl: './wallet-tool.component.html',
   styleUrls: ['./wallet-tool.component.css'],
 })
-export class WalletToolComponent implements OnInit {
+export class WalletToolComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

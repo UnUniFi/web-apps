@@ -2,7 +2,7 @@ import { GasSetting } from '../../../../../../models/cosmos/tx/common/tx-common.
 import { Nft } from '../../../../../../models/ununifi/query/nft/nft.model';
 import { MsgListNftData } from '../../../../../../models/ununifi/tx/nft/nft-tx.model';
 import { StoredWallet } from '../../../../../../models/wallets/wallet.model';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import * as crypto from 'crypto';
 import Long from 'long';
@@ -17,7 +17,7 @@ export type MsgListNftFormData = {
   templateUrl: './list-nft-form-dialog.component.html',
   styleUrls: ['./list-nft-form-dialog.component.css'],
 })
-export class LibViewListNftFormDialogComponent implements OnInit {
+export class LibViewListNftFormDialogComponent implements OnInit, OnChanges {
   @Input() nft?: Nft | null;
 
   @Input() currentStoredWallet?: StoredWallet | null;
@@ -54,7 +54,7 @@ export class LibViewListNftFormDialogComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getColorCode(address: string) {
     const hash = crypto

@@ -1,3 +1,4 @@
+import { denomExponentMap } from '../../models/cosmos/bank.model';
 import { BankQueryService } from '../../models/cosmos/bank.query.service';
 import { FaucetApplicationService } from '../../models/faucets/faucet.application.service';
 import { StoredWallet } from '../../models/wallets/wallet.model';
@@ -58,14 +59,12 @@ export class FaucetComponent implements OnInit {
     this.symbol$ = combineLatest([denom$, denomMetadataMap$]).pipe(
       map(([denom, metadata]) => metadata[denom].symbol || denom),
     );
-    const unit$ = combineLatest([denom$, denomMetadataMap$]).pipe(
-      map(([denom, metadata]) => metadata[denom].denom_units?.find((u) => u.denom == denom)),
-    );
 
-    this.amount$ = combineLatest([unit$, microAmount$]).pipe(
-      map(([unit, microAmount]) => {
+    this.amount$ = combineLatest([denom$, microAmount$]).pipe(
+      map(([denom, microAmount]) => {
         if (microAmount) {
-          return microAmount / 10 ** (unit?.exponent || 6);
+          const exponent = denomExponentMap[denom];
+          return microAmount / 10 ** exponent;
         } else {
           return 0;
         }
@@ -73,14 +72,16 @@ export class FaucetComponent implements OnInit {
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     this.faucetURL$ = this.usecase.faucetURL$(denom$);
-    this.creditAmount$ = combineLatest([unit$, this.usecase.creditAmount$(denom$)]).pipe(
-      map(([unit, amount]) => {
-        return amount / 10 ** (unit?.exponent || 6);
+    this.creditAmount$ = combineLatest([denom$, this.usecase.creditAmount$(denom$)]).pipe(
+      map(([denom, amount]) => {
+        const exponent = denomExponentMap[denom];
+        return amount / 10 ** exponent;
       }),
     );
-    this.maxCredit$ = combineLatest([unit$, this.usecase.maxCredit$(denom$)]).pipe(
-      map(([unit, amount]) => {
-        return amount / 10 ** (unit?.exponent || 6);
+    this.maxCredit$ = combineLatest([denom$, this.usecase.maxCredit$(denom$)]).pipe(
+      map(([denom, amount]) => {
+        const exponent = denomExponentMap[denom];
+        return amount / 10 ** exponent;
       }),
     );
   }

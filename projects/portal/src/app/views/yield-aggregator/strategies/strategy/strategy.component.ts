@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
@@ -11,7 +19,7 @@ import {
   templateUrl: './strategy.component.html',
   styleUrls: ['./strategy.component.css'],
 })
-export class StrategyComponent implements OnInit {
+export class StrategyComponent implements OnInit, OnChanges {
   @Input()
   strategy?: any | null;
   // TODO: fix this
@@ -51,7 +59,9 @@ export class StrategyComponent implements OnInit {
     const width: number = this.cardRef!.nativeElement.offsetWidth;
     this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
+
   ngOnInit(): void {}
+
   ngOnChanges(): void {
     const width: number = this.cardRef!.nativeElement.offsetWidth;
     console.log(width);

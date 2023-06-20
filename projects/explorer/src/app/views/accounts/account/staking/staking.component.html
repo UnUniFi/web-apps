@@ -3,7 +3,7 @@
     <h2 class="card-title">Delegator Rewards</h2>
     <ng-container *ngIf="totalRewards === null; then loading; else loaded"></ng-container>
     <ng-template #loading>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      <span class="loading loading-dots loading-lg"></span>
     </ng-template>
     <ng-template #loaded>
       <ng-container *ngIf="!totalRewards?.total?.length; then empty; else filled"></ng-container>

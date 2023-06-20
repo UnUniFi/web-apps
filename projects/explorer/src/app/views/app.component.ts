@@ -74,6 +74,11 @@ export class AppComponent implements OnInit {
     }
   }
 
+  onClickOpenPortal() {
+    const rootPath = window.location.origin;
+    window.open(rootPath + '/portal', '_blank');
+  }
+
   onSubmitSearchResult(searchResult: SearchResult) {
     this.appSubmitSearchResult.emit(searchResult);
   }

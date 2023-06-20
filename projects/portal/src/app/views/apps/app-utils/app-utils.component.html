@@ -29,7 +29,7 @@
       </div>
       <div class="flex-none">
         <!-- Disable apps for now  -->
-        <app-app-tool class="hidden sm:block"></app-app-tool>
+        <!-- <app-app-tool class="hidden sm:block"></app-app-tool> -->
         <app-node-tool></app-node-tool>
         <app-wallet-tool></app-wallet-tool>
       </div>
@@ -89,7 +89,7 @@
         </label>
       </li> -->
 
-      <li class="menu-title" *ngIf="apps.length">
+      <!-- <li class="menu-title" *ngIf="apps.length">
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
@@ -101,7 +101,7 @@
             <span class="flex-1">{{ app.name }}</span>
           </label>
         </li>
-      </ng-container>
+      </ng-container> -->
 
       <li class="menu-title" *ngIf="navigations?.length">
         <span>Testnet</span>

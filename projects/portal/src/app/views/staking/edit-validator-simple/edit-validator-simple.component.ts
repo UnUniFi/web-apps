@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -17,7 +18,7 @@ import cosmosclient from '@cosmos-client/core';
   templateUrl: './edit-validator-simple.component.html',
   styleUrls: ['./edit-validator-simple.component.css'],
 })
-export class ViewEditValidatorSimpleComponent implements OnInit {
+export class ViewEditValidatorSimpleComponent implements OnInit, OnChanges {
   @Input() currentStoredWallet?: StoredWallet | null;
   @Input() moniker?: string | null;
   @Input() identity?: string | null;
@@ -47,8 +48,8 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
   jsonString: string | null;
   privateWallet:
     | (StoredWallet & {
-      privateKey: string;
-    })
+        privateKey: string;
+      })
     | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
@@ -62,7 +63,7 @@ export class ViewEditValidatorSimpleComponent implements OnInit {
       this.minimumGasPrice = this.minimumGasPrices[0];
     }
   }
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onChangeFile($event: Event): Promise<void> {
     if ($event === null || $event.target === null) {

@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -11,7 +12,6 @@ import {
 import { ChartType } from 'angular-google-charts';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
-import { NftPawnshopPocService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.poc.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
@@ -24,7 +24,7 @@ import {
   templateUrl: './place-bid.component.html',
   styleUrls: ['./place-bid.component.css'],
 })
-export class PlaceBidComponent implements OnInit {
+export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   classID?: string | null;
   @Input()
@@ -67,10 +67,7 @@ export class PlaceBidComponent implements OnInit {
   @Output()
   appSubmit: EventEmitter<PlaceBidRequest>;
 
-  constructor(
-    private readonly pawnshopChart: NftPawnshopChartService,
-    private readonly pawnshopPoc: NftPawnshopPocService,
-  ) {
+  constructor(private readonly pawnshopChart: NftPawnshopChartService) {
     this.autoPayment = true;
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;

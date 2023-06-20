@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -23,7 +24,7 @@ import {
   templateUrl: './repay.component.html',
   styleUrls: ['./repay.component.css'],
 })
-export class RepayComponent implements OnInit {
+export class RepayComponent implements OnInit, OnChanges {
   @Input()
   classID?: string | null;
   @Input()

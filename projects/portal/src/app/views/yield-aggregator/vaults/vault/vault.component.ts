@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -27,7 +28,7 @@ import {
   templateUrl: './vault.component.html',
   styleUrls: ['./vault.component.css'],
 })
-export class VaultComponent implements OnInit {
+export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vault?: Vault200Response | null;
   @Input()

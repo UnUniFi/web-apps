@@ -1,5 +1,5 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 
@@ -8,7 +8,7 @@ import cosmosclient from '@cosmos-client/core';
   templateUrl: './unjail.component.html',
   styleUrls: ['./unjail.component.css'],
 })
-export class UnjailComponent implements OnInit {
+export class UnjailComponent implements OnInit, OnChanges {
   @Input() currentStoredWallet?: StoredWallet | null;
   @Input() delegator_address?: string | null;
   @Input() validator_address?: string | null;
@@ -21,7 +21,7 @@ export class UnjailComponent implements OnInit {
 
   minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
 
-  constructor(private readonly snackBar: MatSnackBar) { }
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   ngOnChanges(): void {
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
@@ -29,7 +29,7 @@ export class UnjailComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onSubmitUnjail(validator_address: string, minimumGasPriceAmount: string): Promise<void> {
     if (!this.currentStoredWallet) {

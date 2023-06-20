@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200Response,
@@ -7,6 +7,7 @@ import {
   StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type UndelegateOnSubmitEvent = {
@@ -20,7 +21,7 @@ export type UndelegateOnSubmitEvent = {
   templateUrl: './undelegate-form-dialog.component.html',
   styleUrls: ['./undelegate-form-dialog.component.css'],
 })
-export class UndelegateFormDialogComponent implements OnInit {
+export class UndelegateFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -80,13 +81,16 @@ export class UndelegateFormDialogComponent implements OnInit {
     if (!this.undelegateAmount) {
       return;
     }
+    if (!this.denom) {
+      return;
+    }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
       amount: {
-        amount: Math.floor(Number(this.undelegateAmount) * 1000000).toString(),
+        amount: Math.floor(Number(this.undelegateAmount) * 10 ** exponent).toString(),
         denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,

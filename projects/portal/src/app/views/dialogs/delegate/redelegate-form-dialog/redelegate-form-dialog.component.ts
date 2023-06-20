@@ -1,11 +1,12 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200Response,
   StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type RedelegateOnSubmitEvent = {
@@ -21,7 +22,7 @@ export type RedelegateOnSubmitEvent = {
   templateUrl: './redelegate-form-dialog.component.html',
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
-export class RedelegateFormDialogComponent implements OnInit {
+export class RedelegateFormDialogComponent implements OnInit, OnChanges {
   @Input()
   validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
@@ -89,11 +90,14 @@ export class RedelegateFormDialogComponent implements OnInit {
     if (!this.validatorsList) {
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    if (!this.denom) {
+      return;
+    }
+    const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
       destinationValidator: this.selectedValidator.operator_address,
       amount: {
-        amount: Math.floor(Number(this.redelegateAmount) * 1000000).toString(),
+        amount: Math.floor(Number(this.redelegateAmount) * 10 ** exponent).toString(),
         denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,

@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -15,7 +15,7 @@ export type VoteOnSubmitEvent = {
   templateUrl: './vote-form-dialog.component.html',
   styleUrls: ['./vote-form-dialog.component.css'],
 })
-export class VoteFormDialogComponent implements OnInit {
+export class VoteFormDialogComponent implements OnInit, OnChanges {
   @Input()
   proposal?: Proposals200ResponseProposalsInner | null;
   @Input()

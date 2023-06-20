@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -16,7 +17,7 @@ import cosmosclient from '@cosmos-client/core';
   templateUrl: './unjail-simple.component.html',
   styleUrls: ['./unjail-simple.component.css'],
 })
-export class UnjailSimpleComponent implements OnInit {
+export class UnjailSimpleComponent implements OnInit, OnChanges {
   @Input() currentStoredWallet?: StoredWallet | null;
   @Input() delegator_address?: string | null;
   @Input() validator_address?: string | null;
@@ -33,11 +34,7 @@ export class UnjailSimpleComponent implements OnInit {
   minimumGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   file: File | null;
   jsonString: string | null;
-  privateWallet:
-    | (StoredWallet & {
-      privateKey: string;
-    })
-    | null;
+  privateWallet: (StoredWallet & { privateKey: string }) | null;
 
   constructor(private readonly snackBar: MatSnackBar) {
     this.file = null;
@@ -51,7 +48,7 @@ export class UnjailSimpleComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async onChangeFile($event: Event): Promise<void> {
     console.log('onChangeFile');

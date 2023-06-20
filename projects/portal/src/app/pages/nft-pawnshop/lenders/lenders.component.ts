@@ -160,9 +160,7 @@ export class LendersComponent implements OnInit {
         if (!selectedMetadata) {
           return [];
         }
-        const filteredNfts = nfts.filter(
-          (nft) => nft.listing?.bid_token == selectedMetadata.denom_units![0].denom,
-        );
+        const filteredNfts = nfts.filter((nft) => nft.listing?.bid_token == selectedMetadata.base);
         return classes.filter((value) =>
           filteredNfts.find((nft) => nft.listing?.nft_id?.class_id == value.class_id),
         );

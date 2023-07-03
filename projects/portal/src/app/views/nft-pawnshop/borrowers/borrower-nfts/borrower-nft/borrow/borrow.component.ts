@@ -56,6 +56,10 @@ export class BorrowComponent implements OnInit, OnChanges {
   chartColumns: any[];
   chartOptions: any;
 
+  autoBorrow = true;
+  selectedBidder?: string;
+  selectedBids: { address: string; amount: number }[] = [];
+
   @Output()
   appSimulate: EventEmitter<BorrowRequest>;
   @Output()
@@ -84,11 +88,35 @@ export class BorrowComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnChanges(): void {
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
+  }
+
+  onToggleAuto(auto: boolean) {
+    this.autoBorrow = auto;
+  }
+
+  isAlreadySelectedBidder(bidderAddr: string) {
+    return this.selectedBids.some((b) => b.address === bidderAddr);
+  }
+
+  onClickAddBidder() {
+    if (!this.selectedBidder) {
+      alert('Please select a bid.');
+      return;
+    }
+    this.selectedBids.push({
+      address: this.selectedBidder,
+      amount: 0,
+    });
+    this.selectedBidder = undefined;
+  }
+
+  onClickDeleteBidder(index: number) {
+    this.selectedBids.splice(index, 1);
   }
 
   onSimulate() {

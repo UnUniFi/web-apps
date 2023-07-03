@@ -67,23 +67,42 @@
 
   <div class="flex flex-col lg:flex-row mb-8">
     <div #chartCardRef class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 lg:mb-0 lg:mr-4">
-      <h3 class="m-4 card-title">Deposits</h3>
-      <google-chart
-        *ngIf="chartData"
-        [title]="chartTitle"
-        [type]="chartType"
-        [data]="chartData"
-        [columns]="chartColumns"
-        [options]="chartOptions"
-      >
-      </google-chart>
+      <div class="card-body">
+        <h3 class="m-4 card-title">Deposits</h3>
+        <google-chart
+          *ngIf="chartData"
+          [title]="chartTitle"
+          [type]="chartType"
+          [data]="chartData"
+          [columns]="chartColumns"
+          [options]="chartOptions"
+        >
+        </google-chart>
+      </div>
     </div>
 
     <span class="flex-auto"></span>
     <div class="card bg-base-100 shadow-xl w-full xl:w-auto">
-      <h3 class="m-4 card-title">Borrow</h3>
       <div class="card-body">
-        <form #formRef="ngForm" (submit)="onSubmit()">
+        <h3 class="m-4 card-title">Borrow</h3>
+        <div class="btn-group">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="autoBorrow"
+            (click)="onToggleAuto(true)"
+          >
+            Auto
+          </label>
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="!autoBorrow"
+            (click)="onToggleAuto(false)"
+          >
+            Manual
+          </label>
+        </div>
+
+        <form #autoFormRef="ngForm" (submit)="onSubmit()" *ngIf="autoBorrow">
           <div class="form-control">
             <span class="label">
               <span class="label-text">Enter borrow amount</span>
@@ -159,7 +178,76 @@
             >
               Simulate
             </button>
-            <button class="btn btn-secondary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+            <button
+              class="btn btn-secondary w-full md:w-auto md:px-8"
+              [disabled]="autoFormRef.invalid"
+            >
+              Borrow
+            </button>
+          </div>
+        </form>
+
+        <form #manualFormRef="ngForm" (submit)="onSubmit()" *ngIf="!autoBorrow">
+          <ng-container *ngFor="let bid of selectedBids; let i = index">
+            <div class="flex flex-row flex-wrap">
+              <label class="input-group w-full mb-2">
+                <span>{{ bid.address }}</span>
+                <input
+                  type="number"
+                  [min]="0"
+                  [step]="1"
+                  [(ngModel)]="bid.amount"
+                  name="bid{{ i }}"
+                  class="input input-bordered w-full"
+                />
+                <span>{{ symbol }}</span>
+                <label class="btn btn-outline btn-error" (click)="onClickDeleteBidder(i)">
+                  <mat-icon>delete</mat-icon>
+                </label>
+              </label>
+            </div>
+          </ng-container>
+
+          <div class="form-control">
+            <label class="input-group mb-2 w-full sm:w-auto">
+              <select
+                [required]="selectedBids.length === 0"
+                class="select select-bordered text-center w-auto sm:w-64"
+                [(ngModel)]="selectedBidder"
+                name="bidder"
+              >
+                <option [value]="undefined" disabled>
+                  <span *ngIf="bidders?.length">Select a bidder</span>
+                  <span *ngIf="!bidders?.length">No bidder</span>
+                </option>
+                <ng-container *ngFor="let b of bidders">
+                  <option
+                    [value]="b.id?.bidder"
+                    *ngIf="!isAlreadySelectedBidder(b.id?.bidder || '')"
+                  >
+                    {{ b.id?.bidder }}
+                  </option>
+                </ng-container>
+              </select>
+              <button
+                type="button"
+                class="btn btn-outline btn-primary"
+                (click)="onClickAddBidder()"
+                [disabled]="!selectedBidder"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </label>
+            <label class="label" *ngIf="selectedBidder">
+              <span class="label-text-alt text-warning">Click + & enter amount!</span>
+            </label>
+          </div>
+
+          <div class="card-actions justify-end mt-4">
+            <button
+              class="btn btn-secondary w-full md:w-auto md:px-8"
+              [disabled]="manualFormRef.invalid"
+            >
               Borrow
             </button>
           </div>
@@ -188,7 +276,7 @@
             <td>{{ bidder.deposit_amount | coin | async }}</td>
             <td>{{ bidder.bid_amount | coin | async }}</td>
             <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-            <td>{{ bidder.bidder }}</td>
+            <td>{{ bidder.id?.bidder }}</td>
           </tr>
         </tbody>
       </table>

@@ -9,10 +9,14 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { ChartType } from 'angular-google-charts';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { BorrowRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import ununificlient from 'ununifi-client';
 import {
   ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
@@ -33,6 +37,10 @@ export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolMetadataMap?: {
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  } | null;
+  @Input()
   symbolImage?: string | null;
   @Input()
   bidders?: BidderBids200ResponseBidsInner[] | null;
@@ -46,10 +54,6 @@ export class BorrowComponent implements OnInit, OnChanges {
   nftImage?: string | null;
   @Input()
   chartData?: (string | number)[][] | null;
-  @Input()
-  shortestExpiryDate?: Date | null;
-  @Input()
-  averageInterestRate?: number | null;
 
   chartType: ChartType;
   chartTitle: string;
@@ -57,15 +61,17 @@ export class BorrowComponent implements OnInit, OnChanges {
   chartOptions: any;
 
   autoBorrow = true;
+  autoBorrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
+  shortestExpiryDate = new Date();
+  averageInterestRate = 0
+
   selectedBidder?: string;
   selectedBids: { address: string; amount: number }[] = [];
 
   @Output()
-  appSimulate: EventEmitter<BorrowRequest>;
-  @Output()
   appSubmit: EventEmitter<BorrowRequest>;
 
-  constructor(private readonly pawnshopChart: NftPawnshopChartService) {
+  constructor(private readonly pawnshopChart: NftPawnshopChartService, private readonly nftPawnshopService: NftPawnshopService) {
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -77,7 +83,6 @@ export class BorrowComponent implements OnInit, OnChanges {
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
-    this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
 
@@ -97,6 +102,16 @@ export class BorrowComponent implements OnInit, OnChanges {
 
   onToggleAuto(auto: boolean) {
     this.autoBorrow = auto;
+  }
+
+  onChangeBorrowAmount() {
+    if (this.bidders && this.borrowAmount && this.symbol && this.symbolMetadataMap) {
+      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(this.bidders, this.borrowAmount, this.symbol, this.symbolMetadataMap)
+      this.averageInterestRate = this.nftPawnshopService.averageInterestRate(this.bidders, this.autoBorrowBids)
+      this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(this.bidders, this.autoBorrowBids)
+      const exponent = denomExponentMap[this.listingInfo?.bid_token!]
+      this.selectedBids = this.autoBorrowBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })
+    }
   }
 
   isAlreadySelectedBidder(bidderAddr: string) {
@@ -119,36 +134,29 @@ export class BorrowComponent implements OnInit, OnChanges {
     this.selectedBids.splice(index, 1);
   }
 
-  onSimulate() {
-    if (!this.classID || !this.nftID) {
-      return;
-    }
-    if (!this.selectedBorrowAmount || !this.symbol) {
-      alert('Some values are invalid!');
-      return;
-    }
-    this.appSimulate.emit({
-      classID: this.classID,
-      nftID: this.nftID,
-      symbol: this.symbol,
-      amount: this.selectedBorrowAmount,
-    });
-  }
-
   onSubmit() {
     if (!this.classID || !this.nftID) {
       alert('Invalid NFT Info!');
       return;
     }
-    if (!this.selectedBorrowAmount || !this.symbol) {
-      alert('Invalid Borrow Amount!');
-      return;
+
+    if (this.autoBorrow) {
+      this.appSubmit.emit({
+        classID: this.classID,
+        nftID: this.nftID,
+        borrowBids: this.autoBorrowBids,
+      });
+    } else {
+      if (!this.symbol || !this.symbolMetadataMap) {
+        alert('Invalid Borrow Amount!');
+        return;
+      }
+      const borrowBids = this.nftPawnshopService.convertBorrowBids(this.selectedBids, this.symbol, this.symbolMetadataMap!)
+      this.appSubmit.emit({
+        classID: this.classID,
+        nftID: this.nftID,
+        borrowBids,
+      });
     }
-    this.appSubmit.emit({
-      classID: this.classID,
-      nftID: this.nftID,
-      symbol: this.symbol,
-      amount: this.selectedBorrowAmount,
-    });
   }
 }

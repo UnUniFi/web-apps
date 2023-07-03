@@ -378,7 +378,7 @@
         <tbody>
           <tr *ngFor="let bidder of bidders; let i = index">
             <ng-container
-              *ngIf="bidder.bidder === currentStoredWallet?.address; then color; else normal"
+              *ngIf="bidder.id?.bidder === currentStoredWallet?.address; then color; else normal"
             ></ng-container>
             <ng-template #color>
               <th class="text-secondary">#{{ i + 1 }}</th>
@@ -388,7 +388,7 @@
               <td class="text-secondary">
                 {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
               </td>
-              <td class="text-secondary">{{ bidder.bidder }}</td>
+              <td class="text-secondary">{{ bidder.id?.bidder }}</td>
             </ng-template>
             <ng-template #normal>
               <th>#{{ i + 1 }}</th>
@@ -396,7 +396,7 @@
               <td>{{ bidder.deposit_amount | coin | async }}</td>
               <td>{{ bidder.bid_amount | coin | async }}</td>
               <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-              <td>{{ bidder.bidder }}</td>
+              <td>{{ bidder.id?.bidder }}</td>
             </ng-template>
           </tr>
         </tbody>

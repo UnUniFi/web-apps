@@ -34,7 +34,6 @@ export type PlaceBidRequest = {
 export type ListRequest = {
   classID: string;
   nftID: string;
-  listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType;
   bidSymbol: string;
   minimumDepositRate: number;
   autoRefinancing: boolean;

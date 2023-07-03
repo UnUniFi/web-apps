@@ -20,7 +20,7 @@ import {
 export interface BidderNftsInfo {
   bidding: number;
   selling_decision: number;
-  end_listing: number;
+  liquidation: number;
   successful_bid: number;
 }
 
@@ -113,10 +113,10 @@ export class LendersComponent implements OnInit {
       mergeMap((bids) =>
         Promise.all(
           bids.map(async (bid) => {
-            if (bid.nft_id && bid.nft_id.class_id && bid.nft_id.nft_id) {
+            if (bid.id) {
               return await this.pawnshopQuery.getNftListing(
-                bid.nft_id?.class_id!,
-                bid.nft_id?.nft_id!,
+                bid.id.nft_id?.class_id!,
+                bid.id.nft_id?.nft_id!,
               );
             } else {
               return {};
@@ -129,12 +129,12 @@ export class LendersComponent implements OnInit {
       map((nfts) => {
         const bidding = nfts.filter((nft) => nft.state == 'BIDDING').length;
         const selling = nfts.filter((nft) => nft.state == 'SELLING_DECISION').length;
-        const ends = nfts.filter((nft) => nft.state == 'END_LISTING').length;
-        const successfulBids = nfts.filter((nft) => nft.state == 'SUCCESSFUL_BID').length;
+        const liquidations = nfts.filter((nft) => nft.state == 'LIQUIDATION').length;
+        const successfulBids = nfts.filter((nft) => nft.state == "SUCCESSFUL_BID").length;
         return {
           bidding: bidding,
           selling_decision: selling,
-          end_listing: ends,
+          liquidation: liquidations,
           successful_bid: successfulBids,
         };
       }),
@@ -182,7 +182,7 @@ export class LendersComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(symbol: string) {
     this.router.navigate([], {

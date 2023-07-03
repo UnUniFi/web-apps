@@ -26,7 +26,7 @@ export class NftPawnshopApplicationService {
     private readonly bankQueryService: BankQueryService,
     private readonly pawnshopService: NftPawnshopService,
     private readonly txCommonApplication: TxCommonApplicationService,
-  ) {}
+  ) { }
 
   async openNftsDialog(classID: string): Promise<void> {
     const nftID = await this.dialog
@@ -38,7 +38,6 @@ export class NftPawnshopApplicationService {
   async listNft(
     classId: string,
     nftId: string,
-    listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType,
     bidSymbol: string,
     minimumDepositRate: number,
     autoRefinancing: boolean,
@@ -58,7 +57,6 @@ export class NftPawnshopApplicationService {
       address,
       classId,
       nftId,
-      listingType,
       bidSymbol,
       symbolMetadataMap,
       minimumDepositRate,

@@ -188,7 +188,7 @@
           <td>{{ bidder.deposit_amount | coin | async }}</td>
           <td>{{ bidder.bid_amount | coin | async }}</td>
           <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-          <td>{{ bidder.bidder }}</td>
+          <td>{{ bidder.id?.bidder }}</td>
         </tr>
       </tbody>
     </table>

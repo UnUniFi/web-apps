@@ -18,7 +18,7 @@ export class NftPawnshopService {
     private readonly txCommon: TxCommonService,
     private readonly bankService: BankService,
     private http: HttpClient,
-  ) {}
+  ) { }
 
   replaceIpfs(url: string): string {
     return url.replace('ipfs://', 'https://ununifi.mypinata.cloud/ipfs/');
@@ -81,7 +81,6 @@ export class NftPawnshopService {
     senderAddress: string,
     classId: string,
     nftId: string,
-    listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType,
     bidSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
     minimumDepositRate: number,
@@ -94,7 +93,6 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      listing_type: listingType,
       bid_token: bidDenom,
       minimum_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
       automatic_refinancing: autoRefinancing,
@@ -220,7 +218,7 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      amount: coin,
+      // amount: coin,
     });
 
     return msg;
@@ -245,7 +243,7 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      amount: coin,
+      // amount: coin,
     });
 
     return msg;

@@ -77,7 +77,7 @@ export class NftComponent implements OnInit {
     );
     this.ownBid$ = combineLatest([this.address$, this.bids$]).pipe(
       map(([address, bidders]) => {
-        const bidder = bidders.find((bidder) => bidder.bidder == address);
+        const bidder = bidders.find((bidder) => bidder.id?.bidder == address);
         return bidder;
       }),
     );
@@ -85,7 +85,7 @@ export class NftComponent implements OnInit {
     this.isWinning$ = combineLatest([this.address$, this.bids$, this.listingInfo$]).pipe(
       map(([address, bidders, info]) => {
         if (info.state == 'SELLING_DECISION') {
-          if (bidders[0].bidder == address) {
+          if (bidders[0].id?.bidder == address) {
             return true;
           } else {
             return false;
@@ -97,7 +97,7 @@ export class NftComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmitCancelListing(data: NftRequest) {
     this.pawnshopApp.cancelNftListing(data.classID, data.nftID);

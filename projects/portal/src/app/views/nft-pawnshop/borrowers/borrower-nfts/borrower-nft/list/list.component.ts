@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ListRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import ununificlient from 'ununifi-client';
 
 @Component({
   selector: 'view-list',
@@ -30,13 +29,12 @@ export class ListComponent implements OnInit {
     this.appSubmit = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit() {
     this.appSubmit.emit({
       classID: this.classID!,
       nftID: this.nftID!,
-      listingType: ununificlient.proto.ununifi.nftbackedloan.ListingType.DIRECT_ASSET_BORROW,
       bidSymbol: this.bidSymbol,
       minimumDepositRate: this.minDepositRate / 100,
       autoRefinancing: true,

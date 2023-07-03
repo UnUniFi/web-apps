@@ -96,6 +96,7 @@ export class BorrowComponent implements OnInit, OnChanges {
   ngOnInit(): void { }
 
   ngOnChanges(): void {
+    this.onChangeBorrowAmount();
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
@@ -105,12 +106,14 @@ export class BorrowComponent implements OnInit, OnChanges {
   }
 
   onChangeBorrowAmount() {
-    if (this.bidders && this.borrowAmount && this.symbol && this.symbolMetadataMap) {
-      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(this.bidders, this.borrowAmount, this.symbol, this.symbolMetadataMap)
+    if (this.bidders && this.selectedBorrowAmount && this.symbol && this.symbolMetadataMap) {
+      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(this.bidders, this.selectedBorrowAmount, this.symbol, this.symbolMetadataMap)
       this.averageInterestRate = this.nftPawnshopService.averageInterestRate(this.bidders, this.autoBorrowBids)
       this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(this.bidders, this.autoBorrowBids)
       const exponent = denomExponentMap[this.listingInfo?.bid_token!]
+      console.log(this.autoBorrowBids)
       this.selectedBids = this.autoBorrowBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })
+      console.log(this.selectedBids)
     }
   }
 

@@ -1,4 +1,4 @@
-import ununificlient from 'ununifi-client';
+import ununificlient from "ununifi-client";
 
 export type Nft = {
   nft?: {
@@ -42,8 +42,7 @@ export type ListRequest = {
 export type BorrowRequest = {
   classID: string;
   nftID: string;
-  symbol: string;
-  amount: number;
+  borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[];
 };
 
 export type RepayRequest = {

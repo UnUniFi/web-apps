@@ -1,3 +1,4 @@
+import ununificlient from 'ununifi-client';
 import { NftsDialogComponent } from '../../pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.component';
 import {
   TxConfirmDialogComponent,
@@ -8,11 +9,8 @@ import { TxCommonApplicationService } from '../cosmos/tx-common.application.serv
 import { NftPawnshopService } from './nft-pawnshop.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { take } from 'rxjs/operators';
-import ununificlient from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +18,7 @@ import ununificlient from 'ununifi-client';
 export class NftPawnshopApplicationService {
   constructor(
     private readonly router: Router,
-    private readonly snackBar: MatSnackBar,
     private readonly dialog: Dialog,
-    private readonly loadingDialog: LoadingDialogService,
     private readonly bankQueryService: BankQueryService,
     private readonly pawnshopService: NftPawnshopService,
     private readonly txCommonApplication: TxCommonApplicationService,
@@ -90,9 +86,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully listed NFT.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -139,9 +132,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully cancelled NFT listing.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -212,9 +202,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully placed bid.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -264,9 +251,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully cancelled bid.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -316,9 +300,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully ended listing.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -368,9 +349,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully decided selling.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -390,11 +368,6 @@ export class NftPawnshopApplicationService {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
-
-    // const symbolMetadataMap = await this.bankQueryService
-    //   .getSymbolMetadataMap$()
-    //   .pipe(take(1))
-    //   .toPromise();
 
     const msg = this.pawnshopService.buildMsgPayFullBid(address, classId, nftId);
 
@@ -425,9 +398,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully paid settlement shortfall.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -441,7 +411,7 @@ export class NftPawnshopApplicationService {
     }
   }
 
-  async borrow(classId: string, nftId: string, symbol: string, amount: number) {
+  async borrow(classId: string, nftId: string, borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -457,9 +427,7 @@ export class NftPawnshopApplicationService {
       address,
       classId,
       nftId,
-      symbol,
-      amount,
-      symbolMetadataMap,
+      borrowBids,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(
@@ -489,9 +457,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully borrowed.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -553,9 +518,6 @@ export class NftPawnshopApplicationService {
       return;
     }
 
-    // this.snackBar.open('Successfully repaid interests.', undefined, {
-    //   duration: 6000,
-    // });
     if (txHash) {
       await this.dialog
         .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
@@ -567,9 +529,5 @@ export class NftPawnshopApplicationService {
         .closed.toPromise();
       this.router.navigate(['nft-backed-loan', 'nfts', classId, nftId]);
     }
-  }
-
-  private async waitSeconds(seconds: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
   }
 }

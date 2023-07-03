@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
-import { ListedClass200Response } from 'ununifi-client/esm/openapi';
+import { BidderBids200ResponseBidsInner, ListedClass200Response } from 'ununifi-client/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -203,14 +203,7 @@ export class NftPawnshopService {
     senderAddress: string,
     classId: string,
     nftId: string,
-    symbol: string,
-    amount: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ) {
-    const coin = this.bankService.convertSymbolAmountMapToCoins(
-      { [symbol]: amount },
-      symbolMetadataMap,
-    )[0];
+    borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]) {
 
     const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgBorrow({
       sender: senderAddress,
@@ -218,7 +211,7 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      // amount: coin,
+      borrow_bids: borrowBids,
     });
 
     return msg;
@@ -247,5 +240,88 @@ export class NftPawnshopService {
     });
 
     return msg;
+  }
+
+  convertBorrowBids(bids: { address: string; amount: number }[],
+    symbol: string,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
+    return bids.map((bid) => {
+      const coin = this.bankService.convertSymbolAmountMapToCoins(
+        { [symbol]: bid.amount },
+        symbolMetadataMap,
+      )[0];
+      return {
+        bidder: bid.address,
+        amount: coin,
+      };
+    });
+  }
+
+  autoBorrowBids(
+    bids: BidderBids200ResponseBidsInner[],
+    amount: number,
+    symbol: string,
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
+    const interestSort = bids.sort(
+      (a, b) => Number(a.deposit_lending_rate) - Number(b.deposit_lending_rate),
+    );
+    const borrowedBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
+    const coin = this.bankService.convertSymbolAmountMapToCoins(
+      { [symbol]: amount },
+      symbolMetadataMap,
+    )[0];
+    let remainingAmount = Number(coin.amount);
+
+    for (const bid of interestSort) {
+      const deposit = Number(bid.deposit_amount);
+      if (remainingAmount <= 0) {
+        break;
+      }
+
+      if (deposit <= remainingAmount) {
+        borrowedBids.push({
+          bidder: bid.id?.bidder,
+          amount: { amount: deposit.toString(), denom: coin.denom },
+        });
+        remainingAmount -= deposit;
+      } else {
+        borrowedBids.push({
+          bidder: bid.id?.bidder,
+          amount: { amount: remainingAmount.toString(), denom: coin.denom },
+        });
+        remainingAmount = 0;
+      }
+    }
+    return borrowedBids;
+  }
+
+  averageInterestRate(bids: BidderBids200ResponseBidsInner[], borrows: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]): number {
+    let total = 0
+    let totalAmount = 0
+    for (const borrow of borrows) {
+      const bid = bids.find((b) => b.id?.bidder === borrow.bidder);
+      if (bid) {
+        total += Number(bid.deposit_lending_rate) * Number(borrow.amount?.amount)
+        totalAmount += Number(borrow.amount?.amount)
+      }
+    }
+    return total / totalAmount
+  }
+
+  shortestExpiryDate(bids: BidderBids200ResponseBidsInner[], borrows: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]): Date {
+    let borrowBids: BidderBids200ResponseBidsInner[] = []
+    for (const borrow of borrows) {
+      const bid = bids.find((b) => b.id?.bidder === borrow.bidder);
+      if (bid) {
+        borrowBids.push(bid)
+      }
+    }
+    const period = borrowBids.reduce((min, curr) => {
+      const currentDate = new Date(curr.bidding_period!);
+      return currentDate < min ? currentDate : min;
+    }, new Date(borrowBids[0].bidding_period!));
+    return period
   }
 }

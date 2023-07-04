@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
@@ -10,7 +11,6 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { liquidation } from 'ununifi-client/cjs/rest/nftbackedloan/module';
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
@@ -27,14 +27,15 @@ export class RepayComponent implements OnInit {
   nftID$: Observable<string>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   symbol$: Observable<string | null | undefined>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbolImage$: Observable<string | undefined>;
-  bidders$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<BidderBids200ResponseBidsInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   repayAmount$: Observable<number>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
-  shortestExpiryDate$: Observable<Date>;
-  averageInterestRate$: Observable<number>;
   chartData$: Observable<(string | number)[][]>;
 
   constructor(
@@ -53,13 +54,14 @@ export class RepayComponent implements OnInit {
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
       map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
-    this.bidders$ = nftCombine$.pipe(
+    this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
       map((bidders) =>
@@ -92,31 +94,8 @@ export class RepayComponent implements OnInit {
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
 
-    this.shortestExpiryDate$ = this.bidders$.pipe(
-      map((bidders) =>
-        bidders.reduce((prev, curr) => {
-          const prevDate = new Date(prev.bidding_period!);
-          const currDate = new Date(curr.bidding_period!);
-          return prevDate > currDate ? curr : prev;
-        }),
-      ),
-      map((bidder) => new Date(bidder.bidding_period!)),
-    );
-
-    this.averageInterestRate$ = this.bidders$.pipe(
-      map((bidders) => {
-        const interests = bidders.reduce(
-          (sum, curr) =>
-            sum + Number(curr.deposit_amount?.amount) * Number(curr.deposit_lending_rate),
-          0,
-        );
-        const amounts = bidders.reduce((sum, curr) => sum + Number(curr.deposit_amount?.amount), 0);
-        return interests / amounts;
-      }),
-    );
-
-    this.chartData$ = this.bidders$.pipe(
-      map((bidders) => this.pawnshopChart.createBorrowingAmountChartData(bidders)),
+    this.chartData$ = this.bids$.pipe(
+      map((bids) => this.pawnshopChart.createBorrowingAmountChartData(bids)),
       map((data) =>
         data.sort(
           (a, b) =>
@@ -126,59 +105,9 @@ export class RepayComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
-
-  onSimulate(data: RepayRequest) {
-    const secondaryColor = '#EC0BA1';
-    this.chartData$ = this.bidders$.pipe(
-      map((bidders) => this.pawnshopChart.createBorrowingAmountChartData(bidders)),
-      map((data) =>
-        data.sort(
-          (a, b) =>
-            Number((a[3] as string).replace('%', '')) - Number((b[3] as string).replace('%', '')),
-        ),
-      ),
-      map((chartData) => {
-        const amounts = chartData.reduce((sum, curr) => sum + Number(curr[1]), 0);
-        const interests = chartData.reduce(
-          (sum, curr) => sum + Number(curr[1]) * Number((curr[3] as string).replace('%', '')),
-          0,
-        );
-        let repayAmount = data.amount;
-        let sumInterest = 0;
-        let i = 0;
-        let j = 0;
-        while (repayAmount > 0 && i < chartData.length) {
-          if (repayAmount > Number(chartData[i][1])) {
-            sumInterest +=
-              Number(chartData[i][1]) * Number((chartData[i][3] as string).replace('%', ''));
-          } else {
-            sumInterest += repayAmount * Number((chartData[i][3] as string).replace('%', ''));
-            chartData[i][2] = secondaryColor;
-            j++;
-            break;
-          }
-          chartData[i][2] = secondaryColor;
-          repayAmount -= Number(chartData[i][1]);
-          i++;
-          j++;
-        }
-        if (amounts != data.amount) {
-          this.averageInterestRate$ = of((interests - sumInterest) / (amounts - data.amount) / 100);
-        }
-        this.shortestExpiryDate$ = of(
-          new Date(
-            chartData
-              .slice(i)
-              .reduce((prev, curr) => (prev < curr[1] ? prev : curr[1]), chartData[0][1]),
-          ),
-        );
-        return chartData;
-      }),
-    );
-  }
+  ngOnInit(): void { }
 
   onSubmit(data: RepayRequest) {
-    this.pawnshopApp.repay(data.classID, data.nftID, data.symbol, data.amount);
+    this.pawnshopApp.repay(data.classID, data.nftID, data.repayBids);
   }
 }

@@ -9,10 +9,14 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { ChartType } from 'angular-google-charts';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import ununificlient from 'ununifi-client';
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
@@ -34,9 +38,13 @@ export class RepayComponent implements OnInit, OnChanges {
   @Input()
   symbol?: string | null;
   @Input()
+  symbolMetadataMap?: {
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  } | null;
+  @Input()
   symbolImage?: string | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   liquidation?: Liquidation200ResponseLiquidations | null;
   @Input()
@@ -47,22 +55,21 @@ export class RepayComponent implements OnInit, OnChanges {
   nftImage?: string | null;
   @Input()
   chartData?: (string | number)[][] | null;
-  @Input()
-  shortestExpiryDate?: Date | null;
-  @Input()
-  averageInterestRate?: number | null;
 
   chartType: ChartType;
   chartTitle: string;
   chartColumns: any[];
   chartOptions: any;
 
-  @Output()
-  appSimulate: EventEmitter<RepayRequest>;
+  autoRepay = true;
+  autoRepayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
+  selectedBidder?: string;
+  selectedBids: { address: string; amount: number }[] = [];
+
   @Output()
   appSubmit: EventEmitter<RepayRequest>;
 
-  constructor(private readonly pawnshopChart: NftPawnshopChartService) {
+  constructor(private readonly pawnshopChart: NftPawnshopChartService, private readonly nftPawnshopService: NftPawnshopService) {
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -74,7 +81,6 @@ export class RepayComponent implements OnInit, OnChanges {
       { type: 'string', role: 'annotation' },
     ];
 
-    this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
 
@@ -85,27 +91,44 @@ export class RepayComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnChanges(): void {
+    this.onChangeRepayAmount();
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  onSimulate() {
-    if (!this.classID || !this.nftID) {
+  onToggleAuto(auto: boolean) {
+    this.autoRepay = auto;
+  }
+
+  onChangeRepayAmount() {
+    if (this.bids && this.liquidation && this.repayAmount && this.symbol && this.symbolMetadataMap) {
+      this.autoRepayBids = this.nftPawnshopService.autoRepayBids(this.bids, this.liquidation, this.repayAmount, this.symbol, this.symbolMetadataMap)
+      const exponent = denomExponentMap[this.listingInfo?.bid_token!]
+      this.selectedBids = this.autoRepayBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })
+    }
+  }
+
+  isAlreadySelectedBidder(bidderAddr: string) {
+    return this.selectedBids.some((b) => b.address === bidderAddr);
+  }
+
+  onClickAddBidder() {
+    if (!this.selectedBidder) {
+      alert('Please select a bid.');
       return;
     }
-    if (!this.repayAmount || !this.symbol) {
-      alert('Some values are invalid!');
-      return;
-    }
-    this.appSimulate.emit({
-      classID: this.classID,
-      nftID: this.nftID,
-      symbol: this.symbol,
-      amount: this.repayAmount,
+    this.selectedBids.push({
+      address: this.selectedBidder,
+      amount: 0,
     });
+    this.selectedBidder = undefined;
+  }
+
+  onClickDeleteBidder(index: number) {
+    this.selectedBids.splice(index, 1);
   }
 
   onSubmit() {
@@ -113,15 +136,23 @@ export class RepayComponent implements OnInit, OnChanges {
       alert('Invalid NFT Info!');
       return;
     }
-    if (!this.repayAmount || !this.symbol) {
-      alert('Invalid Repay Amount!');
-      return;
+    if (this.autoRepay) {
+      this.appSubmit.emit({
+        classID: this.classID,
+        nftID: this.nftID,
+        repayBids: this.autoRepayBids,
+      });
+    } else {
+      if (!this.symbol || !this.symbolMetadataMap) {
+        alert('Invalid Token!');
+        return;
+      }
+      const repayBids = this.nftPawnshopService.convertBorrowBids(this.selectedBids, this.symbol, this.symbolMetadataMap)
+      this.appSubmit.emit({
+        classID: this.classID,
+        nftID: this.nftID,
+        repayBids,
+      });
     }
-    this.appSubmit.emit({
-      classID: this.classID,
-      nftID: this.nftID,
-      symbol: this.symbol,
-      amount: this.repayAmount,
-    });
   }
 }

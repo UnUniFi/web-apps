@@ -273,7 +273,7 @@ export class NftPawnshopService {
     let remainingAmount = Number(coin.amount);
 
     for (const bid of interestSort) {
-      const deposit = Number(bid.deposit_amount);
+      const deposit = Number(bid.deposit_amount?.amount);
       if (remainingAmount <= 0) {
         break;
       }
@@ -302,7 +302,11 @@ export class NftPawnshopService {
     symbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
-    const expirySort = bids.sort((a, b) => Number(a.bidding_period) - Number(b.bidding_period));
+    const expirySort = bids.sort((a, b) => {
+      const dateA = new Date(a.bidding_period!).getTime();
+      const dateB = new Date(b.bidding_period!).getTime();
+      return dateA - dateB;
+    });
     const coin = this.bankService.convertSymbolAmountMapToCoins(
       { [symbol]: amount },
       symbolMetadataMap,

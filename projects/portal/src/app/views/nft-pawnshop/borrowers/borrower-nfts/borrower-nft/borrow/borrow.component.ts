@@ -111,9 +111,7 @@ export class BorrowComponent implements OnInit, OnChanges {
       this.averageInterestRate = this.nftPawnshopService.averageInterestRate(this.bids, this.autoBorrowBids)
       this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(this.bids, this.autoBorrowBids)
       const exponent = denomExponentMap[this.listingInfo?.bid_token!]
-      console.log(this.autoBorrowBids)
       this.selectedBids = this.autoBorrowBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })
-      console.log(this.selectedBids)
     }
   }
 
@@ -151,7 +149,7 @@ export class BorrowComponent implements OnInit, OnChanges {
       });
     } else {
       if (!this.symbol || !this.symbolMetadataMap) {
-        alert('Invalid Borrow Amount!');
+        alert('Invalid Token!');
         return;
       }
       const borrowBids = this.nftPawnshopService.convertBorrowBids(this.selectedBids, this.symbol, this.symbolMetadataMap!)

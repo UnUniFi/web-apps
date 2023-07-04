@@ -30,7 +30,7 @@ export class TxCommonApplicationService {
     private readonly walletService: WalletService,
     private readonly txCommon: TxCommonService,
     private readonly config: ConfigService,
-  ) {}
+  ) { }
 
   async getPrerequisiteData() {
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$
@@ -97,10 +97,14 @@ export class TxCommonApplicationService {
       gas = simulatedResultData.estimatedGasUsedWithMargin;
       fee = simulatedResultData.estimatedFeeWithMargin;
 
+      console.log('Simulated Result Data', simulatedResultData);
       return { gas, fee };
-    } catch (error) {
-      console.error(error);
-      this.snackBar.open(`Tx simulation failed: ${(error as Error).toString()}`, 'Close');
+    } catch (error: any) {
+      if (error.response) {
+        this.snackBar.open(`Tx simulation failed: ${error.response.data.message}`, 'Close');
+      } else {
+        this.snackBar.open(`Tx simulation failed: ${(error as Error).message}`, 'Close');
+      }
       return null;
     } finally {
       dialogRefSimulating.close();

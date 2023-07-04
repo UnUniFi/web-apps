@@ -43,9 +43,9 @@ export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   symbolImage?: string | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  borrowAmount?: number | null;
+  borrowableAmount?: number | null;
   @Input()
   selectedBorrowAmount?: number | null;
   @Input()
@@ -106,10 +106,10 @@ export class BorrowComponent implements OnInit, OnChanges {
   }
 
   onChangeBorrowAmount() {
-    if (this.bidders && this.selectedBorrowAmount && this.symbol && this.symbolMetadataMap) {
-      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(this.bidders, this.selectedBorrowAmount, this.symbol, this.symbolMetadataMap)
-      this.averageInterestRate = this.nftPawnshopService.averageInterestRate(this.bidders, this.autoBorrowBids)
-      this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(this.bidders, this.autoBorrowBids)
+    if (this.bids && this.selectedBorrowAmount && this.symbol && this.symbolMetadataMap) {
+      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(this.bids, this.selectedBorrowAmount, this.symbol, this.symbolMetadataMap)
+      this.averageInterestRate = this.nftPawnshopService.averageInterestRate(this.bids, this.autoBorrowBids)
+      this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(this.bids, this.autoBorrowBids)
       const exponent = denomExponentMap[this.listingInfo?.bid_token!]
       console.log(this.autoBorrowBids)
       this.selectedBids = this.autoBorrowBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })

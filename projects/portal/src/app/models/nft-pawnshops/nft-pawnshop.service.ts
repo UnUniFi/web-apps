@@ -324,4 +324,55 @@ export class NftPawnshopService {
     }, new Date(borrowBids[0].bidding_period!));
     return period
   }
+
+  getMaxBorrowableAmount(bids: BidderBids200ResponseBidsInner[]): number {
+    // 昇順にソート
+    const interestSort = bids.sort(
+      (a, b) => Number(a.deposit_lending_rate) - Number(b.deposit_lending_rate),
+    );
+    const now = new Date()
+    let minSettlement = this.getMinimumSettlementAmount(bids)
+    let borrowableAmount = 0
+
+    for (const bid of interestSort) {
+      const rate = Number(bid.deposit_lending_rate)
+      const deposit = Number(bid.deposit_amount?.amount)
+      const yearInterest = deposit * rate
+      const end = new Date(bid.bidding_period!)
+      const interest = yearInterest * (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 365)
+      const repayAmount = deposit + interest
+      if (repayAmount < minSettlement) {
+        minSettlement -= repayAmount
+        borrowableAmount += deposit
+      } else {
+        borrowableAmount += deposit * minSettlement / repayAmount
+        minSettlement = 0
+        break
+      }
+    }
+    return Math.floor(borrowableAmount)
+  }
+
+  getMinimumSettlementAmount(bids: BidderBids200ResponseBidsInner[]): number {
+    // 降順にソート
+    if (!bids.length) {
+      return 0
+    }
+    const priceSort = bids.sort(
+      (a, b) => Number(b.bid_amount?.amount) - Number(a.bid_amount?.amount),
+    );
+    let minSettlement = 0
+    let forfeitDeposit = 0
+    for (const bid of priceSort) {
+      if (!minSettlement || forfeitDeposit + Number(bid.bid_amount?.amount) < minSettlement) {
+        minSettlement = forfeitDeposit + Number(bid.bid_amount?.amount)
+      }
+      forfeitDeposit += Number(bid.deposit_amount?.amount)
+    }
+
+    if (forfeitDeposit < minSettlement) {
+      return forfeitDeposit
+    }
+    return minSettlement
+  }
 }

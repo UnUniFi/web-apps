@@ -30,11 +30,11 @@ export class BorrowComponent implements OnInit {
     [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
   symbolImage$: Observable<string | undefined>;
-  bidders$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   chartData$: Observable<(string | number)[][]>;
-  borrowAmount$: Observable<number>;
+  borrowableAmount$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,7 +58,7 @@ export class BorrowComponent implements OnInit {
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
-    this.bidders$ = nftCombine$.pipe(
+    this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
         bidders.sort(
@@ -66,14 +66,12 @@ export class BorrowComponent implements OnInit {
         ),
       ),
     );
-    this.borrowAmount$ = this.bidders$.pipe(
-      map((bidders) =>
-        bidders.reduce((sum, bidder) => {
-          const deposit = sum + Number(bidder.deposit_amount?.amount) / 10 ** denomExponentMap[bidder.deposit_amount?.denom!];
-          return deposit;
-        }, 0),
-      ),
-      map((amount) => amount),
+    this.borrowableAmount$ = combineLatest([this.listingInfo$, this.bids$]).pipe(
+      map(([info, bids]) => {
+        const exponent = denomExponentMap[info.bid_token || ''];
+        const borrowableAmount = this.pawnshop.getMaxBorrowableAmount(bids);
+        return borrowableAmount / 10 ** exponent;
+      }),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
@@ -85,8 +83,8 @@ export class BorrowComponent implements OnInit {
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
 
-    this.chartData$ = this.bidders$.pipe(
-      map((bidders) => this.pawnshopChart.createDepositAmountChartData(bidders)),
+    this.chartData$ = this.bids$.pipe(
+      map((bids) => this.pawnshopChart.createDepositAmountChartData(bids)),
       map((data) =>
         data.sort(
           (a, b) =>

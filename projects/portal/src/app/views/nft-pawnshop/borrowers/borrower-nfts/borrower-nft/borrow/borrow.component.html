@@ -141,7 +141,7 @@
                 type="number"
                 name="amount"
                 [(ngModel)]="selectedBorrowAmount"
-                [max]="borrowAmount || 0"
+                [max]="borrowableAmount || 0"
                 [min]="0"
                 [step]="1"
                 class="input input-bordered w-full"
@@ -152,7 +152,7 @@
               <span>{{ symbol }}</span>
             </label>
             <label class="label">
-              <span class="label-text-alt">Max {{ borrowAmount }} {{ symbol }}</span>
+              <span class="label-text-alt">Max {{ borrowableAmount }} {{ symbol }}</span>
             </label>
           </div>
 
@@ -210,10 +210,10 @@
                 name="bidder"
               >
                 <option [value]="undefined" disabled>
-                  <span *ngIf="bidders?.length">Select a bidder</span>
-                  <span *ngIf="!bidders?.length">No bidder</span>
+                  <span *ngIf="bids?.length">Select a bidder</span>
+                  <span *ngIf="!bids?.length">No bidder</span>
                 </option>
-                <ng-container *ngFor="let b of bidders">
+                <ng-container *ngFor="let b of bids">
                   <option
                     [value]="b.id?.bidder"
                     *ngIf="!isAlreadySelectedBidder(b.id?.bidder || '')"
@@ -249,7 +249,7 @@
     </div>
   </div>
 
-  <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
     <div class="overflow-x-auto">
       <table class="table w-full">
         <thead>
@@ -263,13 +263,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bidder of bidders; let i = index">
+          <tr *ngFor="let bid of bids; let i = index">
             <th>#{{ i + 1 }}</th>
-            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-            <td>{{ bidder.deposit_amount | coin | async }}</td>
-            <td>{{ bidder.bid_amount | coin | async }}</td>
-            <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-            <td>{{ bidder.id?.bidder }}</td>
+            <td>{{ bid.deposit_lending_rate | percentage }}</td>
+            <td>{{ bid.deposit_amount | coin | async }}</td>
+            <td>{{ bid.bid_amount | coin | async }}</td>
+            <td>{{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+            <td>{{ bid.id?.bidder }}</td>
           </tr>
         </tbody>
       </table>

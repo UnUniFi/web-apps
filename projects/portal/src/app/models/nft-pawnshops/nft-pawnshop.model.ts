@@ -48,8 +48,7 @@ export type BorrowRequest = {
 export type RepayRequest = {
   classID: string;
   nftID: string;
-  symbol: string;
-  amount: number;
+  repayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[];
 };
 
 export type NftRequest = {

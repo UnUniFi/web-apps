@@ -418,11 +418,6 @@ export class NftPawnshopApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.pawnshopService.buildMsgBorrow(
       address,
       classId,
@@ -470,25 +465,18 @@ export class NftPawnshopApplicationService {
     }
   }
 
-  async repay(classId: string, nftId: string, symbol: string, amount: number) {
+  async repay(classId: string, nftId: string, repayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.pawnshopService.buildMsgRepay(
       address,
       classId,
       nftId,
-      symbol,
-      amount,
-      symbolMetadataMap,
+      repayBids,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

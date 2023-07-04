@@ -26,7 +26,7 @@ export class BorrowerNftComponent implements OnInit {
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   symbol$: Observable<string | null | undefined>;
   symbolImage$: Observable<string | undefined>;
-  bidders$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<BidderBids200ResponseBidsInner[]>;
   loan$: Observable<Loan200Response>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   nftMetadata$: Observable<Metadata>;
@@ -52,10 +52,10 @@ export class BorrowerNftComponent implements OnInit {
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
-    this.bidders$ = nftCombine$.pipe(
+    this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
-      map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+      map((bids) =>
+        bids.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
       ),
     );
     this.loan$ = nftCombine$.pipe(
@@ -75,7 +75,7 @@ export class BorrowerNftComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmitCancel(data: NftRequest) {
     this.pawnshopApp.cancelNftListing(data.classID, data.nftID);

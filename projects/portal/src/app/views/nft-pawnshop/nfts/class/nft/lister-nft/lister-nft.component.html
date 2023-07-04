@@ -165,28 +165,30 @@
     </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="table w-full" *ngIf="bidders && bidders.length">
-      <thead>
-        <tr>
-          <th></th>
-          <td>Interest rate</td>
-          <td>Deposit</td>
-          <td>Bid price</td>
-          <td>Expiry</td>
-          <td>Bidder address</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let bidder of bidders; let i = index">
-          <th>#{{ i + 1 }}</th>
-          <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-          <td>{{ bidder.deposit_amount | coin | async }}</td>
-          <td>{{ bidder.bid_amount | coin | async }}</td>
-          <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-          <td>{{ bidder.id?.bidder }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="table w-full" *ngIf="bidders && bidders.length">
+        <thead>
+          <tr>
+            <th></th>
+            <td>Interest rate</td>
+            <td>Deposit</td>
+            <td>Bid price</td>
+            <td>Expiry</td>
+            <td>Bidder address</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bidder of bidders; let i = index">
+            <th>#{{ i + 1 }}</th>
+            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
+            <td>{{ bidder.deposit_amount | coin | async }}</td>
+            <td>{{ bidder.bid_amount | coin | async }}</td>
+            <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+            <td>{{ bidder.id?.bidder }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

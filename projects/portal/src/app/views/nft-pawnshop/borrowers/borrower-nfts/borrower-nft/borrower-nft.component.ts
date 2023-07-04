@@ -25,7 +25,7 @@ export class BorrowerNftComponent implements OnInit {
   @Input()
   symbolImage?: string | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   loan?: Loan200Response | null;
   @Input()
@@ -45,7 +45,7 @@ export class BorrowerNftComponent implements OnInit {
     this.appSubmitSell = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmitCancel() {
     if (!this.classID || !this.nftID) {

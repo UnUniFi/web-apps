@@ -40,7 +40,13 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
+  @Input()
+  bidAmount?: number | null;
+  @Input()
+  depositAmount?: number | null;
+  @Input()
+  interestRate?: number | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()
@@ -48,14 +54,11 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   chartData?: (string | number)[][] | null;
 
-  bidAmount?: number | null;
-  depositAmount?: number | null;
-  minimumDeposit: number;
-  interestRate?: number | null;
-  datePicker?: Date | null;
+
   date?: string;
   time?: string;
-  autoPayment?: boolean;
+  minimumDeposit: number = 0;
+  autoPayment: boolean = true;
 
   chartType: ChartType;
   chartTitle: string;
@@ -68,7 +71,11 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   appSubmit: EventEmitter<PlaceBidRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    this.autoPayment = true;
+    const now = new Date();
+    // set expire in 1 year
+    now.setFullYear(now.getFullYear() + 1);
+    this.date = now.getFullYear() + '-' + ("0" + (now.getMonth() + 1)).slice(-2) + '-' + ("0" + now.getDate()).slice(-2);
+    this.time = ("0" + now.getHours()).slice(-2) + ':' + ("0" + now.getMinutes()).slice(-2);
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -79,7 +86,6 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
-    this.minimumDeposit = 0;
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
@@ -91,7 +97,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnChanges(): void {
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
@@ -99,6 +105,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   }
 
   onSimulate() {
+    console.log(this.date);
     if (!this.classID || !this.nftID || !this.symbol) {
       alert('Invalid NFT Info!');
       return;
@@ -123,7 +130,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,
-      autoPayment: this.autoPayment || false,
+      autoPayment: this.autoPayment,
       depositAmount: 0,
     });
   }
@@ -155,7 +162,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       bidAmount: this.bidAmount,
       biddingPeriod: biddingPeriod,
       depositLendingRate: this.interestRate,
-      autoPayment: this.autoPayment || false,
+      autoPayment: this.autoPayment,
       depositAmount: this.depositAmount,
     });
   }

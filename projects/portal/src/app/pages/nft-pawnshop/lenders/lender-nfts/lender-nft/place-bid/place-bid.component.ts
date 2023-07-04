@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
@@ -29,7 +30,10 @@ export class PlaceBidComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balance$: Observable<number>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
-  bidders$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  bidAmount$: Observable<number | undefined>;
+  depositAmount$: Observable<number | undefined>;
+  interestRate$: Observable<number>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   chartData$: Observable<(string | number)[][]>;
@@ -67,11 +71,35 @@ export class PlaceBidComponent implements OnInit {
     this.balance$ = zip(balanceMap$, this.symbol$).pipe(
       map(([balance, symbol]) => balance[symbol || '']),
     );
-    this.bidders$ = nftCombine$.pipe(
+    this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
-      map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+      map((bids) =>
+        bids.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
       ),
+    );
+    const maxBidAmount$ = this.bids$.pipe(
+      map((bids) => bids.reduce((max, bid) => Math.max(max, parseInt(bid.bid_amount?.amount || '0')), 0)),
+    );
+    this.bidAmount$ = combineLatest([this.listingInfo$, maxBidAmount$]).pipe(
+      map(([info, maxBidAmount]) => {
+        if (!maxBidAmount) {
+          return undefined
+        }
+        const exponent = denomExponentMap[info.bid_token || '']
+        return maxBidAmount / 10 ** exponent
+      }),
+    );
+    this.depositAmount$ = combineLatest([this.listingInfo$, maxBidAmount$]).pipe(
+      map(([info, maxBidAmount]) => {
+        if (!maxBidAmount) {
+          return undefined
+        }
+        const exponent = denomExponentMap[info.bid_token || '']
+        return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent
+      }),
+    );
+    this.interestRate$ = this.bids$.pipe(
+      map((bids) => bids.reduce((min, bid) => Math.min(min, Number(bid.deposit_lending_rate || '0')) * 100, 5.5)),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
@@ -83,21 +111,21 @@ export class PlaceBidComponent implements OnInit {
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
 
-    this.chartData$ = this.bidders$.pipe(
-      map((bidders) => this.pawnshopChart.createBidAmountChartData(bidders)),
+    this.chartData$ = this.bids$.pipe(
+      map((bids) => this.pawnshopChart.createBidAmountChartData(bids)),
       map((data) => data.sort((a, b) => Number(a[1]) - Number(b[1]))),
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSimulate(data: PlaceBidRequest) {
     const bidAmount = data.bidAmount;
     const date = data.biddingPeriod.toLocaleString();
     const rate = data.depositLendingRate;
     const secondaryColor = '#EC0BA1';
-    this.chartData$ = this.bidders$.pipe(
-      map((bidders) => this.pawnshopChart.createBidAmountChartData(bidders)),
+    this.chartData$ = this.bids$.pipe(
+      map((bids) => this.pawnshopChart.createBidAmountChartData(bids)),
       map((data) => {
         data[data.length] = [date, bidAmount, secondaryColor, rate + '%'];
         return data;

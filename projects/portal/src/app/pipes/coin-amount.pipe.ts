@@ -10,12 +10,12 @@ export class CoinAmountPipe implements PipeTransform {
       const denomExponents = denomExponentMap;
       const exponent = denomExponents[denom];
       const amount = Number(value) / Math.pow(10, exponent);
-      return amount.toFixed(exponent);
+      return amount.toString();
     }
     if (value) {
       // if no denom, assume micro
       const amount = Number(value) / Math.pow(10, 6);
-      return amount.toFixed(6);
+      return amount.toString();
     }
     return '';
   }

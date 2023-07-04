@@ -7,7 +7,7 @@ import { BankQueryService } from '../models/cosmos/bank.query.service';
   name: 'coin',
 })
 export class CoinPipe implements PipeTransform {
-  constructor(private readonly bankQueryService: BankQueryService) {}
+  constructor(private readonly bankQueryService: BankQueryService) { }
   async transform(
     value: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined | null,
   ): Promise<string> {
@@ -20,7 +20,7 @@ export class CoinPipe implements PipeTransform {
       if (!symbol) {
         return value.amount + ' ' + value.denom;
       }
-      return amount.toFixed(exponent) + ' ' + symbol;
+      return amount + ' ' + symbol;
     }
     return '';
   }

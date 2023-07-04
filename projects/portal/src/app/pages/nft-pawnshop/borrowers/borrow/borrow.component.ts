@@ -1,54 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
-import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
+import { BorrowRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { Observable, combineLatest, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import {
-  BidderBids200ResponseBidsInner,
   ListedNfts200ResponseListingsInnerListing,
+  BidderBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
-  selector: 'app-lender-nft',
-  templateUrl: './lender-nft.component.html',
-  styleUrls: ['./lender-nft.component.css'],
+  selector: 'app-borrow',
+  templateUrl: './borrow.component.html',
+  styleUrls: ['./borrow.component.css'],
 })
-export class LenderNftComponent implements OnInit {
-  currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  address$: Observable<string>;
+export class BorrowComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  symbol$: Observable<string | null | undefined>;
-  symbolImage$: Observable<string | undefined>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
-  bidders$: Observable<BidderBids200ResponseBidsInner[]>;
+  symbol$: Observable<string | null | undefined>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
+  symbolImage$: Observable<string | undefined>;
+  bids$: Observable<BidderBids200ResponseBidsInner[]>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
-  bidDetail$: Observable<BidderBids200ResponseBidsInner | undefined>;
-  isWinning$: Observable<boolean>;
+  chartData$: Observable<(string | number)[][]>;
+  borrowableAmount$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
-    private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly pawnshop: NftPawnshopService,
     private readonly pawnshopQuery: NftPawnshopQueryService,
+    private readonly pawnshopChart: NftPawnshopChartService,
     private readonly pawnshopApp: NftPawnshopApplicationService,
   ) {
-    this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    this.address$ = this.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address).toString()),
-    );
-
     this.classID$ = this.route.params.pipe(map((params) => params.class_id));
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
@@ -56,17 +51,27 @@ export class LenderNftComponent implements OnInit {
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
       map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
-    this.bidders$ = nftCombine$.pipe(
+    this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+        bidders.sort(
+          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
+        ),
       ),
+    );
+    this.borrowableAmount$ = combineLatest([this.listingInfo$, this.bids$]).pipe(
+      map(([info, bids]) => {
+        const exponent = denomExponentMap[info.bid_token || ''];
+        const borrowableAmount = this.pawnshop.getMaxBorrowableAmount(bids);
+        return borrowableAmount / 10 ** exponent;
+      }),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
@@ -77,35 +82,21 @@ export class LenderNftComponent implements OnInit {
     this.nftImage$ = nftData$.pipe(
       mergeMap((nft) => this.pawnshop.getImageFromUri(nft.nft?.uri || '')),
     );
-    this.bidDetail$ = combineLatest([this.address$, this.bidders$]).pipe(
-      map(([address, bidders]) => {
-        const bidder = bidders.find((bidder) => bidder.id?.bidder == address);
-        return bidder;
-      }),
-    );
-    // To Do Add Liquidate
-    this.isWinning$ = combineLatest([this.address$, this.bidders$, this.listingInfo$]).pipe(
-      map(([address, bidders, info]) => {
-        if (info.state == 'SELLING_DECISION') {
-          if (bidders[0].id?.bidder == address) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      }),
+
+    this.chartData$ = this.bids$.pipe(
+      map((bids) => this.pawnshopChart.createDepositAmountChartData(bids)),
+      map((data) =>
+        data.sort(
+          (a, b) =>
+            Number((a[3] as string).replace('%', '')) - Number((b[3] as string).replace('%', '')),
+        ),
+      ),
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  onSubmitCancelBid(data: NftRequest) {
-    this.pawnshopApp.cancelBid(data.classID, data.nftID);
-  }
-
-  onSubmitPayFullBid(data: NftRequest) {
-    this.pawnshopApp.payFullBid(data.classID, data.nftID);
+  onSubmit(data: BorrowRequest) {
+    this.pawnshopApp.borrow(data.classID, data.nftID, data.borrowBids);
   }
 }

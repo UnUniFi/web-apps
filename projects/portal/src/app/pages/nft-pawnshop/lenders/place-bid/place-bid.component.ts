@@ -78,28 +78,35 @@ export class PlaceBidComponent implements OnInit {
       ),
     );
     const maxBidAmount$ = this.bids$.pipe(
-      map((bids) => bids.reduce((max, bid) => Math.max(max, parseInt(bid.bid_amount?.amount || '0')), 0)),
+      map((bids) =>
+        bids.reduce((max, bid) => Math.max(max, parseInt(bid.bid_amount?.amount || '0')), 0),
+      ),
     );
     this.bidAmount$ = combineLatest([this.listingInfo$, maxBidAmount$]).pipe(
       map(([info, maxBidAmount]) => {
         if (!maxBidAmount) {
-          return undefined
+          return undefined;
         }
-        const exponent = denomExponentMap[info.bid_token || '']
-        return maxBidAmount / 10 ** exponent
+        const exponent = denomExponentMap[info.bid_token || ''];
+        return maxBidAmount / 10 ** exponent;
       }),
     );
     this.depositAmount$ = combineLatest([this.listingInfo$, maxBidAmount$]).pipe(
       map(([info, maxBidAmount]) => {
         if (!maxBidAmount) {
-          return undefined
+          return undefined;
         }
-        const exponent = denomExponentMap[info.bid_token || '']
-        return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent
+        const exponent = denomExponentMap[info.bid_token || ''];
+        return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent;
       }),
     );
     this.interestRate$ = this.bids$.pipe(
-      map((bids) => bids.reduce((min, bid) => Math.min(min, Number(bid.deposit_lending_rate || '0')) * 100, 5.5)),
+      map((bids) =>
+        bids.reduce(
+          (min, bid) => Math.min(min, Number(bid.deposit_lending_rate || '0')) * 100,
+          5.5,
+        ),
+      ),
     );
     const nftData$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.getNft$(classID, nftID)),
@@ -117,7 +124,7 @@ export class PlaceBidComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSimulate(data: PlaceBidRequest) {
     const bidAmount = data.bidAmount;

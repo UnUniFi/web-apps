@@ -54,7 +54,6 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   chartData?: (string | number)[][] | null;
 
-
   date?: string;
   time?: string;
   minimumDeposit: number = 0;
@@ -74,8 +73,13 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     const now = new Date();
     // set expire in 1 year
     now.setFullYear(now.getFullYear() + 1);
-    this.date = now.getFullYear() + '-' + ("0" + (now.getMonth() + 1)).slice(-2) + '-' + ("0" + now.getDate()).slice(-2);
-    this.time = ("0" + now.getHours()).slice(-2) + ':' + ("0" + now.getMinutes()).slice(-2);
+    this.date =
+      now.getFullYear() +
+      '-' +
+      ('0' + (now.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + now.getDate()).slice(-2);
+    this.time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -97,7 +101,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;

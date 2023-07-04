@@ -13,22 +13,21 @@ import cosmosclient from '@cosmos-client/core';
 import { ChartType } from 'angular-google-charts';
 import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
-import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { BorrowRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
-  BidderBids200ResponseBidsInner,
-  Liquidation200ResponseLiquidations,
   ListedNfts200ResponseListingsInnerListing,
+  BidderBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
-  selector: 'view-repay',
-  templateUrl: './repay.component.html',
-  styleUrls: ['./repay.component.css'],
+  selector: 'view-borrow',
+  templateUrl: './borrow.component.html',
+  styleUrls: ['./borrow.component.css'],
 })
-export class RepayComponent implements OnInit, OnChanges {
+export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   classID?: string | null;
   @Input()
@@ -46,9 +45,9 @@ export class RepayComponent implements OnInit, OnChanges {
   @Input()
   bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  liquidation?: Liquidation200ResponseLiquidations | null;
+  borrowableAmount?: number | null;
   @Input()
-  repayAmount?: number | null;
+  selectedBorrowAmount?: number | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()
@@ -61,26 +60,32 @@ export class RepayComponent implements OnInit, OnChanges {
   chartColumns: any[];
   chartOptions: any;
 
-  autoRepay = true;
-  autoRepayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
+  autoBorrow = true;
+  autoBorrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
+  shortestExpiryDate = new Date();
+  averageInterestRate = 0;
+
   selectedBidder?: string;
   selectedBids: { address: string; amount: number }[] = [];
 
   @Output()
-  appSubmit: EventEmitter<RepayRequest>;
+  appSubmit: EventEmitter<BorrowRequest>;
 
-  constructor(private readonly pawnshopChart: NftPawnshopChartService, private readonly nftPawnshopService: NftPawnshopService) {
+  constructor(
+    private readonly pawnshopChart: NftPawnshopChartService,
+    private readonly nftPawnshopService: NftPawnshopService,
+  ) {
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
+
     this.chartColumns = [
       { type: 'string', label: 'Expiry Date' },
-      { type: 'number', label: 'Borrowing Amount' },
+      { type: 'number', label: 'Deposit Amount' },
       { type: 'string', role: 'style' },
       { type: 'string', role: 'annotation' },
     ];
-
     this.appSubmit = new EventEmitter();
   }
 
@@ -91,23 +96,38 @@ export class RepayComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
-    this.onChangeRepayAmount();
+    this.onChangeBorrowAmount();
     const width: number = this.chartCardRef!.nativeElement.offsetWidth;
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
   onToggleAuto(auto: boolean) {
-    this.autoRepay = auto;
+    this.autoBorrow = auto;
   }
 
-  onChangeRepayAmount() {
-    if (this.bids && this.liquidation && this.repayAmount && this.symbol && this.symbolMetadataMap) {
-      this.autoRepayBids = this.nftPawnshopService.autoRepayBids(this.bids, this.liquidation, this.repayAmount, this.symbol, this.symbolMetadataMap)
-      const exponent = denomExponentMap[this.listingInfo?.bid_token!]
-      this.selectedBids = this.autoRepayBids.map((bid) => { return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent } })
+  onChangeBorrowAmount() {
+    if (this.bids && this.selectedBorrowAmount && this.symbol && this.symbolMetadataMap) {
+      this.autoBorrowBids = this.nftPawnshopService.autoBorrowBids(
+        this.bids,
+        this.selectedBorrowAmount,
+        this.symbol,
+        this.symbolMetadataMap,
+      );
+      this.averageInterestRate = this.nftPawnshopService.averageInterestRate(
+        this.bids,
+        this.autoBorrowBids,
+      );
+      this.shortestExpiryDate = this.nftPawnshopService.shortestExpiryDate(
+        this.bids,
+        this.autoBorrowBids,
+      );
+      const exponent = denomExponentMap[this.listingInfo?.bid_token!];
+      this.selectedBids = this.autoBorrowBids.map((bid) => {
+        return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent };
+      });
     }
   }
 
@@ -136,22 +156,27 @@ export class RepayComponent implements OnInit, OnChanges {
       alert('Invalid NFT Info!');
       return;
     }
-    if (this.autoRepay) {
+
+    if (this.autoBorrow) {
       this.appSubmit.emit({
         classID: this.classID,
         nftID: this.nftID,
-        repayBids: this.autoRepayBids,
+        borrowBids: this.autoBorrowBids,
       });
     } else {
       if (!this.symbol || !this.symbolMetadataMap) {
         alert('Invalid Token!');
         return;
       }
-      const repayBids = this.nftPawnshopService.convertBorrowBids(this.selectedBids, this.symbol, this.symbolMetadataMap)
+      const borrowBids = this.nftPawnshopService.convertBorrowBids(
+        this.selectedBids,
+        this.symbol,
+        this.symbolMetadataMap!,
+      );
       this.appSubmit.emit({
         classID: this.classID,
         nftID: this.nftID,
-        repayBids,
+        borrowBids,
       });
     }
   }

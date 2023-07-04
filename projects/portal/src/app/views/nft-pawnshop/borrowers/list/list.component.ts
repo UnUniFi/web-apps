@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
     this.appSubmit = new EventEmitter();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit() {
     this.appSubmit.emit({

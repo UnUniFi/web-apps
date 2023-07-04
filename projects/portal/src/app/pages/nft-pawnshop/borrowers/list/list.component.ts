@@ -39,7 +39,7 @@ export class ListComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(data: ListRequest) {
     this.pawnshopApp.listNft(

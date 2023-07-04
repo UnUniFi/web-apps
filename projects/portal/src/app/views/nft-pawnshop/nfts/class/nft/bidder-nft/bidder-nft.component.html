@@ -56,12 +56,12 @@
     <div class="card-body">
       <div class="flex flex-row items-center">
         <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat" *ngIf="bidders && bidders.length">
+          <div class="stat" *ngIf="bids && bids.length">
             <div class="stat-title">Highest bid price</div>
             <div class="stat-value text-primary">
-              {{ bidders[0].bid_amount?.amount | coinAmount }}
+              {{ bids[0].bid_amount?.amount | coinAmount }}
             </div>
-            <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom | async }}</div>
+            <div class="stat-desc">{{ bids[0].bid_amount?.denom | coinDenom | async }}</div>
           </div>
           <div class="stat">
             <div class="stat-title">Your Status</div>
@@ -95,7 +95,7 @@
           <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>
           <span class="flex-auto"></span>
           <button
-            *ngIf="bidders && bidders.length > 1"
+            *ngIf="bids && bids.length > 1"
             class="btn btn-secondary px-8"
             (click)="onSubmitCancelBid()"
           >
@@ -111,7 +111,7 @@
     </div>
   </div>
 
-  <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
     <div class="overflow-x-auto">
       <table class="table w-full">
         <thead>
@@ -125,27 +125,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bidder of bidders; let i = index">
+          <tr *ngFor="let bid of bids; let i = index">
             <ng-container
-              *ngIf="bidder.id?.bidder === address; then color; else normal"
+              *ngIf="bid.id?.bidder === address; then color; else normal"
             ></ng-container>
             <ng-template #color>
               <th class="text-secondary">#{{ i + 1 }}</th>
-              <td class="text-secondary">{{ bidder.deposit_lending_rate | percentage }}</td>
-              <td class="text-secondary">{{ bidder.deposit_amount | coin | async }}</td>
-              <td class="text-secondary">{{ bidder.bid_amount | coin | async }}</td>
+              <td class="text-secondary">{{ bid.deposit_lending_rate | percentage }}</td>
+              <td class="text-secondary">{{ bid.deposit_amount | coin | async }}</td>
+              <td class="text-secondary">{{ bid.bid_amount | coin | async }}</td>
               <td class="text-secondary">
-                {{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
+                {{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
               </td>
-              <td class="text-secondary">{{ bidder.id?.bidder }}</td>
+              <td class="text-secondary">{{ bid.id?.bidder }}</td>
             </ng-template>
             <ng-template #normal>
               <th>#{{ i + 1 }}</th>
-              <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-              <td>{{ bidder.deposit_amount | coin | async }}</td>
-              <td>{{ bidder.bid_amount | coin | async }}</td>
-              <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-              <td>{{ bidder.id?.bidder }}</td>
+              <td>{{ bid.deposit_lending_rate | percentage }}</td>
+              <td>{{ bid.deposit_amount | coin | async }}</td>
+              <td>{{ bid.bid_amount | coin | async }}</td>
+              <td>{{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+              <td>{{ bid.id?.bidder }}</td>
             </ng-template>
           </tr>
         </tbody>

@@ -21,7 +21,7 @@ export class BidderNftComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()

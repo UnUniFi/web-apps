@@ -50,7 +50,7 @@
     </div>
   </div>
 
-  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bidders && bidders.length">
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bids && bids.length">
     <div class="card-body">
       <div class="flex flex-col md:flex-row justify-center items-center">
         <div class="stats stats-vertical md:stats-horizontal">
@@ -111,16 +111,16 @@
     </div>
   </div>
 
-  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bidders && bidders.length">
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bids && bids.length">
     <div class="card-body">
       <div class="flex flex-col md:flex-row justify-center items-center">
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title">Highest bid price</div>
             <div class="stat-value text-primary">
-              {{ bidders[0].bid_amount?.amount | coinAmount }}
+              {{ bids[0].bid_amount?.amount | coinAmount }}
             </div>
-            <div class="stat-desc">{{ bidders[0].bid_amount?.denom | coinDenom | async }}</div>
+            <div class="stat-desc">{{ bids[0].bid_amount?.denom | coinDenom | async }}</div>
           </div>
         </div>
         <span class="flex-auto"></span>
@@ -165,9 +165,9 @@
     </div>
   </div>
 
-  <div *ngIf="bidders?.length" class="card bg-base-100 shadow-xl">
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
     <div class="overflow-x-auto">
-      <table class="table w-full" *ngIf="bidders && bidders.length">
+      <table class="table w-full" *ngIf="bids && bids.length">
         <thead>
           <tr>
             <th></th>
@@ -179,13 +179,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bidder of bidders; let i = index">
+          <tr *ngFor="let bid of bids; let i = index">
             <th>#{{ i + 1 }}</th>
-            <td>{{ bidder.deposit_lending_rate | percentage }}</td>
-            <td>{{ bidder.deposit_amount | coin | async }}</td>
-            <td>{{ bidder.bid_amount | coin | async }}</td>
-            <td>{{ bidder.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-            <td>{{ bidder.id?.bidder }}</td>
+            <td>{{ bid.deposit_lending_rate | percentage }}</td>
+            <td>{{ bid.deposit_amount | coin | async }}</td>
+            <td>{{ bid.bid_amount | coin | async }}</td>
+            <td>{{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+            <td>{{ bid.id?.bidder }}</td>
           </tr>
         </tbody>
       </table>

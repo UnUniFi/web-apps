@@ -22,7 +22,7 @@ export class NftPawnshopService {
     private readonly txCommon: TxCommonService,
     private readonly bankService: BankService,
     private http: HttpClient,
-  ) { }
+  ) {}
 
   replaceIpfs(url: string): string {
     return url.replace('ipfs://', 'https://ununifi.mypinata.cloud/ipfs/');

@@ -97,7 +97,7 @@ export class NftComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmitCancelListing(data: NftRequest) {
     this.pawnshopApp.cancelNftListing(data.classID, data.nftID);

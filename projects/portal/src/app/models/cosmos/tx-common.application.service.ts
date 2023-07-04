@@ -30,7 +30,7 @@ export class TxCommonApplicationService {
     private readonly walletService: WalletService,
     private readonly txCommon: TxCommonService,
     private readonly config: ConfigService,
-  ) { }
+  ) {}
 
   async getPrerequisiteData() {
     const currentCosmosWallet = await this.walletService.currentCosmosWallet$

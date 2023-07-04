@@ -174,5 +174,5 @@ export class LenderComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

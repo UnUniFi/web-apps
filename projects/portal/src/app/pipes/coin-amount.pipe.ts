@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { denomExponentMap } from '../models/cosmos/bank.model';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'coinAmount',

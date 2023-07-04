@@ -1,6 +1,6 @@
+import { denomExponentMap } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
 import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
-import { denomExponentMap } from '../cosmos/bank.model';
 
 @Injectable({
   providedIn: 'root',

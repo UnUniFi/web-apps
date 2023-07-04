@@ -1,13 +1,13 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { denomExponentMap } from '../models/cosmos/bank.model';
 import { BankQueryService } from '../models/cosmos/bank.query.service';
+import { Pipe, PipeTransform } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Pipe({
   name: 'coin',
 })
 export class CoinPipe implements PipeTransform {
-  constructor(private readonly bankQueryService: BankQueryService) { }
+  constructor(private readonly bankQueryService: BankQueryService) {}
   async transform(
     value: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined | null,
   ): Promise<string> {

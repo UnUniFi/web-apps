@@ -130,7 +130,7 @@ export class LendersComponent implements OnInit {
         const bidding = nfts.filter((nft) => nft.state == 'BIDDING').length;
         const selling = nfts.filter((nft) => nft.state == 'SELLING_DECISION').length;
         const liquidations = nfts.filter((nft) => nft.state == 'LIQUIDATION').length;
-        const successfulBids = nfts.filter((nft) => nft.state == "SUCCESSFUL_BID").length;
+        const successfulBids = nfts.filter((nft) => nft.state == 'SUCCESSFUL_BID').length;
         return {
           bidding: bidding,
           selling_decision: selling,
@@ -182,7 +182,7 @@ export class LendersComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(symbol: string) {
     this.router.navigate([], {

@@ -1,4 +1,3 @@
-import ununificlient from 'ununifi-client';
 import { NftsDialogComponent } from '../../pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.component';
 import {
   TxConfirmDialogComponent,
@@ -11,6 +10,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import ununificlient from 'ununifi-client';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class NftPawnshopApplicationService {
     private readonly bankQueryService: BankQueryService,
     private readonly pawnshopService: NftPawnshopService,
     private readonly txCommonApplication: TxCommonApplicationService,
-  ) { }
+  ) {}
 
   async openNftsDialog(classID: string): Promise<void> {
     const nftID = await this.dialog
@@ -411,19 +411,18 @@ export class NftPawnshopApplicationService {
     }
   }
 
-  async borrow(classId: string, nftId: string, borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]) {
+  async borrow(
+    classId: string,
+    nftId: string,
+    borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[],
+  ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.pawnshopService.buildMsgBorrow(
-      address,
-      classId,
-      nftId,
-      borrowBids,
-    );
+    const msg = this.pawnshopService.buildMsgBorrow(address, classId, nftId, borrowBids);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,
@@ -465,19 +464,18 @@ export class NftPawnshopApplicationService {
     }
   }
 
-  async repay(classId: string, nftId: string, repayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[]) {
+  async repay(
+    classId: string,
+    nftId: string,
+    repayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[],
+  ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.pawnshopService.buildMsgRepay(
-      address,
-      classId,
-      nftId,
-      repayBids,
-    );
+    const msg = this.pawnshopService.buildMsgRepay(address, classId, nftId, repayBids);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

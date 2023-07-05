@@ -69,7 +69,7 @@ export class BorrowComponent implements OnInit {
     this.borrowableAmount$ = combineLatest([this.listingInfo$, this.bids$]).pipe(
       map(([info, bids]) => {
         const exponent = denomExponentMap[info.bid_token || ''];
-        const borrowableAmount = this.pawnshop.getMaxBorrowableAmount(bids);
+        const borrowableAmount = this.pawnshop.getMaxBorrowAmount(bids);
         return borrowableAmount / 10 ** exponent;
       }),
     );

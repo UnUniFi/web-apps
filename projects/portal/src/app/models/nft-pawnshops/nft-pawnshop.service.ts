@@ -385,14 +385,14 @@ export class NftPawnshopService {
     return period;
   }
 
-  getMaxBorrowableAmount(bids: BidderBids200ResponseBidsInner[]): number {
+  getMaxBorrowAmount(bids: BidderBids200ResponseBidsInner[]): number {
     // 昇順にソート
     const interestSort = bids.sort(
       (a, b) => Number(a.deposit_lending_rate) - Number(b.deposit_lending_rate),
     );
     const now = new Date();
     let minSettlement = this.getMinimumSettlementAmount(bids);
-    let borrowableAmount = 0;
+    let borrowAmount = 0;
 
     for (const bid of interestSort) {
       const rate = Number(bid.deposit_lending_rate);
@@ -404,14 +404,14 @@ export class NftPawnshopService {
       const repayAmount = deposit + interest;
       if (repayAmount < minSettlement) {
         minSettlement -= repayAmount;
-        borrowableAmount += deposit;
+        borrowAmount += deposit;
       } else {
-        borrowableAmount += (deposit * minSettlement) / repayAmount;
+        borrowAmount += (deposit * minSettlement) / repayAmount;
         minSettlement = 0;
         break;
       }
     }
-    return Math.floor(borrowableAmount);
+    return Math.floor(borrowAmount);
   }
 
   getMinimumSettlementAmount(bids: BidderBids200ResponseBidsInner[]): number {

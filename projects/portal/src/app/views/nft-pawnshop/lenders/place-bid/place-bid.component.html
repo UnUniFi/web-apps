@@ -37,7 +37,7 @@
         </div>
       </div>
       <h2 class="card-title break-all">
-        {{ nftMetadata?.name || classID + '/' + nftID }}
+        {{ nftMetadata?.name }}
       </h2>
       <div class="overflow-x-auto">
         <table class="table w-full">
@@ -63,7 +63,7 @@
               <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
             </tr>
             <tr>
-              <td>Started at</td>
+              <td>Listed</td>
               <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
             </tr>
           </tbody>
@@ -331,13 +331,13 @@
             </div> -->
 
             <div class="card-actions justify-end mt-4">
-              <button
+              <!-- <button
                 type="button"
                 class="btn btn-primary btn-outline w-full md:w-auto md:px-8"
                 (click)="onSimulate()"
               >
                 Simulate
-              </button>
+              </button> -->
               <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
                 Make Offer
               </button>

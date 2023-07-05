@@ -45,7 +45,7 @@ export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
-  borrowableAmount?: number | null;
+  borrowAmount?: number | null;
   @Input()
   selectedBorrowAmount?: number | null;
   @Input()

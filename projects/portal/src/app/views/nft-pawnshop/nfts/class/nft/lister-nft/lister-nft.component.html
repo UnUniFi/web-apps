@@ -56,8 +56,17 @@
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title">Total deposits</div>
-            <div class="stat-value text-primary">{{ loan?.borrowing_limit | coinAmount }}</div>
-            <div class="stat-desc">{{ loan?.loan?.loan?.denom | coinDenom | async }}</div>
+            <div class="stat-value text-primary">
+              {{ loan?.total_deposit?.amount | coinAmount }}
+            </div>
+            <div class="stat-desc">{{ loan?.total_deposit?.denom | coinDenom | async }}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Max Borrow Amount</div>
+            <div class="stat-value text-primary">
+              {{ loan?.borrowing_limit?.amount | coinAmount }}
+            </div>
+            <div class="stat-desc">{{ loan?.borrowing_limit?.denom | coinDenom | async }}</div>
           </div>
           <div class="stat">
             <div class="stat-title">Borrowed Amount</div>

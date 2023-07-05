@@ -141,7 +141,7 @@
                 type="number"
                 name="amount"
                 [(ngModel)]="selectedBorrowAmount"
-                [max]="borrowableAmount || 0"
+                [max]="borrowAmount || 0"
                 [min]="0"
                 [step]="1"
                 class="input input-bordered w-full"
@@ -152,7 +152,7 @@
               <span>{{ symbol }}</span>
             </label>
             <label class="label">
-              <span class="label-text-alt">Max {{ borrowableAmount }} {{ symbol }}</span>
+              <span class="label-text-alt">Max {{ borrowAmount }} {{ symbol }}</span>
             </label>
           </div>
 

@@ -14,6 +14,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   ListedNfts200ResponseListingsInnerListing,
   BidderBids200ResponseBidsInner,
+  Loan200Response,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -31,10 +32,11 @@ export class BorrowComponent implements OnInit {
   }>;
   symbolImage$: Observable<string | undefined>;
   bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  loan$: Observable<Loan200Response>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   chartData$: Observable<(string | number)[][]>;
-  borrowableAmount$: Observable<number>;
+  borrowAmount$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,11 +68,14 @@ export class BorrowComponent implements OnInit {
         ),
       ),
     );
-    this.borrowableAmount$ = combineLatest([this.listingInfo$, this.bids$]).pipe(
-      map(([info, bids]) => {
-        const exponent = denomExponentMap[info.bid_token || ''];
-        const borrowableAmount = this.pawnshop.getMaxBorrowAmount(bids);
-        return borrowableAmount / 10 ** exponent;
+    this.loan$ = nftCombine$.pipe(
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getLoan$(classID, nftID)),
+    );
+    this.borrowAmount$ = this.loan$.pipe(
+      map((loan) => {
+        const maxBorrow = Number(loan.borrowing_limit?.amount);
+        const exponent = denomExponentMap[loan.borrowing_limit?.denom || ''];
+        return maxBorrow / 10 ** exponent;
       }),
     );
     const nftData$ = nftCombine$.pipe(

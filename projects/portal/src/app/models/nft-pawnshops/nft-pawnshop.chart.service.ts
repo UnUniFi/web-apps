@@ -58,25 +58,25 @@ export class NftPawnshopChartService {
     };
   }
 
-  createBidAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
+  createBidAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
-    if (bidders.length === 0) {
+    if (bids.length === 0) {
       return [];
     }
-    if (!bidders[0].bid_amount?.denom) {
+    if (!bids[0].bid_amount?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
-    return bidders.map((bidder) => {
+    const exponent = denomExponentMap[bids[0].bid_amount.denom];
+    return bids.map((bid) => {
       if (
-        bidder.bidding_period &&
-        bidder.bid_amount &&
-        bidder.bid_amount.amount &&
-        bidder.deposit_lending_rate
+        bid.bidding_period &&
+        bid.bid_amount &&
+        bid.bid_amount.amount &&
+        bid.deposit_lending_rate
       ) {
-        const date = new Date(bidder.bidding_period).toLocaleString();
-        const bidAmount = Number(bidder.bid_amount.amount) / 10 ** exponent;
-        const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
+        const date = new Date(bid.bidding_period).toLocaleString();
+        const bidAmount = Number(bid.bid_amount.amount) / 10 ** exponent;
+        const rate = (Number(bid.deposit_lending_rate) * 100).toFixed(2) + '%';
         return [date, bidAmount, primaryColor, rate];
       } else {
         return [];
@@ -84,29 +84,29 @@ export class NftPawnshopChartService {
     });
   }
 
-  createDepositAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
+  createDepositAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     const disableColor = '#BFBFBF';
-    if (bidders.length === 0) {
+    if (bids.length === 0) {
       return [];
     }
-    if (!bidders[0].bid_amount?.denom) {
+    if (!bids[0].bid_amount?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
+    const exponent = denomExponentMap[bids[0].bid_amount.denom];
     let data = [];
-    for (let bidder of bidders) {
+    for (let bid of bids) {
       if (
-        bidder.bidding_period &&
-        bidder.deposit_amount &&
-        bidder.deposit_amount.amount &&
-        bidder.deposit_lending_rate
+        bid.bidding_period &&
+        bid.deposit_amount &&
+        bid.deposit_amount.amount &&
+        bid.deposit_lending_rate
       ) {
-        const date = new Date(bidder.bidding_period).toLocaleString();
-        const depositAmount = Number(bidder.deposit_amount.amount) / 10 ** exponent;
-        const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
-        if (bidder.borrowings && bidder.borrowings.length) {
-          const borrowedAmount = bidder.borrowings.reduce(
+        const date = new Date(bid.bidding_period).toLocaleString();
+        const depositAmount = Number(bid.deposit_amount.amount) / 10 ** exponent;
+        const rate = (Number(bid.deposit_lending_rate) * 100).toFixed(2) + '%';
+        if (bid.borrowings && bid.borrowings.length) {
+          const borrowedAmount = bid.borrowings.reduce(
             (sum, curr) => sum + Number(curr.amount?.amount) / 10 ** exponent,
             0,
           );
@@ -125,27 +125,27 @@ export class NftPawnshopChartService {
     return data;
   }
 
-  createBorrowingAmountChartData(bidders: BidderBids200ResponseBidsInner[]) {
+  createBorrowingAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
-    if (bidders.length === 0) {
+    if (bids.length === 0) {
       return [];
     }
-    if (!bidders[0].bid_amount?.denom) {
+    if (!bids[0].bid_amount?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bidders[0].bid_amount.denom];
-    return bidders.map((bidder) => {
+    const exponent = denomExponentMap[bids[0].bid_amount.denom];
+    return bids.map((bid) => {
       if (
-        bidder.bidding_period &&
-        bidder.borrowings &&
-        bidder.borrowings.length &&
-        bidder.deposit_lending_rate
+        bid.bidding_period &&
+        bid.borrowings &&
+        bid.borrowings.length &&
+        bid.deposit_lending_rate
       ) {
-        const date = new Date(bidder.bidding_period).toLocaleString();
+        const date = new Date(bid.bidding_period).toLocaleString();
         const borrowAmount =
-          bidder.borrowings.reduce((sum, curr) => sum + Number(curr.amount?.amount), 0) /
+          bid.borrowings.reduce((sum, curr) => sum + Number(curr.amount?.amount), 0) /
           10 ** exponent;
-        const rate = (Number(bidder.deposit_lending_rate) * 100).toFixed(2) + '%';
+        const rate = (Number(bid.deposit_lending_rate) * 100).toFixed(2) + '%';
         return [date, borrowAmount, primaryColor, rate];
       } else {
         return [];

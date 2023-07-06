@@ -55,7 +55,7 @@ export class BorrowComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
-      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+      map(([info, metadata]) => metadata[info.bid_denom || ''].symbol),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),

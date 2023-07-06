@@ -31,13 +31,7 @@ export class NftPawnshopApplicationService {
     await this.router.navigate(['nft-backed-loan', 'nfts', classID, nftID, 'place-bid']);
   }
 
-  async listNft(
-    classId: string,
-    nftId: string,
-    bidSymbol: string,
-    minimumDepositRate: number,
-    autoRefinancing: boolean,
-  ) {
+  async listNft(classId: string, nftId: string, bidSymbol: string, minimumDepositRate: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -56,7 +50,6 @@ export class NftPawnshopApplicationService {
       bidSymbol,
       symbolMetadataMap,
       minimumDepositRate,
-      autoRefinancing,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

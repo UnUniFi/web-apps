@@ -42,12 +42,6 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(data: ListRequest) {
-    this.pawnshopApp.listNft(
-      data.classID,
-      data.nftID,
-      data.bidSymbol,
-      data.minimumDepositRate,
-      data.autoRefinancing,
-    );
+    this.pawnshopApp.listNft(data.classID, data.nftID, data.bidSymbol, data.minimumDepositRate);
   }
 }

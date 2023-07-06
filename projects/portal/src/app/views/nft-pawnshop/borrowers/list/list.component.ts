@@ -37,7 +37,6 @@ export class ListComponent implements OnInit {
       nftID: this.nftID!,
       bidSymbol: this.bidSymbol,
       minimumDepositRate: this.minDepositRate / 100,
-      autoRefinancing: true,
     });
   }
 }

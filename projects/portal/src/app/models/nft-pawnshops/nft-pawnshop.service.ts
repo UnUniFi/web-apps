@@ -88,7 +88,6 @@ export class NftPawnshopService {
     bidSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
     minimumDepositRate: number,
-    autoRefinancing: boolean,
   ) {
     const bidDenom = symbolMetadataMap[bidSymbol].base;
     const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgListNft({
@@ -97,9 +96,8 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      bid_token: bidDenom,
+      bid_denom: bidDenom,
       minimum_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
-      automatic_refinancing: autoRefinancing,
     });
 
     return msg;
@@ -146,8 +144,8 @@ export class NftPawnshopService {
         nft_id: nftId,
       },
       bid_amount: bid,
-      bidding_period: biddingPeriodTimestamp,
-      deposit_lending_rate: this.txCommon.numberToDecString(lendingRate),
+      expiry_at: biddingPeriodTimestamp,
+      interest_rate: this.txCommon.numberToDecString(lendingRate),
       automatic_payment: automaticPayment,
       deposit_amount: deposit,
     });
@@ -262,9 +260,7 @@ export class NftPawnshopService {
     symbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
-    const interestSort = bids.sort(
-      (a, b) => Number(a.deposit_lending_rate) - Number(b.deposit_lending_rate),
-    );
+    const interestSort = bids.sort((a, b) => Number(a.interest_rate) - Number(b.interest_rate));
     const borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
     const coin = this.bankService.convertSymbolAmountMapToCoins(
       { [symbol]: amount },
@@ -303,8 +299,8 @@ export class NftPawnshopService {
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
     const expirySort = bids.sort((a, b) => {
-      const dateA = new Date(a.bidding_period!).getTime();
-      const dateB = new Date(b.bidding_period!).getTime();
+      const dateA = new Date(a.expiry_at!).getTime();
+      const dateB = new Date(b.expiry_at!).getTime();
       return dateA - dateB;
     });
     const coin = this.bankService.convertSymbolAmountMapToCoins(
@@ -360,7 +356,7 @@ export class NftPawnshopService {
     for (const borrow of borrows) {
       const bid = bids.find((b) => b.id?.bidder === borrow.bidder);
       if (bid) {
-        total += Number(bid.deposit_lending_rate) * Number(borrow.amount?.amount);
+        total += Number(bid.interest_rate) * Number(borrow.amount?.amount);
         totalAmount += Number(borrow.amount?.amount);
       }
     }
@@ -379,26 +375,24 @@ export class NftPawnshopService {
       }
     }
     const period = borrowBids.reduce((min, curr) => {
-      const currentDate = new Date(curr.bidding_period!);
+      const currentDate = new Date(curr.expiry_at!);
       return currentDate < min ? currentDate : min;
-    }, new Date(borrowBids[0].bidding_period!));
+    }, new Date(borrowBids[0].expiry_at!));
     return period;
   }
 
   getMaxBorrowAmount(bids: BidderBids200ResponseBidsInner[]): number {
     // 昇順にソート
-    const interestSort = bids.sort(
-      (a, b) => Number(a.deposit_lending_rate) - Number(b.deposit_lending_rate),
-    );
+    const interestSort = bids.sort((a, b) => Number(a.interest_rate) - Number(b.interest_rate));
     const now = new Date();
     let minSettlement = this.getMinimumSettlementAmount(bids);
     let borrowAmount = 0;
 
     for (const bid of interestSort) {
-      const rate = Number(bid.deposit_lending_rate);
+      const rate = Number(bid.interest_rate);
       const deposit = Number(bid.deposit_amount?.amount);
       const yearInterest = deposit * rate;
-      const end = new Date(bid.bidding_period!);
+      const end = new Date(bid.expiry_at!);
       const interest =
         (yearInterest * (end.getTime() - now.getTime())) / (1000 * 60 * 60 * 24 * 365);
       const repayAmount = deposit + interest;

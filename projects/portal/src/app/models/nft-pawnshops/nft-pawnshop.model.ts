@@ -1,4 +1,4 @@
-import ununificlient from "ununifi-client";
+import ununificlient from 'ununifi-client';
 
 export type Nft = {
   nft?: {
@@ -36,7 +36,6 @@ export type ListRequest = {
   nftID: string;
   bidSymbol: string;
   minimumDepositRate: number;
-  autoRefinancing: boolean;
 };
 
 export type BorrowRequest = {

@@ -56,14 +56,14 @@ export class RepayComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
-      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+      map(([info, metadata]) => metadata[info.bid_denom || ''].symbol),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
     );
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
-      map((bidders) => bidders.filter((bidder) => bidder.borrowings?.length)),
+      map((bidders) => bidders.filter((bidder) => bidder.borrow?.amount?.amount !== '0')),
       map((bidders) =>
         bidders.sort(
           (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),

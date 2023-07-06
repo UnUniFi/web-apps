@@ -60,7 +60,7 @@ export class PlaceBidComponent implements OnInit {
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(
-      map(([info, metadata]) => metadata[info.bid_token || ''].symbol),
+      map(([info, metadata]) => metadata[info.bid_denom || ''].symbol),
     );
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => this.bankQuery.symbolImages().find((i) => i.symbol === symbol)?.image),
@@ -87,7 +87,7 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = denomExponentMap[info.bid_token || ''];
+        const exponent = denomExponentMap[info.bid_denom || ''];
         return maxBidAmount / 10 ** exponent;
       }),
     );
@@ -96,16 +96,13 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = denomExponentMap[info.bid_token || ''];
+        const exponent = denomExponentMap[info.bid_denom || ''];
         return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent;
       }),
     );
     this.interestRate$ = this.bids$.pipe(
       map((bids) =>
-        bids.reduce(
-          (min, bid) => Math.min(min, Number(bid.deposit_lending_rate || '0')) * 100,
-          5.5,
-        ),
+        bids.reduce((min, bid) => Math.min(min, Number(bid.interest_rate || '0')) * 100, 5.5),
       ),
     );
     const nftData$ = nftCombine$.pipe(

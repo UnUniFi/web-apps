@@ -375,20 +375,20 @@
             ></ng-container>
             <ng-template #color>
               <th class="text-secondary">#{{ i + 1 }}</th>
-              <td class="text-secondary">{{ bid.deposit_lending_rate | percentage }}</td>
+              <td class="text-secondary">{{ bid.interest_rate | percentage }}</td>
               <td class="text-secondary">{{ bid.deposit_amount | coin | async }}</td>
               <td class="text-secondary">{{ bid.bid_amount | coin | async }}</td>
               <td class="text-secondary">
-                {{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}
+                {{ bid.expiry_at | date : 'yyyy-MM-dd a hh:mm z' }}
               </td>
               <td class="text-secondary">{{ bid.id?.bidder }}</td>
             </ng-template>
             <ng-template #normal>
               <th>#{{ i + 1 }}</th>
-              <td>{{ bid.deposit_lending_rate | percentage }}</td>
+              <td>{{ bid.interest_rate | percentage }}</td>
               <td>{{ bid.deposit_amount | coin | async }}</td>
               <td>{{ bid.bid_amount | coin | async }}</td>
-              <td>{{ bid.bidding_period | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+              <td>{{ bid.expiry_at | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               <td>{{ bid.id?.bidder }}</td>
             </ng-template>
           </tr>

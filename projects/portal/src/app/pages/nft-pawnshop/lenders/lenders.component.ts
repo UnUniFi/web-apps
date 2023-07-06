@@ -87,21 +87,19 @@ export class LendersComponent implements OnInit {
       map((bids) => {
         let sumBorrows: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] = [];
         for (const bid of bids) {
-          if (bid.borrowings) {
-            for (const borrowing of bid.borrowings) {
-              const index = sumBorrows.findIndex(
-                (borrow) => borrow.denom == borrowing.amount?.denom,
-              );
-              if (index == -1) {
-                sumBorrows.push(borrowing.amount!);
-              } else {
-                const addedAmount =
-                  Number(sumBorrows[index].amount) + Number(borrowing.amount?.amount);
-                sumBorrows[index] = {
-                  amount: addedAmount.toString(),
-                  denom: borrowing.amount?.denom,
-                };
-              }
+          if (bid.borrow) {
+            const index = sumBorrows.findIndex(
+              (borrow) => borrow.denom == bid.borrow?.amount?.denom,
+            );
+            if (index == -1) {
+              sumBorrows.push(bid.borrow.amount!);
+            } else {
+              const addedAmount =
+                Number(sumBorrows[index].amount) + Number(bid.borrow.amount?.amount);
+              sumBorrows[index] = {
+                amount: addedAmount.toString(),
+                denom: bid.borrow?.amount?.denom,
+              };
             }
           }
         }
@@ -160,7 +158,7 @@ export class LendersComponent implements OnInit {
         if (!selectedMetadata) {
           return [];
         }
-        const filteredNfts = nfts.filter((nft) => nft.listing?.bid_token == selectedMetadata.base);
+        const filteredNfts = nfts.filter((nft) => nft.listing?.bid_denom == selectedMetadata.base);
         return classes.filter((value) =>
           filteredNfts.find((nft) => nft.listing?.nft_id?.class_id == value.class_id),
         );

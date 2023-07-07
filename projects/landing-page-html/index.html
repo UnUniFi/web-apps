@@ -2,26 +2,15 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>UnUniFi website</title>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- bootstrap should be abolished by using tailwind -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="./main.css">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.png" />
-
-  <!--tailwind-->
-  <script src="https://cdn.tailwindcss.com/3.1.8" rel="stylesheet"></script>
-
-  <!--add start -->
   <meta name="description" content="UnUniFi" />
   <meta property="og:title" content="UnUniFi" />
   <meta property="og:type" content="article" />
@@ -30,275 +19,490 @@
   <meta property="og:site_name" content="UnUniFi website" />
   <meta property="og:description" content="UnUniFi website" />
   <meta name="twitter:card" content="summary" />
-  <!--add end -->
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </head>
 
-<body>
-  <section class="bannerAndIntro">
-    <div class="banner py-4">
-      <div class="container">
-        <nav class="navbar navbar-expand-md justify-content-between align-items-center">
-          <a href="" class="navbar-brand"><img src="./assets/images/Vector.png" alt=""></a>
-          <button class="navbar-toggler" onclick='toggler()'><span class="fa fa-bars"></span></button>
+<body class="bg-cover bg-center" style="
+      background-image: url('https://img.freepik.com/free-vector/colorful-abstract-nebula_91008-218.jpg?w=1480&t=st=1688354985~exp=1688355585~hmac=753f771c39b6f4c03645eea66e0ce160069b8e197f1dfa610fccf3e265d33c3a');
+    ">
 
-          <!--when drawer opened-->
-          <div class="navbar-collapse collapse">
-            <span class="w-1/5"></span>
-            <div class="navbar-nav justify-content-between mx-auto">
-              <li class="nav-item"><a href="#" class="nav-link">HOME</a></li>
-              <li class="nav-item"><a href="#about" class="nav-link">ABOUT</a></li>
-              <li class="nav-item"><a href="#community" class="nav-link">COMMUNITY</a></li>
-              <!-- comment out
-              <li class="nav-item"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
+  <div class="h-screen overflow-y-auto snap-y snap-mandatory">
+    <div class="navbar glass sticky top-0 z-50" style="margin-bottom: -68px;">
+      <h1 class="flex-1">
+        <a class="btn btn-ghost normal-case text-xl">UnUniFi</a>
+      </h1>
+      <div class="flex-auto"></div>
+      <div>
+        <ul class="menu menu-horizontal px-1 max-md:hidden">
+          <li><a href="./assets/download/UnUniFi-Whitepaper.pdf">Whitepaper</a></li>
+          <li><a href="./assets/download/UnUniFi-OnePage.pdf">One Page</a></li>
+          <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+          <li>
+            <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+              target="_blank">
+              Jobs
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.com/invite/UnUniFi" target="_blank">
+              Discord
+            </a>
+          </li>
+        </ul>
+        <ul class="menu menu-horizontal px-1 md:hidden">
+          <li>
+            <details>
+              <summary>Links</summary>
+              <ul class="p-2 bg-base-100 right-0">
+                <li><a href="./assets/download/UnUniFi-Whitepaper.pdf">Whitepaper</a></li>
+                <li><a href="./assets/download/UnUniFi-OnePage.pdf">One Page</a></li>
+                <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+                <li>
+                  <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+                    target="_blank">
+                    Jobs
+                  </a>
+                </li>
+                <li>
+                  <a href="https://discord.com/invite/UnUniFi" target="_blank">
+                    Discord
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-xl snap-start snap-always">
+      <div class="hero min-h-screen">
+        <div class="hero-content w-full">
+          <div class="w-full">
+            <h2 class="text-5xl font-bold">
+              The Blockchain Optimized For NFTFi infrastructure
+            </h2>
+            <p class="py-6">
+              Build and use the best Web3 applications on UnUniFi, the fast,
+              open, interoperable layer 1 blockchain optimized for NFTFi
+              infrastructure
+            </p>
+            <div class="flex flex-row">
+              <a class="btn btn-primary" href="https://docs.ununifi.io" target="_blank">
+                Start building
+              </a>
+              <a class="btn btn-ghost ml-1" href="https://ununifi.io/explorer/" target="_blank">
+                Explorer
+              </a>
+              <a class="btn btn-ghost ml-1" href="https://ununifi.io/portal/" target="_blank">
+                Portal
+              </a>
             </div>
-            <a href="assets/download/UnUniFi-Whitepaper.pdf" target="_blank" class="btn mr-2">WHITEPAPER</a>
-            <a href="assets/download/UnUniFi-OnePage.pdf" target="_blank" class="btn mx-2">ONE PAGE</a>
-            <a href="https://medium.com/@ununifi" target="_blank" rel="noopener noreferrer" class="btn ml-2">BLOG</a>
-            <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f" target="_blank"
-              rel="noopener noreferrer" class="btn ml-2">JOBS</a>
           </div>
-
-          <!--when drawer closed-->
-          <div class="mobile-nav d-none d-md-none" id="toggled" (click)="toggler()">
-            <div class="navbar-nav justify-content-between mx-auto">
-              <li class="nav-item-close"><a href="#" class="nav-link">HOME</a></li>
-              <li class="nav-item-close"><a href="#about" class="nav-link">ABOUT</a></li>
-              <li class="nav-item-close"><a href="#community" class="nav-link">COMMUNITY</a></li>
-              <!-- comment out
-              <li class="nav-item-close"><a href="#partners" class="nav-link">PARTNERS</a></li>-->
-            </div>
-            <div class="flex flex-col mt-4">
-              <a href="assets/download/UnUniFi-Whitepaper.pdf" target="_blank" class="btn mt-1">WHITEPAPER</a>
-              <a href="assets/download/UnUniFi-OnePage.pdf" target="_blank" class="btn mt-1">ONE PAGE</a>
-              <a href="https://medium.com/@ununifi" target="_blank" rel="noopener noreferrer" class="btn mt-1">BLOG</a>
-              <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f" target="_blank"
-                rel="noopener noreferrer" class="btn mt-1">JOBS</a>
-            </div>
-          </div>
-        </nav>
-        <div class="pt-5 text-center">
-
-          <h1 class="bold pt-4">NFT-Fi Platform with DeFi tools <br /> built on Cosmos</h1>
         </div>
-        <div class="text-center">
-          <p class="bannerParagraph pb-4">
-            Use your NFTs as collateral to access <br /> loans, earn auto defi yield and more.
-            <!-- Use Your NFTs as collateral to obtain rewards<br /> through auto DeFi yield. -->
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-xl snap-start snap-always">
+      <div class="hero min-h-screen">
+        <div class="hero-content w-full">
+          <div class="w-full flex flex-row flex-wrap">
+            <div class="w-full md:w-1/2">
+              <h2 class="text-4xl font-bold">
+                Create best in-class dApps for NFTFi
+              </h2>
+              <ul class="menu bg-base-100 my-4">
+                <li><a id="feature-button-1" class="feature-button text-info-content bg-info"
+                    onclick="onClick(1)">Revolutionizing Smart
+                    Contracts</a></li>
+                <li><a id="feature-button-2" class="feature-button" onclick="onClick(2)">Pioneering Interoperability</a>
+                </li>
+                <li><a id="feature-button-3" class="feature-button" onclick="onClick(3)">Customized DeFi Solutions</a>
+                </li>
+                <li><a id="feature-button-4" class="feature-button" onclick="onClick(4)">Formidable Security</a></li>
+              </ul>
+              <script>
+                function onClick(id) {
+                  var buttonElemId = "feature-button-" + id.toString();
+                  var featureElemId = "feature-" + id.toString();
+
+                  for (const elem of document.getElementsByClassName("feature-button")) {
+                    elem.classList.remove("text-info-content", "bg-info")
+                  }
+                  document.getElementById(buttonElemId).classList.add("text-info-content", "bg-info")
+
+                  for (const elem of document.getElementsByClassName("feature")) {
+                    elem.classList.add("hidden")
+                  }
+                  document.getElementById(featureElemId).classList.remove("hidden")
+                }
+              </script>
+            </div>
+            <div class="w-full md:w-1/2">
+              <div id="feature-1" class="feature">
+                <p>Revolutionizing Smart Contracts</p>
+              </div>
+              <div id="feature-2" class="feature hidden">
+                <p>Pioneering Interoperability</p>
+              </div>
+              <div id="feature-3" class="feature hidden">
+                <p>Customized DeFi Solutions</p>
+              </div>
+              <div id="feature-4" class="feature hidden">
+                <p>Formidable Security</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="snap-align-none" style="height: 300vh; margin-bottom: -300vh;">
+      <div class="sticky top-0">
+        <div class="mx-auto max-w-screen-xl flex flex-row">
+          <div class="w-1/2">
+            <div class="hero min-h-screen">
+              <div class="hero-content w-full">
+                <div class="w-full">
+                  <h2 class="text-4xl font-bold">Featured dApps</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-xl snap-start snap-always flex flex-row relative">
+      <div class="w-1/2"></div>
+      <div class="w-1/2">
+        <div class="hero min-h-screen">
+          <div class="hero-content w-full">
+            <div class="card glass w-full">
+              <div class="card-body">
+                <h2 class="card-title">NFT Backed Loan</h2>
+                <p>
+                <ul>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Crosschain support
+                  </li>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Oracle less
+                  </li>
+                </ul>
+                </p>
+                <div class="card-actions justify-end">
+                  <button class="btn btn-primary">Use</button>
+                  <button class="btn btn-secondary ml-1">Contribute</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-auto max-w-screen-xl snap-start snap-always flex flex-row">
+      <div class="w-1/2"></div>
+      <div class="w-1/2">
+        <div class="hero min-h-screen">
+          <div class="hero-content w-full">
+            <div class="card glass w-full">
+              <div class="card-body">
+                <h2 class="card-title">Interchain Yield Aggregator</h2>
+                <p>
+                <ul>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Crosschain support
+                  </li>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Extendibility with smart contracts
+                  </li>
+                </ul>
+                </p>
+                <div class="card-actions justify-end">
+                  <button class="btn btn-primary">Use</button>
+                  <button class="btn btn-secondary ml-1">Contribute</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-auto max-w-screen-xl snap-start snap-always flex flex-row">
+      <div class="w-1/2"></div>
+      <div class="w-1/2">
+        <div class="hero min-h-screen">
+          <div class="hero-content w-full">
+            <div class="card glass w-full">
+              <div class="card-body">
+                <h2 class="card-title">Derivatives</h2>
+                <p>
+                <ul>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Tokenized positions
+                  </li>
+                  <li>
+                    <span class="material-symbols-outlined">
+                      done_outline
+                    </span>
+                    Extendibility with smart contracts
+                  </li>
+                </ul>
+                </p>
+                <div class="card-actions justify-end">
+                  <button class="btn btn-primary">Use</button>
+                  <button class="btn btn-secondary ml-1">Contribute</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="snap-start snap-always" style="padding-top: 50vh;">
+
+      <div class="mx-auto max-w-screen-xl p-4">
+        <div>
+          <h2 class="text-5xl font-bold">Ecosystem</h2>
+          <p class="py-6">
+            Explore the global network of dApps, validators, builders and
+            partners working together to create a truly free and inclusice
+            NFTFi infrastructure.
           </p>
         </div>
-        <div class="flex flex-row justify-center">
-          <a href="/portal" target="_blank" rel="noopener noreferrer" class="btn d-block mrr-2 btnLaunch p-3">LAUNCH
-            APP</a>
-          <a href="/explorer" target="_blank" rel="noopener noreferrer" class="btn d-block ml-2 btnLaunch p-3">GO TO
-            EXPLORER</a>
-        </div>
-      </div>
-      <img src="./assets/images/arrows.png" class="arrows d-none d-md-block" alt="arrows">
-      <img src="./assets/images/star.png" class="star d-none d-md-block" alt="star">
-      <img src="./assets/images/man.png" class="man d-none d-md-block" alt="man">
-    </div>
-    <div class="intro pt-5" id="about">
-      <div class="container">
-        <h5 class="text-center">How to use our Platform</h5>
-        <div class="row pt-5 justify-content-between align-items-center">
-          <div class="col-11 col-md-7 mx-auto">
-            <div class="row align-items-center">
-              <img src="./assets/images/01.png" class="col-4 d-block" alt="">
-              <div class="col-8">
-                <h6></h6>
-                <p class="pt-2"> Use our NFTFi Platform by either listing your NFT on the marketplace or bidding on a
-                  listed NFT. Our unique bidding mechanism allows for liquidity aggregation. Listing an NFT
-                  collateralizes it, allowing you access flexible loans or simply accept a bid to quickly sell your NFT.
-                </p>
+        <div class="flex flex-row flex-wrap -mr-4 -mb-4">
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">gumi crypto</h2>
               </div>
             </div>
           </div>
-          <img src="./assets/images/bitcoin.png" class="col-4 d-none d-md-block" alt="">
-        </div>
-        <div class="row pt-5 justify-content-between align-items-center">
-          <img src="./assets/images/data.png" class="col-4 d-none d-md-block" alt="">
-          <div class="col-11 col-md-7 mx-auto">
-            <div class="row align-items-center">
-              <img src="./assets/images/02.png" class="col-4 d-block" alt="">
-              <div class="col-8 col-md-8">
-                <h6></h6>
-                <p class="pt-2">Users can then generate automatic DeFi yield on their assets using our Interchain Yield
-                  Aggregator.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  </section>
-  <section class="joinAndPartners">
-    <div class="container join py-5" id="community">
-      <img src="./assets/images/star.png" class="star2 d-none d-md-block" alt="star">
-      <h3 class="text-center pt-5">Join UnUniFi Community</h3>
-      <div class="col-md-7 col-11 mx-auto pt-5">
-        <!--discord-->
-        <div class="row align-items-center">
-          <div class="col-3">
-            <div class="ellipse3 d-flex align-items-center justify-content-center">
-              <a href="https://discord.com/invite/gxEkFyu5rn" target="_blank" rel="noopener noreferrer">
-                <div class="ellipse2 d-flex align-items-center justify-content-center">
-                  <div class="ellipse1 d-flex align-items-center justify-content-center"><i
-                      class=" fa-brands fa-discord"></i></div>
-                </div>
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">CoinCheck</h2>
+              </div>
             </div>
+          </div>
+
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">Polygon</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">Axelar</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">Sei Network</h2>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="mx-auto max-w-screen-xl p-4">
+        <div>
+          <h2 class="text-5xl font-bold">Team</h2>
+          <p class="py-6">
+
+          </p>
+        </div>
+        <div class="flex flex-row flex-wrap -mr-4 -mb-4">
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="KIMURA Yu" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">KIMURA Yu</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="SHIMOJIMA Takeru" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">SHIMOJIMA Takeru</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-1/2 md:w-1/3 lg:w-1/4 pr-4 pb-4">
+            <div class="card glass w-full">
+              <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg?20151119041839"
+                  alt="Chris Lee" />
+              </figure>
+              <div class="card-body">
+                <h2 class="card-title">Chris Lee</h2>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <footer class="footer p-10 bg-base-300 text-base-content">
+        <div>
+          <span class="footer-title">Services</span>
+          <a class="link link-hover">Explorer</a>
+          <a class="link link-hover">Portal</a>
+          <a class="link link-hover" href="https://store.ununifi.io" target="_blank">Store</a>
+        </div>
+        <div>
+          <span class="footer-title">Ecosystem</span>
+          <a class="link link-hover">Contact</a>
+          <a class="link link-hover">Jobs</a>
+          <a class="link link-hover" href="https://github.com/UnUniFi/media" target="_blank">
+            Press kit
+          </a>
+        </div>
+        <div>
+          <span class="footer-title">Social</span>
+          <div class="grid grid-flow-col gap-4">
+            <a href="https://twitter.com/UnUniFi">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+                <path
+                  d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z">
+                </path>
+              </svg>
+            </a>
+            <a href="">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+                <path
+                  d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z">
+                </path>
+              </svg>
+            </a>
+            <a href="">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+                <path
+                  d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z">
+                </path>
+              </svg>
             </a>
           </div>
-          <div class="col-9">Join our Discord and become a part of an amazing community.
-            You will also find the UnUniFi team there, ready to support you.
-          </div>
         </div>
-
-        <!--twitter-->
-        <div class="row pt-5 align-items-center">
-          <div class="col-3">
-            <div class="ellipse3 d-flex align-items-center justify-content-center">
-              <a href="https://mobile.twitter.com/ununifi" target="_blank" rel="noopener noreferrer">
-                <div class="ellipse2 d-flex align-items-center justify-content-center">
-                  <div class="ellipse4 d-flex align-items-center justify-content-center"><i
-                      class=" fa-brands fa-twitter"></i></div>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-9">Follow us on Twitter for updates on UnUniFi space in general.
-          </div>
-        </div>
-
-        <!--github-->
-        <div class="row py-5 align-items-center">
-          <div class="col-3">
-            <div class="ellipse3 d-flex align-items-center justify-content-center">
-              <a href="https://github.com/UnUniFi" target="_blank" rel="noopener noreferrer">
-                <div class="ellipse2 d-flex align-items-center justify-content-center">
-                  <div class="ellipse5 d-flex align-items-center justify-content-center"><i
-                      class=" fa-brands fa-github"></i></div>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-9">Developers, let's work with us to develop a great and innovative NFTFi protocol.
-          </div>
-        </div>
-      </div>
+      </footer>
     </div>
-    <!-- comment out
-    <div class="partners py-5" id="partners">
-      <h3 class="text-center">Partners</h3>
-      <div class="container">
-        <div class="row justify-content-between text-center py-5">
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
-          <div class="col-6 col-md-4 mb-4">
-            <h3>Partners</h3>
-          </div>
+    <div id="disclaimer-popup" class="p-10 bg-base-300 sticky bottom-0" style="display: none;">
+      <div class="popup-content">
+        <h2 class="font-bold text-lg">Disclaimer</h2>
+        <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
+          interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site.
+          Please
+          check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions
+          in
+          their entirety.</p>
+        <p class="mt-2">The application, the underlying smart contracts, or the services described herein (as defined
+          below) are strictly NOT offered to persons or entities who reside in, are citizens of, are incorporated in, or
+          have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then
+          do
+          not attempt to access or use the application, the underlying smart contracts, or the services. Use of a
+          virtual
+          private network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly prohibited.
+        </p>
+        <p class="mt-2">For the purpose of these Terms, Restricted Territory shall mean the United States, China,
+          Myanmar
+          (Burma), Cote
+          D'Ivoire (Ivory Coast), Cuba, Crimea and Sevastopol, Democratic Republic of Congo, Iran, Iraq, Libya, Mali,
+          Nicaragua, Democratic People's Republic of Korea (North Korea), Somalia, Sudan, Syria, Yemen, Zimbabwe,
+          Russia,
+          or any other state, country or region that is subject to sanctions enforced by the United States, the United
+          Kingdom or the European Union.
+        </p>
+
+        <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
+        <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
+          cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
+          your non-essential cookies using the Cookie Settings on your browser.</p>
+        <div class="flex flex-row">
+          <span class="flex-auto"></span>
+          <button id="popup-reject" class="btn btn-ghost">Reject</button>
+          <button id="popup-accept" class="btn btn-primary ml-1">Accept</button>
         </div>
-      </div>
-
-    </div>
-    <img src="./assets/images/Ellipse 9.png" class="blur" alt="blur">
--->
-  </section>
-
-  <footer>
-    <div class="container py-3">
-      <div class="row justify-content-between">
-        <div class="col-3 ">
-          <img src="./assets/images/Vector.png" alt="logo">
-        </div>
-        <div class="col-9 text-right">
-          <p> <span class="pink">&copy; UnUnifi 2022 </span>all right reserved</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    const toggler = () => {
-      document.getElementById('toggled').classList.toggle('d-none')
-    }
-  </script>
-
-  <div id="disclaimer-popup" class="popup">
-    <div class="popup-content">
-      <h2 class="font-bold text-lg">Disclaimer</h2>
-      <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
-        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site. Please
-        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions in
-        their entirety.</p>
-      <p class="mt-2">The application, the underlying smart contracts, or the services described herein (as defined
-        below) are strictly NOT offered to persons or entities who reside in, are citizens of, are incorporated in, or
-        have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then do
-        not attempt to access or use the application, the underlying smart contracts, or the services. Use of a virtual
-        private network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly prohibited.
-      </p>
-      <p class="mt-2">For the purpose of these Terms, Restricted Territory shall mean the United States, China, Myanmar
-        (Burma), Cote
-        D'Ivoire (Ivory Coast), Cuba, Crimea and Sevastopol, Democratic Republic of Congo, Iran, Iraq, Libya, Mali,
-        Nicaragua, Democratic People's Republic of Korea (North Korea), Somalia, Sudan, Syria, Yemen, Zimbabwe, Russia,
-        or any other state, country or region that is subject to sanctions enforced by the United States, the United
-        Kingdom or the European Union.
-      </p>
-
-      <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
-      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
-        cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
-        your non-essential cookies using the Cookie Settings on your browser.</p>
-      <div class="popup-buttons">
-        <button id="popup-accept" class="btn d-block btnLaunch mr-4">ACCEPT</button>
-        <button id="popup-reject" class="btn">REJECT</button>
       </div>
     </div>
   </div>
 
-  <!-- ポップアップの表示スクリプト -->
+  <!-- popup script -->
   <script>
     window.onload = function () {
-      // Cookieが設定されていなければポップアップを表示
+      // if not accepted yet
       if (!getCookie('disclaimer_accepted')) {
         document.getElementById('disclaimer-popup').style.display = 'block';
       }
     };
 
-    // 同意ボタンを押したらCookieを設定してポップアップを非表示
+    // after accepted
     document.getElementById('popup-accept').addEventListener('click', function () {
       setCookie('disclaimer_accepted', true, 365);
       document.getElementById('disclaimer-popup').style.display = 'none';
     });
 
-    // 拒否ボタンを押したらページ遷移
+    // after rejected
     document.getElementById('popup-reject').addEventListener('click', function () {
-      location.href = 'https://twitter.com/ununifi'; // 拒否時に遷移するURLを指定
+      location.href = 'https://twitter.com/ununifi'; // go to twitter
     });
 
-    // Cookieを設定する関数
     function setCookie(name, value, days) {
       var expires = '';
       if (days) {
@@ -309,7 +513,6 @@
       document.cookie = name + '=' + (value || '') + expires + '; path=/';
     }
 
-    // Cookieを取得する関数
     function getCookie(name) {
       var nameEQ = name + '=';
       var ca = document.cookie.split(';');

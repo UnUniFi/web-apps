@@ -12,6 +12,7 @@ import {
 } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 import { KeplrService } from './keplr/keplr.service';
+import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
@@ -27,6 +28,7 @@ export class WalletApplicationService {
   constructor(
     private readonly walletService: WalletService,
     private readonly keplrService: KeplrService,
+    private readonly leapService: LeapService,
     private readonly metaMaskService: MetaMaskService,
     private readonly dialog: Dialog,
     private snackBar: MatSnackBar,
@@ -86,31 +88,24 @@ export class WalletApplicationService {
       }
     }
 
-    if (selectedWalletType === WalletType.Keplr) {
-      const isSuccessConnected = await this.keplrConnectWallet();
-      if (isSuccessConnected) {
-        window.location.reload();
+    const isSuccessConnected = await (async () => {
+      switch (selectedWalletType) {
+        case WalletType.Keplr:
+          return await this.connectWallet(this.keplrService);
+        case WalletType.Leap:
+          return await this.connectWallet(this.leapService);
+        case WalletType.MetaMask:
+          // return await this.connectWallet(this.metaMaskService);
+          this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
+          return false;
+        default:
+          return false;
       }
-      return;
-    }
+    })();
 
-    if (selectedWalletType === WalletType.Leap) {
-      const isSuccessConnected = await this.keplrConnectWallet();
-      if (isSuccessConnected) {
-        window.location.reload();
-      }
-      return;
+    if (isSuccessConnected) {
+      window.location.reload();
     }
-
-    if (selectedWalletType === WalletType.MetaMask) {
-      // Todo: Currently disabled MetaMask related features.
-      this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
-      return;
-      // await this.metaMaskConnectWallet();
-      // return;
-    }
-
-    this.snackBar.open('Invalid wallet type', 'Close');
     return;
   }
 
@@ -190,6 +185,18 @@ export class WalletApplicationService {
     await this.walletService.setStoredWallet(storedWallet);
     await this.walletService.setCurrentStoredWallet(storedWallet);
     await this.openConnectWalletCompletedDialog(storedWallet);
+    return true;
+  }
+
+  async connectWallet(walletService: {
+    connectWallet(): Promise<StoredWallet | null | undefined>;
+  }): Promise<boolean> {
+    const connectedStoredWallet = await walletService.connectWallet();
+    if (!connectedStoredWallet) {
+      return false;
+    }
+    await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
+    await this.openConnectWalletCompletedDialog(connectedStoredWallet);
     return true;
   }
 

@@ -157,10 +157,10 @@ export class TxCommonService {
     currentCosmosWallet: CosmosWallet,
     privateKey?: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       return await this.signTxWithPrivateKey(txBuilder, signerBaseAccount, privateKey);
     }
-    if (currentCosmosWallet.type === WalletType.keplr) {
+    if (currentCosmosWallet.type === WalletType.Keplr) {
       return await this.signTxWithKeplr(txBuilder, signerBaseAccount);
     }
     if (currentCosmosWallet.type === WalletType.ledger) {
@@ -169,7 +169,7 @@ export class TxCommonService {
     if (currentCosmosWallet.type === WalletType.keyStation) {
       return this.signTxWithKeyStation(txBuilder, signerBaseAccount);
     }
-    if (currentCosmosWallet.type === WalletType.metaMask) {
+    if (currentCosmosWallet.type === WalletType.MetaMask) {
       // Todo: Currently disabled MetaMask related features.
       throw Error('Unsupported wallet type!');
       // return this.signTxWithMetaMask(txBuilder, signerBaseAccount);

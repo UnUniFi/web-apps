@@ -21,7 +21,7 @@ export class UnunifiSelectWalletDialogComponent implements OnInit {
       .listStoredWallets()
       .then((storedWallets) => {
         const ununifiWallets = storedWallets?.filter(
-          (storedWallet) => storedWallet.type === WalletType.ununifi,
+          (storedWallet) => storedWallet.type === WalletType.UnUniFi,
         );
         return ununifiWallets;
       })

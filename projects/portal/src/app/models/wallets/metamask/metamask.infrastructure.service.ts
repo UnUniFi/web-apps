@@ -13,7 +13,7 @@ import { take } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureService {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   private messageToDigest(message: string): Uint8Array {
     const messageHash = ethers.utils.hashMessage(message);
@@ -85,7 +85,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const storedWallet: StoredWallet = {
       id: ethAddress,
-      type: WalletType.metaMask,
+      type: WalletType.MetaMask,
       key_type: KeyType.ethsecp256k1,
       public_key: publicKeyString,
       address: accAddress.toString(),

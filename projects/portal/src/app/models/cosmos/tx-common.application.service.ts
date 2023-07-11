@@ -111,7 +111,7 @@ export class TxCommonApplicationService {
     currentCosmosWallet: CosmosWallet,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ) {
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {

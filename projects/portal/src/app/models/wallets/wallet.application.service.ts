@@ -46,13 +46,7 @@ export class WalletApplicationService {
       return;
     }
 
-    // Todo: After implementation, this should be removed
-    if (selectedWalletType === WalletType.keyStation || selectedWalletType === WalletType.ledger) {
-      this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
-      return;
-    }
-
-    if (selectedWalletType === WalletType.ununifi) {
+    if (selectedWalletType === WalletType.UnUniFi) {
       const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 
       if (!selectOrImportOrCreate) {
@@ -92,7 +86,7 @@ export class WalletApplicationService {
       }
     }
 
-    if (selectedWalletType === WalletType.keplr) {
+    if (selectedWalletType === WalletType.Keplr) {
       const isSuccessConnected = await this.keplrConnectWallet();
       if (isSuccessConnected) {
         window.location.reload();
@@ -100,7 +94,15 @@ export class WalletApplicationService {
       return;
     }
 
-    if (selectedWalletType === WalletType.metaMask) {
+    if (selectedWalletType === WalletType.Leap) {
+      const isSuccessConnected = await this.keplrConnectWallet();
+      if (isSuccessConnected) {
+        window.location.reload();
+      }
+      return;
+    }
+
+    if (selectedWalletType === WalletType.MetaMask) {
       // Todo: Currently disabled MetaMask related features.
       this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
       return;
@@ -108,7 +110,7 @@ export class WalletApplicationService {
       // return;
     }
 
-    this.snackBar.open('Invalid wallet type!', 'Close');
+    this.snackBar.open('Invalid wallet type', 'Close');
     return;
   }
 
@@ -129,7 +131,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -152,7 +154,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -175,7 +177,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -206,7 +208,7 @@ export class WalletApplicationService {
     const connectedStoredWallet = await this.metaMaskService.connectWallet();
     loadingDialogRef.close();
     if (!connectedStoredWallet) {
-      this.snackBar.open('Connecting MetaMask was failed!', 'Close');
+      this.snackBar.open('Failed to connect to MetaMask.', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);

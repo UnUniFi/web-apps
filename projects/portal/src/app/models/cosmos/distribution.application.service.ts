@@ -133,7 +133,7 @@ export class DistributionApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
@@ -222,7 +222,7 @@ export class DistributionApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
@@ -311,7 +311,7 @@ export class DistributionApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {

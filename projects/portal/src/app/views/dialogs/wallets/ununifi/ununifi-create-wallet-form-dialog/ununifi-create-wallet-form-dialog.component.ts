@@ -49,7 +49,7 @@ export class UnunifiCreateWalletFormDialogComponent implements OnInit {
       const address = accAddress.toString();
       return {
         id: '',
-        type: WalletType.ununifi,
+        type: WalletType.UnUniFi,
         mnemonic,
         key_type: KeyType.secp256k1,
         privateKey,

@@ -61,7 +61,7 @@ const setup = (props?: { mockCosmosRestService?: any; mockWalletService?: any })
 
   const mockWallet: StoredWallet = {
     id: 'test_id',
-    type: WalletType.ununifi,
+    type: WalletType.UnUniFi,
     key_type: KeyType.secp256k1,
     public_key: '0202d591fa3c0e4d10602fb0fc1c595cd19d6101bd4a9ea4e22a19648d77c64a17',
     address: 'ununifi1tu06z57hgfhen4s565zvnr5aqxnzrtfvpdhv60',

@@ -47,7 +47,7 @@ export class GovApplicationService {
           data: { txHash: txHash, msg: 'Successfully accepted your vote.' },
         })
         .closed.toPromise();
-        location.reload();
+      location.reload();
     }
   }
 
@@ -61,7 +61,7 @@ export class GovApplicationService {
           data: { txHash: txHash, msg: 'Successfully accepted your deposit to the proposal.' },
         })
         .closed.toPromise();
-        location.reload();
+      location.reload();
     }
   }
 
@@ -205,7 +205,7 @@ export class GovApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
@@ -291,7 +291,7 @@ export class GovApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.ununifi) {
+    if (currentCosmosWallet.type === WalletType.UnUniFi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {

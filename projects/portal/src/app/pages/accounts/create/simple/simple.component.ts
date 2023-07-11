@@ -40,7 +40,7 @@ export class SimpleComponent implements OnInit {
       const id = `${year}${month}${date}${hour}${min}${sec}`;
       return {
         id,
-        type: WalletType.ununifi,
+        type: WalletType.UnUniFi,
         mnemonic,
         key_type: KeyType.secp256k1,
         privateKey,
@@ -50,5 +50,5 @@ export class SimpleComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -94,8 +94,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     );
     return {
       id: storedWallet.id,
-      type: WalletType[storedWallet.type],
-      key_type: KeyType[storedWallet.key_type],
+      type: storedWallet.type,
+      key_type: storedWallet.key_type,
       public_key,
       address,
     };
@@ -106,8 +106,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     const address: string = cosmosWallet.address.toAccAddress().toString();
     return {
       id: cosmosWallet.id,
-      type: WalletType[cosmosWallet.type],
-      key_type: KeyType[cosmosWallet.key_type],
+      type: cosmosWallet.type,
+      key_type: cosmosWallet.key_type,
       public_key,
       address,
     };
@@ -118,8 +118,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     const address: Uint8Array = cosmosWallet.address.value();
     return {
       id: cosmosWallet.id,
-      type: WalletType[cosmosWallet.type],
-      key_type: KeyType[cosmosWallet.key_type],
+      type: cosmosWallet.type,
+      key_type: cosmosWallet.key_type,
       public_key,
       address,
     };

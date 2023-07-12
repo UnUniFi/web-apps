@@ -98,6 +98,7 @@
 
 .w-commerce-commercecartcontainer {
   width: 100%;
+  box-sizing: border-box;
   max-width: 480px;
   min-width: 320px;
   background-color: #fff;
@@ -248,6 +249,7 @@
 
 .w-commerce-commercecartapplepayicon {
   width: 100%;
+  box-sizing: border-box;
   height: 50%;
   min-height: 20px;
 }
@@ -310,6 +312,7 @@
 
 .w-commerce-commercecheckoutformcontainer {
   width: 100%;
+  box-sizing: border-box;
   min-height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
@@ -354,6 +357,7 @@
 .w-commerce-commercecheckoutemailinput {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -386,6 +390,7 @@
 .w-commerce-commercecheckoutshippingfullname {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -414,6 +419,7 @@
 .w-commerce-commercecheckoutshippingstreetaddress {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -442,6 +448,7 @@
 .w-commerce-commercecheckoutshippingstreetaddressoptional {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -482,6 +489,7 @@
 .w-commerce-commercecheckoutshippingcity {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -510,6 +518,7 @@
 .w-commerce-commercecheckoutshippingstateprovince {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -538,6 +547,7 @@
 .w-commerce-commercecheckoutshippingzippostalcode {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -566,6 +576,7 @@
 .w-commerce-commercecheckoutshippingcountryselector {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -639,6 +650,7 @@
 .w-commerce-commercecheckoutcardnumber {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -669,6 +681,7 @@
 .w-commerce-commercecheckoutcardexpirationdate {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -699,6 +712,7 @@
 .w-commerce-commercecheckoutcardsecuritycode {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -748,6 +762,7 @@
 .w-commerce-commercecheckoutbillingfullname {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -776,6 +791,7 @@
 .w-commerce-commercecheckoutbillingstreetaddress {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -804,6 +820,7 @@
 .w-commerce-commercecheckoutbillingstreetaddressoptional {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -832,6 +849,7 @@
 .w-commerce-commercecheckoutbillingcity {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -860,6 +878,7 @@
 .w-commerce-commercecheckoutbillingstateprovince {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -888,6 +907,7 @@
 .w-commerce-commercecheckoutbillingzippostalcode {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -916,6 +936,7 @@
 .w-commerce-commercecheckoutbillingcountryselector {
   height: 38px;
   width: 100%;
+  box-sizing: border-box;
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
@@ -1186,6 +1207,7 @@
 
 .w-embed-youtubevideo {
   width: 100%;
+  box-sizing: border-box;
   background-image: url('https://d3e54v103j8qbb.cloudfront.net/static/youtube-placeholder.2b05e7d68d.svg');
   background-position: 50%;
   background-size: cover;
@@ -1202,6 +1224,7 @@
 
 .w-commerce-commerceorderconfirmationcontainer {
   width: 100%;
+  box-sizing: border-box;
   min-height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
@@ -1233,6 +1256,7 @@
 
 .w-commerce-commercepaypalcheckoutformcontainer {
   width: 100%;
+  box-sizing: border-box;
   min-height: 100vh;
   background-color: #f5f5f5;
   padding: 20px;
@@ -1459,6 +1483,7 @@ li {
 
 img {
   max-width: 100%;
+  box-sizing: border-box;
   display: inline-block;
   border-radius: 20px;
 }
@@ -1493,6 +1518,7 @@ figcaption {
 
 .max-width-full {
   width: 100%;
+  box-sizing: border-box;
   max-width: none;
 }
 
@@ -1503,16 +1529,19 @@ figcaption {
 
 .max-width-medium {
   width: 100%;
+  box-sizing: border-box;
   max-width: 35rem;
 }
 
 .max-width-xsmall {
   width: 100%;
+  box-sizing: border-box;
   max-width: 25rem;
 }
 
 .container-large {
   width: 100%;
+  box-sizing: border-box;
   max-width: 80rem;
   margin-left: auto;
   margin-right: auto;
@@ -1525,11 +1554,13 @@ figcaption {
 
 .max-width-large {
   width: 100%;
+  box-sizing: border-box;
   max-width: 48rem;
 }
 
 .max-width-small {
   width: 100%;
+  box-sizing: border-box;
   max-width: 30rem;
 }
 
@@ -1543,6 +1574,7 @@ figcaption {
   height: 100vh;
   max-height: 100%;
   max-width: 100%;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   padding-left: 1.25rem;
@@ -1584,6 +1616,7 @@ figcaption {
 
 .container-small {
   width: 100%;
+  box-sizing: border-box;
   max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
@@ -2577,6 +2610,7 @@ figcaption {
 
 .cta-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   margin-bottom: 0;
 }
@@ -2599,6 +2633,7 @@ figcaption {
 
 .success-person-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   object-fit: contain;
   position: absolute;
@@ -2662,6 +2697,7 @@ figcaption {
 
 .person-image-wrapper {
   width: 100%;
+  box-sizing: border-box;
   padding-top: 120%;
   position: relative;
 }
@@ -2795,6 +2831,7 @@ figcaption {
 
 .line-divider {
   width: 100%;
+  box-sizing: border-box;
   height: 1px;
   background-color: rgba(255, 255, 255, 0.09);
 }
@@ -2871,6 +2908,7 @@ figcaption {
 
 .mage-overlay {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   border-radius: 12px;
   position: absolute;
@@ -2975,6 +3013,7 @@ figcaption {
 
 .login-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
@@ -2986,6 +3025,7 @@ figcaption {
 
 .login-navbar {
   width: 100%;
+  box-sizing: border-box;
   height: 4.5rem;
   justify-content: space-between;
   align-items: center;
@@ -3072,6 +3112,7 @@ figcaption {
 
 .login-footer {
   width: 100%;
+  box-sizing: border-box;
   height: 4.5rem;
   justify-content: flex-start;
   align-items: center;
@@ -3212,6 +3253,7 @@ figcaption {
 
 .blog-category-menu {
   width: 100%;
+  box-sizing: border-box;
   align-items: center;
   margin-bottom: 4rem;
   display: flex;
@@ -3258,6 +3300,7 @@ figcaption {
 
 .blog-featured-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   filter: grayscale();
   object-fit: cover;
@@ -3278,6 +3321,7 @@ figcaption {
 
 .blog-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   object-fit: cover;
   position: absolute;
@@ -3314,6 +3358,7 @@ figcaption {
 
 .blog-item-link {
   width: 100%;
+  box-sizing: border-box;
   border-radius: 14px;
   flex-flow: column wrap;
   flex: 1;
@@ -3324,6 +3369,7 @@ figcaption {
 
 .blog-featured-image-wrapper {
   width: 100%;
+  box-sizing: border-box;
   padding-top: 75%;
   position: relative;
   overflow: hidden;
@@ -3349,6 +3395,7 @@ figcaption {
 
 .blog-image-wrapper {
   width: 100%;
+  box-sizing: border-box;
   border: 1px #e4e4e4;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
@@ -3399,6 +3446,7 @@ figcaption {
 
 .blogpost-image-wrapper {
   width: 100%;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
   padding-top: 66%;
@@ -3420,6 +3468,7 @@ figcaption {
 
 .blogpost-breadcrumb {
   width: 100%;
+  box-sizing: border-box;
   align-items: center;
   margin-bottom: 2.5rem;
   display: flex;
@@ -3477,6 +3526,7 @@ figcaption {
 
 .blogpost-content-top {
   width: 100%;
+  box-sizing: border-box;
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
@@ -3501,6 +3551,7 @@ figcaption {
 
 .blogpost-image {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   object-fit: cover;
   border-radius: 14px;
@@ -3599,6 +3650,7 @@ figcaption {
 
 .icons-grid {
   width: 100%;
+  box-sizing: border-box;
   grid-column-gap: 15px;
   grid-row-gap: 28px;
   grid-template-rows: auto;
@@ -3626,6 +3678,7 @@ figcaption {
 
 .nav-visual-image {
   width: 100%;
+  box-sizing: border-box;
   height: auto;
   object-fit: contain;
   border-radius: 18px;
@@ -3762,6 +3815,7 @@ figcaption {
 
 .navigation-container-mob {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   max-width: 1300px;
   align-items: center;
@@ -3852,6 +3906,7 @@ figcaption {
 
 .logo {
   width: 100%;
+  box-sizing: border-box;
   height: 100%;
   object-fit: contain;
 }
@@ -3918,6 +3973,7 @@ figcaption {
 
 .video-lightbox {
   width: 100%;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -4203,6 +4259,7 @@ figcaption {
 
 .grid-information-block {
   width: 100%;
+  box-sizing: border-box;
   max-width: 90%;
   grid-column-gap: 23px;
   grid-template-rows: auto auto auto;
@@ -4316,6 +4373,7 @@ figcaption {
 
 .heading-stories {
   max-width: 100%;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
   font-family: Gambetta Variable, sans-serif;
@@ -4395,6 +4453,7 @@ figcaption {
 .layout-fade-overlay-top {
   z-index: 1;
   width: 100%;
+  box-sizing: border-box;
   height: 6rem;
   background-image: linear-gradient(#fff, rgba(255, 255, 255, 0));
   position: absolute;
@@ -4407,6 +4466,7 @@ figcaption {
 .layout-fade-overlay-bottom {
   z-index: 1;
   width: 100%;
+  box-sizing: border-box;
   height: 6rem;
   background-image: linear-gradient(to top, #fff, rgba(255, 255, 255, 0));
   position: absolute;
@@ -4662,7 +4722,9 @@ figcaption {
 
 ._404-image {
   width: 100%;
+  box-sizing: border-box;
   max-width: 100%;
+  box-sizing: border-box;
   align-self: center;
   margin-bottom: 2.3rem;
   margin-left: auto;
@@ -4699,6 +4761,7 @@ figcaption {
 
 .tabs-layout-menu.no-scrollbar {
   width: 100%;
+  box-sizing: border-box;
   border: 1px solid #d8d8d8;
   border-radius: 200px;
   justify-content: space-between;
@@ -4710,6 +4773,7 @@ figcaption {
 
 .illustrations-grid {
   width: 100%;
+  box-sizing: border-box;
   grid-column-gap: 28px;
   grid-row-gap: 28px;
   grid-template-rows: auto;
@@ -4766,6 +4830,7 @@ figcaption {
 
 .container-2 {
   width: 100%;
+  box-sizing: border-box;
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
@@ -4834,6 +4899,7 @@ figcaption {
 
 .gallery-image {
   width: 100%;
+  box-sizing: border-box;
 }
 
 .section-2 {
@@ -5003,6 +5069,7 @@ figcaption {
 
   .button.is-icon.background-color-black {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .heading-style-h4 {
@@ -5081,6 +5148,7 @@ figcaption {
 
   .form-wrapper {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .login-image {
@@ -5242,6 +5310,7 @@ figcaption {
 
   .video-lightbox-image {
     width: 100%;
+    box-sizing: border-box;
     height: 100%;
     object-fit: cover;
   }
@@ -5290,6 +5359,7 @@ figcaption {
 
   .product-features-grid {
     width: 100%;
+    box-sizing: border-box;
     grid-template-rows: auto auto auto;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     margin-left: 0;
@@ -5311,6 +5381,7 @@ figcaption {
 
   .grid-information-block {
     max-width: 100%;
+    box-sizing: border-box;
   }
 
   .call-to-action-image {
@@ -5716,6 +5787,7 @@ figcaption {
 
   .blog67-button-row {
     width: 100%;
+    box-sizing: border-box;
     justify-content: flex-start;
   }
 
@@ -5820,6 +5892,7 @@ figcaption {
 
   .testimonial-client {
     width: 100%;
+    box-sizing: border-box;
     align-items: center;
   }
 
@@ -5879,6 +5952,7 @@ figcaption {
 
   .layout-timeline-item {
     width: 100%;
+    box-sizing: border-box;
     grid-column-gap: 16px;
     grid-row-gap: 0rem;
     flex-direction: column;
@@ -6124,6 +6198,7 @@ figcaption {
 
   .form-field {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .grid {
@@ -6152,6 +6227,7 @@ figcaption {
 
   .blogpost-share-wrapper {
     width: 100%;
+    box-sizing: border-box;
     margin-bottom: 2rem;
   }
 
@@ -6255,6 +6331,7 @@ figcaption {
 
   .grid-2 {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .align-right {
@@ -6263,9 +6340,11 @@ figcaption {
   }
 
   .extended-info {
-    min-width: 400px;
+    min-width: 200px;
     margin-right: 0;
     padding: 1rem 0 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .extended-info-wrapper {

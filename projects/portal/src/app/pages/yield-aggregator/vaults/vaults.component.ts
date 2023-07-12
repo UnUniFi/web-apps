@@ -33,6 +33,29 @@ export class VaultsComponent implements OnInit {
           : vaults,
       ),
     );
+    this.vaults$ = of([
+      {
+        id: '1',
+        owner: 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w',
+        denom: 'uatom',
+        withdraw_commission_rate: '0.1',
+        withdraw_reserve_rate: '0.3',
+      },
+      {
+        id: '2',
+        owner: 'ununifi1v0h8j7x7kfys29kj4uwdudcc9y0nx6twwxahla',
+        denom: 'uosmo',
+        withdraw_commission_rate: '0.12',
+        withdraw_reserve_rate: '0.2',
+      },
+      {
+        id: '3',
+        owner: 'ununifi1y3t7sp0nfe2nfda7r9gf628g6ym6e7d44evfv6',
+        denom: 'uguu',
+        withdraw_commission_rate: '0.05',
+        withdraw_reserve_rate: '0.155',
+      },
+    ]);
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>

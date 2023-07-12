@@ -3,7 +3,7 @@ import { NftPawnshopService } from '../../../models/nft-pawnshops/nft-pawnshop.s
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 
@@ -82,9 +82,151 @@ export class NftsComponent implements OnInit {
         ),
       ),
     );
+    this.nftsMetadata$.subscribe((metadata) => console.log(metadata));
     this.images$ = this.nftsMetadata$.pipe(
       map((metadata) => metadata.map((m) => this.pawnshopService.replaceIpfs(m.image || ''))),
     );
+
+    // Dummy
+    this.listedNfts$ = of([
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-0',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'LISTING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-1',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-2',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-3',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'LISTING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-4',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-5',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-6',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-7',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+      {
+        listing: {
+          state: 'BIDDING',
+          owner: 'owner',
+          nft_id: {
+            class_id: 'class_id',
+            nft_id: 'UnUniFi-8',
+          },
+          started_at: '2021-08-01T00:00:00.000Z',
+        },
+        nft_info: {
+          uri: 'uri',
+        },
+      },
+    ]);
+    this.images$ = of([
+      'assets/images/1.png',
+      'assets/images/2.png',
+      'assets/images/3.png',
+      'assets/images/4.png',
+      'assets/images/5.png',
+      'assets/images/6.png',
+      'assets/images/7.png',
+      'assets/images/8.png',
+      'assets/images/9.png',
+    ]);
   }
 
   ngOnInit(): void {}

@@ -143,20 +143,21 @@
       >
         <div class="card w-full glass shadow-xl">
           <figure class="aspect-square w-full">
+            <img *ngIf="images" src="{{ images[i] || 'assets/UnUniFi-logo.png' }}" alt=""
+            class="h-full object-cover" />
             <img
-              *ngIf="images"
-              src="{{ images[i] || 'assets/UnUniFi-logo.png' }}"
+              *ngIf="!images?.length"
+              src="assets/UnUniFi-logo.png"
               alt=""
               class="h-full object-cover"
             />
-            <img *ngIf="!images" src="assets/UnUniFi-logo.png" alt="" class="h-full object-cover" />
           </figure>
           <div class="card-body">
             <span class="badge badge-primary">{{ nft.listing?.state }}</span>
-            <h2 *ngIf="nftsMetadata" class="card-title break-all">
+            <h2 *ngIf="nftsMetadata && nftsMetadata.length" class="card-title break-all">
               {{ nftsMetadata[i].name + '/' + nft.listing?.nft_id?.nft_id }}
             </h2>
-            <h2 *ngIf="!nftsMetadata" class="card-title break-all">
+            <h2 *ngIf="!nftsMetadata?.length" class="card-title break-all">
               {{ nft.listing?.nft_id?.nft_id }}
             </h2>
             <button

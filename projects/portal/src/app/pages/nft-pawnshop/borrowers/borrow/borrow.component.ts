@@ -63,9 +63,7 @@ export class BorrowComponent implements OnInit {
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort(
-          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
-        ),
+        bidders.sort((a, b) => parseInt(b.deposit?.amount!) - parseInt(a.deposit?.amount!)),
       ),
     );
     this.loan$ = nftCombine$.pipe(

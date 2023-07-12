@@ -143,11 +143,11 @@ export class NftPawnshopService {
         class_id: classId,
         nft_id: nftId,
       },
-      bid_amount: bid,
-      expiry_at: biddingPeriodTimestamp,
+      price: bid,
+      expiry: biddingPeriodTimestamp,
       interest_rate: this.txCommon.numberToDecString(lendingRate),
       automatic_payment: automaticPayment,
-      deposit_amount: deposit,
+      deposit: deposit,
     });
 
     return msg;
@@ -189,8 +189,8 @@ export class NftPawnshopService {
     return msg;
   }
 
-  buildMsgPayFullBid(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgPayFullBid({
+  buildMsgPayRemainder(senderAddress: string, classId: string, nftId: string) {
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgPayRemainder({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
@@ -269,7 +269,7 @@ export class NftPawnshopService {
     let remainingAmount = Number(coin.amount);
 
     for (const bid of interestSort) {
-      const deposit = Number(bid.deposit_amount?.amount);
+      const deposit = Number(bid.deposit?.amount);
       if (remainingAmount <= 0) {
         break;
       }
@@ -299,8 +299,8 @@ export class NftPawnshopService {
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] {
     const expirySort = bids.sort((a, b) => {
-      const dateA = new Date(a.expiry_at!).getTime();
-      const dateB = new Date(b.expiry_at!).getTime();
+      const dateA = new Date(a.expiry!).getTime();
+      const dateB = new Date(b.expiry!).getTime();
       return dateA - dateB;
     });
     const coin = this.bankService.convertSymbolAmountMapToCoins(
@@ -375,9 +375,9 @@ export class NftPawnshopService {
       }
     }
     const period = borrowBids.reduce((min, curr) => {
-      const currentDate = new Date(curr.expiry_at!);
+      const currentDate = new Date(curr.expiry!);
       return currentDate < min ? currentDate : min;
-    }, new Date(borrowBids[0].expiry_at!));
+    }, new Date(borrowBids[0].expiry!));
     return period;
   }
 
@@ -390,9 +390,9 @@ export class NftPawnshopService {
 
     for (const bid of interestSort) {
       const rate = Number(bid.interest_rate);
-      const deposit = Number(bid.deposit_amount?.amount);
+      const deposit = Number(bid.deposit?.amount);
       const yearInterest = deposit * rate;
-      const end = new Date(bid.expiry_at!);
+      const end = new Date(bid.expiry!);
       const interest =
         (yearInterest * (end.getTime() - now.getTime())) / (1000 * 60 * 60 * 24 * 365);
       const repayAmount = deposit + interest;
@@ -413,16 +413,14 @@ export class NftPawnshopService {
     if (!bids.length) {
       return 0;
     }
-    const priceSort = bids.sort(
-      (a, b) => Number(b.bid_amount?.amount) - Number(a.bid_amount?.amount),
-    );
+    const priceSort = bids.sort((a, b) => Number(b.price?.amount) - Number(a.price?.amount));
     let minSettlement = 0;
     let forfeitDeposit = 0;
     for (const bid of priceSort) {
-      if (!minSettlement || forfeitDeposit + Number(bid.bid_amount?.amount) < minSettlement) {
-        minSettlement = forfeitDeposit + Number(bid.bid_amount?.amount);
+      if (!minSettlement || forfeitDeposit + Number(bid.price?.amount) < minSettlement) {
+        minSettlement = forfeitDeposit + Number(bid.price?.amount);
       }
-      forfeitDeposit += Number(bid.deposit_amount?.amount);
+      forfeitDeposit += Number(bid.deposit?.amount);
     }
 
     if (forfeitDeposit < minSettlement) {

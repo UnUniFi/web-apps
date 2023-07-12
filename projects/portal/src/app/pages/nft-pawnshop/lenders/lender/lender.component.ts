@@ -47,17 +47,14 @@ export class LenderComponent implements OnInit {
       map((bids) => {
         let sumDeposits: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] = [];
         for (const bid of bids) {
-          const index = sumDeposits.findIndex(
-            (deposit) => deposit.denom == bid.deposit_amount?.denom,
-          );
+          const index = sumDeposits.findIndex((deposit) => deposit.denom == bid.deposit?.denom);
           if (index == -1) {
-            sumDeposits.push(bid.deposit_amount!);
+            sumDeposits.push(bid.deposit!);
           } else {
-            const addedAmount =
-              Number(sumDeposits[index].amount) + Number(bid.deposit_amount?.amount);
+            const addedAmount = Number(sumDeposits[index].amount) + Number(bid.deposit?.amount);
             sumDeposits[index] = {
               amount: addedAmount.toString(),
-              denom: bid.deposit_amount?.denom,
+              denom: bid.deposit?.denom,
             };
           }
         }

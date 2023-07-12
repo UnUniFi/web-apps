@@ -65,9 +65,7 @@ export class RepayComponent implements OnInit {
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) => bidders.filter((bidder) => bidder.borrow?.amount?.amount !== '0')),
       map((bidders) =>
-        bidders.sort(
-          (a, b) => parseInt(b.deposit_amount?.amount!) - parseInt(a.deposit_amount?.amount!),
-        ),
+        bidders.sort((a, b) => parseInt(b.deposit?.amount!) - parseInt(a.deposit?.amount!)),
       ),
     );
     this.liquidation$ = nftCombine$.pipe(

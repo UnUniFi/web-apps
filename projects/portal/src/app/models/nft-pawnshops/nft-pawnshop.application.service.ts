@@ -355,14 +355,14 @@ export class NftPawnshopApplicationService {
     }
   }
 
-  async payFullBid(classId: string, nftId: string) {
+  async PayRemainder(classId: string, nftId: string) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.pawnshopService.buildMsgPayFullBid(address, classId, nftId);
+    const msg = this.pawnshopService.buildMsgPayRemainder(address, classId, nftId);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

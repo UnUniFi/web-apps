@@ -73,13 +73,11 @@ export class PlaceBidComponent implements OnInit {
     );
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
-      map((bids) =>
-        bids.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
-      ),
+      map((bids) => bids.sort((a, b) => parseInt(b.price?.amount!) - parseInt(a.price?.amount!))),
     );
     const maxBidAmount$ = this.bids$.pipe(
       map((bids) =>
-        bids.reduce((max, bid) => Math.max(max, parseInt(bid.bid_amount?.amount || '0')), 0),
+        bids.reduce((max, bid) => Math.max(max, parseInt(bid.price?.amount || '0')), 0),
       ),
     );
     this.bidAmount$ = combineLatest([this.listingInfo$, maxBidAmount$]).pipe(

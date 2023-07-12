@@ -59,9 +59,9 @@
           <div class="stat" *ngIf="bids && bids.length">
             <div class="stat-title">Highest bid price</div>
             <div class="stat-value text-primary">
-              {{ bids[0].bid_amount?.amount | coinAmount }}
+              {{ bids[0].price?.amount | coinAmount }}
             </div>
-            <div class="stat-desc">{{ bids[0].bid_amount?.denom | coinDenom | async }}</div>
+            <div class="stat-desc">{{ bids[0].price?.denom | coinDenom | async }}</div>
           </div>
           <div class="stat">
             <div class="stat-title">Your Status</div>
@@ -77,9 +77,11 @@
           <div *ngIf="isWinning" class="stat">
             <div class="stat-title">Settlement Shortfall Deadline</div>
             <div class="stat-value text-accent">
-              {{ listingInfo?.end_at | date : 'yyyy-MM-dd' }}
+              {{ listingInfo?.full_payment_end_at | date : 'yyyy-MM-dd' }}
             </div>
-            <div class="stat-desc">{{ listingInfo?.end_at | date : 'hh:mm:ss z' }}</div>
+            <div class="stat-desc">
+              {{ listingInfo?.full_payment_end_at | date : 'hh:mm:ss z' }}
+            </div>
           </div>
         </div>
         <span class="flex-auto"></span>
@@ -106,7 +108,7 @@
           </button>
         </div>
         <div *ngIf="isWinning" class="card-actions justify-end">
-          <button class="btn btn-primary px-8" (click)="onSubmitPayFullBid()">
+          <button class="btn btn-primary px-8" (click)="onSubmitPayRemainder()">
             Pay Settlement Shortfall
           </button>
         </div>
@@ -135,19 +137,19 @@
             <ng-template #color>
               <th class="text-secondary">#{{ i + 1 }}</th>
               <td class="text-secondary">{{ bid.interest_rate | percentage }}</td>
-              <td class="text-secondary">{{ bid.deposit_amount | coin | async }}</td>
-              <td class="text-secondary">{{ bid.bid_amount | coin | async }}</td>
+              <td class="text-secondary">{{ bid.deposit | coin | async }}</td>
+              <td class="text-secondary">{{ bid.price | coin | async }}</td>
               <td class="text-secondary">
-                {{ bid.expiry_at | date : 'yyyy-MM-dd a hh:mm z' }}
+                {{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }}
               </td>
               <td class="text-secondary">{{ bid.id?.bidder }}</td>
             </ng-template>
             <ng-template #normal>
               <th>#{{ i + 1 }}</th>
               <td>{{ bid.interest_rate | percentage }}</td>
-              <td>{{ bid.deposit_amount | coin | async }}</td>
-              <td>{{ bid.bid_amount | coin | async }}</td>
-              <td>{{ bid.expiry_at | date : 'yyyy-MM-dd a hh:mm z' }}</td>
+              <td>{{ bid.deposit | coin | async }}</td>
+              <td>{{ bid.price | coin | async }}</td>
+              <td>{{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }}</td>
               <td>{{ bid.id?.bidder }}</td>
             </ng-template>
           </tr>

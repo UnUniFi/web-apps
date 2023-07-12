@@ -57,7 +57,7 @@ export class NftComponent implements OnInit {
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+        bidders.sort((a, b) => parseInt(b.price?.amount!) - parseInt(a.price?.amount!)),
       ),
     );
     this.loan$ = nftCombine$.pipe(
@@ -111,7 +111,7 @@ export class NftComponent implements OnInit {
     this.pawnshopApp.cancelBid(data.classID, data.nftID);
   }
 
-  onSubmitPayFullBid(data: NftRequest) {
-    this.pawnshopApp.payFullBid(data.classID, data.nftID);
+  onSubmitPayRemainder(data: NftRequest) {
+    this.pawnshopApp.PayRemainder(data.classID, data.nftID);
   }
 }

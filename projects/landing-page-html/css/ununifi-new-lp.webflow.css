@@ -1,6 +1,6 @@
 .w-layout-grid {
-  grid-row-gap: 5%;
-  grid-column-gap: 5%;
+  grid-row-gap: 2%;
+  grid-column-gap: 2%;
   grid-template-rows: auto auto;
   grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
@@ -1540,7 +1540,7 @@ figcaption {
 }
 
 .container-large {
-  width: 80%;
+  width: 90%;
   box-sizing: border-box;
   max-width: 100%;
   margin-left: auto;
@@ -2450,8 +2450,8 @@ figcaption {
 .padding-global {
   background-color: #fff;
   background-image: linear-gradient(#fff, #fff);
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 0%;
+  padding-right: 0%;
 }
 
 .padding-global.padding-top.padding-superhuge {
@@ -3827,7 +3827,7 @@ figcaption {
 }
 
 .navigation-container {
-  width: 90%;
+  width: 100%;
   height: 100%;
   max-width: 1300px;
   min-height: 40px;
@@ -4263,7 +4263,7 @@ figcaption {
 
 .grid-information-block {
   box-sizing: border-box;
-  max-width: 90%;
+  max-width: 100%;
   grid-column-gap: 20px;
   grid-template-rows: auto auto auto;
   grid-template-columns: 2fr;
@@ -5263,7 +5263,7 @@ figcaption {
   }
 
   .navigation-mob {
-    width: 90%;
+    width: 100%;
     height: 85px;
     border-bottom: 0 rgba(68, 85, 103, 0.11);
     flex-direction: row;
@@ -6135,8 +6135,8 @@ figcaption {
     max-width: 100%;
     box-sizing: border-box;
     margin-top: 5%;
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 1%;
+    margin-right: 1%;
     padding-top: 0;
     padding-bottom: 5%;
     padding-right: 10%;

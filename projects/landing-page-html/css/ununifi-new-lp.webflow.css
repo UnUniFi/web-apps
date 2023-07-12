@@ -1,6 +1,6 @@
 .w-layout-grid {
-  grid-row-gap: 16px;
-  grid-column-gap: 16px;
+  grid-row-gap: 5%;
+  grid-column-gap: 5%;
   grid-template-rows: auto auto;
   grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
@@ -100,7 +100,7 @@
   width: 100%;
   box-sizing: border-box;
   max-width: 480px;
-  min-width: 320px;
+  min-width: 160px;
   background-color: #fff;
   flex-direction: column;
   display: flex;
@@ -1540,9 +1540,9 @@ figcaption {
 }
 
 .container-large {
-  width: 100%;
+  width: 80%;
   box-sizing: border-box;
-  max-width: 80rem;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -2461,6 +2461,8 @@ figcaption {
 .padding-section-medium {
   padding-top: 5rem;
   padding-bottom: 5rem;
+  padding-left: 1%;
+  padding-right: 1%;
 }
 
 .padding-section-large {
@@ -4249,6 +4251,8 @@ figcaption {
 }
 
 .information-block {
+  max-width: 100%;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -4258,10 +4262,9 @@ figcaption {
 }
 
 .grid-information-block {
-  width: 100%;
   box-sizing: border-box;
   max-width: 90%;
-  grid-column-gap: 23px;
+  grid-column-gap: 20px;
   grid-template-rows: auto auto auto;
   grid-template-columns: 2fr;
   margin-top: 4rem;
@@ -4274,8 +4277,8 @@ figcaption {
 }
 
 .information-block-inner {
-  grid-row-gap: 100px;
-  border-radius: 20px;
+  grid-row-gap: 10%;
+  border-radius: 2%;
   flex-direction: column;
   justify-content: space-between;
   padding: 2rem;
@@ -5081,8 +5084,10 @@ figcaption {
   }
 
   .padding-section-medium {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-left: 1%;
+    padding-right: 1%;
   }
 
   .padding-section-large {
@@ -5641,11 +5646,6 @@ figcaption {
     padding-bottom: 2rem;
   }
 
-  .padding-section-medium {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-
   .padding-section-large {
     padding-top: 4rem;
     padding-bottom: 4rem;
@@ -6113,8 +6113,9 @@ figcaption {
   }
 
   .padding-global {
-    width: 479px;
-    max-width: 479px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     margin-left: auto;
     margin-right: auto;
     padding-left: 0%;
@@ -6122,18 +6123,21 @@ figcaption {
   }
 
   .padding-section-medium {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
 
   .padding-section-large {
-    max-width: 479px;
-    margin-top: -57px;
-    margin-left: 16px;
-    margin-right: -176px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: -5%;
+    margin-left: 1%;
+    margin-right: -5%;
     padding-top: 0;
-    padding-bottom: 3.5rem;
-    padding-right: 62px;
+    padding-bottom: 5%;
+    padding-right: 10%;
   }
 
   .heading {

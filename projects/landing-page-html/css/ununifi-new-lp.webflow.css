@@ -5,6 +5,8 @@
   grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
   display: grid;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .w-commerce-commercecartwrapper {
@@ -2459,14 +2461,14 @@ figcaption {
 }
 
 .padding-section-medium {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
   padding-left: 1%;
   padding-right: 1%;
 }
 
 .padding-section-large {
-  padding-top: 2.9rem;
+  padding-top: 3rem;
   padding-bottom: 7rem;
 }
 
@@ -3964,8 +3966,8 @@ figcaption {
 
 .dropdown-list.w--open {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 7px;
+  border-radius: 5px;
+  padding: 2px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
 }
 
@@ -3974,7 +3976,7 @@ figcaption {
 }
 
 .video-lightbox {
-  width: 100%;
+  width: 95%;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -4797,7 +4799,7 @@ figcaption {
   background-size: cover;
   background-attachment: scroll;
   padding-top: 2%;
-  padding-bottom: 5%;
+  padding-bottom: 1%;
 }
 
 .heading-10 {
@@ -4946,17 +4948,17 @@ figcaption {
 }
 
 .dropdown-toggle {
-  text-align: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  text-align: start;
   font-size: 1rem;
-  top: 4px;
-  right: 0;
+  font-weight: 500;
+  display: inline-block;
 }
 
 .dropdown {
-  flex-direction: row;
-  align-items: flex-start;
+  width: auto;
+  margin-left: 0;
+  margin-right: auto;
+  font-size: 1.125rem;
   display: inline-block;
 }
 
@@ -6499,7 +6501,7 @@ figcaption {
 
   .hidden-logo-grid {
     margin-top: 8px;
-    margin-left: -14px;
+    margin-left: 0px;
     margin-right: 13px;
   }
 
@@ -6520,15 +6522,7 @@ figcaption {
   }
 
   .dropdown-toggle {
-    clear: none;
-    object-fit: none;
-    flex-flow: column;
-    justify-content: center;
-    align-items: flex-start;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0;
-    display: flex;
+    display: inline-block;
   }
 
   .dropdown {

@@ -716,70 +716,51 @@
                       <div
                         id="w-node-ac8cb882-6ebc-baea-0790-7d48aabdc52e-07af4f65"
                         class="extended-info"
-                        style="
-                          margin-bottom: 10px;
-                          padding-left: 10px;
-                          padding-right: 10px;
-                          padding-bottom: 10px;
-                        "
+                        style="margin-bottom: 10px; padding: 10px"
                       >
                         <div class="extended-info-content">
-                          <a href="#" class="link"
-                            ><strong class="bold-text">NFT-Backed Loan Extensions:</strong><br
-                          /></a>
+                          <strong class="bold-text">NFT-Backed Loan Extensions:</strong>
                         </div>
                         <div
                           id="w-node-e2a37e97-c543-8089-8422-fa7722c8f227-07af4f65"
                           class="extended-info-content"
                         >
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link">Tokenized DeFi Positions<br /></a>
+                          Tokenized DeFi Positions
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link">Automatic Bid Pools</a>
+                          Automatic Bid Pools
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link">Lending for Non-Collateralized Borrowers</a>
+                          Lending for Non-Collateralized Borrowers
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link"
-                            >Automatic Bidding (Accounts Receivable <br />via NFT-Fi)</a
-                          >
+                          Automatic Bidding (Accounts Receivable <br />via NFT-Fi)
                         </div>
                       </div>
 
                       <div
                         id="w-node-ac8cb882-6ebc-baea-0790-7d48aabdc52e-07af4f65"
                         class="extended-info"
-                        style="
-                          margin-bottom: 10px;
-                          padding-left: 10px;
-                          padding-right: 10px;
-                          padding-bottom: 10px;
-                        "
+                        style="padding: 10px"
                       >
                         <div class="extended-info-content">
-                          <a href="#" class="link"
-                            ><strong class="bold-text-2">IYA Extensions:</strong><br
-                          /></a>
+                          <strong class="bold-text-2">IYA Extensions:</strong>
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link"
-                            >AMM LP Farming<br />
-                            in external chains<br
-                          /></a>
+                          AMM LP Farming in external chains
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link">DAO-based VC</a>
+                          DAO-based VC
                         </div>
                         <div class="extended-info-content">
                           <img src="images/integrations.svg" loading="lazy" width="23" alt="" />
-                          <a href="#" class="link">Centralized Asset <br />Management Service</a>
+                          Centralized Asset Management Service
                         </div>
                       </div>
                     </div>
@@ -1224,18 +1205,6 @@
                             class="image"
                         /></a>
                       </div>
-                      <div class="margin-bottom margin-medium">
-                        <div class="footer3-details-wrapper">
-                          <div class="text-size-small-2 text-color-black">
-                            <span class="text-weight-semibold">Contact:</span>
-                            <a
-                              href="mailto:info@UnUniFi.io?subject=Contact%20UnUniFi"
-                              class="link-2"
-                              ><br />info@ununifi.io</a
-                            >
-                          </div>
-                        </div>
-                      </div>
                     </div>
                     <div class="w-layout-grid footer-menu-wrapper text-color-white">
                       <div class="footer-link-list">
@@ -1336,27 +1305,22 @@
       </div>
     </div>
 
-    <!-- ポップアップの表示スクリプト -->
     <script>
       window.onload = function () {
-        // Cookieが設定されていなければポップアップを表示
         if (!getCookie('disclaimer_accepted')) {
           document.getElementById('disclaimer-popup').style.display = 'block';
         }
       };
 
-      // 同意ボタンを押したらCookieを設定してポップアップを非表示
       document.getElementById('popup-accept').addEventListener('click', function () {
         setCookie('disclaimer_accepted', true, 365);
         document.getElementById('disclaimer-popup').style.display = 'none';
       });
 
-      // 拒否ボタンを押したらページ遷移
       document.getElementById('popup-reject').addEventListener('click', function () {
         location.href = 'https://twitter.com/ununifi'; // 拒否時に遷移するURLを指定
       });
 
-      // Cookieを設定する関数
       function setCookie(name, value, days) {
         var expires = '';
         if (days) {
@@ -1367,7 +1331,6 @@
         document.cookie = name + '=' + (value || '') + expires + '; path=/';
       }
 
-      // Cookieを取得する関数
       function getCookie(name) {
         var nameEQ = name + '=';
         var ca = document.cookie.split(';');

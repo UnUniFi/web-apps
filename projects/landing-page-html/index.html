@@ -184,11 +184,9 @@
                       <nav class="w-dropdown-list">
                         <a href="https://ununifi.io/portal" class="w-dropdown-link">Portal</a>
                         <a href="https://ununifi.io/explorer" class="w-dropdown-link">Explorer</a>
-                        <a
-                        href="https://lab-testnet.ununifi.io/portal"
-                        class="w-dropdown-link"
-                        >Labs Testnet</a
-                      >
+                        <a href="https://lab-testnet.ununifi.io/portal" class="w-dropdown-link"
+                          >Labs Testnet</a
+                        >
                       </nav>
                     </div>
                     <a
@@ -1312,5 +1310,89 @@
       crossorigin="anonymous"
     ></script>
     <script src="js/webflow.js" type="text/javascript"></script>
+
+    <div id="disclaimer-popup" class="popup">
+      <div class="popup-content">
+        <h2 style="font-size: 20px">Disclaimer</h2>
+        <p style="font-size: 14px">
+          This website (the "Site") is an information aggregator relating to the UnUniFi blockchain.
+          By viewing, interacting with or otherwise using the Site, you are agreeing to the Terms
+          and Conditions for the Site. Please check below to certify you have read and understood
+          and are agreeing to be bound by the Terms and Conditions in their entirety.
+        </p>
+        <p style="font-size: 14px; margin-top: 4px">
+          The application, the underlying smart contracts, or the services described herein (as
+          defined below) are strictly NOT offered to persons or entities who reside in, are citizens
+          of, are incorporated in, or have a registered office in any Restricted Territory, as
+          defined below. If you are a Restricted Person, then do not attempt to access or use the
+          application, the underlying smart contracts, or the services. Use of a virtual private
+          network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly
+          prohibited.
+        </p>
+        <p style="font-size: 14px; margin-top: 4px">
+          For the purpose of these Terms, Restricted Territory shall mean the United States, China,
+          Myanmar (Burma), Cote D'Ivoire (Ivory Coast), Cuba, Crimea and Sevastopol, Democratic
+          Republic of Congo, Iran, Iraq, Libya, Mali, Nicaragua, Democratic People's Republic of
+          Korea (North Korea), Somalia, Sudan, Syria, Yemen, Zimbabwe, Russia, or any other state,
+          country or region that is subject to sanctions enforced by the United States, the United
+          Kingdom or the European Union.
+        </p>
+
+        <h2 style="font-size: 20px">Use of Cookies</h2>
+        <p style="font-size: 14px; margin-top: 4px">
+          We use technical cookies to make the Site work. We would also like to use from time to
+          time analytics cookies to improve your user experience. Non-essential cookies will be set
+          only if you accept. You can manage your non-essential cookies using the Cookie Settings on
+          your browser.
+        </p>
+        <div class="popup-buttons">
+          <button id="popup-accept" class="button-8 w-button">ACCEPT & CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ポップアップの表示スクリプト -->
+    <script>
+      window.onload = function () {
+        // Cookieが設定されていなければポップアップを表示
+        if (!getCookie('disclaimer_accepted')) {
+          document.getElementById('disclaimer-popup').style.display = 'block';
+        }
+      };
+
+      // 同意ボタンを押したらCookieを設定してポップアップを非表示
+      document.getElementById('popup-accept').addEventListener('click', function () {
+        setCookie('disclaimer_accepted', true, 365);
+        document.getElementById('disclaimer-popup').style.display = 'none';
+      });
+
+      // 拒否ボタンを押したらページ遷移
+      document.getElementById('popup-reject').addEventListener('click', function () {
+        location.href = 'https://twitter.com/ununifi'; // 拒否時に遷移するURLを指定
+      });
+
+      // Cookieを設定する関数
+      function setCookie(name, value, days) {
+        var expires = '';
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + (value || '') + expires + '; path=/';
+      }
+
+      // Cookieを取得する関数
+      function getCookie(name) {
+        var nameEQ = name + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+    </script>
   </body>
 </html>

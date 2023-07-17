@@ -108,6 +108,13 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
+  onChangePrice() {
+    if (!this.depositAmount) {
+      const rate = Number(this.listingInfo?.minimum_deposit_rate);
+      this.depositAmount = Number(this.bidAmount) * rate;
+    }
+  }
+
   onSimulate() {
     console.log(this.date);
     if (!this.classID || !this.nftID || !this.symbol) {

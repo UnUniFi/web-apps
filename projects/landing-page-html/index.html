@@ -22,6 +22,34 @@
 
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+  <style>
+    .scroll-fade-in {
+      opacity: 0;
+      transition: 1s;
+    }
+  </style>
+  <script>
+    function scrollFadeIn() {
+      const elements = document.getElementsByClassName('scroll-fade-in');
+
+      for (const element of elements) {
+        const rect = element.getBoundingClientRect();
+        const y = rect.top + rect.height / 2;
+        const visible = y < window.innerHeight;
+        if (visible) {
+          element.classList.add('opacity-100');
+        }
+      }
+    }
+    window.addEventListener('load', () => {
+      scrollFadeIn();
+    });
+
+    window.addEventListener('scroll', () => {
+      scrollFadeIn();
+    });
+  </script>
 </head>
 
 <body>
@@ -124,7 +152,7 @@
                         images/Screenshot-2023-07-10-at-18.09.31-p-1600.png 1600w,
                         images/Screenshot-2023-07-10-at-18.09.31-p-2000.png 2000w,
                         images/Screenshot-2023-07-10-at-18.09.31.png        2574w
-                      " alt="" class="rounded-lg" />
+                      " alt="" class="rounded-lg scroll-fade-in" />
             </div>
           </div>
         </div>
@@ -156,132 +184,255 @@
         animation: infinity-scroll-left 20s linear infinite;
       }
     </style>
-    <div class="flex flex-row overflow-hidden scroll-left-container py-8">
-      <div class="flex flex-row overflow-hidden scroll-left">
-        <img src="images/My-project-1-4.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-4-p-500.png 500w, images/My-project-1-4.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-5.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-5-p-500.png 500w, images/My-project-1-5.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-6.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-6-p-500.png 500w, images/My-project-1-6.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-7.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-7-p-500.png 500w, images/My-project-1-7.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-8.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-8-p-500.png 500w, images/My-project-1-8.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-9.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-9-p-500.png 500w, images/My-project-1-9.png 506w" alt="" class="logo3-logo" />
+    <div class="flex flex-row overflow-hidden scroll-left-container py-4">
+      <div class="flex flex-row flex-shrink-0 scroll-left">
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-4.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-5.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-6.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-7.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-8.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-9.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
       </div>
-      <div class="flex flex-row overflow-hidden scroll-left">
-        <img src="images/My-project-1-4.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-4-p-500.png 500w, images/My-project-1-4.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-5.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-5-p-500.png 500w, images/My-project-1-5.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-6.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-6-p-500.png 500w, images/My-project-1-6.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-7.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-7-p-500.png 500w, images/My-project-1-7.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-8.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-8-p-500.png 500w, images/My-project-1-8.png 506w" alt="" class="logo3-logo" />
-        <img src="images/My-project-1-9.png" loading="lazy" sizes="20vw"
-          srcset="images/My-project-1-9-p-500.png 500w, images/My-project-1-9.png 506w" alt="" class="logo3-logo" />
+      <!-- repeat -->
+      <div class="flex flex-row flex-shrink-0 scroll-left">
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-4.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-5.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-6.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-7.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-8.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
+        <div class="p-4" style="width: 25vw;">
+          <div class="max-w-xs">
+            <img src="images/My-project-1-9.png" loading="lazy" width="100%" height="100%" alt=""
+              class="object-contain" />
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section>
-    <div class="mx-auto max-w-screen-xl p-8">
-      <div class="flex flex-row flex-wrap justify-between rounded-full md:border border-solid">
-        <div class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200">
-          <h3 class="text-xl font-extrabold text-center">NFT Backed Loan</h3>
-        </div>
-        <div
-          class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-300 bg-base-300">
-          <h3 class="text-xl font-extrabold text-center">Interchain Yield Aggregator</h3>
-        </div>
-        <div class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200">
-          <h3 class="text-xl font-extrabold text-center">Derivatives</h3>
+  <section class="scroll-fade-in">
+    <section>
+      <style>
+        .tab-item-fade-in {
+          display: none;
+        }
+
+        .tab-item-fade-in.active {
+          display: initial;
+          animation: appear 1s;
+        }
+
+        @keyframes appear {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
+        }
+      </style>
+      <script>
+        const tabNftBackedLoan = 'tab-nft-backed-loan';
+        const tabInterchainYieldAggregator = 'tab-interchain-yield-aggregator';
+        const tabDerivatives = 'tab-derivatives';
+
+        const tabItemNftBackedLoan = 'tab-item-nft-backed-loan';
+        const tabItemInterchainYieldAggregator = 'tab-item-interchain-yield-aggregator';
+        const tabItemDerivatives = 'tab-item-derivatives';
+
+        function switchTab(activeTabId) {
+          document.getElementById(tabNftBackedLoan).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+          document.getElementById(tabInterchainYieldAggregator).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+          document.getElementById(tabDerivatives).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+
+          document.getElementById(tabItemNftBackedLoan).classList.remove('active');
+          document.getElementById(tabItemInterchainYieldAggregator).classList.remove('active');
+          document.getElementById(tabItemDerivatives).classList.remove('active');
+
+          switch (activeTabId) {
+            case tabNftBackedLoan:
+              document.getElementById(tabNftBackedLoan).classList.add('bg-base-300', 'hover:bg-base-300');
+              document.getElementById(tabInterchainYieldAggregator).classList.add('hover:bg-base-200');
+              document.getElementById(tabDerivatives).classList.add('hover:bg-base-200');
+
+              document.getElementById(tabItemNftBackedLoan).classList.add('active');
+              break;
+            case tabInterchainYieldAggregator:
+              document.getElementById(tabNftBackedLoan).classList.add('hover:bg-base-200');
+              document.getElementById(tabInterchainYieldAggregator).classList.add('bg-base-300', 'hover:bg-base-300');
+              document.getElementById(tabDerivatives).classList.add('hover:bg-base-200');
+
+              document.getElementById(tabItemInterchainYieldAggregator).classList.add('active');
+              break;
+            case tabDerivatives:
+              document.getElementById(tabNftBackedLoan).classList.add('hover:bg-base-200');
+              document.getElementById(tabInterchainYieldAggregator).classList.add('hover:bg-base-200');
+              document.getElementById(tabDerivatives).classList.add('bg-base-300', 'hover:bg-base-300');
+
+              document.getElementById(tabItemDerivatives).classList.add('active');
+              break;
+          }
+        }
+
+        window.addEventListener('load', () => {
+          switchTab(tabInterchainYieldAggregator);
+        });
+      </script>
+      <div class="mx-auto max-w-screen-xl p-8">
+        <div class="flex flex-row flex-wrap justify-between rounded-full md:border border-solid">
+          <div
+            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
+            id="tab-nft-backed-loan" onclick="switchTab('tab-nft-backed-loan')">
+            <h3 class="text-xl font-extrabold text-center">NFT Backed Loan</h3>
+          </div>
+          <div
+            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
+            id="tab-interchain-yield-aggregator" onclick="switchTab('tab-interchain-yield-aggregator')">
+            <h3 class="text-xl font-extrabold text-center">Interchain Yield Aggregator</h3>
+          </div>
+          <div
+            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
+            id="tab-derivatives" onclick="switchTab('tab-derivatives')">
+            <h3 class="text-xl font-extrabold text-center">Derivatives</h3>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-  </section>
+    <section id="tab-item-nft-backed-loan" class="tab-item-fade-in">
+      <div class="mx-auto max-w-screen-xl p-8">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
+            <h3 class="text-3xl font-bold">
+              Efficient & Flexible Collateralization for any NFT Asset
+            </h3>
+            <ul class="mt-8">
+              <li>Oracle-Free NFT valuations based on a unique, algorithmically governed valuation mechanism</li>
+              <li>
+                Support for any NFT on any blockchain, enabling
+                cross-chain liquidity aggregation
+              </li>
+              <li>
+                Extending NFT-Fi beyond PFPs, with support for RWAs, GameFi, Tokenized DeFi positions, and more
+              </li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 md:pl-4">
+            <img loading="lazy" src="images/portal-nft-backed-loan-nfts.png" alt="" width="100%" class="rounded-lg" />
+          </div>
+        </div>
 
-  <section>
-    <div class="mx-auto max-w-screen-xl p-8">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            Efficient & Flexible Collateralization for any NFT Asset
-          </h3>
-          <ul class="mt-8">
-            <li>Oracle-Free NFT valuations based on a unique, algorithmically governed valuation mechanism</li>
-            <li>
-              Support for any NFT on any blockchain, enabling
-              cross-chain liquidity aggregation
-            </li>
-            <li>
-              Extending NFT-Fi beyond PFPs, with support for RWAs, GameFi, Tokenized DeFi positions, and more
-            </li>
-          </ul>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <img loading="lazy" src="images/portal-nft-backed-loan-nfts.png" alt="" width="100%" class="rounded-lg" />
-        </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <section id="tab-item-interchain-yield-aggregator" class="tab-item-fade-in">
+      <div class="mx-auto max-w-screen-xl p-8">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
+            <h3 class="text-3xl font-bold">
+              Decentralized Asset Management with integrations to Major DeFi Protocols
+            </h3>
+            <ul class="mt-8">
+              <li>
+                Generate Automatic DeFi Yield on any assets held with our platform, including assets borrowed from
+                NFT-Fi
+              </li>
+              <li>
+                Extensive yield strategies offered with third-party creation, competitive to market changes
+              </li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 md:pl-4">
+            <img loading="lazy" src="images/portal-yield-aggregator-vaults.png" alt="" width="100%"
+              class="rounded-lg" />
+          </div>
+        </div>
 
-  <section>
-    <div class="mx-auto max-w-screen-xl p-8">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            Decentralized Asset Management with integrations to Major DeFi Protocols
-          </h3>
-          <ul class="mt-8">
-            <li>
-              Generate Automatic DeFi Yield on any assets held with our platform, including assets borrowed from
-              NFT-Fi
-            </li>
-            <li>
-              Extensive yield strategies offered with third-party creation, competitive to market changes
-            </li>
-          </ul>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <img loading="lazy" src="images/portal-yield-aggregator-vaults.png" alt="" width="100%" class="rounded-lg" />
-        </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <section id="tab-item-derivatives" class="tab-item-fade-in">
+      <div class="mx-auto max-w-screen-xl p-8">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
+            <h3 class="text-3xl font-bold">
+              Perps Trading via a Custom, Improved, GMX-style Model
+            </h3>
+            <ul class="mt-8">
+              <li>Familiar UI/UX for experienced DeFi traders & users</li>
+              <li>Stabilized Pool prevents liquidity provider loss, while
+                servicing larger institutionally-sized positions</li>
+              <li>Create complex DeFi trading strategies by incorporating assets borrowed from NFT-Fi</li>
+              <li>NFT price index perps offered alongside DeFi products</li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 md:pl-4">
+            <img loading="lazy" src="images/portal-derivatives-perpetual-futures-BTC-USDC.png" alt="" width="100%"
+              class="rounded-lg" />
+          </div>
+        </div>
 
-  <section>
-    <div class="mx-auto max-w-screen-xl p-8">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            Perps Trading via a Custom, Improved, GMX-style Model
-          </h3>
-          <ul class="mt-8">
-            <li>Familiar UI/UX for experienced DeFi traders & users</li>
-            <li>Stabilized Pool prevents liquidity provider loss, while
-              servicing larger institutionally-sized positions</li>
-            <li>Create complex DeFi trading strategies by incorporating assets borrowed from NFT-Fi</li>
-            <li>NFT price index perps offered alongside DeFi products</li>
-          </ul>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <img loading="lazy" src="images/portal-derivatives-perpetual-futures-BTC-USDC.png" alt="" width="100%"
-            class="rounded-lg" />
-        </div>
       </div>
-
-    </div>
+    </section>
   </section>
 
-  <section>
+  <section class="scroll-fade-in">
     <div class="mx-auto max-w-screen-xl p-8">
       <div class="flex flex-row flex-wrap">
         <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
@@ -315,7 +466,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="scroll-fade-in">
     <div class="mx-auto max-w-screen-xl p-8">
       <div class="flex flex-row flex-wrap">
         <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
@@ -342,7 +493,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="scroll-fade-in">
     <div class="mx-auto max-w-screen-xl p-8">
       <div class="flex flex-row flex-wrap">
         <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
@@ -387,169 +538,130 @@
     </div>
 
     <div class="mx-auto max-w-screen-xl p-8">
-      <div class="information-block">
-        <div class="w-layout-grid hidden-logo-grid">
-          <img src="images/My-project-1-5_1.png" loading="lazy"
-            id="w-node-_7203e6ad-0357-4cd8-e5e0-670f8900f2e2-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-5_1-p-500.png 500w,
-              images/My-project-1-5_1.png       506w
-            " alt="" /><img src="images/My-project-1-4_1.png" loading="lazy"
-            id="w-node-_75a4131e-2a4d-2e3e-4bf7-4569ef18d367-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-4_1-p-500.png 500w,
-              images/My-project-1-4_1.png       506w
-            " alt="" /><img src="images/My-project-1-8_1.png" loading="lazy"
-            id="w-node-_31c1fce4-96b6-0f2a-3c4b-d004afa7c7dd-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-8_1-p-500.png 500w,
-              images/My-project-1-8_1.png       506w
-            " alt="" /><img src="images/My-project-1-9_1.png" loading="lazy"
-            id="w-node-_2d5dc393-2bbc-95b1-50e8-aa76ec002f6d-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-9_1-p-500.png 500w,
-              images/My-project-1-9_1.png       506w
-            " alt="" /><img src="images/My-project-1-10.png" loading="lazy"
-            id="w-node-_8f7cd708-0405-591e-fb94-bdeec013e1b8-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-10-p-500.png 500w,
-              images/My-project-1-10.png       506w
-            " alt="" /><img src="images/My-project-1-12.png" loading="lazy"
-            id="w-node-_78e09c4a-48fd-bb48-68c7-18ad1dac9524-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-12-p-500.png 500w,
-              images/My-project-1-12.png       506w
-            " alt="" /><img src="images/My-project-1-14.png" loading="lazy"
-            id="w-node-_76dbb844-3101-b9a1-e7e1-710f3c9087e1-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-14-p-500.png 500w,
-              images/My-project-1-14.png       506w
-            " alt="" /><img src="images/My-project-1-11.png" loading="lazy"
-            id="w-node-_82c05561-5de4-e79c-ce10-903d02334df4-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-11-p-500.png 500w,
-              images/My-project-1-11.png       506w
-            " alt="" /><img src="images/My-project-1-7_1.png" loading="lazy"
-            id="w-node-_0a161469-6418-1c59-27c3-378ecbeb12cb-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-7_1-p-500.png 500w,
-              images/My-project-1-7_1.png       506w
-            " alt="" /><img src="images/My-project-1-13.png" loading="lazy"
-            id="w-node-d4e002ed-fd5b-411b-64f5-4ebcc2595b2b-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-13-p-500.png 500w,
-              images/My-project-1-13.png       506w
-            " alt="" /><img src="images/My-project-1-15.png" loading="lazy"
-            id="w-node-_6e8670de-1e1f-d5b8-4547-93a3bc008303-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-15-p-500.png 500w,
-              images/My-project-1-15.png       506w
-            " alt="" /><img src="images/My-project-1-16.png" loading="lazy"
-            id="w-node-ab6d7601-1b57-ce75-1589-45b3df3f205a-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-16-p-500.png 500w,
-              images/My-project-1-16.png       506w
-            " alt="" /><img src="images/My-project-1-17.png" loading="lazy"
-            id="w-node-_88e30272-82da-731d-3c60-21dc3b4bd307-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-17-p-500.png 500w,
-              images/My-project-1-17.png       506w
-            " alt="" /><img src="images/My-project-1-18.png" loading="lazy"
-            id="w-node-_180097ea-4e49-2c78-cd50-697a386fe950-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-18-p-500.png 500w,
-              images/My-project-1-18.png       506w
-            " alt="" /><img src="images/My-project-1-19.png" loading="lazy"
-            id="w-node-_9c8a07fb-9e8a-d2b2-b816-9690fca1e998-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-19-p-500.png 500w,
-              images/My-project-1-19.png       506w
-            " alt="" /><img src="images/My-project-1-20.png" loading="lazy"
-            id="w-node-c6c56306-34e5-6c93-4203-8e43004e5672-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-20-p-500.png 500w,
-              images/My-project-1-20.png       506w
-            " alt="" /><img src="images/sommelier.png" loading="lazy"
-            id="w-node-_97767fa7-1fb1-3006-7ce4-6c88de002133-07af4f65" sizes="20vw"
-            srcset="images/sommelier-p-500.png 500w, images/sommelier.png 506w" alt="" /><img
-            src="images/My-project-1-21.png" loading="lazy" id="w-node-eafd5df5-6769-ac17-0dc6-38c4c25d53c0-07af4f65"
-            sizes="20vw" srcset="
-              images/My-project-1-21-p-500.png 500w,
-              images/My-project-1-21.png       506w
-            " alt="" /><img src="images/My-project-1-24.png" loading="lazy"
-            id="w-node-_973690cd-fa72-2de2-baf0-1e52de53df5a-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-24-p-500.png 500w,
-              images/My-project-1-24.png       506w
-            " alt="" /><img src="images/My-project-1-22.png" loading="lazy"
-            id="w-node-_09964a49-5516-437f-92c5-2532168a9c5b-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-22-p-500.png 500w,
-              images/My-project-1-22.png       506w
-            " alt="" />
+      <div class="scroll-fade-in">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-5_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-4_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-8_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-9_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-10.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-12.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-14.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-11.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-7_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-13.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-15.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-16.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-17.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-18.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-19.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-20.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/sommelier.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-21.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-24.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-22.png" loading="lazy" width="100%" alt="" />
+          </div>
         </div>
       </div>
 
 
       <h4 class="text-2xl my-8">Validators</h4>
 
-      <div class="information-block">
-        <div class="w-layout-grid hidden-logo-grid">
-          <img src="images/My-project-1-27.png" loading="lazy" id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2e6-07af4f65"
-            sizes="20vw" srcset="
-              images/My-project-1-27-p-500.png 500w,
-              images/My-project-1-27.png       506w
-            " alt="" /><img src="images/My-project-1-28.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2e7-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-28-p-500.png 500w,
-              images/My-project-1-28.png       506w
-            " alt="" /><img src="images/My-project-1-30.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2e8-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-30-p-500.png 500w,
-              images/My-project-1-30.png       506w
-            " alt="" /><img src="images/My-project-1-29.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2e9-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-29-p-500.png 500w,
-              images/My-project-1-29.png       506w
-            " alt="" /><img src="images/My-project-1-31.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2ea-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-31-p-500.png 500w,
-              images/My-project-1-31.png       506w
-            " alt="" /><img src="images/My-project-1-25.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2eb-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-25-p-500.png 500w,
-              images/My-project-1-25.png       506w
-            " alt="" /><img src="images/My-project-1-23.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2ec-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-23-p-500.png 500w,
-              images/My-project-1-23.png       506w
-            " alt="" /><img src="images/My-project-1-26.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2ed-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-26-p-500.png 500w,
-              images/My-project-1-26.png       506w
-            " alt="" /><img src="images/My-project-1-33.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2ee-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-33-p-500.png 500w,
-              images/My-project-1-33.png       506w
-            " alt="" /><img src="images/My-project-1-9_2.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2ef-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-9_2-p-500.png 500w,
-              images/My-project-1-9_2.png       506w
-            " alt="" /><img src="images/My-project-1-12_1.png" loading="lazy"
-            id="w-node-_0e1448bf-f1b3-495a-884c-8e90a7a4fd69-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-12_1-p-500.png 500w,
-              images/My-project-1-12_1.png       506w
-            " alt="" /><img src="images/My-project-1-11_1.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f1-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-11_1-p-500.png 500w,
-              images/My-project-1-11_1.png       506w
-            " alt="" /><img src="images/My-project-1-7_2.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f0-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-7_2-p-500.png 500w,
-              images/My-project-1-7_2.png       506w
-            " alt="" /><img src="images/My-project-1-4_2.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f2-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-4_2-p-500.png 500w,
-              images/My-project-1-4_2.png       506w
-            " alt="" /><img src="images/My-project-1-5_2.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f3-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-5_2-p-500.png 500w,
-              images/My-project-1-5_2.png       506w
-            " alt="" /><img src="images/My-project-1-8_2.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f4-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-8_2-p-500.png 500w,
-              images/My-project-1-8_2.png       506w
-            " alt="" /><img src="images/My-project-1-6_1.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f5-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-6_1-p-500.png 500w,
-              images/My-project-1-6_1.png       506w
-            " alt="" /><img src="images/My-project-1-10_1.png" loading="lazy"
-            id="w-node-f12ea8a5-2985-c74b-7694-9be8977da2f6-07af4f65" sizes="20vw" srcset="
-              images/My-project-1-10_1-p-500.png 500w,
-              images/My-project-1-10_1.png       506w
-            " alt="" />
+      <div class="scroll-fade-in">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-27.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-28.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-30.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-29.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-31.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-25.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-23.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-26.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-33.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-9_2.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-12_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-11_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-7_2.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-4_2.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-5_2.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-8_2.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-6_1.png" loading="lazy" width="100%" alt="" />
+          </div>
+          <div class="w-1/4 p-4">
+            <img src="images/My-project-1-10_1.png" loading="lazy" width="100%" alt="" />
+          </div>
         </div>
       </div>
     </div>
@@ -597,6 +709,45 @@
     </div>
   </footer>
 
+  <div id="disclaimer-popup" class="p-10 bg-base-300 overflow-y-auto sticky bottom-0"
+    style="display: none; max-height: 50vh;">
+    <div class="popup-content">
+      <h2 class="font-bold text-lg">Disclaimer</h2>
+      <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
+        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site.
+        Please
+        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions
+        in
+        their entirety.</p>
+      <p class="mt-2">The application, the underlying smart contracts, or the services described herein (as defined
+        below) are strictly NOT offered to persons or entities who reside in, are citizens of, are incorporated in, or
+        have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then
+        do
+        not attempt to access or use the application, the underlying smart contracts, or the services. Use of a
+        virtual
+        private network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly prohibited.
+      </p>
+      <p class="mt-2">For the purpose of these Terms, Restricted Territory shall mean the United States, China,
+        Myanmar
+        (Burma), Cote
+        D'Ivoire (Ivory Coast), Cuba, Crimea and Sevastopol, Democratic Republic of Congo, Iran, Iraq, Libya, Mali,
+        Nicaragua, Democratic People's Republic of Korea (North Korea), Somalia, Sudan, Syria, Yemen, Zimbabwe,
+        Russia,
+        or any other state, country or region that is subject to sanctions enforced by the United States, the United
+        Kingdom or the European Union.
+      </p>
+
+      <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
+      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
+        cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
+        your non-essential cookies using the Cookie Settings on your browser.</p>
+      <div class="flex flex-row mt-4">
+        <span class="flex-auto"></span>
+        <button id="popup-reject" class="btn btn-ghost">Reject</button>
+        <button id="popup-accept" class="btn btn-neutral ml-1">Accept</button>
+      </div>
+    </div>
+  </div>
   <!-- popup script -->
   <script>
     window.onload = function () {

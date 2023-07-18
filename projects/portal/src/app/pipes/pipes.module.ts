@@ -5,6 +5,7 @@ import { CoinPipe } from './coin.pipe';
 import { DecimalsPipe } from './decimals.pipe';
 import { FloorPipe } from './floor.pipe';
 import { PercentagePipe } from './percentage.pipe';
+import { SecondToDatePipe } from './seconds-to-date.pipe';
 import { UnitConversionPipe } from './unit-conversion.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -19,6 +20,7 @@ import { NgModule } from '@angular/core';
     CoinDenomPipe,
     CoinAmountPipe,
     EllipsisPipe,
+    SecondToDatePipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -30,6 +32,7 @@ import { NgModule } from '@angular/core';
     CoinDenomPipe,
     CoinAmountPipe,
     EllipsisPipe,
+    SecondToDatePipe,
   ],
 })
 export class PipesModule {}

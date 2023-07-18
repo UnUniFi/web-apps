@@ -36,6 +36,7 @@ export type ListRequest = {
   nftID: string;
   bidSymbol: string;
   minimumDepositRate: number;
+  milliSeconds: number;
 };
 
 export type BorrowRequest = {

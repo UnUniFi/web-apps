@@ -31,7 +31,13 @@ export class NftPawnshopApplicationService {
     await this.router.navigate(['nft-backed-loan', 'nfts', classID, nftID, 'place-bid']);
   }
 
-  async listNft(classId: string, nftId: string, bidSymbol: string, minimumDepositRate: number) {
+  async listNft(
+    classId: string,
+    nftId: string,
+    bidSymbol: string,
+    minimumDepositRate: number,
+    milliseconds: number,
+  ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -50,30 +56,30 @@ export class NftPawnshopApplicationService {
       bidSymbol,
       symbolMetadataMap,
       minimumDepositRate,
+      milliseconds,
     );
 
-    const simulationResult = await this.txCommonApplication.simulate(
-      msg,
-      publicKey,
-      account,
-      minimumGasPrice,
-    );
-    if (!simulationResult) {
-      return;
-    }
-    const { gas, fee } = simulationResult;
+    // comment-out simulate
+    // const simulationResult = await this.txCommonApplication.simulate(
+    //   msg,
+    //   publicKey,
+    //   account,
+    //   minimumGasPrice,
+    // );
+    // if (!simulationResult) {
+    //   return;
+    // }
+    // const { gas, fee } = simulationResult;
 
-    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
-      return;
-    }
+    // if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+    //   return;
+    // }
 
     const txHash = await this.txCommonApplication.broadcast(
       msg,
       currentCosmosWallet,
       publicKey,
       account,
-      gas,
-      fee,
     );
     if (!txHash) {
       return;

@@ -49,8 +49,8 @@
   <div class="flex flex-row">
     <span class="flex-auto"></span>
     <div class="card bg-base-100 shadow-xl w-full lg:w-1/2">
-      <h3 class="m-4 card-title">List this NFT</h3>
       <div class="card-body">
+        <h3 class="m-4 card-title">List this NFT</h3>
         <form #formRef="ngForm" (submit)="onSubmit()">
           <div class="form-control">
             <label class="label">
@@ -104,9 +104,51 @@
               <span>%</span>
             </label>
           </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Enter Minimum Bid Expiry Date</span>
+              <!-- The button to open modal -->
+              <label for="modal-minimum-expiry" class="label-text cursor-pointer">
+                <mat-icon>help</mat-icon>
+              </label>
 
-          <br />
-          <button class="btn btn-primary w-full px-8" [disabled]="formRef.invalid">List NFT</button>
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-minimum-expiry" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the minimum bid expiry date?</h3>
+                  <p class="py-4">
+                    For example, if you set it to 180 days, bidders will have at least 180 days to
+                    make a valid bid and you will be able to borrow tokens from the deposit during
+                    that time.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-minimum-expiry" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <label class="input-group">
+              <input
+                #minExpiryDateNgModelRef="ngModel"
+                required
+                type="number"
+                name="minExpiryDate"
+                [(ngModel)]="minExpiryDate"
+                [min]="0"
+                [step]="1"
+                class="input input-bordered w-full"
+                [class]="{ 'input-error': minExpiryDateNgModelRef.errors }"
+                pattern="^[0-9]*\.?[0-9]{0,4}$"
+              />
+              <span>Days</span>
+            </label>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary w-full px-8" [disabled]="formRef.invalid">
+              List NFT
+            </button>
+          </div>
         </form>
       </div>
     </div>

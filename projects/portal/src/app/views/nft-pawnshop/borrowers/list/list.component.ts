@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ListRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { min } from 'rxjs/operators';
 
 @Component({
   selector: 'view-list',
@@ -19,6 +20,7 @@ export class ListComponent implements OnInit {
 
   bidSymbol: string;
   minDepositRate: number;
+  minExpiryDate: number;
 
   @Output()
   appSubmit: EventEmitter<ListRequest>;
@@ -26,6 +28,7 @@ export class ListComponent implements OnInit {
   constructor() {
     this.bidSymbol = 'GUU';
     this.minDepositRate = 5;
+    this.minExpiryDate = 180;
     this.appSubmit = new EventEmitter();
   }
 
@@ -37,6 +40,7 @@ export class ListComponent implements OnInit {
       nftID: this.nftID!,
       bidSymbol: this.bidSymbol,
       minimumDepositRate: this.minDepositRate / 100,
+      milliSeconds: this.minExpiryDate * 24 * 60 * 60 * 1000,
     });
   }
 }

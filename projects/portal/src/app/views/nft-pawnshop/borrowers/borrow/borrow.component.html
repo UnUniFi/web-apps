@@ -56,6 +56,10 @@
               <td>{{ listingInfo?.minimum_deposit_rate | percentage }}</td>
             </tr>
             <tr>
+              <td>Minimum bid Expiry date</td>
+              <td>{{ listingInfo?.minimum_bidding_period | secondToDate }} Days</td>
+            </tr>
+            <tr>
               <td>Listed</td>
               <td>{{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
             </tr>

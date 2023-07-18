@@ -53,9 +53,10 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   nftImage?: string | null;
   @Input()
   chartData?: (string | number)[][] | null;
-
-  date?: string;
-  time?: string;
+  @Input()
+  date?: string | null;
+  @Input()
+  time?: string | null;
   minimumDeposit: number = 0;
   autoPayment: boolean = true;
 
@@ -70,16 +71,6 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   appSubmit: EventEmitter<PlaceBidRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    const now = new Date();
-    // set expire in 1 year
-    now.setFullYear(now.getFullYear() + 1);
-    this.date =
-      now.getFullYear() +
-      '-' +
-      ('0' + (now.getMonth() + 1)).slice(-2) +
-      '-' +
-      ('0' + now.getDate()).slice(-2);
-    this.time = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
     this.chartTitle = '';
     this.chartType = ChartType.BarChart;
     const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
@@ -116,7 +107,6 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   }
 
   onSimulate() {
-    console.log(this.date);
     if (!this.classID || !this.nftID || !this.symbol) {
       alert('Invalid NFT Info!');
       return;
@@ -164,12 +154,11 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     const minExpiryDate = new Date();
     const expiryDate = new Date(this.date + 'T' + this.time);
     if (this.listingInfo && this.listingInfo.minimum_bidding_period) {
-      const minExpiry = parseInt(this.listingInfo.minimum_bidding_period);
-      expiryDate.setSeconds(expiryDate.getSeconds() + minExpiry);
-      console.log(expiryDate);
+      const minExpirySeconds = parseInt(this.listingInfo.minimum_bidding_period);
+      minExpiryDate.setSeconds(minExpiryDate.getSeconds() + minExpirySeconds);
     }
     if (expiryDate < minExpiryDate) {
-      alert('Bidding period should be in the future!');
+      alert('Please set Expiration Date beyond the Minimum bidding period!');
       return;
     }
     this.appSubmit.emit({

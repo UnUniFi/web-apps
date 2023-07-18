@@ -37,6 +37,8 @@ export class PlaceBidComponent implements OnInit {
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
   chartData$: Observable<(string | number)[][]>;
+  date$: Observable<string>;
+  time$: Observable<string>;
 
   constructor(
     private route: ActivatedRoute,
@@ -116,6 +118,35 @@ export class PlaceBidComponent implements OnInit {
     this.chartData$ = this.bids$.pipe(
       map((bids) => this.pawnshopChart.createBidAmountChartData(bids)),
       map((data) => data.sort((a, b) => Number(a[1]) - Number(b[1]))),
+    );
+
+    const defaultExpiryDate$ = this.listingInfo$.pipe(
+      map((info) => {
+        const expiryDate = new Date();
+        if (info.minimum_bidding_period) {
+          // add 2 * minimum_bidding_period
+          const minExpirySeconds = parseInt(info.minimum_bidding_period);
+          expiryDate.setSeconds(expiryDate.getSeconds() + 2 * minExpirySeconds);
+          return expiryDate;
+        } else {
+          // add 6 months
+          expiryDate.setSeconds(expiryDate.getSeconds() + 15552000);
+          return expiryDate;
+        }
+      }),
+    );
+    this.date$ = defaultExpiryDate$.pipe(
+      map(
+        (date) =>
+          date.getFullYear() +
+          '-' +
+          ('0' + (date.getMonth() + 1)).slice(-2) +
+          '-' +
+          ('0' + date.getDate()).slice(-2),
+      ),
+    );
+    this.time$ = defaultExpiryDate$.pipe(
+      map((date) => ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)),
     );
   }
 

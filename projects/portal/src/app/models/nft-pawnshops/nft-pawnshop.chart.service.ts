@@ -1,12 +1,321 @@
 import { denomExponentMap } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
+import { Chart, ChartItem } from 'chart.js';
 import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
+
+export type BidChartData = {
+  price: number;
+  deposit: number;
+  interest: number;
+  expiry: Date;
+  borrowed: boolean;
+};
+
+export const chartUtils = {
+  transparentize: (value: string, opacity: number) => {
+    var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+    return value.replace('rgb', 'rgba').replace(')', ', ' + opacity + ')');
+  },
+  CHART_COLORS: {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)',
+  },
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class NftPawnshopChartService {
   constructor() {}
+
+  convertChartData(bids: BidderBids200ResponseBidsInner[]): BidChartData[] {
+    const chartData = bids.map((bid) => {
+      return {
+        price: Number(bid.price?.amount),
+        deposit: Number(bid.deposit?.amount),
+        interest: Number(bid.interest_rate),
+        expiry: new Date(bid.expiry!),
+        borrowed: Number(bid.borrow?.amount?.amount) > 0,
+      };
+    });
+    return chartData;
+  }
+
+  calcRadius(min: number, max: number, value: number) {
+    return ((16 - 4) / (max - min)) * (value - min) + 4;
+  }
+
+  createInterestDepositChart(chartItem: ChartItem, data: BidChartData[]) {
+    const minPrice = Math.min(...data.map((d) => d.price));
+    const maxPrice = Math.max(...data.map((d) => d.price));
+
+    const dataDepositInterest = {
+      datasets: [
+        {
+          label: 'Borrowed',
+          data: data
+            .filter((d) => d.borrowed)
+            .map((d) => ({
+              x: d.interest,
+              y: d.deposit,
+              r: this.calcRadius(minPrice, maxPrice, d.price),
+              price: d.price,
+              expiry: d.expiry,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.red, 0.5),
+        },
+        {
+          label: 'Not Borrowed',
+          data: data
+            .filter((d) => !d.borrowed)
+            .map((d) => ({
+              x: d.interest,
+              y: d.deposit,
+              r: this.calcRadius(minPrice, maxPrice, d.price),
+              price: d.price,
+              expiry: d.expiry,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.blue, 0.5),
+        },
+      ],
+    };
+    Chart.defaults.font.family = 'Consolas';
+    Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
+    new Chart(chartItem, {
+      type: 'bubble',
+      data: dataDepositInterest,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Interest-Deposit-(Price)',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                return [
+                  'Price: ' + context.raw.price + '\n',
+                  'Deposit: ' + context.raw.y + '\n',
+                  'Annual Interest Rate: ' + context.raw.x + '\n',
+                  'Expiry: ' + context.raw.expiry.toLocaleString(),
+                ];
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Interest',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Deposit',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+        },
+      },
+    });
+  }
+
+  createExpiryInterestChart(chartItem: ChartItem, data: BidChartData[]) {
+    const minDeposit = Math.min(...data.map((d) => d.deposit));
+    const maxDeposit = Math.max(...data.map((d) => d.deposit));
+
+    const dataExpiryInterest = {
+      datasets: [
+        {
+          label: 'Borrowed',
+          data: data
+            .filter((d) => d.borrowed)
+            .map((d) => ({
+              x: d.expiry,
+              y: d.interest,
+              r: this.calcRadius(minDeposit, maxDeposit, d.deposit),
+              price: d.price,
+              deposit: d.deposit,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.red, 0.5),
+        },
+        {
+          label: 'Not Borrowed',
+          data: data
+            .filter((d) => !d.borrowed)
+            .map((d) => ({
+              x: d.expiry,
+              y: d.interest,
+              r: this.calcRadius(minDeposit, maxDeposit, d.deposit),
+              price: d.price,
+              deposit: d.deposit,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.blue, 0.5),
+        },
+      ],
+    };
+    Chart.defaults.font.family = 'Consolas';
+    Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
+    new Chart(chartItem, {
+      type: 'bubble',
+      data: dataExpiryInterest,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Expiry-Interest-(Deposit)',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                return [
+                  'Price: ' + context.raw.price + '\n',
+                  'Deposit: ' + context.raw.deposit + '\n',
+                  'Annual Interest Rate: ' + context.raw.y + '\n',
+                  'Expiry: ' + context.raw.x.toLocaleString(),
+                ];
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day',
+            },
+            title: {
+              display: true,
+              text: 'Expiry',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Interest',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+        },
+      },
+    });
+  }
+
+  createExpiryDepositChart(chartItem: ChartItem, data: BidChartData[]) {
+    const minPrice = Math.min(...data.map((d) => d.price));
+    const maxPrice = Math.max(...data.map((d) => d.price));
+
+    const dataExpiryDeposit = {
+      datasets: [
+        {
+          label: 'Borrowed',
+          data: data
+            .filter((d) => d.borrowed)
+            .map((d) => ({
+              x: d.expiry,
+              y: d.deposit,
+              r: this.calcRadius(minPrice, maxPrice, d.price),
+              price: d.price,
+              interest: d.interest,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.red, 0.5),
+        },
+        {
+          label: 'Not Borrowed',
+          data: data
+            .filter((d) => !d.borrowed)
+            .map((d) => ({
+              x: d.expiry,
+              y: d.deposit,
+              r: this.calcRadius(minPrice, maxPrice, d.price),
+              price: d.price,
+              interest: d.interest,
+            })),
+          backgroundColor: chartUtils.transparentize(chartUtils.CHART_COLORS.blue, 0.5),
+        },
+      ],
+    };
+
+    Chart.defaults.font.family = 'Consolas';
+    Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
+    new Chart(chartItem, {
+      type: 'bubble',
+      data: dataExpiryDeposit,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Expiry-Deposit-(Price)',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                return [
+                  'Price: ' + context.raw.price + '\n',
+                  'Deposit: ' + context.raw.y + '\n',
+                  'Annual Interest Rate: ' + context.raw.interest + '\n',
+                  'Expiry: ' + context.raw.x.toLocaleString(),
+                ];
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day',
+            },
+            title: {
+              display: true,
+              text: 'Expiry',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Deposit',
+            },
+            grid: {
+              color: chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.1),
+            },
+          },
+        },
+      },
+    });
+  }
 
   createChartOption(width: number) {
     return {

@@ -43,10 +43,19 @@ export class NftPawnshopService {
     return this.replaceIpfs(metadata.image);
   }
 
+  convertMillisecToDuration(millisecond: number) {
+    const seconds = Math.floor(millisecond / 1000);
+    const nanos = (millisecond % 1000) * 1e6;
+    return cosmosclient.proto.google.protobuf.Duration.fromObject({
+      seconds: seconds,
+      nanos: nanos,
+    });
+  }
+
   convertDateToTimestamp(date: Date) {
     const millisecond = date.getTime();
     return ununificlient.proto.google.protobuf.Timestamp.fromObject({
-      seconds: millisecond / 1000,
+      seconds: Math.floor(millisecond / 1000),
       nanos: (millisecond % 1000) * 1e6,
     });
   }
@@ -88,6 +97,7 @@ export class NftPawnshopService {
     bidSymbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
     minimumDepositRate: number,
+    milliseconds: number,
   ) {
     const bidDenom = symbolMetadataMap[bidSymbol].base;
     const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgListNft({
@@ -98,6 +108,7 @@ export class NftPawnshopService {
       },
       bid_denom: bidDenom,
       minimum_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
+      minimum_bidding_period: this.convertMillisecToDuration(milliseconds),
     });
 
     return msg;

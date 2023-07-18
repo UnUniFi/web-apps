@@ -154,8 +154,14 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       alert('Some values are invalid!');
       return;
     }
-    const biddingPeriod = new Date(this.date + 'T' + this.time);
-    if (biddingPeriod < new Date()) {
+    const minExpiryDate = new Date();
+    const expiryDate = new Date(this.date + 'T' + this.time);
+    if (this.listingInfo && this.listingInfo.minimum_bidding_period) {
+      const minExpiry = parseInt(this.listingInfo.minimum_bidding_period);
+      expiryDate.setSeconds(expiryDate.getSeconds() + minExpiry);
+      console.log(expiryDate);
+    }
+    if (expiryDate < minExpiryDate) {
       alert('Bidding period should be in the future!');
       return;
     }
@@ -164,7 +170,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       nftID: this.nftID,
       symbol: this.symbol,
       bidAmount: this.bidAmount,
-      biddingPeriod: biddingPeriod,
+      biddingPeriod: expiryDate,
       depositLendingRate: this.interestRate,
       autoPayment: this.autoPayment,
       depositAmount: this.depositAmount,

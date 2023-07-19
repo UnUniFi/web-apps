@@ -59,7 +59,6 @@
     "bip39": "^3.0.4",
     "chart.js": "^4.3.0",
     "chartjs-adapter-date-fns": "^3.0.0",
-    "chartjs-adapter-moment": "^1.0.1",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.30.0",
     "decimal.js": "^10.4.3",

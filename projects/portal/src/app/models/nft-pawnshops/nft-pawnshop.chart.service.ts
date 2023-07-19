@@ -1,6 +1,7 @@
 import { denomExponentMap } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
-import { Chart, ChartItem } from 'chart.js';
+import { Chart, ChartItem } from 'chart.js/auto';
+import 'chartjs-adapter-moment';
 import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
 
 export type BidChartData = {
@@ -227,6 +228,7 @@ export class NftPawnshopChartService {
   }
 
   createExpiryDepositChart(chartItem: ChartItem, data: BidChartData[]) {
+    console.log(data);
     const minPrice = Math.min(...data.map((d) => d.price));
     const maxPrice = Math.max(...data.map((d) => d.price));
 
@@ -263,7 +265,7 @@ export class NftPawnshopChartService {
 
     Chart.defaults.font.family = 'Consolas';
     Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
-    new Chart(chartItem, {
+    const chart = new Chart(chartItem, {
       type: 'bubble',
       data: dataExpiryDeposit,
       options: {
@@ -315,6 +317,7 @@ export class NftPawnshopChartService {
         },
       },
     });
+    return chart;
   }
 
   createChartOption(width: number) {

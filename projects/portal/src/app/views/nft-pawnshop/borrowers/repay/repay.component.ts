@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { ChartType } from 'angular-google-charts';
+import Chart from 'chart.js/auto';
 import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -56,10 +57,12 @@ export class RepayComponent implements OnInit, OnChanges {
   @Input()
   chartData?: (string | number)[][] | null;
 
-  chartType: ChartType;
-  chartTitle: string;
-  chartColumns: any[];
-  chartOptions: any;
+  chart?: Chart<any>;
+  contextChart?: CanvasRenderingContext2D;
+  // chartType: ChartType;
+  // chartTitle: string;
+  // chartColumns: any[];
+  // chartOptions: any;
 
   autoRepay = true;
   autoRepayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
@@ -73,33 +76,43 @@ export class RepayComponent implements OnInit, OnChanges {
     private readonly pawnshopChart: NftPawnshopChartService,
     private readonly nftPawnshopService: NftPawnshopService,
   ) {
-    this.chartTitle = '';
-    this.chartType = ChartType.BarChart;
-    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
-    this.chartColumns = [
-      { type: 'string', label: 'Expiry Date' },
-      { type: 'number', label: 'Borrowing Amount' },
-      { type: 'string', role: 'style' },
-      { type: 'string', role: 'annotation' },
-    ];
+    // this.chartTitle = '';
+    // this.chartType = ChartType.BarChart;
+    // const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // this.chartColumns = [
+    //   { type: 'string', label: 'Expiry Date' },
+    //   { type: 'number', label: 'Borrowing Amount' },
+    //   { type: 'string', role: 'style' },
+    //   { type: 'string', role: 'annotation' },
+    // ];
 
     this.appSubmit = new EventEmitter();
   }
 
-  @ViewChild('chartCardRef') chartCardRef?: ElementRef;
+  @ViewChild('canvasChart') canvasChart?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.onChangeRepayAmount();
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
+    this.contextChart = this.canvasChart?.nativeElement.getContext('2d');
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    if (this.contextChart && this.bids) {
+      this.chart = this.pawnshopChart.createExpiryDepositChart(
+        this.contextChart,
+        this.pawnshopChart.convertChartData(this.bids),
+      );
+    }
   }
 
   onToggleAuto(auto: boolean) {

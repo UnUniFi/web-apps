@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import Chart from 'chart.js/auto';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -60,10 +61,14 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   minimumDeposit: number = 0;
   autoPayment: boolean = true;
 
-  chartType: ChartType;
-  chartTitle: string;
-  chartColumns: any[];
-  chartOptions: any;
+  activeInterestChart = true;
+  chart?: Chart<any>;
+  contextChart?: CanvasRenderingContext2D;
+
+  // chartType: ChartType;
+  // chartTitle: string;
+  // chartColumns: any[];
+  // chartOptions: any;
 
   @Output()
   appSimulate: EventEmitter<PlaceBidRequest>;
@@ -71,32 +76,33 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   appSubmit: EventEmitter<PlaceBidRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    this.chartTitle = '';
-    this.chartType = ChartType.BarChart;
-    const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
-    this.chartColumns = [
-      { type: 'string', label: 'Expiry Date' },
-      { type: 'number', label: 'Existing Bid' },
-      { type: 'string', role: 'style' },
-      { type: 'string', role: 'annotation' },
-    ];
+    // this.chartTitle = '';
+    // this.chartType = ChartType.BarChart;
+    // const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // this.chartColumns = [
+    //   { type: 'string', label: 'Expiry Date' },
+    //   { type: 'number', label: 'Existing Bid' },
+    //   { type: 'string', role: 'style' },
+    //   { type: 'string', role: 'annotation' },
+    // ];
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
 
-  @ViewChild('chartCardRef') chartCardRef?: ElementRef;
+  @ViewChild('canvasChart') canvasChart?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.pawnshopChart.createChartOption(width);
+    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.pawnshopChart.createChartOption(width);
+    this.drawChart();
   }
 
   onChangePrice() {
@@ -104,6 +110,11 @@ export class PlaceBidComponent implements OnInit, OnChanges {
       const rate = Number(this.listingInfo?.minimum_deposit_rate);
       this.depositAmount = Number(this.bidAmount) * rate;
     }
+  }
+
+  onToggleChart(activeInterest: boolean) {
+    this.activeInterestChart = activeInterest;
+    this.drawChart();
   }
 
   onSimulate() {
@@ -180,5 +191,25 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     }
     const rate = Number(this.listingInfo.minimum_deposit_rate);
     this.minimumDeposit = this.bidAmount * rate;
+  }
+
+  drawChart() {
+    this.contextChart = this.canvasChart?.nativeElement.getContext('2d');
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    if (this.contextChart && this.bids && this.listingInfo?.bid_denom) {
+      if (this.activeInterestChart) {
+        this.chart = this.pawnshopChart.createInterestDepositChart(
+          this.contextChart,
+          this.pawnshopChart.convertChartData(this.bids, this.listingInfo.bid_denom),
+        );
+      } else {
+        this.chart = this.pawnshopChart.createExpiryDepositChart(
+          this.contextChart,
+          this.pawnshopChart.convertChartData(this.bids, this.listingInfo.bid_denom),
+        );
+      }
+    }
   }
 }

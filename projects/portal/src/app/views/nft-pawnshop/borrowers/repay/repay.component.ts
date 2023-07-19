@@ -107,10 +107,10 @@ export class RepayComponent implements OnInit, OnChanges {
     if (this.chart) {
       this.chart.destroy();
     }
-    if (this.contextChart && this.bids) {
+    if (this.contextChart && this.bids && this.listingInfo?.bid_denom) {
       this.chart = this.pawnshopChart.createExpiryDepositChart(
         this.contextChart,
-        this.pawnshopChart.convertChartData(this.bids),
+        this.pawnshopChart.convertChartData(this.bids, this.listingInfo.bid_denom),
       );
     }
   }

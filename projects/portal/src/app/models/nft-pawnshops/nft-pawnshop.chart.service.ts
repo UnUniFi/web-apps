@@ -1,7 +1,7 @@
 import { denomExponentMap } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
 import { Chart, ChartItem } from 'chart.js/auto';
-import 'chartjs-adapter-moment';
+import 'chartjs-adapter-date-fns';
 import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
 
 export type BidChartData = {
@@ -34,12 +34,13 @@ export const chartUtils = {
 export class NftPawnshopChartService {
   constructor() {}
 
-  convertChartData(bids: BidderBids200ResponseBidsInner[]): BidChartData[] {
+  convertChartData(bids: BidderBids200ResponseBidsInner[], denom: string): BidChartData[] {
+    const exponent = denomExponentMap[denom];
     const chartData = bids.map((bid) => {
       return {
-        price: Number(bid.price?.amount),
-        deposit: Number(bid.deposit?.amount),
-        interest: Number(bid.interest_rate),
+        price: Number(bid.price?.amount) / 10 ** exponent,
+        deposit: Number(bid.deposit?.amount) / 10 ** exponent,
+        interest: Number(bid.interest_rate) * 100,
         expiry: new Date(bid.expiry!),
         borrowed: Number(bid.borrow?.amount?.amount) > 0,
       };
@@ -52,6 +53,7 @@ export class NftPawnshopChartService {
   }
 
   createInterestDepositChart(chartItem: ChartItem, data: BidChartData[]) {
+    console.log(data);
     const minPrice = Math.min(...data.map((d) => d.price));
     const maxPrice = Math.max(...data.map((d) => d.price));
 
@@ -87,7 +89,7 @@ export class NftPawnshopChartService {
     };
     Chart.defaults.font.family = 'Consolas';
     Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
-    new Chart(chartItem, {
+    const chart = new Chart(chartItem, {
       type: 'bubble',
       data: dataDepositInterest,
       options: {
@@ -135,9 +137,11 @@ export class NftPawnshopChartService {
         },
       },
     });
+    return chart;
   }
 
   createExpiryInterestChart(chartItem: ChartItem, data: BidChartData[]) {
+    console.log(data);
     const minDeposit = Math.min(...data.map((d) => d.deposit));
     const maxDeposit = Math.max(...data.map((d) => d.deposit));
 
@@ -173,7 +177,7 @@ export class NftPawnshopChartService {
     };
     Chart.defaults.font.family = 'Consolas';
     Chart.defaults.borderColor = chartUtils.transparentize(chartUtils.CHART_COLORS.grey, 0.5);
-    new Chart(chartItem, {
+    const chart = new Chart(chartItem, {
       type: 'bubble',
       data: dataExpiryInterest,
       options: {
@@ -225,6 +229,7 @@ export class NftPawnshopChartService {
         },
       },
     });
+    return chart;
   }
 
   createExpiryDepositChart(chartItem: ChartItem, data: BidChartData[]) {

@@ -77,7 +77,28 @@
   </div>
 
   <div class="flex flex-row flex-wrap mb-8">
-    <div
+    <div class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 lg:mb-0 lg:mr-4">
+      <div class="card-body">
+        <div class="btn-group">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="activeInterestChart"
+            (click)="onToggleChart(true)"
+          >
+            Interest-Deposit
+          </label>
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="!activeInterestChart"
+            (click)="onToggleChart(false)"
+          >
+            Expiry-Deposit
+          </label>
+        </div>
+        <canvas #canvasChart></canvas>
+      </div>
+    </div>
+    <!-- <div
       #chartCardRef
       class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto mb-4 xl:mr-8"
     >
@@ -95,7 +116,8 @@
         [options]="chartOptions"
       >
       </google-chart>
-    </div>
+    </div> -->
+    <span class="flex-auto"></span>
     <ng-container *ngIf="listingInfo?.owner !== currentStoredWallet?.address; else listerSelf">
       <div class="card bg-base-100 shadow-xl w-full xl:w-96 mb-4">
         <div class="card-body">

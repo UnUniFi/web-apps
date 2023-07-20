@@ -45,7 +45,7 @@ export class RedelegateFormDialogComponent implements OnInit, OnChanges {
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   redelegateAmount?: number;
-  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
+  selectedValidator?: string;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
@@ -58,7 +58,9 @@ export class RedelegateFormDialogComponent implements OnInit, OnChanges {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
     if (this.validatorsList) {
-      this.selectedValidator = this.validatorsList[0];
+      this.selectedValidator = this.validatorsList.filter(
+        (val) => val.operator_address != this.validator?.operator_address,
+      )[0].operator_address;
     }
   }
 
@@ -78,24 +80,29 @@ export class RedelegateFormDialogComponent implements OnInit, OnChanges {
   }
 
   onSubmit() {
-    if (!this.selectedValidator || !this.selectedValidator.operator_address) {
+    if (!this.selectedValidator) {
+      alert('Please select a validator');
       return;
     }
     if (!this.redelegateAmount) {
+      alert('Please input amount');
       return;
     }
     if (!this.selectedGasPrice) {
+      alert('Please select gas price');
       return;
     }
     if (!this.validatorsList) {
+      alert('invalid Validators List');
       return;
     }
     if (!this.denom) {
+      alert('invalid denom');
       return;
     }
     const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
-      destinationValidator: this.selectedValidator.operator_address,
+      destinationValidator: this.selectedValidator,
       amount: {
         amount: Math.floor(Number(this.redelegateAmount) * 10 ** exponent).toString(),
         denom: this.denom,

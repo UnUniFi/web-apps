@@ -32,17 +32,20 @@
 
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text">After {{ validatorsList![0] !== validator }}</span>
+          <span class="label-text">After</span>
         </label>
         <select
           name="selected-validator"
           class="select select-bordered"
           [(ngModel)]="selectedValidator"
           required
-          (ngModelChange)="onMinimumGasDenomChanged($event)"
         >
+          <option value="null" disabled selected>Select a validator</option>
           <ng-container *ngFor="let val of validatorsList">
-            <option *ngIf="val.operator_address !== validator?.operator_address" [value]="val">
+            <option
+              *ngIf="val.operator_address !== validator?.operator_address"
+              [value]="val.operator_address"
+            >
               {{ val.description?.moniker }}
             </option>
           </ng-container>
@@ -68,7 +71,9 @@
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin | async }} </span>
+          <span class="label-text text-xs">
+            Delegated Amount: {{ delegateCoin | coin | async }}
+          </span>
         </label>
       </div>
 

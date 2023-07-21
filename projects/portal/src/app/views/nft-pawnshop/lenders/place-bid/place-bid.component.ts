@@ -2,14 +2,12 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnChanges,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
-import { ChartType } from 'angular-google-charts';
 import Chart from 'chart.js/auto';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
@@ -65,43 +63,21 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   chart?: Chart<any>;
   contextChart?: CanvasRenderingContext2D;
 
-  // chartType: ChartType;
-  // chartTitle: string;
-  // chartColumns: any[];
-  // chartOptions: any;
-
   @Output()
   appSimulate: EventEmitter<PlaceBidRequest>;
   @Output()
   appSubmit: EventEmitter<PlaceBidRequest>;
 
   constructor(private readonly pawnshopChart: NftPawnshopChartService) {
-    // this.chartTitle = '';
-    // this.chartType = ChartType.BarChart;
-    // const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
-    // this.chartOptions = this.pawnshopChart.createChartOption(width);
-    // this.chartColumns = [
-    //   { type: 'string', label: 'Expiry Date' },
-    //   { type: 'number', label: 'Existing Bid' },
-    //   { type: 'string', role: 'style' },
-    //   { type: 'string', role: 'annotation' },
-    // ];
     this.appSimulate = new EventEmitter();
     this.appSubmit = new EventEmitter();
   }
 
   @ViewChild('canvasChart') canvasChart?: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onWindowResize() {
-    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.pawnshopChart.createChartOption(width);
-  }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.pawnshopChart.createChartOption(width);
     this.drawChart();
   }
 

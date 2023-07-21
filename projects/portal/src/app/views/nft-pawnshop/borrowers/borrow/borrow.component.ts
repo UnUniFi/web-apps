@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnChanges,
   OnInit,
@@ -10,7 +9,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { ChartType } from 'angular-google-charts';
 import { Chart } from 'chart.js';
 import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
@@ -58,10 +56,6 @@ export class BorrowComponent implements OnInit, OnChanges {
 
   chart?: Chart<any>;
   contextChart?: CanvasRenderingContext2D;
-  // chartType: ChartType;
-  // chartTitle: string;
-  // chartColumns: any[];
-  // chartOptions: any;
 
   autoBorrow = true;
   autoBorrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[] = [];
@@ -78,33 +72,15 @@ export class BorrowComponent implements OnInit, OnChanges {
     private readonly pawnshopChart: NftPawnshopChartService,
     private readonly nftPawnshopService: NftPawnshopService,
   ) {
-    // this.chartTitle = '';
-    // this.chartType = ChartType.BarChart;
-    // const width: number = this.chartCardRef?.nativeElement.offsetWidth || 320;
-    // this.chartOptions = this.pawnshopChart.createChartOption(width);
-
-    // this.chartColumns = [
-    //   { type: 'string', label: 'Expiry Date' },
-    //   { type: 'number', label: 'Deposit Amount' },
-    //   { type: 'string', role: 'style' },
-    //   { type: 'string', role: 'annotation' },
-    // ];
     this.appSubmit = new EventEmitter();
   }
 
   @ViewChild('canvasChart') canvasChart?: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onWindowResize() {
-    // const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.pawnshopChart.createChartOption(width);
-  }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.onChangeBorrowAmount();
-    //const width: number = this.chartCardRef!.nativeElement.offsetWidth;
-    //this.chartOptions = this.pawnshopChart.createChartOption(width);
     this.contextChart = this.canvasChart?.nativeElement.getContext('2d');
     if (this.chart) {
       this.chart.destroy();

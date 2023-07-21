@@ -1,9 +1,7 @@
 <div class="card bg-base-100 shadow-xl">
   <div class="card-body">
     <div class="flex flex-row justify-center content-center items-center">
-      <!-- To Do Change from mat-progress-spinner -->
-      <!-- <div class="btn btn-ghost loading"></div> -->
-      <mat-progress-spinner [diameter]="64" [mode]="'indeterminate'"></mat-progress-spinner>
+      <span class="loading loading-dots loading-lg"></span>
       <p class="flex-auto m-4">
         {{ message$ | async }}
       </p>

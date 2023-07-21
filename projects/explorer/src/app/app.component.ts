@@ -2,15 +2,17 @@ import { Config, ConfigService } from './models/config.service';
 import { CosmosSDKService } from './models/cosmos-sdk.service';
 import { SearchResult } from './pages/tools/search-tool/search-tool.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable, BehaviorSubject, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
+import { routerAnimation } from './animation';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  animations: [routerAnimation],
 })
 export class AppComponent implements OnInit {
   config$: Observable<Config | undefined>;
@@ -223,4 +225,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet?.activatedRouteData?.['animation'];
+  }
 }

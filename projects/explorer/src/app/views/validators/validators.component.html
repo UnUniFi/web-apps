@@ -21,7 +21,7 @@
   </div>
   <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <span class="loading loading-dots loading-lg"></span>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -51,12 +51,12 @@
                 </mat-icon>
               </th>
               <td>{{ validator.val.description?.moniker }}</td>
-              <td>{{ validator.share | percent: '1.2-2' }}</td>
+              <td>{{ validator.share | percent : '1.2-2' }}</td>
               <td>
                 {{ validator.val.tokens | coinAmount }}
               </td>
               <td>
-                {{ validator.val.commission?.commission_rates?.rate | percent: '1.0-0' }}
+                {{ validator.val.commission?.commission_rates?.rate | percent : '1.0-0' }}
               </td>
             </tr>
           </ng-container>

@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { denomExponentMap } from '../models/cosmos/bank.model';
 import { BankQueryService } from '../models/cosmos/bank.query.service';
+import { Pipe, PipeTransform } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Pipe({
   name: 'coin',
@@ -20,7 +20,7 @@ export class CoinPipe implements PipeTransform {
       if (!symbol) {
         return value.amount + ' ' + value.denom;
       }
-      return amount.toFixed(exponent) + ' ' + symbol;
+      return amount + ' ' + symbol;
     }
     return '';
   }

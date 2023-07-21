@@ -8,5 +8,7 @@
   (appChangeInputValue)="onChangeInputValue($event)"
   (appChangeConfig)="onChangeConfig($event)"
 >
-  <router-outlet></router-outlet>
+  <div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
 </view-app>

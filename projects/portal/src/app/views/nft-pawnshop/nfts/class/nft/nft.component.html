@@ -9,7 +9,7 @@
       [classID]="classID"
       [nftID]="nftID"
       [listingInfo]="listingInfo"
-      [bidders]="bids"
+      [bids]="bids"
       [loan]="loan"
       [liquidation]="liquidation"
       [nftMetadata]="nftMetadata"
@@ -24,13 +24,13 @@
       [nftID]="nftID"
       [address]="address"
       [listingInfo]="listingInfo"
-      [bidders]="bids"
+      [bids]="bids"
       [nftMetadata]="nftMetadata"
       [nftImage]="nftImage"
       [ownBid]="ownBid"
       [isWinning]="isWinning"
       (appSubmitCancelBid)="onSubmitCancelBid()"
-      (appSubmitPayFullBid)="onSubmitPayFullBid()"
+      (appSubmitPayRemainder)="onSubmitPayRemainder()"
     ></view-bidder-nft>
   </ng-template>
 </ng-template>

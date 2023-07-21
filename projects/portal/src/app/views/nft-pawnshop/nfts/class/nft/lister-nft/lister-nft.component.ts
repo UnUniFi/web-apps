@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { BidderBids200ResponseBidsInner, Liquidation200ResponseLiquidations, ListedNfts200ResponseListingsInnerListing, Loan200Response } from 'ununifi-client/esm/openapi';
+import {
+  BidderBids200ResponseBidsInner,
+  Liquidation200ResponseLiquidations,
+  ListedNfts200ResponseListingsInnerListing,
+  Loan200Response,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-lister-nft',
@@ -16,7 +21,7 @@ export class ListerNftComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   loan?: Loan200Response | null;
   @Input()

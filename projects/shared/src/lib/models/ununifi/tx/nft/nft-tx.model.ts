@@ -7,7 +7,7 @@ export type MsgListNftData = {
     nft_id: string;
   };
   listing_type: ListingType;
-  bid_token: string; // denom
+  bid_denom: string; // denom
   min_bid: string; // string number
   bid_hook: Long; // string number but need to convert to Long before use in ununifi-client
 };

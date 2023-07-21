@@ -57,7 +57,7 @@ export class NftComponent implements OnInit {
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),
       map((bidders) =>
-        bidders.sort((a, b) => parseInt(b.bid_amount?.amount!) - parseInt(a.bid_amount?.amount!)),
+        bidders.sort((a, b) => parseInt(b.price?.amount!) - parseInt(a.price?.amount!)),
       ),
     );
     this.loan$ = nftCombine$.pipe(
@@ -77,7 +77,7 @@ export class NftComponent implements OnInit {
     );
     this.ownBid$ = combineLatest([this.address$, this.bids$]).pipe(
       map(([address, bidders]) => {
-        const bidder = bidders.find((bidder) => bidder.bidder == address);
+        const bidder = bidders.find((bidder) => bidder.id?.bidder == address);
         return bidder;
       }),
     );
@@ -85,7 +85,7 @@ export class NftComponent implements OnInit {
     this.isWinning$ = combineLatest([this.address$, this.bids$, this.listingInfo$]).pipe(
       map(([address, bidders, info]) => {
         if (info.state == 'SELLING_DECISION') {
-          if (bidders[0].bidder == address) {
+          if (bidders[0].id?.bidder == address) {
             return true;
           } else {
             return false;
@@ -111,7 +111,7 @@ export class NftComponent implements OnInit {
     this.pawnshopApp.cancelBid(data.classID, data.nftID);
   }
 
-  onSubmitPayFullBid(data: NftRequest) {
-    this.pawnshopApp.payFullBid(data.classID, data.nftID);
+  onSubmitPayRemainder(data: NftRequest) {
+    this.pawnshopApp.PayRemainder(data.classID, data.nftID);
   }
 }

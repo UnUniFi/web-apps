@@ -90,8 +90,8 @@
                 {{ symbols[i].name }}
               </div>
             </td>
-            <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
-            <td>{{ vault.withdraw_commission_rate | percentage }}</td>
+            <td>{{ vault.withdraw_reserve_rate | percent : '1.0-4' }}</td>
+            <td>{{ vault.withdraw_commission_rate | percent : '1.0-4' }}</td>
             <!-- <td>{{ vault.name }}</td> -->
             <td>{{ vault.owner }}</td>
           </tr>

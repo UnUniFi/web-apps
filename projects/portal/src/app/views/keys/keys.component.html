@@ -10,7 +10,7 @@
   <mat-divider></mat-divider>
   <ng-container *ngIf="keys === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <span class="loading loading-dots loading-lg"></span>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(keys?.length || 0) > 0; then exist; else empty"> </ng-container>

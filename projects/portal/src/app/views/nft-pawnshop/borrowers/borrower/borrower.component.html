@@ -9,7 +9,7 @@
     <h2>Your NFTs</h2>
     <ng-container *ngIf="ownNfts === null; then loading; else loaded"> </ng-container>
     <ng-template #loading>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      <span class="loading loading-dots loading-lg"></span>
     </ng-template>
     <ng-template #loaded>
       <ng-container
@@ -68,7 +68,7 @@
       *ngIf="listedOwnNfts === null; then loadingListing; else loadedListing"
     ></ng-container>
     <ng-template #loadingListing>
-      <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+      <span class="loading loading-dots loading-lg"></span>
     </ng-template>
     <ng-template #loadedListing>
       <ng-container

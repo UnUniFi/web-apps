@@ -26,7 +26,7 @@
               required
               #addressNgModelRef="ngModel"
               class="input input-bordered w-full"
-              placeholder="e.g. ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
+              placeholder="ununifi1xxx"
               [class]="{
                 'input-error': addressNgModelRef.errors && addressNgModelRef.touched
               }"
@@ -51,7 +51,7 @@
                     #tokenNgModelRef="ngModel"
                     type="number"
                     required
-                    placeholder="e.g. 12.123456"
+                    placeholder="12.123456"
                     [min]="0"
                     [max]="symbolBalancesMap?.[token.symbol] || 0"
                     [step]="1"

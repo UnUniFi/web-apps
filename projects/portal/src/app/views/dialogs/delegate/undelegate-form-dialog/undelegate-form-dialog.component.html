@@ -92,7 +92,7 @@
           <input
             name="undelegate-amount"
             type="number"
-            placeholder="e.g. 12.123456"
+            placeholder="12.123456"
             class="input input-bordered w-full"
             [(ngModel)]="undelegateAmount"
             [min]="0"
@@ -103,7 +103,9 @@
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin | async }} </span>
+          <span class="label-text text-xs">
+            Delegated Amount: {{ delegateCoin | coin | async }}
+          </span>
         </label>
       </div>
 

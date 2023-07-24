@@ -198,7 +198,7 @@
             <td>{{ bid.deposit | coin | async }}</td>
             <td>{{ bid.price | coin | async }}</td>
             <td>{{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }}</td>
-            <td>{{ bid.id?.bidder }}</td>
+            <td class="font-mono">{{ bid.id?.bidder }}</td>
           </tr>
         </tbody>
       </table>

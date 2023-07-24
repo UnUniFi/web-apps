@@ -48,13 +48,16 @@
       </label>
     </div>
   </div>
-  <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
-  <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
-  </ng-template>
-  <ng-template #loaded>
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
+      <ng-template #loading>
+        <p class="text-center">
+          <span class="loading loading-dots loading-lg"></span>
+        </p>
+      </ng-template>
+      <ng-template #loaded>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <thead>
@@ -84,7 +87,7 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </ng-template>
     </div>
-  </ng-template>
+  </div>
 </div>

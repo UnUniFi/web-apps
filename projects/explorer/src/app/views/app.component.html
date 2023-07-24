@@ -23,15 +23,17 @@
       <button class="align-middle" mat-icon-button routerLink="/">
         <img class="p-1 w-10 h-10" src="assets/favicon.png" />
       </button>
-      <div class="flex-1 mx-2 text-2xl">
+      <div class="flex-1 text-2xl sm:mx-2">
         <div class="hidden xl:block pr-2">UnUniFi</div>
         <div>Explorer</div>
       </div>
-      <app-node-tool></app-node-tool>
-      <button class="btn gap-1 btn-primary w-full md:w-auto md:px-8" (click)="onClickOpenPortal()">
-        <mat-icon class="md:ml-3">wallet</mat-icon>
-        <span class="hidden md:inline">Open Portal</span>
-      </button>
+      <div class="flex-none">
+        <app-node-tool></app-node-tool>
+        <button class="btn gap-1 btn-primary w-auto md:px-8" (click)="onClickOpenPortal()">
+          <mat-icon class="md:ml-3">wallet</mat-icon>
+          <span class="hidden md:inline">Open Portal</span>
+        </button>
+      </div>
     </div>
     <!-- Page content here -->
     <div class="w-full max-w-screen-xl mx-auto p-8">

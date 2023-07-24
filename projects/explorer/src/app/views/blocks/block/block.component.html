@@ -41,38 +41,49 @@
 
 <h3 class="my-2">Transactions</h3>
 <div class="card bg-base-100 shadow-xl">
-  <mat-list>
-    <mat-list-item>
-      <span class="w-4/12 truncate pl-2">Hash</span>
-      <span class="w-4/12 truncate pl-2">Type</span>
-      <span class="w-4/12 truncate pl-2">From</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
-  <ng-container
-    *ngIf="
-      (transactions?.tx_responses?.length || 0) > 0;
-      then existTransactions;
-      else emptyTransactions
-    "
-  >
-  </ng-container>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <td>Hash</td>
+          <td>Type</td>
+          <td>From</td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngIf="
+            (transactions?.tx_responses?.length || 0) > 0;
+            then existTransactions;
+            else emptyTransactions
+          "
+        >
+        </ng-container>
+        <ng-template #emptyTransactions>
+          <tr>
+            <td colspan="5">There is no transaction.</td>
+          </tr>
+        </ng-template>
 
-  <ng-template #emptyTransactions>
-    <span>*No Transactions</span>
-  </ng-template>
-
-  <ng-template #existTransactions>
-    <mat-nav-list>
-      <mat-list-item
-        routerLink="/txs/{{ tx.txhash }}"
-        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
-      >
-        <span class="w-4/12 truncate text-sm">{{ tx.txhash }}</span>
-        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
-        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-nav-list>
-  </ng-template>
+        <ng-template #existTransactions>
+          <mat-nav-list>
+            <mat-list-item
+              routerLink="/txs/{{ tx.txhash }}"
+              *ngFor="let tx of transactions?.tx_responses; let i = index"
+            >
+              <th class="font-mono">
+                {{ tx.txhash }}
+              </th>
+              <th>
+                {{ txTitles?.[i]?.txType }}
+              </th>
+              <th class="font-mono">
+                {{ txTitles?.[i]?.fromAddress }}
+              </th>
+            </mat-list-item>
+          </mat-nav-list>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
 </div>

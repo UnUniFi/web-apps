@@ -76,10 +76,10 @@
               </label>
             </ng-container>
 
-            <label class="input-group mb-2 w-full sm:w-auto">
+            <label class="input-group mb-2">
               <select
                 [required]="selectedTokens?.length === 0"
-                class="select select-bordered text-center w-auto"
+                class="select select-bordered text-center w-full"
                 [(ngModel)]="selectedSymbol"
                 name="strategyId"
               >
@@ -92,7 +92,7 @@
               </select>
               <button
                 type="button"
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 (click)="onClickAddToken()"
                 [disabled]="!selectedSymbol"
               >

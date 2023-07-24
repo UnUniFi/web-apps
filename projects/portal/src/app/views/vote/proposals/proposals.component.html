@@ -12,7 +12,7 @@
       </label>
       <label class="input-group">
         <select
-          class="select select-bordered select-primary w-20 sm:w-64"
+          class="select select-bordered w-20 sm:w-64"
           [(ngModel)]="pageSize"
           (change)="onPaginationChange()"
         >
@@ -21,9 +21,9 @@
             <option [value]="size">{{ size }}</option>
           </ng-container>
         </select>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
-        <button class="btn btn-primary">Page {{ pageNumber || 1 }}</button>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+        <button class="btn" (click)="onPaginationChange(1)">«</button>
+        <span>Page {{ pageNumber || 1 }}</span>
+        <button class="btn" (click)="onPaginationChange(2)">»</button>
       </label>
       <label class="label">
         <span class="label-text-alt"

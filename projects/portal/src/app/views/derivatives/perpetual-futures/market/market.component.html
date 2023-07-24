@@ -64,7 +64,7 @@
         <div class="stat">
           <div class="stat-title">Borrow Fee</div>
           <div class="stat-value text-secondary">
-            {{ params?.pool_params?.borrowing_fee_rate_per_hour | percentage }}
+            {{ params?.pool_params?.borrowing_fee_rate_per_hour | percent : '1.0-2' }}
           </div>
           <div class="stat-desc"></div>
         </div>

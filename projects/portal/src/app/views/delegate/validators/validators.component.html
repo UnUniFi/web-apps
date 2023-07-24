@@ -129,7 +129,9 @@
   </div>
   <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <p class="text-center">
+      <span class="loading loading-dots loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>

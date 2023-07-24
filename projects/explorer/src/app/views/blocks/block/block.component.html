@@ -24,11 +24,11 @@
         </tr>
         <tr>
           <th>Block Hash</th>
-          <td>{{ block?.block_id?.hash }}</td>
+          <td class="font-mono">{{ block?.block_id?.hash }}</td>
         </tr>
         <tr>
           <th>Block Proposer</th>
-          <td>{{ block?.block?.header?.proposer_address }}</td>
+          <td class="font-mono">{{ block?.block?.header?.proposer_address }}</td>
         </tr>
         <tr>
           <th>Block Transactions</th>
@@ -40,7 +40,7 @@
 </div>
 
 <h3 class="my-2">Transactions</h3>
-<mat-card class="mb-2">
+<div class="card bg-base-100 shadow-xl">
   <mat-list>
     <mat-list-item>
       <span class="w-4/12 truncate pl-2">Hash</span>
@@ -75,4 +75,4 @@
       </mat-list-item>
     </mat-nav-list>
   </ng-template>
-</mat-card>
+</div>

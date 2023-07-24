@@ -43,7 +43,7 @@
 
   <ng-template #exist>
     <div *ngFor="let proposal of proposals; let i = index" class="w-full mb-4">
-      <div class="card glass w-full shadow-xl">
+      <div class="card bg-base-100 w-full shadow-xl">
         <div class="card-body">
           <span class="badge badge-primary">
             {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}

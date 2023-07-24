@@ -4,7 +4,6 @@ import { CoinDenomPipe } from './coin-denom.pipe';
 import { CoinPipe } from './coin.pipe';
 import { DecimalsPipe } from './decimals.pipe';
 import { FloorPipe } from './floor.pipe';
-import { PercentagePipe } from './percentage.pipe';
 import { SecondToDatePipe } from './seconds-to-date.pipe';
 import { UnitConversionPipe } from './unit-conversion.pipe';
 import { CommonModule } from '@angular/common';
@@ -15,7 +14,6 @@ import { NgModule } from '@angular/core';
     DecimalsPipe,
     FloorPipe,
     UnitConversionPipe,
-    PercentagePipe,
     CoinPipe,
     CoinDenomPipe,
     CoinAmountPipe,
@@ -27,7 +25,6 @@ import { NgModule } from '@angular/core';
     DecimalsPipe,
     FloorPipe,
     UnitConversionPipe,
-    PercentagePipe,
     CoinPipe,
     CoinDenomPipe,
     CoinAmountPipe,

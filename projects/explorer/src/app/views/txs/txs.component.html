@@ -12,7 +12,7 @@
       </label>
       <label class="input-group">
         <select
-          class="select select-bordered select-primary text-center w-auto sm:w-64"
+          class="select text-center w-auto sm:w-64"
           name="txType"
           [(ngModel)]="selectedTxType"
           (change)="onSelectedTxTypeChanged(selectedTxType!)"
@@ -27,7 +27,7 @@
           </ng-container>
         </select>
         <select
-          class="select select-bordered select-primary w-20"
+          class="select w-20"
           name="pageSize"
           [(ngModel)]="pageInfo && pageInfo.pageSize"
           (change)="onPaginationChange()"
@@ -37,9 +37,9 @@
             <option [value]="size">{{ size }}</option>
           </ng-container>
         </select>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
-        <button class="btn btn-primary">Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}</button>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+        <button class="btn" (click)="onPaginationChange(1)">«</button>
+        <span>Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}</span>
+        <button class="btn" (click)="onPaginationChange(2)">»</button>
       </label>
       <label class="label">
         <span class="label-text-alt"

@@ -5,19 +5,22 @@
         <h2 class="card-title">
           {{ walletId }}
         </h2>
-        <h3 class="mx-4 break-all">
-          {{ accAddress }}
-          <button
-            mat-icon-button
-            type="button"
-            (click)="copyClipboard(accAddress ? accAddress : '')"
-          >
-            <mat-icon>content_copy</mat-icon>
-          </button>
-        </h3>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
+              <tr>
+                <td>Address</td>
+                <td class="font-mono">
+                  {{ accAddress }}
+                  <button
+                    mat-icon-button
+                    type="button"
+                    (click)="copyClipboard(accAddress ? accAddress : '')"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </td>
+              </tr>
               <tr>
                 <td>Wallet Type</td>
                 <td>{{ walletType }}</td>

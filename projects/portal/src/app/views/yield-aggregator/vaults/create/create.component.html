@@ -236,10 +236,10 @@
               </div>
             </ng-container>
 
-            <label class="input-group mb-2 w-full sm:w-auto">
+            <label class="input-group mb-2 w-full">
               <select
                 [required]="selectedStrategies.length === 0"
-                class="select select-bordered text-center w-auto sm:w-64"
+                class="select select-bordered text-center w-full"
                 [(ngModel)]="selectedStrategyId"
                 name="strategyId"
                 [disabled]="!selectedSymbol"
@@ -259,7 +259,7 @@
               </select>
               <button
                 type="button"
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 (click)="onClickAddStrategy()"
                 [disabled]="!selectedStrategyId"
               >

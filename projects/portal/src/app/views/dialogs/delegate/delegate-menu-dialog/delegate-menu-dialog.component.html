@@ -9,9 +9,6 @@
       <img class="w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
       <div class="font-bold text-xl m-3">Delegate Menu</div>
       <div class="form-control w-full">
-        <label class="label">
-          <span class="label-text">Validator</span>
-        </label>
         <ul class="menu bg-base-100">
           <li class="disabled">
             <a class="text-base-content items-center">
@@ -24,19 +21,19 @@
               {{ selectedValidator?.description?.moniker }}
             </a>
           </li>
-          <li class="disabled">
+          <li class="disabled mt-4">
             <a class="text-base-content">
               <span class="column-name">Address</span>
               <span class="flex-auto w-1/4"></span>
               <span class="column-value truncate">{{ selectedValidator?.operator_address }}</span>
             </a>
           </li>
-          <li class="disabled">
+          <li class="disabled mt-4">
             <a class="text-base-content">
               <span class="column-name">Commission</span>
               <span class="flex-auto"></span>
               <span class="column-value">{{
-                selectedValidator?.commission?.commission_rates?.rate | percent
+                selectedValidator?.commission?.commission_rates?.rate | percent : '1.2-2'
               }}</span>
             </a>
           </li>

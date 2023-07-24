@@ -34,7 +34,7 @@
               class="hover cursor-pointer"
               routerLink="{{ '/validators/' + reward.validator_address }}"
             >
-              <th>{{ reward.validator_address }}</th>
+              <th class="font-mono">{{ reward.validator_address }}</th>
               <td *ngFor="let eachReward of reward?.reward">{{ eachReward | coin | async }}</td>
             </tr>
           </tbody>

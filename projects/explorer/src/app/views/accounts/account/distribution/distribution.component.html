@@ -37,7 +37,7 @@
       <ng-template #filledReward>
         <table class="table w-full">
           <tr>
-            <th>Outstanding Reward (For Delegators)</th>
+            <th>Outstanding Reward (For Delegator)</th>
             <td *ngFor="let r of rewards?.rewards?.rewards">
               {{ r | coin | async }}
             </td>

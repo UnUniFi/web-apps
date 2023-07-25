@@ -14,12 +14,13 @@
   <ng-template #loaded>
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
+        <span class="badge badge-info badge-lg">
+          {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
+        </span>
         <h2 class="card-title break-all">
           # {{ proposal?.proposal_id }} {{ proposalContent?.title }}
-          <span class="badge badge-info">
-            {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
-          </span>
         </h2>
+
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>

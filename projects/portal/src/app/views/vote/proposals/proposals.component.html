@@ -55,32 +55,32 @@
           </h2>
           <div class="divider m-0">Tallies</div>
           <div class="grid gap-3">
-            <div class="flex items-center p-1 w-full">
-              <mat-icon class="w-8 text-success mr-2">thumb_up</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <mat-icon class="w-8 text-success">thumb_up</mat-icon>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].yes }}"
                 class="progress progress-success"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-warning mr-2">thumb_down</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <mat-icon class="w-8 text-warning">thumb_down</mat-icon>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].no }}"
                 class="progress progress-warning"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-error mr-2">not_interested</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <mat-icon class="w-8 text-error">not_interested</mat-icon>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].noWithVeto }}"
                 class="progress progress-error"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-primary mr-2">subtitles_off</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <mat-icon class="w-8 text-primary">subtitles_off</mat-icon>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].abstain }}"
@@ -90,10 +90,10 @@
           </div>
           <div class="card-actions justify-end">
             <button
-              class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
+              class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
               (click)="onClickVote(proposal.proposal_id!)"
             >
-              <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
+              <mat-icon>how_to_vote</mat-icon>Vote
             </button>
             <button
               class="btn btn-outline btn-info w-full md:w-auto md:px-8"

@@ -1,11 +1,11 @@
-<div class="flex flex-row items-center">
+<div class="flex flex-row items-center gap-4">
   <h2 class="mb-0">Block #{{ block?.block?.header?.height }}</h2>
   <span class="flex-auto"></span>
   <button class="btn btn-circle" routerLink="/blocks/{{ previousBlock }}" class="mr-4">
-    <span class="material-icons" color="primary"> navigate_before </span>
+    <span class="material-icons align-bottom">navigate_before</span>
   </button>
   <button routerLink="/blocks/{{ nextBlock }}">
-    <span class="material-icons" color="primary"> navigate_next </span>
+    <span class="material-icons align-bottom">navigate_next</span>
   </button>
 </div>
 <h3 class="my-2">Block details</h3>

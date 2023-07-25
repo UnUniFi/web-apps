@@ -5,11 +5,17 @@
       <table class="table w-full">
         <tr>
           <th>Address</th>
-          <td class="font-mono">
-            {{ address }}
-            <button mat-icon-button type="button" (click)="copyClipboard(address || '')">
-              <span class="material-icons">content_copy</span>
-            </button>
+          <td class="font-mono gap-2">
+            <div class="flex items-center gap-2">
+              {{ address }}
+              <button
+                class="btn btn-circle btn-sm"
+                type="button"
+                (click)="copyClipboard(address || '')"
+              >
+                <span class="material-icons">content_copy</span>
+              </button>
+            </div>
           </td>
         </tr>
         <tr>

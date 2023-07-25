@@ -8,28 +8,17 @@
   <ng-container *ngIf="validator !== undefined; then exist; else notFound"> </ng-container>
 </ng-template>
 <ng-template #exist>
-  <div class="flex items-center my-2">
-    <span class="material-icons" class="mr-1" [ngStyle]="{ color: getColorCode(validator?.val) }">
+  <div class="flex m-2 gap-4">
+    <span class="material-icons pt-1" [ngStyle]="{ color: getColorCode(validator?.val) }">
       circle
     </span>
-    <h2 class="mb-0">
+    <h2>
       {{ validator?.val?.description?.moniker }}
     </h2>
+
     <span class="flex-auto"></span>
     <div *ngIf="validator?.inList" class="badge badge-lg badge-primary">Active</div>
     <div *ngIf="!validator?.inList" class="badge badge-lg badge-secondary">Inactive</div>
-    <!-- <span
-      *ngIf="validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-blue-500"
-    >
-      Active
-    </span>
-    <span
-      *ngIf="!validator?.inList"
-      class="my-2 px-4 py-2 border-2 rounded-md font-semibold tracking-wider text-white bg-red-500"
-    >
-      Inactive
-    </span> -->
   </div>
 
   <div class="card bg-base-100 shadow-xl mb-4">

@@ -2,8 +2,8 @@
   <div class="flex flex-row">
     <span>{{ key?.id }}</span>
     <span class="flex-auto"></span>
-    <button (click)="openDeleteDialog(key?.id || '')" color="accent">
-      <span class="material-icons" color="warn">delete</span>
+    <button (click)="openDeleteDialog(key?.id || '')">
+      <span class="material-icons">delete</span>
     </button>
   </div>
 </h2>
@@ -43,7 +43,7 @@
         }"
         *ngFor="let faucet of faucets; last as last"
       >
-        <span class="material-icons" color="accent">clean_hands</span>
+        <span class="material-icons">clean_hands</span>
         <span class="ml-2">Go to Faucet of {{ faucet.denom }}</span>
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
@@ -57,7 +57,7 @@
 <mat-card>
   <mat-nav-list>
     <mat-list-item routerLink="../../accounts/{{ accAddress?.toString() }}">
-      <span class="material-icons" color="accent">account_balance_wallet </span>
+      <span class="material-icons">account_balance_wallet </span>
       <span class="ml-2">Show Account Info</span>
     </mat-list-item>
   </mat-nav-list>

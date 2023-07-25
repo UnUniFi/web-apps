@@ -3,13 +3,11 @@
     <mat-nav-list>
       <ng-template ngFor let-key [ngForOf]="data.keys">
         <mat-list-item (click)="onClickKey(key)">
-          <span class="material-icons" matListIcon [ngStyle]="{ color: getColorCode(key) }">
-            circle
-          </span>
+          <span class="material-icons" [ngStyle]="{ color: getColorCode(key) }"> circle </span>
           <span>{{ key.id }}</span>
           <span class="flex-auto"></span>
           <ng-container *ngIf="data.currentKeyID === key.id">
-            <span class="material-icons" color="primary">check</span>
+            <span class="material-icons">check</span>
           </ng-container>
         </mat-list-item>
       </ng-template>

@@ -209,12 +209,12 @@
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
               <div class="flex flex-row flex-wrap">
                 <a
-                  class="btn btn-outline normal-case w-full sm:w-64"
+                  class="btn btn-outline normal-case w-full sm:w-64 gap-2"
                   href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
                   target="_blank"
                 >
                   {{ strategy.name }}
-                  <span class="material-icons" class="ml-2">info</span>
+                  <span class="material-icons">info</span>
                 </a>
                 <div class="w-full sm:w-auto sm:flex-auto">
                   <label class="input-group w-full mb-2">

@@ -2,15 +2,15 @@
   <div tabindex="0" class="btn gap-1 btn-ghost">
     <span class="material-icons">apps</span>
     <span class="hidden md:inline">Apps</span>
-    <span class="material-icons" class="hidden md:inline">keyboard_arrow_down</span>
+    <span class="material-icons hidden md:inline">keyboard_arrow_down</span>
   </div>
   <ul
     tabindex="0"
     class="dropdown-content menu sm:p-2 shadow bg-base-100 text-base-content rounded-box w-52"
   >
     <li *ngFor="let app of apps">
-      <a routerLink="{{ app.link }}">
-        <span class="material-icons" color="primary" class="mr-2">{{ app.icon }}</span>
+      <a routerLink="{{ app.link }}" class="gap-2">
+        <span class="material-icons">{{ app.icon }}</span>
         {{ app.name }}
       </a>
     </li>

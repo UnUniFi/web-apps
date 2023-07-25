@@ -20,9 +20,7 @@
   <ng-template #exist>
     <ng-container *ngFor="let key of keys">
       <mat-list-item routerLink="{{ key.id }}">
-        <span class="material-icons" matListIcon [ngStyle]="{ color: getColorCode(key) }">
-          circle
-        </span>
+        <span class="material-icons" [ngStyle]="{ color: getColorCode(key) }"> circle </span>
         <span>{{ key.id }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>

@@ -11,14 +11,16 @@
               <tr>
                 <td>Address</td>
                 <td class="font-mono">
-                  {{ accAddress }}
-                  <button
-                    mat-icon-button
-                    type="button"
-                    (click)="copyClipboard(accAddress ? accAddress : '')"
-                  >
-                    <span class="material-icons">content_copy</span>
-                  </button>
+                  <div class="flex items-center gap-2">
+                    {{ accAddress }}
+                    <button
+                      class="btn btn-circle btn-sm"
+                      type="button"
+                      (click)="copyClipboard(accAddress ? accAddress : '')"
+                    >
+                      <span class="material-icons">content_copy</span>
+                    </button>
+                  </div>
                 </td>
               </tr>
               <tr>
@@ -38,8 +40,11 @@
         </div>
         <div class="card-actions justify-end">
           <!-- The button to open modal -->
-          <label for="modal-account" class="btn btn-outline btn-info w-full md:w-auto md:px-8">
-            <span class="material-icons" class="mr-2">account_box</span> More Info
+          <label
+            for="modal-account"
+            class="btn btn-outline btn-info w-full md:w-auto md:px-8 gap-2"
+          >
+            <span class="material-icons">account_box</span> More Info
           </label>
         </div>
         <!-- Put this part before </body> tag -->
@@ -59,40 +64,46 @@
                   <tr>
                     <th>Address</th>
                     <td class="break-all font-mono">
-                      {{ accAddress }}
-                      <button
-                        mat-icon-button
-                        type="button"
-                        (click)="copyClipboard(accAddress ? accAddress : '')"
-                      >
-                        <span class="material-icons">content_copy</span>
-                      </button>
+                      <div class="flex items-center gap-2">
+                        {{ accAddress }}
+                        <button
+                          class="btn btn-circle btn-sm"
+                          type="button"
+                          (click)="copyClipboard(accAddress ? accAddress : '')"
+                        >
+                          <span class="material-icons">content_copy</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <th>Validator Address</th>
                     <td class="break-all font-mono">
-                      {{ valAddress }}
-                      <button
-                        mat-icon-button
-                        type="button"
-                        (click)="copyClipboard(valAddress ? valAddress : '')"
-                      >
-                        <span class="material-icons">content_copy</span>
-                      </button>
+                      <div class="flex items-center gap-2">
+                        {{ accAddress }}
+                        <button
+                          class="btn btn-circle btn-sm"
+                          type="button"
+                          (click)="copyClipboard(valAddress ? valAddress : '')"
+                        >
+                          <span class="material-icons">content_copy</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <th>Public Key</th>
                     <td class="break-all font-mono">
-                      {{ publicKey }}
-                      <button
-                        mat-icon-button
-                        type="button"
-                        (click)="copyClipboard(publicKey ? publicKey : '')"
-                      >
-                        <span class="material-icons">content_copy</span>
-                      </button>
+                      <div class="flex items-center gap-2">
+                        {{ accAddress }}
+                        <button
+                          class="btn btn-circle btn-sm"
+                          type="button"
+                          (click)="copyClipboard(publicKey ? publicKey : '')"
+                        >
+                          <span class="material-icons">content_copy</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -236,13 +247,13 @@
           </ng-template>
         </ng-template>
 
-        <div class="card-actions justify-end">
+        <div class="card-actions justify-end gap-2">
           <button
             class="btn btn-secondary sm:px-8"
             (click)="onClickWithdrawAllDelegatorRewardButton()"
             [disabled]="!rewardSymbols?.length"
           >
-            <span class="material-icons" class="mr-2">monetization_on</span>Claim All Rewards
+            <span class="material-icons" >monetization_on</span>Claim All Rewards
           </button>
         </div>
       </div>

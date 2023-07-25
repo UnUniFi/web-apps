@@ -4,9 +4,13 @@
 
     <mat-list role="list">
       <mat-list-item class="node-list-item" *ngFor="let url of data.redirectUrls; let i = index">
-        <a class="node-list-item flex justify-between items-center" [href]="url" target="_blank">
+        <a
+          class="node-list-item flex justify-between items-center gap-2"
+          [href]="url"
+          target="_blank"
+        >
           <span>Node {{i + 1}}</span>
-          <span class="material-icons" class="ml-2">open_in_new</span>
+          <span class="material-icons">open_in_new</span>
         </a>
       </mat-list-item>
     </mat-list>

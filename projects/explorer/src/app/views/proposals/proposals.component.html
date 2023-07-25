@@ -6,33 +6,41 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <div class="form-control">
-      <label class="label">
-        <span class="label-text">Items per page</span>
-      </label>
-      <label class="input-group">
-        <select class="select w-20 sm:w-64" [(ngModel)]="pageSize" (change)="onPaginationChange()">
-          <option disabled selected>Select items amount</option>
-          <ng-container *ngFor="let size of pageSizeOptions">
-            <option [value]="size">{{ size }}</option>
-          </ng-container>
-        </select>
-        <button class="btn" (click)="onPaginationChange(1)">«</button>
-        <span>Page {{ pageNumber || 1 }}</span>
-        <button class="btn" (click)="onPaginationChange(2)">»</button>
-      </label>
-      <label class="label">
-        <span class="label-text-alt"
-          >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of {{ pageLength }}items</span
-        >
-      </label>
+    <div class="flex gap-4">
+      <div class="form-control">
+        <label class="input-group">
+          <select
+            class="select w-20 sm:w-64"
+            [(ngModel)]="pageSize"
+            (change)="onPaginationChange()"
+          >
+            <option disabled selected>Select items amount</option>
+            <ng-container *ngFor="let size of pageSizeOptions">
+              <option [value]="size">{{ size }}</option>
+            </ng-container>
+          </select>
+        </label>
+
+        <label class="label">
+          <span class="label-text-alt"
+            >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of
+            {{ pageLength }}items</span
+          >
+        </label>
+      </div>
+
+      <div class="join join-horizontal">
+        <button class="btn join-item" (click)="onPaginationChange(1)">«</button>
+        <button class="btn join-item cursor-default">Page {{ pageNumber || 1 }}</button>
+        <button class="btn join-item" (click)="onPaginationChange(2)">»</button>
+      </div>
     </div>
   </div>
 
   <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <p class="text-center">
-      <span class="loading loading-dots loading-lg"></span>
+      <span class="loading loading-ring loading-lg"></span>
     </p>
   </ng-template>
   <ng-template #loaded>
@@ -43,13 +51,19 @@
     <div *ngFor="let proposal of proposals; let i = index" class="w-full mb-4">
       <div class="card bg-base-100 w-full shadow-xl">
         <div class="card-body">
-          <span class="badge badge-primary">
-            {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
-          </span>
-          <h2 class="card-title break-all">
-            #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
-          </h2>
-          <div class="divider m-0">Tallies</div>
+          <div class="flex items-center">
+            <h2 class="card-title break-all">
+              #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
+            </h2>
+            <span class="flex-auto"></span>
+            <span class="badge badge-primary badge-lg">
+              {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+            </span>
+          </div>
+
+          <label class="label">
+            <span class="label-text">Tallies</span>
+          </label>
           <div class="grid gap-3">
             <div class="flex items-center p-1 gap-2">
               <span class="material-icons text-success">thumb_up</span>

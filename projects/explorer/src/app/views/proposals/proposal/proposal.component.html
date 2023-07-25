@@ -7,7 +7,7 @@
   </div>
   <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <span class="loading loading-ring loading-lg"></span>
   </ng-template>
   <ng-template #loaded>
     <div class="card bg-base-100 shadow-xl mb-4">

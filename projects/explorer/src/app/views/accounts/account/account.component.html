@@ -1,76 +1,85 @@
-<h2 class="mb-0">Account Info</h2>
-<div class="card bg-base-100 shadow-xl mb-4">
-  <div class="card-body">
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <tr>
-          <th>Address</th>
-          <td class="font-mono gap-2">
-            <div class="flex items-center gap-2">
-              {{ address }}
-              <button
-                class="btn btn-circle btn-sm"
-                type="button"
-                (click)="copyClipboard(address || '')"
-              >
-                <span class="material-icons">content_copy</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Public Key</th>
-          <td class="font-mono">{{ publicKey }}</td>
-        </tr>
-        <tr>
-          <th>Account Number</th>
-          <td>{{ baseAccount?.account_number }}</td>
-        </tr>
-        <tr>
-          <th>Sequence</th>
-          <td>{{ baseAccount?.sequence }}</td>
-        </tr>
-      </table>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li>Account Info</li>
+    </ul>
+  </div>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tr>
+            <th>Address</th>
+            <td class="font-mono gap-2">
+              <div class="flex items-center gap-2">
+                {{ address }}
+                <button
+                  class="btn btn-circle btn-sm"
+                  type="button"
+                  (click)="copyClipboard(address || '')"
+                >
+                  <span class="material-icons">content_copy</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Public Key</th>
+            <td class="font-mono">{{ publicKey }}</td>
+          </tr>
+          <tr>
+            <th>Account Number</th>
+            <td>{{ baseAccount?.account_number }}</td>
+          </tr>
+          <tr>
+            <th>Sequence</th>
+            <td>{{ baseAccount?.sequence }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="card bg-base-100 shadow-xl mb-4">
-  <div class="card-body">
-    <h2 class="card-title">Balances</h2>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <h2 class="card-title">Balances</h2>
 
-    <ng-container *ngIf="symbolBalancesMap === null; then loading; else loaded"></ng-container>
-    <ng-template #loading>
-      <p class="text-center">
-        <span class="loading loading-dots loading-lg"></span>
-      </p>
-    </ng-template>
-    <ng-template #loaded>
-      <ng-container *ngIf="!symbolBalancesMap; then empty; else filled"></ng-container>
-      <ng-template #empty>
-        <p class="text-lg text-error">No Balance!</p>
+      <ng-container *ngIf="symbolBalancesMap === null; then loading; else loaded"></ng-container>
+      <ng-template #loading>
+        <p class="text-center">
+          <span class="loading loading-ring loading-lg"></span>
+        </p>
       </ng-template>
-      <ng-template #filled>
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr *ngFor="let balance of symbolBalancesMap | keyvalue">
-                <th>
-                  <div class="flex items-center space-x-3">
-                    <div class="avatar mr-2" *ngIf="symbolImageMap && symbolImageMap[balance.key]">
-                      <div class="mask mask-circle w-8 h-8">
-                        <img src="{{ symbolImageMap[balance.key] }}" alt="Asset Symbol" />
+      <ng-template #loaded>
+        <ng-container *ngIf="!symbolBalancesMap; then empty; else filled"></ng-container>
+        <ng-template #empty>
+          <p class="text-lg text-error">No Balance!</p>
+        </ng-template>
+        <ng-template #filled>
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <tbody>
+                <tr *ngFor="let balance of symbolBalancesMap | keyvalue">
+                  <th>
+                    <div class="flex items-center space-x-3">
+                      <div
+                        class="avatar mr-2"
+                        *ngIf="symbolImageMap && symbolImageMap[balance.key]"
+                      >
+                        <div class="mask mask-circle w-8 h-8">
+                          <img src="{{ symbolImageMap[balance.key] }}" alt="Asset Symbol" />
+                        </div>
                       </div>
+                      {{ balance.key }}
                     </div>
-                    {{ balance.key }}
-                  </div>
-                </th>
-                <td>{{ balance.value }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  </th>
+                  <td>{{ balance.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-template>
       </ng-template>
-    </ng-template>
+    </div>
   </div>
 </div>

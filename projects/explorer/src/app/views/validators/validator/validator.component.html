@@ -9,7 +9,9 @@
 </ng-template>
 <ng-template #exist>
   <div class="flex items-center my-2">
-    <mat-icon class="mr-1" [ngStyle]="{ color: getColorCode(validator?.val) }"> circle </mat-icon>
+    <span class="material-icons" class="mr-1" [ngStyle]="{ color: getColorCode(validator?.val) }">
+      circle
+    </span>
     <h2 class="mb-0">
       {{ validator?.val?.description?.moniker }}
     </h2>

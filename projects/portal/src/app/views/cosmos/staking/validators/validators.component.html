@@ -13,7 +13,9 @@
   <ng-template #exist>
     <ng-container *ngFor="let validator of validators">
       <mat-list-item routerLink="{{ validator.operator_address }}">
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator) }"> circle </mat-icon>
+        <span class="material-icons" matListIcon [ngStyle]="{ color: getColorCode(validator) }">
+          circle
+        </span>
         <span class="break-all text-sm sm:text-base">{{ validator.operator_address }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>

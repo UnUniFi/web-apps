@@ -65,7 +65,7 @@
                   />
                   <span class="w-36">{{ token.symbol }}</span>
                   <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
-                    <mat-icon>delete</mat-icon>
+                    <span class="material-icons">delete</span>
                   </label>
                 </label>
               </div>
@@ -96,7 +96,7 @@
                 (click)="onClickAddToken()"
                 [disabled]="!selectedSymbol"
               >
-                <mat-icon>add</mat-icon>
+                <span class="material-icons">add</span>
               </button>
             </label>
             <label class="label" *ngIf="selectedSymbol">

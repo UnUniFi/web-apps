@@ -18,9 +18,14 @@
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
         <h2 class="card-title break-all flex flex-col md:flex-row">
-          <mat-icon class="mr-1" matListIcon [ngStyle]="{ color: getColorCode(validator?.val) }">
+          <span
+            class="material-icons"
+            class="mr-1"
+            matListIcon
+            [ngStyle]="{ color: getColorCode(validator?.val) }"
+          >
             circle
-          </mat-icon>
+          </span>
           {{ validator?.val?.description?.moniker }}
           <span *ngIf="validator?.inList" class="badge badge-info">Active</span>
           <span *ngIf="!validator?.inList" class="badge badge-error">Inactive</span>
@@ -37,7 +42,7 @@
                     type="button"
                     (click)="copyClipboard(validator?.val?.operator_address || '')"
                   >
-                    <mat-icon>content_copy</mat-icon>
+                    <span class="material-icons">content_copy</span>
                   </button>
                 </td>
               </tr>
@@ -50,7 +55,7 @@
                     type="button"
                     (click)="copyClipboard(accAddress?.toString() || '')"
                   >
-                    <mat-icon>content_copy</mat-icon>
+                    <span class="material-icons">content_copy</span>
                   </button>
                 </td>
               </tr>

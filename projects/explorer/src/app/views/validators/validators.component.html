@@ -45,12 +45,13 @@
           <ng-container *ngFor="let validator of validators">
             <tr class="hover cursor-pointer" routerLink="{{ validator.val.operator_address }}">
               <th>
-                <mat-icon
+                <span
+                  class="material-icons"
                   matListIcon
                   [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
                 >
                   circle
-                </mat-icon>
+                </span>
               </th>
               <td>{{ validator.val.description?.moniker }}</td>
               <td>{{ validator.share | percent : '1.2-2' }}</td>

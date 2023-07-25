@@ -1,8 +1,8 @@
 <div class="dropdown dropdown-end">
   <div tabindex="0" class="btn gap-1 btn-ghost">
-    <mat-icon>apps</mat-icon>
+    <span class="material-icons">apps</span>
     <span class="hidden md:inline">Apps</span>
-    <mat-icon class="hidden md:inline">keyboard_arrow_down</mat-icon>
+    <span class="material-icons" class="hidden md:inline">keyboard_arrow_down</span>
   </div>
   <ul
     tabindex="0"
@@ -10,7 +10,7 @@
   >
     <li *ngFor="let app of apps">
       <a routerLink="{{ app.link }}">
-        <mat-icon color="primary" class="mr-2">{{ app.icon }}</mat-icon>
+        <span class="material-icons" color="primary" class="mr-2">{{ app.icon }}</span>
         {{ app.name }}
       </a>
     </li>

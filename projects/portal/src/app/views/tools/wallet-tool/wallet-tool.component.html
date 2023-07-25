@@ -2,13 +2,14 @@
 <ng-template #exist>
   <div class="dropdown dropdown-end">
     <label tabindex="0" class="btn gap-1 btn-ghost">
-      <mat-icon
+      <span
+        class="material-icons"
         matListIcon
         class="md:ml-3"
         [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
       >
         circle
-      </mat-icon>
+      </span>
       <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
     </label>
     <div tabindex="0" class="dropdown-content md:p-2 w-screen md:w-auto">
@@ -16,14 +17,19 @@
         <div class="card-body">
           <div class="flex flex-row flex-wrap">
             <h2 class="card-title">
-              <mat-icon matListIcon [ngStyle]="{ color: getColorCode(currentStoredWallet!) }">
-                circle </mat-icon
-              >{{ currentStoredWallet?.id }}
+              <span
+                class="material-icons"
+                matListIcon
+                [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+              >
+                circle
+              </span>
+              {{ currentStoredWallet?.id }}
             </h2>
             <span class="flex-auto"></span>
             <button class="btn btn-link -mt-2 hidden md:flex" routerLink="/">
               <span>View Balance</span>
-              <mat-icon>arrow_right_alt</mat-icon>
+              <span class="material-icons">arrow_right_alt</span>
             </button>
           </div>
 
@@ -37,7 +43,7 @@
               type="button"
               (click)="copyClipboard(currentStoredWallet?.address || '')"
             >
-              <mat-icon>content_copy</mat-icon>
+              <span class="material-icons">content_copy</span>
             </button>
           </h3>
 
@@ -69,7 +75,7 @@
     class="btn gap-1 btn-info btn-outline w-full md:w-auto md:px-8"
     (click)="onConnectWallet($event)"
   >
-    <mat-icon color="primary" class="md:ml-3">wallet</mat-icon>
+    <span class="material-icons" color="primary" class="md:ml-3">wallet</span>
     <span class="hidden md:inline">Connect wallet</span>
   </button>
 </ng-template>

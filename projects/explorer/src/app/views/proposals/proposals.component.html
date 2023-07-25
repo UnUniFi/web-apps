@@ -52,7 +52,7 @@
           <div class="divider m-0">Tallies</div>
           <div class="grid gap-3">
             <div class="flex items-center p-1 w-full">
-              <mat-icon class="w-8 text-success mr-2">thumb_up</mat-icon>
+              <span class="material-icons" class="w-8 text-success mr-2">thumb_up</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].yes }}"
@@ -60,7 +60,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-warning mr-2">thumb_down</mat-icon>
+              <span class="material-icons" class="w-8 text-warning mr-2">thumb_down</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].no }}"
@@ -68,7 +68,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-error mr-2">not_interested</mat-icon>
+              <span class="material-icons" class="w-8 text-error mr-2">not_interested</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].noWithVeto }}"
@@ -76,7 +76,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-primary mr-2">subtitles_off</mat-icon>
+              <span class="material-icons" class="w-8 text-primary mr-2">subtitles_off</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].abstain }}"

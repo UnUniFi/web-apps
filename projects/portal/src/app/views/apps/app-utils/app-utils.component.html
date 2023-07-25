@@ -50,7 +50,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/">
           <span class="flex-none">
-            <mat-icon color="primary">other_houses</mat-icon>
+            <span class="material-icons" color="primary">other_houses</span>
           </span>
           <span class="flex-1">Balance</span>
         </label>
@@ -58,7 +58,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/utilities/send">
           <span class="flex-none">
-            <mat-icon color="primary">send</mat-icon>
+            <span class="material-icons" color="primary">send</span>
           </span>
           <span class="flex-1">Send Token</span>
         </label>
@@ -66,7 +66,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/utilities/vote/proposals">
           <span class="flex-none">
-            <mat-icon color="primary">how_to_vote</mat-icon>
+            <span class="material-icons" color="primary">how_to_vote</span>
           </span>
           <span class="flex-1">Vote</span>
         </label>
@@ -74,7 +74,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/utilities/delegate/validators">
           <span class="flex-none">
-            <mat-icon color="primary">savings</mat-icon>
+            <span class="material-icons" color="primary">savings</span>
           </span>
           <span class="flex-1">Delegate</span>
         </label>
@@ -82,7 +82,7 @@
       <!-- <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/utilities/incentive">
           <span class="flex-none">
-            <mat-icon color="primary">attach_money</mat-icon>
+            <span class="material-icons" color="primary">attach_money</span>
           </span>
           <span class="flex-1">Incentive</span>
         </label>
@@ -95,7 +95,7 @@
         <li *ngIf="app.name !== 'Utilities'">
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
-              <mat-icon color="primary">{{ app.icon }}</mat-icon>
+              <span class="material-icons" color="primary">{{ app.icon }}</span>
             </span>
             <span class="flex-1">{{ app.name }}</span>
           </label>
@@ -114,7 +114,7 @@
               routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
             >
               <span class="flex-none">
-                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                <span class="material-icons" color="accent">{{ navigation.icon }}</span>
               </span>
               <span class="flex-1">{{ navigation.name }}</span>
             </label>

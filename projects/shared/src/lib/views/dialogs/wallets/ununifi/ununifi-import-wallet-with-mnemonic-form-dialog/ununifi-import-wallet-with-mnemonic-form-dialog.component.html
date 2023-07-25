@@ -63,7 +63,7 @@
               pattern="^[a-z\s]+$"
             ></textarea>
             <button mat-button type="button" matSuffix (click)="copyClipboard(mnemonicRef.value)">
-              <mat-icon>content_copy</mat-icon>
+              <span class="material-icons">content_copy</span>
               <span>copy</span>
             </button>
           </mat-form-field>
@@ -81,12 +81,12 @@
               autocomplete="new-password"
             />
             <button mat-button type="button" matSuffix (click)="togglePasswordVisibility()">
-              <mat-icon>
+              <span class="material-icons">
                 {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
-              </mat-icon>
+              </span>
             </button>
             <button mat-button type="button" matSuffix (click)="copyClipboard(privateKeyRef.value)">
-              <mat-icon>content_copy</mat-icon>
+              <span class="material-icons">content_copy</span>
               <span>copy</span>
             </button>
             <mat-hint>

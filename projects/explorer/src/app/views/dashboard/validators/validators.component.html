@@ -37,9 +37,13 @@
                 routerLink="/validators/{{ validator.val.operator_address }}"
               >
                 <th>
-                  <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator.val) }">
+                  <span
+                    class="material-icons"
+                    matListIcon
+                    [ngStyle]="{ color: getColorCode(validator.val) }"
+                  >
                     circle
-                  </mat-icon>
+                  </span>
                 </th>
                 <td>
                   {{ validator.val.description?.moniker }}

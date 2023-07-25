@@ -28,14 +28,15 @@
                 (click)="onClickValidator(validator!)"
               >
                 <th>
-                  <mat-icon
+                  <span
+                    class="material-icons"
                     matListIcon
                     [ngStyle]="{
                       color: getColorCode(delegation.delegation?.validator_address ?? '')
                     }"
                   >
                     circle
-                  </mat-icon>
+                  </span>
                 </th>
                 <td>{{ validator?.description?.moniker }}</td>
                 <td>{{ delegation.balance | coin | async }}</td>
@@ -82,14 +83,15 @@
                 (click)="onClickValidator(validator!)"
               >
                 <th>
-                  <mat-icon
+                  <span
+                    class="material-icons"
                     matListIcon
                     [ngStyle]="{
                       color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '')
                     }"
                   >
                     circle
-                  </mat-icon>
+                  </span>
                 </th>
                 <td>{{ validator?.description?.moniker }}</td>
                 <td>
@@ -153,12 +155,13 @@
           <ng-container *ngFor="let validator of validators">
             <tr class="hover cursor-pointer" (click)="onClickValidator(validator.val)">
               <th>
-                <mat-icon
+                <span
+                  class="material-icons"
                   matListIcon
                   [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
                 >
                   circle
-                </mat-icon>
+                </span>
               </th>
               <td>{{ validator.val.description?.moniker }}</td>
               <td>{{ validator.share | percent : '1.2-2' }}</td>

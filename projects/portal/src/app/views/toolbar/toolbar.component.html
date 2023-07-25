@@ -27,7 +27,7 @@
           [disabled]="searchResult?.searchValue === '' || searchResult?.type === ''"
           (click)="onSubmitSearchResult()"
         >
-          <mat-icon>search</mat-icon>
+          <span class="material-icons">search</span>
         </button>
       </mat-form-field>
     </form>
@@ -35,13 +35,17 @@
   <button class="flex-row" mat-button (click)="onConnectWallet()">
     <ng-container *ngIf="currentStoredWallet; then exist; else empty"></ng-container>
     <ng-template #exist>
-      <mat-icon matListIcon class="ml-3" [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+      <span
+        class="material-icons"
+        matListIcon
+        class="ml-3"
+        [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
         >circle
-      </mat-icon>
+      </span>
       <span class="ml-3 hidden md:inline-block">{{ currentStoredWallet?.id }}</span>
     </ng-template>
     <ng-template #empty>
-      <mat-icon class="ml-3">wallet</mat-icon>
+      <span class="material-icons" class="ml-3">wallet</span>
       <span class="ml-3 hidden md:inline-block">Connect Wallet</span>
     </ng-template>
   </button>

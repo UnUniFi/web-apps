@@ -109,7 +109,7 @@
   <mat-divider></mat-divider>
   <ng-container *ngIf="txs === null; then loading; else loaded"></ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <span class="loading loading-ring loading-lg"></span>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(txs?.txs?.length || 0) > 0; then exist; else empty">

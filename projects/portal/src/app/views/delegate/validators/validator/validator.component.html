@@ -8,7 +8,7 @@
   <ng-container *ngIf="validator === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <p class="text-center">
-      <span class="loading loading-dots loading-lg"></span>
+      <span class="loading loading-ring loading-lg"></span>
     </p>
   </ng-template>
   <ng-template #loaded>
@@ -17,19 +17,15 @@
   <ng-template #exist>
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
-        <h2 class="card-title break-all flex flex-col md:flex-row">
-          <span
-            class="material-icons"
-            class="mr-1"
-            matListIcon
-            [ngStyle]="{ color: getColorCode(validator?.val) }"
-          >
+        <div class="flex flex-row items-center gap-4 mb-4">
+          <span class="material-icons" [ngStyle]="{ color: getColorCode(validator?.val) }">
             circle
           </span>
-          {{ validator?.val?.description?.moniker }}
-          <span *ngIf="validator?.inList" class="badge badge-info">Active</span>
-          <span *ngIf="!validator?.inList" class="badge badge-error">Inactive</span>
-        </h2>
+          <h2 class="card-title">{{ validator?.val?.description?.moniker }}</h2>
+          <span class="flex-auto"></span>
+          <div *ngIf="validator?.inList" class="badge badge-lg badge-primary">Active</div>
+          <div *ngIf="!validator?.inList" class="badge badge-lg badge-secondary">Inactive</div>
+        </div>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>

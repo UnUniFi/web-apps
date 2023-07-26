@@ -3,7 +3,9 @@
     <h2 class="card-title">Transactions</h2>
     <ng-container *ngIf="txsWithPagination === null; then loading; else loaded"></ng-container>
     <ng-template #loading>
-      <span class="loading loading-dots loading-lg"></span>
+      <p class="text-center">
+        <span class="loading loading-dots loading-lg"></span>
+      </p>
     </ng-template>
     <ng-template #loaded>
       <ng-container
@@ -27,7 +29,7 @@
               routerLink="{{ '/txs/' + tx.txhash }}"
             >
               <th>{{ tx.height }}</th>
-              <td>{{ tx.txhash }}</td>
+              <td class="font-mono">{{ tx.txhash }}</td>
             </tr>
           </tbody>
         </table>

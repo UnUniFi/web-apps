@@ -5,19 +5,22 @@
         <h2 class="card-title">
           {{ walletId }}
         </h2>
-        <h3 class="mx-4 break-all">
-          {{ accAddress }}
-          <button
-            mat-icon-button
-            type="button"
-            (click)="copyClipboard(accAddress ? accAddress : '')"
-          >
-            <mat-icon>content_copy</mat-icon>
-          </button>
-        </h3>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
+              <tr>
+                <td>Address</td>
+                <td class="font-mono">
+                  {{ accAddress }}
+                  <button
+                    mat-icon-button
+                    type="button"
+                    (click)="copyClipboard(accAddress ? accAddress : '')"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </td>
+              </tr>
               <tr>
                 <td>Wallet Type</td>
                 <td>{{ walletType }}</td>
@@ -55,7 +58,8 @@
                   </tr>
                   <tr>
                     <th>Address</th>
-                    <td class="break-all">
+                    <td class="break-all font-mono">
+                      {{ accAddress }}
                       <button
                         mat-icon-button
                         type="button"
@@ -63,12 +67,12 @@
                       >
                         <mat-icon>content_copy</mat-icon>
                       </button>
-                      {{ accAddress }}
                     </td>
                   </tr>
                   <tr>
                     <th>Validator Address</th>
-                    <td class="break-all">
+                    <td class="break-all font-mono">
+                      {{ valAddress }}
                       <button
                         mat-icon-button
                         type="button"
@@ -76,12 +80,12 @@
                       >
                         <mat-icon>content_copy</mat-icon>
                       </button>
-                      {{ valAddress }}
                     </td>
                   </tr>
                   <tr>
                     <th>Public Key</th>
-                    <td class="break-all">
+                    <td class="break-all font-mono">
+                      {{ publicKey }}
                       <button
                         mat-icon-button
                         type="button"
@@ -89,7 +93,6 @@
                       >
                         <mat-icon>content_copy</mat-icon>
                       </button>
-                      {{ publicKey }}
                     </td>
                   </tr>
                   <tr>
@@ -124,7 +127,9 @@
 
         <ng-container *ngIf="symbolBalancesMap === null; then loading; else loaded"></ng-container>
         <ng-template #loading>
-          <span class="loading loading-dots loading-lg"></span>
+          <p class="text-center">
+            <span class="loading loading-dots loading-lg"></span>
+          </p>
         </ng-template>
         <ng-template #loaded>
           <ng-container *ngIf="!symbolBalancesMap; then empty; else filled"></ng-container>

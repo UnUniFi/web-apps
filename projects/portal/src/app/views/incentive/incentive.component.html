@@ -14,7 +14,9 @@
       </p>
       <ng-container *ngIf="unitIds === null; then loading; else loaded"></ng-container>
       <ng-template #loading>
-        <span class="loading loading-dots loading-lg"></span>
+        <p class="text-center">
+          <span class="loading loading-dots loading-lg"></span>
+        </p>
       </ng-template>
       <ng-template #loaded>
         <ng-container *ngIf="!unitIds || unitIds.length === 0; then empty; else filled">
@@ -53,7 +55,9 @@
       <h2 class="card-title">Rewards</h2>
       <ng-container *ngIf="rewards === null; then loadingReward; else loadedReward"></ng-container>
       <ng-template #loadingReward>
-        <span class="loading loading-dots loading-lg"></span>
+        <p class="text-center">
+          <span class="loading loading-dots loading-lg"></span>
+        </p>
       </ng-template>
       <ng-template #loadedReward>
         <ng-container *ngIf="!rewards || rewards.length === 0; then emptyReward; else filledReward">

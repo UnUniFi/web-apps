@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let subject of unit?.weighted_addresses">
-              <td>{{ subject.address }}</td>
+              <td class="font-mono">{{ subject.address }}</td>
               <td>{{ subject.weight | percent : '1.2-2' }}</td>
             </tr>
           </tbody>

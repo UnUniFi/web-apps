@@ -1,1 +1,6 @@
-<view-vaults [vaults]="vaults$ | async" [symbols]="symbols$ | async"></view-vaults>
+<view-vaults
+  [vaults]="vaults$ | async"
+  [symbols]="symbols$ | async"
+  [keyword]="keyword$ | async"
+  (search)="appSearchValueChanged($event)"
+></view-vaults>

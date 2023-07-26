@@ -7,7 +7,9 @@
   </div>
   <ng-container *ngIf="validator === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <p class="text-center">
+      <span class="loading loading-dots loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="validator !== undefined; then exist; else notFound"> </ng-container>
@@ -28,7 +30,7 @@
             <tbody>
               <tr>
                 <td>Validator Address</td>
-                <td>
+                <td class="font-mono">
                   {{ validator?.val?.operator_address }}
                   <button
                     mat-icon-button
@@ -41,7 +43,7 @@
               </tr>
               <tr>
                 <td>Account Address</td>
-                <td>
+                <td class="font-mono">
                   {{ accAddress }}
                   <button
                     mat-icon-button

@@ -24,11 +24,11 @@
         </tr>
         <tr>
           <th>Block Hash</th>
-          <td>{{ block?.block_id?.hash }}</td>
+          <td class="font-mono">{{ block?.block_id?.hash }}</td>
         </tr>
         <tr>
           <th>Block Proposer</th>
-          <td>{{ block?.block?.header?.proposer_address }}</td>
+          <td class="font-mono">{{ block?.block?.header?.proposer_address }}</td>
         </tr>
         <tr>
           <th>Block Transactions</th>
@@ -40,39 +40,50 @@
 </div>
 
 <h3 class="my-2">Transactions</h3>
-<mat-card class="mb-2">
-  <mat-list>
-    <mat-list-item>
-      <span class="w-4/12 truncate pl-2">Hash</span>
-      <span class="w-4/12 truncate pl-2">Type</span>
-      <span class="w-4/12 truncate pl-2">From</span>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
-  <ng-container
-    *ngIf="
-      (transactions?.tx_responses?.length || 0) > 0;
-      then existTransactions;
-      else emptyTransactions
-    "
-  >
-  </ng-container>
+<div class="card bg-base-100 shadow-xl">
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <td>Hash</td>
+          <td>Type</td>
+          <td>From</td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngIf="
+            (transactions?.tx_responses?.length || 0) > 0;
+            then existTransactions;
+            else emptyTransactions
+          "
+        >
+        </ng-container>
+        <ng-template #emptyTransactions>
+          <tr>
+            <td colspan="5">There is no transaction.</td>
+          </tr>
+        </ng-template>
 
-  <ng-template #emptyTransactions>
-    <span>*No Transactions</span>
-  </ng-template>
-
-  <ng-template #existTransactions>
-    <mat-nav-list>
-      <mat-list-item
-        routerLink="/txs/{{ tx.txhash }}"
-        *ngFor="let tx of transactions?.tx_responses; let i = index; last as last"
-      >
-        <span class="w-4/12 truncate text-sm">{{ tx.txhash }}</span>
-        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.txType }}</span>
-        <span class="w-4/12 truncate text-sm pl-2">{{ txTitles?.[i]?.fromAddress }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-nav-list>
-  </ng-template>
-</mat-card>
+        <ng-template #existTransactions>
+          <mat-nav-list>
+            <mat-list-item
+              routerLink="/txs/{{ tx.txhash }}"
+              *ngFor="let tx of transactions?.tx_responses; let i = index"
+            >
+              <th class="font-mono">
+                {{ tx.txhash }}
+              </th>
+              <th>
+                {{ txTitles?.[i]?.txType }}
+              </th>
+              <th class="font-mono">
+                {{ txTitles?.[i]?.fromAddress }}
+              </th>
+            </mat-list-item>
+          </mat-nav-list>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>

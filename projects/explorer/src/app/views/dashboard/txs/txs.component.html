@@ -1,31 +1,34 @@
-<ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <span class="loading loading-dots loading-lg"></span>
-</ng-template>
-<ng-template #loaded>
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
-      <div class="flex flex-wrap">
-        <h2 class="card-title">Transactions</h2>
-        <span class="flex-auto"></span>
-        <div class="form-control">
-          <select
-            class="select select-bordered text-center w-auto sm:w-64"
-            name="txType"
-            [(ngModel)]="selectedTxType"
-            (change)="onSelectedTxTypeChanged(selectedTxType!)"
-          >
-            <option [value]="undefined" disabled>
-              <span>Select Tx type</span>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <div class="flex flex-wrap">
+      <h2 class="card-title">Transactions</h2>
+      <span class="flex-auto"></span>
+      <div class="form-control">
+        <select
+          class="select select-bordered text-center w-auto sm:w-64"
+          name="txType"
+          [(ngModel)]="selectedTxType"
+          (change)="onSelectedTxTypeChanged(selectedTxType!)"
+        >
+          <option [value]="undefined" disabled>
+            <span>Select Tx type</span>
+          </option>
+          <ng-container *ngFor="let txType of txTypeOptions">
+            <option [value]="txType">
+              {{ txType }}
             </option>
-            <ng-container *ngFor="let txType of txTypeOptions">
-              <option [value]="txType">
-                {{ txType }}
-              </option>
-            </ng-container>
-          </select>
-        </div>
+          </ng-container>
+        </select>
       </div>
+    </div>
+
+    <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
+    <ng-template #loading>
+      <p class="text-center">
+        <span class="loading loading-dots loading-lg"></span>
+      </p>
+    </ng-template>
+    <ng-template #loaded>
       <div class="overflow-x-auto">
         <table class="table w-full">
           <thead>
@@ -39,7 +42,7 @@
                 class="hover cursor-pointer"
                 routerLink="/txs/{{ tx.txhash }}"
               >
-                <th>
+                <th class="font-mono">
                   {{ tx.txhash }}
                 </th>
                 <td>
@@ -55,6 +58,6 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </ng-template>
   </div>
-</ng-template>
+</div>

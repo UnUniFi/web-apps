@@ -168,7 +168,9 @@
     <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
       <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
       <ng-template #loading>
-        <span class="loading loading-dots loading-lg"></span>
+        <p class="text-center">
+          <span class="loading loading-dots loading-lg"></span>
+        </p>
       </ng-template>
       <ng-template #loaded>
         <ng-container

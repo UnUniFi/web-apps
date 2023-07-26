@@ -6,8 +6,6 @@ import { PubKey } from '@cosmos-client/core/esm/types';
 export enum WalletType {
   ununifi = 'ununifi',
   keplr = 'keplr',
-  ledger = 'ledger',
-  keyStation = 'keyStation',
   metaMask = 'metaMask',
 }
 

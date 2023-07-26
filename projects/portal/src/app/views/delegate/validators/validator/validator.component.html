@@ -18,7 +18,10 @@
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
         <div class="flex flex-row items-center gap-4 mb-4">
-          <span class="material-icons" [ngStyle]="{ color: getColorCode(validator?.val) }">
+          <span
+            class="material-symbols-outlined"
+            [ngStyle]="{ color: getColorCode(validator?.val) }"
+          >
             circle
           </span>
           <h2 class="card-title">{{ validator?.val?.description?.moniker }}</h2>
@@ -38,7 +41,7 @@
                     type="button"
                     (click)="copyClipboard(validator?.val?.operator_address || '')"
                   >
-                    <span class="material-icons">content_copy</span>
+                    <span class="material-symbols-outlined">content_copy</span>
                   </button>
                 </td>
               </tr>
@@ -51,7 +54,7 @@
                     type="button"
                     (click)="copyClipboard(accAddress?.toString() || '')"
                   >
-                    <span class="material-icons">content_copy</span>
+                    <span class="material-symbols-outlined">content_copy</span>
                   </button>
                 </td>
               </tr>

@@ -18,7 +18,10 @@
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body">
         <div class="flex flex-row items-center gap-4 mb-4">
-          <span class="material-icons" [ngStyle]="{ color: getColorCode(validator?.val) }">
+          <span
+            class="material-symbols-outlined"
+            [ngStyle]="{ color: getColorCode(validator?.val) }"
+          >
             circle
           </span>
           <h2 class="card-title">{{ validator?.val?.description?.moniker }}</h2>

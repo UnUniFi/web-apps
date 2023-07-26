@@ -8,14 +8,16 @@
         <mat-nav-list>
           <ng-container *ngFor="let storedWallet of storedWallets">
             <mat-list-item (click)="onClickWallet(storedWallet)">
-              <span class="material-icons" [ngStyle]="{ color: getColorCode(storedWallet) }"
+              <span
+                class="material-symbols-outlined"
+                [ngStyle]="{ color: getColorCode(storedWallet) }"
                 >circle</span
               >
               <div mat-line>
                 <span class="text-white">{{ storedWallet.id }}</span>
                 <ng-container *ngIf="currentStoredWallet$ | async as currentStoredWallet">
                   <ng-container *ngIf="currentStoredWallet.id === storedWallet.id">
-                    <span class="material-icons">check</span>
+                    <span class="material-symbols-outlined">check</span>
                   </ng-container>
                 </ng-container>
               </div>

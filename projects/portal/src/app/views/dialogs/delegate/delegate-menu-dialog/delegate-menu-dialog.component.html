@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <span class="material-icons">close</span>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -16,7 +16,7 @@
           <li class="disabled">
             <a class="text-base-content items-center">
               <span
-                class="material-icons"
+                class="material-symbols-outlined"
                 [style]="{ color: getColorCode(selectedValidator?.operator_address!) }"
               >
                 circle
@@ -147,7 +147,7 @@
         class="btn btn-info btn-outline w-full md:w-auto md:px-8 m-1 gap-2"
         (click)="onClickDetailButton()"
       >
-        <span class="material-icons">info</span>
+        <span class="material-symbols-outlined">info</span>
         <span>More info</span>
       </button>
 
@@ -155,7 +155,7 @@
         class="btn btn-secondary btn-outline w-full md:w-auto md:px-8 m-1 gap-2"
         (click)="onClickDelegateButton()"
       >
-        <span class="material-icons">how_to_vote</span>
+        <span class="material-symbols-outlined">how_to_vote</span>
         <span>Delegate</span>
       </button>
 
@@ -164,7 +164,7 @@
         *ngIf="isDelegated"
         (click)="onClickRedelegateButton()"
       >
-        <span class="material-icons">picture_in_picture_alt</span>
+        <span class="material-symbols-outlined">picture_in_picture_alt</span>
         <span>Redelegate</span>
       </button>
 
@@ -173,7 +173,7 @@
         *ngIf="isDelegated"
         (click)="onClickUndelegateButton()"
       >
-        <span class="material-icons">delete_sweep</span>
+        <span class="material-symbols-outlined">delete_sweep</span>
         <span>Undelegate</span>
       </button>
 
@@ -182,7 +182,7 @@
         *ngIf="isDelegated"
         (click)="onClickWithdrawDelegatorRewardButton()"
       >
-        <span class="material-icons">attach_money</span>
+        <span class="material-symbols-outlined">attach_money</span>
         <span>Claim delegator reward</span>
       </button>
 
@@ -191,7 +191,7 @@
         *ngIf="isValidator"
         (click)="onClickWithdrawValidatorCommissionButton()"
       >
-        <span class="material-icons">monetization_on</span>
+        <span class="material-symbols-outlined">monetization_on</span>
         <span>Claim validator commission</span>
       </button>
     </div>

@@ -2,7 +2,10 @@
 <ng-template #exist>
   <div class="dropdown dropdown-end">
     <label tabindex="0" class="btn gap-1 btn-ghost">
-      <span class="material-icons" [ngStyle]="{ color: getColorCode(currentStoredWallet!) }">
+      <span
+        class="material-symbols-outlined"
+        [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+      >
         circle
       </span>
       <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
@@ -11,7 +14,10 @@
       <div class="card bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title">
-            <span class="material-icons" [ngStyle]="{ color: getColorCode(currentStoredWallet!) }">
+            <span
+              class="material-symbols-outlined"
+              [ngStyle]="{ color: getColorCode(currentStoredWallet!) }"
+            >
               circle
             </span>
             {{ currentStoredWallet?.id }}
@@ -27,7 +33,7 @@
               type="button"
               (click)="copyClipboard(currentStoredWallet?.address || '')"
             >
-              <span class="material-icons">content_copy</span>
+              <span class="material-symbols-outlined">content_copy</span>
             </button>
           </h3>
 
@@ -62,7 +68,7 @@
     class="btn btn-info btn-outline w-full md:w-auto md:px-8 gap-2"
     (click)="onConnectWallet($event)"
   >
-    <span class="material-icons">wallet</span>
+    <span class="material-symbols-outlined">wallet</span>
     <span class="hidden md:inline">Connect wallet</span>
   </button>
 </ng-template>

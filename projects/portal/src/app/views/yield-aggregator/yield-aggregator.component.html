@@ -8,11 +8,11 @@
           <p style="white-space: pre-wrap">{{ config.description }}</p>
           <div class="card-actions justify-end" *ngIf="config.route === 'vaults'">
             <button class="btn btn-primary gap-2" routerLink="{{ config.route }}">
-              <span class="material-icons">monetization_on</span>
+              <span class="material-symbols-outlined">monetization_on</span>
               <span>Deposit</span>
             </button>
             <button class="btn btn-secondary gap-2" routerLink="{{ config.route }}/create">
-              <span class="material-icons">create</span>
+              <span class="material-symbols-outlined">create</span>
               <span>create</span>
             </button>
           </div>
@@ -36,7 +36,7 @@
                 [disabled]="formRef.invalid"
                 routerLink="{{ config.route }}/{{ selectedDenom }}"
               >
-                <span class="material-icons">explore</span>
+                <span class="material-symbols-outlined">explore</span>
                 <span>View</span>
               </button>
             </form>

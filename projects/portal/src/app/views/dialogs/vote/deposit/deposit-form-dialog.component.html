@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-actions justify-end md:hidden">
       <button class="btn btn-square btn-ghost btn-sm">
-        <span class="material-icons" (click)="onClickClose()">close</span>
+        <span class="material-symbols-outlined" (click)="onClickClose()">close</span>
       </button>
     </div>
     <div class="flex flex-col items-center">
@@ -25,7 +25,7 @@
         <li class="disabled">
           <a class="text-base-content items-center font-mono">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
             >
               circle

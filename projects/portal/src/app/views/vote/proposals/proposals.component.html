@@ -62,7 +62,7 @@
           </label>
           <div class="grid gap-3">
             <div class="flex items-center p-1 gap-2">
-              <span class="material-icons text-success">thumb_up</span>
+              <span class="material-symbols-outlined text-success">thumb_up</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].yes }}"
@@ -70,7 +70,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <span class="material-icons text-warning">thumb_down</span>
+              <span class="material-symbols-outlined text-warning">thumb_down</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].no }}"
@@ -78,7 +78,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <span class="material-icons text-error">not_interested</span>
+              <span class="material-symbols-outlined text-error">not_interested</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].noWithVeto }}"
@@ -86,7 +86,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <span class="material-icons text-primary">subtitles_off</span>
+              <span class="material-symbols-outlined text-primary">subtitles_off</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].abstain }}"
@@ -99,7 +99,7 @@
               class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
               (click)="onClickVote(proposal.proposal_id!)"
             >
-              <span class="material-icons">how_to_vote</span>Vote
+              <span class="material-symbols-outlined">how_to_vote</span>Vote
             </button>
             <button
               class="btn btn-outline btn-info w-full md:w-auto md:px-8"

@@ -8,10 +8,10 @@ const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 
 // To Do write chain config
-const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
+const domainCauchyEA = 'localhost';
 
-const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'test';
+const chainName = 'UnUniFi (test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',

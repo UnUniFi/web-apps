@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-actions justify-end md:hidden">
       <button class="btn btn-square btn-ghost btn-sm">
-        <span class="material-icons" (click)="onClickClose()">close</span>
+        <span class="material-symbols-outlined" (click)="onClickClose()">close</span>
       </button>
     </div>
     <div class="flex flex-col items-center">
@@ -27,7 +27,7 @@
         <li class="disabled">
           <a class="text-base-content items-center font-mono">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
             >
               circle
@@ -127,22 +127,22 @@
     </div> -->
 
     <button class="btn btn-success btn-block btn-sm mt-2" (click)="onSubmitYes()">
-      <span class="material-icons">thumb_up</span>
+      <span class="material-symbols-outlined">thumb_up</span>
       &nbsp;&nbsp;Yes
     </button>
 
     <button class="btn btn-warning btn-block btn-sm" (click)="onSubmitNo()">
-      <span class="material-icons">thumb_down</span>
+      <span class="material-symbols-outlined">thumb_down</span>
       &nbsp;&nbsp;No
     </button>
 
     <button class="btn btn-error btn-block btn-sm" (click)="onSubmitNoWithVeto()">
-      <span class="material-icons">not_interested</span>
+      <span class="material-symbols-outlined">not_interested</span>
       &nbsp;&nbsp;No with Veto
     </button>
 
     <button class="btn btn-primary btn-sm" (click)="onSubmitAbstain()">
-      <span class="material-icons">subtitles_off</span>
+      <span class="material-symbols-outlined">subtitles_off</span>
       &nbsp;&nbsp;Abstain
     </button>
   </div>

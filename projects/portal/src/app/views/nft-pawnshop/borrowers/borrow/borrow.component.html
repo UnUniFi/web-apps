@@ -118,7 +118,7 @@
               <span class="label-text">Enter borrow amount</span>
               <!-- The button to open modal -->
               <label for="modal-bid-price" class="label-text cursor-pointer">
-                <span class="material-icons">help</span>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -206,7 +206,7 @@
                   />
                   <span>{{ symbol }}</span>
                   <label class="btn btn-outline btn-error" (click)="onClickDeleteBidder(i)">
-                    <span class="material-icons">delete</span>
+                    <span class="material-symbols-outlined">delete</span>
                   </label>
                 </label>
               </div>
@@ -238,7 +238,7 @@
                 (click)="onClickAddBidder()"
                 [disabled]="!selectedBidder"
               >
-                <span class="material-icons">add</span>
+                <span class="material-symbols-outlined">add</span>
               </button>
             </label>
             <label class="label" *ngIf="selectedBidder">

@@ -29,7 +29,7 @@
               >
                 <th>
                   <span
-                    class="material-icons"
+                    class="material-symbols-outlined"
                     [ngStyle]="{
                       color: getColorCode(delegation.delegation?.validator_address ?? '')
                     }"
@@ -83,7 +83,7 @@
               >
                 <th>
                   <span
-                    class="material-icons"
+                    class="material-symbols-outlined"
                     [ngStyle]="{
                       color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '')
                     }"
@@ -154,7 +154,7 @@
             <tr class="hover cursor-pointer" (click)="onClickValidator(validator.val)">
               <th>
                 <span
-                  class="material-icons"
+                  class="material-symbols-outlined"
                   [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
                 >
                   circle

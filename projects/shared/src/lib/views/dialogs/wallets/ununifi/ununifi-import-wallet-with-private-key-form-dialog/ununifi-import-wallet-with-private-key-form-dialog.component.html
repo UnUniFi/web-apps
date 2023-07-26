@@ -62,12 +62,12 @@
               autocomplete="new-password"
             />
             <button mat-button type="button" matSuffix (click)="togglePasswordVisibility()">
-              <span class="material-icons">
+              <span class="material-symbols-outlined">
                 {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
               </span>
             </button>
             <button mat-button type="button" matSuffix (click)="copyClipboard(privateKeyRef.value)">
-              <span class="material-icons">content_copy</span>
+              <span class="material-symbols-outlined">content_copy</span>
               <span>copy</span>
             </button>
             <mat-hint>

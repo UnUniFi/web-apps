@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <span class="material-icons">close</span>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -23,7 +23,7 @@
             >
               <a class="text-base-content items-center">
                 <span
-                  class="material-icons"
+                  class="material-symbols-outlined"
                   [ngStyle]="{
                     color: getColorCode(delegation.delegation?.validator_address ?? '')
                   }"
@@ -52,7 +52,7 @@
         <li class="disabled">
           <a class="text-base-content items-center">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
             >
               circle

@@ -13,7 +13,7 @@
           Lend your Tokens to an NFT Holder
           <!-- The button to open modal -->
           <label for="modal-lend" class="label-text cursor-pointer">
-            <mat-icon class="">help</mat-icon>
+            <span class="material-symbols-outlined">help</span>
           </label>
         </h2>
         <!-- Put this part before </body> tag -->
@@ -41,8 +41,8 @@
             <span>Lending Status</span>
           </button>
 
-          <button class="btn btn-primary btn-outline w-full" routerLink="nfts">
-            <mat-icon class="mr-2">monetization_on</mat-icon>
+          <button class="btn btn-primary btn-outline w-full gap-2" routerLink="nfts">
+            <span class="material-symbols-outlined">monetization_on</span>
             <span>Go to Lend</span>
           </button>
         </div>
@@ -62,7 +62,7 @@
           Borrow Tokens against your Collateralized NFT
           <!-- The button to open modal -->
           <label for="modal-borrow" class="label-text cursor-pointer">
-            <mat-icon class="">help</mat-icon>
+            <span class="material-symbols-outlined">help</span>
           </label>
         </h2>
         <!-- Put this part before </body> tag -->
@@ -85,8 +85,11 @@
         <p>List NFT, received funds from the bidders and borrow tokens.</p>
 
         <div class="card-actions justify-end">
-          <button class="btn btn-secondary btn-outline w-full" routerLink="borrowers/borrower">
-            <mat-icon class="mr-2">add_photo_alternate</mat-icon>
+          <button
+            class="btn btn-secondary btn-outline w-full gap-2"
+            routerLink="borrowers/borrower"
+          >
+            <span class="material-symbols-outlined">add_photo_alternate</span>
             <span>Go to borrow</span>
           </button>
         </div>

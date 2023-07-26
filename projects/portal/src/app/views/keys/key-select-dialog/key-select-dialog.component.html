@@ -1,16 +1,18 @@
 <div class="card bg-base-100 shadow-xl">
-<div class="card-body">
-  <mat-nav-list>
-    <ng-template ngFor let-key [ngForOf]="data.keys">
-      <mat-list-item (click)="onClickKey(key)">
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(key) }"> circle </mat-icon>
-        <span>{{ key.id }}</span>
-        <span class="flex-auto"></span>
-        <ng-container *ngIf="data.currentKeyID === key.id">
-          <mat-icon color="primary">check</mat-icon>
-        </ng-container>
-      </mat-list-item>
-    </ng-template>
-  </mat-nav-list>
-</div>
+  <div class="card-body">
+    <mat-nav-list>
+      <ng-template ngFor let-key [ngForOf]="data.keys">
+        <mat-list-item (click)="onClickKey(key)">
+          <span class="material-symbols-outlined" [ngStyle]="{ color: getColorCode(key) }">
+            circle
+          </span>
+          <span>{{ key.id }}</span>
+          <span class="flex-auto"></span>
+          <ng-container *ngIf="data.currentKeyID === key.id">
+            <span class="material-symbols-outlined">check</span>
+          </ng-container>
+        </mat-list-item>
+      </ng-template>
+    </mat-nav-list>
+  </div>
 </div>

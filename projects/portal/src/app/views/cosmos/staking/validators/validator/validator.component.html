@@ -1,7 +1,7 @@
 <ng-container *ngIf="validator === null; then loading; else loaded"> </ng-container>
 <ng-template #loading>
   <p class="text-center">
-    <span class="loading loading-dots loading-lg"></span></p
+    <span class="loading loading-ring loading-lg"></span></p
 ></ng-template>
 <ng-template #loaded>
   <ng-container *ngIf="validator !== undefined; then exist; else notFound"> </ng-container>

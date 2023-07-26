@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -15,7 +15,9 @@
             <ng-container *ngFor="let storedWallet of storedWallets">
               <li (click)="onClickWallet(storedWallet)">
                 <a>
-                  <span class="material-icons" [style]="{ color: getColorCode(storedWallet) }"
+                  <span
+                    class="material-symbols-outlined"
+                    [style]="{ color: getColorCode(storedWallet) }"
                     >circle</span
                   >
                   <div>
@@ -28,7 +30,7 @@
                   </div>
                   <ng-container *ngIf="currentStoredWallet$ | async as currentStoredWallet">
                     <ng-container *ngIf="currentStoredWallet.id === storedWallet.id">
-                      <span class="material-icons">check</span>
+                      <span class="material-symbols-outlined">check</span>
                     </ng-container>
                   </ng-container>
                 </a>

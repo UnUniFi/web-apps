@@ -36,7 +36,7 @@
   <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <p class="text-center">
-      <span class="loading loading-dots loading-lg"></span>
+      <span class="loading loading-ring loading-lg"></span>
     </p>
   </ng-template>
   <ng-template #loaded>
@@ -47,16 +47,22 @@
     <div *ngFor="let proposal of proposals; let i = index" class="w-full mb-4">
       <div class="card bg-base-100 w-full shadow-xl">
         <div class="card-body">
-          <span class="badge badge-primary">
-            {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
-          </span>
-          <h2 class="card-title break-all">
-            #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
-          </h2>
-          <div class="divider m-0">Tallies</div>
+          <div class="flex items-center">
+            <h2 class="card-title break-all">
+              #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
+            </h2>
+            <span class="flex-auto"></span>
+            <span class="badge badge-primary badge-lg">
+              {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+            </span>
+          </div>
+
+          <label class="label">
+            <span class="label-text">Tallies</span>
+          </label>
           <div class="grid gap-3">
             <div class="flex items-center p-1 gap-2">
-              <mat-icon class="w-8 text-success">thumb_up</mat-icon>
+              <span class="material-symbols-outlined text-success">thumb_up</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].yes }}"
@@ -64,7 +70,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <mat-icon class="w-8 text-warning">thumb_down</mat-icon>
+              <span class="material-symbols-outlined text-warning">thumb_down</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].no }}"
@@ -72,7 +78,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <mat-icon class="w-8 text-error">not_interested</mat-icon>
+              <span class="material-symbols-outlined text-error">not_interested</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].noWithVeto }}"
@@ -80,7 +86,7 @@
               ></progress>
             </div>
             <div class="flex items-center p-1 gap-2">
-              <mat-icon class="w-8 text-primary">subtitles_off</mat-icon>
+              <span class="material-symbols-outlined text-primary">subtitles_off</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].abstain }}"
@@ -93,7 +99,7 @@
               class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
               (click)="onClickVote(proposal.proposal_id!)"
             >
-              <mat-icon>how_to_vote</mat-icon>Vote
+              <span class="material-symbols-outlined">how_to_vote</span>Vote
             </button>
             <button
               class="btn btn-outline btn-info w-full md:w-auto md:px-8"

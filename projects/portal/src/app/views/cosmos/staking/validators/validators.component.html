@@ -4,7 +4,7 @@
   <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <p class="text-center">
-      <span class="loading loading-dots loading-lg"></span>
+      <span class="loading loading-ring loading-lg"></span>
     </p>
   </ng-template>
   <ng-template #loaded>
@@ -13,7 +13,9 @@
   <ng-template #exist>
     <ng-container *ngFor="let validator of validators">
       <mat-list-item routerLink="{{ validator.operator_address }}">
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(validator) }"> circle </mat-icon>
+        <span class="material-symbols-outlined" [ngStyle]="{ color: getColorCode(validator) }">
+          circle
+        </span>
         <span class="break-all text-sm sm:text-base">{{ validator.operator_address }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>

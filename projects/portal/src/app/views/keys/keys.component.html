@@ -3,7 +3,7 @@
     <h3 matSubheader>Keys</h3>
     <span class="flex-auto"></span>
     <button mat-flat-button routerLink="create" color="accent">
-      <mat-icon>add</mat-icon>
+      <span class="material-symbols-outlined">add</span>
       <span>Create</span>
     </button>
   </div>
@@ -11,7 +11,7 @@
   <ng-container *ngIf="keys === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
     <p class="text-center">
-      <span class="loading loading-dots loading-lg"></span>
+      <span class="loading loading-ring loading-lg"></span>
     </p>
   </ng-template>
   <ng-template #loaded>
@@ -20,7 +20,9 @@
   <ng-template #exist>
     <ng-container *ngFor="let key of keys">
       <mat-list-item routerLink="{{ key.id }}">
-        <mat-icon matListIcon [ngStyle]="{ color: getColorCode(key) }"> circle </mat-icon>
+        <span class="material-symbols-outlined" [ngStyle]="{ color: getColorCode(key) }">
+          circle
+        </span>
         <span>{{ key.id }}</span>
       </mat-list-item>
       <mat-divider></mat-divider>

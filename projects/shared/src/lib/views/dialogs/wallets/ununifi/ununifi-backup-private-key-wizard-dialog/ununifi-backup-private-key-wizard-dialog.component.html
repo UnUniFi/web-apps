@@ -22,15 +22,20 @@
           <p class="flex justify-between items-center text-white">
             Input private key
             <button mat-button type="button" (click)="togglePasswordVisibility()">
-              <mat-icon>
+              <span class="material-symbols-outlined">
                 {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
-              </mat-icon>
+              </span>
             </button>
           </p>
           <mat-form-field appearance="fill">
             <mat-label>Private Key</mat-label>
-            <input matInput required name="privateKey" [type]="isPasswordVisible ? 'text' : 'password'"
-              [(ngModel)]="inputPrivateKey" />
+            <input
+              matInput
+              required
+              name="privateKey"
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="inputPrivateKey"
+            />
           </mat-form-field>
           <div class="mb-2">
             <button mat-flat-button class="w-full" color="accent">Check</button>
@@ -46,7 +51,13 @@
         <div class="mb-2 flex justify-start">
           <button mat-flat-button matStepperPrevious>Back</button>
         </div>
-        <button mat-flat-button class="w-full" color="accent" [disabled]="!checked || !saved" (click)="onClickSubmit()">
+        <button
+          mat-flat-button
+          class="w-full"
+          color="accent"
+          [disabled]="!checked || !saved"
+          (click)="onClickSubmit()"
+        >
           Next
         </button>
       </mat-step>

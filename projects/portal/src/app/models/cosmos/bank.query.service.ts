@@ -1,4 +1,5 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
+import { denomExponentMap } from './bank.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Decimal from 'decimal.js';
@@ -72,13 +73,12 @@ export class BankQueryService {
         const map: { [symbol: string]: number } = {};
         await Promise.all(
           balance.map(async (b) => {
-            const metadata = metadataMap[b.denom!];
-            const denomUnit = metadata.denom_units?.find((u) => u.denom === b.denom);
-
-            if (denomUnit) {
-              const amount = new Decimal(b.amount!);
+            if (b.denom && b.amount) {
+              const metadata = metadataMap[b.denom];
+              const denomExponent = denomExponentMap[b.denom];
+              const amount = new Decimal(b.amount);
               map[metadata.symbol!] = Number(
-                amount.dividedBy(new Decimal(10 ** denomUnit.exponent!)).toFixed(6),
+                amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),
               );
             }
           }),
@@ -111,24 +111,66 @@ export class BankQueryService {
   async _denomsMetadata() {
     const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
       {
-        description: 'UnUniFi governance token',
+        description: 'The governance token of UnUniFi protocol.',
         denom_units: [
           {
             denom: 'uguu',
+            exponent: 0,
+          },
+          {
+            denom: 'guu',
             exponent: 6,
-            aliases: [],
           },
         ],
         base: 'uguu',
-        display: 'GUU',
         name: 'UnUniFi',
+        display: 'guu',
         symbol: 'GUU',
+      },
+      {
+        description: 'The governance token of OSMOSIS.',
+        denom_units: [
+          {
+            denom: 'uosmo',
+            exponent: 0,
+          },
+          {
+            denom: 'osmo',
+            exponent: 6,
+          },
+        ],
+        base: 'uosmo',
+        name: 'OSMOSIS',
+        display: 'osmo',
+        symbol: 'OSMO',
+      },
+      {
+        description: 'The governance token of Cosmos Hub.',
+        denom_units: [
+          {
+            denom: 'uatom',
+            exponent: 0,
+          },
+          {
+            denom: 'atom',
+            exponent: 6,
+          },
+        ],
+        base: 'uatom',
+        name: 'COSMOS',
+        display: 'atom',
+        symbol: 'ATOM',
       },
       {
         description: 'The first cryptocurrency invented in 2008',
         denom_units: [
           {
             denom: 'ubtc',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'btc',
             exponent: 6,
             aliases: [],
           },
@@ -143,6 +185,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'uusd',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'usd',
             exponent: 6,
             aliases: [],
           },
@@ -155,6 +202,11 @@ export class BankQueryService {
       {
         description: 'Stablecoin pegged to the USD',
         denom_units: [
+          {
+            denom: 'uusdc',
+            exponent: 0,
+            aliases: [],
+          },
           {
             denom: 'uusdc',
             exponent: 6,
@@ -171,6 +223,11 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'udlp',
+            exponent: 0,
+            aliases: [],
+          },
+          {
+            denom: 'dlp',
             exponent: 6,
             aliases: [],
           },
@@ -185,12 +242,12 @@ export class BankQueryService {
         denom_units: [
           {
             denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-            exponent: 6,
+            exponent: 0,
             aliases: [],
           },
         ],
         base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-        display: 'OSMO',
+        display: 'osmo',
         name: 'OSMOSIS (IBC)',
         symbol: 'OSMO',
       },
@@ -265,6 +322,21 @@ export class BankQueryService {
         metadata,
       },
     };
+  }
+
+  async getDenomMetadata(
+    denoms?: string[],
+  ): Promise<cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[]> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    if (!denoms) {
+      const res = await this._denomsMetadata();
+      return res.data.metadatas || [];
+    }
+
+    const res = await Promise.all(
+      denoms.map((denom) => this._denomMetadata(denom).then((res) => res.data.metadata!)),
+    );
+    return res;
   }
 
   getDenomMetadata$(

@@ -30,8 +30,9 @@ export class IncentiveComponent implements OnInit {
     );
     this.address$ = address$.pipe(map((addr) => addr.toString()));
     this.unitIds$ = address$.pipe(
-      mergeMap((address) => this.incentiveQuery.listIncentiveUnitIdsByAddr$(address.toString())),
-      map((res) => res.incentive_unit_ids),
+      mergeMap((address) =>
+        this.incentiveQuery.belongingRecipientContainerIdsByAddr$(address.toString()),
+      ),
     );
     this.rewards$ = address$.pipe(
       mergeMap((address) => this.incentiveQuery.getAllRewards$(address.toString())),

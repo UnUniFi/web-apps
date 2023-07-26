@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200ResponseDelegationResponsesInner,
@@ -19,7 +19,7 @@ export type WithdrawAllDelegatorRewardOnSubmitEvent = {
   templateUrl: './withdraw-all-delegator-reward-form-dialog.component.html',
   styleUrls: ['./withdraw-all-delegator-reward-form-dialog.component.css'],
 })
-export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
+export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -35,12 +35,10 @@ export class WithdrawAllDelegatorRewardFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<WithdrawAllDelegatorRewardOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 

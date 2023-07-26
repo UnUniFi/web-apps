@@ -1,16 +1,17 @@
+import { BankQueryService } from '../models/cosmos/bank.query.service';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'coinDenom',
 })
 export class CoinDenomPipe implements PipeTransform {
-  transform(value: string | undefined | null): unknown {
+  constructor(private readonly bankQueryService: BankQueryService) {}
+  async transform(value: string | undefined | null): Promise<string | null | undefined> {
     if (value) {
-      const denom = value;
-      const symbolDenom = denom.slice(1).toUpperCase();
-      return symbolDenom;
-    } else {
-      return value;
+      const metadata = await this.bankQueryService.getDenomMetadata([value]);
+      const symbol = metadata[0].symbol;
+      return symbol;
     }
+    return value;
   }
 }

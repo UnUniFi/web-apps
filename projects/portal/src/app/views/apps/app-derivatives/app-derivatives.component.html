@@ -43,7 +43,7 @@
           <li>
             <label class="flex gap-4" routerLink="/derivatives">
               <span class="flex-none">
-                <mat-icon color="primary">other_houses</mat-icon>
+                <span class="material-symbols-outlined">other_houses</span>
               </span>
               <span class="flex-1">Derivatives</span>
             </label>
@@ -51,7 +51,7 @@
           <li>
             <label class="flex gap-4" routerLink="/derivatives/perpetual-futures">
               <span class="flex-none">
-                <mat-icon color="primary">sync_alt</mat-icon>
+                <span class="material-symbols-outlined">sync_alt</span>
               </span>
               <span class="flex-1">Perpetual Futures</span>
             </label>
@@ -59,7 +59,7 @@
           <li>
             <label class="flex gap-4" routerLink="/derivatives/positions">
               <span class="flex-none">
-                <mat-icon color="primary">playlist_add_check</mat-icon>
+                <span class="material-symbols-outlined">playlist_add_check</span>
               </span>
               <span class="flex-1">Positions</span>
             </label>
@@ -67,7 +67,7 @@
           <li>
             <label class="flex gap-4" routerLink="/derivatives/pool">
               <span class="flex-none">
-                <mat-icon color="primary">pool</mat-icon>
+                <span class="material-symbols-outlined">pool</span>
               </span>
               <span class="flex-1">Pool</span>
             </label>
@@ -80,7 +80,7 @@
             <li *ngIf="app.name !== 'Derivatives'">
               <label class="flex gap-4" routerLink="{{ app.link }}">
                 <span class="flex-none">
-                  <mat-icon color="primary">{{ app.icon }}</mat-icon>
+                  <span class="material-symbols-outlined">{{ app.icon }}</span>
                 </span>
                 <span class="flex-1">{{ app.name }}</span>
               </label>
@@ -98,7 +98,7 @@
                   routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
                 >
                   <span class="flex-none">
-                    <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                    <span class="material-symbols-outlined">{{ navigation.icon }}</span>
                   </span>
                   <span class="flex-1">{{ navigation.name }}</span>
                 </label>
@@ -133,7 +133,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/derivatives">
           <span class="flex-none">
-            <mat-icon color="primary">other_houses</mat-icon>
+            <span class="material-symbols-outlined">other_houses</span>
           </span>
           <span class="flex-1">Derivatives</span>
         </label>
@@ -141,7 +141,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/perpetual-futures">
           <span class="flex-none">
-            <mat-icon color="primary">sync_alt</mat-icon>
+            <span class="material-symbols-outlined">sync_alt</span>
           </span>
           <span class="flex-1">Perpetual Futures</span>
         </label>
@@ -149,7 +149,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/positions">
           <span class="flex-none">
-            <mat-icon color="primary">playlist_add_check</mat-icon>
+            <span class="material-symbols-outlined">playlist_add_check</span>
           </span>
           <span class="flex-1">Positions</span>
         </label>
@@ -157,7 +157,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/derivatives/pool">
           <span class="flex-none">
-            <mat-icon color="primary">pool</mat-icon>
+            <span class="material-symbols-outlined">pool</span>
           </span>
           <span class="flex-1">Pool</span>
         </label>
@@ -170,7 +170,7 @@
         <li *ngIf="app.name !== 'Derivatives'">
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
-              <mat-icon color="primary">{{ app.icon }}</mat-icon>
+              <span class="material-symbols-outlined">{{ app.icon }}</span>
             </span>
             <span class="flex-1">{{ app.name }}</span>
           </label>
@@ -189,7 +189,7 @@
               routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
             >
               <span class="flex-none">
-                <mat-icon color="accent">{{ navigation.icon }}</mat-icon>
+                <span class="material-symbols-outlined">{{ navigation.icon }}</span>
               </span>
               <span class="flex-1">{{ navigation.name }}</span>
             </label>

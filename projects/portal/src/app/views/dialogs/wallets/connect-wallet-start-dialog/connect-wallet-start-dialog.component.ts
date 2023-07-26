@@ -10,30 +10,20 @@ import { Component, OnInit } from '@angular/core';
 export class ConnectWalletStartDialogComponent implements OnInit {
   walletOptions = [
     {
-      logo: 'assets/favicon.png',
-      walletType: WalletType.ununifi,
-      name: 'UnUniFi',
-    },
-    {
       logo: 'assets/keplr-logo.svg',
       walletType: WalletType.keplr,
       name: 'Keplr',
     },
     {
-      logo: 'assets/ledger-logo.png',
-      walletType: WalletType.ledger,
-      name: 'Ledger',
+      logo: 'assets/favicon.png',
+      walletType: WalletType.ununifi,
+      name: 'UnUniFi',
     },
-    {
-      logo: 'assets/key-station-logo.png',
-      walletType: WalletType.keyStation,
-      name: 'Key Station',
-    },
-    {
-      logo: 'assets/metamask-logo.svg',
-      walletType: WalletType.metaMask,
-      name: 'MetaMask',
-    },
+    // {
+    //   logo: 'assets/metamask-logo.svg',
+    //   walletType: WalletType.metaMask,
+    //   name: 'MetaMask',
+    // },
   ];
 
   constructor(public dialogRef: DialogRef<WalletType, ConnectWalletStartDialogComponent>) {}

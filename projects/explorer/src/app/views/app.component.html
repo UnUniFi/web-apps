@@ -1,4 +1,4 @@
-<div class="drawer drawer-mobile w-screen h-screen bg-base-300" data-theme="cmyk">
+<div class="drawer lg:drawer-open w-screen h-screen bg-base-300" data-theme="cmyk">
   <input id="drawer-main" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
@@ -28,6 +28,10 @@
         <div>Explorer</div>
       </div>
       <app-node-tool></app-node-tool>
+      <button class="btn gap-1 btn-primary w-full md:w-auto md:px-8" (click)="onClickOpenPortal()">
+        <span class="material-symbols-outlined">wallet</span>
+        <span class="hidden md:inline">Open Portal</span>
+      </button>
     </div>
     <!-- Page content here -->
     <div class="w-full max-w-screen-xl mx-auto p-8">
@@ -37,13 +41,13 @@
 
   <div class="drawer-side h-full overflow-auto">
     <label for="drawer-main" class="drawer-overlay"></label>
-    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full bg-base-200">
+    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full h-full bg-base-200">
       <!-- Sidebar content here -->
       <app-search-tool class="w-full"></app-search-tool>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/">
           <span class="flex-none">
-            <mat-icon color="primary">other_houses</mat-icon>
+            <span class="material-symbols-outlined">other_houses</span>
           </span>
           <span class="flex-1">Home</span>
         </label>
@@ -51,7 +55,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/blocks">
           <span class="flex-none">
-            <mat-icon color="primary">account_tree</mat-icon>
+            <span class="material-symbols-outlined">account_tree</span>
           </span>
           <span class="flex-1">Blocks</span>
         </label>
@@ -59,7 +63,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/txs">
           <span class="flex-none">
-            <mat-icon color="primary">mail</mat-icon>
+            <span class="material-symbols-outlined">mail</span>
           </span>
           <span class="flex-1">Transactions</span>
         </label>
@@ -67,7 +71,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/validators">
           <span class="flex-none">
-            <mat-icon color="primary">savings</mat-icon>
+            <span class="material-symbols-outlined">savings</span>
           </span>
           <span class="flex-1">Validators</span>
         </label>
@@ -75,7 +79,7 @@
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/proposals">
           <span class="flex-none">
-            <mat-icon color="primary">message</mat-icon>
+            <span class="material-symbols-outlined">message</span>
           </span>
           <span class="flex-1">Votes</span>
         </label>

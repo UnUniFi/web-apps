@@ -1,11 +1,12 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200Response,
   StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type RedelegateOnSubmitEvent = {
@@ -21,7 +22,7 @@ export type RedelegateOnSubmitEvent = {
   templateUrl: './redelegate-form-dialog.component.html',
   styleUrls: ['./redelegate-form-dialog.component.css'],
 })
-export class RedelegateFormDialogComponent implements OnInit {
+export class RedelegateFormDialogComponent implements OnInit, OnChanges {
   @Input()
   validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
@@ -29,11 +30,11 @@ export class RedelegateFormDialogComponent implements OnInit {
   @Input()
   delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  delegateCoin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denom?: string | null;
   @Input()
-  uguuBalance?: string | null;
+  balance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -43,24 +44,23 @@ export class RedelegateFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<RedelegateOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  selectedValidator?: StakingDelegatorValidators200ResponseValidatorsInner;
+  redelegateAmount?: number;
+  selectedValidator?: string;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 
   ngOnChanges(): void {
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     if (this.minimumGasPrices && this.minimumGasPrices.length > 0) {
       this.selectedGasPrice = this.minimumGasPrices[0];
     }
     if (this.validatorsList) {
-      this.selectedValidator = this.validatorsList[0];
+      this.selectedValidator = this.validatorsList.filter(
+        (val) => val.operator_address != this.validator?.operator_address,
+      )[0].operator_address;
     }
   }
 
@@ -80,24 +80,32 @@ export class RedelegateFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.selectedValidator || !this.selectedValidator.operator_address) {
+    if (!this.selectedValidator) {
+      alert('Please select a validator');
       return;
     }
-    if (!this.selectedAmount) {
+    if (!this.redelegateAmount) {
+      alert('Please input amount');
       return;
     }
     if (!this.selectedGasPrice) {
+      alert('Please select gas price');
       return;
     }
     if (!this.validatorsList) {
+      alert('invalid Validators List');
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    if (!this.denom) {
+      alert('invalid denom');
+      return;
+    }
+    const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
-      destinationValidator: this.selectedValidator.operator_address,
+      destinationValidator: this.selectedValidator,
       amount: {
-        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: this.selectedAmount.denom,
+        amount: Math.floor(Number(this.redelegateAmount) * 10 ** exponent).toString(),
+        denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

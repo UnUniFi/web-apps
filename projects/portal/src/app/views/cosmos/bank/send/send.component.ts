@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -15,7 +15,7 @@ export type SendOnSubmitEvent = {
   templateUrl: './send.component.html',
   styleUrls: ['./send.component.css'],
 })
-export class SendComponent implements OnInit {
+export class SendComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
 
@@ -43,7 +43,7 @@ export class SendComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSubmit(toAddress: string, minimumGasPrice: string) {
     if (!this.currentStoredWallet) {

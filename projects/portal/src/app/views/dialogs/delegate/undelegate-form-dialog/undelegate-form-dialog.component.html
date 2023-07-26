@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -18,7 +18,7 @@
         <li class="disabled">
           <a class="text-base-content items-center">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
             >
               circle
@@ -37,7 +37,7 @@
         <li class="disabled">
           <a class="text-base-content items-center">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
             >
               circle
@@ -92,18 +92,20 @@
           <input
             name="undelegate-amount"
             type="number"
-            placeholder="e.g. 12.123456"
+            placeholder="12.123456"
             class="input input-bordered w-full"
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [(ngModel)]="undelegateAmount"
             [min]="0"
             required
             pattern="^\d+(\.\d{1,6})?$"
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateAmount | coin }} </span>
+          <span class="label-text text-xs">
+            Delegated Amount: {{ delegateCoin | coin | async }}
+          </span>
         </label>
       </div>
 

@@ -7,6 +7,9 @@ const routes: Routes = [
     path: 'utilities',
     loadChildren: () =>
       import('./pages/apps/app-utils/app-utils.module').then((m) => m.AppAppUtilsModule),
+      data:{
+        animation: true
+      }
   },
   {
     path: 'nft-backed-loan',
@@ -14,6 +17,9 @@ const routes: Routes = [
       import('./pages/apps/app-nft-backed-loans/app-nft-backed-loans.module').then(
         (m) => m.AppAppNftBackedLoansModule,
       ),
+      data:{
+        animation: true
+      }
   },
   {
     path: 'derivatives',
@@ -21,6 +27,9 @@ const routes: Routes = [
       import('./pages/apps/app-derivatives/app-derivatives.module').then(
         (m) => m.AppAppDerivativesModule,
       ),
+      data:{
+        animation: true
+      }
   },
   {
     path: 'yield-aggregator',
@@ -28,6 +37,9 @@ const routes: Routes = [
       import('./pages/apps/app-yield-aggregator/app-yield-aggregator.module').then(
         (m) => m.AppAppYieldAggregatorModule,
       ),
+      data:{
+        animation: true
+      }
   },
 ];
 

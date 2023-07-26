@@ -1,0 +1,15 @@
+<view-borrow
+  [classID]="classID$ | async"
+  [nftID]="nftID$ | async"
+  [listingInfo]="listingInfo$ | async"
+  [symbol]="symbol$ | async"
+  [symbolMetadataMap]="symbolMetadataMap$ | async"
+  [symbolImage]="symbolImage$ | async"
+  [bids]="bids$ | async"
+  [nftMetadata]="nftMetadata$ | async"
+  [nftImage]="nftImage$ | async"
+  [borrowAmount]="borrowAmount$ | async"
+  [selectedBorrowAmount]="borrowAmount$ | async"
+  [chartData]="chartData$ | async"
+  (appSubmit)="onSubmit($event)"
+></view-borrow>

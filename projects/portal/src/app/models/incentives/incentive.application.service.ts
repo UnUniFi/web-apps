@@ -80,8 +80,8 @@ export class IncentiveApplicationService {
   }
 
   async Register(
-    incentiveUnitId: string,
-    subjectAddresses: string[],
+    recipientContainerId: string,
+    addresses: string[],
     weights: number[],
     minimumGasPrice: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     gasRatio: number,
@@ -107,8 +107,8 @@ export class IncentiveApplicationService {
 
     try {
       simulatedResultData = await this.incentiveService.simulateToRegister(
-        incentiveUnitId,
-        subjectAddresses,
+        recipientContainerId,
+        addresses,
         weights,
         cosmosPublicKey,
         minimumGasPrice,
@@ -149,8 +149,8 @@ export class IncentiveApplicationService {
 
     try {
       txResult = await this.incentiveService.register(
-        incentiveUnitId,
-        subjectAddresses,
+        recipientContainerId,
+        addresses,
         weights,
         currentCosmosWallet,
         gas,

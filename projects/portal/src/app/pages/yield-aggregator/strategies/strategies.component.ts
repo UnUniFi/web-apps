@@ -43,7 +43,7 @@ export class StrategiesComponent implements OnInit {
     this.symbolImage$ = this.symbol$.pipe(
       map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
     );
-    const allStrategies$ = this.iyaQuery.listStrategies$('');
+    const allStrategies$ = this.iyaQuery.listStrategies$();
     this.availableSymbols$ = combineLatest([allStrategies$, denomMetadataMap$]).pipe(
       map(([allStrategies, denomMetadataMap]) => {
         const symbols = allStrategies

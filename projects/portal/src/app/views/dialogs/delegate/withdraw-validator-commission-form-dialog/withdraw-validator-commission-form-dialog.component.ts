@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200Response,
@@ -18,7 +18,7 @@ export type WithdrawValidatorCommissionOnSubmitEvent = {
   templateUrl: './withdraw-validator-commission-form-dialog.component.html',
   styleUrls: ['./withdraw-validator-commission-form-dialog.component.css'],
 })
-export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
+export class WithdrawValidatorCommissionFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
@@ -35,7 +35,6 @@ export class WithdrawValidatorCommissionFormDialogComponent implements OnInit {
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
     this.gasRatio = 0;
   }
 

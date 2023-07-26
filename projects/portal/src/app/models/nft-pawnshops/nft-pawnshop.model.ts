@@ -34,24 +34,21 @@ export type PlaceBidRequest = {
 export type ListRequest = {
   classID: string;
   nftID: string;
-  listingType: ununificlient.proto.ununifi.nftmarket.ListingType;
   bidSymbol: string;
   minimumDepositRate: number;
-  autoRefinancing: boolean;
+  milliSeconds: number;
 };
 
 export type BorrowRequest = {
   classID: string;
   nftID: string;
-  symbol: string;
-  amount: number;
+  borrowBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[];
 };
 
 export type RepayRequest = {
   classID: string;
   nftID: string;
-  symbol: string;
-  amount: number;
+  repayBids: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[];
 };
 
 export type NftRequest = {

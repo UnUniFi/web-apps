@@ -21,7 +21,9 @@
   </div> -->
   <ng-container *ngIf="positions === null; then loading; else loaded"></ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="!positions || positions.length === 0; then empty; else filled">

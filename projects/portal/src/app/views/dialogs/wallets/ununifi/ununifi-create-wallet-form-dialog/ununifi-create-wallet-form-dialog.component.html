@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -80,7 +80,7 @@
                   disabled
                 ></textarea>
                 <button class="btn btn-sm btn-ghost" (click)="copyClipboard(mnemonicRef.value)">
-                  <span class="material-icons">content_copy</span>
+                  <span class="material-symbols-outlined">content_copy</span>
                 </button>
               </div>
             </div>
@@ -103,14 +103,14 @@
                 <label class="swap">
                   <input type="checkbox" (change)="togglePasswordVisibility()" />
                   <div class="swap-on btn btn-sm btn-ghost">
-                    <span class="material-icons">visibility</span>
+                    <span class="material-symbols-outlined">visibility</span>
                   </div>
                   <div class="swap-off btn btn-sm btn-ghost">
-                    <span class="material-icons">visibility_off</span>
+                    <span class="material-symbols-outlined">visibility_off</span>
                   </div>
                 </label>
                 <button class="btn btn-sm btn-ghost" (click)="copyClipboard(privateKeyRef.value)">
-                  <span class="material-icons">content_copy</span>
+                  <span class="material-symbols-outlined">content_copy</span>
                 </button>
               </div>
               <label class="label">

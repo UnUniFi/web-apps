@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
@@ -15,15 +15,11 @@ export type VoteOnSubmitEvent = {
   templateUrl: './vote-form-dialog.component.html',
   styleUrls: ['./vote-form-dialog.component.css'],
 })
-export class VoteFormDialogComponent implements OnInit {
+export class VoteFormDialogComponent implements OnInit, OnChanges {
   @Input()
   proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
-  @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -41,8 +37,6 @@ export class VoteFormDialogComponent implements OnInit {
   appSubmitAbstain: EventEmitter<VoteOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
@@ -50,10 +44,6 @@ export class VoteFormDialogComponent implements OnInit {
     this.appSubmitNoWithVeto = new EventEmitter();
     this.appSubmitNo = new EventEmitter();
     this.appSubmitAbstain = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 

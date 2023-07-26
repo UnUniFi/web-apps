@@ -46,12 +46,6 @@ export class WalletApplicationService {
       return;
     }
 
-    // Todo: After implementation, this should be removed
-    if (selectedWalletType === WalletType.keyStation || selectedWalletType === WalletType.ledger) {
-      this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
-      return;
-    }
-
     if (selectedWalletType === WalletType.ununifi) {
       const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 

@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
   DelegatorDelegations200Response,
@@ -7,6 +7,7 @@ import {
   StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type UndelegateOnSubmitEvent = {
@@ -20,17 +21,17 @@ export type UndelegateOnSubmitEvent = {
   templateUrl: './undelegate-form-dialog.component.html',
   styleUrls: ['./undelegate-form-dialog.component.css'],
 })
-export class UndelegateFormDialogComponent implements OnInit {
+export class UndelegateFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
   delegations?: DelegatorDelegations200Response | null;
   @Input()
-  delegateAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  delegateCoin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denom?: string | null;
   @Input()
-  uguuBalance?: string | null;
+  balance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -42,8 +43,7 @@ export class UndelegateFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<UndelegateOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  undelegateAmount?: number;
   gasRatio: number;
 
   estimatedUnbondingData: string = '';
@@ -51,9 +51,6 @@ export class UndelegateFormDialogComponent implements OnInit {
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
     this.now.setDate(this.now.getDate() + 14);
     this.estimatedUnbondingData = this.now.toString();
@@ -81,17 +78,20 @@ export class UndelegateFormDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.selectedAmount) {
+    if (!this.undelegateAmount) {
+      return;
+    }
+    if (!this.denom) {
       return;
     }
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
       amount: {
-        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: this.selectedAmount.denom,
+        amount: Math.floor(Number(this.undelegateAmount) * 10 ** exponent).toString(),
+        denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       gasRatio: this.gasRatio,

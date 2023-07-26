@@ -1,8 +1,9 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
+import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type DelegateOnSubmitEvent = {
@@ -18,15 +19,15 @@ export type DelegateOnSubmitEvent = {
   templateUrl: './delegate-form-dialog.component.html',
   styleUrls: ['./delegate-form-dialog.component.css'],
 })
-export class DelegateFormDialogComponent implements OnInit {
+export class DelegateFormDialogComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
   validatorsList?: StakingDelegatorValidators200ResponseValidatorsInner[] | null;
   @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denom?: string | null;
   @Input()
-  uguuBalance?: string | null;
+  balance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -36,16 +37,11 @@ export class DelegateFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<DelegateOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
-  selectedAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  delegateAmount?: number;
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    // this.availableDenoms = this.coins?.map((coin) => coin.denom!);
-    this.availableDenoms = ['uguu'];
-
-    this.selectedAmount = { denom: 'uguu', amount: '0' };
     this.gasRatio = 0;
   }
 
@@ -73,18 +69,19 @@ export class DelegateFormDialogComponent implements OnInit {
   onSubmit() {
     if (
       !this.currentStoredWallet ||
-      !this.selectedAmount ||
+      !this.delegateAmount ||
       !this.selectedGasPrice ||
-      !this.validatorsList
+      !this.validatorsList ||
+      !this.denom
     ) {
       return;
     }
-    // this.selectedAmount.amount = this.selectedAmount.amount?.toString();
+    const exponent = denomExponentMap[this.denom];
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       amount: {
-        amount: Math.floor(Number(this.selectedAmount.amount) * 1000000).toString(),
-        denom: this.selectedAmount.denom,
+        amount: Math.floor(Number(this.delegateAmount) * 10 ** exponent).toString(),
+        denom: this.denom,
       },
       minimumGasPrice: this.selectedGasPrice,
       validatorList: this.validatorsList,

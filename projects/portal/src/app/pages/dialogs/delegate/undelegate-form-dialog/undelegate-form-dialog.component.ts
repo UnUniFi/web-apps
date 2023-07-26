@@ -12,7 +12,7 @@ import { StakingApplicationService } from 'projects/portal/src/app/models/cosmos
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { UndelegateOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/delegate/undelegate-form-dialog/undelegate-form-dialog.component';
-import { Observable, of } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -23,9 +23,9 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class UndelegateFormDialogComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   delegations$: Observable<DelegatorDelegations200Response>;
-  delegateAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
-  coins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  uguuBalance$: Observable<string> | undefined;
+  delegateCoin$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  denom$: Observable<string | null | undefined>;
+  balance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   validator: StakingDelegatorValidators200ResponseValidatorsInner | undefined;
   unbondingDelegation$: Observable<UnbondingDelegation200Response | undefined>;
@@ -59,7 +59,7 @@ export class UndelegateFormDialogComponent implements OnInit {
         return this.cosmosRest.getUnbondingDelegation$(valAddress, address);
       }),
     );
-    this.delegateAmount$ = this.delegations$.pipe(
+    this.delegateCoin$ = this.delegations$.pipe(
       map(
         (delegations) =>
           delegations.delegation_responses?.find(
@@ -68,12 +68,10 @@ export class UndelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-    this.coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
-    this.uguuBalance$ = this.coins$.pipe(
-      map((coins) => {
-        const balance = coins?.find((coin) => coin.denom == 'uguu');
-        return balance ? balance.amount! : '0';
-      }),
+    const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
+    this.denom$ = this.delegateCoin$.pipe(map((coin) => coin?.denom));
+    this.balance$ = combineLatest([coins$, this.denom$]).pipe(
+      map(([coins, denom]) => coins?.find((coin) => coin.denom === denom)),
     );
 
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));

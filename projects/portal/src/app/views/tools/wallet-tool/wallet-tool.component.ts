@@ -1,6 +1,14 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Window as KeplrWindow } from '@keplr-wallet/types';
 import * as crypto from 'crypto';
@@ -14,19 +22,41 @@ declare global {
   templateUrl: './wallet-tool.component.html',
   styleUrls: ['./wallet-tool.component.css'],
 })
-export class WalletToolComponent implements OnInit {
+export class WalletToolComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
+  symbol?: string | null;
+  @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input()
+  keplrStoredWallet?: StoredWallet | null;
   @Output()
   appConnectWallet: EventEmitter<{}>;
   @Output()
   appDisconnectWallet: EventEmitter<{}>;
 
+  isFirstChange = true;
+
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
     this.appConnectWallet = new EventEmitter();
     this.appDisconnectWallet = new EventEmitter();
+  }
+
+  ngOnChanges(): void {
+    if (
+      this.isFirstChange &&
+      this.currentStoredWallet &&
+      this.keplrStoredWallet &&
+      this.currentStoredWallet.type === 'keplr' &&
+      this.currentStoredWallet.public_key != this.keplrStoredWallet.public_key
+    ) {
+      this.isFirstChange = false;
+      alert(
+        'Logged out because Keplr and Portal have different addresses. Please connect wallet again.',
+      );
+      this.onDisconnectWallet({});
+    }
   }
 
   ngOnInit(): void {}

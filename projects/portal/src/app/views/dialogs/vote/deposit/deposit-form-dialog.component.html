@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="card-actions justify-end md:hidden">
       <button class="btn btn-square btn-ghost btn-sm">
-        <span class="material-icons" (click)="onClickClose()">close</span>
+        <span class="material-symbols-outlined" (click)="onClickClose()">close</span>
       </button>
     </div>
     <div class="flex flex-col items-center">
@@ -12,9 +12,7 @@
     <ng-container *ngIf="proposalContent">
       <ul class="menu w-full">
         <li class="disabled">
-          <a class="text-base-content">
-            # {{ proposal?.proposal_id }} {{ proposalContent.title }}
-          </a>
+          <a class="text-base-content"> # {{ proposalID }} {{ proposalContent.title }} </a>
         </li>
       </ul>
     </ng-container>
@@ -25,9 +23,9 @@
       </label>
       <ul class="menu bg-base-100">
         <li class="disabled">
-          <a class="text-base-content items-center">
+          <a class="text-base-content items-center font-mono">
             <span
-              class="material-icons"
+              class="material-symbols-outlined"
               [ngStyle]="{ color: getColorCode(currentStoredWallet?.address!) }"
             >
               circle
@@ -49,17 +47,15 @@
             type="number"
             placeholder="Type here"
             class="input input-bordered w-full"
-            [(ngModel)]="selectedAmount && selectedAmount.amount"
+            [(ngModel)]="depositAmount"
             pattern="^\d+(\.\d{1,6})?$"
             [min]="0"
             required
           />
-          <span>{{ selectedAmount?.denom | coinDenom }}</span>
+          <span>{{ denom | coinDenom | async }}</span>
         </label>
         <label class="label">
-          <span class="label-text text-xs">
-            Available Balance: {{ uguuBalance | coinAmount }}{{ selectedAmount?.denom | coinDenom }}
-          </span>
+          <span class="label-text text-xs"> Available Balance: {{ balance | coin | async }} </span>
         </label>
       </div>
 

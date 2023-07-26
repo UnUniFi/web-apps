@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
-  NftmarketParams200ResponseParams,
+  NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -13,12 +13,12 @@ import {
   styleUrls: ['./nft-pawnshop.component.css'],
 })
 export class NftPawnshopComponent implements OnInit {
-  params$: Observable<NftmarketParams200ResponseParams>;
+  params$: Observable<NftBackedLoanParams200ResponseParams>;
   listedClasses$: Observable<ListedClass200Response[]>;
   listedNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
 
   constructor(private readonly pawnshopQuery: NftPawnshopQueryService) {
-    this.params$ = this.pawnshopQuery.getNftmarketParam$();
+    this.params$ = this.pawnshopQuery.getNftBackedLoanParam$();
     this.listedClasses$ = this.pawnshopQuery.listAllListedClasses$();
     this.listedNfts$ = this.pawnshopQuery.listAllListedNfts$();
   }

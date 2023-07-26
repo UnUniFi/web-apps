@@ -26,16 +26,16 @@ export class YieldAggregatorQueryService {
     );
   }
 
-  listStrategies$(denom: string): Observable<StrategyAll200ResponseStrategiesInner[]> {
+  listStrategies$(denom?: string): Observable<StrategyAll200ResponseStrategiesInner[]> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.strategyAll(sdk, denom)),
       map((res) => res.data.strategies!),
     );
   }
 
-  getStrategy$(denom: string, id: string): Observable<StrategyAll200ResponseStrategiesInner> {
+  getStrategy$(id: string, denom?: string): Observable<StrategyAll200ResponseStrategiesInner> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategy(sdk, denom, id)),
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.strategy(sdk, id, denom)),
       map((res) => res.data.strategy!),
     );
   }
@@ -56,7 +56,7 @@ export class YieldAggregatorQueryService {
 
   getEstimatedMintAmount$(
     id: string,
-    amount: string,
+    amount?: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateMintAmount(sdk, id, amount)),
@@ -66,7 +66,7 @@ export class YieldAggregatorQueryService {
 
   getEstimatedRedeemAmount$(
     id: string,
-    amount: string,
+    amount?: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount)),

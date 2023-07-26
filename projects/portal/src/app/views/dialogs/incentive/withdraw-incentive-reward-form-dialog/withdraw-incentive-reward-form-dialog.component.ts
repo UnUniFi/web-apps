@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
@@ -14,15 +14,11 @@ export type WithdrawRewardOnSubmitEvent = {
   templateUrl: './withdraw-incentive-reward-form-dialog.component.html',
   styleUrls: ['./withdraw-incentive-reward-form-dialog.component.css'],
 })
-export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
+export class WithdrawIncentiveRewardFormDialogComponent implements OnInit, OnChanges {
   @Input()
   denom?: string;
   @Input()
   currentStoredWallet?: StoredWallet | null;
-  @Input()
-  coins?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
-  @Input()
-  uguuBalance?: string | null;
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
@@ -32,13 +28,10 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   appSubmit: EventEmitter<WithdrawRewardOnSubmitEvent>;
 
   selectedGasPrice?: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
-  availableDenoms?: string[];
   gasRatio: number;
 
   constructor(public dialogRef: DialogRef) {
     this.appSubmit = new EventEmitter();
-    this.availableDenoms = ['uguu'];
-
     this.gasRatio = 0;
   }
 

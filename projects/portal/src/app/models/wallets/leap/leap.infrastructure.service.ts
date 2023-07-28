@@ -140,7 +140,7 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     const pubkey = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
     const storedWallet: StoredWallet = {
       id: keyData.name,
-      type: WalletType.Leap,
+      type: WalletType.leap,
       key_type: KeyType.secp256k1,
       public_key: pubkey,
       address: accAddress.toString(),

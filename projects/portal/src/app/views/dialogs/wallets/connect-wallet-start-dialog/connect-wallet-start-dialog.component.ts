@@ -11,12 +11,12 @@ export class ConnectWalletStartDialogComponent implements OnInit {
   walletOptions = [
     {
       logo: 'assets/wallets/keplr.svg',
-      walletType: WalletType.Keplr,
+      walletType: WalletType.keplr,
       name: 'Keplr',
     },
     {
       logo: 'assets/wallets/leap.svg',
-      walletType: WalletType.Leap,
+      walletType: WalletType.leap,
       name: 'Leap',
     },
     // {
@@ -26,7 +26,7 @@ export class ConnectWalletStartDialogComponent implements OnInit {
     // },
     {
       logo: 'assets/favicon.png',
-      walletType: WalletType.UnUniFi,
+      walletType: WalletType.ununifi,
       name: 'UnUniFi (deprecated))',
     },
   ];

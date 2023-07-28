@@ -40,7 +40,7 @@ export class SimpleComponent implements OnInit {
       const id = `${year}${month}${date}${hour}${min}${sec}`;
       return {
         id,
-        type: WalletType.UnUniFi,
+        type: WalletType.ununifi,
         mnemonic,
         key_type: KeyType.secp256k1,
         privateKey,

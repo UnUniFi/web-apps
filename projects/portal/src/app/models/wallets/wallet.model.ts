@@ -5,10 +5,10 @@ import { PubKey } from '@cosmos-client/core/esm/types';
 import { Window as KeplrWindow } from '@keplr-wallet/types';
 
 export enum WalletType {
-  UnUniFi = 'ununifi',
-  Keplr = 'keplr',
-  Leap = 'leap',
-  MetaMask = 'metamask',
+  ununifi = 'UnUniFi',
+  keplr = 'Keplr',
+  leap = 'Leap',
+  metamask = 'MetaMask',
 }
 
 interface MergedWindow extends KeplrWindow, LeapWindow {}

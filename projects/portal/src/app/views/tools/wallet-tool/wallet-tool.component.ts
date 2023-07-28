@@ -48,7 +48,7 @@ export class WalletToolComponent implements OnInit, OnChanges {
       this.isFirstChange &&
       this.currentStoredWallet &&
       this.keplrStoredWallet &&
-      this.currentStoredWallet.type === WalletType.Keplr &&
+      this.currentStoredWallet.type === WalletType.keplr &&
       this.currentStoredWallet.public_key != this.keplrStoredWallet.public_key
     ) {
       this.isFirstChange = false;
@@ -63,7 +63,7 @@ export class WalletToolComponent implements OnInit, OnChanges {
 
   @HostListener('window:keplr_keystorechange', ['$event'])
   onChangeKeplrKey() {
-    if (this.currentStoredWallet?.type === WalletType.Keplr) {
+    if (this.currentStoredWallet?.type === WalletType.keplr) {
       alert('Key store in Keplr is changed. You may need to refetch the account info.');
       this.onDisconnectWallet({});
     }
@@ -71,7 +71,7 @@ export class WalletToolComponent implements OnInit, OnChanges {
 
   @HostListener('window:leap_keystorechange', ['$event'])
   onChangeLeapKey() {
-    if (this.currentStoredWallet?.type === WalletType.Leap) {
+    if (this.currentStoredWallet?.type === WalletType.leap) {
       alert('Key store in Leap is changed. You may need to refetch the account info.');
       this.onDisconnectWallet({});
     }

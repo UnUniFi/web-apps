@@ -71,7 +71,7 @@ export class SlashingApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.UnUniFi) {
+    if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {

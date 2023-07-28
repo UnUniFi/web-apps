@@ -45,7 +45,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
         if (!privateKey) {
           return {
             id,
-            type: WalletType.UnUniFi,
+            type: WalletType.ununifi,
             mnemonic: '',
             key_type: KeyType.secp256k1,
             privateKey: '',
@@ -66,7 +66,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
           const address = accAddress.toString();
           return {
             id,
-            type: WalletType.UnUniFi,
+            type: WalletType.ununifi,
             mnemonic: '',
             key_type: KeyType.secp256k1,
             privateKey,
@@ -77,7 +77,7 @@ export class UnunifiImportWalletWithPrivateKeyFormDialogComponent implements OnI
           console.error(error);
           return {
             id,
-            type: WalletType.UnUniFi,
+            type: WalletType.ununifi,
             mnemonic: '',
             key_type: KeyType.secp256k1,
             privateKey: '',

@@ -205,7 +205,7 @@ export class GovApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.UnUniFi) {
+    if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {
@@ -291,7 +291,7 @@ export class GovApplicationService {
     }
 
     // confirm fee only ununifi wallet type case
-    if (currentCosmosWallet.type === WalletType.UnUniFi) {
+    if (currentCosmosWallet.type === WalletType.ununifi) {
       const txFeeConfirmedResult = await this.dialog
         .open<TxFeeConfirmDialogData>(TxFeeConfirmDialogComponent, {
           data: {

@@ -28,7 +28,7 @@ export class DbService {
         const keys = await this.db.table('keys').toArray();
         const wallets = keys.map((key) => {
           const id = `ununifi_${key.id}`;
-          const type = WalletType.UnUniFi;
+          const type = WalletType.ununifi;
           const key_type = key.type as KeyType;
           const public_key = key.public_key as string;
           let cosmosPublicKey: PubKey;

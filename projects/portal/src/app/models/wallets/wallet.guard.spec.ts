@@ -15,7 +15,7 @@ const setup = (props?: {
   const routerMock: any = {};
   const mockStoredWallet1: StoredWallet = {
     id: 'test1',
-    type: WalletType.UnUniFi,
+    type: WalletType.ununifi,
     key_type: KeyType.secp256k1,
     public_key: 'test1_public_key',
     address: 'test1_address',

@@ -135,7 +135,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     const pubkey = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
     const storedWallet: StoredWallet = {
       id: keyData.name,
-      type: WalletType.Keplr,
+      type: WalletType.keplr,
       key_type: KeyType.secp256k1,
       public_key: pubkey,
       address: accAddress.toString(),

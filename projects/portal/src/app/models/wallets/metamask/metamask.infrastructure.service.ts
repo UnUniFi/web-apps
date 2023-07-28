@@ -85,7 +85,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const storedWallet: StoredWallet = {
       id: ethAddress,
-      type: WalletType.MetaMask,
+      type: WalletType.metamask,
       key_type: KeyType.ethsecp256k1,
       public_key: publicKeyString,
       address: accAddress.toString(),

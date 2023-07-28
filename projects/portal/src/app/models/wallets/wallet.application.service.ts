@@ -48,7 +48,7 @@ export class WalletApplicationService {
       return;
     }
 
-    if (selectedWalletType === WalletType.UnUniFi) {
+    if (selectedWalletType === WalletType.ununifi) {
       const selectOrImportOrCreate = await this.openUnunifiSelectCreateImportDialog();
 
       if (!selectOrImportOrCreate) {
@@ -90,11 +90,11 @@ export class WalletApplicationService {
 
     const isSuccessConnected = await (async () => {
       switch (selectedWalletType) {
-        case WalletType.Keplr:
+        case WalletType.keplr:
           return await this.connectWallet(this.keplrService);
-        case WalletType.Leap:
+        case WalletType.leap:
           return await this.connectWallet(this.leapService);
-        case WalletType.MetaMask:
+        case WalletType.metamask:
           // return await this.connectWallet(this.metaMaskService);
           this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
           return false;

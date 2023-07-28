@@ -1,6 +1,5 @@
 import { DbService } from '../db.service';
-import { KeyType } from '../keys/key.model';
-import { CosmosWallet, StoredWallet, Wallet, WalletType } from './wallet.model';
+import { CosmosWallet, StoredWallet, Wallet } from './wallet.model';
 import { IWalletInfrastructure } from './wallet.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';

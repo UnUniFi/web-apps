@@ -17,19 +17,6 @@ interface Key {
   isNanoLedger: boolean;
 }
 
-interface LeapWindow {
-  leap?: any;
-  getOfflineSigner?: (chainId: string) => any;
-  getOfflineSignerOnlyAmino?: (chainId: string) => any;
-  getOfflineSignerAuto?: (chainId: string) => Promise<any>;
-  getEnigmaUtils?: (chainId: string) => any;
-}
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends LeapWindow {}
-}
-
 @Injectable({
   providedIn: 'root',
 })

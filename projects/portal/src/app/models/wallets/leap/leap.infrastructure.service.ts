@@ -32,20 +32,20 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       return;
     }
     const chainID = this.configService.configs[0].chainID;
-    await window.leap?.enable(chainID);
+    await window.leap.enable(chainID);
 
-    const key = await window.leap?.getKey(chainID);
+    const key = await window.leap.getKey(chainID);
     return key;
   }
 
   private async suggestChain(): Promise<void> {
-    if (!window.keplr) {
+    if (!window.leap) {
       alert('Please install Leap extension');
       return;
     }
     const chainId = this.configService.configs[0].chainID;
     const chainName = this.configService.configs[0].chainName;
-    const rpc = this.configService.configs[0].websocketURL;
+    const rpc = this.configService.configs[0].websocketURL.replace('ws', 'http');
     const rest = this.configService.configs[0].restURL;
     const bip44 = { coinType: 118 };
     const bech32Config = {
@@ -83,7 +83,9 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       average: 0.01,
       high: 0.03,
     };
-    const image = ''; // TODO
+    const image =
+      'https://raw.githubusercontent.com/cosmos/chain-registry/master/ununifi/images/ununifi.svg';
+
     const chainInfo = {
       chainId,
       chainName,
@@ -97,11 +99,11 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       gasPriceStep,
       image,
     };
-    await window.leap?.experimentalSuggestChain(chainInfo);
+    await window.leap.experimentalSuggestChain(chainInfo);
   }
 
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
-    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Keplr...');
+    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Leap...');
     try {
       await this.suggestChain();
     } catch (error) {
@@ -158,8 +160,8 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       return;
     }
     const chainId = this.configService.configs[0].chainID;
-    await window.leap?.enable(chainId);
-    const directSignResponse = await window.leap?.signDirect(chainId, signer, {
+    await window.leap.enable(chainId);
+    const directSignResponse = await window.leap.signDirect(chainId, signer, {
       bodyBytes,
       authInfoBytes,
       chainId,

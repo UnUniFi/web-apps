@@ -15,19 +15,19 @@ export class ConnectWalletStartDialogComponent implements OnInit {
       name: 'Keplr',
     },
     {
-      logo: 'assets/wallets/leap.png',
+      logo: 'assets/wallets/leap.svg',
       walletType: WalletType.Leap,
       name: 'Leap',
     },
-    {
-      logo: 'assets/metamask-logo.svg',
-      walletType: WalletType.MetaMask,
-      name: 'MetaMask',
-    },
+    // {
+    //   logo: 'assets/metamask.svg',
+    //   walletType: WalletType.MetaMask,
+    //   name: 'MetaMask',
+    // },
     {
       logo: 'assets/favicon.png',
       walletType: WalletType.UnUniFi,
-      name: 'UnUniFi',
+      name: 'UnUniFi (deprecated))',
     },
   ];
 

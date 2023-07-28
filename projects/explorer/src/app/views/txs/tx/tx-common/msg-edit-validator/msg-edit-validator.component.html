@@ -1,62 +1,66 @@
 <ng-container *ngIf="txDetail">
-  <mat-card class="mb-2">
-    <mat-chip-list>
-      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
-    </mat-chip-list>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">Validator address:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Minimum self delegate:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.minimumSelfDelegation }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Moniker:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.moniker }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Identity:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.identity }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Commission rate:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.editedCommissionRate | percent }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Details:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.details }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="break-words">Contact:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.description?.security_contact }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-    </mat-list>
-    <mat-nav-list>
-      <mat-list-item>
-        <span class="break-words">Website:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">
-          <a target="_blank" rel="noopener noreferrer" href="{{ txDetail.description?.website }}">{{
-            txDetail.description?.website }}</a>
-        </span>
-      </mat-list-item>
-    </mat-nav-list>
-
-  </mat-card>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <span class="badge badge-info"> {{ txDetail.txType }} </span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>Validator</th>
+            <td class="font-mono">
+              {{ txDetail.toAddress }}
+            </td>
+          </tr>
+          <tr>
+            <th>Minimum self delegate</th>
+            <td class="font-mono">
+              {{ txDetail.minimumSelfDelegation }}
+            </td>
+          </tr>
+          <tr>
+            <th>Moniker</th>
+            <td>
+              {{ txDetail.description?.moniker }}
+            </td>
+          </tr>
+          <tr>
+            <th>Identity</th>
+            <td>
+              {{ txDetail.description?.identity }}
+            </td>
+          </tr>
+          <tr>
+            <th>Commission rate</th>
+            <td>
+              {{ txDetail.editedCommissionRate | percent : '1.2-2' }}
+            </td>
+          </tr>
+          <tr>
+            <th>Details</th>
+            <td>
+              {{ txDetail.description?.details }}
+            </td>
+          </tr>
+          <tr>
+            <th>Contact</th>
+            <td>
+              {{ txDetail.description?.security_contact }}
+            </td>
+          </tr>
+          <tr>
+            <th>Website</th>
+            <td>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="{{ txDetail.description?.website }}"
+                >{{ txDetail.description?.website }}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ng-container>

@@ -11,10 +11,10 @@ export enum WalletType {
   metamask = 'MetaMask',
 }
 
-interface MergedWindow extends KeplrWindow, LeapWindow {}
+export interface WalletWindow extends KeplrWindow, LeapWindow {}
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends MergedWindow {}
+  interface Window extends WalletWindow {}
 }
 
 // Note: For general purpose? Uint8Array ... Want to use this as possible?

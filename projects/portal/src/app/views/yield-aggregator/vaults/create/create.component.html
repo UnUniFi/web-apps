@@ -27,7 +27,7 @@
               <span class="label-text">Enter Vault Name</span>
               <!-- The button to open modal -->
               <label for="modal-name" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -50,7 +50,7 @@
               type="text"
               required
               #nameNgModelRef="ngModel"
-              placeholder="e.g. GUU Lending"
+              placeholder="UnUniFi GUU Lending"
               class="input input-bordered w-full"
               [class]="{
                 'input-error': nameNgModelRef.errors && nameNgModelRef.touched
@@ -93,7 +93,7 @@
               <span class="label-text">Enter Commission Rate</span>
               <!-- The button to open modal -->
               <label for="modal-commission" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -136,7 +136,7 @@
               <span class="label-text">Enter Withdraw Reserve Rate</span>
               <!-- The button to open modal -->
               <label for="modal-reserve" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -181,7 +181,7 @@
               <span class="label-text">Select Strategies</span>
               <!-- The button to open modal -->
               <label for="modal-strategy" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -209,12 +209,12 @@
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
               <div class="flex flex-row flex-wrap">
                 <a
-                  class="btn btn-outline normal-case w-full sm:w-64"
+                  class="btn btn-outline normal-case w-full sm:w-64 gap-2"
                   href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
                   target="_blank"
                 >
                   {{ strategy.name }}
-                  <mat-icon class="ml-2">info</mat-icon>
+                  <span class="material-symbols-outlined">info</span>
                 </a>
                 <div class="w-full sm:w-auto sm:flex-auto">
                   <label class="input-group w-full mb-2">
@@ -229,17 +229,17 @@
                     />
                     <span>%</span>
                     <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
-                      <mat-icon>delete</mat-icon>
+                      <span class="material-symbols-outlined">delete</span>
                     </label>
                   </label>
                 </div>
               </div>
             </ng-container>
 
-            <label class="input-group mb-2 w-full sm:w-auto">
+            <label class="input-group mb-2 w-full">
               <select
                 [required]="selectedStrategies.length === 0"
-                class="select select-bordered text-center w-auto sm:w-64"
+                class="select select-bordered text-center w-full"
                 [(ngModel)]="selectedStrategyId"
                 name="strategyId"
                 [disabled]="!selectedSymbol"
@@ -259,11 +259,11 @@
               </select>
               <button
                 type="button"
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 (click)="onClickAddStrategy()"
                 [disabled]="!selectedStrategyId"
               >
-                <mat-icon>add</mat-icon>
+                <span class="material-symbols-outlined">add</span>
               </button>
             </label>
             <label class="label" *ngIf="selectedStrategyId">
@@ -276,7 +276,7 @@
               <span class="label-text">Deposit</span>
               <!-- The button to open modal -->
               <label for="modal-deposit" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -315,7 +315,7 @@
               <span class="label-text">Fee</span>
               <!-- The button to open modal -->
               <label for="modal-fee" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->

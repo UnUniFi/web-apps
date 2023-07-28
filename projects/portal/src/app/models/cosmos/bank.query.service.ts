@@ -1,4 +1,5 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
+import { denomExponentMap } from './bank.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Decimal from 'decimal.js';
@@ -6,7 +7,6 @@ import Decimal from 'decimal.js';
 import Long from 'long';
 import { Observable, zip } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
-import { denomExponentMap } from './bank.model';
 
 declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
@@ -126,6 +126,40 @@ export class BankQueryService {
         name: 'UnUniFi',
         display: 'guu',
         symbol: 'GUU',
+      },
+      {
+        description: 'The governance token of OSMOSIS.',
+        denom_units: [
+          {
+            denom: 'uosmo',
+            exponent: 0,
+          },
+          {
+            denom: 'osmo',
+            exponent: 6,
+          },
+        ],
+        base: 'uosmo',
+        name: 'OSMOSIS',
+        display: 'osmo',
+        symbol: 'OSMO',
+      },
+      {
+        description: 'The governance token of Cosmos Hub.',
+        denom_units: [
+          {
+            denom: 'uatom',
+            exponent: 0,
+          },
+          {
+            denom: 'atom',
+            exponent: 6,
+          },
+        ],
+        base: 'uatom',
+        name: 'COSMOS',
+        display: 'atom',
+        symbol: 'ATOM',
       },
       {
         description: 'The first cryptocurrency invented in 2008',

@@ -14,7 +14,6 @@ import {
   ListedNfts200ResponseListingsInner,
   ListedNfts200ResponseListingsInnerListing,
   Loan200Response,
-  Loans200ResponseLoansInner,
   NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
 
@@ -83,13 +82,6 @@ export class NftPawnshopQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftbackedloan.bidderBids(sdk, address)),
       map((res) => res.data.bids!),
-    );
-  }
-
-  listAllLoans$(): Observable<Loans200ResponseLoansInner[]> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftbackedloan.loans(sdk)),
-      map((res) => res.data.loans!),
     );
   }
 

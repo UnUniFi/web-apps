@@ -87,7 +87,7 @@ export class LibViewListNftFormDialogComponent implements OnInit, OnChanges {
           nft_id: this.nft.id,
         },
         listing_type: 'DIRECT_ASSET_BORROW',
-        bid_token: this.bidToken,
+        bid_denom: this.bidToken,
         min_bid: this.minBid,
         bid_hook: Long.fromString(this.bidHook),
       },

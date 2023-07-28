@@ -47,17 +47,14 @@ export class LenderComponent implements OnInit {
       map((bids) => {
         let sumDeposits: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] = [];
         for (const bid of bids) {
-          const index = sumDeposits.findIndex(
-            (deposit) => deposit.denom == bid.deposit_amount?.denom,
-          );
+          const index = sumDeposits.findIndex((deposit) => deposit.denom == bid.deposit?.denom);
           if (index == -1) {
-            sumDeposits.push(bid.deposit_amount!);
+            sumDeposits.push(bid.deposit!);
           } else {
-            const addedAmount =
-              Number(sumDeposits[index].amount) + Number(bid.deposit_amount?.amount);
+            const addedAmount = Number(sumDeposits[index].amount) + Number(bid.deposit?.amount);
             sumDeposits[index] = {
               amount: addedAmount.toString(),
-              denom: bid.deposit_amount?.denom,
+              denom: bid.deposit?.denom,
             };
           }
         }
@@ -74,21 +71,19 @@ export class LenderComponent implements OnInit {
       map((bids) => {
         let sumBorrows: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] = [];
         for (const bid of bids) {
-          if (bid.borrowings) {
-            for (const borrowing of bid.borrowings) {
-              const index = sumBorrows.findIndex(
-                (borrow) => borrow.denom == borrowing.amount?.denom,
-              );
-              if (index == -1) {
-                sumBorrows.push(borrowing.amount!);
-              } else {
-                const addedAmount =
-                  Number(sumBorrows[index].amount) + Number(borrowing.amount?.amount);
-                sumBorrows[index] = {
-                  amount: addedAmount.toString(),
-                  denom: borrowing.amount?.denom,
-                };
-              }
+          if (bid.borrow) {
+            const index = sumBorrows.findIndex(
+              (borrow) => borrow.denom == bid.borrow?.amount?.denom,
+            );
+            if (index == -1) {
+              sumBorrows.push(bid.borrow.amount!);
+            } else {
+              const addedAmount =
+                Number(sumBorrows[index].amount) + Number(bid.borrow.amount?.amount);
+              sumBorrows[index] = {
+                amount: addedAmount.toString(),
+                denom: bid.borrow?.amount?.denom,
+              };
             }
           }
         }
@@ -106,10 +101,10 @@ export class LenderComponent implements OnInit {
       mergeMap((bids) =>
         Promise.all(
           bids.map(async (bid) => {
-            if (bid.nft_id && bid.nft_id.class_id && bid.nft_id.nft_id) {
+            if (bid.id) {
               return await this.pawnshopQueryService.getNftListing(
-                bid.nft_id?.class_id!,
-                bid.nft_id?.nft_id!,
+                bid.id.nft_id?.class_id!,
+                bid.id.nft_id?.nft_id!,
               );
             } else {
               return {};
@@ -122,12 +117,12 @@ export class LenderComponent implements OnInit {
       map((nfts) => {
         const bidding = nfts.filter((nft) => nft.state == 'BIDDING').length;
         const selling = nfts.filter((nft) => nft.state == 'SELLING_DECISION').length;
-        const ends = nfts.filter((nft) => nft.state == 'END_LISTING').length;
+        const liquidation = nfts.filter((nft) => nft.state == 'LIQUIDATION').length;
         const successfulBids = nfts.filter((nft) => nft.state == 'SUCCESSFUL_BID').length;
         return {
           bidding: bidding,
           selling_decision: selling,
-          end_listing: ends,
+          liquidation: liquidation,
           successful_bid: successfulBids,
         };
       }),

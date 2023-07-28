@@ -12,9 +12,13 @@
     <div class="creat-val-form">
       <div class="create-val-dropzone" ngx-dropzone (change)="onSelect($event)" accept=".txt">
         <div class="create-val-dropzone-lable" ngx-dropzone-label>
-          <mat-icon class="create-val-icon" aria-hidden="false" aria-label="Upload icon">
+          <span
+            class="material-symbols-outlined create-val-icon"
+            aria-hidden="false"
+            aria-label="Upload icon"
+          >
             cloud_upload
-          </mat-icon>
+          </span>
           <p class="text-xl text-center mt-4">
             <span class="font-bold">Drag</span> and <span class="font-bold">drop</span><br />
             <span class="create-val-file-type font-bold"> wallet-backup </span>
@@ -74,9 +78,13 @@
   </ng-template>
   <ng-template #successBlock>
     <div class="creat-val-success">
-      <mat-icon class="create-val-success-icon" aria-hidden="false" aria-label="Upload icon">
+      <span
+        class="material-symbols-outlined create-val-success-icon"
+        aria-hidden="false"
+        aria-label="Upload icon"
+      >
         check_circle_outline
-      </mat-icon>
+      </span>
       <p class="text-xl crate-val-success-text">
         Validator(s) successfully <span class="font-bold">created!</span>
       </p>

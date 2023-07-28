@@ -7,7 +7,9 @@
   </div>
   <ng-container *ngIf="validator === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="validator !== undefined; then exist; else notFound"> </ng-container>
@@ -15,40 +17,44 @@
   <ng-template #exist>
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
-        <h2 class="card-title break-all flex flex-col md:flex-row">
-          <mat-icon class="mr-1" matListIcon [ngStyle]="{ color: getColorCode(validator?.val) }">
+        <div class="flex flex-row items-center gap-4 mb-4">
+          <span
+            class="material-symbols-outlined"
+            [ngStyle]="{ color: getColorCode(validator?.val) }"
+          >
             circle
-          </mat-icon>
-          {{ validator?.val?.description?.moniker }}
-          <span *ngIf="validator?.inList" class="badge badge-info">Active</span>
-          <span *ngIf="!validator?.inList" class="badge badge-error">Inactive</span>
-        </h2>
+          </span>
+          <h2 class="card-title">{{ validator?.val?.description?.moniker }}</h2>
+          <span class="flex-auto"></span>
+          <div *ngIf="validator?.inList" class="badge badge-lg badge-primary">Active</div>
+          <div *ngIf="!validator?.inList" class="badge badge-lg badge-secondary">Inactive</div>
+        </div>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <td>Validator Address</td>
-                <td>
+                <td class="font-mono">
                   {{ validator?.val?.operator_address }}
                   <button
                     mat-icon-button
                     type="button"
                     (click)="copyClipboard(validator?.val?.operator_address || '')"
                   >
-                    <mat-icon>content_copy</mat-icon>
+                    <span class="material-symbols-outlined">content_copy</span>
                   </button>
                 </td>
               </tr>
               <tr>
                 <td>Account Address</td>
-                <td>
+                <td class="font-mono">
                   {{ accAddress }}
                   <button
                     mat-icon-button
                     type="button"
                     (click)="copyClipboard(accAddress?.toString() || '')"
                   >
-                    <mat-icon>content_copy</mat-icon>
+                    <span class="material-symbols-outlined">content_copy</span>
                   </button>
                 </td>
               </tr>

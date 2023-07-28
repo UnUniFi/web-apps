@@ -1,7 +1,9 @@
 <h2 class="mb-0">Accounts Balances</h2>
 <ng-container *ngIf="keys === null; then loading; else loaded"></ng-container>
 <ng-template #loading>
-  <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+  <p class="text-center">
+    <span class="loading loading-ring loading-lg"></span>
+  </p>
 </ng-template>
 <ng-template #loaded>
   <ng-container *ngIf="(keys?.length || 0) > 0; then exist; else empty"></ng-container>
@@ -15,7 +17,7 @@
           <span class="flex-auto"></span>
           <span class="mr-2">{{ balance.amount | number : '1.0-0' }}</span>
           <span>{{ balance.denom }}</span>
-          <span *ngIf="balance?.denom?.length == 3" class="mr-2"></span>
+          <span *ngIf="balance?.denom?.length === 3" class="mr-2"></span>
           <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
       </mat-list>

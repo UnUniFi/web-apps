@@ -14,6 +14,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 export class VaultsComponent implements OnInit {
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ name: string; img: string }[]>;
+  keyword$: Observable<string>;
 
   constructor(
     private router: Router,
@@ -21,19 +22,27 @@ export class VaultsComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
   ) {
-    this.vaults$ = combineLatest([this.iyaQuery.listVaults$(), this.route.queryParams]).pipe(
-      map(([vaults, params]) =>
-        params.search
+    this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.vaults$ = combineLatest([
+      this.iyaQuery.listVaults$(),
+      this.route.queryParams,
+      denomMetadataMap$,
+    ]).pipe(
+      map(([vaults, params, denomMetadata]) =>
+        params.keyword
           ? vaults.filter((vault) => {
-              const hasIdMatch = vault.id && vault.id.includes(params.search);
-              const hasOwnerMatch = vault.owner && vault.owner.includes(params.search);
-              const hasDenomMatch = vault.denom && vault.denom.includes(params.search);
-              return hasIdMatch || hasOwnerMatch || hasDenomMatch;
+              const hasIdMatch = vault.id && vault.id.includes(params.keyword);
+              const hasOwnerMatch = vault.owner?.includes(params.keyword);
+              const hasDenomMatch = vault.denom?.includes(params.keyword);
+              const hasSymbolMatch = vault.denom
+                ? denomMetadata?.[vault.denom].symbol?.includes(params.keyword)
+                : false;
+              return hasIdMatch || hasOwnerMatch || hasDenomMatch || hasSymbolMatch;
             })
           : vaults,
       ),
     );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
         vaults.map((vault) => {
@@ -51,7 +60,7 @@ export class VaultsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        search: value,
+        keyword: value,
       },
       queryParamsHandling: 'merge',
     });

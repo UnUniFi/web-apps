@@ -163,12 +163,6 @@ export class TxCommonService {
     if (currentCosmosWallet.type === WalletType.Keplr) {
       return await this.signTxWithKeplr(txBuilder, signerBaseAccount);
     }
-    if (currentCosmosWallet.type === WalletType.ledger) {
-      return this.signTxWithLedger(txBuilder, signerBaseAccount);
-    }
-    if (currentCosmosWallet.type === WalletType.keyStation) {
-      return this.signTxWithKeyStation(txBuilder, signerBaseAccount);
-    }
     if (currentCosmosWallet.type === WalletType.MetaMask) {
       // Todo: Currently disabled MetaMask related features.
       throw Error('Unsupported wallet type!');
@@ -224,22 +218,6 @@ export class TxCommonService {
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): cosmosclient.TxBuilder {
     throw Error('Currently signing with Ledger is not supported!');
-  }
-
-  // Todo: This is dummy function and need to implement later.
-  signTxWithKeyStation(
-    txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-  ): cosmosclient.TxBuilder {
-    throw Error('Currently signing with KeyStation is not supported!');
-  }
-
-  async signTxWithMetaMask(
-    txBuilder: cosmosclient.TxBuilder,
-    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-  ): Promise<cosmosclient.TxBuilder> {
-    const signedTxBuilder = await this.metaMaskService.signTx(txBuilder, signerBaseAccount);
-    return signedTxBuilder;
   }
 
   async simulateTx(

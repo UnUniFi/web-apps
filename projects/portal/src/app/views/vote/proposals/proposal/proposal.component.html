@@ -7,17 +7,20 @@
   </div>
   <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <div class="card bg-base-100 shadow-xl mb-4">
       <div class="card-body w-full">
+        <span class="badge badge-info badge-lg">
+          {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
+        </span>
         <h2 class="card-title break-all">
           # {{ proposal?.proposal_id }} {{ proposalContent?.title }}
-          <span class="badge badge-info">
-            {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
-          </span>
         </h2>
+
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
@@ -74,7 +77,7 @@
           <div class="stat">
             <div class="stat-title">Yes</div>
             <div class="stat-value text-success">
-              <mat-icon>thumb_up</mat-icon>
+              <span class="material-symbols-outlined">thumb_up</span>
               {{ tally?.yes }}
             </div>
             <div class="stat-desc"></div>
@@ -82,7 +85,7 @@
           <div class="stat">
             <div class="stat-title">No</div>
             <div class="stat-value text-warning">
-              <mat-icon>thumb_down</mat-icon>
+              <span class="material-symbols-outlined">thumb_down</span>
               {{ tally?.no }}
             </div>
             <div class="stat-desc"></div>
@@ -90,7 +93,7 @@
           <div class="stat">
             <div class="stat-title">No with Veto</div>
             <div class="stat-value text-error">
-              <mat-icon>not_interested</mat-icon>
+              <span class="material-symbols-outlined">not_interested</span>
               {{ tally?.no_with_veto }}
             </div>
             <div class="stat-desc"></div>
@@ -98,7 +101,7 @@
           <div class="stat">
             <div class="stat-title">Abstain</div>
             <div class="stat-value text-primary">
-              <mat-icon>subtitles_off</mat-icon>
+              <span class="material-symbols-outlined">subtitles_off</span>
               {{ tally?.abstain }}
             </div>
             <div class="stat-desc"></div>
@@ -151,10 +154,10 @@
 
         <div class="card-actions justify-end">
           <button
-            class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
+            class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
             (click)="onClickVote(proposal?.proposal_id!)"
           >
-            <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
+            <span class="material-symbols-outlined">how_to_vote</span>Vote
           </button>
         </div>
       </div>
@@ -193,10 +196,10 @@
 
         <div class="card-actions justify-end">
           <button
-            class="btn btn-outline btn-info px-8"
+            class="btn btn-outline btn-info px-8 gap-2"
             (click)="onClickDeposit(proposal?.proposal_id!)"
           >
-            <mat-icon class="mr-2">add</mat-icon>Deposit
+            <span class="material-symbols-outlined">add</span>Deposit
           </button>
         </div>
       </div>

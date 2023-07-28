@@ -25,6 +25,6 @@ mat-toolbar.toolbar {
   padding: 16px;
 }
 
-mat-progress-spinner {
+.loading {
   margin: 1em auto;
 }

@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <div class="flex flex-col items-center">
-    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo">
+    <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
     <div class="font-bold text-white text-xl m-3">Connect Your Wallet</div>
     <div class="text-base text-white m-3">Start earning high yield on your crypto</div>
     <ng-container *ngIf="privateWallet$ | async as privateWallet">
@@ -17,7 +17,9 @@
               pattern="^[a-z_][a-z_0-9]*$"
               autocomplete="username"
             />
-            <mat-error>Only lowercase alphanumeric characters and underscores can be input.</mat-error>
+            <mat-error
+              >Only lowercase alphanumeric characters and underscores can be input.</mat-error
+            >
           </mat-form-field>
 
           <mat-form-field class="w-full">
@@ -34,7 +36,14 @@
 
           <mat-form-field class="w-full">
             <mat-label>Key Type</mat-label>
-            <mat-select #keyTypeRef [(ngModel)]="privateWallet.key_type" name="keyType" matInput required disabled >
+            <mat-select
+              #keyTypeRef
+              [(ngModel)]="privateWallet.key_type"
+              name="keyType"
+              matInput
+              required
+              disabled
+            >
               <mat-option [value]="'secp256k1'">Secp256k1</mat-option>
               <mat-option [value]="'ed25519'" disabled>Ed25519</mat-option>
               <mat-option [value]="'sr25519'" disabled>Sr25519</mat-option>
@@ -51,11 +60,12 @@
               rows="3"
               style="resize: none"
               readOnly
-              required pattern="^[a-z\s]+$"
+              required
+              pattern="^[a-z\s]+$"
               disabled
             ></textarea>
             <button mat-button type="button" matSuffix (click)="copyClipboard(mnemonicRef.value)">
-              <mat-icon>content_copy</mat-icon>
+              <span class="material-symbols-outlined">content_copy</span>
               <span>copy</span>
             </button>
           </mat-form-field>
@@ -72,33 +82,22 @@
               required
               autocomplete="new-password"
             />
-            <button
-              mat-button
-              type="button"
-              matSuffix
-              (click)="togglePasswordVisibility()"
-            >
-              <mat-icon>
+            <button mat-button type="button" matSuffix (click)="togglePasswordVisibility()">
+              <span class="material-symbols-outlined">
                 {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
-              </mat-icon>
+              </span>
             </button>
-            <button
-              mat-button
-              type="button"
-              matSuffix
-              (click)="copyClipboard(privateKeyRef.value)"
-            >
-              <mat-icon>content_copy</mat-icon>
+            <button mat-button type="button" matSuffix (click)="copyClipboard(privateKeyRef.value)">
+              <span class="material-symbols-outlined">content_copy</span>
               <span>copy</span>
             </button>
             <mat-hint>
-              You need to save this private key as a password using password manager built in the web browser.
+              You need to save this private key as a password using password manager built in the
+              web browser.
             </mat-hint>
           </mat-form-field>
 
-          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">
-            Next
-          </button>
+          <button mat-flat-button class="w-full" [disabled]="formRef.invalid">Next</button>
         </form>
       </ng-container>
     </ng-container>

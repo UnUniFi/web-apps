@@ -1,23 +1,29 @@
-<h2>Dashboard</h2>
-
-<div class="stats stats-vertical md:stats-horizontal shadow">
-  <div class="stat">
-    <div class="stat-title">Latest Block Height</div>
-    <div class="stat-value text-primary">{{ latestBlockHeight }}</div>
-    <div class="stat-desc" routerLink="/blocks/{{ latestBlockHeight }}">Details</div>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li>Dashboard</li>
+    </ul>
   </div>
 
-  <div class="stat">
-    <div class="stat-title">Staked Ratio</div>
-    <div class="stat-value">{{ stakedRatio }} %</div>
-    <div class="stat-desc">
-      {{ stakedTokens | unitConversion }} / {{ totalSupply | unitConversion }}
+  <div class="stats stats-vertical md:stats-horizontal shadow">
+    <div class="stat">
+      <div class="stat-title">Latest Block Height</div>
+      <div class="stat-value text-primary">{{ latestBlockHeight }}</div>
+      <div class="stat-desc" routerLink="/blocks/{{ latestBlockHeight }}">Details</div>
     </div>
-  </div>
 
-  <div class="stat">
-    <div class="stat-title">Inflation</div>
-    <div class="stat-value text-secondary">{{ inflation }} %</div>
-    <div class="stat-desc">Total supply increase of governance token</div>
+    <div class="stat">
+      <div class="stat-title">Staked Ratio</div>
+      <div class="stat-value">{{ stakedRatio }} %</div>
+      <div class="stat-desc">
+        {{ stakedTokens | unitConversion }} / {{ totalSupply | unitConversion }}
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Inflation</div>
+      <div class="stat-value text-secondary">{{ inflation }} %</div>
+      <div class="stat-desc">Total supply increase of governance token</div>
+    </div>
   </div>
 </div>

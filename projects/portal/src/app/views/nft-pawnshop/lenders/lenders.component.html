@@ -55,7 +55,7 @@
         </div>
         <div class="stat">
           <div class="stat-title">liquidating</div>
-          <div class="stat-value">{{ biddingNftsInfo?.end_listing }}</div>
+          <div class="stat-value">{{ biddingNftsInfo?.liquidation }}</div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
@@ -155,8 +155,8 @@
           />
         </div>
         <div class="card-actions justify-end mt-4">
-          <button class="btn btn-primary w-full md:w-auto md:px-8">
-            <mat-icon class="mr-2">photo_library</mat-icon>
+          <button class="btn btn-primary w-full md:w-auto md:px-8 gap-2">
+            <span class="material-symbols-outlined">photo_library</span>
             Search NFTs
           </button>
         </div>
@@ -168,7 +168,9 @@
     <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
       <ng-container *ngIf="listedClasses === null; then loading; else loaded"> </ng-container>
       <ng-template #loading>
-        <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+        <p class="text-center">
+          <span class="loading loading-ring loading-lg"></span>
+        </p>
       </ng-template>
       <ng-template #loaded>
         <ng-container

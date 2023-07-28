@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { BankQueryService } from '../models/cosmos/bank.query.service';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'coinDenom',

@@ -7,12 +7,12 @@
   </div>
   <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <mat-progress-spinner [diameter]="30" [mode]="'indeterminate'"></mat-progress-spinner>
+    <span class="loading loading-ring loading-lg"></span>
   </ng-template>
   <ng-template #loaded>
     <div class="card bg-base-100 shadow-xl mb-4">
-      <div class="card-body w-full">
-        <span class="badge badge-info">
+      <div class="card-body">
+        <span class="badge badge-info badge-lg">
           {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
         </span>
         <h2 class="card-title break-all">
@@ -64,7 +64,7 @@
           <div class="stat">
             <div class="stat-title">Yes</div>
             <div class="stat-value text-success">
-              <mat-icon>thumb_up</mat-icon>
+              <span class="material-symbols-outlined">thumb_up</span>
               {{ tally?.yes }}
             </div>
             <div class="stat-desc"></div>
@@ -72,7 +72,7 @@
           <div class="stat">
             <div class="stat-title">No</div>
             <div class="stat-value text-warning">
-              <mat-icon>thumb_down</mat-icon>
+              <span class="material-symbols-outlined">thumb_down</span>
               {{ tally?.no }}
             </div>
             <div class="stat-desc"></div>
@@ -80,7 +80,7 @@
           <div class="stat">
             <div class="stat-title">No with Veto</div>
             <div class="stat-value text-error">
-              <mat-icon>not_interested</mat-icon>
+              <span class="material-symbols-outlined">not_interested</span>
               {{ tally?.no_with_veto }}
             </div>
             <div class="stat-desc"></div>
@@ -88,7 +88,7 @@
           <div class="stat">
             <div class="stat-title">Abstain</div>
             <div class="stat-value text-primary">
-              <mat-icon>subtitles_off</mat-icon>
+              <span class="material-symbols-outlined">subtitles_off</span>
               {{ tally?.abstain }}
             </div>
             <div class="stat-desc"></div>

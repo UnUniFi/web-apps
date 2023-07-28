@@ -21,7 +21,7 @@ export class BidderNftComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
-  bidders?: BidderBids200ResponseBidsInner[] | null;
+  bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()
@@ -34,11 +34,11 @@ export class BidderNftComponent implements OnInit {
   @Output()
   appSubmitCancelBid: EventEmitter<NftRequest>;
   @Output()
-  appSubmitPayFullBid: EventEmitter<NftRequest>;
+  appSubmitPayRemainder: EventEmitter<NftRequest>;
 
   constructor() {
     this.appSubmitCancelBid = new EventEmitter();
-    this.appSubmitPayFullBid = new EventEmitter();
+    this.appSubmitPayRemainder = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -50,10 +50,10 @@ export class BidderNftComponent implements OnInit {
     this.appSubmitCancelBid.emit({ classID: this.classID, nftID: this.nftID });
   }
 
-  onSubmitPayFullBid() {
+  onSubmitPayRemainder() {
     if (!this.classID || !this.nftID) {
       return;
     }
-    this.appSubmitPayFullBid.emit({ classID: this.classID, nftID: this.nftID });
+    this.appSubmitPayRemainder.emit({ classID: this.classID, nftID: this.nftID });
   }
 }

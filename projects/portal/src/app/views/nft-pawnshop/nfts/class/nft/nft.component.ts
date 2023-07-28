@@ -29,7 +29,7 @@ export class NftComponent implements OnInit {
   @Output() appSubmitCancelListing = new EventEmitter<NftRequest>();
   @Output() appSubmitSell = new EventEmitter<NftRequest>();
   @Output() appSubmitCancelBid = new EventEmitter<NftRequest>();
-  @Output() appSubmitPayFullBid = new EventEmitter<NftRequest>();
+  @Output() appSubmitPayRemainder = new EventEmitter<NftRequest>();
 
   constructor() {}
 
@@ -56,10 +56,10 @@ export class NftComponent implements OnInit {
     this.appSubmitCancelBid.emit({ classID: this.classID, nftID: this.nftID });
   }
 
-  onSubmitPayFullBid() {
+  onSubmitPayRemainder() {
     if (!this.classID || !this.nftID) {
       return;
     }
-    this.appSubmitPayFullBid.emit({ classID: this.classID, nftID: this.nftID });
+    this.appSubmitPayRemainder.emit({ classID: this.classID, nftID: this.nftID });
   }
 }

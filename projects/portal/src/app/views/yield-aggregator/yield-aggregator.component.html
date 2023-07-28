@@ -7,13 +7,13 @@
           <h2 class="card-title break-all">{{ config.name }}</h2>
           <p style="white-space: pre-wrap">{{ config.description }}</p>
           <div class="card-actions justify-end" *ngIf="config.route === 'vaults'">
-            <button class="btn btn-primary" routerLink="{{ config.route }}">
-              <mat-icon>monetization_on</mat-icon>
-              <span class="ml-2">Deposit</span>
+            <button class="btn btn-primary gap-2" routerLink="{{ config.route }}">
+              <span class="material-symbols-outlined">monetization_on</span>
+              <span>Deposit</span>
             </button>
-            <button class="btn btn-secondary" routerLink="{{ config.route }}/create">
-              <mat-icon>create</mat-icon>
-              <span class="ml-2">create</span>
+            <button class="btn btn-secondary gap-2" routerLink="{{ config.route }}/create">
+              <span class="material-symbols-outlined">create</span>
+              <span>create</span>
             </button>
           </div>
 
@@ -32,12 +32,12 @@
                 </ng-container>
               </select>
               <button
-                class="btn btn-primary"
+                class="btn btn-primary gap-2"
                 [disabled]="formRef.invalid"
                 routerLink="{{ config.route }}/{{ selectedDenom }}"
               >
-                <mat-icon>explore</mat-icon>
-                <span class="ml-2">View</span>
+                <span class="material-symbols-outlined">explore</span>
+                <span>View</span>
               </button>
             </form>
           </div>

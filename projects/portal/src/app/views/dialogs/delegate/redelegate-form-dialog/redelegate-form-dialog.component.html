@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -19,7 +19,7 @@
           <li class="disabled">
             <a class="text-base-content items-center">
               <span
-                class="material-icons"
+                class="material-symbols-outlined"
                 [ngStyle]="{ color: getColorCode(validator?.operator_address!) }"
               >
                 circle
@@ -32,17 +32,20 @@
 
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text">After {{ validatorsList![0] !== validator }}</span>
+          <span class="label-text">After</span>
         </label>
         <select
           name="selected-validator"
           class="select select-bordered"
           [(ngModel)]="selectedValidator"
           required
-          (ngModelChange)="onMinimumGasDenomChanged($event)"
         >
+          <option value="null" disabled selected>Select a validator</option>
           <ng-container *ngFor="let val of validatorsList">
-            <option *ngIf="val.operator_address !== validator?.operator_address" [value]="val">
+            <option
+              *ngIf="val.operator_address !== validator?.operator_address"
+              [value]="val.operator_address"
+            >
               {{ val.description?.moniker }}
             </option>
           </ng-container>
@@ -57,7 +60,7 @@
           <input
             name="redelegate-amount"
             type="number"
-            placeholder="e.g. 12.123456"
+            placeholder="12.123456"
             class="input input-bordered w-full"
             [(ngModel)]="redelegateAmount"
             [min]="0"
@@ -68,7 +71,9 @@
         </label>
 
         <label class="label">
-          <span class="label-text text-xs"> Delegated Amount: {{ delegateCoin | coin | async }} </span>
+          <span class="label-text text-xs">
+            Delegated Amount: {{ delegateCoin | coin | async }}
+          </span>
         </label>
       </div>
 

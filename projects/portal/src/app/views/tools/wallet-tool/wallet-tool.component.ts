@@ -1,4 +1,4 @@
-import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { StoredWallet, WalletType } from '../../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   Component,
@@ -62,9 +62,19 @@ export class WalletToolComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   @HostListener('window:keplr_keystorechange', ['$event'])
-  onChangeKey() {
-    alert('Key store in Keplr is changed. You may need to refetch the account info.');
-    this.onDisconnectWallet({});
+  onChangeKeplrKey() {
+    if (this.currentStoredWallet?.type === WalletType.Keplr) {
+      alert('Key store in Keplr is changed. You may need to refetch the account info.');
+      this.onDisconnectWallet({});
+    }
+  }
+
+  @HostListener('window:leap_keystorechange', ['$event'])
+  onChangeLeapKey() {
+    if (this.currentStoredWallet?.type === WalletType.Leap) {
+      alert('Key store in Leap is changed. You may need to refetch the account info.');
+      this.onDisconnectWallet({});
+    }
   }
 
   getColorCode(storedWallet: StoredWallet) {

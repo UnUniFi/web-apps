@@ -14,7 +14,7 @@
           <pre><code class="break-all">{{ txMemo }}</code></pre>
           <div class="flex flex-row justify-end">
             <label class="btn" (click)="copyClipboard(txMemo)">
-              <mat-icon>content_copy</mat-icon>Copy
+              <span class="material-symbols-outlined">content_copy</span>Copy
             </label>
           </div>
         </div>
@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let subject of unit?.weighted_addresses">
-              <td>{{ subject.address }}</td>
+              <td class="font-mono">{{ subject.address }}</td>
               <td>{{ subject.weight | percent : '1.2-2' }}</td>
             </tr>
           </tbody>

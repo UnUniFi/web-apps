@@ -28,14 +28,14 @@
                 (click)="onClickValidator(validator!)"
               >
                 <th>
-                  <mat-icon
-                    matListIcon
+                  <span
+                    class="material-symbols-outlined"
                     [ngStyle]="{
                       color: getColorCode(delegation.delegation?.validator_address ?? '')
                     }"
                   >
                     circle
-                  </mat-icon>
+                  </span>
                 </th>
                 <td>{{ validator?.description?.moniker }}</td>
                 <td>{{ delegation.balance | coin | async }}</td>
@@ -82,14 +82,14 @@
                 (click)="onClickValidator(validator!)"
               >
                 <th>
-                  <mat-icon
-                    matListIcon
+                  <span
+                    class="material-symbols-outlined"
                     [ngStyle]="{
                       color: getColorCode(unbondingDelegation?.unbond?.validator_address ?? '')
                     }"
                   >
                     circle
-                  </mat-icon>
+                  </span>
                 </th>
                 <td>{{ validator?.description?.moniker }}</td>
                 <td>
@@ -129,7 +129,9 @@
   </div>
   <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -151,12 +153,12 @@
           <ng-container *ngFor="let validator of validators">
             <tr class="hover cursor-pointer" (click)="onClickValidator(validator.val)">
               <th>
-                <mat-icon
-                  matListIcon
+                <span
+                  class="material-symbols-outlined"
                   [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
                 >
                   circle
-                </mat-icon>
+                </span>
               </th>
               <td>{{ validator.val.description?.moniker }}</td>
               <td>{{ validator.share | percent : '1.2-2' }}</td>

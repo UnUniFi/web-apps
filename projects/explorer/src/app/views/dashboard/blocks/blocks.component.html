@@ -1,25 +1,28 @@
-<ng-container *ngIf="blocks === null; then loading; else loaded"> </ng-container>
-<ng-template #loading>
-  <span class="loading loading-dots loading-lg"></span>
-</ng-template>
-<ng-template #loaded>
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
-      <div class="flex flex-wrap">
-        <h2 class="card-title">Latest Blocks</h2>
-        <span class="flex-auto"></span>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <input
-              #autoRef
-              type="checkbox"
-              class="checkbox mr-2"
-              (change)="onCheckBoxAutoChange(autoRef.checked)"
-            />
-            <span class="label-text">Auto</span>
-          </label>
-        </div>
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <div class="flex flex-wrap">
+      <h2 class="card-title">Latest Blocks</h2>
+      <span class="flex-auto"></span>
+      <div class="form-control">
+        <label class="label cursor-pointer">
+          <input
+            #autoRef
+            type="checkbox"
+            class="checkbox mr-2"
+            (change)="onCheckBoxAutoChange(autoRef.checked)"
+          />
+          <span class="label-text">Auto</span>
+        </label>
       </div>
+    </div>
+
+    <ng-container *ngIf="blocks === null; then loading; else loaded"> </ng-container>
+    <ng-template #loading>
+      <p class="text-center">
+        <span class="loading loading-ring loading-lg"></span>
+      </p>
+    </ng-template>
+    <ng-template #loaded>
       <div class="overflow-x-auto">
         <table class="table w-full">
           <thead>
@@ -38,7 +41,7 @@
                 <th>
                   {{ block?.block?.header?.height }}
                 </th>
-                <td>
+                <td class="font-mono">
                   {{ block?.block?.header?.proposer_address }}
                 </td>
                 <td>{{ block?.block?.data?.txs?.length }}</td>
@@ -53,6 +56,6 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </ng-template>
   </div>
-</ng-template>
+</div>

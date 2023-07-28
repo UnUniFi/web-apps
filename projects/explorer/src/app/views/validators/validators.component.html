@@ -1,6 +1,10 @@
 <div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap items-end mb-4">
-    <h2>Validators</h2>
+  <div class="flex flex-row flex-wrap mb-4">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li>Validators</li>
+      </ul>
+    </div>
     <span class="flex-auto"></span>
     <div class="btn-group">
       <label
@@ -21,7 +25,9 @@
   </div>
   <ng-container *ngIf="validators === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(validators?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -43,12 +49,12 @@
           <ng-container *ngFor="let validator of validators">
             <tr class="hover cursor-pointer" routerLink="{{ validator.val.operator_address }}">
               <th>
-                <mat-icon
-                  matListIcon
+                <span
+                  class="material-symbols-outlined"
                   [ngStyle]="{ color: getColorCode(validator.val.operator_address ?? '') }"
                 >
                   circle
-                </mat-icon>
+                </span>
               </th>
               <td>{{ validator.val.description?.moniker }}</td>
               <td>{{ validator.share | percent : '1.2-2' }}</td>

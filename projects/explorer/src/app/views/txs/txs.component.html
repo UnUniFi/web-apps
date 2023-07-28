@@ -6,55 +6,63 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <div class="form-control overflow-x-auto">
-      <label class="label">
-        <span class="label-text">Tx Type & Items per page</span>
-      </label>
-      <label class="input-group">
-        <select
-          class="select text-center w-auto sm:w-64"
-          name="txType"
-          [(ngModel)]="selectedTxType"
-          (change)="onSelectedTxTypeChanged(selectedTxType!)"
-        >
-          <option [value]="undefined" disabled>
-            <span>Select Tx type</span>
-          </option>
-          <ng-container *ngFor="let txType of txTypeOptions">
-            <option [value]="txType">
-              {{ txType }}
+    <div class="flex gap-4">
+      <div class="form-control overflow-x-auto">
+        <label class="input-group">
+          <select
+            class="select text-center w-auto sm:w-64"
+            name="txType"
+            [(ngModel)]="selectedTxType"
+            (change)="onSelectedTxTypeChanged(selectedTxType!)"
+          >
+            <option [value]="undefined" disabled>
+              <span>Select Tx type</span>
             </option>
-          </ng-container>
-        </select>
-        <select
-          class="select w-20"
-          name="pageSize"
-          [(ngModel)]="pageInfo && pageInfo.pageSize"
-          (change)="onPaginationChange()"
-        >
-          <option disabled selected>Select items amount</option>
-          <ng-container *ngFor="let size of pageSizeOptions">
-            <option [value]="size">{{ size }}</option>
-          </ng-container>
-        </select>
-        <button class="btn" (click)="onPaginationChange(1)">«</button>
-        <span>Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}</span>
-        <button class="btn" (click)="onPaginationChange(2)">»</button>
-      </label>
-      <label class="label">
-        <span class="label-text-alt"
-          >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of {{ pageLength }}items</span
-        >
-      </label>
+            <ng-container *ngFor="let txType of txTypeOptions">
+              <option [value]="txType">
+                {{ txType }}
+              </option>
+            </ng-container>
+          </select>
+          <select
+            class="select w-20"
+            name="pageSize"
+            [(ngModel)]="pageInfo && pageInfo.pageSize"
+            (change)="onPaginationChange()"
+          >
+            <option disabled selected>Select items amount</option>
+            <ng-container *ngFor="let size of pageSizeOptions">
+              <option [value]="size">{{ size }}</option>
+            </ng-container>
+          </select>
+        </label>
+        <label class="label">
+          <span class="label-text-alt"
+            >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of
+            {{ pageLength }}items</span
+          >
+        </label>
+      </div>
+
+      <div class="join join-horizontal">
+        <button class="btn join-item" (click)="onPaginationChange(1)">«</button>
+        <button class="btn join-item cursor-default">
+          Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}
+        </button>
+        <button class="btn join-item" (click)="onPaginationChange(2)">»</button>
+      </div>
     </div>
   </div>
-  <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
-  <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
-  </ng-template>
-  <ng-template #loaded>
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body">
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <ng-container *ngIf="txs === null; then loading; else loaded"> </ng-container>
+      <ng-template #loading>
+        <p class="text-center">
+          <span class="loading loading-ring loading-lg"></span>
+        </p>
+      </ng-template>
+      <ng-template #loaded>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <thead>
@@ -68,7 +76,7 @@
                   class="hover cursor-pointer"
                   routerLink="/txs/{{ tx.txhash }}"
                 >
-                  <th>
+                  <th class="font-mono">
                     {{ tx.txhash }}
                   </th>
                   <td>
@@ -84,7 +92,7 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </ng-template>
     </div>
-  </ng-template>
+  </div>
 </div>

@@ -114,7 +114,7 @@
               <span class="label-text">Enter repay amount</span>
               <!-- The button to open modal -->
               <label for="modal-bid-price" class="label-text cursor-pointer">
-                <mat-icon>help</mat-icon>
+                <span class="material-symbols-outlined">help</span>
               </label>
 
               <!-- Put this part before </body> tag -->
@@ -174,7 +174,7 @@
             <ng-container *ngFor="let bid of selectedBids; let i = index">
               <div class="flex flex-row flex-wrap">
                 <label class="label">
-                  <span class="label-text">{{ bid.address }}</span>
+                  <span class="label-text font-mono">{{ bid.address }}</span>
                 </label>
                 <label class="input-group w-full mb-2">
                   <input
@@ -187,7 +187,7 @@
                   />
                   <span>{{ symbol }}</span>
                   <label class="btn btn-outline btn-error" (click)="onClickDeleteBidder(i)">
-                    <mat-icon>delete</mat-icon>
+                    <span class="material-symbols-outlined">delete</span>
                   </label>
                 </label>
               </div>
@@ -219,7 +219,7 @@
                 (click)="onClickAddBidder()"
                 [disabled]="!selectedBidder"
               >
-                <mat-icon>add</mat-icon>
+                <span class="material-symbols-outlined">add</span>
               </button>
             </label>
             <label class="label" *ngIf="selectedBidder">

@@ -11,7 +11,7 @@ const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
 
 const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (Alpha-Test)';
+const chainName = 'UnUniFi (alpha-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -78,27 +78,6 @@ const configs = [
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
-        //   denom: 'jpu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-        // {
-        //   hasFaucet: true,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
-        //   denom: 'ueth',
-        //   creditAmount: 1000,
-        //   maxCredit: 999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
-        //   denom: 'euu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
       ],
       monitor: undefined,
       nftMint: {

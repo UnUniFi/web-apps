@@ -48,7 +48,7 @@ export class WalletToolComponent implements OnInit, OnChanges {
       this.isFirstChange &&
       this.currentStoredWallet &&
       this.keplrStoredWallet &&
-      this.currentStoredWallet.type === 'keplr' &&
+      this.currentStoredWallet.type === WalletType.Keplr &&
       this.currentStoredWallet.public_key != this.keplrStoredWallet.public_key
     ) {
       this.isFirstChange = false;

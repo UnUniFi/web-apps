@@ -31,9 +31,9 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       return;
     }
     const chainID = this.configService.configs[0].chainID;
-    await window.keplr?.enable(chainID);
+    await window.keplr.enable(chainID);
 
-    const key = await window.keplr?.getKey(chainID);
+    const key = await window.keplr.getKey(chainID);
     return key;
   }
 
@@ -44,7 +44,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     }
     const chainId = this.configService.configs[0].chainID;
     const chainName = this.configService.configs[0].chainName;
-    const rpc = this.configService.configs[0].websocketURL;
+    const rpc = this.configService.configs[0].websocketURL.replace('ws', 'http');
     const rest = this.configService.configs[0].restURL;
     const bip44 = { coinType: 118 };
     const bech32Config = {
@@ -94,7 +94,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       stakeCurrency,
       gasPriceStep,
     };
-    await window.keplr?.experimentalSuggestChain(chainInfo);
+    await window.keplr.experimentalSuggestChain(chainInfo);
   }
 
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
@@ -155,7 +155,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       return;
     }
     const chainId = this.configService.configs[0].chainID;
-    await window.keplr?.enable(chainId);
+    await window.keplr.enable(chainId);
     const directSignResponse = await window.keplr.signDirect(chainId, signer, {
       bodyBytes,
       authInfoBytes,

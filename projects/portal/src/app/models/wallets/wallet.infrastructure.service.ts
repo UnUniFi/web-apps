@@ -1,6 +1,5 @@
 import { DbService } from '../db.service';
-import { KeyType } from '../keys/key.model';
-import { CosmosWallet, StoredWallet, Wallet, WalletType } from './wallet.model';
+import { CosmosWallet, StoredWallet, Wallet } from './wallet.model';
 import { IWalletInfrastructure } from './wallet.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
@@ -94,8 +93,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     );
     return {
       id: storedWallet.id,
-      type: WalletType[storedWallet.type],
-      key_type: KeyType[storedWallet.key_type],
+      type: storedWallet.type,
+      key_type: storedWallet.key_type,
       public_key,
       address,
     };
@@ -106,8 +105,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     const address: string = cosmosWallet.address.toAccAddress().toString();
     return {
       id: cosmosWallet.id,
-      type: WalletType[cosmosWallet.type],
-      key_type: KeyType[cosmosWallet.key_type],
+      type: cosmosWallet.type,
+      key_type: cosmosWallet.key_type,
       public_key,
       address,
     };
@@ -118,8 +117,8 @@ export class WalletInfrastructureService implements IWalletInfrastructure {
     const address: Uint8Array = cosmosWallet.address.value();
     return {
       id: cosmosWallet.id,
-      type: WalletType[cosmosWallet.type],
-      key_type: KeyType[cosmosWallet.key_type],
+      type: cosmosWallet.type,
+      key_type: cosmosWallet.key_type,
       public_key,
       address,
     };

@@ -12,6 +12,7 @@ import {
 } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
 import { KeplrService } from './keplr/keplr.service';
+import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
 import { WalletType, StoredWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
@@ -27,6 +28,7 @@ export class WalletApplicationService {
   constructor(
     private readonly walletService: WalletService,
     private readonly keplrService: KeplrService,
+    private readonly leapService: LeapService,
     private readonly metaMaskService: MetaMaskService,
     private readonly dialog: Dialog,
     private snackBar: MatSnackBar,
@@ -86,23 +88,24 @@ export class WalletApplicationService {
       }
     }
 
-    if (selectedWalletType === WalletType.keplr) {
-      const isSuccessConnected = await this.keplrConnectWallet();
-      if (isSuccessConnected) {
-        window.location.reload();
+    const isSuccessConnected = await (async () => {
+      switch (selectedWalletType) {
+        case WalletType.keplr:
+          return await this.connectWallet(this.keplrService);
+        case WalletType.leap:
+          return await this.connectWallet(this.leapService);
+        case WalletType.metamask:
+          // return await this.connectWallet(this.metaMaskService);
+          this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
+          return false;
+        default:
+          return false;
       }
-      return;
-    }
+    })();
 
-    if (selectedWalletType === WalletType.metaMask) {
-      // Todo: Currently disabled MetaMask related features.
-      this.snackBar.open('Selected Wallet is not supported yet!', 'Close');
-      return;
-      // await this.metaMaskConnectWallet();
-      // return;
+    if (isSuccessConnected) {
+      window.location.reload();
     }
-
-    this.snackBar.open('Invalid wallet type!', 'Close');
     return;
   }
 
@@ -123,7 +126,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -146,7 +149,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -169,7 +172,7 @@ export class WalletApplicationService {
     }
     const backupResult = await this.openUnunifiBackupMnemonicAndPrivateKeyDialog(privateWallet);
     if (!(backupResult?.checked && backupResult.saved)) {
-      this.snackBar.open('Backup failed! Try again.', 'Close');
+      this.snackBar.open('Backup failed. Try again.', 'Close');
       return false;
     }
     const storedWallet = {
@@ -182,6 +185,18 @@ export class WalletApplicationService {
     await this.walletService.setStoredWallet(storedWallet);
     await this.walletService.setCurrentStoredWallet(storedWallet);
     await this.openConnectWalletCompletedDialog(storedWallet);
+    return true;
+  }
+
+  async connectWallet(walletService: {
+    connectWallet(): Promise<StoredWallet | null | undefined>;
+  }): Promise<boolean> {
+    const connectedStoredWallet = await walletService.connectWallet();
+    if (!connectedStoredWallet) {
+      return false;
+    }
+    await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
+    await this.openConnectWalletCompletedDialog(connectedStoredWallet);
     return true;
   }
 
@@ -200,7 +215,7 @@ export class WalletApplicationService {
     const connectedStoredWallet = await this.metaMaskService.connectWallet();
     loadingDialogRef.close();
     if (!connectedStoredWallet) {
-      this.snackBar.open('Connecting MetaMask was failed!', 'Close');
+      this.snackBar.open('Failed to connect to MetaMask.', 'Close');
       return false;
     }
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);

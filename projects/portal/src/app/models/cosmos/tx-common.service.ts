@@ -4,6 +4,7 @@ import { validatePrivateStoredWallet } from '../../utils/validation';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { KeyType } from '../keys/key.model';
 import { KeplrService } from '../wallets/keplr/keplr.service';
+import { LeapService } from '../wallets/leap/leap.service';
 import { MetaMaskService } from '../wallets/metamask/metamask.service';
 import { WalletApplicationService } from '../wallets/wallet.application.service';
 import { CosmosWallet, StoredWallet, WalletType } from '../wallets/wallet.model';
@@ -27,7 +28,7 @@ export class TxCommonService {
     private readonly cosmosSDK: CosmosSDKService,
     private readonly walletAppService: WalletApplicationService,
     private readonly keplrService: KeplrService,
-    private readonly metaMaskService: MetaMaskService,
+    private readonly leapService: LeapService,
   ) {}
 
   canonicalizeAccAddress(address: string) {
@@ -163,7 +164,10 @@ export class TxCommonService {
     if (currentCosmosWallet.type === WalletType.keplr) {
       return await this.signTxWithKeplr(txBuilder, signerBaseAccount);
     }
-    if (currentCosmosWallet.type === WalletType.metaMask) {
+    if (currentCosmosWallet.type === WalletType.leap) {
+      return await this.signTxWithLeap(txBuilder, signerBaseAccount);
+    }
+    if (currentCosmosWallet.type === WalletType.metamask) {
       // Todo: Currently disabled MetaMask related features.
       throw Error('Unsupported wallet type!');
       // return this.signTxWithMetaMask(txBuilder, signerBaseAccount);
@@ -212,12 +216,12 @@ export class TxCommonService {
     return signedTxBuilder;
   }
 
-  // Todo: This is dummy function and need to implement later.
-  signTxWithLedger(
+  async signTxWithLeap(
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-  ): cosmosclient.TxBuilder {
-    throw Error('Currently signing with Ledger is not supported!');
+  ): Promise<cosmosclient.TxBuilder> {
+    const signedTxBuilder = await this.leapService.signTx(txBuilder, signerBaseAccount);
+    return signedTxBuilder;
   }
 
   async simulateTx(

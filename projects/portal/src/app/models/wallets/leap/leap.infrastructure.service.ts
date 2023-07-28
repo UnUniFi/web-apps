@@ -2,44 +2,45 @@ import { createCosmosPublicKeyFromUint8Array } from '../../../utils/key';
 import { ConfigService } from '../../config.service';
 import { KeyType } from '../../keys/key.model';
 import { StoredWallet, WalletType } from '../wallet.model';
-import { IKeplrInfrastructureService } from './keplr.service';
+import { ILeapInfrastructureService } from './leap.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { ChainInfo, Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
-export interface signKeplr {
-  authInfoBytes: Uint8Array;
-  bodyBytes: Uint8Array;
-  signature: Uint8Array;
+interface Key {
+  name: string;
+  algo: string;
+  pubKey: Uint8Array;
+  address: Uint8Array;
+  bech32Address: string;
+  isNanoLedger: boolean;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class KeplrInfrastructureService implements IKeplrInfrastructureService {
+export class LeapInfrastructureService implements ILeapInfrastructureService {
   constructor(
     private readonly loadingDialog: LoadingDialogService,
     private snackBar: MatSnackBar,
     private configService: ConfigService,
   ) {}
-
   private async getKey(): Promise<Key | undefined> {
-    if (!window.keplr) {
-      alert('Please install Keplr extension');
+    if (!window.leap) {
+      alert('Please install Leap extension');
       return;
     }
     const chainID = this.configService.configs[0].chainID;
-    await window.keplr.enable(chainID);
+    await window.leap.enable(chainID);
 
-    const key = await window.keplr.getKey(chainID);
+    const key = await window.leap.getKey(chainID);
     return key;
   }
 
   private async suggestChain(): Promise<void> {
-    if (!window.keplr) {
-      alert('Please install Keplr extension');
+    if (!window.leap) {
+      alert('Please install Leap extension');
       return;
     }
     const chainId = this.configService.configs[0].chainID;
@@ -82,7 +83,10 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       average: 0.01,
       high: 0.03,
     };
-    const chainInfo: ChainInfo = {
+    const image =
+      'https://raw.githubusercontent.com/cosmos/chain-registry/master/ununifi/images/ununifi.svg';
+
+    const chainInfo = {
       chainId,
       chainName,
       rpc,
@@ -93,17 +97,18 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       feeCurrencies,
       stakeCurrency,
       gasPriceStep,
+      image,
     };
-    await window.keplr.experimentalSuggestChain(chainInfo);
+    await window.leap.experimentalSuggestChain(chainInfo);
   }
 
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
-    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Keplr...');
+    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Leap...');
     try {
       await this.suggestChain();
     } catch (error) {
       console.error(error);
-      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      const errorMessage = `Leap Connection failed: ${(error as Error).toString()}`;
       this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
       dialogRefSuggestChainAndGetKey.close();
       return;
@@ -113,7 +118,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
       keyData = await this.getKey();
     } catch (error) {
       console.error(error);
-      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      const errorMessage = `Leap Connection failed: ${(error as Error).toString()}`;
       this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
     } finally {
       dialogRefSuggestChainAndGetKey.close();
@@ -121,7 +126,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     return keyData;
   }
 
-  private convertKeplrKeyToStoredWallet(keyData: Key | undefined): StoredWallet | undefined {
+  private convertLeapKeyToStoredWallet(keyData: Key | undefined): StoredWallet | undefined {
     if (!keyData) {
       console.error('Fail.');
       return undefined;
@@ -135,7 +140,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     const pubkey = Buffer.from(cosmosPublicKey.bytes()).toString('hex');
     const storedWallet: StoredWallet = {
       id: keyData.name,
-      type: WalletType.keplr,
+      type: WalletType.leap,
       key_type: KeyType.secp256k1,
       public_key: pubkey,
       address: accAddress.toString(),
@@ -149,36 +154,36 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     bodyBytes: Uint8Array,
     authInfoBytes: Uint8Array,
     accountNumber: Long,
-  ): Promise<signKeplr | undefined> {
-    if (!window.keplr) {
-      alert('Please install Keplr extension');
+  ): Promise<any | undefined> {
+    if (!window.leap) {
+      alert('Please install Leap extension');
       return;
     }
     const chainId = this.configService.configs[0].chainID;
-    await window.keplr.enable(chainId);
-    const directSignResponse = await window.keplr.signDirect(chainId, signer, {
+    await window.leap.enable(chainId);
+    const directSignResponse = await window.leap.signDirect(chainId, signer, {
       bodyBytes,
       authInfoBytes,
       chainId,
       accountNumber,
     });
-    const signKeplr: signKeplr = {
+    const signLeap: any = {
       authInfoBytes: directSignResponse.signed.authInfoBytes,
       bodyBytes: directSignResponse.signed.bodyBytes,
       signature: Uint8Array.from(Buffer.from(directSignResponse.signature.signature, 'base64')),
     };
-    return signKeplr;
+    return signLeap;
   }
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {
     const keyData = await this.suggestChainAndGetKey();
-    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
+    const storedWallet = this.convertLeapKeyToStoredWallet(keyData);
     return storedWallet;
   }
 
   async checkWallet(): Promise<StoredWallet | null | undefined> {
     const keyData = await this.getKey();
-    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
+    const storedWallet = this.convertLeapKeyToStoredWallet(keyData);
     return storedWallet;
   }
 

@@ -1,4 +1,4 @@
-import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletWindow, StoredWallet, WalletType } from '../../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   Component,
@@ -10,12 +10,11 @@ import {
   Output,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Window as KeplrWindow } from '@keplr-wallet/types';
 import * as crypto from 'crypto';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow {}
+  interface Window extends WalletWindow {}
 }
 @Component({
   selector: 'view-wallet-tool',
@@ -31,6 +30,8 @@ export class WalletToolComponent implements OnInit, OnChanges {
   symbolBalancesMap?: { [symbol: string]: number } | null;
   @Input()
   keplrStoredWallet?: StoredWallet | null;
+  @Input()
+  leapStoredWallet?: StoredWallet | null;
   @Output()
   appConnectWallet: EventEmitter<{}>;
   @Output()
@@ -44,11 +45,35 @@ export class WalletToolComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
+    if (this.isFirstChange && this.currentStoredWallet) {
+      if (
+        this.keplrStoredWallet &&
+        this.currentStoredWallet.type === WalletType.keplr &&
+        this.currentStoredWallet.public_key != this.keplrStoredWallet.public_key
+      ) {
+        this.isFirstChange = false;
+        alert(
+          'Logged out because Keplr and Portal have different addresses. Please connect wallet again.',
+        );
+        this.onDisconnectWallet({});
+      }
+      if (
+        this.leapStoredWallet &&
+        this.currentStoredWallet.type === WalletType.leap &&
+        this.currentStoredWallet.public_key != this.leapStoredWallet.public_key
+      ) {
+        this.isFirstChange = false;
+        alert(
+          'Logged out because Leap and Portal have different addresses. Please connect wallet again.',
+        );
+        this.onDisconnectWallet({});
+      }
+    }
     if (
       this.isFirstChange &&
       this.currentStoredWallet &&
       this.keplrStoredWallet &&
-      this.currentStoredWallet.type === 'keplr' &&
+      this.currentStoredWallet.type === WalletType.keplr &&
       this.currentStoredWallet.public_key != this.keplrStoredWallet.public_key
     ) {
       this.isFirstChange = false;
@@ -62,9 +87,19 @@ export class WalletToolComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   @HostListener('window:keplr_keystorechange', ['$event'])
-  onChangeKey() {
-    alert('Key store in Keplr is changed. You may need to refetch the account info.');
-    this.onDisconnectWallet({});
+  onChangeKeplrKey() {
+    if (this.currentStoredWallet?.type === WalletType.keplr) {
+      alert('Key store in Keplr is changed. You may need to refetch the account info.');
+      this.onDisconnectWallet({});
+    }
+  }
+
+  @HostListener('window:leap_keystorechange', ['$event'])
+  onChangeLeapKey() {
+    if (this.currentStoredWallet?.type === WalletType.leap) {
+      alert('Key store in Leap is changed. You may need to refetch the account info.');
+      this.onDisconnectWallet({});
+    }
   }
 
   getColorCode(storedWallet: StoredWallet) {

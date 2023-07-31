@@ -1,5 +1,5 @@
-import { IncentiveModule } from '../../views/incentive/incentive.module';
-import { TokenModule } from '../../views/incentive/units/unit/unit.module';
+import { IncentiveModule } from '../../views/ecosystemincentive/incentive.module';
+import { TokenModule } from '../../views/ecosystemincentive/units/unit/unit.module';
 import { IncentiveRoutingModule } from './incentive-routing.module';
 import { IncentiveComponent } from './incentive.component';
 import { UnitComponent } from './units/unit/unit.component';

@@ -1,5 +1,5 @@
 import { StoredWallet } from '../../../models/wallets/wallet.model';
-import { BidderNftsInfo } from '../../../pages/nft-pawnshop/lenders/lenders.component';
+import { BidderNftsInfo } from '../../../pages/nftbackedloan/lenders/lenders.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { ListedClass200Response } from 'ununifi-client/esm/openapi';

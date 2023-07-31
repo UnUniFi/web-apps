@@ -1,4 +1,4 @@
-import { SearchInfo } from '../../../pages/nft-pawnshop/nfts/nfts.component';
+import { SearchInfo } from '../../../pages/nftbackedloan/nfts/nfts.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';

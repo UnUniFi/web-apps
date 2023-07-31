@@ -62,12 +62,12 @@ const routes: Routes = [
     path: 'incentive',
     component: AppUtilsComponent,
     loadChildren: () =>
-      import('../../incentive/incentive.module').then((m) => m.AppIncentiveModule),
+      import('../../ecosystemincentive/incentive.module').then((m) => m.AppIncentiveModule),
   },
   {
     path: 'nfts',
     component: AppUtilsComponent,
-    loadChildren: () => import('../../nfts/nfts.module').then((m) => m.AppNftsModule),
+    loadChildren: () => import('../../nftfactory/nfts.module').then((m) => m.AppNftsModule),
   },
   {
     path: 'developers',

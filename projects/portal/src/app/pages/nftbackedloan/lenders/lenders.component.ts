@@ -4,7 +4,7 @@ import { NftPawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawns
 import { NftPawnshopService } from '../../../models/nft-pawnshops/nft-pawnshop.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
-import { LendParams } from '../../../views/nft-pawnshop/lenders/lenders.component';
+import { LendParams } from '../../../views/nftbackedloan/lenders/lenders.component';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';

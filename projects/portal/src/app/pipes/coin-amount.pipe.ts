@@ -1,4 +1,4 @@
-import { denomExponentMap } from '../models/cosmos/bank.model';
+import { getDenomExponent } from '../models/cosmos/bank.model';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -7,8 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class CoinAmountPipe implements PipeTransform {
   transform(value: string | undefined | null, denom?: string): string {
     if (denom) {
-      const denomExponents = denomExponentMap;
-      const exponent = denomExponents[denom];
+      const exponent = getDenomExponent(denom);
       const amount = Number(value) / Math.pow(10, exponent);
       return amount.toString();
     }

@@ -1,5 +1,5 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
-import { denomExponentMap } from './bank.model';
+import { getDenomExponent } from './bank.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Decimal from 'decimal.js';
@@ -75,7 +75,7 @@ export class BankQueryService {
           balance.map(async (b) => {
             if (b.denom && b.amount) {
               const metadata = metadataMap[b.denom];
-              const denomExponent = denomExponentMap[b.denom];
+              const denomExponent = getDenomExponent(b.denom);
               const amount = new Decimal(b.amount);
               map[metadata.symbol!] = Number(
                 amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Chart from 'chart.js/auto';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
@@ -110,7 +110,7 @@ export class RepayComponent implements OnInit, OnChanges {
         this.symbol,
         this.symbolMetadataMap,
       );
-      const exponent = denomExponentMap[this.listingInfo?.bid_denom!];
+      const exponent = getDenomExponent(this.listingInfo?.bid_denom!);
       this.selectedBids = this.autoRepayBids.map((bid) => {
         return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent };
       });

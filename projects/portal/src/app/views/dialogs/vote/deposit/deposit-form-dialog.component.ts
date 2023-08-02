@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import cosmosclient from '@cosmos-client/core';
 import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type DepositOnSubmitEvent = {
@@ -17,7 +17,7 @@ export type DepositOnSubmitEvent = {
   templateUrl: './deposit-form-dialog.component.html',
   styleUrls: ['./deposit-form-dialog.component.css'],
 })
-export class DepositFormDialogComponent implements OnInit,OnChanges {
+export class DepositFormDialogComponent implements OnInit, OnChanges {
   @Input()
   proposal?: Proposals200ResponseProposalsInner | null;
   @Input()
@@ -76,7 +76,7 @@ export class DepositFormDialogComponent implements OnInit,OnChanges {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    const exponent = denomExponentMap[this.denom];
+    const exponent = getDenomExponent(this.denom);
     this.appSubmit.emit({
       amount: {
         amount: Math.floor(Number(this.depositAmount) * 10 ** exponent).toString(),

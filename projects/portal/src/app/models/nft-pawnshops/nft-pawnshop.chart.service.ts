@@ -1,4 +1,4 @@
-import { denomExponentMap } from '../cosmos/bank.model';
+import { getDenomExponent } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
 import { Chart, ChartItem } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
@@ -35,7 +35,7 @@ export class NftPawnshopChartService {
   constructor() {}
 
   convertChartData(bids: BidderBids200ResponseBidsInner[], denom: string): BidChartData[] {
-    const exponent = denomExponentMap[denom];
+    const exponent = getDenomExponent(denom);
     const chartData = bids.map((bid) => {
       return {
         price: Number(bid.price?.amount) / 10 ** exponent,
@@ -383,7 +383,7 @@ export class NftPawnshopChartService {
     if (!bids[0].price?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bids[0].price.denom];
+    const exponent = getDenomExponent(bids[0].price.denom);
     return bids.map((bid) => {
       if (bid.expiry && bid.price && bid.price.amount && bid.interest_rate) {
         const date = new Date(bid.expiry).toLocaleString();
@@ -405,7 +405,7 @@ export class NftPawnshopChartService {
     if (!bids[0].price?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bids[0].price.denom];
+    const exponent = getDenomExponent(bids[0].price.denom);
     let data = [];
     for (let bid of bids) {
       if (bid.expiry && bid.deposit && bid.deposit.amount && bid.interest_rate) {
@@ -437,7 +437,7 @@ export class NftPawnshopChartService {
     if (!bids[0].price?.denom) {
       return [];
     }
-    const exponent = denomExponentMap[bids[0].price.denom];
+    const exponent = getDenomExponent(bids[0].price.denom);
     return bids.map((bid) => {
       if (bid.expiry && bid.borrow?.amount?.amount !== '0' && bid.interest_rate) {
         const date = new Date(bid.expiry).toLocaleString();

@@ -1,6 +1,7 @@
 import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { KeplrService } from '../../../models/wallets/keplr/keplr.service';
+import { LeapService } from '../../../models/wallets/leap/leap.service';
 import { WalletApplicationService } from '../../../models/wallets/wallet.application.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -18,12 +19,14 @@ export class WalletToolComponent implements OnInit {
   symbol$: Observable<string | null | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   keplrStoredWallet$: Observable<StoredWallet | null | undefined>;
+  leapStoredWallet$: Observable<StoredWallet | null | undefined>;
 
   constructor(
     private readonly walletService: WalletService,
     private readonly walletApplicationService: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly keplrService: KeplrService,
+    private readonly leapService: LeapService,
     private readonly configService: ConfigService,
   ) {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
@@ -42,6 +45,7 @@ export class WalletToolComponent implements OnInit {
       mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
     );
     this.keplrStoredWallet$ = from(this.keplrService.checkWallet());
+    this.leapStoredWallet$ = from(this.leapService.checkWallet());
   }
 
   ngOnInit(): void {}

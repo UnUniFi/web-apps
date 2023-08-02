@@ -13,7 +13,7 @@
           Pool Status
           <!-- The button to open modal -->
           <label for="modal-help" class="label-text cursor-pointer">
-            <mat-icon>help</mat-icon>
+            <span class="material-symbols-outlined">help</span>
           </label>
         </h2>
 
@@ -94,7 +94,7 @@
                 <span class="label-text">Enter amount to deposit</span>
                 <!-- The button to open modal -->
                 <label for="modal-dlp" class="label-text cursor-pointer">
-                  <mat-icon>help</mat-icon>
+                  <span class="material-symbols-outlined">help</span>
                 </label>
               </span>
               <label class="input-group">
@@ -110,7 +110,7 @@
                   ngModel
                   name="mint-amount"
                   type="number"
-                  placeholder="e.g. 12.123456"
+                  placeholder="12.123456"
                   class="input input-bordered w-full"
                   [class]="{
                     'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
@@ -221,7 +221,7 @@
               <span class="label">
                 <span class="label-text">Enter amount to sell</span>
                 <label for="modal-dlp" class="label-text cursor-pointer">
-                  <mat-icon>help</mat-icon>
+                  <span class="material-symbols-outlined">help</span>
                 </label>
               </span>
               <label class="input-group">
@@ -232,7 +232,7 @@
                   ngModel
                   name="burn-amount"
                   type="number"
-                  placeholder="e.g. 12.123456"
+                  placeholder="12.123456"
                   class="input input-bordered w-full"
                   [class]="{
                     'input-error': burnAmountNgModelRef.errors && burnAmountNgModelRef.touched

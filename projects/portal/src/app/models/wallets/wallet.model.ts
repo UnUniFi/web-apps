@@ -1,14 +1,20 @@
 import { KeyType } from '../keys/key.model';
+import { Window as LeapWindow } from './leap/leap.model';
 import cosmosclient from '@cosmos-client/core';
 import { PubKey } from '@cosmos-client/core/esm/types';
+import { Window as KeplrWindow } from '@keplr-wallet/types';
 
-// Note: Now, only ununifi is supported.
 export enum WalletType {
-  ununifi = 'ununifi',
-  keplr = 'keplr',
-  ledger = 'ledger',
-  keyStation = 'keyStation',
-  metaMask = 'metaMask',
+  ununifi = 'UnUniFi',
+  keplr = 'Keplr',
+  leap = 'Leap',
+  metamask = 'MetaMask',
+}
+
+export interface WalletWindow extends KeplrWindow, LeapWindow {}
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Window extends WalletWindow {}
 }
 
 // Note: For general purpose? Uint8Array ... Want to use this as possible?

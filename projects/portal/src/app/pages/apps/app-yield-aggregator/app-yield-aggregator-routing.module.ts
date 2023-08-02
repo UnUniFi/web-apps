@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: AppYieldAggregatorComponent,
     loadChildren: () =>
-      import('../../yield-aggregator/yield-aggregator.module').then(
+      import('../../yieldaggregator/yield-aggregator.module').then(
         (m) => m.AppYieldAggregatorModule,
       ),
   },

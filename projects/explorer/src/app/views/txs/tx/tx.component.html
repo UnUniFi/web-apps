@@ -1,30 +1,37 @@
-<h2 class="mb-0">Transaction</h2>
-<div class="card bg-base-100 shadow-xl">
-  <div class="card-body">
-    <!-- <h2 class="card-title"></h2> -->
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <tr>
-          <th>TxHash</th>
-          <td>{{ tx?.tx_response?.txhash }}</td>
-        </tr>
-        <tr>
-          <th>Height</th>
-          <td>{{ tx?.tx_response?.height }}</td>
-        </tr>
-        <tr>
-          <th>Gas Used</th>
-          <td>{{ tx?.tx_response?.gas_used }}</td>
-        </tr>
-        <tr>
-          <th>Gas Wanted</th>
-          <td>{{ tx?.tx_response?.gas_wanted }}</td>
-        </tr>
-        <tr>
-          <th>Timestamp</th>
-          <td>{{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
-        </tr>
-      </table>
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li routerLink=".."><a>Transactions</a></li>
+      <li class="font-mono">{{ tx?.tx_response?.txhash }}</li>
+    </ul>
+  </div>
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <!-- <h2 class="card-title"></h2> -->
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tr>
+            <th>TxHash</th>
+            <td class="font-mono">{{ tx?.tx_response?.txhash }}</td>
+          </tr>
+          <tr>
+            <th>Height</th>
+            <td>{{ tx?.tx_response?.height }}</td>
+          </tr>
+          <tr>
+            <th>Gas Used</th>
+            <td>{{ tx?.tx_response?.gas_used }}</td>
+          </tr>
+          <tr>
+            <th>Gas Wanted</th>
+            <td>{{ tx?.tx_response?.gas_wanted }}</td>
+          </tr>
+          <tr>
+            <th>Timestamp</th>
+            <td>{{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 </div>

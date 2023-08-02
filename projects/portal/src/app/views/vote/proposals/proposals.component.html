@@ -12,7 +12,7 @@
       </label>
       <label class="input-group">
         <select
-          class="select select-bordered select-primary w-20 sm:w-64"
+          class="select select-bordered w-20 sm:w-64"
           [(ngModel)]="pageSize"
           (change)="onPaginationChange()"
         >
@@ -21,9 +21,9 @@
             <option [value]="size">{{ size }}</option>
           </ng-container>
         </select>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(1)">«</button>
-        <button class="btn btn-primary">Page {{ pageNumber || 1 }}</button>
-        <button class="btn btn-outline btn-primary" (click)="onPaginationChange(2)">»</button>
+        <button class="btn" (click)="onPaginationChange(1)">«</button>
+        <span>Page {{ pageNumber || 1 }}</span>
+        <button class="btn" (click)="onPaginationChange(2)">»</button>
       </label>
       <label class="label">
         <span class="label-text-alt"
@@ -35,7 +35,9 @@
 
   <ng-container *ngIf="proposals === null; then loading; else loaded"> </ng-container>
   <ng-template #loading>
-    <span class="loading loading-dots loading-lg"></span>
+    <p class="text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </p>
   </ng-template>
   <ng-template #loaded>
     <ng-container *ngIf="(proposals?.length || 0) > 0; then exist; else empty"> </ng-container>
@@ -43,42 +45,48 @@
 
   <ng-template #exist>
     <div *ngFor="let proposal of proposals; let i = index" class="w-full mb-4">
-      <div class="card glass w-full shadow-xl">
+      <div class="card bg-base-100 w-full shadow-xl">
         <div class="card-body">
-          <span class="badge badge-primary">
-            {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
-          </span>
-          <h2 class="card-title break-all">
-            #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
-          </h2>
-          <div class="divider m-0">Tallies</div>
+          <div class="flex items-center">
+            <h2 class="card-title break-all">
+              #{{ proposal.proposal_id }} {{ getProposalTitle(proposal) }}
+            </h2>
+            <span class="flex-auto"></span>
+            <span class="badge badge-primary badge-lg">
+              {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}
+            </span>
+          </div>
+
+          <label class="label">
+            <span class="label-text">Tallies</span>
+          </label>
           <div class="grid gap-3">
-            <div class="flex items-center p-1 w-full">
-              <mat-icon class="w-8 text-success">thumb_up</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <span class="material-symbols-outlined text-success">thumb_up</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].yes }}"
                 class="progress progress-success"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-warning">thumb_down</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <span class="material-symbols-outlined text-warning">thumb_down</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].no }}"
                 class="progress progress-warning"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-error">not_interested</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <span class="material-symbols-outlined text-error">not_interested</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].noWithVeto }}"
                 class="progress progress-error"
               ></progress>
             </div>
-            <div class="flex items-center p-1">
-              <mat-icon class="w-8 text-primary">subtitles_off</mat-icon>
+            <div class="flex items-center p-1 gap-2">
+              <span class="material-symbols-outlined text-primary">subtitles_off</span>
               <progress
                 max="{{ tallies![i].max }}"
                 value="{{ tallies![i].abstain }}"
@@ -88,10 +96,10 @@
           </div>
           <div class="card-actions justify-end">
             <button
-              class="btn btn-outline btn-secondary w-full md:w-auto md:px-8"
+              class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
               (click)="onClickVote(proposal.proposal_id!)"
             >
-              <mat-icon class="mr-2">how_to_vote</mat-icon>Vote
+              <span class="material-symbols-outlined">how_to_vote</span>Vote
             </button>
             <button
               class="btn btn-outline btn-info w-full md:w-auto md:px-8"

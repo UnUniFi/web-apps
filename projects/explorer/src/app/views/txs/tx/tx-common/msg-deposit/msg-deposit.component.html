@@ -1,30 +1,29 @@
 <ng-container *ngIf="txDetail">
-  <mat-card class="mb-2">
-    <mat-chip-list>
-      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
-    </mat-chip-list>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">Depositor:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.fromAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Proposal ID:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item *ngFor="let balance of txDetail?.amounts; let i = index; last as last">
-        <span *ngIf="txDetail?.amounts?.length == 1" class="break-words">Deposit:</span>
-        <span *ngIf="txDetail?.amounts?.length != 1" class="break-words">Deposit {{i+1}}:</span>
-        <span class="flex-auto"></span>
-        <span class="mr-2">{{ balance.amount | number: '1.0-0' }}</span>
-        <span>{{ balance.denom }}</span>
-        <span *ngIf="balance?.denom?.length == 3" class="mr-2"></span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <span class="badge badge-info"> {{ txDetail.txType }} </span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>Depositor</th>
+            <td class="font-mono">
+              {{ txDetail.fromAddress }}
+            </td>
+          </tr>
+          <tr>
+            <th>Proposal ID</th>
+            <td>
+              {{ txDetail.toAddress }}
+            </td>
+          </tr>
+          <tr *ngFor="let amount of txDetail.amounts; let i = index">
+            <th>Deposit #{{ i }}</th>
+            <td>{{ amount.amount }}{{ amount.denom }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ng-container>

@@ -3,7 +3,9 @@
     <h2 class="card-title">Validator Rewards</h2>
     <ng-container *ngIf="commission === null; then loading; else loaded"></ng-container>
     <ng-template #loading>
-      <span class="loading loading-dots loading-lg"></span>
+      <p class="text-center">
+        <span class="loading loading-ring loading-lg"></span>
+      </p>
     </ng-template>
     <ng-template #loaded>
       <ng-container
@@ -37,7 +39,7 @@
       <ng-template #filledReward>
         <table class="table w-full">
           <tr>
-            <th>Outstanding Reward (For Delegators)</th>
+            <th>Outstanding Reward (For Delegator)</th>
             <td *ngFor="let r of rewards?.rewards?.rewards">
               {{ r | coin | async }}
             </td>

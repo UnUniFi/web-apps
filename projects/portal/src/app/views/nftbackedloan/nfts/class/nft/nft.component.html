@@ -1,0 +1,38 @@
+<ng-container *ngIf="listingInfo === null; then loading; else loaded"></ng-container>
+<ng-template #loading>
+  <p class="text-center">
+    <span class="loading loading-ring loading-lg"></span>
+  </p>
+</ng-template>
+<ng-template #loaded>
+  <ng-container *ngIf="address === listingInfo?.owner; then lister; else bidder"></ng-container>
+  <ng-template #lister>
+    <view-lister-nft
+      [classID]="classID"
+      [nftID]="nftID"
+      [listingInfo]="listingInfo"
+      [bids]="bids"
+      [loan]="loan"
+      [liquidation]="liquidation"
+      [nftMetadata]="nftMetadata"
+      [nftImage]="nftImage"
+      (appSubmitCancel)="onSubmitCancelListing()"
+      (appSubmitSell)="onSubmitSell()"
+    ></view-lister-nft>
+  </ng-template>
+  <ng-template #bidder>
+    <view-bidder-nft
+      [classID]="classID"
+      [nftID]="nftID"
+      [address]="address"
+      [listingInfo]="listingInfo"
+      [bids]="bids"
+      [nftMetadata]="nftMetadata"
+      [nftImage]="nftImage"
+      [ownBid]="ownBid"
+      [isWinning]="isWinning"
+      (appSubmitCancelBid)="onSubmitCancelBid()"
+      (appSubmitPayRemainder)="onSubmitPayRemainder()"
+    ></view-bidder-nft>
+  </ng-template>
+</ng-template>

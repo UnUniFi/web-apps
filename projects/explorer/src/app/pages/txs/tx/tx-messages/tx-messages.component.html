@@ -1,35 +1,52 @@
 <h3 *ngIf="txDetails" class="mb-0 ml-2 font-medium">Message</h3>
-<ng-container *ngFor="let txDetail of txDetails; let i = index">
-  <ng-container [ngSwitch]="txDetail.txType">
-    <!--distribution-->
-    <view-msg-fund-community-pool *ngSwitchCase="'MsgFundCommunityPool'" [txDetail]="txDetails?.[i]">
-    </view-msg-fund-community-pool>
-    <view-msg-set-withdraw-address *ngSwitchCase="'MsgSetWithdrawAddress'" [txDetail]="txDetails?.[i]">
-    </view-msg-set-withdraw-address>
-    <view-msg-withdraw-deledator-reward *ngSwitchCase="'MsgWithdrawDelegatorReward'" [txDetail]="txDetails?.[i]">
-    </view-msg-withdraw-deledator-reward>
-    <view-msg-withdraw-validator-commission *ngSwitchCase="'MsgWithdrawValidatorCommission'"
-      [txDetail]=" txDetails?.[i]"></view-msg-withdraw-validator-commission>
-    <!--staking-->
-    <view-msg-create-validator *ngSwitchCase="'MsgCreateValidator'" [txDetail]="txDetails?.[i]">
-    </view-msg-create-validator>
-    <view-msg-edit-validator *ngSwitchCase="'MsgEditValidator'" [txDetail]="txDetails?.[i]"></view-msg-edit-validator>
-    <view-msg-delegate *ngSwitchCase="'MsgDelegate'" [txDetail]="txDetails?.[i]"></view-msg-delegate>
-    <view-msg-begin-redelegate *ngSwitchCase="'MsgBeginRedelegate'" [txDetail]="txDetails?.[i]">
-    </view-msg-begin-redelegate>
-    <view-msg-undelegate *ngSwitchCase="'MsgUndelegate'" [txDetail]="txDetails?.[i]"></view-msg-undelegate>
-    <!--gov-->
-    <view-msg-vote *ngSwitchCase="'MsgVote'" [txDetail]="txDetails?.[i]"></view-msg-vote>
-    <view-msg-vote-weighted *ngSwitchCase="'MsgVoteWeighted'" [txDetail]="txDetails?.[i]"></view-msg-vote-weighted>
-    <view-msg-deposit *ngSwitchCase="'MsgDeposit'" [txDetail]="txDetails?.[i]"></view-msg-deposit>
-    <view-msg-submit-proposal *ngSwitchCase="'MsgSubmitProposal'" [txDetail]="txDetails?.[i]">
-    </view-msg-submit-proposal>
-    <!--vesting-->
-    <view-msg-create-vesting-account *ngSwitchCase="'MsgCreateVestingAccount'" [txDetail]="txDetails?.[i]">
-    </view-msg-create-vesting-account>
-    <!--bank-->
-    <view-msg-send *ngSwitchCase="'MsgSend'" [txDetail]="txDetails?.[i]"></view-msg-send>
-    <!--default-->
-    <div *ngSwitchDefault>* No message</div>
+<ng-container *ngIf="(txDetails?.length || 0) > 0; else empty">
+  <ng-container *ngFor="let txDetail of txDetails">
+    <ng-container [ngSwitch]="txDetail.txType">
+      <!--distribution-->
+      <view-msg-fund-community-pool *ngSwitchCase="'MsgFundCommunityPool'" [txDetail]="txDetail">
+      </view-msg-fund-community-pool>
+      <view-msg-set-withdraw-address *ngSwitchCase="'MsgSetWithdrawAddress'" [txDetail]="txDetail">
+      </view-msg-set-withdraw-address>
+      <view-msg-withdraw-deledator-reward
+        *ngSwitchCase="'MsgWithdrawDelegatorReward'"
+        [txDetail]="txDetail"
+      >
+      </view-msg-withdraw-deledator-reward>
+      <view-msg-withdraw-validator-commission
+        *ngSwitchCase="'MsgWithdrawValidatorCommission'"
+        [txDetail]="txDetail"
+      >
+      </view-msg-withdraw-validator-commission>
+      <!--staking-->
+      <view-msg-create-validator *ngSwitchCase="'MsgCreateValidator'" [txDetail]="txDetail">
+      </view-msg-create-validator>
+      <view-msg-edit-validator *ngSwitchCase="'MsgEditValidator'" [txDetail]="txDetail">
+      </view-msg-edit-validator>
+      <view-msg-delegate *ngSwitchCase="'MsgDelegate'" [txDetail]="txDetail"></view-msg-delegate>
+      <view-msg-begin-redelegate *ngSwitchCase="'MsgBeginRedelegate'" [txDetail]="txDetail">
+      </view-msg-begin-redelegate>
+      <view-msg-undelegate *ngSwitchCase="'MsgUndelegate'" [txDetail]="txDetail">
+      </view-msg-undelegate>
+      <!--gov-->
+      <view-msg-vote *ngSwitchCase="'MsgVote'" [txDetail]="txDetail"></view-msg-vote>
+      <view-msg-vote-weighted *ngSwitchCase="'MsgVoteWeighted'" [txDetail]="txDetail">
+      </view-msg-vote-weighted>
+      <view-msg-deposit *ngSwitchCase="'MsgDeposit'" [txDetail]="txDetail"></view-msg-deposit>
+      <view-msg-submit-proposal *ngSwitchCase="'MsgSubmitProposal'" [txDetail]="txDetail">
+      </view-msg-submit-proposal>
+      <!--vesting-->
+      <view-msg-create-vesting-account
+        *ngSwitchCase="'MsgCreateVestingAccount'"
+        [txDetail]="txDetail"
+      >
+      </view-msg-create-vesting-account>
+      <!--bank-->
+      <view-msg-send *ngSwitchCase="'MsgSend'" [txDetail]="txDetail"></view-msg-send>
+      <!--default-->
+      <view-msg-default *ngSwitchDefault [txDetail]="txDetail"></view-msg-default>
+    </ng-container>
   </ng-container>
 </ng-container>
+<ng-template #empty>
+  <p>* No message</p>
+</ng-template>

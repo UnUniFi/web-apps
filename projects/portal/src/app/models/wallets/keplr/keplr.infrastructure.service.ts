@@ -6,18 +6,13 @@ import { IKeplrInfrastructureService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
-import { ChainInfo, Key, Window as KeplrWindow } from '@keplr-wallet/types';
+import { ChainInfo, Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 export interface signKeplr {
   authInfoBytes: Uint8Array;
   bodyBytes: Uint8Array;
   signature: Uint8Array;
-}
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Window extends KeplrWindow {}
 }
 
 @Injectable({
@@ -32,78 +27,74 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
 
   private async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {
-      alert('Please install keplr extension');
+      alert('Please install Keplr extension');
       return;
-    } else {
-      const chainID = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainID);
-
-      const key = await window.keplr?.getKey(chainID);
-      return key;
     }
+    const chainID = this.configService.configs[0].chainID;
+    await window.keplr.enable(chainID);
+
+    const key = await window.keplr.getKey(chainID);
+    return key;
   }
 
   private async suggestChain(): Promise<void> {
     if (!window.keplr) {
-      alert('Please install keplr extension');
+      alert('Please install Keplr extension');
       return;
-    } else {
-      const chainId = this.configService.configs[0].chainID;
-      const chainName = this.configService.configs[0].chainName;
-      const rpc = this.configService.configs[0].websocketURL;
-      const rest = this.configService.configs[0].restURL;
-      const bip44 = { coinType: 118 };
-      const bech32Config = {
-        bech32PrefixAccAddr: this.configService.configs[0].bech32Prefix?.accAddr!,
-        bech32PrefixAccPub: this.configService.configs[0].bech32Prefix?.accPub!,
-        bech32PrefixValAddr: this.configService.configs[0].bech32Prefix?.valAddr!,
-        bech32PrefixValPub: this.configService.configs[0].bech32Prefix?.valPub!,
-        bech32PrefixConsAddr: this.configService.configs[0].bech32Prefix?.consAddr!,
-        bech32PrefixConsPub: this.configService.configs[0].bech32Prefix?.consPub!,
-      };
-      const currencies = [
-        {
-          coinDenom: 'GUU',
-          coinMinimalDenom: 'uguu',
-          coinDecimals: 6,
-          coinGeckoId: 'ununifi',
-        },
-      ];
-      const feeCurrencies = [
-        {
-          coinDenom: 'GUU',
-          coinMinimalDenom: 'uguu',
-          coinDecimals: 6,
-          coinGeckoId: 'ununifi',
-        },
-      ];
-      const stakeCurrency = {
+    }
+    const chainId = this.configService.configs[0].chainID;
+    const chainName = this.configService.configs[0].chainName;
+    const rpc = this.configService.configs[0].websocketURL.replace('ws', 'http');
+    const rest = this.configService.configs[0].restURL;
+    const bip44 = { coinType: 118 };
+    const bech32Config = {
+      bech32PrefixAccAddr: this.configService.configs[0].bech32Prefix?.accAddr!,
+      bech32PrefixAccPub: this.configService.configs[0].bech32Prefix?.accPub!,
+      bech32PrefixValAddr: this.configService.configs[0].bech32Prefix?.valAddr!,
+      bech32PrefixValPub: this.configService.configs[0].bech32Prefix?.valPub!,
+      bech32PrefixConsAddr: this.configService.configs[0].bech32Prefix?.consAddr!,
+      bech32PrefixConsPub: this.configService.configs[0].bech32Prefix?.consPub!,
+    };
+    const currencies = [
+      {
         coinDenom: 'GUU',
         coinMinimalDenom: 'uguu',
         coinDecimals: 6,
         coinGeckoId: 'ununifi',
-      };
-      const coinType = 118;
-      const gasPriceStep = {
-        low: 0,
-        average: 0.01,
-        high: 0.03,
-      };
-      const chainInfo: ChainInfo = {
-        chainId,
-        chainName,
-        rpc,
-        rest,
-        bip44,
-        bech32Config,
-        currencies,
-        feeCurrencies,
-        stakeCurrency,
-        coinType,
-        gasPriceStep,
-      };
-      await window.keplr?.experimentalSuggestChain(chainInfo);
-    }
+      },
+    ];
+    const feeCurrencies = [
+      {
+        coinDenom: 'GUU',
+        coinMinimalDenom: 'uguu',
+        coinDecimals: 6,
+        coinGeckoId: 'ununifi',
+      },
+    ];
+    const stakeCurrency = {
+      coinDenom: 'GUU',
+      coinMinimalDenom: 'uguu',
+      coinDecimals: 6,
+      coinGeckoId: 'ununifi',
+    };
+    const gasPriceStep = {
+      low: 0,
+      average: 0.01,
+      high: 0.03,
+    };
+    const chainInfo: ChainInfo = {
+      chainId,
+      chainName,
+      rpc,
+      rest,
+      bip44,
+      bech32Config,
+      currencies,
+      feeCurrencies,
+      stakeCurrency,
+      gasPriceStep,
+    };
+    await window.keplr.experimentalSuggestChain(chainInfo);
   }
 
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
@@ -160,24 +151,23 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     accountNumber: Long,
   ): Promise<signKeplr | undefined> {
     if (!window.keplr) {
-      alert('Please install keplr extension');
+      alert('Please install Keplr extension');
       return;
-    } else {
-      const chainId = this.configService.configs[0].chainID;
-      await window.keplr?.enable(chainId);
-      const directSignResponse = await window.keplr.signDirect(chainId, signer, {
-        bodyBytes,
-        authInfoBytes,
-        chainId,
-        accountNumber,
-      });
-      const signKeplr: signKeplr = {
-        authInfoBytes: directSignResponse.signed.authInfoBytes,
-        bodyBytes: directSignResponse.signed.bodyBytes,
-        signature: Uint8Array.from(Buffer.from(directSignResponse.signature.signature, 'base64')),
-      };
-      return signKeplr;
     }
+    const chainId = this.configService.configs[0].chainID;
+    await window.keplr.enable(chainId);
+    const directSignResponse = await window.keplr.signDirect(chainId, signer, {
+      bodyBytes,
+      authInfoBytes,
+      chainId,
+      accountNumber,
+    });
+    const signKeplr: signKeplr = {
+      authInfoBytes: directSignResponse.signed.authInfoBytes,
+      bodyBytes: directSignResponse.signed.bodyBytes,
+      signature: Uint8Array.from(Buffer.from(directSignResponse.signature.signature, 'base64')),
+    };
+    return signKeplr;
   }
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {

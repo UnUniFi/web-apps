@@ -1,7 +1,7 @@
 <div class="card bg-base-100 shadow-xl overflow-y-auto">
   <div class="flex flex-col items-end md:hidden">
     <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
-      <mat-icon>close</mat-icon>
+      <span class="material-symbols-outlined">close</span>
     </button>
   </div>
   <div class="card-body">
@@ -14,7 +14,7 @@
           <div class="btn-block inline-flex items-center">
             <img class="w-6 h-6" src="{{ walletOption.logo }}" alt="{{ walletOption.name }} logo" />
             <span class="mx-3">{{ walletOption.name }}</span>
-            <span class="material-icons text-primary">arrow_forward</span>
+            <span class="material-symbols-outlined text-primary">arrow_forward</span>
           </div>
         </button>
       </ng-container>

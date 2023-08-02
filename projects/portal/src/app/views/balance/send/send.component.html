@@ -26,7 +26,7 @@
               required
               #addressNgModelRef="ngModel"
               class="input input-bordered w-full"
-              placeholder="e.g. ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w"
+              placeholder="ununifi1xxx"
               [class]="{
                 'input-error': addressNgModelRef.errors && addressNgModelRef.touched
               }"
@@ -51,7 +51,7 @@
                     #tokenNgModelRef="ngModel"
                     type="number"
                     required
-                    placeholder="e.g. 12.123456"
+                    placeholder="12.123456"
                     [min]="0"
                     [max]="symbolBalancesMap?.[token.symbol] || 0"
                     [step]="1"
@@ -65,7 +65,7 @@
                   />
                   <span class="w-36">{{ token.symbol }}</span>
                   <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
-                    <mat-icon>delete</mat-icon>
+                    <span class="material-symbols-outlined">delete</span>
                   </label>
                 </label>
               </div>
@@ -76,10 +76,10 @@
               </label>
             </ng-container>
 
-            <label class="input-group mb-2 w-full sm:w-auto">
+            <label class="input-group mb-2">
               <select
                 [required]="selectedTokens?.length === 0"
-                class="select select-bordered text-center w-auto"
+                class="select select-bordered text-center w-full"
                 [(ngModel)]="selectedSymbol"
                 name="strategyId"
               >
@@ -92,11 +92,11 @@
               </select>
               <button
                 type="button"
-                class="btn btn-outline btn-primary"
+                class="btn btn-outline"
                 (click)="onClickAddToken()"
                 [disabled]="!selectedSymbol"
               >
-                <mat-icon>add</mat-icon>
+                <span class="material-symbols-outlined">add</span>
               </button>
             </label>
             <label class="label" *ngIf="selectedSymbol">

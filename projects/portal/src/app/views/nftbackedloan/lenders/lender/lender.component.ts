@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BidderNftsInfo } from 'projects/portal/src/app/pages/nft-pawnshop/lenders/lenders.component';
+import { BidderNftsInfo } from 'projects/portal/src/app/pages/nftbackedloan/lenders/lenders.component';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { ListedNfts200ResponseListingsInnerListing } from 'ununifi-client/esm/openapi';
 

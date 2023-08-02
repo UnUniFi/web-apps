@@ -1,5 +1,5 @@
-import { MintModule } from '../../views/nfts/mint/mint.module';
-import { NftsModule } from '../../views/nfts/nfts.module';
+import { MintModule } from '../../views/nftfactory/mint/mint.module';
+import { NftsModule } from '../../views/nftfactory/nfts.module';
 import { MintComponent } from './mint/mint.component';
 import { NftsRoutingModule } from './nfts-routing.module';
 import { NftsComponent } from './nfts.component';

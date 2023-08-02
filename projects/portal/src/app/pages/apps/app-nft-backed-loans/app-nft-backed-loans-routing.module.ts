@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: AppNftBackedLoansComponent,
     loadChildren: () =>
-      import('../../nft-pawnshop/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
+      import('../../nftbackedloan/nft-pawnshop.module').then((m) => m.AppNftPawnshopModule),
   },
 ];
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Config = {
@@ -19,6 +20,7 @@ export type Config = {
     denom: string;
     amount: string;
   }[];
+  denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;

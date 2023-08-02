@@ -23,7 +23,7 @@
       <li>Vaults</li>
     </ul>
   </div>
-  <div class="flex flex-row flex-wrap items-end p-8 mb-8">
+  <div class="flex flex-row flex-wrap items-end mb-8">
     <form #formRef="ngForm" (submit)="onSubmit()">
       <div class="form-control w-full md:max-w-xs">
         <label class="label">
@@ -35,7 +35,7 @@
             type="text"
             #keywordNgModelRef="ngModel"
             class="input input-bordered w-full"
-            placeholder="GUU"
+            placeholder="ATOM"
             [(ngModel)]="keyword"
             name="keyword"
           />
@@ -69,43 +69,47 @@
     </div>
   </div>
 
-  <h3>Select the Vault to deposit</h3>
-  <div class="overflow-x-auto mb-8">
-    <table class="table w-full">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th></th>
-          <td>Asset</td>
-          <td>Reserve Rate</td>
-          <td>Commission Rate</td>
-          <!-- <td>Name</td> -->
-          <td>Owner</td>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let vault of vaults; let i = index">
-          <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
-            <th>#{{ vault.id }}</th>
-            <td *ngIf="symbols">
-              <div class="flex items-center space-x-3">
-                <div class="avatar">
-                  <div class="mask mask-circle w-8 h-8">
-                    <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+  <h3 class="pb-2">Select the Vault to deposit</h3>
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th></th>
+              <td>Asset</td>
+              <td>Reserve Rate</td>
+              <td>Commission Rate</td>
+              <!-- <td>Name</td> -->
+              <td>Owner</td>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let vault of vaults; let i = index">
+              <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
+                <th>#{{ vault.id }}</th>
+                <td *ngIf="symbols">
+                  <div class="flex items-center space-x-3">
+                    <div class="avatar">
+                      <div class="mask mask-circle w-8 h-8">
+                        <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                      </div>
+                    </div>
+                    {{ symbols[i].name }}
                   </div>
-                </div>
-                {{ symbols[i].name }}
-              </div>
-            </td>
-            <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
-            <td>{{ vault.withdraw_commission_rate | percentage }}</td>
-            <!-- <td>{{ vault.name }}</td> -->
-            <td>{{ vault.owner }}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-    <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
+                </td>
+                <td>{{ vault.withdraw_reserve_rate | percentage }}</td>
+                <td>{{ vault.withdraw_commission_rate | percentage }}</td>
+                <!-- <td>{{ vault.name }}</td> -->
+                <td>{{ vault.owner }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
+      </div>
+    </div>
   </div>
 
   <div class="card lg:card-side bg-base-100 shadow-xl mb-4">

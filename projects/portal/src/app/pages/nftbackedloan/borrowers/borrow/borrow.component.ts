@@ -72,7 +72,7 @@ export class BorrowComponent implements OnInit {
     this.borrowAmount$ = this.loan$.pipe(
       map((loan) => {
         const maxBorrow = Number(loan.borrowing_limit?.amount);
-        const exponent = getDenomExponent(loan.borrowing_limit?.denom || '');
+        const exponent = getDenomExponent(loan.borrowing_limit?.denom);
         return maxBorrow / 10 ** exponent;
       }),
     );

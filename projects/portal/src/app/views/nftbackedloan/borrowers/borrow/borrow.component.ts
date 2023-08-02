@@ -113,7 +113,7 @@ export class BorrowComponent implements OnInit, OnChanges {
         this.bids,
         this.autoBorrowBids,
       );
-      const exponent = getDenomExponent(this.listingInfo?.bid_denom!);
+      const exponent = getDenomExponent(this.listingInfo?.bid_denom);
       this.selectedBids = this.autoBorrowBids.map((bid) => {
         return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent };
       });

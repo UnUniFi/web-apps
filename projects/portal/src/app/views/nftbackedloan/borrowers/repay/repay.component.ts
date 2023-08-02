@@ -110,7 +110,7 @@ export class RepayComponent implements OnInit, OnChanges {
         this.symbol,
         this.symbolMetadataMap,
       );
-      const exponent = getDenomExponent(this.listingInfo?.bid_denom!);
+      const exponent = getDenomExponent(this.listingInfo?.bid_denom);
       this.selectedBids = this.autoRepayBids.map((bid) => {
         return { address: bid.bidder!, amount: Number(bid.amount?.amount) / 10 ** exponent };
       });

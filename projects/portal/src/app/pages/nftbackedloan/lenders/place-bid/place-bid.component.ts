@@ -87,7 +87,7 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = getDenomExponent(info.bid_denom || '');
+        const exponent = getDenomExponent(info.bid_denom);
         return maxBidAmount / 10 ** exponent;
       }),
     );
@@ -96,7 +96,7 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = getDenomExponent(info.bid_denom || '');
+        const exponent = getDenomExponent(info.bid_denom);
         return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent;
       }),
     );

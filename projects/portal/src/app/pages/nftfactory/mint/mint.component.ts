@@ -2,7 +2,7 @@ import { ConfigService } from '../../../models/config.service';
 import { NftMintApplicationService } from '../../../models/nft-mints/nft-mint.application.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
-import { MintNftEvent } from '../../../views/nfts/mint/mint.component';
+import { MintNftEvent } from '../../../views/nftfactory/mint/mint.component';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';

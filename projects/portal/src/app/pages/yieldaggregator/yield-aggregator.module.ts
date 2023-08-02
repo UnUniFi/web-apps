@@ -1,10 +1,10 @@
-import { StrategiesModule } from '../../views/yield-aggregator/strategies/strategies.module';
-import { StrategyModule } from '../../views/yield-aggregator/strategies/strategy/strategy.module';
-import { CreateModule } from '../../views/yield-aggregator/vaults/create/create.module';
-import { OwnerModule } from '../../views/yield-aggregator/vaults/owner/owner.module';
-import { VaultModule } from '../../views/yield-aggregator/vaults/vault/vault.module';
-import { VaultsModule } from '../../views/yield-aggregator/vaults/vaults.module';
-import { YieldAggregatorModule } from '../../views/yield-aggregator/yield-aggregator.module';
+import { StrategiesModule } from '../../views/yieldaggregator/strategies/strategies.module';
+import { StrategyModule } from '../../views/yieldaggregator/strategies/strategy/strategy.module';
+import { CreateModule } from '../../views/yieldaggregator/vaults/create/create.module';
+import { OwnerModule } from '../../views/yieldaggregator/vaults/owner/owner.module';
+import { VaultModule } from '../../views/yieldaggregator/vaults/vault/vault.module';
+import { VaultsModule } from '../../views/yieldaggregator/vaults/vaults.module';
+import { YieldAggregatorModule } from '../../views/yieldaggregator/yield-aggregator.module';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';

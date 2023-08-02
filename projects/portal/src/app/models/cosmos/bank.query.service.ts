@@ -238,7 +238,7 @@ export class BankQueryService {
         symbol: 'DLP',
       },
       {
-        description: 'OSMO IBC from OSMOSIS (testnet)',
+        description: 'OSMO from Osmosis (testnet)',
         denom_units: [
           {
             denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
@@ -252,7 +252,7 @@ export class BankQueryService {
         symbol: 'OSMO',
       },
       {
-        description: 'ATOM IBC from OSMOSIS (testnet)',
+        description: 'ATOM from Osmosis (testnet)',
         denom_units: [
           {
             denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',

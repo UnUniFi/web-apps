@@ -1,3 +1,4 @@
+import { ConfigService } from '../config.service';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { getDenomExponent } from './bank.model';
 import { Injectable } from '@angular/core';
@@ -14,7 +15,7 @@ declare const QueryApi: any | { balance(address: string, denom: string): Promise
 export class BankQueryService {
   private restSdk$: Observable<cosmosclient.CosmosSDK>;
 
-  constructor(private cosmosSDK: CosmosSDKService) {
+  constructor(private cosmosSDK: CosmosSDKService, private readonly configS: ConfigService) {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
 
@@ -116,186 +117,31 @@ export class BankQueryService {
 
   // TODO: remove this after metadata is embed in bank module
   async _denomsMetadata() {
-    const metadatas: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] = [
-      {
-        description: 'The governance token of UnUniFi protocol.',
-        denom_units: [
-          {
-            denom: 'uguu',
-            exponent: 0,
-          },
-          {
-            denom: 'guu',
-            exponent: 6,
-          },
-        ],
-        base: 'uguu',
-        name: 'UnUniFi',
-        display: 'guu',
-        symbol: 'GUU',
-      },
-      {
-        description: 'The governance token of OSMOSIS.',
-        denom_units: [
-          {
-            denom: 'uosmo',
-            exponent: 0,
-          },
-          {
-            denom: 'osmo',
-            exponent: 6,
-          },
-        ],
-        base: 'uosmo',
-        name: 'OSMOSIS',
-        display: 'osmo',
-        symbol: 'OSMO',
-      },
-      {
-        description: 'The governance token of Cosmos Hub.',
-        denom_units: [
-          {
-            denom: 'uatom',
-            exponent: 0,
-          },
-          {
-            denom: 'atom',
-            exponent: 6,
-          },
-        ],
-        base: 'uatom',
-        name: 'COSMOS',
-        display: 'atom',
-        symbol: 'ATOM',
-      },
-      {
-        description: 'The first cryptocurrency invented in 2008',
-        denom_units: [
-          {
-            denom: 'ubtc',
-            exponent: 0,
-            aliases: [],
-          },
-          {
-            denom: 'btc',
-            exponent: 6,
-            aliases: [],
-          },
-        ],
-        base: 'ubtc',
-        display: 'BTC',
-        name: 'Bitcoin',
-        symbol: 'BTC',
-      },
-      {
-        description: 'The currency of the U.S.A.',
-        denom_units: [
-          {
-            denom: 'uusd',
-            exponent: 0,
-            aliases: [],
-          },
-          {
-            denom: 'usd',
-            exponent: 6,
-            aliases: [],
-          },
-        ],
-        base: 'uusd',
-        display: 'USD',
-        name: 'US Dollar',
-        symbol: 'USD',
-      },
-      {
-        description: 'Stablecoin pegged to the USD',
-        denom_units: [
-          {
-            denom: 'uusdc',
-            exponent: 0,
-            aliases: [],
-          },
-          {
-            denom: 'uusdc',
-            exponent: 6,
-            aliases: [],
-          },
-        ],
-        base: 'uusdc',
-        display: 'USDC',
-        name: 'USD Coin',
-        symbol: 'USDC',
-      },
-      {
-        description: 'Decentralized Liquidity Provider Token',
-        denom_units: [
-          {
-            denom: 'udlp',
-            exponent: 0,
-            aliases: [],
-          },
-          {
-            denom: 'dlp',
-            exponent: 6,
-            aliases: [],
-          },
-        ],
-        base: 'udlp',
-        display: 'DLP',
-        name: 'Liquidity Provider',
-        symbol: 'DLP',
-      },
-      {
-        description: 'OSMO from Osmosis (testnet)',
-        denom_units: [
-          {
-            denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-            exponent: 0,
-            aliases: [],
-          },
-        ],
-        base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-        display: 'osmo(ibc)',
-        name: 'OSMOSIS (IBC)',
-        symbol: 'OSMO',
-      },
-      {
-        description: 'ATOM from Osmosis (testnet)',
-        denom_units: [
-          {
-            denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-            exponent: 0,
-            aliases: [],
-          },
-        ],
-        base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-        display: 'atom(ibc)',
-        name: 'ATOM(IBC osmosis)',
-        symbol: 'ATOM',
-      },
-    ];
-
-    for (let i = 0; i < 100; i++) {
-      metadatas.push({
-        description: 'Yield Aggregator Vault #' + i + 'Token',
-        denom_units: [
-          {
-            denom: 'yield-aggregator/vaults/' + i,
-            exponent: 6,
-            aliases: [],
-          },
-        ],
-        base: 'yield-aggregator/vaults/' + i,
-        display: 'YA-Vault-' + i,
-        name: 'YA Vault #' + i,
-        symbol: 'YA-VAULT-' + i,
-      });
-    }
-
-    return {
-      data: {
-        metadatas,
-      },
-    };
+    const data = this.configS.config$.toPromise().then((c) => {
+      const metadata = c?.denomMetadata || [];
+      for (let i = 0; i < 100; i++) {
+        metadata?.push({
+          description: 'Yield Aggregator Vault #' + i + 'Token',
+          denom_units: [
+            {
+              denom: 'yield-aggregator/vaults/' + i,
+              exponent: 6,
+              aliases: [],
+            },
+          ],
+          base: 'yield-aggregator/vaults/' + i,
+          display: 'YA-Vault-' + i,
+          name: 'YA Vault #' + i,
+          symbol: 'YA-VAULT-' + i,
+        });
+      }
+      return {
+        data: {
+          metadata,
+        },
+      };
+    });
+    return data;
   }
 
   symbolImages() {
@@ -335,7 +181,7 @@ export class BankQueryService {
   // TODO: remove this after metadata is embed in bank module
   async _denomMetadata(denom: string) {
     const metadata = await this._denomsMetadata().then((res) =>
-      res.data.metadatas.find((m) => m.base === denom),
+      res.data.metadata.find((m) => m.base === denom),
     );
 
     return {
@@ -351,7 +197,7 @@ export class BankQueryService {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     if (!denoms) {
       const res = await this._denomsMetadata();
-      return res.data.metadatas || [];
+      return res.data.metadata || [];
     }
 
     const res = await Promise.all(
@@ -366,7 +212,7 @@ export class BankQueryService {
     if (!denoms) {
       return this.restSdk$.pipe(
         mergeMap((sdk) => this._denomsMetadata()),
-        map((res) => res.data.metadatas || []),
+        map((res) => res.data.metadata || []),
       );
     }
 

@@ -63,7 +63,9 @@ export class VaultComponent implements OnInit {
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
-      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol),
+      map(([vault, denomMetadataMap]) =>
+        denomMetadataMap?.[vault.vault?.denom!].symbol?.replace(/\([^)]*\)/g, ''),
+      ),
     );
     const timer$ = timer(0, 1000 * 60);
     this.totalDepositAmount$ = combineLatest([

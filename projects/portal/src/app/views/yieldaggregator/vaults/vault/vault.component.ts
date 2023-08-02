@@ -20,7 +20,6 @@ import {
 import {
   StrategyAll200ResponseStrategiesInner,
   Vault200Response,
-  VaultAll200ResponseVaultsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({

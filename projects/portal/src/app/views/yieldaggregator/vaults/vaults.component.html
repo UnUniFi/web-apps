@@ -94,7 +94,7 @@
                     <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
                   </div>
                 </div>
-                {{ symbols[i].name }}
+                {{ symbols[i].name || vault.denom }}
               </div>
             </td>
             <td>{{ vault.withdraw_reserve_rate | percent : '1.0-4' }}</td>

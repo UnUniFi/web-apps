@@ -131,7 +131,6 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeDeposit(amount: number) {
-    console.log('a');
     this.mintAmount$.next(amount);
   }
 
@@ -140,7 +139,6 @@ export class VaultComponent implements OnInit {
   }
 
   onChangeWithdraw(amount: number) {
-    console.log('b');
     this.burnAmount$.next(amount);
   }
 

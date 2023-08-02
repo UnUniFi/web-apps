@@ -45,6 +45,11 @@ export class VaultComponent implements OnInit, OnChanges {
   totalUnbondingAmount?: TokenAmountUSD | null;
   @Input()
   totalWithdrawalBalance?: TokenAmountUSD | null;
+  @Input()
+  estimatedMintAmount?: cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimatedBurnAmount?: cosmos.base.v1beta1.ICoin | null;
+
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()

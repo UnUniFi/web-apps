@@ -167,8 +167,16 @@
               <span class="label-text">You will receive</span>
             </label>
             <label class="input-group">
-              <input disabled class="input input-bordered w-full" value="Coming Soon" />
-              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
+              <input
+                #estimatedMintAmountRef
+                #estimatedMintAmountNgModelRef="ngModel"
+                type="number"
+                disabled
+                class="input input-bordered w-full"
+                [(ngModel)]="estimatedMintAmount && estimatedMintAmount.amount"
+                name="estimatedMintAmount"
+              />
+              <span class="whitespace-nowrap">{{ estimatedMintAmount?.denom }}</span>
             </label>
           </div>
 
@@ -218,8 +226,16 @@
               <span class="label-text">You will receive</span>
             </label>
             <label class="input-group">
-              <input disabled class="input input-bordered w-full" value="Coming Soon" />
-              <span>{{ symbol }}</span>
+              <input
+                #estimatedBurnAmountRef
+                #estimatedBurnAmountNgModelRef="ngModel"
+                type="number"
+                disabled
+                class="input input-bordered w-full"
+                [(ngModel)]="estimatedBurnAmount && estimatedBurnAmount.amount"
+                name="estimatedBurnAmount"
+              />
+              <span class="whitespace-nowrap">{{ estimatedBurnAmount?.denom }}</span>
             </label>
           </div>
 

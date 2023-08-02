@@ -7,6 +7,8 @@
   [totalBondedAmount]="totalBondedAmount$ | async"
   [totalUnbondingAmount]="totalUnbondingAmount$ | async"
   [totalWithdrawalBalance]="totalWithdrawalBalance$ | async"
+  [estimatedMintAmount]="estimatedMintAmount$ | async"
+  [estimatedBurnAmount]="estimatedBurnAmount$ | async"
   (changeDeposit)="onChangeDeposit($event)"
   (changeWithdraw)="onChangeWithdraw($event)"
   (appDeposit)="onSubmitDeposit($event)"

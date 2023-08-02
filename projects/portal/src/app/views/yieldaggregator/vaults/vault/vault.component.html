@@ -76,9 +76,18 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
+            <div class="stat-title">Total Deposit Amount</div>
+            <div class="stat-value text-info">
+              {{ totalDepositAmount?.symbolAmount }} {{ symbol }}
+            </div>
+            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
+              ${{ totalDepositAmount?.usdAmount | number }}
+            </div>
+          </div>
+          <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value text-primary">
-              <td>{{ vault?.total_bonded_amount | coinAmount }} {{ symbol }}</td>
+              <td>{{ totalBondedAmount?.symbolAmount }} {{ symbol }}</td>
             </div>
             <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
               ${{ totalBondedAmount?.usdAmount | number }}
@@ -87,7 +96,7 @@
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
             <div class="stat-value text-secondary">
-              {{ vault?.total_unbonding_amount | coinAmount }} {{ symbol }}
+              {{ totalUnbondingAmount?.symbolAmount }} {{ symbol }}
             </div>
             <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
               ${{ totalUnbondingAmount?.usdAmount | number }}
@@ -96,7 +105,7 @@
           <div class="stat">
             <div class="stat-title">Withdrawal Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ vault?.total_withdrawal_balance | coinAmount }} {{ symbol }}
+              {{ totalWithdrawalBalance?.symbolAmount }} {{ symbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
               ${{ totalWithdrawalBalance?.usdAmount | number }}
@@ -168,15 +177,11 @@
             </label>
             <label class="input-group">
               <input
-                #estimatedMintAmountRef
-                #estimatedMintAmountNgModelRef="ngModel"
-                type="number"
                 disabled
                 class="input input-bordered w-full"
-                [(ngModel)]="estimatedMintAmount && estimatedMintAmount.amount"
-                name="estimatedMintAmount"
+                value="{{ estimatedMintAmount?.amount | coinAmount }}"
               />
-              <span class="whitespace-nowrap">{{ estimatedMintAmount?.denom }}</span>
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
             </label>
           </div>
 
@@ -225,17 +230,14 @@
             <label class="label">
               <span class="label-text">You will receive</span>
             </label>
+
             <label class="input-group">
               <input
-                #estimatedBurnAmountRef
-                #estimatedBurnAmountNgModelRef="ngModel"
-                type="number"
                 disabled
                 class="input input-bordered w-full"
-                [(ngModel)]="estimatedBurnAmount && estimatedBurnAmount.amount"
-                name="estimatedBurnAmount"
+                value="{{ estimatedBurnAmount?.amount | coinAmount }}"
               />
-              <span class="whitespace-nowrap">{{ estimatedBurnAmount?.denom }}</span>
+              <span>{{ symbol }}</span>
             </label>
           </div>
 

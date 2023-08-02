@@ -34,6 +34,7 @@ export class VaultComponent implements OnInit {
   symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
+  totalDepositAmount$: Observable<TokenAmountUSD>;
   totalBondedAmount$: Observable<TokenAmountUSD>;
   totalUnbondingAmount$: Observable<TokenAmountUSD>;
   totalWithdrawalBalance$: Observable<TokenAmountUSD>;
@@ -63,6 +64,24 @@ export class VaultComponent implements OnInit {
       map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol),
     );
     const timer$ = timer(0, 1000 * 60);
+    this.totalDepositAmount$ = combineLatest([
+      timer$,
+      this.symbol$,
+      this.vault$,
+      this.symbolMetadataMap$,
+    ]).pipe(
+      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmount(
+          symbol!,
+          (
+            Number(vault.total_bonded_amount) +
+            Number(vault.total_unbonding_amount) +
+            Number(vault.total_withdrawal_balance)
+          ).toString(),
+          symbolMetadataMap,
+        ),
+      ),
+    );
     this.totalBondedAmount$ = combineLatest([
       timer$,
       this.symbol$,

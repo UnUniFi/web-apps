@@ -40,6 +40,8 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
+  totalDepositAmount?: TokenAmountUSD | null;
+  @Input()
   totalBondedAmount?: TokenAmountUSD | null;
   @Input()
   totalUnbondingAmount?: TokenAmountUSD | null;

@@ -16,6 +16,7 @@ import {
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { Vault200Response, VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -45,6 +46,7 @@ export class VaultComponent implements OnInit {
     private route: ActivatedRoute,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly iyaApp: YieldAggregatorApplicationService,
+    private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
@@ -130,19 +132,17 @@ export class VaultComponent implements OnInit {
     );
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);
-    this.estimatedMintAmount$ = combineLatest([
-      vaultId$,
-      this.vault$,
-      this.mintAmount$.asObservable(),
-    ]).pipe(
-      mergeMap(([id, vault, deposit]) => {
-        const exponent = getDenomExponent(vault.vault?.denom);
-        return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
+    this.estimatedMintAmount$ = combineLatest([this.vault$, this.mintAmount$.asObservable()]).pipe(
+      mergeMap(([vault, deposit]) => {
+        return this.iyaService.estimateMintAmount$(vault, deposit);
+        // const exponent = getDenomExponent(vault.vault?.denom);
+        // return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
-    this.estimatedBurnAmount$ = combineLatest([vaultId$, this.burnAmount$.asObservable()]).pipe(
-      mergeMap(([id, burn]) => {
-        return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
+    this.estimatedBurnAmount$ = combineLatest([this.vault$, this.burnAmount$.asObservable()]).pipe(
+      mergeMap(([vault, burn]) => {
+        return this.iyaService.estimateRedeemAmount$(vault, burn);
+        // return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
       }),
     );
   }

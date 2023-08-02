@@ -23,7 +23,7 @@
       <li>Vaults</li>
     </ul>
   </div>
-  <div class="flex flex-row flex-wrap items-end p-8 mb-8">
+  <div class="flex flex-row flex-wrap items-end mb-8">
     <form #formRef="ngForm" (submit)="onSubmit()">
       <div class="form-control w-full md:max-w-xs">
         <label class="label">
@@ -35,7 +35,7 @@
             type="text"
             #keywordNgModelRef="ngModel"
             class="input input-bordered w-full"
-            placeholder="GUU"
+            placeholder="ATOM"
             [(ngModel)]="keyword"
             name="keyword"
           />

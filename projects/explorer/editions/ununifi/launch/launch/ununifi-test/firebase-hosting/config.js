@@ -185,6 +185,16 @@ const denomMetadata = [
   },
 ];
 
+const strategiesInfo = [
+  {
+    id: '0',
+    name: 'Osmosis ATOM/OSMO Farm',
+    description: '',
+    gitUrl: '',
+    apy: 0.11,
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -201,6 +211,7 @@ const configs = [
       },
     ],
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -245,6 +256,7 @@ const configs = [
       },
     ],
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -289,6 +301,7 @@ const configs = [
       },
     ],
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -333,6 +346,7 @@ const configs = [
       },
     ],
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {

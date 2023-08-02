@@ -21,13 +21,7 @@ export type Config = {
     amount: string;
   }[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
-  strategiesInfo: {
-    id: string;
-    name: string;
-    description: string;
-    git_url: string;
-    apy: number;
-  }[];
+  strategiesInfo: StrategyInfo[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
@@ -54,6 +48,14 @@ export type Config = {
     }[];
     messageModules: string[];
   };
+};
+
+export type StrategyInfo = {
+  id: string;
+  name: string;
+  description: string;
+  gitURL: string;
+  apy: number;
 };
 
 declare const configs: Config[];

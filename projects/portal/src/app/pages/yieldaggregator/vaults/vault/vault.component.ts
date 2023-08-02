@@ -6,7 +6,7 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -41,6 +41,7 @@ export class VaultComponent implements OnInit {
   totalWithdrawalBalance$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   estimatedBurnAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  vaultAPY$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +51,7 @@ export class VaultComponent implements OnInit {
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly configService: ConfigService,
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
@@ -64,7 +66,7 @@ export class VaultComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
       map(([vault, denomMetadataMap]) =>
-        denomMetadataMap?.[vault.vault?.denom!].symbol?.replace(/\([^)]*\)/g, ''),
+        denomMetadataMap?.[vault.vault?.denom!].symbol?.replace(/\s*\([^)]*\)/g, ''),
       ),
     );
     const timer$ = timer(0, 1000 * 60);
@@ -145,6 +147,21 @@ export class VaultComponent implements OnInit {
       mergeMap(([vault, burn]) => {
         return this.iyaService.estimateRedeemAmount$(vault, burn);
         // return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
+      }),
+    );
+    this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      map(([vault, config]) => {
+        if (!vault.vault?.strategy_weights) {
+          return 0;
+        }
+        let vaultAPY = 0;
+        for (const strategyWeight of vault.vault.strategy_weights) {
+          const strategyAPY = config?.strategiesInfo?.find(
+            (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
+          )?.apy;
+          vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
+        }
+        return vaultAPY;
       }),
     );
   }

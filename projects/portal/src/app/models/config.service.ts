@@ -21,6 +21,13 @@ export type Config = {
     amount: string;
   }[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
+  strategiesInfo: {
+    id: string;
+    name: string;
+    description: string;
+    git_url: string;
+    apy: number;
+  }[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;

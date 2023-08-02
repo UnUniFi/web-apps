@@ -50,6 +50,8 @@ export class VaultComponent implements OnInit, OnChanges {
   estimatedMintAmount?: cosmos.base.v1beta1.ICoin | null;
   @Input()
   estimatedBurnAmount?: cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  vaultAPY?: number | null;
 
   @Output()
   changeDeposit: EventEmitter<number>;

@@ -76,6 +76,12 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
+            <div class="stat-title">APY</div>
+            <div class="stat-value text-accent">
+              {{ vaultAPY | percent : '1.2-2' }}
+            </div>
+          </div>
+          <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
             <div class="stat-value text-info">
               {{ totalDepositAmount?.symbolAmount }} {{ symbol }}
@@ -84,6 +90,8 @@
               ${{ totalDepositAmount?.usdAmount | number }}
             </div>
           </div>
+        </div>
+        <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value text-primary">

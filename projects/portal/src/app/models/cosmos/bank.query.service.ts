@@ -5,9 +5,8 @@ import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Decimal from 'decimal.js';
 // import { QueryApi } from '@cosmos-client/core/esm/openapi';
-import Long from 'long';
 import { Observable, zip } from 'rxjs';
-import { map, mergeMap, pluck } from 'rxjs/operators';
+import { map, mergeMap, pluck, take } from 'rxjs/operators';
 
 declare const QueryApi: any | { balance(address: string, denom: string): Promise<any> };
 
@@ -117,31 +116,29 @@ export class BankQueryService {
 
   // TODO: remove this after metadata is embed in bank module
   async _denomsMetadata() {
-    const data = this.configS.config$.toPromise().then((c) => {
-      const metadata = c?.denomMetadata || [];
-      for (let i = 0; i < 100; i++) {
-        metadata?.push({
-          description: 'Yield Aggregator Vault #' + i + 'Token',
-          denom_units: [
-            {
-              denom: 'yield-aggregator/vaults/' + i,
-              exponent: 6,
-              aliases: [],
-            },
-          ],
-          base: 'yield-aggregator/vaults/' + i,
-          display: 'YA-Vault-' + i,
-          name: 'YA Vault #' + i,
-          symbol: 'YA-VAULT-' + i,
-        });
-      }
-      return {
-        data: {
-          metadata,
-        },
-      };
-    });
-    return data;
+    const config = await this.configS.config$.pipe(take(1)).toPromise();
+    const metadata = config?.denomMetadata || [];
+    for (let i = 0; i < 100; i++) {
+      metadata?.push({
+        description: 'Yield Aggregator Vault #' + i + 'Token',
+        denom_units: [
+          {
+            denom: 'yield-aggregator/vaults/' + i,
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'yield-aggregator/vaults/' + i,
+        display: 'YA-Vault-' + i,
+        name: 'YA Vault #' + i,
+        symbol: 'YA-VAULT-' + i,
+      });
+    }
+    return {
+      data: {
+        metadata,
+      },
+    };
   }
 
   symbolImages() {
@@ -167,6 +164,11 @@ export class BankQueryService {
       },
       {
         symbol: 'ATOM',
+        image:
+          'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg',
+      },
+      {
+        symbol: 'ATOM (from Osmosis)',
         image:
           'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg',
       },

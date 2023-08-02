@@ -54,7 +54,14 @@
             </tr>
             <tr>
               <th>Website</th>
-              <td>{{ validator?.val?.description?.website }}</td>
+              <td>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="{{ validator?.val?.description?.website }}"
+                  >{{ validator?.val?.description?.website }}
+                </a>
+              </td>
             </tr>
             <tr>
               <th>Commission</th>

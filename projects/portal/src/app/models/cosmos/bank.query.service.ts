@@ -238,7 +238,7 @@ export class BankQueryService {
         symbol: 'DLP',
       },
       {
-        description: 'uosmo IBC denom',
+        description: 'OSMO IBC from OSMOSIS (testnet)',
         denom_units: [
           {
             denom: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
@@ -247,9 +247,23 @@ export class BankQueryService {
           },
         ],
         base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
-        display: 'osmo',
+        display: 'osmo(ibc)',
         name: 'OSMOSIS (IBC)',
         symbol: 'OSMO',
+      },
+      {
+        description: 'ATOM IBC from OSMOSIS (testnet)',
+        denom_units: [
+          {
+            denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+            exponent: 0,
+            aliases: [],
+          },
+        ],
+        base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        display: 'atom(ibc)',
+        name: 'ATOM(IBC osmosis)',
+        symbol: 'ATOM',
       },
     ];
 

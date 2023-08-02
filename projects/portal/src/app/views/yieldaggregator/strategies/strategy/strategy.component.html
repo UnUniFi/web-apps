@@ -45,6 +45,14 @@
           </tbody>
         </table>
 
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">APR</div>
+            <div class="stat-value text-secondary">{{ strategyInfo?.apy | percent : '1.2-2' }}</div>
+            <div class="stat-desc"></div>
+          </div>
+        </div>
+
         <!-- <div class="stats flex flex-col md:flex-row">
           <div class="stat">
             <div class="stat-title">APR</div>

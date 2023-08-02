@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ConfigService, StrategyInfo } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -23,11 +24,13 @@ export class StrategyComponent implements OnInit {
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
+  strategyInfo$: Observable<StrategyInfo | undefined>;
 
   constructor(
     private route: ActivatedRoute,
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
+    private readonly configService: ConfigService,
   ) {
     const params$ = this.route.params;
     this.id$ = params$.pipe(map((params) => params.strategy_id));
@@ -69,6 +72,9 @@ export class StrategyComponent implements OnInit {
             vault.strategy_weights?.find((strategy) => strategy.strategy_id === id)?.weight,
         ),
       ),
+    );
+    this.strategyInfo$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
+      map(([strategy, config]) => config?.strategiesInfo?.find((s) => s.id == strategy?.id)),
     );
   }
 

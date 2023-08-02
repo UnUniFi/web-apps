@@ -101,7 +101,7 @@
           <div class="stats">
             <div class="stat" *ngIf="weights">
               <div class="stat-title">Weight</div>
-              <div class="stat-value">{{ weights[i] | percentage }}</div>
+              <div class="stat-value">{{ weights[i] | percent : '1.0-2' }}</div>
               <div class="stat-desc"></div>
             </div>
           </div>

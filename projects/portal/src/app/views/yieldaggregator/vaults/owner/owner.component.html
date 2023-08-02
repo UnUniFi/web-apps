@@ -92,11 +92,11 @@
                 </tr>
                 <tr>
                   <th>Withdraw Commission Rate</th>
-                  <td>{{ vault?.withdraw_commission_rate | percentage }}</td>
+                  <td>{{ vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
                 </tr>
                 <tr>
                   <th>Withdraw Reserve Rate</th>
-                  <td>{{ vault?.withdraw_reserve_rate | percentage }}</td>
+                  <td>{{ vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -121,7 +121,7 @@
                   >
                     <th>#{{ strategy.strategy_id }}</th>
                     <td>{{ 'Coming Soon' }}</td>
-                    <td>{{ strategy.weight | percentage }}</td>
+                    <td>{{ strategy.weight | percent : '1.0-2' }}</td>
                   </tr>
                 </ng-container>
               </tbody>

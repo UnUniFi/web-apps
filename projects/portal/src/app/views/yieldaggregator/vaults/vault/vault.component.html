@@ -65,11 +65,11 @@
               </tr>
               <tr>
                 <td>Withdraw Commission Rate</td>
-                <td>{{ vault?.vault?.withdraw_commission_rate | percentage }}</td>
+                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
               </tr>
               <tr>
                 <td>Withdraw Reserve Rate</td>
-                <td>{{ vault?.vault?.withdraw_reserve_rate | percentage }}</td>
+                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
               </tr>
             </tbody>
           </table>
@@ -254,7 +254,7 @@
           <div class="stats">
             <div class="stat">
               <div class="stat-title">Allocation weight</div>
-              <div class="stat-value">{{ strategy.weight | percentage }}</div>
+              <div class="stat-value">{{ strategy.weight | percent : '1.0-2' }}</div>
               <div class="stat-desc"></div>
             </div>
           </div>

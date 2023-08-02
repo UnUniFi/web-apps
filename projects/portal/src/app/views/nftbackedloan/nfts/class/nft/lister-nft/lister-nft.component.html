@@ -194,7 +194,7 @@
         <tbody>
           <tr *ngFor="let bid of bids; let i = index">
             <th>#{{ i + 1 }}</th>
-            <td>{{ bid.interest_rate | percentage }}</td>
+            <td>{{ bid.interest_rate | percent : '1.0-4' }}</td>
             <td>{{ bid.deposit | coin | async }}</td>
             <td>{{ bid.price | coin | async }}</td>
             <td>{{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }}</td>

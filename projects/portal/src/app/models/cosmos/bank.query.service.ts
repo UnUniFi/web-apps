@@ -18,6 +18,13 @@ export class BankQueryService {
     this.restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
   }
 
+  getSupply$(denom: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.bank.supplyOf(sdk, denom)),
+      map((res) => res.data.amount!),
+    );
+  }
+
   getBalance$(
     address: string,
     denoms?: string[],

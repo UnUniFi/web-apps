@@ -1,27 +1,29 @@
 <ng-container *ngIf="txDetail">
-  <mat-card class="mb-2">
-    <mat-chip-list>
-      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
-    </mat-chip-list>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">Voter:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.fromAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item>
-        <span class="whitespace-nowrap">Proposal ID:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.toAddress }}</span>
-      </mat-list-item>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-list-item *ngFor="let voteOption of txDetail.voteOptions; last as last">
-        <span class="break-words">{{options[voteOption.option||0].replace('VOTE_OPTION_', '')}}</span>
-        <span class="flex-auto"></span>
-        <span class="mr-2">{{ voteOption.weight | percent }}</span>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <span class="badge badge-info"> {{ txDetail.txType }} </span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>Voter</th>
+            <td class="font-mono">
+              {{ txDetail.fromAddress }}
+            </td>
+          </tr>
+          <tr>
+            <th>Proposal ID</th>
+            <td>
+              {{ txDetail.toAddress }}
+            </td>
+          </tr>
+          <tr *ngFor="let voteOption of txDetail.voteOptions; let i = index">
+            <th>{{ options[voteOption.option || 0].replace('VOTE_OPTION_', '') }}</th>
+            <td>{{ voteOption.weight | percent : '1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ng-container>

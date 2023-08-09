@@ -7,7 +7,7 @@ import {
   StakingDelegatorValidators200ResponseValidatorsInner,
 } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type UndelegateOnSubmitEvent = {
@@ -87,7 +87,7 @@ export class UndelegateFormDialogComponent implements OnInit, OnChanges {
     if (this.selectedGasPrice === undefined) {
       return;
     }
-    const exponent = denomExponentMap[this.denom];
+    const exponent = getDenomExponent(this.denom);
     this.appSubmit.emit({
       amount: {
         amount: Math.floor(Number(this.undelegateAmount) * 10 ** exponent).toString(),

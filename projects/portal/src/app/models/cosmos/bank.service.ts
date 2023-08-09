@@ -1,6 +1,6 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { CosmosWallet } from '../wallets/wallet.model';
-import { denomExponentMap } from './bank.model';
+import { getDenomExponent } from './bank.model';
 import { SimulatedTxResultResponse } from './tx-common.model';
 import { TxCommonService } from './tx-common.service';
 import { Injectable } from '@angular/core';
@@ -23,7 +23,7 @@ export class BankService {
   ): cosmosclient.proto.cosmos.base.v1beta1.ICoin[] {
     const coins = Object.keys(symbolAmountMap).map((symbol) => {
       const denom = symbolMetadataMap[symbol].base!;
-      const denomExponent = denomExponentMap[denom];
+      const denomExponent = getDenomExponent(denom);
       const amount = symbolAmountMap[symbol].toFixed(denomExponent).replace('.', '');
       return {
         denom,
@@ -39,7 +39,7 @@ export class BankService {
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): { symbol: string; amount: number } {
     const denomMetadata = denomMetadataMap[coin.denom!];
-    const denomExponent = denomExponentMap[coin.denom!];
+    const denomExponent = getDenomExponent(coin.denom!);
     const symbol = denomMetadata.symbol!;
     const amount = Number(new Decimal(coin.amount!).dividedBy(10 ** denomExponent).toFixed(6));
     return { symbol, amount };
@@ -52,7 +52,7 @@ export class BankService {
     const map: { [symbol: string]: number } = {};
     coins.map((b) => {
       const metadata = denomMetadataMap[b.denom!];
-      const denomExponent = denomExponentMap[b.denom!];
+      const denomExponent = getDenomExponent(b.denom!);
 
       const amount = new Decimal(b.amount!);
       map[metadata.symbol!] = Number(amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6));

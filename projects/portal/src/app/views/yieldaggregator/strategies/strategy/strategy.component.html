@@ -37,13 +37,21 @@
               <td class="font-mono">{{ strategy?.contract_address }}</td>
             </tr>
             <tr>
-              <td>Github</td>
+              <td>Git URL</td>
               <td>
                 <a href="{{ strategy?.git_url }}" target="_blank">{{ strategy?.git_url }}</a>
               </td>
             </tr>
           </tbody>
         </table>
+
+        <div class="stats flex flex-col md:flex-row">
+          <div class="stat">
+            <div class="stat-title">APR</div>
+            <div class="stat-value text-secondary">{{ strategyInfo?.apy | percent : '1.2-2' }}</div>
+            <div class="stat-desc"></div>
+          </div>
+        </div>
 
         <!-- <div class="stats flex flex-col md:flex-row">
           <div class="stat">
@@ -66,7 +74,7 @@
           {{ description }}
         </p> -->
 
-        <h3 class="mt-4">Historical APR (Demo)</h3>
+        <!-- <h3 class="mt-4">Historical APR (Demo)</h3>
         <div class="flex w-full justify-center" #chartRef>
           <google-chart
             [title]="chartTitle"
@@ -76,7 +84,7 @@
             [options]="chartOptions"
           >
           </google-chart>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

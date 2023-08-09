@@ -1,10 +1,7 @@
 const restPort = location.protocol === 'https:' ? 1318 : 1317;
 const websocketPort = location.protocol === 'https:' ? 26658 : 26657;
-const faucetUbtcPort = location.protocol === 'https:' ? 8001 : 8000;
-const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
-const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
-const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
-const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const faucetUbtcPort = location.protocol === 'https:' ? 8000 : 7000;
+const faucetUguuPort = location.protocol === 'https:' ? 8002 : 7002;
 
 const domainCauchyEA = 'a.lcd.ununifi.cauchye.net';
 const domainCauchyEB = 'b.lcd.ununifi.cauchye.net';

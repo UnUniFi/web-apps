@@ -1,14 +1,19 @@
 <ng-container *ngIf="txDetail">
-  <mat-card class="mb-2">
-    <mat-chip-list>
-      <mat-chip color="primary" selected> {{txDetail.txType}} </mat-chip>
-    </mat-chip-list>
-    <mat-list>
-      <mat-list-item>
-        <span class="break-words">Validator address:</span>
-        <span class="flex-auto"></span>
-        <span class="ml-2 break-all text-xs sm:text-base">{{ txDetail.fromAddress }}</span>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="card-body">
+      <span class="badge badge-info"> {{ txDetail.txType }} </span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          <tr>
+            <th>Validator address</th>
+            <td class="font-mono">
+              {{ txDetail.fromAddress }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ng-container>

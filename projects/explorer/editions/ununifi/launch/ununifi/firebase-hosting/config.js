@@ -41,6 +41,136 @@ const messageModules = [
   'pricefeed',
 ];
 
+const denomMetadata = [
+  {
+    description: 'The governance token of UnUniFi protocol.',
+    denom_units: [
+      {
+        denom: 'uguu',
+        exponent: 0,
+      },
+      {
+        denom: 'guu',
+        exponent: 6,
+      },
+    ],
+    base: 'uguu',
+    name: 'UnUniFi',
+    display: 'guu',
+    symbol: 'GUU',
+  },
+  {
+    description: 'The governance token of OSMOSIS.',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+      },
+      {
+        denom: 'osmo',
+        exponent: 6,
+      },
+    ],
+    base: 'uosmo',
+    name: 'OSMOSIS',
+    display: 'osmo',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'The governance token of Cosmos Hub.',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+      },
+      {
+        denom: 'atom',
+        exponent: 6,
+      },
+    ],
+    base: 'uatom',
+    name: 'COSMOS',
+    display: 'atom',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'The first cryptocurrency invented in 2008',
+    denom_units: [
+      {
+        denom: 'ubtc',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'btc',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'ubtc',
+    display: 'BTC',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+  },
+  {
+    description: 'The currency of the U.S.A.',
+    denom_units: [
+      {
+        denom: 'uusd',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'usd',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'uusd',
+    display: 'USD',
+    name: 'US Dollar',
+    symbol: 'USD',
+  },
+  {
+    description: 'Stablecoin pegged to the USD',
+    denom_units: [
+      {
+        denom: 'uusdc',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'uusdc',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'uusdc',
+    display: 'USDC',
+    name: 'USD Coin',
+    symbol: 'USDC',
+  },
+  {
+    description: 'Decentralized Liquidity Provider Token',
+    denom_units: [
+      {
+        denom: 'udlp',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'dlp',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'udlp',
+    name: 'Liquidity Provider',
+    display: 'dlp',
+    symbol: 'DLP',
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -56,44 +186,9 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
     extension: {
-      faucet: [
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetJpuPort}`,
-        //   denom: 'jpu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUethPort}`,
-        //   denom: 'ueth',
-        //   creditAmount: 1000,
-        //   maxCredit: 999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetEuuPort}`,
-        //   denom: 'euu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-      ],
+      faucet: [],
       // monitor: {},
       navigations: [],
       messageModules,
@@ -113,44 +208,9 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
     extension: {
-      faucet: [
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetJpuPort}`,
-        //   denom: 'jpu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUethPort}`,
-        //   denom: 'ueth',
-        //   creditAmount: 1000,
-        //   maxCredit: 999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetEuuPort}`,
-        //   denom: 'euu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-      ],
+      faucet: [],
       // monitor: {},
       navigations: [],
       messageModules,
@@ -170,44 +230,9 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
     extension: {
-      faucet: [
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetJpuPort}`,
-        //   denom: 'jpu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUethPort}`,
-        //   denom: 'ueth',
-        //   creditAmount: 1000,
-        //   maxCredit: 999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetEuuPort}`,
-        //   denom: 'euu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-      ],
+      faucet: [],
       // monitor: {},
       navigations: [],
       messageModules,
@@ -227,44 +252,9 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
     extension: {
-      faucet: [
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
-        //   denom: 'ubtc',
-        //   creditAmount: 100, // amount to credit in max request
-        //   maxCredit: 99, // account has already maxCredit balance cannot claim anymore
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
-        //   denom: 'uguu',
-        //   creditAmount: 2000000,
-        //   maxCredit: 1999999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetJpuPort}`,
-        //   denom: 'jpu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUethPort}`,
-        //   denom: 'ueth',
-        //   creditAmount: 1000,
-        //   maxCredit: 999,
-        // },
-        // {
-        //   hasFaucet: false,
-        //   faucetURL: `${location.protocol}//${domainCauchyED}:${faucetEuuPort}`,
-        //   denom: 'euu',
-        //   creditAmount: 10,
-        //   maxCredit: 9,
-        // },
-      ],
+      faucet: [],
       // monitor: {},
       navigations: [],
       messageModules,

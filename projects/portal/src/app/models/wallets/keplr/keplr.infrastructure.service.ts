@@ -27,7 +27,7 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
 
   private async getKey(): Promise<Key | undefined> {
     if (!window.keplr) {
-      alert('Please install Keplr extension');
+      // alert('Please install Keplr extension');
       return;
     }
     const chainID = this.configService.configs[0].chainID;

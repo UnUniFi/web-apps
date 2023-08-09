@@ -89,8 +89,8 @@
             <ng-container *ngFor="let vault of vaults; let i = index">
               <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
                 <th>#{{ vault.id }}</th>
-                <td *ngIf="symbols">
-                  <div class="flex items-center space-x-3">
+                <td>
+                  <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
                     <div class="avatar">
                       <div class="mask mask-circle w-8 h-8">
                         <img src="{{ symbols[i].img }}" alt="Asset Symbol" />

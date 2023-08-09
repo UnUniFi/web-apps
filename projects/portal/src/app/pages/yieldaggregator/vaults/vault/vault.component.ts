@@ -6,7 +6,7 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -16,6 +16,7 @@ import {
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { Vault200Response, VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -34,19 +35,23 @@ export class VaultComponent implements OnInit {
   symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
+  totalDepositAmount$: Observable<TokenAmountUSD>;
   totalBondedAmount$: Observable<TokenAmountUSD>;
   totalUnbondingAmount$: Observable<TokenAmountUSD>;
   totalWithdrawalBalance$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   estimatedBurnAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  vaultAPY$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly iyaApp: YieldAggregatorApplicationService,
+    private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly configService: ConfigService,
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
@@ -60,9 +65,29 @@ export class VaultComponent implements OnInit {
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
-      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol),
+      map(([vault, denomMetadataMap]) =>
+        denomMetadataMap?.[vault.vault?.denom!].symbol?.replace(/\s*\([^)]*\)/g, ''),
+      ),
     );
     const timer$ = timer(0, 1000 * 60);
+    this.totalDepositAmount$ = combineLatest([
+      timer$,
+      this.symbol$,
+      this.vault$,
+      this.symbolMetadataMap$,
+    ]).pipe(
+      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmount(
+          symbol!,
+          (
+            Number(vault.total_bonded_amount) +
+            Number(vault.total_unbonding_amount) +
+            Number(vault.total_withdrawal_balance)
+          ).toString(),
+          symbolMetadataMap,
+        ),
+      ),
+    );
     this.totalBondedAmount$ = combineLatest([
       timer$,
       this.symbol$,
@@ -111,19 +136,32 @@ export class VaultComponent implements OnInit {
     );
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);
-    this.estimatedMintAmount$ = combineLatest([
-      vaultId$,
-      this.vault$,
-      this.mintAmount$.asObservable(),
-    ]).pipe(
-      mergeMap(([id, vault, deposit]) => {
-        const exponent = denomExponentMap[vault.vault?.denom!];
-        return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
+    this.estimatedMintAmount$ = combineLatest([this.vault$, this.mintAmount$.asObservable()]).pipe(
+      mergeMap(([vault, deposit]) => {
+        return this.iyaService.estimateMintAmount$(vault, deposit);
+        // const exponent = getDenomExponent(vault.vault?.denom);
+        // return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
-    this.estimatedBurnAmount$ = combineLatest([vaultId$, this.burnAmount$.asObservable()]).pipe(
-      mergeMap(([id, burn]) => {
-        return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
+    this.estimatedBurnAmount$ = combineLatest([this.vault$, this.burnAmount$.asObservable()]).pipe(
+      mergeMap(([vault, burn]) => {
+        return this.iyaService.estimateRedeemAmount$(vault, burn);
+        // return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
+      }),
+    );
+    this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      map(([vault, config]) => {
+        if (!vault.vault?.strategy_weights) {
+          return 0;
+        }
+        let vaultAPY = 0;
+        for (const strategyWeight of vault.vault.strategy_weights) {
+          const strategyAPY = config?.strategiesInfo?.find(
+            (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
+          )?.apy;
+          vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
+        }
+        return vaultAPY;
       }),
     );
   }
@@ -131,7 +169,6 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeDeposit(amount: number) {
-    console.log('a');
     this.mintAmount$.next(amount);
   }
 
@@ -140,7 +177,6 @@ export class VaultComponent implements OnInit {
   }
 
   onChangeWithdraw(amount: number) {
-    console.log('b');
     this.burnAmount$.next(amount);
   }
 

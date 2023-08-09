@@ -20,7 +20,6 @@ import {
 import {
   StrategyAll200ResponseStrategiesInner,
   Vault200Response,
-  VaultAll200ResponseVaultsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -40,11 +39,20 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
+  totalDepositAmount?: TokenAmountUSD | null;
+  @Input()
   totalBondedAmount?: TokenAmountUSD | null;
   @Input()
   totalUnbondingAmount?: TokenAmountUSD | null;
   @Input()
   totalWithdrawalBalance?: TokenAmountUSD | null;
+  @Input()
+  estimatedMintAmount?: cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimatedBurnAmount?: cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  vaultAPY?: number | null;
+
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()

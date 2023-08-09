@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
@@ -72,7 +72,7 @@ export class BorrowComponent implements OnInit {
     this.borrowAmount$ = this.loan$.pipe(
       map((loan) => {
         const maxBorrow = Number(loan.borrowing_limit?.amount);
-        const exponent = denomExponentMap[loan.borrowing_limit?.denom || ''];
+        const exponent = getDenomExponent(loan.borrowing_limit?.denom);
         return maxBorrow / 10 ** exponent;
       }),
     );

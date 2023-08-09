@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import cosmosclient from '@cosmos-client/core';
 import { StakingDelegatorValidators200ResponseValidatorsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet, WalletType } from 'projects/portal/src/app/models/wallets/wallet.model';
 
 export type DelegateOnSubmitEvent = {
@@ -76,7 +76,7 @@ export class DelegateFormDialogComponent implements OnInit, OnChanges {
     ) {
       return;
     }
-    const exponent = denomExponentMap[this.denom];
+    const exponent = getDenomExponent(this.denom);
     this.appSubmit.emit({
       walletType: this.currentStoredWallet?.type,
       amount: {

@@ -28,7 +28,7 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
   ) {}
   private async getKey(): Promise<Key | undefined> {
     if (!window.leap) {
-      alert('Please install Leap extension');
+      // alert('Please install Leap extension');
       return;
     }
     const chainID = this.configService.configs[0].chainID;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { denomExponentMap } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.application.service';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
@@ -87,7 +87,7 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = denomExponentMap[info.bid_denom || ''];
+        const exponent = getDenomExponent(info.bid_denom);
         return maxBidAmount / 10 ** exponent;
       }),
     );
@@ -96,7 +96,7 @@ export class PlaceBidComponent implements OnInit {
         if (!maxBidAmount) {
           return undefined;
         }
-        const exponent = denomExponentMap[info.bid_denom || ''];
+        const exponent = getDenomExponent(info.bid_denom);
         return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent;
       }),
     );

@@ -1,9 +1,14 @@
+import { getDenomExponent } from '../cosmos/bank.model';
+import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
+import { Vault200Response } from 'ununifi-client/esm/openapi';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +16,7 @@ import ununificlient from 'ununifi-client';
 export class YieldAggregatorService {
   constructor(
     private readonly bankService: BankService,
+    private readonly bankQueryService: BankQueryService,
     private readonly txCommonService: TxCommonService,
   ) {}
 
@@ -112,5 +118,53 @@ export class YieldAggregatorService {
     });
 
     return msg;
+  }
+
+  estimateMintAmount$(
+    vault: Vault200Response,
+    mintAmount: number,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    const lpDenom = 'yield-aggregator/vaults/' + vault?.vault?.id;
+    const exponent = getDenomExponent(vault.vault?.denom);
+    const mintDenomAmount = mintAmount * Math.pow(10, exponent);
+    const totalAmountInVault =
+      Number(vault.total_bonded_amount) +
+      Number(vault.total_unbonding_amount) +
+      Number(vault.total_withdrawal_balance);
+    const supplyLp$ = this.bankQueryService.getSupply$(lpDenom);
+    return supplyLp$.pipe(
+      map((supplyLp) => {
+        if (!totalAmountInVault || !supplyLp || !supplyLp.amount || !parseInt(supplyLp.amount)) {
+          return { denom: lpDenom, amount: mintDenomAmount.toString() };
+        }
+        // lpAmount = lpSupply * (principalAmountToMint / principalAmountInVault)
+        const mintLp = (mintDenomAmount * parseInt(supplyLp.amount)) / totalAmountInVault;
+        return { denom: lpDenom, amount: mintLp.toString() };
+      }),
+    );
+  }
+
+  estimateRedeemAmount$(
+    vault: Vault200Response,
+    burnAmount: number,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    const lpDenom = 'yield-aggregator/vaults/' + vault?.vault?.id;
+    const exponent = getDenomExponent(vault.vault?.denom);
+    const burnDenomAmount = burnAmount * Math.pow(10, exponent);
+    const totalAmountInVault =
+      Number(vault.total_bonded_amount) +
+      Number(vault.total_unbonding_amount) +
+      Number(vault.total_withdrawal_balance);
+    const supplyLp$ = this.bankQueryService.getSupply$(lpDenom);
+    return supplyLp$.pipe(
+      map((supplyLp) => {
+        if (!totalAmountInVault || !supplyLp || !supplyLp.amount || !parseInt(supplyLp.amount)) {
+          return { denom: lpDenom, amount: '0' };
+        }
+        // principalAmount = principalAmountInVault * (lpAmountToBurn / lpSupply)
+        const redeemAmount = (burnDenomAmount * totalAmountInVault) / parseInt(supplyLp.amount);
+        return { denom: lpDenom, amount: redeemAmount.toString() };
+      }),
+    );
   }
 }

@@ -1,8 +1,8 @@
+import { getDenomExponent } from '../../models/cosmos/bank.model';
 import { validateAccAddress } from '../../utils/validation';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { cosmos } from '@cosmos-client/core/esm/proto';
-import { denomExponentMap } from '../../models/cosmos/bank.model';
 
 export type Amount = {
   amount: number;
@@ -78,7 +78,7 @@ export class FaucetComponent implements OnInit {
       });
       return;
     }
-    const exponent = denomExponentMap[metadata.base];
+    const exponent = getDenomExponent(metadata.base);
     const amountInt = Math.floor(this.amount * 10 ** exponent);
     if (amountInt > 0 && this.faucetURL) {
       this.postFaucetRequested.emit({

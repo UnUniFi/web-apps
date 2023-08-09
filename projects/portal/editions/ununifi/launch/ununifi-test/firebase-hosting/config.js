@@ -41,6 +41,160 @@ const messageModules = [
   'pricefeed',
 ];
 
+const denomMetadata = [
+  {
+    description: 'The governance token of UnUniFi protocol.',
+    denom_units: [
+      {
+        denom: 'uguu',
+        exponent: 0,
+      },
+      {
+        denom: 'guu',
+        exponent: 6,
+      },
+    ],
+    base: 'uguu',
+    name: 'UnUniFi',
+    display: 'guu',
+    symbol: 'GUU',
+  },
+  {
+    description: 'The governance token of OSMOSIS.',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+      },
+      {
+        denom: 'osmo',
+        exponent: 6,
+      },
+    ],
+    base: 'uosmo',
+    name: 'OSMOSIS',
+    display: 'osmo',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'The governance token of Cosmos Hub.',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+      },
+      {
+        denom: 'atom',
+        exponent: 6,
+      },
+    ],
+    base: 'uatom',
+    name: 'COSMOS',
+    display: 'atom',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'The first cryptocurrency invented in 2008',
+    denom_units: [
+      {
+        denom: 'ubtc',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'btc',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'ubtc',
+    display: 'BTC',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+  },
+  {
+    description: 'The currency of the U.S.A.',
+    denom_units: [
+      {
+        denom: 'uusd',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'usd',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'uusd',
+    display: 'USD',
+    name: 'US Dollar',
+    symbol: 'USD',
+  },
+  {
+    description: 'Stablecoin pegged to the USD',
+    denom_units: [
+      {
+        denom: 'uusdc',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'uusdc',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'uusdc',
+    display: 'USDC',
+    name: 'USD Coin',
+    symbol: 'USDC',
+  },
+  {
+    description: 'Decentralized Liquidity Provider Token',
+    denom_units: [
+      {
+        denom: 'udlp',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'dlp',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'udlp',
+    name: 'Liquidity Provider',
+    display: 'dlp',
+    symbol: 'DLP',
+  },
+  {
+    description: 'ATOM from Osmosis (testnet)',
+    denom_units: [
+      {
+        denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+    name: 'ATOM (from Osmosis)',
+    display: 'atom(from osmosis)',
+    symbol: 'ATOM (from Osmosis)',
+  },
+];
+
+const strategiesInfo = [
+  {
+    id: '0',
+    name: 'Osmosis ATOM/OSMO Farm',
+    description: '',
+    gitUrl: '',
+    apy: 0.11,
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -56,6 +210,8 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -99,6 +255,8 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -142,6 +300,8 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -185,6 +345,8 @@ const configs = [
         amount: 0.015,
       },
     ],
+    denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {

@@ -26,3 +26,16 @@ export type TransferVaultRequest = {
   vaultId: string;
   recipientAddress: string;
 };
+
+export type OsmosisPools = {
+  pool_id: number;
+  apr_list: {
+    start_date: string;
+    denom: string;
+    symbol: string;
+    apr_1d: number;
+    apr_7d: number;
+    apr_14d: number;
+    apr_superfluid: number;
+  }[];
+}[];

@@ -1,3 +1,4 @@
+import { TokenAmountUSD } from '../../../models/band-protocols/band-protocol.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -12,6 +13,10 @@ export class VaultsComponent implements OnInit {
   vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Input()
   symbols?: { name: string; img: string }[] | null;
+  @Input()
+  apy?: (number | null)[] | null;
+  @Input()
+  totalDeposited?: TokenAmountUSD[] | null;
   @Input()
   keyword?: string | null;
   @Output()

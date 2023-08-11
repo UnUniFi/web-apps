@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { StrategyInfo } from 'projects/portal/src/app/models/config.service';
 import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
   StrategyAll200ResponseStrategiesInner,
@@ -34,7 +33,7 @@ export class StrategyComponent implements OnInit, OnChanges {
   @Input()
   weights?: (string | undefined)[] | null;
   @Input()
-  strategyInfo?: StrategyInfo | null;
+  strategyAPR?: number | null;
 
   description: string;
   chartType: ChartType;

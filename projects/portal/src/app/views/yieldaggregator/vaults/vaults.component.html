@@ -78,31 +78,31 @@
           <thead>
             <tr>
               <th></th>
-              <td>Asset</td>
-              <td>Reserve Rate</td>
-              <td>Commission Rate</td>
               <!-- <td>Name</td> -->
-              <td>Owner</td>
+              <td>Asset</td>
+              <td>APY</td>
+              <td>Commission Rate</td>
+              <td>Total Deposited</td>
             </tr>
           </thead>
           <tbody>
             <ng-container *ngFor="let vault of vaults; let i = index">
               <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
                 <th>#{{ vault.id }}</th>
+                <!-- <td>{{ vault.name }}</td> -->
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
                     <div class="avatar">
                       <div class="mask mask-circle w-8 h-8">
-                        <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                        <img src="{{ symbols[i]?.img }}" alt="Asset Symbol" />
                       </div>
                     </div>
-                    {{ symbols[i].name || vault.denom }}
+                    {{ symbols[i].name || 'UNKNOWN' }}
                   </div>
                 </td>
-                <td>{{ vault.withdraw_reserve_rate | percent : '1.0-4' }}</td>
+                <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>
                 <td>{{ vault.withdraw_commission_rate | percent : '1.0-4' }}</td>
-                <!-- <td>{{ vault.name }}</td> -->
-                <td>{{ vault.owner }}</td>
+                <td>{{ totalDeposited?.[i]?.usdAmount | number }}</td>
               </tr>
             </ng-container>
           </tbody>

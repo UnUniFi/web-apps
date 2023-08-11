@@ -34,11 +34,11 @@
             </tr>
             <tr>
               <td>Contract Address</td>
-              <td class="font-mono">{{ strategy?.contract_address }}</td>
+              <td class="font-mono break-all">{{ strategy?.contract_address }}</td>
             </tr>
             <tr>
               <td>Git URL</td>
-              <td>
+              <td class="break-all">
                 <a href="{{ strategy?.git_url }}" target="_blank">{{ strategy?.git_url }}</a>
               </td>
             </tr>
@@ -48,7 +48,7 @@
         <div class="stats flex flex-col md:flex-row">
           <div class="stat">
             <div class="stat-title">APR</div>
-            <div class="stat-value text-secondary">{{ strategyInfo?.apy | percent : '1.2-2' }}</div>
+            <div class="stat-value text-secondary">{{ strategyAPR | percent : '1.2-2' }}</div>
             <div class="stat-desc"></div>
           </div>
         </div>

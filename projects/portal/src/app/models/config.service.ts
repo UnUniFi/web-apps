@@ -56,6 +56,18 @@ export type StrategyInfo = {
   description: string;
   gitURL: string;
   apy: number;
+  poolInfo:
+    | {
+        type: 'osmosis';
+        poolId: string;
+      }
+    | {
+        type: 'osmosis_multi';
+        pools: { id: string; weight: string }[];
+      }
+    | {
+        type: 'astroport';
+      };
 };
 
 declare const configs: Config[];

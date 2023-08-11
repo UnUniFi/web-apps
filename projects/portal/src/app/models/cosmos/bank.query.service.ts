@@ -82,6 +82,9 @@ export class BankQueryService {
           balance.map(async (b) => {
             if (b.denom && b.amount) {
               const metadata = metadataMap[b.denom];
+              if (!metadata) {
+                return;
+              }
               const denomExponent = getDenomExponent(b.denom);
               const amount = new Decimal(b.amount);
               map[metadata.symbol!] = Number(

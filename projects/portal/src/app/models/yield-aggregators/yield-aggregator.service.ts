@@ -1,11 +1,14 @@
+import { StrategyInfo } from '../config.service';
 import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
+import { OsmosisPools } from './yield-aggregator.model';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 import { Vault200Response } from 'ununifi-client/esm/openapi';
@@ -18,6 +21,7 @@ export class YieldAggregatorService {
     private readonly bankService: BankService,
     private readonly bankQueryService: BankQueryService,
     private readonly txCommonService: TxCommonService,
+    private http: HttpClient,
   ) {}
 
   buildMsgDepositToVault(
@@ -166,5 +170,34 @@ export class YieldAggregatorService {
         return { denom: lpDenom, amount: redeemAmount.toString() };
       }),
     );
+  }
+
+  async getOsmoPoolAPY(poolId: string): Promise<number> {
+    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then((res: any) => {
+        const pools = res as OsmosisPools;
+        let totalApr = 0;
+        for (const pool of pools) {
+          for (const apr of pool.apr_list) {
+            totalApr += apr.apr_superfluid;
+          }
+        }
+        return totalApr / 100;
+      });
+  }
+
+  async getStrategyAPR(strategyInfo?: StrategyInfo): Promise<number> {
+    if (!strategyInfo) {
+      return 0;
+    }
+    if (strategyInfo.poolInfo) {
+      if (strategyInfo.poolInfo.type === 'osmosis') {
+        return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
+      }
+    }
+    return strategyInfo.apy || 0;
   }
 }

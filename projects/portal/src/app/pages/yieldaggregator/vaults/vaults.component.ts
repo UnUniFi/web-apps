@@ -57,7 +57,7 @@ export class VaultsComponent implements OnInit {
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.denom!].symbol || 'Invalid Asset';
+          const symbol = denomMetadataMap?.[vault.denom!]?.symbol || 'Invalid Asset';
           const img = this.bankQuery.getSymbolImageMap()[symbol];
           return { name: symbol, img: img };
         }),

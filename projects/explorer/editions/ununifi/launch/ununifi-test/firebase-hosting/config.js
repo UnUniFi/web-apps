@@ -191,7 +191,10 @@ const strategiesInfo = [
     name: 'Osmosis ATOM/OSMO Farm',
     description: '',
     gitUrl: '',
-    apy: 0.11,
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
   },
 ];
 

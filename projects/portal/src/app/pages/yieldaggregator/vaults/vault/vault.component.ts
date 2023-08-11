@@ -150,15 +150,16 @@ export class VaultComponent implements OnInit {
       }),
     );
     this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
-      map(([vault, config]) => {
+      mergeMap(async ([vault, config]) => {
         if (!vault.vault?.strategy_weights) {
           return 0;
         }
         let vaultAPY = 0;
         for (const strategyWeight of vault.vault.strategy_weights) {
-          const strategyAPY = config?.strategiesInfo?.find(
+          const strategyInfo = config?.strategiesInfo?.find(
             (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
-          )?.apy;
+          );
+          const strategyAPY = await this.iyaService.getStrategyAPR(strategyInfo);
           vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
         }
         return vaultAPY;

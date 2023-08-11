@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ConfigService, StrategyInfo } from 'projects/portal/src/app/models/config.service';
+import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
@@ -24,11 +25,12 @@ export class StrategyComponent implements OnInit {
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
-  strategyInfo$: Observable<StrategyInfo | undefined>;
+  strategyAPR$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
     private readonly bankQuery: BankQueryService,
+    private readonly iyaService: YieldAggregatorService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly configService: ConfigService,
   ) {
@@ -73,8 +75,12 @@ export class StrategyComponent implements OnInit {
         ),
       ),
     );
-    this.strategyInfo$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
-      map(([strategy, config]) => config?.strategiesInfo?.find((s) => s.id == strategy?.id)),
+    this.strategyAPR$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
+      mergeMap(async ([strategy, config]) => {
+        const info = config?.strategiesInfo?.find((s) => s.id == strategy?.id);
+        const apr = await this.iyaService.getStrategyAPR(info);
+        return apr;
+      }),
     );
   }
 

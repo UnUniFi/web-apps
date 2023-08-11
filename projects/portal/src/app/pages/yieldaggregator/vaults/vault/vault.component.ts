@@ -151,6 +151,8 @@ export class VaultComponent implements OnInit {
     );
     this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
       mergeMap(async ([vault, config]) => {
+        // TODO: go to a function
+        // same in vaults.component.ts
         if (!vault.vault?.strategy_weights) {
           return 0;
         }

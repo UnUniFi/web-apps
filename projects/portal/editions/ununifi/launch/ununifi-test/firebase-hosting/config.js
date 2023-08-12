@@ -60,40 +60,6 @@ const denomMetadata = [
     symbol: 'GUU',
   },
   {
-    description: 'The governance token of OSMOSIS.',
-    denom_units: [
-      {
-        denom: 'uosmo',
-        exponent: 0,
-      },
-      {
-        denom: 'osmo',
-        exponent: 6,
-      },
-    ],
-    base: 'uosmo',
-    name: 'OSMOSIS',
-    display: 'osmo',
-    symbol: 'OSMO',
-  },
-  {
-    description: 'The governance token of Cosmos Hub.',
-    denom_units: [
-      {
-        denom: 'uatom',
-        exponent: 0,
-      },
-      {
-        denom: 'atom',
-        exponent: 6,
-      },
-    ],
-    base: 'uatom',
-    name: 'COSMOS',
-    display: 'atom',
-    symbol: 'ATOM',
-  },
-  {
     description: 'The first cryptocurrency invented in 2008',
     denom_units: [
       {
@@ -111,25 +77,6 @@ const denomMetadata = [
     display: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
-  },
-  {
-    description: 'The currency of the U.S.A.',
-    denom_units: [
-      {
-        denom: 'uusd',
-        exponent: 0,
-        aliases: [],
-      },
-      {
-        denom: 'usd',
-        exponent: 6,
-        aliases: [],
-      },
-    ],
-    base: 'uusd',
-    display: 'USD',
-    name: 'US Dollar',
-    symbol: 'USD',
   },
   {
     description: 'Stablecoin pegged to the USD',
@@ -182,6 +129,20 @@ const denomMetadata = [
     name: 'ATOM (from Osmosis)',
     display: 'ATOM (from osmosis)',
     symbol: 'ATOM.Osmosis',
+  },
+  {
+    description: 'OSMO from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+    name: 'OSMO',
+    display: 'OSMO',
+    symbol: 'OSMO',
   },
 ];
 

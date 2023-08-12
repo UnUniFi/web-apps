@@ -132,7 +132,7 @@ export class VaultComponent implements OnInit {
     );
 
     this.symbolImage$ = this.symbol$.pipe(
-      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
+      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] || 'UNKNOWN' : null)),
     );
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);

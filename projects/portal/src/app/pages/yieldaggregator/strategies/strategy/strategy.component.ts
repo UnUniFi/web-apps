@@ -20,7 +20,8 @@ export class StrategyComponent implements OnInit {
   id$: Observable<string>;
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
-  symbol$: Observable<string | null | undefined>;
+  symbol$: Observable<string>;
+  displaySymbol$: Observable<string>;
   symbolImage$: Observable<string | null>;
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
@@ -43,7 +44,16 @@ export class StrategyComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
       map(([denom, ibcDenom, denomMetadataMap]) =>
-        ibcDenom == '' ? denomMetadataMap[denom].symbol : denomMetadataMap[ibcDenom].symbol,
+        ibcDenom == ''
+          ? denomMetadataMap[denom]?.symbol || ''
+          : denomMetadataMap[ibcDenom]?.symbol || '',
+      ),
+    );
+    this.displaySymbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
+      map(([denom, ibcDenom, denomMetadataMap]) =>
+        ibcDenom == ''
+          ? denomMetadataMap[denom]?.display || denom
+          : denomMetadataMap[ibcDenom]?.display || ibcDenom,
       ),
     );
     this.symbolImage$ = this.symbol$.pipe(

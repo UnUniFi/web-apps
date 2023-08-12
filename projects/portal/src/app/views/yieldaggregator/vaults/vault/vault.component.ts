@@ -31,7 +31,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vault?: Vault200Response | null;
   @Input()
-  symbol?: string | null;
+  displaySymbol?: string | null;
   @Input()
   symbolImage?: string | null;
   @Input()
@@ -110,7 +110,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.mintAmount,
-      symbol: this.symbol!,
+      symbol: this.displaySymbol!,
     });
   }
 
@@ -125,7 +125,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.burnAmount,
-      symbol: this.symbol!,
+      symbol: this.displaySymbol!,
     });
   }
 

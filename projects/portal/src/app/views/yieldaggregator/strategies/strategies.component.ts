@@ -11,7 +11,7 @@ export class StrategiesComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
-  symbol?: string | null;
+  displaySymbol?: string | null;
   @Input()
   availableSymbols?: string[] | null;
   @Input()
@@ -30,10 +30,10 @@ export class StrategiesComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeSymbol() {
-    if (!this.symbol) {
+    if (!this.displaySymbol) {
       return;
     }
-    const denom = this.symbolMetadataMap?.[this.symbol].base;
+    const denom = this.symbolMetadataMap?.[this.displaySymbol].base;
     if (denom) {
       this.changeDenom.emit(denom);
     }

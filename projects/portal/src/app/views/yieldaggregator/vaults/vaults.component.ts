@@ -31,9 +31,6 @@ export class VaultsComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.keyword === null) {
-      return;
-    }
-    this.search.emit(this.keyword);
+    this.search.emit(this.keyword || '');
   }
 }

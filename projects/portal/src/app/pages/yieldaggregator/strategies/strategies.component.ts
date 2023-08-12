@@ -15,7 +15,8 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class StrategiesComponent implements OnInit {
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
-  symbol$: Observable<string | null | undefined>;
+  symbol$: Observable<string>;
+  displaySymbol$: Observable<string>;
   availableSymbols$: Observable<string[]>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbolImage$: Observable<string | null>;
@@ -36,8 +37,15 @@ export class StrategiesComponent implements OnInit {
     this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
       map(([denom, ibcDenom, denomMetadataMap]) =>
         ibcDenom == ''
-          ? denomMetadataMap[denom] && denomMetadataMap[denom].symbol
-          : denomMetadataMap[ibcDenom] && denomMetadataMap[ibcDenom].symbol,
+          ? denomMetadataMap[denom]?.symbol || ''
+          : denomMetadataMap[ibcDenom]?.symbol || '',
+      ),
+    );
+    this.displaySymbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
+      map(([denom, ibcDenom, denomMetadataMap]) =>
+        ibcDenom == ''
+          ? denomMetadataMap[denom]?.display || denom
+          : denomMetadataMap[ibcDenom]?.display || denom,
       ),
     );
     this.symbolImage$ = this.symbol$.pipe(

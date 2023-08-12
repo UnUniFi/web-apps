@@ -3,7 +3,7 @@
     <ul>
       <li routerLink="/yield-aggregator/vaults"><a>Vaults</a></li>
       <li routerLink="..">
-        <a>Strategies of {{ symbol }}</a>
+        <a>Strategies of {{ displaySymbol }}</a>
       </li>
       <li>{{ strategy?.name }}</li>
     </ul>
@@ -12,14 +12,21 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div #cardRef class="card-body">
         <h2 class="card-title">
-          <div class="avatar">
-            <div class="mask mask-circle w-12 h-12">
-              <img src="{{ symbolImage }}" alt="Asset Symbol" />
+          <ng-container *ngIf="symbolImage">
+            <div class="avatar">
+              <div class="mask mask-circle w-6 h-6">
+                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+              </div>
             </div>
-          </div>
-          {{ strategy?.name }}
+          </ng-container>
+          <ng-container *ngIf="!symbolImage">
+            <span class="material-symbols-outlined">question_mark</span>
+          </ng-container>
+          <span>
+            {{ strategy?.name }}
+          </span>
           <div class="badge badge-primary">#{{ id }}</div>
-          <div class="badge badge-secondary">{{ symbol }}</div>
+          <div class="badge badge-secondary">{{ displaySymbol }}</div>
         </h2>
 
         <table class="table w-full">
@@ -30,7 +37,7 @@
             </tr>
             <tr>
               <td>Asset</td>
-              <td>{{ symbol }}</td>
+              <td>{{ displaySymbol }}</td>
             </tr>
             <tr>
               <td>Contract Address</td>
@@ -98,12 +105,17 @@
             <div class="badge badge-lg badge-primary mr-1">#{{ vault.id }}</div>
           </div>
           <h2 class="card-title break-all">
-            <div class="avatar">
-              <div class="mask mask-circle w-8 h-8">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
               </div>
-            </div>
-            Vault #{{ vault.id }}
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span>Vault #{{ vault.id }}</span>
           </h2>
 
           <div class="stats">

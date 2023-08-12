@@ -25,7 +25,7 @@ export class StrategyComponent implements OnInit, OnChanges {
   @Input()
   id?: string | null;
   @Input()
-  symbol?: string | null;
+  displaySymbol?: string | null;
   @Input()
   symbolImage?: string | null;
   @Input()

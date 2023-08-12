@@ -17,7 +17,7 @@ export class StrategiesComponent implements OnInit {
   ibcDenom$: Observable<string>;
   symbol$: Observable<string>;
   displaySymbol$: Observable<string>;
-  availableSymbols$: Observable<string[]>;
+  availableSymbols$: Observable<{ symbol: string; display: string }[]>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbolImage$: Observable<string | null>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
@@ -58,12 +58,15 @@ export class StrategiesComponent implements OnInit {
           .map((strategy) => {
             const denomMetadata = denomMetadataMap[strategy.denom || ''];
             if (denomMetadata) {
-              return denomMetadata.symbol;
+              return {
+                symbol: denomMetadata.symbol || '',
+                display: denomMetadata.display || strategy.denom || '',
+              };
             } else {
               return undefined;
             }
           })
-          .filter((symbol): symbol is string => typeof symbol == 'string');
+          .filter((symbol): symbol is { symbol: string; display: string } => !!symbol);
         return [...new Set(symbols)];
       }),
     );

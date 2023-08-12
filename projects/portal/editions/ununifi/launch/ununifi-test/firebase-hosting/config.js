@@ -127,7 +127,7 @@ const denomMetadata = [
     ],
     base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
     name: 'ATOM from Osmosis',
-    display: 'ATOM.Osmosis',
+    display: 'ATOM.osmosis',
     symbol: 'ATOM',
   },
   {

@@ -11,9 +11,11 @@ export class StrategiesComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
+  symbol?: string | null;
+  @Input()
   displaySymbol?: string | null;
   @Input()
-  availableSymbols?: string[] | null;
+  availableSymbols?: {symbol:string, display:string}[] | null;
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
@@ -30,10 +32,10 @@ export class StrategiesComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeSymbol() {
-    if (!this.displaySymbol) {
+    if (!this.symbol) {
       return;
     }
-    const denom = this.symbolMetadataMap?.[this.displaySymbol].base;
+    const denom = this.symbolMetadataMap?.[this.symbol].base;
     if (denom) {
       this.changeDenom.emit(denom);
     }

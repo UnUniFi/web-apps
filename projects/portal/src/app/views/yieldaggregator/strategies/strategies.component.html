@@ -12,15 +12,15 @@
     <select
       class="select select-bordered text-center w-auto sm:w-64"
       name="symbol"
-      [(ngModel)]="displaySymbol"
+      [(ngModel)]="symbol"
       (change)="onChangeSymbol()"
     >
       <option [value]="undefined" disabled>
         <span>Select an Asset</span>
       </option>
       <ng-container *ngFor="let symbol of availableSymbols">
-        <option [value]="symbol">
-          {{ symbol }}
+        <option [value]="symbol.symbol">
+          {{ symbol.display }}
         </option>
       </ng-container>
     </select>
@@ -34,7 +34,9 @@
       <div class="card bg-base-100 shadow-xl w-full">
         <div class="card-body">
           <div class="flex flex-row">
-            <div class="badge badge-lg badge-primary mr-1">#{{ strategy.id }}</div>
+            <div class="badge badge-lg badge-primary mr-1">
+              {{ displaySymbol }}#{{ strategy.id }}
+            </div>
           </div>
           <h2 class="card-title break-all">
             <ng-container *ngIf="symbolImage">

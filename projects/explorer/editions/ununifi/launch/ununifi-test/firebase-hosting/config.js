@@ -151,7 +151,7 @@ const denomMetadata = [
     symbol: 'USDC',
   },
   {
-    description: 'Decentralized Liquidity Provider Token',
+    description: 'Derivatives Liquidity Provider Token',
     denom_units: [
       {
         denom: 'udlp',

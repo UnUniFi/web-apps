@@ -151,7 +151,7 @@ const denomMetadata = [
     symbol: 'USDC',
   },
   {
-    description: 'Decentralized Liquidity Provider Token',
+    description: 'Derivatives Liquidity Provider Token',
     denom_units: [
       {
         denom: 'udlp',
@@ -170,7 +170,7 @@ const denomMetadata = [
     symbol: 'DLP',
   },
   {
-    description: 'ATOM from Osmosis (testnet)',
+    description: 'ATOM from Osmosis',
     denom_units: [
       {
         denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
@@ -180,8 +180,8 @@ const denomMetadata = [
     ],
     base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
     name: 'ATOM (from Osmosis)',
-    display: 'atom(from osmosis)',
-    symbol: 'ATOM (from Osmosis)',
+    display: 'ATOM (from osmosis)',
+    symbol: 'ATOM.Osmosis',
   },
 ];
 
@@ -194,6 +194,16 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
+    },
+  },
+  {
+    id: '1',
+    name: 'Osmosis MARS/OSMO Farm',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '9',
     },
   },
 ];

@@ -19,7 +19,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 })
 export class VaultsComponent implements OnInit {
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
-  symbols$: Observable<{ name: string; img: string }[]>;
+  symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
   apy$: Observable<number[]>;
   totalDeposited$: Observable<TokenAmountUSD[]>;
   keyword$: Observable<string>;
@@ -57,9 +57,10 @@ export class VaultsComponent implements OnInit {
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.denom!]?.symbol || 'Invalid Asset';
-          const img = this.bankQuery.getSymbolImageMap()[symbol];
-          return { name: symbol, img: img };
+          const symbol = denomMetadataMap?.[vault.denom!]?.symbol || '';
+          const display = denomMetadataMap?.[vault.denom!]?.display || vault.denom!;
+          const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
+          return { symbol: symbol, display: display, img: img };
         }),
       ),
     );
@@ -73,7 +74,7 @@ export class VaultsComponent implements OnInit {
               .pipe(first())
               .toPromise();
             return this.bandProtocolService.convertToUSDAmount(
-              symbol.name,
+              symbol.symbol,
               (
                 Number(vault.total_bonded_amount) +
                 Number(vault.total_unbonding_amount) +

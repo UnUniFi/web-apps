@@ -9,14 +9,19 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">
-          <div class="avatar">
-            <div class="mask mask-circle w-12 h-12">
-              <img src="{{ symbolImage }}" alt="Asset Symbol" />
+          <ng-container *ngIf="symbolImage">
+            <div class="avatar">
+              <div class="mask mask-circle w-6 h-6">
+                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+              </div>
             </div>
-          </div>
-          Vault #{{ vault?.vault?.id }}
+          </ng-container>
+          <ng-container *ngIf="!symbolImage">
+            <span class="material-symbols-outlined">question_mark</span>
+          </ng-container>
+          <span>Vault #{{ vault?.vault?.id }}</span>
           <div class="badge badge-primary">#{{ vault?.vault?.id }}</div>
-          <div class="badge badge-secondary">{{ symbol }}</div>
+          <div class="badge badge-secondary">{{ displaySymbol }}</div>
         </h2>
         <!-- <div class="stats">
           <div class="stat">
@@ -84,7 +89,7 @@
           <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
             <div class="stat-value text-info">
-              {{ totalDepositAmount?.symbolAmount }} {{ symbol }}
+              {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
               ${{ totalDepositAmount?.usdAmount | number }}
@@ -95,7 +100,7 @@
           <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value text-primary">
-              <td>{{ totalBondedAmount?.symbolAmount }} {{ symbol }}</td>
+              <td>{{ totalBondedAmount?.symbolAmount }} {{ displaySymbol }}</td>
             </div>
             <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
               ${{ totalBondedAmount?.usdAmount | number }}
@@ -104,7 +109,7 @@
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
             <div class="stat-value text-secondary">
-              {{ totalUnbondingAmount?.symbolAmount }} {{ symbol }}
+              {{ totalUnbondingAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
               ${{ totalUnbondingAmount?.usdAmount | number }}
@@ -113,7 +118,7 @@
           <div class="stat">
             <div class="stat-title">Withdrawal Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ totalWithdrawalBalance?.symbolAmount }} {{ symbol }}
+              {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
               ${{ totalWithdrawalBalance?.usdAmount | number }}
@@ -163,18 +168,18 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.[symbol || ''] || 0"
+                [max]="symbolBalancesMap?.[displaySymbol || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span>{{ symbol }}</span>
+              <span>{{ displaySymbol }}</span>
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ symbol }}
+                {{ symbolBalancesMap?.[displaySymbol || ''] || 0 }} {{ displaySymbol }}
               </span>
             </label>
           </div>
@@ -245,7 +250,7 @@
                 class="input input-bordered w-full"
                 value="{{ estimatedBurnAmount?.amount | coinAmount }}"
               />
-              <span>{{ symbol }}</span>
+              <span>{{ displaySymbol }}</span>
             </label>
           </div>
 
@@ -266,16 +271,20 @@
     >
       <div class="card bg-base-100 shadow-xl w-full">
         <div class="card-body">
-          <div class="flex flex-row">
-            <div class="badge badge-lg badge-primary mr-1">{{ strategy.strategy_id }}</div>
-          </div>
           <h2 class="card-title break-all">
-            <div class="avatar">
-              <div class="mask mask-circle w-8 h-8">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
               </div>
-            </div>
-            {{ getStrategyInfo(strategy.strategy_id)?.name }}
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span>
+              {{ getStrategyInfo(strategy.strategy_id)?.name }}
+            </span>
           </h2>
           <div class="stats">
             <div class="stat">

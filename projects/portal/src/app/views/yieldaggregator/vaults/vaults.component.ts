@@ -12,7 +12,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Input()
-  symbols?: { name: string; img: string }[] | null;
+  symbols?: { symbol: string; display: string; img: string }[] | null;
   @Input()
   apy?: (number | null)[] | null;
   @Input()
@@ -31,9 +31,6 @@ export class VaultsComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.keyword === null) {
-      return;
-    }
-    this.search.emit(this.keyword);
+    this.search.emit(this.keyword || '');
   }
 }

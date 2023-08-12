@@ -31,7 +31,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vault?: Vault200Response | null;
   @Input()
-  symbol?: string | null;
+  displaySymbol?: string | null;
   @Input()
   symbolImage?: string | null;
   @Input()
@@ -64,11 +64,11 @@ export class VaultComponent implements OnInit, OnChanges {
 
   mintAmount?: number;
   burnAmount?: number;
-  chartType: ChartType;
-  chartTitle: string;
-  chartData: any[];
-  chartColumnNames: any[];
-  chartOptions: any;
+  // chartType: ChartType;
+  // chartTitle: string;
+  // chartData: any[];
+  // chartColumnNames: any[];
+  // chartOptions: any;
   tab: 'mint' | 'burn' = 'mint';
 
   constructor(private readonly iyaChart: YieldAggregatorChartService) {
@@ -76,27 +76,27 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
-    this.chartTitle = '';
-    this.chartType = ChartType.LineChart;
-    const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
-    this.chartOptions = this.iyaChart.createChartOption(width);
+    // this.chartTitle = '';
+    // this.chartType = ChartType.LineChart;
+    // const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
+    // this.chartOptions = this.iyaChart.createChartOption(width);
 
-    this.chartData = this.iyaChart.createDummyChartData();
-    this.chartColumnNames = ['Date', 'APY'];
+    // this.chartData = this.iyaChart.createDummyChartData();
+    // this.chartColumnNames = ['Date', 'APY'];
   }
 
   @ViewChild('chartRef') chartRef?: ElementRef;
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const width: number = this.chartRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
+    // const width: number = this.chartRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    const width: number = this.chartRef!.nativeElement.offsetWidth;
-    this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
+    // const width: number = this.chartRef!.nativeElement.offsetWidth;
+    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
   onDepositAmountChange() {
@@ -110,7 +110,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.mintAmount,
-      symbol: this.symbol!,
+      symbol: this.displaySymbol!,
     });
   }
 
@@ -125,7 +125,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.burnAmount,
-      symbol: this.symbol!,
+      symbol: this.displaySymbol!,
     });
   }
 

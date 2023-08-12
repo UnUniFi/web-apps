@@ -5,13 +5,14 @@ const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
 const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
-const developerPort = location.protocol === 'https:' ? 3040 : 3030;
 
-// To Do write chain config
-const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
+const domainCauchyEA = 'a.ununifi-test-v1.cauchye.net';
+const domainCauchyEB = 'b.ununifi-test-v1.cauchye.net';
+const domainCauchyEC = 'c.ununifi-test-v1.cauchye.net';
+const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
 
-const chainID = 'ununifi-alpha-test';
-const chainName = 'UnUniFi (alpha-test)';
+const chainID = 'ununifi-test-v1';
+const chainName = 'UnUniFi (test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -59,40 +60,6 @@ const denomMetadata = [
     symbol: 'GUU',
   },
   {
-    description: 'The governance token of OSMOSIS.',
-    denom_units: [
-      {
-        denom: 'uosmo',
-        exponent: 0,
-      },
-      {
-        denom: 'osmo',
-        exponent: 6,
-      },
-    ],
-    base: 'uosmo',
-    name: 'OSMOSIS',
-    display: 'osmo',
-    symbol: 'OSMO',
-  },
-  {
-    description: 'The governance token of Cosmos Hub.',
-    denom_units: [
-      {
-        denom: 'uatom',
-        exponent: 0,
-      },
-      {
-        denom: 'atom',
-        exponent: 6,
-      },
-    ],
-    base: 'uatom',
-    name: 'COSMOS',
-    display: 'atom',
-    symbol: 'ATOM',
-  },
-  {
     description: 'The first cryptocurrency invented in 2008',
     denom_units: [
       {
@@ -110,25 +77,6 @@ const denomMetadata = [
     display: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
-  },
-  {
-    description: 'The currency of the U.S.A.',
-    denom_units: [
-      {
-        denom: 'uusd',
-        exponent: 0,
-        aliases: [],
-      },
-      {
-        denom: 'usd',
-        exponent: 6,
-        aliases: [],
-      },
-    ],
-    base: 'uusd',
-    display: 'USD',
-    name: 'US Dollar',
-    symbol: 'USD',
   },
   {
     description: 'Stablecoin pegged to the USD',
@@ -150,7 +98,7 @@ const denomMetadata = [
     symbol: 'USDC',
   },
   {
-    description: 'Decentralized Liquidity Provider Token',
+    description: 'Derivatives Liquidity Provider Token',
     denom_units: [
       {
         denom: 'udlp',
@@ -167,6 +115,57 @@ const denomMetadata = [
     name: 'Liquidity Provider',
     display: 'dlp',
     symbol: 'DLP',
+  },
+  {
+    description: 'ATOM from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+    name: 'ATOM from Osmosis',
+    display: 'ATOM.osmosis',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'OSMO from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+    name: 'OSMO',
+    display: 'OSMO',
+    symbol: 'OSMO',
+  },
+];
+
+const strategiesInfo = [
+  {
+    id: '0',
+    name: 'Osmosis ATOM/OSMO Farm',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+  {
+    id: '1',
+    name: 'Osmosis MARS/OSMO Farm',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '9',
+    },
   },
 ];
 
@@ -186,6 +185,7 @@ const configs = [
       },
     ],
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -211,14 +211,141 @@ const configs = [
         },
       ],
       monitor: undefined,
-      nftMint: {
-        enabled: true,
-        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
+      navigations: [],
+      messageModules,
+    },
+  },
+  // CauchyE B node without Monitor
+  {
+    id: domainCauchyEB,
+    restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
+    chainID,
+    chainName,
+    bech32Prefix,
+    minimumGasPrices: [
+      {
+        denom: 'uguu',
+        amount: 0.015,
       },
-      developer: {
-        enabled: true,
-        developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
+    ],
+    denomMetadata,
+    strategiesInfo,
+    extension: {
+      faucet: [
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
+          denom: 'ubtc',
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
+          denom: 'uguu',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+      ],
+      monitor: undefined,
+      navigations: [],
+      messageModules,
+    },
+  },
+  // CauchyE C node without Monitor
+  {
+    id: domainCauchyEC,
+    restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
+    chainID,
+    chainName,
+    bech32Prefix,
+    minimumGasPrices: [
+      {
+        denom: 'uguu',
+        amount: 0.015,
       },
+    ],
+    denomMetadata,
+    strategiesInfo,
+    extension: {
+      faucet: [
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
+          denom: 'ubtc',
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
+          denom: 'uguu',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+      ],
+      monitor: undefined,
+      navigations: [],
+      messageModules,
+    },
+  },
+  // CauchyE D node without Monitor
+  {
+    id: domainCauchyED,
+    restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
+    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
+    chainID,
+    chainName,
+    bech32Prefix,
+    minimumGasPrices: [
+      {
+        denom: 'uguu',
+        amount: 0.015,
+      },
+    ],
+    denomMetadata,
+    strategiesInfo,
+    extension: {
+      faucet: [
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
+          denom: 'ubtc',
+          creditAmount: 2000000, // amount to credit in max request
+          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
+          denom: 'uguu',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+        {
+          hasFaucet: true,
+          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
+          denom: 'uusdc',
+          creditAmount: 2000000000,
+          maxCredit: 2000000000,
+        },
+      ],
+      monitor: undefined,
       navigations: [],
       messageModules,
     },

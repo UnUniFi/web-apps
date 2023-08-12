@@ -31,7 +31,6 @@
         </label>
         <div class="input-group">
           <input
-            required
             type="text"
             #keywordNgModelRef="ngModel"
             class="input input-bordered w-full"
@@ -58,7 +57,7 @@
         </div>
       </div>
     </form>
-    <div class="flex-auto flex flex-row">
+    <!-- <div class="flex-auto flex flex-row">
       <span class="flex-auto"></span>
       <div class="form-control">
         <label class="label cursor-pointer">
@@ -66,7 +65,7 @@
           <input type="checkbox" checked="checked" class="checkbox checkbox-primary" />
         </label>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <h3 class="pb-2">Select the Vault to deposit</h3>
@@ -92,17 +91,24 @@
                 <!-- <td>{{ vault.name }}</td> -->
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                    <div class="avatar">
-                      <div class="mask mask-circle w-8 h-8">
-                        <img src="{{ symbols[i]?.img }}" alt="Asset Symbol" />
+                    <ng-container *ngIf="symbols[i]?.img">
+                      <div class="avatar">
+                        <div class="mask mask-circle w-6 h-6">
+                          <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                        </div>
                       </div>
-                    </div>
-                    {{ symbols[i].name || 'UNKNOWN' }}
+                    </ng-container>
+                    <ng-container *ngIf="!symbols[i]?.img">
+                      <span class="material-symbols-outlined">question_mark</span>
+                    </ng-container>
+                    <span>
+                      {{ symbols[i].display }}
+                    </span>
                   </div>
                 </td>
                 <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>
                 <td>{{ vault.withdraw_commission_rate | percent : '1.0-4' }}</td>
-                <td>{{ totalDeposited?.[i]?.usdAmount | number }}</td>
+                <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>
             </ng-container>
           </tbody>

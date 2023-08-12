@@ -13,7 +13,9 @@ export class StrategiesComponent implements OnInit {
   @Input()
   symbol?: string | null;
   @Input()
-  availableSymbols?: string[] | null;
+  displaySymbol?: string | null;
+  @Input()
+  availableSymbols?: {symbol:string, display:string}[] | null;
   @Input()
   symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
   @Input()

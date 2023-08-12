@@ -15,8 +15,9 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class StrategiesComponent implements OnInit {
   denom$: Observable<string>;
   ibcDenom$: Observable<string>;
-  symbol$: Observable<string | null | undefined>;
-  availableSymbols$: Observable<string[]>;
+  symbol$: Observable<string>;
+  displaySymbol$: Observable<string>;
+  availableSymbols$: Observable<{ symbol: string; display: string }[]>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   symbolImage$: Observable<string | null>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
@@ -36,8 +37,15 @@ export class StrategiesComponent implements OnInit {
     this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
       map(([denom, ibcDenom, denomMetadataMap]) =>
         ibcDenom == ''
-          ? denomMetadataMap[denom] && denomMetadataMap[denom].symbol
-          : denomMetadataMap[ibcDenom] && denomMetadataMap[ibcDenom].symbol,
+          ? denomMetadataMap[denom]?.symbol || ''
+          : denomMetadataMap[ibcDenom]?.symbol || '',
+      ),
+    );
+    this.displaySymbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
+      map(([denom, ibcDenom, denomMetadataMap]) =>
+        ibcDenom == ''
+          ? denomMetadataMap[denom]?.display || denom
+          : denomMetadataMap[ibcDenom]?.display || denom,
       ),
     );
     this.symbolImage$ = this.symbol$.pipe(
@@ -50,12 +58,15 @@ export class StrategiesComponent implements OnInit {
           .map((strategy) => {
             const denomMetadata = denomMetadataMap[strategy.denom || ''];
             if (denomMetadata) {
-              return denomMetadata.symbol;
+              return {
+                symbol: denomMetadata.symbol || '',
+                display: denomMetadata.display || strategy.denom || '',
+              };
             } else {
               return undefined;
             }
           })
-          .filter((symbol): symbol is string => typeof symbol == 'string');
+          .filter((symbol): symbol is { symbol: string; display: string } => !!symbol);
         return [...new Set(symbols)];
       }),
     );

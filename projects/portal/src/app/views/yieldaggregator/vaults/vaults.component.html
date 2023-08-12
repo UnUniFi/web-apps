@@ -103,13 +103,13 @@
                       <span class="material-symbols-outlined">question_mark</span>
                     </ng-container>
                     <span>
-                      {{ symbols[i].name }}
+                      {{ symbols[i].display }}
                     </span>
                   </div>
                 </td>
                 <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>
                 <td>{{ vault.withdraw_commission_rate | percent : '1.0-4' }}</td>
-                <td>{{ totalDeposited?.[i]?.usdAmount | number }}</td>
+                <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>
             </ng-container>
           </tbody>

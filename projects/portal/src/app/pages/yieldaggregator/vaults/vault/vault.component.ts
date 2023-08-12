@@ -31,7 +31,8 @@ export class VaultComponent implements OnInit {
   vault$: Observable<Vault200Response>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
-  symbol$: Observable<string | null | undefined>;
+  symbol$: Observable<string>;
+  displaySymbol$: Observable<string>;
   symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
@@ -65,10 +66,15 @@ export class VaultComponent implements OnInit {
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
-      map(([vault, denomMetadataMap]) =>
-        denomMetadataMap?.[vault.vault?.denom!].symbol?.replace(/\s*\([^)]*\)/g, ''),
+      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol || ''),
+    );
+    this.displaySymbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
+      map(
+        ([vault, denomMetadataMap]) =>
+          denomMetadataMap?.[vault.vault?.denom!].display || vault.vault?.denom!,
       ),
     );
+
     const timer$ = timer(0, 1000 * 60);
     this.totalDepositAmount$ = combineLatest([
       timer$,
@@ -132,7 +138,7 @@ export class VaultComponent implements OnInit {
     );
 
     this.symbolImage$ = this.symbol$.pipe(
-      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] || 'UNKNOWN' : null)),
+      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] || '' : null)),
     );
     this.mintAmount$ = new BehaviorSubject(0);
     this.burnAmount$ = new BehaviorSubject(0);

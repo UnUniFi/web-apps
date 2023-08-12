@@ -92,12 +92,19 @@
                 <!-- <td>{{ vault.name }}</td> -->
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                    <div class="avatar">
-                      <div class="mask mask-circle w-8 h-8">
-                        <img src="{{ symbols[i]?.img }}" alt="Asset Symbol" />
+                    <ng-container *ngIf="symbols[i]?.img">
+                      <div class="avatar">
+                        <div class="mask mask-circle w-6 h-6">
+                          <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                        </div>
                       </div>
-                    </div>
-                    {{ symbols[i].name || 'UNKNOWN' }}
+                    </ng-container>
+                    <ng-container *ngIf="!symbols[i]?.img">
+                      <span class="material-symbols-outlined">question_mark</span>
+                    </ng-container>
+                    <span>
+                      {{ symbols[i].name || 'UNKNOWN' }}
+                    </span>
                   </div>
                 </td>
                 <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>

@@ -144,12 +144,14 @@
               <ng-container *ngFor="let vote of votes">
                 <tr>
                   <th>{{ vote.voter }}</th>
-                  <td>{{ vote.option?.replace('VOTE_OPTION_', '') }}</td>
+                  <ng-container *ngFor="let option of vote.options">
+                    <td>{{ option.option?.replace('VOTE_OPTION_', '') }}</td>
+                  </ng-container>
                 </tr>
               </ng-container>
             </tbody>
           </table>
-          <p class="ml-4">There is no vote.</p>
+          <p class="ml-4" *ngIf="!votes?.length">There is no vote.</p>
         </div>
 
         <div class="card-actions justify-end">

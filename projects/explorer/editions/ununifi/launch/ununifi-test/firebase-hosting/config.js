@@ -219,22 +219,8 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uusdc',
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },
@@ -264,22 +250,8 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-          denom: 'uusdc',
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },
@@ -309,22 +281,8 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
-          denom: 'uusdc',
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },
@@ -354,22 +312,8 @@ const configs = [
       faucet: [
         {
           hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
-        },
-        {
-          hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
-          denom: 'uusdc',
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },

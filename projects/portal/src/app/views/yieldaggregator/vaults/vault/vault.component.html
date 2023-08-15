@@ -193,7 +193,7 @@
                 class="input input-bordered w-full"
                 value="{{ estimatedMintAmount?.amount | coinAmount }}"
               />
-              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
+              <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
             </label>
           </div>
 
@@ -232,8 +232,8 @@
             </label>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
-              <span class="label-text-alt"
-                >{{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
+              <span class="label-text-alt">
+                {{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </span>
             </label>

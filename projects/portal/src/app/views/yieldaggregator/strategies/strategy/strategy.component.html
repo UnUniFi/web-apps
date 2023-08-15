@@ -54,7 +54,14 @@
         <div class="stats flex flex-col md:flex-row">
           <div class="stat">
             <div class="stat-title">APR</div>
-            <div class="stat-value text-secondary">{{ strategyAPR | percent : '1.2-2' }}</div>
+            <div class="stat-value text-secondary">
+              <ng-container *ngIf="strategyAPR !== null">
+                {{ strategyAPR | percent : '1.2-2' }}
+              </ng-container>
+              <ng-container *ngIf="strategyAPR === null">
+                <div class="animate-pulse bg-slate-200 w-32 h-12 rounded-full"></div>
+              </ng-container>
+            </div>
             <div class="stat-desc"></div>
           </div>
         </div>

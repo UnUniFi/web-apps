@@ -48,9 +48,9 @@
             </label>
             <input
               type="text"
-              required
+              readonly
               #nameNgModelRef="ngModel"
-              placeholder="UnUniFi GUU Lending"
+              placeholder="Entering name will be supported in next upgrade"
               class="input input-bordered w-full"
               [class]="{
                 'input-error': nameNgModelRef.errors && nameNgModelRef.touched
@@ -61,7 +61,7 @@
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">Select Asset</span>
+              <span class="label-text">Select Asset for the Vault</span>
             </label>
             <select
               required
@@ -89,30 +89,17 @@
             </select>
           </div>
           <div class="form-control">
-            <label class="label">
+            <span class="label">
               <span class="label-text">Enter Commission Rate</span>
-              <!-- The button to open modal -->
-              <label for="modal-commission" class="label-text cursor-pointer">
+              <a
+                href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
+                target="_blank"
+                class="label-text"
+              >
                 <span class="material-symbols-outlined">help</span>
-              </label>
-
-              <!-- Put this part before </body> tag -->
-              <input type="checkbox" id="modal-commission" class="modal-toggle" />
-              <div class="modal modal-bottom sm:modal-middle">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">What is Commission Rate?</h3>
-                  <p class="py-2">
-                    The commission fee is a fee charged to the Vault users. You can choose what
-                    percentage of the deposits you want to charge as a commission.
-                  </p>
-
-                  <div class="modal-action">
-                    <label for="modal-commission" class="btn">Understood</label>
-                  </div>
-                </div>
-              </div>
-            </label>
-            <label class="input-group">
+              </a>
+            </span>
+            <div class="join">
               <input
                 #commissionNgModelRef="ngModel"
                 required
@@ -123,40 +110,26 @@
                 [(ngModel)]="commissionRate"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="commission"
-                class="input input-bordered w-full"
+                class="join-item input input-bordered w-full"
                 [class]="{
                   'input-error': commissionNgModelRef.errors && commissionNgModelRef.touched
                 }"
               />
-              <span>%</span>
-            </label>
+              <div class="join-item btn btn-disabled">%</div>
+            </div>
           </div>
           <div class="form-control">
-            <label class="label">
+            <div class="label">
               <span class="label-text">Enter Withdraw Reserve Rate</span>
-              <!-- The button to open modal -->
-              <label for="modal-reserve" class="label-text cursor-pointer">
+              <a
+                href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                target="_blank"
+                class="label-text"
+              >
                 <span class="material-symbols-outlined">help</span>
-              </label>
-
-              <!-- Put this part before </body> tag -->
-              <input type="checkbox" id="modal-reserve" class="modal-toggle" />
-              <div class="modal modal-bottom sm:modal-middle">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">What is Reserve Rate?</h3>
-                  <p class="py-2">
-                    Determines the percentage of funds set aside for withdrawals. For example, if
-                    set at 10%, 10% of the funds will be left uninvested and 90% of the funds will
-                    be used for investment.
-                  </p>
-
-                  <div class="modal-action">
-                    <label for="modal-reserve" class="btn">Understood</label>
-                  </div>
-                </div>
-              </div>
-            </label>
-            <label class="input-group">
+              </a>
+            </div>
+            <div class="join">
               <input
                 #reserveNgModelRef="ngModel"
                 required
@@ -168,17 +141,17 @@
                 [(ngModel)]="reserveRate"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="reserve"
-                class="input input-bordered w-full"
+                class="join-item input input-bordered w-full"
                 [class]="{
                   'input-error': reserveNgModelRef.errors && reserveNgModelRef.touched
                 }"
               />
-              <span>%</span>
-            </label>
+              <div class="join-item btn btn-disabled">%</div>
+            </div>
           </div>
           <div class="form-control">
             <span class="label">
-              <span class="label-text">Select Strategies</span>
+              <span class="label-text">Strategies Allocation</span>
               <!-- The button to open modal -->
               <label for="modal-strategy" class="label-text cursor-pointer">
                 <span class="material-symbols-outlined">help</span>
@@ -207,7 +180,7 @@
             </span>
 
             <ng-container *ngFor="let strategy of selectedStrategies; let i = index">
-              <div class="flex flex-row flex-wrap">
+              <div class="flex flex-row flex-wrap gap-2 mb-2">
                 <a
                   class="btn btn-outline normal-case w-full sm:w-64 gap-2"
                   href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
@@ -217,7 +190,7 @@
                   <span class="material-symbols-outlined">info</span>
                 </a>
                 <div class="w-full sm:w-auto sm:flex-auto">
-                  <label class="input-group w-full mb-2">
+                  <div class="join w-full">
                     <input
                       type="number"
                       [min]="0"
@@ -225,31 +198,38 @@
                       [step]="1"
                       [(ngModel)]="strategy.weight"
                       name="strategy{{ i }}Weight"
-                      class="input input-bordered w-full"
+                      class="join-item input input-bordered w-full"
                     />
-                    <span>%</span>
-                    <label class="btn btn-outline btn-error" (click)="onClickDeleteStrategy(i)">
+                    <div class="join-item btn btn-disabled">%</div>
+                    <label
+                      class="join-item btn btn-outline btn-error"
+                      (click)="onClickDeleteStrategy(i)"
+                    >
                       <span class="material-symbols-outlined">delete</span>
                     </label>
-                  </label>
+                  </div>
                 </div>
               </div>
             </ng-container>
 
-            <label class="input-group mb-2 w-full">
+            <span class="label">
+              <span class="label-text">Add Strategy</span>
+            </span>
+            <div class="join mb-2">
               <select
                 [required]="selectedStrategies.length === 0"
-                class="select select-bordered text-center w-full"
+                class="join-item select select-bordered w-full"
                 [(ngModel)]="selectedStrategyId"
                 name="strategyId"
                 [disabled]="!selectedSymbol"
+                (change)="onAddStrategy(selectedStrategyId || '')"
               >
-                <option [value]="undefined" disabled>
-                  <span *ngIf="!selectedSymbol">Select an asset first!</span>
+                <option [value]="''" disabled>
+                  <span *ngIf="!selectedSymbol">Select an asset first</span>
                   <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
-                  <span *ngIf="selectedSymbol && !strategies?.length"
-                    >No strategy for {{ selectedSymbol }}</span
-                  >
+                  <span *ngIf="selectedSymbol && !strategies?.length">
+                    No strategy for {{ selectedSymbol }}
+                  </span>
                 </option>
                 <ng-container *ngFor="let s of strategies">
                   <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
@@ -257,17 +237,9 @@
                   </option>
                 </ng-container>
               </select>
-              <button
-                type="button"
-                class="btn btn-outline"
-                (click)="onClickAddStrategy()"
-                [disabled]="!selectedStrategyId"
-              >
-                <span class="material-symbols-outlined">add</span>
-              </button>
-            </label>
+            </div>
             <label class="label" *ngIf="selectedStrategyId">
-              <span class="label-text-alt text-warning">Click + to add a strategy!</span>
+              <span class="label-text-alt text-warning">Click + to add a strategy</span>
             </label>
           </div>
 
@@ -293,16 +265,16 @@
                 </div>
               </div>
             </span>
-            <label class="input-group">
+            <div class="join">
               <input
                 type="number"
                 name="deposit"
                 [(ngModel)]="deposit && deposit.amount"
                 disabled
-                class="input input-bordered w-full"
+                class="join-item input input-bordered w-full"
               />
-              <span>{{ deposit?.symbol }}</span>
-            </label>
+              <div class="join-item btn btn-disabled">{{ deposit?.symbol }}</div>
+            </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
@@ -330,16 +302,16 @@
                 </div>
               </div>
             </span>
-            <label class="input-group">
+            <div class="join">
               <input
                 type="number"
                 name="fee"
                 [(ngModel)]="fee && fee.amount"
                 disabled
-                class="input input-bordered w-full"
+                class="join-item input input-bordered w-full"
               />
-              <span>{{ fee?.symbol }}</span>
-            </label>
+              <div class="join-item btn btn-disabled">{{ fee?.symbol }}</div>
+            </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">

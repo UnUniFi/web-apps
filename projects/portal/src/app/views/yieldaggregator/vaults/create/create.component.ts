@@ -51,23 +51,19 @@ export class CreateComponent implements OnInit {
     return this.selectedStrategies.some((s) => s.id === strategyId);
   }
 
-  onClickAddStrategy() {
-    if (!this.selectedStrategyId) {
-      alert('Please select a strategy.');
-      return;
-    }
+  onAddStrategy(strategyId: string) {
     this.selectedStrategies.push({
-      id: this.selectedStrategyId,
-      name: this.strategies?.find((s) => s.id === this.selectedStrategyId)?.name,
+      id: strategyId,
+      name: this.strategies?.find((s) => s.id === strategyId)?.name,
       weight: 0,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
-
     this.selectedStrategyId = undefined;
   }
 
   onClickDeleteStrategy(index: number) {
     this.selectedStrategies.splice(index, 1);
+    this.selectedStrategyId = '';
   }
 
   onChangeSymbol() {

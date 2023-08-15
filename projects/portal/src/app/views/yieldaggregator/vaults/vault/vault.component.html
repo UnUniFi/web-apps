@@ -68,11 +68,29 @@
                 <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
               </tr>
               <tr>
-                <td>Withdraw Commission Rate</td>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Withdraw Commission Rate</span>
+                  <a
+                    href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
+                    target="_blank"
+                    class="h-[24px]"
+                  >
+                    <span class="material-symbols-outlined">help</span>
+                  </a>
+                </td>
                 <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
               </tr>
               <tr>
-                <td>Withdraw Reserve Rate</td>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Withdraw Reserve Rate</span>
+                  <a
+                    href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                    target="_blank"
+                    class="h-[24px]"
+                  >
+                    <span class="material-symbols-outlined">help</span>
+                  </a>
+                </td>
                 <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
               </tr>
             </tbody>

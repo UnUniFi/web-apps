@@ -168,7 +168,7 @@ const parseMsgSubmitProposal = (
   };
 };
 const parseMsgVoteWeighted = (
-  instance: cosmosclient.proto.cosmos.gov.v1beta1.MsgVoteWeighted,
+  instance: cosmosclient.proto.cosmos.gov.v1.MsgVoteWeighted,
 ): txTitle => {
   const denomAmount = instance.options?.[0].weight || '';
   const denom = instance.options?.[0].weight;
@@ -181,7 +181,7 @@ const parseMsgVoteWeighted = (
     voteOptions: instance.options,
   };
 };
-const parseMsgVote = (instance: cosmosclient.proto.cosmos.gov.v1beta1.MsgVote): txTitle => {
+const parseMsgVote = (instance: cosmosclient.proto.cosmos.gov.v1.MsgVote): txTitle => {
   return {
     txType: instance.constructor.name,
     fromAddress: instance.voter,
@@ -190,7 +190,7 @@ const parseMsgVote = (instance: cosmosclient.proto.cosmos.gov.v1beta1.MsgVote): 
     voteOption: instance.option,
   };
 };
-const parseMsgDeposit = (instance: cosmosclient.proto.cosmos.gov.v1beta1.MsgDeposit): txTitle => {
+const parseMsgDeposit = (instance: cosmosclient.proto.cosmos.gov.v1.MsgDeposit): txTitle => {
   const denomAmount = instance.amount?.[0].amount || '';
   const denom = instance.amount?.[0].denom;
   const amount = denomAmount + ' ' + denom;

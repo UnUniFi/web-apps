@@ -206,8 +206,8 @@ export class GovService {
     proposalID: number,
     voterAddress: string,
     voteOption: cosmosclient.proto.cosmos.gov.v1beta1.VoteOption,
-  ): cosmosclient.proto.cosmos.gov.v1beta1.MsgVote {
-    const msgVote = new cosmosclient.proto.cosmos.gov.v1beta1.MsgVote({
+  ): cosmosclient.proto.cosmos.gov.v1.MsgVote {
+    const msgVote = new cosmosclient.proto.cosmos.gov.v1.MsgVote({
       proposal_id: Long.fromNumber(proposalID),
       voter: voterAddress,
       option: voteOption,

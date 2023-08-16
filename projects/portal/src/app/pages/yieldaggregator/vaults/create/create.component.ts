@@ -20,7 +20,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
   denom$: Observable<string>;
-  availableSymbols$: Observable<string[]>;
+  availableSymbols$: Observable<({ symbol: string; display: string } | undefined)[]>;
   selectedSymbol$: Observable<string | undefined>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
@@ -56,15 +56,19 @@ export class CreateComponent implements OnInit {
           .map((strategy) => {
             const denomMetadata = denomMetadataMap[strategy.denom || ''];
             if (denomMetadata) {
-              return denomMetadata.symbol;
+              return {
+                symbol: denomMetadata.symbol!,
+                display: denomMetadata.display!,
+              };
             } else {
               return undefined;
             }
           })
-          .filter((symbol): symbol is string => typeof symbol == 'string');
+          .filter((symbol) => symbol !== undefined);
         return [...new Set(symbols)];
       }),
     );
+    this.availableSymbols$.subscribe((symbols) => console.log(symbols));
 
     this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
       map(([denom, denomMetadataMap]) => {

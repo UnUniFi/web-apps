@@ -99,6 +99,36 @@ export class BankQueryService {
     );
   }
 
+  getSymbolDisplayBalanceMap$(
+    address: string,
+    denoms?: string[],
+  ): Observable<{
+    [symbol: string]: number;
+  }> {
+    return zip(this.getBalance$(address, denoms), this.getDenomMetadataMap$(denoms)).pipe(
+      mergeMap(async ([balance, metadataMap]) => {
+        const map: { [symbol: string]: number } = {};
+        await Promise.all(
+          balance.map(async (b) => {
+            if (b.denom && b.amount) {
+              const metadata = metadataMap[b.denom];
+              if (!metadata) {
+                return;
+              }
+              const denomExponent = getDenomExponent(b.denom);
+              const amount = new Decimal(b.amount);
+              map[metadata.display!] = Number(
+                amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),
+              );
+            }
+          }),
+        );
+
+        return map;
+      }),
+    );
+  }
+
   getSymbolImageMap(symbols?: string[]): {
     [symbol: string]: string;
   } {

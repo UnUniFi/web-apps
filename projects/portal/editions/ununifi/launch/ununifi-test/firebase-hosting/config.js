@@ -56,7 +56,7 @@ const denomMetadata = [
     ],
     base: 'uguu',
     name: 'UnUniFi',
-    display: 'guu',
+    display: 'GUU',
     symbol: 'GUU',
   },
   {
@@ -113,7 +113,7 @@ const denomMetadata = [
     ],
     base: 'udlp',
     name: 'Liquidity Provider',
-    display: 'dlp',
+    display: 'DLP',
     symbol: 'DLP',
   },
   {

@@ -303,8 +303,8 @@ export class GovService {
     proposalID: number,
     depositerAddress: string,
     amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
-  ): cosmosclient.proto.cosmos.gov.v1beta1.MsgDeposit {
-    const msgDeposit = new cosmosclient.proto.cosmos.gov.v1beta1.MsgDeposit({
+  ): cosmosclient.proto.cosmos.gov.v1.MsgDeposit {
+    const msgDeposit = new cosmosclient.proto.cosmos.gov.v1.MsgDeposit({
       proposal_id: Long.fromNumber(proposalID),
       depositor: depositerAddress,
       amount: [amount],

@@ -41,12 +41,15 @@
 
             <ng-container *ngFor="let token of selectedTokens; let i = index">
               <div class="w-full sm:w-auto sm:flex-auto">
-                <label class="input-group w-full">
-                  <span *ngIf="symbolImageMap && symbolImageMap[token.symbol]">
+                <div class="join w-full">
+                  <div
+                    class="join-item btn btn-neutral btn-disabled"
+                    *ngIf="symbolImageMap && symbolImageMap[token.symbol]"
+                  >
                     <div class="mask mask-circle w-8 h-8">
                       <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
                     </div>
-                  </span>
+                  </div>
                   <input
                     #tokenNgModelRef="ngModel"
                     type="number"
@@ -58,28 +61,29 @@
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     [(ngModel)]="token.amount"
                     name="amount{{ i }}"
-                    class="input input-bordered w-full"
+                    class="join-item input input-bordered w-full"
                     [class]="{
                       'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
                     }"
                   />
-                  <span class="w-36">{{ token.symbol }}</span>
-                  <label class="btn btn-outline btn-error" (click)="onClickDeleteToken(i)">
+                  <div class="join-item btn btn-neutral btn-disabled">{{ token.symbol }}</div>
+                  <label class="join-item btn btn-error" (click)="onClickDeleteToken(i)">
                     <span class="material-symbols-outlined">delete</span>
                   </label>
-                </label>
+                </div>
               </div>
-              <label class="label">
+              <span class="label">
+                <span class="label-text">Available:</span>
                 <span class="label-text-alt">
-                  Available {{ symbolBalancesMap?.[token.symbol] || 0 }} {{ token.symbol }}
+                  {{ symbolBalancesMap?.[token.symbol] || 0 }} {{ token.symbol }}
                 </span>
-              </label>
+              </span>
             </ng-container>
 
-            <label class="input-group mb-2">
+            <div class="join mb-2">
               <select
                 [required]="selectedTokens?.length === 0"
-                class="select select-bordered text-center w-full"
+                class="join-item select select-bordered w-full"
                 [(ngModel)]="selectedSymbol"
                 name="strategyId"
               >
@@ -92,13 +96,13 @@
               </select>
               <button
                 type="button"
-                class="btn btn-outline"
+                class="join-item btn btn-outline"
                 (click)="onClickAddToken()"
                 [disabled]="!selectedSymbol"
               >
                 <span class="material-symbols-outlined">add</span>
               </button>
-            </label>
+            </div>
             <label class="label" *ngIf="selectedSymbol">
               <span class="label-text-alt text-warning">Click + and enter the amount to send!</span>
             </label>

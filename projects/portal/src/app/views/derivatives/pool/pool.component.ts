@@ -10,6 +10,7 @@ import {
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import {
+  DerivativesParams200ResponseParamsPoolParams,
   EstimateDLPTokenAmount200Response,
   EstimateRedeemTokenAmount200Response,
 } from 'ununifi-client/esm/openapi';
@@ -34,7 +35,7 @@ export class PoolComponent implements OnInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.IQueryPoolResponse | null;
 
   @Input()
-  params?: ununificlient.proto.ununifi.derivatives.IPoolParams | null;
+  params?: DerivativesParams200ResponseParamsPoolParams | null;
 
   @Input()
   dlpRates?: { [symbol: string]: number } | null | null;

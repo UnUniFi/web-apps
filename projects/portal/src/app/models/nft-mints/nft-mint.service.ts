@@ -11,7 +11,7 @@ export class NftMintService {
     const msg = new ununificlient.proto.ununifi.nftfactory.MsgMintNFT({
       sender: senderAddress,
       class_id: classId,
-      nft_id: nftId,
+      token_id: nftId,
       recipient: recipientAddress,
     });
 

@@ -23,23 +23,6 @@
         Add this JSON string to the txMemo in the MSG of the transaction sent from the app you
         developed. You will be rewarded when the transaction is processed successfully.
       </p>
-
-      <div class="overflow-x-auto">
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Address</th>
-              <td>Rate</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let subject of unit?.weighted_addresses">
-              <td class="font-mono">{{ subject.address }}</td>
-              <td>{{ subject.weight | percent : '1.2-2' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 </div>

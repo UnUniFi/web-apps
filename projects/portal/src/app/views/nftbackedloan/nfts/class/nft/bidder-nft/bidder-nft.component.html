@@ -40,11 +40,11 @@
             </tr>
             <tr>
               <td>Minimum deposit rate</td>
-              <td>{{ listingInfo?.minimum_deposit_rate | percent : '1.0-4' }}</td>
+              <td>{{ listingInfo?.min_deposit_rate | percent : '1.0-4' }}</td>
             </tr>
             <tr>
               <td>Minimum bid Expiry date</td>
-              <td>{{ listingInfo?.minimum_bidding_period | secondToDate }} Days</td>
+              <td>{{ listingInfo?.min_bid_period | secondToDate }} Days</td>
             </tr>
             <tr>
               <td>Listed</td>
@@ -75,7 +75,7 @@
           <div class="stat">
             <div class="stat-title">Lending Status</div>
             <div class="stat-value text-primary">
-              {{ ownBid?.borrow?.amount | coin | async }}
+              {{ ownBid?.loan?.amount | coin | async }}
             </div>
           </div>
           <div *ngIf="isWinning" class="stat">
@@ -95,7 +95,7 @@
         <div
           *ngIf="
             ownBid &&
-            ownBid.borrow?.amount !== '0' &&
+            ownBid.loan?.amount?.amount !== '0' &&
             !isWinning &&
             listingInfo?.state === 'BIDDING'
           "

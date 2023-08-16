@@ -27,7 +27,7 @@ export class ConnectWalletStartDialogComponent implements OnInit {
     {
       logo: 'assets/favicon.png',
       walletType: WalletType.ununifi,
-      name: 'UnUniFi (deprecated)',
+      name: 'UnUniFi Portal Wallet (deprecated)',
     },
   ];
 

@@ -17,7 +17,7 @@ export class SendComponent implements OnInit {
   address$: Observable<string>;
   toAddress$: Observable<string>;
   selectedTokens$: Observable<{ symbol: string; amount?: number }[]>;
-  balanceSymbols$: Observable<string[] | undefined>;
+  balanceSymbols$: Observable<({ symbol: string; display: string } | undefined)[]>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolImageMap: { [symbol: string]: string };
 
@@ -46,7 +46,17 @@ export class SendComponent implements OnInit {
 
     this.balanceSymbols$ = combineLatest([balance$, denomMetadataMap$]).pipe(
       map(([balances, denomMetadataMap]) =>
-        balances?.map((b) => denomMetadataMap?.[b.denom!].symbol || 'Invalid Token'),
+        balances?.map((b) => {
+          const denomMetadata = denomMetadataMap?.[b.denom || ''];
+          if (denomMetadata) {
+            return {
+              symbol: denomMetadata.symbol!,
+              display: denomMetadata.display!,
+            };
+          } else {
+            return undefined;
+          }
+        }),
       ),
     );
   }

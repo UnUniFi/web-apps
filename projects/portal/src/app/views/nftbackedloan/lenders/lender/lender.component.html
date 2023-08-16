@@ -106,11 +106,11 @@
                 {{ nftsMetadata[i].name }}
               </h2>
               <h2 *ngIf="!nftsMetadata" class="card-title break-all">
-                {{ nft.nft_id?.nft_id }}
+                {{ nft.nft_id?.token_id }}
               </h2>
               <button
                 class="btn btn-outline btn-primary"
-                routerLink="../../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.nft_id }}"
+                routerLink="../../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.token_id }}"
               >
                 View
               </button>

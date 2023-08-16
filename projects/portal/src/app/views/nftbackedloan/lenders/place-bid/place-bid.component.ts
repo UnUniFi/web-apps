@@ -83,7 +83,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
 
   onChangePrice() {
     if (!this.depositAmount) {
-      const rate = Number(this.listingInfo?.minimum_deposit_rate);
+      const rate = Number(this.listingInfo?.min_deposit_rate);
       this.depositAmount = Number(this.bidAmount) * rate;
     }
   }
@@ -140,8 +140,8 @@ export class PlaceBidComponent implements OnInit, OnChanges {
     }
     const minExpiryDate = new Date();
     const expiryDate = new Date(this.date + 'T' + this.time);
-    if (this.listingInfo && this.listingInfo.minimum_bidding_period) {
-      const minExpirySeconds = parseInt(this.listingInfo.minimum_bidding_period);
+    if (this.listingInfo && this.listingInfo.min_bid_period) {
+      const minExpirySeconds = parseInt(this.listingInfo.min_bid_period);
       minExpiryDate.setSeconds(minExpiryDate.getSeconds() + minExpirySeconds);
     }
     if (expiryDate < minExpiryDate) {
@@ -161,11 +161,11 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   }
 
   calculateMinimumDeposit() {
-    if (!this.bidAmount || !this.listingInfo?.minimum_deposit_rate) {
+    if (!this.bidAmount || !this.listingInfo?.min_deposit_rate) {
       this.minimumDeposit = 0;
       return;
     }
-    const rate = Number(this.listingInfo.minimum_deposit_rate);
+    const rate = Number(this.listingInfo.min_deposit_rate);
     this.minimumDeposit = this.bidAmount * rate;
   }
 

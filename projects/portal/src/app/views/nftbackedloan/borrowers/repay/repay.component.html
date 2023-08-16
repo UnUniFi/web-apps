@@ -52,11 +52,11 @@
             </tr>
             <tr>
               <td>Minimum deposit rate</td>
-              <td>{{ listingInfo?.minimum_deposit_rate | percent : '1.0-4' }}</td>
+              <td>{{ listingInfo?.min_deposit_rate | percent : '1.0-4' }}</td>
             </tr>
             <tr>
               <td>Minimum bid Expiry date</td>
-              <td>{{ listingInfo?.minimum_bidding_period | secondToDate }} Days</td>
+              <td>{{ listingInfo?.min_bid_period | secondToDate }} Days</td>
             </tr>
             <tr>
               <td>Listed</td>
@@ -257,7 +257,7 @@
           <tr *ngFor="let bid of bids; let i = index">
             <th>#{{ i + 1 }}</th>
             <td>{{ bid.interest_rate | percent : '1.0-4' }}</td>
-            <td>{{ bid.borrow?.amount | coin | async }}</td>
+            <td>{{ bid.loan?.amount | coin | async }}</td>
             <td>{{ bid.price | coin | async }}</td>
             <td>{{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }}</td>
             <td>{{ bid.id?.bidder }}</td>

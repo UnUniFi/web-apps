@@ -12,7 +12,7 @@
 
     <form #formRef="ngForm" (submit)="onSubmit()">
       <ul class="menu bg-base-100 w-full">
-        <li *ngFor="let reward of rewards; let i = index; last as last">
+        <li *ngFor="let reward of rewards?.rewards; let i = index; last as last">
           <a>
             <span class="column-name">Reward #{{ i + 1 }}:</span>
             <span class="flex-auto"></span>

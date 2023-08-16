@@ -56,10 +56,10 @@ export class BorrowerComponent implements OnInit {
       mergeMap((nfts) =>
         Promise.all(
           nfts.map(async (nft) => {
-            if (nft.listing?.nft_id?.class_id && nft.listing?.nft_id?.nft_id) {
+            if (nft.listing?.nft_id?.class_id && nft.listing?.nft_id?.token_id) {
               const res = await this.pawnshopQuery.getNft(
                 nft.listing.nft_id.class_id,
-                nft.listing.nft_id.nft_id,
+                nft.listing.nft_id.token_id,
               );
               return res.nft?.uri;
             } else {

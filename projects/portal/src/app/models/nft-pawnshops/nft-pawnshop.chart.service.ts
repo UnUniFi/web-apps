@@ -42,7 +42,7 @@ export class NftPawnshopChartService {
         deposit: Number(bid.deposit?.amount) / 10 ** exponent,
         interest: Number(bid.interest_rate) * 100,
         expiry: new Date(bid.expiry!),
-        borrowed: Number(bid.borrow?.amount?.amount) > 0,
+        borrowed: Number(bid.loan?.amount?.amount) > 0,
       };
     });
     return chartData;
@@ -412,8 +412,8 @@ export class NftPawnshopChartService {
         const date = new Date(bid.expiry).toLocaleString();
         const depositAmount = Number(bid.deposit.amount) / 10 ** exponent;
         const rate = (Number(bid.interest_rate) * 100).toFixed(2) + '%';
-        if (bid.borrow?.amount?.amount !== '0') {
-          const borrowedAmount = Number(bid.borrow?.amount?.amount) / 10 ** exponent;
+        if (bid.loan?.amount?.amount !== '0') {
+          const borrowedAmount = Number(bid.loan?.amount?.amount) / 10 ** exponent;
           data.push([date, borrowedAmount, disableColor, rate]);
           const restAmount = depositAmount - borrowedAmount;
           if (restAmount > 0) {
@@ -439,9 +439,9 @@ export class NftPawnshopChartService {
     }
     const exponent = getDenomExponent(bids[0].price.denom);
     return bids.map((bid) => {
-      if (bid.expiry && bid.borrow?.amount?.amount !== '0' && bid.interest_rate) {
+      if (bid.expiry && bid.loan?.amount?.amount !== '0' && bid.interest_rate) {
         const date = new Date(bid.expiry).toLocaleString();
-        const borrowedAmount = Number(bid.borrow?.amount?.amount) / 10 ** exponent;
+        const borrowedAmount = Number(bid.loan?.amount?.amount) / 10 ** exponent;
         const rate = (Number(bid.interest_rate) * 100).toFixed(2) + '%';
         return [date, borrowedAmount, primaryColor, rate];
       } else {

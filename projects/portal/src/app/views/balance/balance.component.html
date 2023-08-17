@@ -162,7 +162,7 @@
                             <img src="{{ symbolImageMap[balance.key] }}" alt="Asset Symbol" />
                           </div>
                         </div>
-                        {{ balance.key }}
+                        {{ symbolDisplayMap?.[balance.key] || balance.key }}
                       </div>
                     </th>
                     <td>{{ balance.value }}</td>

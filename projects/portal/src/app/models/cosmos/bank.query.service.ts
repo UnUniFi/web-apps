@@ -99,31 +99,13 @@ export class BankQueryService {
     );
   }
 
-  getSymbolDisplayBalanceMap$(
-    address: string,
-    denoms?: string[],
-  ): Observable<{
-    [symbol: string]: number;
-  }> {
-    return zip(this.getBalance$(address, denoms), this.getDenomMetadataMap$(denoms)).pipe(
-      mergeMap(async ([balance, metadataMap]) => {
-        const map: { [symbol: string]: number } = {};
-        await Promise.all(
-          balance.map(async (b) => {
-            if (b.denom && b.amount) {
-              const metadata = metadataMap[b.denom];
-              if (!metadata) {
-                return;
-              }
-              const denomExponent = getDenomExponent(b.denom);
-              const amount = new Decimal(b.amount);
-              map[metadata.display!] = Number(
-                amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6),
-              );
-            }
-          }),
-        );
-
+  getSymbolDisplayMap$(denoms?: string[]) {
+    return this.getDenomMetadata$(denoms).pipe(
+      map((metadata) => {
+        const map: { [symbol: string]: string } = {};
+        for (const m of metadata) {
+          map[m.symbol || ''] = m.display!;
+        }
         return map;
       }),
     );
@@ -280,7 +262,7 @@ export class BankQueryService {
   ): Observable<{ [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata }> {
     return this.getDenomMetadata$(denoms).pipe(
       map((metadata) => {
-        const map: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } = {};
+        const map: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } = {};
         for (const m of metadata) {
           map[m.symbol || ''] = m;
         }

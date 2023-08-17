@@ -26,6 +26,7 @@ export class BalanceComponent implements OnInit {
   accountTypeName$: Observable<string | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
+  symbolDisplayMap$: Observable<{ [symbol: string]: string }>;
   symbolImageMap: { [symbol: string]: string };
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
   symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
@@ -68,8 +69,9 @@ export class BalanceComponent implements OnInit {
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     this.symbolBalancesMap$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolDisplayBalanceMap$(address!)),
+      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
     );
+    this.symbolDisplayMap$ = this.bankQuery.getSymbolDisplayMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const rewards$ = cosmosWallet$.pipe(
       mergeMap((wallet) => this.rest.getDelegationTotalRewards$(wallet?.address!)),

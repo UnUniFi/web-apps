@@ -171,19 +171,19 @@
               <span class="label-text-alt flex flex-row gap-2">
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 4"
+                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 4"
                 >
                   25%
                 </span>
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 2"
+                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 2"
                 >
                   50%
                 </span>
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = symbolBalancesMap?.[displaySymbol || ''] || 0"
+                  (click)="mintAmount = symbolBalancesMap?.[symbol || ''] || 0"
                 >
                   100%
                 </span>
@@ -201,7 +201,7 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.[displaySymbol || ''] || 0"
+                [max]="symbolBalancesMap?.[symbol || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
@@ -212,7 +212,7 @@
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ symbolBalancesMap?.[displaySymbol || ''] || 0 }} {{ displaySymbol }}
+                {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
           </div>

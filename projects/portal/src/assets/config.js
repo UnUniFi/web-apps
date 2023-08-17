@@ -56,7 +56,7 @@ const denomMetadata = [
     ],
     base: 'uguu',
     name: 'UnUniFi',
-    display: 'guu',
+    display: 'GUU',
     symbol: 'GUU',
   },
   {

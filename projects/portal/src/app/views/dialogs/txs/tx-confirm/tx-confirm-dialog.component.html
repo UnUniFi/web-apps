@@ -8,7 +8,7 @@
       <form (submit)="onClickClose()">
         <div class="hidden md:block mockup-code text-primary-content mb-4">
           <pre><code class="break-all font-mono">{{ txData?.txHash }}</code></pre>
-          <div class="flex flex-row justify-end mt-2">
+          <div class="flex flex-row justify-end mt-2 mr-4">
             <label class="btn" (click)="copyClipboard(txData?.txHash!)">
               <span class="material-symbols-outlined">content_copy</span>Copy
             </label>

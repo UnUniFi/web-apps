@@ -105,7 +105,7 @@
               {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalDepositAmount?.usdAmount | number }}
+              {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@
               <td>{{ totalBondedAmount?.symbolAmount }} {{ displaySymbol }}</td>
             </div>
             <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
-              ${{ totalBondedAmount?.usdAmount | number }}
+              ${{ totalBondedAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
@@ -125,7 +125,7 @@
               {{ totalUnbondingAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
-              ${{ totalUnbondingAmount?.usdAmount | number }}
+              ${{ totalUnbondingAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
@@ -134,7 +134,7 @@
               {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalWithdrawalBalance?.usdAmount | number }}
+              ${{ totalWithdrawalBalance?.usdAmount | currency }}
             </div>
           </div>
         </div>

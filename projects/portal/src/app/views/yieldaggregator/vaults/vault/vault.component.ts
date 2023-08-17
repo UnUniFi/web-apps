@@ -31,6 +31,8 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vault?: Vault200Response | null;
   @Input()
+  symbol?: string | null;
+  @Input()
   displaySymbol?: string | null;
   @Input()
   symbolImage?: string | null;

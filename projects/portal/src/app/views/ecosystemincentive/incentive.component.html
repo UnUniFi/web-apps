@@ -60,7 +60,9 @@
         </p>
       </ng-template>
       <ng-template #loadedReward>
-        <ng-container *ngIf="!rewards || rewards.length === 0; then emptyReward; else filledReward">
+        <ng-container
+          *ngIf="!rewards || rewards.rewards?.length === 0; then emptyReward; else filledReward"
+        >
         </ng-container>
       </ng-template>
 
@@ -80,7 +82,7 @@
             <tbody>
               <tr
                 class="hover"
-                *ngFor="let reward of rewards; let i = index"
+                *ngFor="let reward of rewards?.rewards; let i = index"
                 (click)="onClickReward(reward.denom!)"
               >
                 <th>#{{ i + 1 }}</th>

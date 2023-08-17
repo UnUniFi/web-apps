@@ -35,15 +35,5 @@ export class CreateUnitFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   // WIP
-  async onSubmit($event: RegisterIncentiveUnitOnSubmitEvent) {
-    let txHash: string | undefined;
-    txHash = await this.incentiveApp.Register(
-      $event.unitID,
-      $event.addresses,
-      $event.weights,
-      $event.minimumGasPrice,
-      $event.gasRatio,
-    );
-    this.dialogRef.close(txHash);
-  }
+  async onSubmit($event: RegisterIncentiveUnitOnSubmitEvent) {}
 }

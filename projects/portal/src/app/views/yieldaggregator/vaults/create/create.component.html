@@ -84,7 +84,7 @@
                 >
               </option>
               <ng-container *ngFor="let symbol of availableSymbols">
-                <option [value]="symbol">{{ symbol }}</option>
+                <option [value]="symbol?.symbol">{{ symbol?.display }}</option>
               </ng-container>
             </select>
           </div>

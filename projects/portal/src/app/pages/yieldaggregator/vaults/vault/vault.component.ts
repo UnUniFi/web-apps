@@ -7,6 +7,7 @@ import {
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -144,15 +145,24 @@ export class VaultComponent implements OnInit {
     this.burnAmount$ = new BehaviorSubject(0);
     this.estimatedMintAmount$ = combineLatest([this.vault$, this.mintAmount$.asObservable()]).pipe(
       mergeMap(([vault, deposit]) => {
-        return this.iyaService.estimateMintAmount$(vault, deposit);
-        // const exponent = getDenomExponent(vault.vault?.denom);
-        // return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
+        // return this.iyaService.estimateMintAmount$(vault, deposit);
+        const id = vault.vault?.id;
+        if (!id) {
+          return of({ amount: '0', denom: '' });
+        }
+        const exponent = getDenomExponent(vault.vault?.denom);
+        return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
     this.estimatedBurnAmount$ = combineLatest([this.vault$, this.burnAmount$.asObservable()]).pipe(
       mergeMap(([vault, burn]) => {
-        return this.iyaService.estimateRedeemAmount$(vault, burn);
-        // return this.iyaQuery.getEstimatedRedeemAmount$(id, burn.toString());
+        // return this.iyaService.estimateRedeemAmount$(vault, burn);
+        const id = vault.vault?.id;
+        if (!id) {
+          return of({ amount: '0', denom: '' });
+        }
+        const exponent = getDenomExponent('yield-aggregator/vaults/' + id);
+        return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
     this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(

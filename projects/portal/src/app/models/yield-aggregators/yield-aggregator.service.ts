@@ -152,8 +152,9 @@ export class YieldAggregatorService {
     vault: Vault200Response,
     burnAmount: number,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    const denom = vault.vault?.denom;
     const lpDenom = 'yield-aggregator/vaults/' + vault?.vault?.id;
-    const exponent = getDenomExponent(vault.vault?.denom);
+    const exponent = getDenomExponent(lpDenom);
     const burnDenomAmount = burnAmount * Math.pow(10, exponent);
     const totalAmountInVault =
       Number(vault.total_bonded_amount) +
@@ -163,11 +164,11 @@ export class YieldAggregatorService {
     return supplyLp$.pipe(
       map((supplyLp) => {
         if (!totalAmountInVault || !supplyLp || !supplyLp.amount || !parseInt(supplyLp.amount)) {
-          return { denom: lpDenom, amount: '0' };
+          return { denom: denom, amount: '0' };
         }
         // principalAmount = principalAmountInVault * (lpAmountToBurn / lpSupply)
         const redeemAmount = (burnDenomAmount * totalAmountInVault) / parseInt(supplyLp.amount);
-        return { denom: lpDenom, amount: redeemAmount.toString() };
+        return { denom: denom, amount: redeemAmount.toString() };
       }),
     );
   }

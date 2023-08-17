@@ -68,7 +68,7 @@ export class BalanceComponent implements OnInit {
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     this.symbolBalancesMap$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
+      mergeMap((address) => this.bankQuery.getSymbolDisplayBalanceMap$(address!)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const rewards$ = cosmosWallet$.pipe(

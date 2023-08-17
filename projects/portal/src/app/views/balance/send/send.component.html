@@ -89,8 +89,8 @@
               >
                 <option [value]="undefined" disabled>Select a token</option>
                 <ng-container *ngFor="let s of balanceSymbols">
-                  <option [value]="s" *ngIf="!isAlreadySelectedSymbol(s)">
-                    {{ s }}
+                  <option [value]="s?.symbol" *ngIf="!isAlreadySelectedSymbol(s?.symbol)">
+                    {{ s?.display }}
                   </option>
                 </ng-container>
               </select>

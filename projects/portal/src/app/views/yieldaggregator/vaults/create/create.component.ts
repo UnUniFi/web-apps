@@ -14,7 +14,7 @@ export class CreateComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
-  availableSymbols?: string[] | null;
+  availableSymbols?: ({ symbol: string; display: string } | undefined)[] | null;
   @Input()
   selectedSymbol?: string | null;
   @Input()

@@ -56,7 +56,7 @@ const denomMetadata = [
     ],
     base: 'uguu',
     name: 'UnUniFi',
-    display: 'guu',
+    display: 'GUU',
     symbol: 'GUU',
   },
   {
@@ -73,7 +73,7 @@ const denomMetadata = [
     ],
     base: 'uosmo',
     name: 'OSMOSIS',
-    display: 'osmo',
+    display: 'OSMO',
     symbol: 'OSMO',
   },
   {
@@ -90,7 +90,7 @@ const denomMetadata = [
     ],
     base: 'uatom',
     name: 'COSMOS',
-    display: 'atom',
+    display: 'ATOM',
     symbol: 'ATOM',
   },
   {
@@ -166,11 +166,11 @@ const denomMetadata = [
     ],
     base: 'udlp',
     name: 'Liquidity Provider',
-    display: 'dlp',
+    display: 'DLP',
     symbol: 'DLP',
   },
   {
-    description: 'ATOM from Osmosis (testnet)',
+    description: 'ATOM from Osmosis',
     denom_units: [
       {
         denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
@@ -179,9 +179,9 @@ const denomMetadata = [
       },
     ],
     base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-    name: 'ATOM (from Osmosis)',
-    display: 'atom(from osmosis)',
-    symbol: 'ATOM (from Osmosis)',
+    name: 'ATOM from Osmosis',
+    display: 'ATOM.osmosis',
+    symbol: 'ATOM',
   },
 ];
 

@@ -50,14 +50,25 @@
       </div>
 
       <div class="form-control w-full">
-        <label class="label">
+        <span class="label">
           <span class="label-text">Delegate Amount</span>
-        </label>
+          <span class="label-text-alt flex flex-row gap-2">
+            <span class="cursor-pointer" (click)="onClickAutoFill(balance?.amount, 0.25)">
+              25%
+            </span>
+            <span class="cursor-pointer" (click)="onClickAutoFill(balance?.amount, 0.5)">
+              50%
+            </span>
+            <span class="cursor-pointer" (click)="onClickAutoFill(balance?.amount, 1.0)">
+              100%
+            </span>
+          </span>
+        </span>
         <label class="input-group">
           <input
             name="delegate-amount"
             type="number"
-            placeholder="12.123456"
+            placeholder="0.00000"
             class="input input-bordered w-full"
             [(ngModel)]="delegateAmount"
             [min]="0"
@@ -67,9 +78,10 @@
           <span>{{ denom | coinDenom | async }}</span>
         </label>
 
-        <label class="label">
-          <span class="label-text text-xs"> Available Balance: {{ balance | coin | async }} </span>
-        </label>
+        <span class="label">
+          <span class="label-text">Available Balance:</span>
+          <span class="label-text-alt">{{ balance | coin | async }} </span>
+        </span>
       </div>
 
       <!-- <h3 class="pt-3">Gas Settings</h3>

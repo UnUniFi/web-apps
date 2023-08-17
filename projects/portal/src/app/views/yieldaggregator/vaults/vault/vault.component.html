@@ -51,22 +51,18 @@
                 <td>Vault ID</td>
                 <td>{{ vault?.vault?.id }}</td>
               </tr>
-              <tr>
-                <td>Vault Address</td>
-                <td class="font-mono break-all">{{ vault?.vault_address }}</td>
-              </tr>
               <!-- <tr>
                 <td>Vault Name</td>
                 <td>{{ 'Coming soon' }}</td>
               </tr> -->
-              <tr>
+              <!-- <tr>
                 <td>Owner</td>
                 <td class="font-mono break-all">{{ vault?.vault?.owner }}</td>
               </tr>
               <tr>
                 <td>Owner's Deposit</td>
                 <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td class="flex flex-row items-center gap-2">
                   <span>Withdraw Commission Rate</span>
@@ -78,7 +74,7 @@
                     <span class="material-symbols-outlined">help</span>
                   </a>
                 </td>
-                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
+                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
@@ -91,7 +87,7 @@
                     <span class="material-symbols-outlined">help</span>
                   </a>
                 </td>
-                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
+                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
               </tr>
             </tbody>
           </table>
@@ -109,7 +105,7 @@
               {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalDepositAmount?.usdAmount | number }}
+              {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
         </div>
@@ -120,7 +116,7 @@
               <td>{{ totalBondedAmount?.symbolAmount }} {{ displaySymbol }}</td>
             </div>
             <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
-              ${{ totalBondedAmount?.usdAmount | number }}
+              ${{ totalBondedAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
@@ -129,7 +125,7 @@
               {{ totalUnbondingAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
-              ${{ totalUnbondingAmount?.usdAmount | number }}
+              ${{ totalUnbondingAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
@@ -138,7 +134,7 @@
               {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalWithdrawalBalance?.usdAmount | number }}
+              ${{ totalWithdrawalBalance?.usdAmount | currency }}
             </div>
           </div>
         </div>
@@ -160,18 +156,38 @@
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="tabs tabs-boxed w-full">
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
-          >Deposit</a
-        >
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
-          >Withdraw</a
-        >
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
+          Deposit
+        </a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
+          Withdraw
+        </a>
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
         <form #depositFormRef="ngForm" (submit)="onSubmitDeposit()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 4"
+                >
+                  25%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 2"
+                >
+                  50%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = symbolBalancesMap?.[displaySymbol || ''] || 0"
+                >
+                  100%
+                </span>
+              </span>
             </label>
             <label class="input-group">
               <input
@@ -179,7 +195,7 @@
                 #depositAmountNgModelRef="ngModel"
                 required
                 type="number"
-                placeholder="12.123456"
+                placeholder="0.000000"
                 class="input input-bordered w-full"
                 [class]="{
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
@@ -195,10 +211,7 @@
             </label>
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
-              <label
-                class="label-text-alt cursor-pointer"
-                (click)="mintAmount = symbolBalancesMap?.[displaySymbol || '']"
-              >
+              <label class="label-text-alt">
                 {{ symbolBalancesMap?.[displaySymbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
@@ -230,12 +243,32 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 4"
+                >
+                  25%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 2"
+                >
+                  50%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0"
+                >
+                  100%
+                </span>
+              </span>
             </label>
             <label class="input-group">
               <input
                 #withdrawAmountRef
                 #withdrawAmountNgModelRef="ngModel"
-                placeholder="12.123456"
+                placeholder="0.000000"
                 required
                 type="number"
                 class="input input-bordered w-full"
@@ -253,10 +286,7 @@
             </label>
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
-              <label
-                class="label-text-alt cursor-pointer"
-                (click)="burnAmount = symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id]"
-              >
+              <label class="label-text-alt">
                 {{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </label>

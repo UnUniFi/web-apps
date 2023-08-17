@@ -40,37 +40,58 @@
             </span>
 
             <ng-container *ngFor="let token of selectedTokens; let i = index">
-              <div class="w-full sm:w-auto sm:flex-auto">
-                <div class="join w-full">
-                  <div
-                    class="join-item btn btn-neutral btn-disabled"
-                    *ngIf="symbolImageMap && symbolImageMap[token.symbol]"
+              <span class="label">
+                <span class="label-text">Enter amount</span>
+                <span class="label-text-alt flex flex-row gap-2">
+                  <span
+                    class="cursor-pointer"
+                    (click)="token.amount = (symbolBalancesMap?.[token.symbol || ''] || 0) / 4"
                   >
-                    <div class="mask mask-circle w-8 h-8">
-                      <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
-                    </div>
+                    25%
+                  </span>
+                  <span
+                    class="cursor-pointer"
+                    (click)="token.amount = (symbolBalancesMap?.[token.symbol || ''] || 0) / 2"
+                  >
+                    50%
+                  </span>
+                  <span
+                    class="cursor-pointer"
+                    (click)="token.amount = symbolBalancesMap?.[token.symbol || ''] || 0"
+                  >
+                    100%
+                  </span>
+                </span>
+              </span>
+              <div class="join">
+                <div
+                  class="join-item btn btn-neutral btn-disabled"
+                  *ngIf="symbolImageMap && symbolImageMap[token.symbol]"
+                >
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
                   </div>
-                  <input
-                    #tokenNgModelRef="ngModel"
-                    type="number"
-                    required
-                    placeholder="12.123456"
-                    [min]="0"
-                    [max]="symbolBalancesMap?.[token.symbol] || 0"
-                    [step]="1"
-                    pattern="^[0-9]*\.?[0-9]{0,6}$"
-                    [(ngModel)]="token.amount"
-                    name="amount{{ i }}"
-                    class="join-item input input-bordered w-full"
-                    [class]="{
-                      'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
-                    }"
-                  />
-                  <div class="join-item btn btn-neutral btn-disabled">{{ token.symbol }}</div>
-                  <label class="join-item btn btn-error" (click)="onClickDeleteToken(i)">
-                    <span class="material-symbols-outlined">delete</span>
-                  </label>
                 </div>
+                <input
+                  #tokenNgModelRef="ngModel"
+                  type="number"
+                  required
+                  placeholder="12.123456"
+                  [min]="0"
+                  [max]="symbolBalancesMap?.[token.symbol] || 0"
+                  [step]="1"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  [(ngModel)]="token.amount"
+                  name="amount{{ i }}"
+                  class="join-item input input-bordered w-full"
+                  [class]="{
+                    'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
+                  }"
+                />
+                <div class="join-item btn btn-neutral btn-disabled">{{ token.symbol }}</div>
+                <label class="join-item btn btn-error" (click)="onClickDeleteToken(i)">
+                  <span class="material-symbols-outlined">delete</span>
+                </label>
               </div>
               <span class="label">
                 <span class="label-text">Available:</span>

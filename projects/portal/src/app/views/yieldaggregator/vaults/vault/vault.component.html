@@ -51,22 +51,18 @@
                 <td>Vault ID</td>
                 <td>{{ vault?.vault?.id }}</td>
               </tr>
-              <tr>
-                <td>Vault Address</td>
-                <td class="font-mono break-all">{{ vault?.vault_address }}</td>
-              </tr>
               <!-- <tr>
                 <td>Vault Name</td>
                 <td>{{ 'Coming soon' }}</td>
               </tr> -->
-              <tr>
+              <!-- <tr>
                 <td>Owner</td>
                 <td class="font-mono break-all">{{ vault?.vault?.owner }}</td>
               </tr>
               <tr>
                 <td>Owner's Deposit</td>
                 <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td class="flex flex-row items-center gap-2">
                   <span>Withdraw Commission Rate</span>
@@ -78,7 +74,7 @@
                     <span class="material-symbols-outlined">help</span>
                   </a>
                 </td>
-                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
+                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
@@ -91,7 +87,7 @@
                     <span class="material-symbols-outlined">help</span>
                   </a>
                 </td>
-                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
+                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
               </tr>
             </tbody>
           </table>

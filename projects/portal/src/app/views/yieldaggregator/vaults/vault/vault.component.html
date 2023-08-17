@@ -160,18 +160,38 @@
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="tabs tabs-boxed w-full">
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'"
-          >Deposit</a
-        >
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'"
-          >Withdraw</a
-        >
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
+          Deposit
+        </a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
+          Withdraw
+        </a>
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
         <form #depositFormRef="ngForm" (submit)="onSubmitDeposit()">
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 4"
+                >
+                  25%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 2"
+                >
+                  50%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="mintAmount = symbolBalancesMap?.[displaySymbol || ''] || 0"
+                >
+                  100%
+                </span>
+              </span>
             </label>
             <label class="input-group">
               <input
@@ -179,7 +199,7 @@
                 #depositAmountNgModelRef="ngModel"
                 required
                 type="number"
-                placeholder="12.123456"
+                placeholder="0.000000"
                 class="input input-bordered w-full"
                 [class]="{
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
@@ -195,10 +215,7 @@
             </label>
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
-              <label
-                class="label-text-alt cursor-pointer"
-                (click)="mintAmount = symbolBalancesMap?.[displaySymbol || '']"
-              >
+              <label class="label-text-alt">
                 {{ symbolBalancesMap?.[displaySymbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
@@ -230,12 +247,32 @@
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 4"
+                >
+                  25%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 2"
+                >
+                  50%
+                </span>
+                <span
+                  class="cursor-pointer"
+                  (click)="burnAmount = symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0"
+                >
+                  100%
+                </span>
+              </span>
             </label>
             <label class="input-group">
               <input
                 #withdrawAmountRef
                 #withdrawAmountNgModelRef="ngModel"
-                placeholder="12.123456"
+                placeholder="0.000000"
                 required
                 type="number"
                 class="input input-bordered w-full"
@@ -253,10 +290,7 @@
             </label>
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
-              <label
-                class="label-text-alt cursor-pointer"
-                (click)="burnAmount = symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id]"
-              >
+              <label class="label-text-alt">
                 {{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </label>

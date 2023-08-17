@@ -10,7 +10,7 @@ export class SendComponent implements OnInit {
   @Input() address?: string | null;
   @Input() toAddress?: string | null;
   @Input() selectedTokens?: { symbol: string; amount?: number }[] | null;
-  @Input() balanceSymbols?: string[] | null;
+  @Input() balanceSymbols?: ({ symbol: string; display: string } | undefined)[] | null;
   @Input() symbolImageMap?: { [symbol: string]: string };
   @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
   @Output() appSend: EventEmitter<BankSendRequest>;
@@ -22,7 +22,7 @@ export class SendComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  isAlreadySelectedSymbol(symbol: string) {
+  isAlreadySelectedSymbol(symbol?: string) {
     return this.selectedTokens?.some((s) => s.symbol === symbol);
   }
 

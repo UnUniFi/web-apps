@@ -71,18 +71,16 @@ export class LenderComponent implements OnInit {
       map((bids) => {
         let sumBorrows: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] = [];
         for (const bid of bids) {
-          if (bid.borrow) {
-            const index = sumBorrows.findIndex(
-              (borrow) => borrow.denom == bid.borrow?.amount?.denom,
-            );
+          if (bid.loan) {
+            const index = sumBorrows.findIndex((borrow) => borrow.denom == bid.loan?.amount?.denom);
             if (index == -1) {
-              sumBorrows.push(bid.borrow.amount!);
+              sumBorrows.push(bid.loan.amount!);
             } else {
               const addedAmount =
-                Number(sumBorrows[index].amount) + Number(bid.borrow.amount?.amount);
+                Number(sumBorrows[index].amount) + Number(bid.loan.amount?.amount);
               sumBorrows[index] = {
                 amount: addedAmount.toString(),
-                denom: bid.borrow?.amount?.denom,
+                denom: bid.loan?.amount?.denom,
               };
             }
           }
@@ -104,7 +102,7 @@ export class LenderComponent implements OnInit {
             if (bid.id) {
               return await this.pawnshopQueryService.getNftListing(
                 bid.id.nft_id?.class_id!,
-                bid.id.nft_id?.nft_id!,
+                bid.id.nft_id?.token_id!,
               );
             } else {
               return {};
@@ -135,7 +133,7 @@ export class LenderComponent implements OnInit {
             if (nft) {
               const nftData = await this.pawnshopQueryService.getNft(
                 nft.nft_id?.class_id!,
-                nft.nft_id?.nft_id!,
+                nft.nft_id?.token_id!,
               );
               return nftData;
             } else {

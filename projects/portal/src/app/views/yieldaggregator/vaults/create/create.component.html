@@ -84,7 +84,7 @@
                 >
               </option>
               <ng-container *ngFor="let symbol of availableSymbols">
-                <option [value]="symbol">{{ symbol }}</option>
+                <option [value]="symbol?.symbol">{{ symbol?.display }}</option>
               </ng-container>
             </select>
           </div>
@@ -215,32 +215,34 @@
             <span class="label">
               <span class="label-text">Add Strategy</span>
             </span>
-            <div class="join mb-2">
-              <select
-                [required]="selectedStrategies.length === 0"
-                class="join-item select select-bordered w-full"
-                [(ngModel)]="selectedStrategyId"
-                name="strategyId"
-                [disabled]="!selectedSymbol"
-                (change)="onAddStrategy(selectedStrategyId || '')"
-              >
-                <option [value]="''" disabled>
-                  <span *ngIf="!selectedSymbol">Select an asset first</span>
-                  <span *ngIf="selectedSymbol && strategies?.length">Select a strategy</span>
-                  <span *ngIf="selectedSymbol && !strategies?.length">
-                    No strategy for {{ selectedSymbol }}
-                  </span>
-                </option>
-                <ng-container *ngFor="let s of strategies">
-                  <option [value]="s.id" *ngIf="!isAlreadySelectedStrategy(s.id || '')">
-                    {{ s.name | uppercase }}
-                  </option>
+            <!-- Open the modal using ID.showModal() method -->
+            <button type="button" class="btn w-full" onclick="addStrategyModal.showModal()">
+              Add Strategy
+            </button>
+            <dialog id="addStrategyModal" class="modal">
+              <form method="dialog" class="modal-box">
+                <h3 class="font-bold text-lg">Strategies for {{ selectedSymbol }}</h3>
+                <ng-container *ngIf="!selectedSymbol">
+                  <p class="py-4">Select an asset first</p>
                 </ng-container>
-              </select>
-            </div>
-            <label class="label" *ngIf="selectedStrategyId">
-              <span class="label-text-alt text-warning">Click + to add a strategy</span>
-            </label>
+                <ng-container *ngIf="selectedSymbol && !strategies?.length">
+                  <p class="py-4">No strategy for {{ selectedSymbol }}</p>
+                </ng-container>
+
+                <ul class="menu w-full">
+                  <ng-container *ngFor="let s of strategies">
+                    <ng-container *ngIf="!isAlreadySelectedStrategy(s.id || '')">
+                      <li>
+                        <a (click)="onAddStrategy(s.id || '')">{{ s.name }}</a>
+                      </li>
+                    </ng-container>
+                  </ng-container>
+                </ul>
+              </form>
+              <form method="dialog" class="modal-backdrop" onsubmit="addStrategyModal.close()">
+                <button>close</button>
+              </form>
+            </dialog>
           </div>
 
           <div class="form-control">

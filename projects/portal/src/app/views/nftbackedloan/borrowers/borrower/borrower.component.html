@@ -103,15 +103,15 @@
             <div class="card-body">
               <span class="badge badge-primary">{{ nft.listing?.state }}</span>
               <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
-                {{ listedOwnNftsMetadata[i].name + '/' + nft.listing?.nft_id?.nft_id }}
+                {{ listedOwnNftsMetadata[i].name + '/' + nft.listing?.nft_id?.token_id }}
               </h2>
               <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
-                {{ nft.listing?.nft_id?.nft_id }}
+                {{ nft.listing?.nft_id?.token_id }}
               </h2>
               <button
                 class="btn btn-outline btn-secondary"
                 routerLink="../../nfts/{{ nft.listing?.nft_id?.class_id }}/{{
-                  nft.listing?.nft_id?.nft_id
+                  nft.listing?.nft_id?.token_id
                 }}"
               >
                 View

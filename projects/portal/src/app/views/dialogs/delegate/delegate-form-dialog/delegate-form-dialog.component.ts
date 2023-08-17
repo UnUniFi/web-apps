@@ -66,6 +66,14 @@ export class DelegateFormDialogComponent implements OnInit, OnChanges {
     this.gasRatio = ratio;
   }
 
+  onClickAutoFill(balance: string | undefined | null, percent: number) {
+    if (!this.denom) {
+      return;
+    }
+    const exponent = getDenomExponent(this.denom);
+    this.delegateAmount = (Number(balance) * percent) / 10 ** exponent;
+  }
+
   onSubmit() {
     if (
       !this.currentStoredWallet ||

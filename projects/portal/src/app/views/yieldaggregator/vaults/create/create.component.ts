@@ -14,7 +14,7 @@ export class CreateComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
-  availableSymbols?: string[] | null;
+  availableSymbols?: ({ symbol: string; display: string } | undefined)[] | null;
   @Input()
   selectedSymbol?: string | null;
   @Input()
@@ -36,7 +36,6 @@ export class CreateComponent implements OnInit {
 
   reserveRate?: number;
   name?: string;
-  selectedStrategyId?: string;
   selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
 
   constructor() {
@@ -52,21 +51,25 @@ export class CreateComponent implements OnInit {
   }
 
   onAddStrategy(strategyId: string) {
+    if (!strategyId) {
+      return;
+    }
     this.selectedStrategies.push({
       id: strategyId,
       name: this.strategies?.find((s) => s.id === strategyId)?.name,
       weight: 0,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
-    this.selectedStrategyId = undefined;
+
+    (global as any).addStrategyModal.close();
   }
 
   onClickDeleteStrategy(index: number) {
     this.selectedStrategies.splice(index, 1);
-    this.selectedStrategyId = '';
   }
 
   onChangeSymbol() {
+    this.selectedStrategies = [];
     if (!this.selectedSymbol) {
       return;
     }

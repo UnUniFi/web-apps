@@ -48,7 +48,7 @@ export class NftsComponent implements OnInit {
             (nft) =>
               nft.listing?.owner?.includes(keyword) ||
               nft.listing?.nft_id?.class_id?.includes(keyword) ||
-              nft.listing?.nft_id?.nft_id?.includes(keyword),
+              nft.listing?.nft_id?.token_id?.includes(keyword),
           );
         }
         if (state) {

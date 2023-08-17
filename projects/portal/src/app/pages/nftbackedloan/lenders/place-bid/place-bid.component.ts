@@ -97,7 +97,7 @@ export class PlaceBidComponent implements OnInit {
           return undefined;
         }
         const exponent = getDenomExponent(info.bid_denom);
-        return Math.floor(maxBidAmount * Number(info.minimum_deposit_rate || '0')) / 10 ** exponent;
+        return Math.floor(maxBidAmount * Number(info.min_deposit_rate || '0')) / 10 ** exponent;
       }),
     );
     this.interestRate$ = this.bids$.pipe(
@@ -123,9 +123,9 @@ export class PlaceBidComponent implements OnInit {
     const defaultExpiryDate$ = this.listingInfo$.pipe(
       map((info) => {
         const expiryDate = new Date();
-        if (info.minimum_bidding_period) {
-          // add 2 * minimum_bidding_period
-          const minExpirySeconds = parseInt(info.minimum_bidding_period);
+        if (info.min_bid_period) {
+          // add 2 * min_bid_period
+          const minExpirySeconds = parseInt(info.min_bid_period);
           expiryDate.setSeconds(expiryDate.getSeconds() + 2 * minExpirySeconds);
           return expiryDate;
         } else {

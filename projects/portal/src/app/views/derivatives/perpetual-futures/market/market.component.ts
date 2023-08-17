@@ -9,7 +9,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import ununificlient from 'ununifi-client';
-import { AddressPositions200ResponsePositionsInner } from 'ununifi-client/esm/openapi';
+import {
+  AddressPositions200ResponsePositionsInner,
+  DerivativesParams200ResponseParams,
+} from 'ununifi-client/esm/openapi';
 
 declare const TradingView: any;
 
@@ -42,7 +45,7 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   availableMarkets?: string[] | null;
   @Input()
-  params?: ununificlient.proto.ununifi.derivatives.IParams | null;
+  params?: DerivativesParams200ResponseParams | null;
   @Input()
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IAssetInfo | null;
   @Input()

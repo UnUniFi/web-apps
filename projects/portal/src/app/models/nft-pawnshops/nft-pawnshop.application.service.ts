@@ -102,7 +102,7 @@ export class NftPawnshopApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.pawnshopService.buildMsgCancelNftListing(address, classId, nftId);
+    const msg = this.pawnshopService.buildMsgCancelListing(address, classId, nftId);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

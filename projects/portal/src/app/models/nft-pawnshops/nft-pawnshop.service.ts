@@ -104,22 +104,22 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
       bid_denom: bidDenom,
-      minimum_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
-      minimum_bidding_period: this.convertMillisecToDuration(milliseconds),
+      min_deposit_rate: this.txCommon.numberToDecString(minimumDepositRate),
+      min_bid_period: this.convertMillisecToDuration(milliseconds),
     });
 
     return msg;
   }
 
-  buildMsgCancelNftListing(senderAddress: string, classId: string, nftId: string) {
-    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgCancelNftListing({
+  buildMsgCancelListing(senderAddress: string, classId: string, nftId: string) {
+    const msg = new ununificlient.proto.ununifi.nftbackedloan.MsgCancelListing({
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
     });
 
@@ -152,7 +152,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
       price: bid,
       expiry: biddingPeriodTimestamp,
@@ -169,7 +169,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
     });
 
@@ -181,7 +181,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
     });
 
@@ -193,7 +193,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
     });
 
@@ -205,7 +205,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
     });
 
@@ -222,7 +222,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
       borrow_bids: borrowBids,
     });
@@ -240,7 +240,7 @@ export class NftPawnshopService {
       sender: senderAddress,
       nft_id: {
         class_id: classId,
-        nft_id: nftId,
+        token_id: nftId,
       },
       repay_bids: repayBids,
     });

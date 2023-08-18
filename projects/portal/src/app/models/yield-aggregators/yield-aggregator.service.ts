@@ -134,7 +134,7 @@ export class YieldAggregatorService {
     const totalAmountInVault =
       Number(vault.total_bonded_amount) +
       Number(vault.total_unbonding_amount) +
-      Number(vault.total_withdrawal_balance);
+      Number(vault.withdraw_reserve);
     const supplyLp$ = this.bankQueryService.getSupply$(lpDenom);
     return supplyLp$.pipe(
       map((supplyLp) => {
@@ -159,7 +159,7 @@ export class YieldAggregatorService {
     const totalAmountInVault =
       Number(vault.total_bonded_amount) +
       Number(vault.total_unbonding_amount) +
-      Number(vault.total_withdrawal_balance);
+      Number(vault.withdraw_reserve);
     const supplyLp$ = this.bankQueryService.getSupply$(lpDenom);
     return supplyLp$.pipe(
       map((supplyLp) => {

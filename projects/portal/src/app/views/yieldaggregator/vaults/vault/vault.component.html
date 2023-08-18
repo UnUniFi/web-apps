@@ -104,7 +104,7 @@
             <div class="stat-value text-info">
               {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
               {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
@@ -129,12 +129,12 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Withdrawal Reserve Amount</div>
+            <div class="stat-title">Withdraw Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalWithdrawalBalance?.usdAmount | currency }}
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+              ${{ withdrawReserve?.usdAmount | currency }}
             </div>
           </div>
         </div>

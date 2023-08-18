@@ -67,13 +67,13 @@ export class StrategyComponent implements OnInit {
       ),
     );
     this.strategy$ = combineLatest([this.id$, strategies$]).pipe(
-      map(([id, strategies]) => strategies.find((s) => s.id == id)),
+      map(([id, strategies]) => strategies.find((s) => s.strategy?.id == id)),
     );
     const allVaults$ = this.iyaQuery.listVaults$();
     this.vaults$ = combineLatest([allVaults$, this.id$]).pipe(
       map(([vaults, id]) =>
         vaults.filter((vault) =>
-          vault.strategy_weights?.find((strategy) => strategy.strategy_id === id),
+          vault.vault?.strategy_weights?.find((strategy) => strategy.strategy_id === id),
         ),
       ),
     );
@@ -81,13 +81,13 @@ export class StrategyComponent implements OnInit {
       map(([vaults, id]) =>
         vaults.map(
           (vault) =>
-            vault.strategy_weights?.find((strategy) => strategy.strategy_id === id)?.weight,
+            vault.vault?.strategy_weights?.find((strategy) => strategy.strategy_id === id)?.weight,
         ),
       ),
     );
     this.strategyAPR$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
       mergeMap(async ([strategy, config]) => {
-        const info = config?.strategiesInfo?.find((s) => s.id == strategy?.id);
+        const info = config?.strategiesInfo?.find((s) => s.id == strategy?.strategy?.id);
         const apr = await this.iyaService.getStrategyAPR(info);
         return apr;
       }),

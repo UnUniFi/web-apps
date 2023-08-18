@@ -5,7 +5,7 @@
       <li routerLink="..">
         <a>Strategies of {{ displaySymbol }}</a>
       </li>
-      <li>{{ strategy?.name }}</li>
+      <li>{{ strategy?.strategy?.name }}</li>
     </ul>
   </div>
   <div class="w-full md:w-auto mb-8">
@@ -23,7 +23,7 @@
             <span class="material-symbols-outlined">question_mark</span>
           </ng-container>
           <span>
-            {{ strategy?.name }}
+            {{ strategy?.strategy?.name }}
           </span>
           <div class="badge badge-primary">{{ displaySymbol }}#{{ id }}</div>
         </h2>
@@ -40,12 +40,14 @@
             </tr>
             <tr>
               <td>Contract Address</td>
-              <td class="font-mono break-all">{{ strategy?.contract_address }}</td>
+              <td class="font-mono break-all">{{ strategy?.strategy?.contract_address }}</td>
             </tr>
             <tr>
               <td>Git URL</td>
               <td class="break-all">
-                <a href="{{ strategy?.git_url }}" target="_blank">{{ strategy?.git_url }}</a>
+                <a href="{{ strategy?.strategy?.git_url }}" target="_blank">{{
+                  strategy?.strategy?.git_url
+                }}</a>
               </td>
             </tr>
           </tbody>
@@ -118,7 +120,7 @@
             <ng-container *ngIf="!symbolImage">
               <span class="material-symbols-outlined">question_mark</span>
             </ng-container>
-            <span>Vault #{{ vault.id }}</span>
+            <span>Vault #{{ vault.vault?.id }}</span>
           </h2>
 
           <div class="stats">
@@ -130,7 +132,7 @@
           </div>
 
           <button
-            routerLink="/yield-aggregator/vaults/{{ vault.id }}"
+            routerLink="/yield-aggregator/vaults/{{ vault.vault?.id }}"
             class="btn btn-outline btn-info"
           >
             View

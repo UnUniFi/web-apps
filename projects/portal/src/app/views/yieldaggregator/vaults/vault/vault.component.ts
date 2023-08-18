@@ -18,7 +18,7 @@ import {
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import {
-  StrategyAll200ResponseStrategiesInner,
+  StrategyAll200ResponseStrategiesInnerStrategy,
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
 
@@ -47,7 +47,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   totalUnbondingAmount?: TokenAmountUSD | null;
   @Input()
-  totalWithdrawalBalance?: TokenAmountUSD | null;
+  withdrawReserve?: TokenAmountUSD | null;
   @Input()
   estimatedMintAmount?: cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -131,7 +131,7 @@ export class VaultComponent implements OnInit, OnChanges {
     });
   }
 
-  getStrategyInfo(id?: string): StrategyAll200ResponseStrategiesInner | undefined {
+  getStrategyInfo(id?: string): StrategyAll200ResponseStrategiesInnerStrategy | undefined {
     return this.vault?.strategies?.find((strategy) => strategy.id === id);
   }
 }

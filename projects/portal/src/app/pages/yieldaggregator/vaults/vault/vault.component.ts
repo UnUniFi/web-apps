@@ -40,7 +40,7 @@ export class VaultComponent implements OnInit {
   totalDepositAmount$: Observable<TokenAmountUSD>;
   totalBondedAmount$: Observable<TokenAmountUSD>;
   totalUnbondingAmount$: Observable<TokenAmountUSD>;
-  totalWithdrawalBalance$: Observable<TokenAmountUSD>;
+  withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   estimatedBurnAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   vaultAPY$: Observable<number>;
@@ -89,7 +89,7 @@ export class VaultComponent implements OnInit {
           (
             Number(vault.total_bonded_amount) +
             Number(vault.total_unbonding_amount) +
-            Number(vault.total_withdrawal_balance)
+            Number(vault.withdraw_reserve)
           ).toString(),
           symbolMetadataMap,
         ),
@@ -123,7 +123,7 @@ export class VaultComponent implements OnInit {
         ),
       ),
     );
-    this.totalWithdrawalBalance$ = combineLatest([
+    this.withdrawReserve$ = combineLatest([
       timer$,
       this.symbol$,
       this.vault$,
@@ -132,7 +132,7 @@ export class VaultComponent implements OnInit {
       mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
         this.bandProtocolService.convertToUSDAmount(
           symbol!,
-          vault.total_withdrawal_balance!,
+          vault.withdraw_reserve!,
           symbolMetadataMap,
         ),
       ),

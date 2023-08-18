@@ -56,11 +56,11 @@ export class StrategiesComponent implements OnInit {
       map(([allStrategies, denomMetadataMap]) => {
         const symbols = allStrategies
           .map((strategy) => {
-            const denomMetadata = denomMetadataMap[strategy.denom || ''];
+            const denomMetadata = denomMetadataMap[strategy.strategy?.denom || ''];
             if (denomMetadata) {
               return {
                 symbol: denomMetadata.symbol || '',
-                display: denomMetadata.display || strategy.denom || '',
+                display: denomMetadata.display || strategy.strategy?.denom || '',
               };
             } else {
               return undefined;
@@ -74,12 +74,12 @@ export class StrategiesComponent implements OnInit {
       map(([strategies, denom, ibcDenom]) => {
         if (ibcDenom == '') {
           if (denom) {
-            return strategies.filter((strategy) => strategy.denom == denom);
+            return strategies.filter((strategy) => strategy.strategy?.denom == denom);
           } else {
             return strategies;
           }
         } else {
-          return strategies.filter((strategy) => strategy.denom == ibcDenom);
+          return strategies.filter((strategy) => strategy.strategy?.denom == ibcDenom);
         }
       }),
     );

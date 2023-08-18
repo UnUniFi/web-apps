@@ -54,7 +54,7 @@ export class CreateComponent implements OnInit {
       map(([allStrategies, denomMetadataMap]) => {
         const symbols = allStrategies
           .map((strategy) => {
-            const denomMetadata = denomMetadataMap[strategy.denom || ''];
+            const denomMetadata = denomMetadataMap[strategy.strategy?.denom || ''];
             if (denomMetadata) {
               return {
                 symbol: denomMetadata.symbol!,

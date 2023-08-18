@@ -1,4 +1,4 @@
-import { apps } from '../../tools/app-tool/app-tool.component';
+import { AppNavigation } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -9,12 +9,10 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AppYieldAggregatorComponent implements OnInit {
   @Input()
   navigations?: { name: string; link: string; icon: string }[] | null;
+  @Input()
+  apps?: AppNavigation[] | null;
 
-  apps: { name: string; link: string; icon: string }[];
-
-  constructor() {
-    this.apps = apps;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

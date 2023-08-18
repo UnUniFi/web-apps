@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { AppNavigation } from '../../../models/config.service';
+import { Component, Input, OnInit } from '@angular/core';
 
-export const apps = [
-  { name: 'Utilities', link: '/', icon: 'assistant' },
-  // { name: 'NFT Backed Loan', link: '/nft-backed-loan/nfts', icon: 'loyalty' },
-  { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
-  // { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
-];
 @Component({
   selector: 'view-app-tool',
   templateUrl: './app-tool.component.html',
   styleUrls: ['./app-tool.component.css'],
 })
 export class AppToolComponent implements OnInit {
-  apps: { name: string; link: string; icon: string }[];
+  @Input()
+  apps?: AppNavigation[] | null;
 
-  constructor() {
-    this.apps = apps;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

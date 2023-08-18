@@ -35,7 +35,7 @@
         <div class="card-body">
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">
-              {{ displaySymbol }}#{{ strategy.id }}
+              {{ displaySymbol }}#{{ strategy.strategy?.id }}
             </div>
           </div>
           <h2 class="card-title break-all">
@@ -50,11 +50,13 @@
               <span class="material-symbols-outlined">question_mark</span>
             </ng-container>
             <span>
-              {{ strategy.name }}
+              {{ strategy.strategy?.name }}
             </span>
           </h2>
 
-          <button routerLink="{{ strategy.id }}" class="btn btn-outline btn-info">View</button>
+          <button routerLink="{{ strategy.strategy?.id }}" class="btn btn-outline btn-info">
+            View
+          </button>
         </div>
       </div>
     </div>

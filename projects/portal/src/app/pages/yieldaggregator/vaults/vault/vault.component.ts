@@ -20,7 +20,11 @@ import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yiel
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { Vault200Response, VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  EstimateMintAmount200Response,
+  EstimateRedeemAmount200Response,
+  Vault200Response,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-vault',
@@ -41,8 +45,8 @@ export class VaultComponent implements OnInit {
   totalBondedAmount$: Observable<TokenAmountUSD>;
   totalUnbondingAmount$: Observable<TokenAmountUSD>;
   withdrawReserve$: Observable<TokenAmountUSD>;
-  estimatedMintAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
-  estimatedBurnAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
+  estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultAPY$: Observable<number>;
 
   constructor(
@@ -148,18 +152,21 @@ export class VaultComponent implements OnInit {
         // return this.iyaService.estimateMintAmount$(vault, deposit);
         const id = vault.vault?.id;
         if (!id) {
-          return of({ amount: '0', denom: '' });
+          return of({ mint_amount: { amount: '0', denom: '' } });
         }
         const exponent = getDenomExponent(vault.vault?.denom);
         return this.iyaQuery.getEstimatedMintAmount$(id, (deposit * 10 ** exponent).toString());
       }),
     );
-    this.estimatedBurnAmount$ = combineLatest([this.vault$, this.burnAmount$.asObservable()]).pipe(
+    this.estimatedRedeemAmount$ = combineLatest([
+      this.vault$,
+      this.burnAmount$.asObservable(),
+    ]).pipe(
       mergeMap(([vault, burn]) => {
         // return this.iyaService.estimateRedeemAmount$(vault, burn);
         const id = vault.vault?.id;
         if (!id) {
-          return of({ amount: '0', denom: '' });
+          return of({ redeem_amount: { amount: '0', denom: '' } });
         }
         const exponent = getDenomExponent('yield-aggregator/vaults/' + id);
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());

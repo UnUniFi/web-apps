@@ -10,7 +10,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
-import { ChartType } from 'angular-google-charts';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
 import {
@@ -18,6 +17,8 @@ import {
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import {
+  EstimateMintAmount200Response,
+  EstimateRedeemAmount200Response,
   StrategyAll200ResponseStrategiesInnerStrategy,
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
@@ -49,9 +50,9 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   withdrawReserve?: TokenAmountUSD | null;
   @Input()
-  estimatedMintAmount?: cosmos.base.v1beta1.ICoin | null;
+  estimatedMintAmount?: EstimateMintAmount200Response | null;
   @Input()
-  estimatedBurnAmount?: cosmos.base.v1beta1.ICoin | null;
+  estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
   vaultAPY?: number | null;
 

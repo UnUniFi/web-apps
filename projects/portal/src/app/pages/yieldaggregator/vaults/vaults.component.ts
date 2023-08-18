@@ -68,21 +68,17 @@ export class VaultsComponent implements OnInit {
     this.totalDeposited$ = combineLatest([this.symbols$, this.vaults$, symbolMetadataMap$]).pipe(
       mergeMap(([symbols, vaults, symbolMetadataMap]) =>
         Promise.all(
-          symbols.map(async (symbol, index) => {
-            const vault = await this.iyaQuery
-              .getVault$(vaults[index].vault?.id!)
-              .pipe(first())
-              .toPromise();
-            return this.bandProtocolService.convertToUSDAmount(
-              symbol.symbol,
+          vaults.map((vault, index) =>
+            this.bandProtocolService.convertToUSDAmount(
+              symbols[index].symbol,
               (
                 Number(vault.total_bonded_amount) +
                 Number(vault.total_unbonding_amount) +
                 Number(vault.withdraw_reserve)
               ).toString(),
               symbolMetadataMap,
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );

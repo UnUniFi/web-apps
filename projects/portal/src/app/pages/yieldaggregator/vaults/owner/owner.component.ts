@@ -33,7 +33,7 @@ export class OwnerComponent implements OnInit {
     this.owner$ = this.route.params.pipe(map((params) => params.address));
     this.owner$.subscribe((owner) => console.log(owner));
     this.vaults$ = combineLatest([this.iyaQuery.listVaults$(), this.owner$]).pipe(
-      map(([vaults, owner]) => vaults.filter((vault) => vault.owner === owner)),
+      map(([vaults, owner]) => vaults.filter((vault) => vault.vault?.owner === owner)),
     );
   }
 

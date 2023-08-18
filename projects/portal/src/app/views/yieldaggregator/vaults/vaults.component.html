@@ -86,8 +86,8 @@
           </thead>
           <tbody>
             <ng-container *ngFor="let vault of vaults; let i = index">
-              <tr class="hover cursor-pointer" routerLink="{{ vault.id }}">
-                <th>#{{ vault.id }}</th>
+              <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
+                <th>#{{ vault.vault?.id }}</th>
                 <!-- <td>{{ vault.name }}</td> -->
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
@@ -107,7 +107,7 @@
                   </div>
                 </td>
                 <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>
-                <td>{{ vault.withdraw_commission_rate | percent : '1.0-4' }}</td>
+                <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
                 <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>
             </ng-container>

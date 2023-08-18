@@ -43,11 +43,11 @@ export class VaultsComponent implements OnInit {
       map(([vaults, params, denomMetadata]) =>
         params.keyword
           ? vaults.filter((vault) => {
-              const hasIdMatch = vault.id && vault.id.includes(params.keyword);
-              const hasOwnerMatch = vault.owner?.includes(params.keyword);
-              const hasDenomMatch = vault.denom?.includes(params.keyword);
-              const hasSymbolMatch = vault.denom
-                ? denomMetadata?.[vault.denom].symbol?.includes(params.keyword)
+              const hasIdMatch = vault.vault?.id && vault.vault?.id.includes(params.keyword);
+              const hasOwnerMatch = vault.vault?.owner?.includes(params.keyword);
+              const hasDenomMatch = vault.vault?.denom?.includes(params.keyword);
+              const hasSymbolMatch = vault.vault?.denom
+                ? denomMetadata?.[vault.vault?.denom].symbol?.includes(params.keyword)
                 : false;
               return hasIdMatch || hasOwnerMatch || hasDenomMatch || hasSymbolMatch;
             })
@@ -57,8 +57,8 @@ export class VaultsComponent implements OnInit {
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.denom!]?.symbol || '';
-          const display = denomMetadataMap?.[vault.denom!]?.display || vault.denom!;
+          const symbol = denomMetadataMap?.[vault.vault?.denom!]?.symbol || '';
+          const display = denomMetadataMap?.[vault.vault?.denom!]?.display || vault.vault?.denom!;
           const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
           return { symbol: symbol, display: display, img: img };
         }),
@@ -68,21 +68,17 @@ export class VaultsComponent implements OnInit {
     this.totalDeposited$ = combineLatest([this.symbols$, this.vaults$, symbolMetadataMap$]).pipe(
       mergeMap(([symbols, vaults, symbolMetadataMap]) =>
         Promise.all(
-          symbols.map(async (symbol, index) => {
-            const vault = await this.iyaQuery
-              .getVault$(vaults[index].id!)
-              .pipe(first())
-              .toPromise();
-            return this.bandProtocolService.convertToUSDAmount(
-              symbol.symbol,
+          vaults.map((vault, index) =>
+            this.bandProtocolService.convertToUSDAmount(
+              symbols[index].symbol,
               (
                 Number(vault.total_bonded_amount) +
                 Number(vault.total_unbonding_amount) +
-                Number(vault.total_withdrawal_balance)
+                Number(vault.withdraw_reserve)
               ).toString(),
               symbolMetadataMap,
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );
@@ -92,11 +88,11 @@ export class VaultsComponent implements OnInit {
           vaults.map(async (vault) => {
             // TODO: go to a function
             // same in vault.component.ts
-            if (!vault.strategy_weights) {
+            if (!vault.vault?.strategy_weights) {
               return 0;
             }
             let vaultAPY = 0;
-            for (const strategyWeight of vault.strategy_weights) {
+            for (const strategyWeight of vault.vault?.strategy_weights) {
               const strategyInfo = config?.strategiesInfo?.find(
                 (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
               );

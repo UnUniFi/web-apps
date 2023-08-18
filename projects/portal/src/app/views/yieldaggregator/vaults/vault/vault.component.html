@@ -104,7 +104,7 @@
             <div class="stat-value text-info">
               {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
               {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
@@ -129,12 +129,12 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Withdrawal Reserve Amount</div>
+            <div class="stat-title">Withdraw Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalWithdrawalBalance?.usdAmount | currency }}
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+              ${{ withdrawReserve?.usdAmount | currency }}
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@
               <input
                 disabled
                 class="input input-bordered w-full"
-                value="{{ estimatedMintAmount?.amount | coinAmount }}"
+                value="{{ estimatedMintAmount?.mint_amount?.amount | coinAmount }}"
               />
               <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
             </label>
@@ -301,10 +301,16 @@
               <input
                 disabled
                 class="input input-bordered w-full"
-                value="{{ estimatedBurnAmount?.amount | coinAmount }}"
+                value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
               />
               <span>{{ displaySymbol }}</span>
             </label>
+            <span class="label" *ngIf="estimatedRedeemAmount?.share_amount">
+              <span class="label-text-alt">
+                Total {{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }} - Fee
+                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+              </span>
+            </span>
           </div>
 
           <div class="card-actions justify-end mt-8">

@@ -20,6 +20,7 @@ export type Config = {
     denom: string;
     amount: string;
   }[];
+  apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: StrategyInfo[];
   extension?: {
@@ -48,6 +49,12 @@ export type Config = {
     }[];
     messageModules: string[];
   };
+};
+
+export type AppNavigation = {
+  name: string;
+  link: string;
+  icon: string;
 };
 
 export type StrategyInfo = {

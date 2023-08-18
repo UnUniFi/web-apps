@@ -1,4 +1,4 @@
-import { apps } from '../../tools/app-tool/app-tool.component';
+import { AppNavigation } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -9,11 +9,10 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AppUtilsComponent implements OnInit {
   @Input()
   navigations?: { name: string; link: string; icon: string }[] | null;
-  apps: { name: string; link: string; icon: string }[];
+  @Input()
+  apps?: AppNavigation[] | null;
 
-  constructor() {
-    this.apps = apps;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

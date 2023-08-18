@@ -42,15 +42,15 @@
             </figure>
             <div class="card-body">
               <span class="badge badge-primary">NOT LISTING</span>
-              <h2 *ngIf="ownNftsMetadata" class="card-title break-all">
-                {{ ownNftsMetadata[i].name + '/' + nft.id }}
-              </h2>
-              <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
-                {{ nft.id }}
+              <h2 class="card-title break-all">
+                <span *ngIf="ownNftsMetadata && ownNftsMetadata.length && ownNftsMetadata[i].name">
+                  {{ ownNftsMetadata[i].name }}
+                </span>
+                <span>{{ nft.id }}</span>
               </h2>
               <button
                 class="btn btn-outline btn-info"
-                routerLink="../../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
+                [routerLink]="['../../nfts', nft.class_id, nft.id, 'list']"
               >
                 List
               </button>
@@ -110,9 +110,11 @@
               </h2>
               <button
                 class="btn btn-outline btn-secondary"
-                routerLink="../../nfts/{{ nft.listing?.nft_id?.class_id }}/{{
+                [routerLink]="[
+                  '../../nfts',
+                  nft.listing?.nft_id?.class_id,
                   nft.listing?.nft_id?.token_id
-                }}"
+                ]"
               >
                 View
               </button>

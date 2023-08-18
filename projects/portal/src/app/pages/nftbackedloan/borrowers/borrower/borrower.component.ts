@@ -37,12 +37,14 @@ export class BorrowerComponent implements OnInit {
     this.ownNfts$ = this.address$.pipe(
       mergeMap((address) => this.pawnshopQuery.listOwnNfts$(address)),
     );
+    this.ownNfts$.subscribe((a) => console.log(a));
     this.ownNftImages$ = this.ownNfts$.pipe(
       mergeMap((value) => this.pawnshop.listNftImages(value)),
     );
     this.ownNftsMetadata$ = this.ownNfts$.pipe(
       mergeMap((value) => this.pawnshop.listNftsMetadata(value)),
     );
+    this.ownNftsMetadata$.subscribe((a) => console.log(a));
 
     this.listedOwnNfts$ = this.address$.pipe(
       mergeMap((address) =>

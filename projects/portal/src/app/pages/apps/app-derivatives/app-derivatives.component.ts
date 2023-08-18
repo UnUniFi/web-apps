@@ -1,4 +1,4 @@
-import { ConfigService } from '../../../models/config.service';
+import { AppNavigation, ConfigService } from '../../../models/config.service';
 import { DeveloperService } from '../../../models/developer.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -13,6 +13,7 @@ import { filter, map } from 'rxjs/operators';
 })
 export class AppDerivativesComponent implements OnInit {
   address$: Observable<string | undefined>;
+  apps$: Observable<AppNavigation[] | undefined>;
   navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
 
   constructor(
@@ -26,6 +27,7 @@ export class AppDerivativesComponent implements OnInit {
       map((wallet) => wallet.address),
     );
     const config$ = this.configS.config$;
+    this.apps$ = config$.pipe(map((conf) => conf?.apps));
     this.navigations$ = combineLatest([this.address$, config$]).pipe(
       map(([address, config]) => {
         const navigation = config?.extension?.navigations.slice();

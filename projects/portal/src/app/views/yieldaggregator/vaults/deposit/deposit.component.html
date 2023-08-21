@@ -24,6 +24,8 @@
                 <th></th>
                 <th>Asset</th>
                 <th>Amount</th>
+                <th>Value</th>
+                <th>Value (USD)</th>
               </tr>
             </thead>
             <tbody>
@@ -49,6 +51,10 @@
                         {{ symbols[i].display }}
                       </span>
                     </div>
+                  </td>
+                  <td>{{ balance.amount | coinAmount }}</td>
+                  <td>
+                    {{ usdDepositAmount?.[i]?.symbolAmount }} {{ usdDepositAmount?.[i]?.symbol }}
                   </td>
                   <td>{{ usdDepositAmount?.[i]?.usdAmount | currency }}</td>
                 </tr>

@@ -115,6 +115,11 @@
         </table>
         <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
       </div>
+      <div class="card-actions justify-end">
+        <button class="btn btn-secondary" routerLink="deposit/{{ address }}">
+          Deposited Vault
+        </button>
+      </div>
     </div>
   </div>
 
@@ -123,7 +128,7 @@
       <h2 class="card-title">
         Create your own unique vault, earn commission from strategy adopters
       </h2>
-      <ol>
+      <ol class="list-decimal ml-4">
         <li>Tailor assets according to your preference</li>
         <li>Fine-tune your strategy weights</li>
         <li>Set your commission rate</li>

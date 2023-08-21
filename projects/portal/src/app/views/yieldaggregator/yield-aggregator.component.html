@@ -26,7 +26,7 @@
                 name="symbol"
                 (change)="onChangeSymbol()"
               >
-                <option [value]="undefined" disabled>Select a asset</option>
+                <option [value]="undefined" disabled>Select an asset</option>
                 <ng-container *ngFor="let symbol of availableSymbols">
                   <option [value]="symbol">{{ symbol }}</option>
                 </ng-container>

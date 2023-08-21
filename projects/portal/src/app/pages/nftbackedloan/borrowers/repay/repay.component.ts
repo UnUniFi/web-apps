@@ -14,7 +14,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -25,7 +25,7 @@ import {
 export class RepayComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
+  listingInfo$: Observable<ListedNft200ResponseListing>;
   symbol$: Observable<string | null | undefined>;
   symbolMetadataMap$: Observable<{
     [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
@@ -51,7 +51,7 @@ export class RepayComponent implements OnInit {
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getListedNft$(classID, nftID)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();

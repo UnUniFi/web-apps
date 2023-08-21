@@ -14,7 +14,7 @@ import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nf
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
   BidderBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
@@ -37,7 +37,7 @@ export class PlaceBidComponent implements OnInit, OnChanges {
   @Input()
   balance?: number | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  listingInfo?: ListedNft200ResponseListing | null;
   @Input()
   bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()

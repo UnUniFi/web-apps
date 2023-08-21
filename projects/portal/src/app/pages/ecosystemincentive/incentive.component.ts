@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { AllRewards200ResponseRewardRecord } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-incentive',
@@ -16,7 +15,7 @@ import { AllRewards200ResponseRewardRecord } from 'ununifi-client/esm/openapi';
 export class IncentiveComponent implements OnInit {
   address$: Observable<string>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  rewards$: Observable<AllRewards200ResponseRewardRecord>;
+  rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     private readonly incentiveApp: IncentiveApplicationService,
@@ -30,7 +29,7 @@ export class IncentiveComponent implements OnInit {
     );
     this.address$ = address$.pipe(map((addr) => addr.toString()));
     this.rewards$ = address$.pipe(
-      mergeMap((address) => this.incentiveQuery.getAllRewards$(address.toString())),
+      mergeMap((address) => this.incentiveQuery.getEcosystemRewards$(address.toString())),
     );
   }
 

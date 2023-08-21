@@ -11,8 +11,8 @@ import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
   ListedClass200Response,
+  ListedNft200ResponseListing,
   ListedNfts200ResponseListingsInner,
-  ListedNfts200ResponseListingsInnerListing,
   Loan200Response,
   NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
@@ -31,22 +31,16 @@ export class NftPawnshopQueryService {
     );
   }
 
-  getNftListing$(
-    classID: string,
-    nftID: string,
-  ): Observable<ListedNfts200ResponseListingsInnerListing> {
+  getListedNft$(classID: string, nftID: string): Observable<ListedNft200ResponseListing> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftbackedloan.nftListing(sdk, classID, nftID)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedNft(sdk, classID, nftID)),
       map((res) => res.data.listing!),
     );
   }
 
-  async getNftListing(
-    classID: string,
-    nftID: string,
-  ): Promise<ListedNfts200ResponseListingsInnerListing> {
+  async getNftListing(classID: string, nftID: string): Promise<ListedNft200ResponseListing> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const res = await ununifi.rest.nftbackedloan.nftListing(sdk, classID, nftID);
+    const res = await ununifi.rest.nftbackedloan.listedNft(sdk, classID, nftID);
     return res.data.listing!;
   }
 
@@ -57,14 +51,14 @@ export class NftPawnshopQueryService {
     );
   }
 
-  listAllListedClasses$(): Observable<ListedClass200Response[]> {
+  listAllListedClasses$(classID?: string, limit?: number): Observable<ListedClass200Response[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedClasses(sdk)),
+      mergeMap((sdk) => ununifi.rest.nftbackedloan.listedClasses(sdk, classID, limit)),
       map((res) => res.data.classes!),
     );
   }
 
-  listListedClass$(classID: string, limit: number): Observable<ListedClass200Response> {
+  listListedClass$(classID: string, limit?: number): Observable<ListedClass200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.nftbackedloan.listedClass(sdk, classID, limit)),
       map((res) => res.data!),

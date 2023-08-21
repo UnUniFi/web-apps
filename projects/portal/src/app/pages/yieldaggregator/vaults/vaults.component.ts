@@ -4,12 +4,14 @@ import {
 } from '../../../models/band-protocols/band-protocol.service';
 import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { first, map, mergeMap } from 'rxjs/operators';
+import { filter, first, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -18,6 +20,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
   styleUrls: ['./vaults.component.css'],
 })
 export class VaultsComponent implements OnInit {
+  address$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
   apy$: Observable<number[]>;
@@ -27,12 +30,17 @@ export class VaultsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly iyaService: YieldAggregatorService,
     private readonly configService: ConfigService,
     private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.address$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => wallet.address),
+    );
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.vaults$ = combineLatest([
@@ -69,7 +77,7 @@ export class VaultsComponent implements OnInit {
       mergeMap(([symbols, vaults, symbolMetadataMap]) =>
         Promise.all(
           vaults.map((vault, index) =>
-            this.bandProtocolService.convertToUSDAmount(
+            this.bandProtocolService.convertToUSDAmountSymbol(
               symbols[index].symbol,
               (
                 Number(vault.total_bonded_amount) +

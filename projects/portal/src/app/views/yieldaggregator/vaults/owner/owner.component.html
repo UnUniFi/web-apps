@@ -6,7 +6,7 @@
     </ul>
   </div>
 
-  <h3 class="breal-all">Vaults created by {{ owner }}</h3>
+  <h2 class="breal-all mt-4">Created Vaults</h2>
   <ng-container *ngFor="let vault of vaults">
     <div class="w-full md:w-auto mb-8">
       <div class="card bg-base-100 shadow-xl w-full">
@@ -144,5 +144,5 @@
       </div>
     </div>
   </ng-container>
-  <p *ngIf="!vaults?.length" class="ml-4">There is no vault.</p>
+  <p *ngIf="!vaults?.length" class="mt-4 ml-4">There is no vault.</p>
 </div>

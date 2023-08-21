@@ -71,4 +71,13 @@ export class YieldAggregatorQueryService {
       map((res) => res.data!),
     );
   }
+
+  async getEstimatedRedeemAmount(
+    id: string,
+    amount?: string,
+  ): Promise<EstimateRedeemAmount200Response> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const res = await ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount);
+    return res.data!;
+  }
 }

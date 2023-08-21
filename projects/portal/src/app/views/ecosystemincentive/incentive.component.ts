@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { AllRewards200ResponseRewardRecord } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-incentive',
@@ -13,7 +12,7 @@ export class IncentiveComponent implements OnInit {
   @Input()
   unitIds?: string[] | null;
   @Input()
-  rewards?: AllRewards200ResponseRewardRecord | null;
+  rewards?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Output()
   appClickCreate: EventEmitter<string>;
   @Output()

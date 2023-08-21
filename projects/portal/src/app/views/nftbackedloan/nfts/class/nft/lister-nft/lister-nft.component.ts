@@ -4,7 +4,7 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
   Loan200Response,
 } from 'ununifi-client/esm/openapi';
 
@@ -19,7 +19,7 @@ export class ListerNftComponent implements OnInit {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  listingInfo?: ListedNft200ResponseListing | null;
   @Input()
   bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()

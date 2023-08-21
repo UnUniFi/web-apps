@@ -20,7 +20,7 @@
           </a>
         </li>
         <li>
-          <a>
+          <a *ngFor="let reward of rewards">
             <span class="column-name">Rewards:</span>
             <span class="flex-auto"></span>
             <span class="column-value">{{ reward?.amount }}{{ reward?.denom }}</span>

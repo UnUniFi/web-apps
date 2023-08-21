@@ -10,7 +10,7 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ListedNfts200ResponseListingsInnerListing } from 'ununifi-client/esm/openapi';
+import { ListedNft200ResponseListing } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-lender',
@@ -21,7 +21,7 @@ export class LenderComponent implements OnInit {
   address$: Observable<string>;
   symbolDepositMap$: Observable<{ [symbol: string]: number }>;
   symbolLendMap$: Observable<{ [symbol: string]: number }>;
-  biddingNfts$: Observable<ListedNfts200ResponseListingsInnerListing[]>;
+  biddingNfts$: Observable<ListedNft200ResponseListing[]>;
   biddingNftsInfo$: Observable<BidderNftsInfo>;
   nftsMetadata$: Observable<Metadata[]>;
   nftImages$: Observable<string[]>;

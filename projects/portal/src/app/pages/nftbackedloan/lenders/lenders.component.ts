@@ -14,7 +14,7 @@ import {
   BidderBids200ResponseBidsInner,
   ListedClass200Response,
   ListedNfts200ResponseListingsInner,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
 } from 'ununifi-client/esm/openapi';
 
 export interface BidderNftsInfo {
@@ -35,7 +35,7 @@ export class LendersComponent implements OnInit {
   bidderBids$: Observable<BidderBids200ResponseBidsInner[]>;
   depositCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   lendCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
-  biddingNfts$: Observable<ListedNfts200ResponseListingsInnerListing[]>;
+  biddingNfts$: Observable<ListedNft200ResponseListing[]>;
   biddingNftsInfo$: Observable<BidderNftsInfo>;
   rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   listedClasses$: Observable<ListedClass200Response[]>;

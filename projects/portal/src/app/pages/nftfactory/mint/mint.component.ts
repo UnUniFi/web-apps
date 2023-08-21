@@ -34,6 +34,7 @@ export class MintComponent implements OnInit {
   ngOnInit(): void {}
 
   async onMintNft($event: MintNftEvent) {
-    await this.nftMintApp.mintNft($event.classId, $event.nftId, $event.recipient);
+    await this.nftMintApp.mintTestNft($event.nftId, $event.recipient);
+    // await this.nftMintApp.mintNft($event.classId, $event.nftId, $event.recipient);
   }
 }

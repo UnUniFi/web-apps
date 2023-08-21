@@ -17,7 +17,7 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
   BidderBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
@@ -32,7 +32,7 @@ export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  listingInfo?: ListedNft200ResponseListing | null;
   @Input()
   symbol?: string | null;
   @Input()

@@ -102,11 +102,11 @@
             </figure>
             <div class="card-body">
               <span class="badge badge-primary">{{ nft.listing?.state }}</span>
-              <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
-                {{ listedOwnNftsMetadata[i].name + '/' + nft.listing?.nft_id?.token_id }}
-              </h2>
-              <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
-                {{ nft.listing?.nft_id?.token_id }}
+              <h2 class="card-title break-all">
+                <span *ngIf="ownNftsMetadata && ownNftsMetadata.length && ownNftsMetadata[i].name">
+                  {{ ownNftsMetadata[i].name }}
+                </span>
+                <span>{{ nft.listing?.nft_id?.token_id }}</span>
               </h2>
               <button
                 class="btn btn-outline btn-secondary"

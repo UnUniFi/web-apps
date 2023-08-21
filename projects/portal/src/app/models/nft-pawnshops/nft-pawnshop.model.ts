@@ -11,13 +11,15 @@ export type Nft = {
 };
 
 export type Nfts = {
-  nfts?: {
-    class_id?: string;
-    id?: string;
-    uri?: string;
-    uri_hash?: string;
-    data?: null;
-  }[];
+  nfts?: NftInfo[];
+};
+
+export type NftInfo = {
+  class_id?: string;
+  id?: string;
+  uri?: string;
+  uri_hash?: string;
+  data?: null;
 };
 
 export type PlaceBidRequest = {

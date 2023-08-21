@@ -1,4 +1,4 @@
-import { Nfts } from '../../../models/nft-pawnshops/nft-pawnshop.model';
+import { NftInfo, Nfts } from '../../../models/nft-pawnshops/nft-pawnshop.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 
@@ -14,6 +14,8 @@ export class BorrowersComponent implements OnInit {
   ownNfts?: Nfts | null;
   @Input()
   listedOwnNfts?: ListedNfts200ResponseListingsInner[] | null;
+  @Input()
+  notListedOwnNfts?: NftInfo[] | null;
 
   constructor() {}
 

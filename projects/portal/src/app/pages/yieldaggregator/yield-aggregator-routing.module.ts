@@ -2,6 +2,7 @@ import { WalletGuard } from '../../models/wallets/wallet.guard';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';
+import { DepositComponent } from './vaults/deposit/deposit.component';
 import { OwnerComponent } from './vaults/owner/owner.component';
 import { VaultComponent } from './vaults/vault/vault.component';
 import { VaultsComponent } from './vaults/vaults.component';
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'vaults/owner/:address',
     component: OwnerComponent,
+  },
+  {
+    path: 'vaults/deposit/:address',
+    component: DepositComponent,
   },
   {
     path: 'vaults/:vault_id',

@@ -88,7 +88,7 @@ export class VaultComponent implements OnInit {
       this.symbolMetadataMap$,
     ]).pipe(
       mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmount(
+        this.bandProtocolService.convertToUSDAmountSymbol(
           symbol!,
           (
             Number(vault.total_bonded_amount) +
@@ -106,7 +106,7 @@ export class VaultComponent implements OnInit {
       this.symbolMetadataMap$,
     ]).pipe(
       mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmount(
+        this.bandProtocolService.convertToUSDAmountSymbol(
           symbol!,
           vault.total_bonded_amount!,
           symbolMetadataMap,
@@ -120,7 +120,7 @@ export class VaultComponent implements OnInit {
       this.symbolMetadataMap$,
     ]).pipe(
       mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmount(
+        this.bandProtocolService.convertToUSDAmountSymbol(
           symbol!,
           vault.total_unbonding_amount!,
           symbolMetadataMap,
@@ -134,7 +134,7 @@ export class VaultComponent implements OnInit {
       this.symbolMetadataMap$,
     ]).pipe(
       mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmount(
+        this.bandProtocolService.convertToUSDAmountSymbol(
           symbol!,
           vault.withdraw_reserve!,
           symbolMetadataMap,

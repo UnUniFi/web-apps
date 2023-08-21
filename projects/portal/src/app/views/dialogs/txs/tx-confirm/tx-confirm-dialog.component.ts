@@ -21,7 +21,8 @@ export class TxConfirmDialogComponent implements OnInit {
     private clipboard: Clipboard,
     private readonly snackBar: MatSnackBar,
   ) {
-    data.msg = data.msg + ' \nIf it is not reflected, wait a while and reload the page.';
+    data.msg =
+      data.msg + ' \nIf it does not reflect immediately, please wait a moment and reload the page.';
     this.txData = data;
   }
 

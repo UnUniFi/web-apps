@@ -71,7 +71,7 @@ export class YieldAggregatorApplicationService {
 
     await this.dialog
       .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
-        data: { txHash: txHash, msg: 'Successfully deposit to the vault.' },
+        data: { txHash: txHash, msg: 'Deposit to the vault was successful.' },
       })
       .closed.toPromise();
     location.reload();

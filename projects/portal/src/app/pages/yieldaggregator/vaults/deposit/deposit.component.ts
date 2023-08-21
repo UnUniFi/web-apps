@@ -14,8 +14,8 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 export type VaultBalance = {
-  vaultId: string | undefined;
-  amount: number;
+  vaultId: string;
+  amount: string;
 };
 
 @Component({
@@ -50,10 +50,9 @@ export class DepositComponent implements OnInit {
         balance
           .filter((balance) => balance.denom?.includes('yield-aggregator/vaults/'))
           .map((balance) => {
-            const exponent = getDenomExponent(balance.denom!);
             return {
-              vaultId: balance.denom?.replace('yield-aggregator/vaults/', ''),
-              amount: Number(balance.amount) / Math.pow(10, exponent),
+              vaultId: balance.denom?.replace('yield-aggregator/vaults/', '')!,
+              amount: balance.amount!,
             };
           }),
       ),
@@ -77,13 +76,17 @@ export class DepositComponent implements OnInit {
     this.usdDepositAmount$ = combineLatest([this.vaultBalances$, denomMetadataMap$]).pipe(
       mergeMap(([vaultBalances, denomMetadataMap]) =>
         Promise.all(
-          vaultBalances.map((balance) =>
-            this.bandProtocolService.convertToUSDAmountDenom(
-              'yield-aggregator/vaults/' + balance.vaultId,
-              balance.amount.toString(),
+          vaultBalances.map(async (balance) => {
+            const redeemAmount = await this.iyaQuery.getEstimatedRedeemAmount(
+              balance.vaultId,
+              balance.amount,
+            );
+            return this.bandProtocolService.convertToUSDAmountDenom(
+              redeemAmount.redeem_amount?.denom!,
+              redeemAmount.redeem_amount?.amount!,
               denomMetadataMap,
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );

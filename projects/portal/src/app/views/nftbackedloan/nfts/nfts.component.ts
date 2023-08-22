@@ -17,6 +17,7 @@ export class NftsComponent implements OnInit {
   @Input() interestRate?: number | null;
   @Input() date?: string | null;
   @Input() time?: string | null;
+  @Input() minExpiryDate?: number | null;
   @Input() isSearchBoxOpened?: boolean | null;
   @Output()
   searchNfts = new EventEmitter<SearchInfo>();
@@ -28,7 +29,13 @@ export class NftsComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.keyword === null || this.state === null || this.date === null || this.time === null) {
+    if (
+      this.keyword === null ||
+      this.state === null ||
+      this.date === null ||
+      this.time === null ||
+      this.minExpiryDate === null
+    ) {
       return;
     }
     this.searchNfts.emit({
@@ -37,6 +44,7 @@ export class NftsComponent implements OnInit {
       // interestRate: this.interestRate,
       date: this.date,
       time: this.time,
+      minExpiryDate: this.minExpiryDate,
     });
   }
 

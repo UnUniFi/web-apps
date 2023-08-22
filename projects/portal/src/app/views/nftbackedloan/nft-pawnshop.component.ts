@@ -1,3 +1,4 @@
+import { Nfts } from '../../models/nft-pawnshops/nft-pawnshop.model';
 import { Component, Input, OnInit } from '@angular/core';
 import {
   ListedClass200Response,
@@ -17,6 +18,10 @@ export class NftPawnshopComponent implements OnInit {
   listedClasses?: ListedClass200Response[] | null;
   @Input()
   listedNfts?: ListedNfts200ResponseListingsInner[] | null;
+  @Input()
+  ownNfts?: Nfts | null;
+  @Input()
+  listedOwnNfts?: ListedNfts200ResponseListingsInner[] | null;
 
   constructor() {}
 

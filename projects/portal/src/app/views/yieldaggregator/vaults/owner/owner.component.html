@@ -60,6 +60,11 @@
                     routerLink="/yield-aggregator/strategies/{{ vault.vault?.denom }}/{{
                       strategy.strategy_id
                     }}"
+                    [routerLink]="[
+                      '/yield-aggregator/strategies',
+                      vault.vault?.denom,
+                      strategy.strategy_id
+                    ]"
                   >
                     <th>#{{ strategy.strategy_id }}</th>
                     <td>{{ 'Coming Soon' }}</td>

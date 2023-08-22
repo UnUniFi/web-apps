@@ -6,6 +6,7 @@ import { WalletApplicationService } from '../../../models/wallets/wallet.applica
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { Observable, combineLatest, from } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -18,6 +19,9 @@ export class WalletToolComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   symbol$: Observable<string | null | undefined>;
   symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   keplrStoredWallet$: Observable<StoredWallet | null | undefined>;
   leapStoredWallet$: Observable<StoredWallet | null | undefined>;
 
@@ -38,6 +42,7 @@ export class WalletToolComponent implements OnInit {
       map((config) => config?.minimumGasPrices?.[0]?.denom),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.symbol$ = combineLatest([denom$, denomMetadataMap$]).pipe(
       map(([denom, metadata]) => metadata[denom || ''].symbol),
     );

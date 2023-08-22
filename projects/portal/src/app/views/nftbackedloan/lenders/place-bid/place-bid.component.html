@@ -56,7 +56,7 @@
             </tr>
             <tr>
               <td>Bid Token</td>
-              <td>{{ symbol }}</td>
+              <td>{{ listingInfo?.bid_denom | coinDenom | async }}</td>
             </tr>
             <tr>
               <td>Minimum deposit rate</td>
@@ -171,7 +171,7 @@
                   (input)="calculateMinimumDeposit()"
                   (change)="onChangePrice()"
                 />
-                <span>{{ symbol }}</span>
+                <span>{{ listingInfo?.bid_denom | coinDenom | async }}</span>
               </label>
             </div>
             <div class="form-control">
@@ -214,7 +214,7 @@
                   }"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                 />
-                <span>{{ symbol }}</span>
+                <span>{{ listingInfo?.bid_denom | coinDenom | async }}</span>
               </label>
               <label class="label">
                 <span class="label-text-alt">Minimum Deposit: </span>
@@ -222,12 +222,14 @@
                   class="label-text-alt"
                   [class]="{ 'text-error': depositAmountNgModelRef.errors }"
                 >
-                  {{ minimumDeposit }} {{ symbol }}
+                  {{ minimumDeposit }} {{ listingInfo?.bid_denom | coinDenom | async }}
                 </span>
               </label>
               <label class="label -mt-4">
                 <span class="label-text-alt">Available balance:</span>
-                <span class="label-text-alt">{{ balance }} {{ symbol }}</span>
+                <span class="label-text-alt"
+                  >{{ balance }} {{ listingInfo?.bid_denom | coinDenom | async }}</span
+                >
               </label>
             </div>
             <div class="form-control">

@@ -51,13 +51,14 @@
               (change)="onSelectedDenomChanged()"
             >
               <ng-container *ngFor="let s of symbols">
-                <option [value]="s">{{ s }}</option>
+                <option [value]="s">{{ symbolMetadataMap?.[s || '']?.display  }}</option>
               </ng-container>
             </select>
           </label>
           <label class="label">
             <span class="label-text-alt"
-              >Max Claimable Amount: {{ creditAmount }}{{ symbol }}
+              >Max Claimable Amount: {{ creditAmount
+              }}{{ symbolMetadataMap?.[symbol || '']?.display }}
             </span>
           </label>
         </div>

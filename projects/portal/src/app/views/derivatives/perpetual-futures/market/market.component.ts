@@ -8,6 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 import {
   AddressPositions200ResponsePositionsInner,
@@ -50,7 +51,6 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   pool?: ununificlient.proto.ununifi.derivatives.PoolMarketCap.IAssetInfo | null;
   @Input()
   price?: number | null;
-  // price?: ununificlient.proto.ununifi.pricefeed.ICurrentPrice | null;
   @Input()
   positions?: AddressPositions200ResponsePositionsInner[] | null;
   @Input()
@@ -61,6 +61,8 @@ export class MarketComponent implements OnInit, AfterViewInit, OnChanges {
   info?: ununificlient.proto.ununifi.derivatives.IQueryPerpetualFuturesMarketResponse | null;
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
 
   @Output()
   openPosition = new EventEmitter<OpenPositionEvent>();

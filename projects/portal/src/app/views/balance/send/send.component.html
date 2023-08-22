@@ -3,19 +3,6 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">Send Tokens</h2>
-        <!-- <h3>Balance</h3>
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <ng-container *ngFor="let symbol of balanceSymbols">
-                <tr>
-                  <th>{{ symbol }}</th>
-                  <td>{{ symbolBalancesMap?.[symbol] }}</td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-        </div> -->
         <form #formRef="ngForm" (submit)="onSubmitSend()">
           <div class="form-control">
             <label class="label">
@@ -88,7 +75,9 @@
                     'input-error': tokenNgModelRef.errors && tokenNgModelRef.touched
                   }"
                 />
-                <div class="join-item btn btn-neutral btn-disabled">{{ token.symbol }}</div>
+                <div class="join-item btn btn-neutral btn-disabled">
+                  {{ convertSymbolToDisplay(token.symbol) }}
+                </div>
                 <label class="join-item btn btn-error" (click)="onClickDeleteToken(i)">
                   <span class="material-symbols-outlined">delete</span>
                 </label>
@@ -96,7 +85,8 @@
               <span class="label">
                 <span class="label-text">Available:</span>
                 <span class="label-text-alt">
-                  {{ symbolBalancesMap?.[token.symbol] || 0 }} {{ token.symbol }}
+                  {{ symbolBalancesMap?.[token.symbol] || 0 }}
+                  {{ convertSymbolToDisplay(token.symbol) }}
                 </span>
               </span>
             </ng-container>

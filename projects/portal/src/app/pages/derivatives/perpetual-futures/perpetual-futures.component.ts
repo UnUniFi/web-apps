@@ -3,10 +3,8 @@ import { DerivativesQueryService } from '../../../models/derivatives/derivatives
 import { DerivativesService } from '../../../models/derivatives/derivatives.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import cosmosclient from '@cosmos-client/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import ununificlient from 'ununifi-client';
 
 @Component({
   selector: 'app-perpetual-futures',

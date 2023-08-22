@@ -9,8 +9,8 @@ export class CoinDenomPipe implements PipeTransform {
   async transform(value: string | undefined | null): Promise<string | null | undefined> {
     if (value) {
       const metadata = await this.bankQueryService.getDenomMetadata([value]);
-      const symbol = metadata[0].symbol;
-      return symbol;
+      const display = metadata[0].display;
+      return display;
     }
     return value;
   }

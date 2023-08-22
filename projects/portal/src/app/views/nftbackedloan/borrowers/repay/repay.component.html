@@ -48,7 +48,7 @@
             </tr>
             <tr>
               <td>Bid Token</td>
-              <td>{{ symbol }}</td>
+              <td>{{ listingInfo?.bid_denom | coinDenom | async }}</td>
             </tr>
             <tr>
               <td>Minimum deposit rate</td>
@@ -155,7 +155,7 @@
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 (change)="onChangeRepayAmount()"
               />
-              <span>{{ symbol }}</span>
+              <span>{{ listingInfo?.bid_denom | coinDenom | async }}</span>
             </label>
           </div>
 
@@ -185,7 +185,7 @@
                     name="bid{{ i }}"
                     class="input input-bordered w-full"
                   />
-                  <span>{{ symbol }}</span>
+                  <span>{{ listingInfo?.bid_denom | coinDenom | async }}</span>
                   <label class="btn btn-outline btn-error" (click)="onClickDeleteBidder(i)">
                     <span class="material-symbols-outlined">delete</span>
                   </label>

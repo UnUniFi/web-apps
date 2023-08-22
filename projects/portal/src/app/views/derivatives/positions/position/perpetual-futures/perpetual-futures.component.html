@@ -53,7 +53,9 @@
       <div class="stats stats-vertical md:stats-horizontal">
         <div class="stat">
           <div class="stat-title">Opened Rate</div>
-          <div class="stat-value text-primary">{{ openedRate | number }} {{ quoteSymbol }}</div>
+          <div class="stat-value text-primary">
+            {{ openedRate | number }} {{ quoteSymbolDisplay }}
+          </div>
         </div>
         <div class="stat">
           <div class="stat-title">Leverage</div>

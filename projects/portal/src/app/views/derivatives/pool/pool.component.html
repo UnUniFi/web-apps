@@ -127,7 +127,9 @@
                   class="select select-bordered"
                 >
                   <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-                    <option [value]="symbol">{{ symbol }}</option>
+                    <option [value]="symbol">
+                      {{ symbolMetadataMap?.[symbol || '']?.display }}
+                    </option>
                   </ng-container>
                 </select>
               </label>
@@ -212,7 +214,9 @@
                   class="select select-bordered"
                 >
                   <ng-container *ngFor="let symbol of poolAcceptedSymbols">
-                    <option [value]="symbol">{{ symbol }}</option>
+                    <option [value]="symbol">
+                      {{ symbolMetadataMap?.[symbol || '']?.display }}
+                    </option>
                   </ng-container>
                 </select>
               </label>

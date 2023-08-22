@@ -4,7 +4,12 @@ import { Injectable } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 
 export const rest = 'https://laozi1.bandchain.org/api';
-export type TokenAmountUSD = { symbol: string; symbolAmount: number; usdAmount: number };
+export type TokenAmountUSD = {
+  symbol: string;
+  display: string;
+  symbolAmount: number;
+  usdAmount: number;
+};
 @Injectable({
   providedIn: 'root',
 })
@@ -31,13 +36,17 @@ export class BandProtocolService {
   ): Promise<TokenAmountUSD> {
     const price = await this.getPrice(symbol);
     const denom = symbolMetadataMap?.[symbol].base;
+    const display = symbolMetadataMap?.[symbol].display;
     if (!denom) {
       throw new Error(`Denom not found for symbol ${symbol}`);
+    }
+    if (!display) {
+      throw new Error(`Display not found for denom ${denom}`);
     }
     const exponent = getDenomExponent(denom);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const usdAmount = symbolAmount * price;
-    return { symbol, symbolAmount, usdAmount };
+    return { symbol, display, symbolAmount, usdAmount };
   }
 
   async convertToUSDAmountDenom(
@@ -46,13 +55,17 @@ export class BandProtocolService {
     denomMetadataMap: { [denom: string]: cosmos.bank.v1beta1.IMetadata },
   ): Promise<TokenAmountUSD> {
     const symbol = denomMetadataMap[denom].symbol;
+    const display = denomMetadataMap[denom].display;
     if (!symbol) {
       throw new Error(`Symbol not found for denom ${denom}`);
+    }
+    if (!display) {
+      throw new Error(`Display not found for denom ${denom}`);
     }
     const price = await this.getPrice(symbol);
     const exponent = getDenomExponent(denom);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const usdAmount = symbolAmount * price;
-    return { symbol, symbolAmount, usdAmount };
+    return { symbol, display, symbolAmount, usdAmount };
   }
 }

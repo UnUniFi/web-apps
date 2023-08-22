@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-yield-aggregator',
@@ -13,6 +14,7 @@ import { map } from 'rxjs/operators';
 export class YieldAggregatorComponent implements OnInit {
   symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
   availableSymbols$: Observable<string[]>;
+  vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
 
   constructor(
     private readonly bankQuery: BankQueryService,
@@ -37,6 +39,7 @@ export class YieldAggregatorComponent implements OnInit {
         return [...new Set(symbols)];
       }),
     );
+    this.vaults$ = this.iyaQuery.listVaults$();
   }
 
   ngOnInit(): void {}

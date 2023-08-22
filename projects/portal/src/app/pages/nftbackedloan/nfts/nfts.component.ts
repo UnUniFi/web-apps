@@ -12,6 +12,7 @@ export type SearchInfo = {
   state?: string;
   date?: string;
   time?: string;
+  minExpiryDate?: number;
 };
 @Component({
   selector: 'app-nfts',
@@ -26,6 +27,7 @@ export class NftsComponent implements OnInit {
   state$: Observable<string>;
   date$: Observable<string>;
   time$: Observable<string>;
+  minExpiryDate$: Observable<number>;
   isSearchBoxOpened$: Observable<boolean>;
 
   constructor(
@@ -43,6 +45,7 @@ export class NftsComponent implements OnInit {
         const state = params.state;
         const date = params.date;
         const time = params.time;
+        const minExpiryDate = params.minExpiryDate;
         if (keyword) {
           nfts = nfts.filter(
             (nft) =>
@@ -58,13 +61,22 @@ export class NftsComponent implements OnInit {
           const searchDate = time ? new Date(date + 'T' + time) : new Date(date);
           nfts = nfts.filter((nft) => new Date(nft.listing?.started_at!) > searchDate);
         }
+        if (minExpiryDate) {
+          nfts = nfts.filter(
+            (nft) =>
+              Number(nft.listing?.min_bid_period?.replace('s', '')) >
+              Number(minExpiryDate) * 24 * 60 * 60,
+          );
+        }
         return nfts;
       }),
     );
+    this.listedNfts$.subscribe((nfts) => console.log(nfts));
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     this.state$ = this.route.queryParams.pipe(map((params) => params.state));
     this.date$ = this.route.queryParams.pipe(map((params) => params.date));
     this.time$ = this.route.queryParams.pipe(map((params) => params.time));
+    this.minExpiryDate$ = this.route.queryParams.pipe(map((params) => params.minExpiryDate));
     this.isSearchBoxOpened$ = this.route.queryParams.pipe(
       map((params) => params.keyword || params.state || params.date || params.time),
     );
@@ -97,6 +109,7 @@ export class NftsComponent implements OnInit {
         state: searchInfo.state,
         date: searchInfo.date,
         time: searchInfo.time,
+        minExpiryDate: searchInfo.minExpiryDate,
       },
       queryParamsHandling: 'merge',
     });

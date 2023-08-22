@@ -354,10 +354,12 @@
           </div>
 
           <button
-            routerLink="/yield-aggregator/strategies/{{ vault?.vault?.denom }}/{{
-              strategy.strategy_id
-            }}"
             class="btn btn-outline btn-info"
+            [routerLink]="[
+              '/yield-aggregator/strategies',
+              vault?.vault?.denom,
+              strategy.strategy_id
+            ]"
           >
             View
           </button>

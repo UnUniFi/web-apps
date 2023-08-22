@@ -8,6 +8,7 @@ import { LenderComponent } from './lenders/lender/lender.component';
 import { LendersComponent } from './lenders/lenders.component';
 import { PlaceBidComponent } from './lenders/place-bid/place-bid.component';
 import { NftPawnshopComponent } from './nft-pawnshop.component';
+import { ClassComponent } from './nfts/class/class.component';
 import { NftComponent } from './nfts/class/nft/nft.component';
 import { NftsComponent } from './nfts/nfts.component';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'nfts',
     component: NftsComponent,
+  },
+  {
+    path: 'nfts/:class_id',
+    component: ClassComponent,
   },
   {
     path: 'nfts/:class_id/:nft_id',

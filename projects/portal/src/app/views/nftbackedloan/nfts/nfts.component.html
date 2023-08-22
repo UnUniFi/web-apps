@@ -61,10 +61,10 @@
             <option [value]="undefined" disabled>Select a Bid State</option>
             <option [value]="undefined">All State</option>
             <option [value]="'LISTING'">LISTING (No Bid)</option>
-            <option [value]="'BIDDING'">BIDDING (With Bids)</option>
-            <option [value]="'SELLING_DECISION'">SELLING DECISION (Wait for Payment)</option>
+            <option [value]="'BIDDING'">BIDDING</option>
+            <option [value]="'SELLING_DECISION'">SELLING DECISION</option>
             <option [value]="'SUCCESSFUL_BID'">SUCCESSFUL BID (Transferring)</option>
-            <option [value]="'END_LISTING'">END LISTING (Being Liquidated)</option>
+            <option [value]="'LIQUIDATION'">LIQUIDATION</option>
           </select>
           <label class="label">
             <span class="label-text">Started After</span>
@@ -89,7 +89,25 @@
         </div>
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Min Interest Rate (Coming soon)</span>
+            <span class="label-text">Minimum Bid Expiry Date</span>
+          </label>
+          <label class="input-group">
+            <input
+              #minExpiryDateRef
+              type="number"
+              name="minExpiryDate"
+              [(ngModel)]="minExpiryDate"
+              class="input input-bordered w-full"
+              [min]="0"
+              [step]="1"
+              pattern="^[0-9]*\.?[0-9]{0,4}$"
+            />
+            <span>Days</span>
+          </label>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Minimum Interest Rate (Coming soon)</span>
           </label>
           <label class="input-group">
             <input

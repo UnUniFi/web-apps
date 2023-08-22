@@ -34,7 +34,7 @@
               <button
                 class="btn btn-primary gap-2"
                 [disabled]="formRef.invalid"
-                routerLink="{{ config.route }}/{{ selectedDenom }}"
+                [routerLink]="[config.route, selectedDenom]"
               >
                 <span class="material-symbols-outlined">explore</span>
                 <span>View</span>

@@ -3,7 +3,7 @@ import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-paw
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   BidderBids200ResponseBidsInner,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -19,7 +19,7 @@ export class BidderNftComponent implements OnInit {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  listingInfo?: ListedNft200ResponseListing | null;
   @Input()
   bids?: BidderBids200ResponseBidsInner[] | null;
   @Input()

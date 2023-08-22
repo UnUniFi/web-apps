@@ -19,7 +19,7 @@ import ununificlient from 'ununifi-client';
 import {
   BidderBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -33,7 +33,7 @@ export class RepayComponent implements OnInit, OnChanges {
   @Input()
   nftID?: string | null;
   @Input()
-  listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
+  listingInfo?: ListedNft200ResponseListing | null;
   @Input()
   symbol?: string | null;
   @Input()

@@ -6,23 +6,23 @@
     </ul>
   </div>
 
-  <h3 class="breal-all">Vaults created by {{ owner }}</h3>
+  <h2 class="breal-all mt-4">Created Vaults</h2>
   <ng-container *ngFor="let vault of vaults">
     <div class="w-full md:w-auto mb-8">
       <div class="card bg-base-100 shadow-xl w-full">
         <div class="card-body">
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">
-              {{ vault.denom | coinDenom | async }}
+              {{ vault.vault?.denom | coinDenom | async }}
             </div>
           </div>
-          <h2 class="card-title">{{ vault.id }}</h2>
+          <h2 class="card-title">{{ vault.vault?.id }}</h2>
           <div class="overflow-x-auto">
             <table class="table w-full">
               <tbody>
                 <tr>
                   <th>Vault ID</th>
-                  <td>{{ vault?.id }}</td>
+                  <td>{{ vault?.vault?.id }}</td>
                 </tr>
                 <tr>
                   <th>Vault Name</th>
@@ -30,15 +30,15 @@
                 </tr>
                 <tr>
                   <th>Owner's Deposit</th>
-                  <td>{{ vault?.owner_deposit | coin | async }}</td>
+                  <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
                 </tr>
                 <tr>
                   <th>Withdraw Commission Rate</th>
-                  <td>{{ vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
+                  <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
                 </tr>
                 <tr>
                   <th>Withdraw Reserve Rate</th>
-                  <td>{{ vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
+                  <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-4' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -54,10 +54,10 @@
                 </tr>
               </thead>
               <tbody>
-                <ng-container *ngFor="let strategy of vault.strategy_weights">
+                <ng-container *ngFor="let strategy of vault.vault?.strategy_weights">
                   <tr
                     class="hover cursor-pointer"
-                    routerLink="/yield-aggregator/strategies/{{ vault.denom }}/{{
+                    routerLink="/yield-aggregator/strategies/{{ vault.vault?.denom }}/{{
                       strategy.strategy_id
                     }}"
                   >
@@ -71,21 +71,23 @@
           </div>
 
           <div class="card-actions justify-end" *ngIf="owner === address">
-            <label for="transfer-modal-{{ vault.id }}" class="btn btn-outline btn-secondary mr-2"
+            <label
+              for="transfer-modal-{{ vault.vault?.id }}"
+              class="btn btn-outline btn-secondary mr-2"
               >Transfer</label
             >
-            <label for="delete-modal-{{ vault.id }}" class="btn btn-outline btn-error"
+            <label for="delete-modal-{{ vault.vault?.id }}" class="btn btn-outline btn-error"
               >Delete</label
             >
           </div>
           <!-- Put this part before </body> tag -->
-          <input type="checkbox" id="transfer-modal-{{ vault.id }}" class="modal-toggle" />
+          <input type="checkbox" id="transfer-modal-{{ vault.vault?.id }}" class="modal-toggle" />
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">
                 Are you sure to transfer the ownership of this Vault?
               </h3>
-              <form #transferFormRef="ngForm" (submit)="onSubmitTransfer(vault.id)">
+              <form #transferFormRef="ngForm" (submit)="onSubmitTransfer(vault.vault?.id)">
                 <div class="form-control">
                   <label class="label">
                     <span class="label-text">Enter Destination address</span>
@@ -105,11 +107,13 @@
                 </div>
 
                 <p class="py-4">
-                  The ownership of the vault #{{ vault.id }} will be transferred to the address, do
-                  you proceed?
+                  The ownership of the vault #{{ vault.vault?.id }} will be transferred to the
+                  address, do you proceed?
                 </p>
                 <div class="modal-action">
-                  <label for="transfer-modal-{{ vault.id }}" class="btn btn-outline">Cancel</label>
+                  <label for="transfer-modal-{{ vault.vault?.id }}" class="btn btn-outline"
+                    >Cancel</label
+                  >
                   <button class="btn btn-secondary" [disabled]="transferFormRef.invalid">
                     Transfer
                   </button>
@@ -119,14 +123,18 @@
           </div>
 
           <!-- Put this part before </body> tag -->
-          <input type="checkbox" id="delete-modal-{{ vault.id }}" class="modal-toggle" />
+          <input type="checkbox" id="delete-modal-{{ vault.vault?.id }}" class="modal-toggle" />
           <div class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
               <h3 class="font-bold text-lg">Are you sure to delete this Vault?</h3>
-              <form #deleteFormRef="ngForm" (submit)="onSubmitDelete(vault.id)">
-                <p class="py-4">The vault #{{ vault.id }} will be deleted, do you proceed?</p>
+              <form #deleteFormRef="ngForm" (submit)="onSubmitDelete(vault.vault?.id)">
+                <p class="py-4">
+                  The vault #{{ vault.vault?.id }} will be deleted, do you proceed?
+                </p>
                 <div class="modal-action">
-                  <label for="delete-modal-{{ vault.id }}" class="btn btn-outline">Cancel</label>
+                  <label for="delete-modal-{{ vault.vault?.id }}" class="btn btn-outline"
+                    >Cancel</label
+                  >
                   <button class="btn btn-error">Delete</button>
                 </div>
               </form>
@@ -136,5 +144,5 @@
       </div>
     </div>
   </ng-container>
-  <p *ngIf="!vaults?.length" class="ml-4">There is no vault.</p>
+  <p *ngIf="!vaults?.length" class="mt-4 ml-4">There is no vault.</p>
 </div>

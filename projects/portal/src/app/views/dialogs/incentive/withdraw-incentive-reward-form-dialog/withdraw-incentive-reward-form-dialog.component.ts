@@ -22,7 +22,7 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit, OnCha
   @Input()
   minimumGasPrices?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  reward?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  rewards?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   @Output()
   appSubmit: EventEmitter<WithdrawRewardOnSubmitEvent>;

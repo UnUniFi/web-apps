@@ -80,7 +80,7 @@
                   >No Strategy on the chain</span
                 >
                 <span *ngIf="availableSymbols && availableSymbols.length"
-                  >Select a asset's symbol</span
+                  >Select an asset's symbol</span
                 >
               </option>
               <ng-container *ngFor="let symbol of availableSymbols">
@@ -231,9 +231,9 @@
 
                 <ul class="menu w-full">
                   <ng-container *ngFor="let s of strategies">
-                    <ng-container *ngIf="!isAlreadySelectedStrategy(s.id || '')">
+                    <ng-container *ngIf="!isAlreadySelectedStrategy(s.strategy?.id || '')">
                       <li>
-                        <a (click)="onAddStrategy(s.id || '')">{{ s.name }}</a>
+                        <a (click)="onAddStrategy(s.strategy?.id || '')">{{ s.strategy?.name }}</a>
                       </li>
                     </ng-container>
                   </ng-container>

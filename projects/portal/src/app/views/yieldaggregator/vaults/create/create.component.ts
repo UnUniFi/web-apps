@@ -56,7 +56,7 @@ export class CreateComponent implements OnInit {
     }
     this.selectedStrategies.push({
       id: strategyId,
-      name: this.strategies?.find((s) => s.id === strategyId)?.name,
+      name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
       weight: 0,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));

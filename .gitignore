@@ -52,6 +52,3 @@ ssl/server.key
 ssl/server.crt
 ssl/server.csr
 
-# config
-projects/explorer/src/assets/config.js
-projects/portal/src/assets/config.js

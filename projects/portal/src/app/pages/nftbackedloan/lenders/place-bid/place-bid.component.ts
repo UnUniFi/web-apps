@@ -14,7 +14,7 @@ import { combineLatest, Observable, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   BidderBids200ResponseBidsInner,
-  ListedNfts200ResponseListingsInnerListing,
+  ListedNft200ResponseListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -29,7 +29,7 @@ export class PlaceBidComponent implements OnInit {
   symbolImage$: Observable<string | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balance$: Observable<number>;
-  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
+  listingInfo$: Observable<ListedNft200ResponseListing>;
   bids$: Observable<BidderBids200ResponseBidsInner[]>;
   bidAmount$: Observable<number | undefined>;
   depositAmount$: Observable<number | undefined>;
@@ -58,7 +58,7 @@ export class PlaceBidComponent implements OnInit {
     );
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getListedNft$(classID, nftID)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbol$ = combineLatest([this.listingInfo$, denomMetadataMap$]).pipe(

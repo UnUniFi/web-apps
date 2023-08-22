@@ -5,10 +5,7 @@ import { CosmosSDK } from '@cosmos-client/core/cjs/sdk';
 import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
-import {
-  AllRewards200ResponseRewardRecord,
-  EcosystemIncentiveParams200ResponseParams,
-} from 'ununifi-client/esm/openapi';
+import { EcosystemIncentiveParams200ResponseParams } from 'ununifi-client/esm/openapi';
 
 @Injectable({ providedIn: 'root' })
 export class IncentiveQueryService {
@@ -24,20 +21,13 @@ export class IncentiveQueryService {
     );
   }
 
-  getAllRewards$(subjectAddr: string): Observable<AllRewards200ResponseRewardRecord> {
+  getEcosystemRewards$(
+    address: string,
+    denom?: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.allRewards(sdk, subjectAddr)),
-      map((res) => res.data.reward_record!),
-    );
-  }
-
-  getReward$(
-    subjectAddr: string,
-    denom: string,
-  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
-    return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.reward(sdk, subjectAddr, denom)),
-      map((res) => res.data.reward!),
+      mergeMap((sdk) => ununifi.rest.ecosystemIncentive.ecosystemRewards(sdk, address, denom)),
+      map((res) => res.data.rewards!),
     );
   }
 }

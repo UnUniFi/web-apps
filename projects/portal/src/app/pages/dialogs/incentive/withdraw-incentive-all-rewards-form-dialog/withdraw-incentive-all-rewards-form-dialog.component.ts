@@ -9,7 +9,6 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { WithdrawAllRewardsOnSubmitEvent } from 'projects/portal/src/app/views/dialogs/incentive/withdraw-incentive-all-rewards-form-dialog/withdraw-incentive-all-rewards-form-dialog.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AllRewards200ResponseRewardRecord } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-withdraw-incentive-all-rewards-form-dialog',
@@ -20,7 +19,7 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   address: string;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  rewards$: Observable<AllRewards200ResponseRewardRecord>;
+  rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     @Inject(DIALOG_DATA)
@@ -33,7 +32,7 @@ export class WithdrawIncentiveAllRewardsFormDialogComponent implements OnInit {
   ) {
     this.address = data;
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
-    this.rewards$ = this.incentiveQuery.getAllRewards$(this.address);
+    this.rewards$ = this.incentiveQuery.getEcosystemRewards$(this.address);
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }
 

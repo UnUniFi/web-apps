@@ -104,7 +104,7 @@
             <div class="stat-value text-info">
               {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
               {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
@@ -129,12 +129,12 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Withdrawal Reserve Amount</div>
+            <div class="stat-title">Withdraw Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ totalWithdrawalBalance?.symbolAmount }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="totalWithdrawalBalance?.usdAmount">
-              ${{ totalWithdrawalBalance?.usdAmount | currency }}
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+              ${{ withdrawReserve?.usdAmount | currency }}
             </div>
           </div>
         </div>
@@ -171,19 +171,19 @@
               <span class="label-text-alt flex flex-row gap-2">
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 4"
+                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 4"
                 >
                   25%
                 </span>
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[displaySymbol || ''] || 0) / 2"
+                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 2"
                 >
                   50%
                 </span>
                 <span
                   class="cursor-pointer"
-                  (click)="mintAmount = symbolBalancesMap?.[displaySymbol || ''] || 0"
+                  (click)="mintAmount = symbolBalancesMap?.[symbol || ''] || 0"
                 >
                   100%
                 </span>
@@ -201,7 +201,7 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.[displaySymbol || ''] || 0"
+                [max]="symbolBalancesMap?.[symbol || ''] || 0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
@@ -212,7 +212,7 @@
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ symbolBalancesMap?.[displaySymbol || ''] || 0 }} {{ displaySymbol }}
+                {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
           </div>
@@ -225,7 +225,7 @@
               <input
                 disabled
                 class="input input-bordered w-full"
-                value="{{ estimatedMintAmount?.amount | coinAmount }}"
+                value="{{ estimatedMintAmount?.mint_amount?.amount | coinAmount }}"
               />
               <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
             </label>
@@ -301,10 +301,16 @@
               <input
                 disabled
                 class="input input-bordered w-full"
-                value="{{ estimatedBurnAmount?.amount | coinAmount }}"
+                value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
               />
               <span>{{ displaySymbol }}</span>
             </label>
+            <span class="label" *ngIf="estimatedRedeemAmount?.share_amount">
+              <span class="label-text-alt">
+                Total {{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }} - Fee
+                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+              </span>
+            </span>
           </div>
 
           <div class="card-actions justify-end mt-8">
@@ -316,7 +322,7 @@
       </div>
     </div>
   </div>
-  <h2>Strategies this vault contains</h2>
+  <h2>Strategies Contained in this Vault</h2>
   <div class="flex flex-row flex-wrap -mr-12 -mb-12">
     <div
       *ngFor="let strategy of vault?.vault?.strategy_weights; let i = index"

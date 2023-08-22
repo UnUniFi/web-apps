@@ -24,7 +24,7 @@ export class BandProtocolService {
     return result;
   }
 
-  async convertToUSDAmount(
+  async convertToUSDAmountSymbol(
     symbol: string,
     amount: string,
     symbolMetadataMap: { [symbol: string]: cosmos.bank.v1beta1.IMetadata },
@@ -34,6 +34,22 @@ export class BandProtocolService {
     if (!denom) {
       throw new Error(`Denom not found for symbol ${symbol}`);
     }
+    const exponent = getDenomExponent(denom);
+    const symbolAmount = Number(amount) / 10 ** (exponent || 0);
+    const usdAmount = symbolAmount * price;
+    return { symbol, symbolAmount, usdAmount };
+  }
+
+  async convertToUSDAmountDenom(
+    denom: string,
+    amount: string,
+    denomMetadataMap: { [denom: string]: cosmos.bank.v1beta1.IMetadata },
+  ): Promise<TokenAmountUSD> {
+    const symbol = denomMetadataMap[denom].symbol;
+    if (!symbol) {
+      throw new Error(`Symbol not found for denom ${denom}`);
+    }
+    const price = await this.getPrice(symbol);
     const exponent = getDenomExponent(denom);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const usdAmount = symbolAmount * price;

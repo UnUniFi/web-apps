@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Nfts } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { NftInfo, Nfts } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
-import { forkJoin, Observable } from 'rxjs';
-import { concatMap, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -18,11 +18,12 @@ import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';
 export class BorrowerComponent implements OnInit {
   address$: Observable<string>;
   ownNfts$: Observable<Nfts>;
-  ownNftImages$: Observable<string[]>;
-  ownNftsMetadata$: Observable<Metadata[]>;
   listedOwnNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
   listedOwnNftImages$: Observable<string[]>;
   listedOwnNftsMetadata$: Observable<Metadata[]>;
+  notListedOwnNfts$: Observable<NftInfo[] | undefined>;
+  notListedOwnNftImages$: Observable<string[]>;
+  notListedOwnNftsMetadata$: Observable<Metadata[]>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -37,12 +38,6 @@ export class BorrowerComponent implements OnInit {
     this.ownNfts$ = this.address$.pipe(
       mergeMap((address) => this.pawnshopQuery.listOwnNfts$(address)),
     );
-    this.ownNftImages$ = this.ownNfts$.pipe(
-      mergeMap((value) => this.pawnshop.listNftImages(value)),
-    );
-    this.ownNftsMetadata$ = this.ownNfts$.pipe(
-      mergeMap((value) => this.pawnshop.listNftsMetadata(value)),
-    );
 
     this.listedOwnNfts$ = this.address$.pipe(
       mergeMap((address) =>
@@ -51,8 +46,28 @@ export class BorrowerComponent implements OnInit {
           .pipe(map((nfts) => nfts.filter((nft) => nft.listing?.owner == address))),
       ),
     );
+    this.notListedOwnNfts$ = combineLatest([this.ownNfts$, this.listedOwnNfts$]).pipe(
+      map(([ownNfts, listedOwnNfts]) => {
+        const listedOwnNftIds = listedOwnNfts.map((nft) => {
+          return { classId: nft.listing?.nft_id?.class_id, tokenId: nft.listing?.nft_id?.token_id };
+        });
+        const filteredNfts = ownNfts.nfts?.filter(
+          (nft) =>
+            !listedOwnNftIds.some(
+              (listedNft) => listedNft.classId == nft.class_id && listedNft.tokenId == nft.id,
+            ),
+        );
+        return filteredNfts;
+      }),
+    );
+    this.notListedOwnNftImages$ = this.notListedOwnNfts$.pipe(
+      mergeMap((value) => this.pawnshop.listNftImages({ nfts: value })),
+    );
+    this.notListedOwnNftsMetadata$ = this.notListedOwnNfts$.pipe(
+      mergeMap((value) => this.pawnshop.listNftsMetadata({ nfts: value })),
+    );
 
-    const ownNftsUri$ = this.listedOwnNfts$.pipe(
+    const listedOwnNftsUri$ = this.listedOwnNfts$.pipe(
       mergeMap((nfts) =>
         Promise.all(
           nfts.map(async (nft) => {
@@ -70,7 +85,7 @@ export class BorrowerComponent implements OnInit {
       ),
     );
 
-    this.listedOwnNftImages$ = ownNftsUri$.pipe(
+    this.listedOwnNftImages$ = listedOwnNftsUri$.pipe(
       mergeMap((uris) =>
         Promise.all(
           uris.map(async (uri) => {
@@ -81,7 +96,7 @@ export class BorrowerComponent implements OnInit {
       ),
     );
 
-    this.listedOwnNftsMetadata$ = ownNftsUri$.pipe(
+    this.listedOwnNftsMetadata$ = listedOwnNftsUri$.pipe(
       mergeMap((uris) =>
         Promise.all(
           uris.map(async (uri) => {

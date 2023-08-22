@@ -4,12 +4,14 @@ import {
 } from '../../../models/band-protocols/band-protocol.service';
 import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { first, map, mergeMap } from 'rxjs/operators';
+import { filter, first, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -18,6 +20,7 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
   styleUrls: ['./vaults.component.css'],
 })
 export class VaultsComponent implements OnInit {
+  address$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
   apy$: Observable<number[]>;
@@ -27,12 +30,17 @@ export class VaultsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly iyaService: YieldAggregatorService,
     private readonly configService: ConfigService,
     private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.address$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => wallet.address),
+    );
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.vaults$ = combineLatest([
@@ -43,11 +51,11 @@ export class VaultsComponent implements OnInit {
       map(([vaults, params, denomMetadata]) =>
         params.keyword
           ? vaults.filter((vault) => {
-              const hasIdMatch = vault.id && vault.id.includes(params.keyword);
-              const hasOwnerMatch = vault.owner?.includes(params.keyword);
-              const hasDenomMatch = vault.denom?.includes(params.keyword);
-              const hasSymbolMatch = vault.denom
-                ? denomMetadata?.[vault.denom].symbol?.includes(params.keyword)
+              const hasIdMatch = vault.vault?.id && vault.vault?.id.includes(params.keyword);
+              const hasOwnerMatch = vault.vault?.owner?.includes(params.keyword);
+              const hasDenomMatch = vault.vault?.denom?.includes(params.keyword);
+              const hasSymbolMatch = vault.vault?.denom
+                ? denomMetadata?.[vault.vault?.denom].symbol?.includes(params.keyword)
                 : false;
               return hasIdMatch || hasOwnerMatch || hasDenomMatch || hasSymbolMatch;
             })
@@ -57,8 +65,8 @@ export class VaultsComponent implements OnInit {
     this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
       map(([vaults, denomMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.denom!]?.symbol || '';
-          const display = denomMetadataMap?.[vault.denom!]?.display || vault.denom!;
+          const symbol = denomMetadataMap?.[vault.vault?.denom!]?.symbol || '';
+          const display = denomMetadataMap?.[vault.vault?.denom!]?.display || vault.vault?.denom!;
           const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
           return { symbol: symbol, display: display, img: img };
         }),
@@ -68,21 +76,17 @@ export class VaultsComponent implements OnInit {
     this.totalDeposited$ = combineLatest([this.symbols$, this.vaults$, symbolMetadataMap$]).pipe(
       mergeMap(([symbols, vaults, symbolMetadataMap]) =>
         Promise.all(
-          symbols.map(async (symbol, index) => {
-            const vault = await this.iyaQuery
-              .getVault$(vaults[index].id!)
-              .pipe(first())
-              .toPromise();
-            return this.bandProtocolService.convertToUSDAmount(
-              symbol.symbol,
+          vaults.map((vault, index) =>
+            this.bandProtocolService.convertToUSDAmountSymbol(
+              symbols[index].symbol,
               (
                 Number(vault.total_bonded_amount) +
                 Number(vault.total_unbonding_amount) +
-                Number(vault.total_withdrawal_balance)
+                Number(vault.withdraw_reserve)
               ).toString(),
               symbolMetadataMap,
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );
@@ -92,11 +96,11 @@ export class VaultsComponent implements OnInit {
           vaults.map(async (vault) => {
             // TODO: go to a function
             // same in vault.component.ts
-            if (!vault.strategy_weights) {
+            if (!vault.vault?.strategy_weights) {
               return 0;
             }
             let vaultAPY = 0;
-            for (const strategyWeight of vault.strategy_weights) {
+            for (const strategyWeight of vault.vault?.strategy_weights) {
               const strategyInfo = config?.strategiesInfo?.find(
                 (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
               );

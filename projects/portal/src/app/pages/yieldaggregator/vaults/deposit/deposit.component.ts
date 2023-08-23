@@ -48,10 +48,10 @@ export class DepositComponent implements OnInit {
     this.vaultBalances$ = balances$.pipe(
       map((balance) =>
         balance
-          .filter((balance) => balance.denom?.includes('yield-aggregator/vaults/'))
+          .filter((balance) => balance.denom?.includes('yieldaggregator/vaults/'))
           .map((balance) => {
             return {
-              vaultId: balance.denom?.replace('yield-aggregator/vaults/', '')!,
+              vaultId: balance.denom?.replace('yieldaggregator/vaults/', '')!,
               amount: balance.amount!,
             };
           }),

@@ -138,12 +138,12 @@ export class BankQueryService {
         description: 'Yield Aggregator Vault #' + i + 'Token',
         denom_units: [
           {
-            denom: 'yield-aggregator/vaults/' + i,
+            denom: 'yieldaggregator/vaults/' + i,
             exponent: 6,
             aliases: [],
           },
         ],
-        base: 'yield-aggregator/vaults/' + i,
+        base: 'yieldaggregator/vaults/' + i,
         display: 'YA-Vault-' + i,
         name: 'YA Vault #' + i,
         symbol: 'YA-VAULT-' + i,

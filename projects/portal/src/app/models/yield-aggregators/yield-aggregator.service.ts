@@ -128,7 +128,7 @@ export class YieldAggregatorService {
     vault: Vault200Response,
     mintAmount: number,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
-    const lpDenom = 'yield-aggregator/vaults/' + vault?.vault?.id;
+    const lpDenom = 'yieldaggregator/vaults/' + vault?.vault?.id;
     const exponent = getDenomExponent(vault.vault?.denom);
     const mintDenomAmount = mintAmount * Math.pow(10, exponent);
     const totalAmountInVault =
@@ -153,7 +153,7 @@ export class YieldAggregatorService {
     burnAmount: number,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     const denom = vault.vault?.denom;
-    const lpDenom = 'yield-aggregator/vaults/' + vault?.vault?.id;
+    const lpDenom = 'yieldaggregator/vaults/' + vault?.vault?.id;
     const exponent = getDenomExponent(lpDenom);
     const burnDenomAmount = burnAmount * Math.pow(10, exponent);
     const totalAmountInVault =

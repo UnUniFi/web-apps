@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
   ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
@@ -21,13 +21,13 @@ export class BidderNftComponent implements OnInit {
   @Input()
   listingInfo?: ListedNfts200ResponseListingsInnerListing | null;
   @Input()
-  bids?: BidderBids200ResponseBidsInner[] | null;
+  bids?: NftBids200ResponseBidsInner[] | null;
   @Input()
   nftMetadata?: Metadata | null;
   @Input()
   nftImage?: string | null;
   @Input()
-  ownBid?: BidderBids200ResponseBidsInner | null;
+  ownBid?: NftBids200ResponseBidsInner | null;
   @Input()
   isWinning?: boolean | null;
 

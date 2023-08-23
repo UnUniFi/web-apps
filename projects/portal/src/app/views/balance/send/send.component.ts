@@ -53,4 +53,8 @@ export class SendComponent implements OnInit {
     }[];
     this.appSend.emit({ toAddress: this.toAddress, symbolAmounts: amounts });
   }
+
+  convertSymbolToDisplay(symbol: string): string | undefined {
+    return this.balanceSymbols?.find((s) => s?.symbol === symbol)?.display;
+  }
 }

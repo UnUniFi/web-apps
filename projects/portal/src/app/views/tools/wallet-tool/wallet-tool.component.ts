@@ -10,6 +10,7 @@ import {
   Output,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
 import * as crypto from 'crypto';
 
 declare global {
@@ -28,6 +29,8 @@ export class WalletToolComponent implements OnInit, OnChanges {
   symbol?: string | null;
   @Input()
   symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input()
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   keplrStoredWallet?: StoredWallet | null;
   @Input()

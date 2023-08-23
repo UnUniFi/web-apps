@@ -61,10 +61,10 @@
             <option [value]="undefined" disabled>Select a Bid State</option>
             <option [value]="undefined">All State</option>
             <option [value]="'LISTING'">LISTING (No Bid)</option>
-            <option [value]="'BIDDING'">BIDDING (With Bids)</option>
-            <option [value]="'SELLING_DECISION'">SELLING DECISION (Wait for Payment)</option>
+            <option [value]="'BIDDING'">BIDDING</option>
+            <option [value]="'SELLING_DECISION'">SELLING DECISION</option>
             <option [value]="'SUCCESSFUL_BID'">SUCCESSFUL BID (Transferring)</option>
-            <option [value]="'END_LISTING'">END LISTING (Being Liquidated)</option>
+            <option [value]="'LIQUIDATION'">LIQUIDATION</option>
           </select>
           <label class="label">
             <span class="label-text">Started After</span>
@@ -89,7 +89,25 @@
         </div>
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Min Interest Rate (Coming soon)</span>
+            <span class="label-text">Minimum Bid Expiry Date</span>
+          </label>
+          <label class="input-group">
+            <input
+              #minExpiryDateRef
+              type="number"
+              name="minExpiryDate"
+              [(ngModel)]="minExpiryDate"
+              class="input input-bordered w-full"
+              [min]="0"
+              [step]="1"
+              pattern="^[0-9]*\.?[0-9]{0,4}$"
+            />
+            <span>Days</span>
+          </label>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Minimum Interest Rate (Coming soon)</span>
           </label>
           <label class="input-group">
             <input
@@ -155,15 +173,15 @@
           </figure>
           <div class="card-body">
             <span class="badge badge-primary">{{ nft.listing?.state }}</span>
-            <h2 *ngIf="nftsMetadata" class="card-title break-all">
-              {{ nftsMetadata[i].name + '/' + nft.listing?.nft_id?.token_id }}
-            </h2>
-            <h2 *ngIf="!nftsMetadata" class="card-title break-all">
-              {{ nft.listing?.nft_id?.token_id }}
+            <h2 class="card-title break-all">
+              <span *ngIf="nftsMetadata && nftsMetadata.length && nftsMetadata[i].name">
+                {{ nftsMetadata[i].name }}
+              </span>
+              <span>{{ nft.listing?.nft_id?.token_id }}</span>
             </h2>
             <button
               class="btn btn-outline btn-info"
-              routerLink="{{ nft.listing?.nft_id?.class_id }}/{{ nft.listing?.nft_id?.token_id }}"
+              [routerLink]="['./', nft.listing?.nft_id?.class_id, nft.listing?.nft_id?.token_id]"
             >
               View
             </button>

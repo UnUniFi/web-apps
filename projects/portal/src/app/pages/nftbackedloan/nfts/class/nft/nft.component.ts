@@ -11,10 +11,10 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
-  ListedNfts200ResponseListingsInnerListing,
-  BidderBids200ResponseBidsInner,
   Loan200Response,
   Liquidation200ResponseLiquidations,
+  ListedNfts200ResponseListingsInnerListing,
+  NftBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -27,12 +27,12 @@ export class NftComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
   listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
-  bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<NftBids200ResponseBidsInner[]>;
   loan$: Observable<Loan200Response>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   nftMetadata$: Observable<Metadata>;
   nftImage$: Observable<string>;
-  ownBid$: Observable<BidderBids200ResponseBidsInner | undefined>;
+  ownBid$: Observable<NftBids200ResponseBidsInner | undefined>;
   isWinning$: Observable<boolean>;
 
   constructor(
@@ -52,7 +52,7 @@ export class NftComponent implements OnInit {
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getListedNft$(classID, nftID)),
     );
     this.bids$ = nftCombine$.pipe(
       mergeMap(([classID, nftID]) => this.pawnshopQuery.listNftBids$(classID, nftID)),

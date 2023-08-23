@@ -8,9 +8,9 @@ import cosmosclient from '@cosmos-client/core';
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
-  ListedClass200Response,
+  ListedClasses200ResponseClassesInner,
 } from 'ununifi-client/esm/openapi';
 
 @Injectable({
@@ -60,7 +60,7 @@ export class NftPawnshopService {
     });
   }
 
-  async listNftImages(data: ListedClass200Response | Nfts): Promise<string[]> {
+  async listNftImages(data: ListedClasses200ResponseClassesInner | Nfts): Promise<string[]> {
     if (!data.nfts) {
       return [];
     }
@@ -75,7 +75,7 @@ export class NftPawnshopService {
     );
   }
 
-  async listNftsMetadata(data: ListedClass200Response | Nfts): Promise<Metadata[]> {
+  async listNftsMetadata(data: ListedClasses200ResponseClassesInner | Nfts): Promise<Metadata[]> {
     if (!data.nfts) {
       return [];
     }
@@ -266,7 +266,7 @@ export class NftPawnshopService {
   }
 
   autoBorrowBids(
-    bids: BidderBids200ResponseBidsInner[],
+    bids: NftBids200ResponseBidsInner[],
     amount: number,
     symbol: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
@@ -303,7 +303,7 @@ export class NftPawnshopService {
   }
 
   autoRepayBids(
-    bids: BidderBids200ResponseBidsInner[],
+    bids: NftBids200ResponseBidsInner[],
     liquidation: Liquidation200ResponseLiquidations,
     amount: number,
     symbol: string,
@@ -359,7 +359,7 @@ export class NftPawnshopService {
   }
 
   averageInterestRate(
-    bids: BidderBids200ResponseBidsInner[],
+    bids: NftBids200ResponseBidsInner[],
     borrows: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[],
   ): number {
     let total = 0;
@@ -375,10 +375,10 @@ export class NftPawnshopService {
   }
 
   shortestExpiryDate(
-    bids: BidderBids200ResponseBidsInner[],
+    bids: NftBids200ResponseBidsInner[],
     borrows: ununificlient.proto.ununifi.nftbackedloan.IBorrowBid[],
   ): Date {
-    let borrowBids: BidderBids200ResponseBidsInner[] = [];
+    let borrowBids: NftBids200ResponseBidsInner[] = [];
     for (const borrow of borrows) {
       const bid = bids.find((b) => b.id?.bidder === borrow.bidder);
       if (bid) {
@@ -392,7 +392,7 @@ export class NftPawnshopService {
     return period;
   }
 
-  getMaxBorrowAmount(bids: BidderBids200ResponseBidsInner[]): number {
+  getMaxBorrowAmount(bids: NftBids200ResponseBidsInner[]): number {
     // 昇順にソート
     const interestSort = bids.sort((a, b) => Number(a.interest_rate) - Number(b.interest_rate));
     const now = new Date();
@@ -419,7 +419,7 @@ export class NftPawnshopService {
     return Math.floor(borrowAmount);
   }
 
-  getMinimumSettlementAmount(bids: BidderBids200ResponseBidsInner[]): number {
+  getMinimumSettlementAmount(bids: NftBids200ResponseBidsInner[]): number {
     // 降順にソート
     if (!bids.length) {
       return 0;

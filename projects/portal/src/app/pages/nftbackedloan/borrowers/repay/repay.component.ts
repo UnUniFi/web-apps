@@ -12,7 +12,7 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
   ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
@@ -31,7 +31,7 @@ export class RepayComponent implements OnInit {
     [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
   symbolImage$: Observable<string | undefined>;
-  bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<NftBids200ResponseBidsInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   repayAmount$: Observable<number>;
   nftMetadata$: Observable<Metadata>;
@@ -51,7 +51,7 @@ export class RepayComponent implements OnInit {
     this.nftID$ = this.route.params.pipe(map((params) => params.nft_id));
     const nftCombine$ = combineLatest([this.classID$, this.nftID$]);
     this.listingInfo$ = nftCombine$.pipe(
-      mergeMap(([classID, nftID]) => this.pawnshopQuery.getNftListing$(classID, nftID)),
+      mergeMap(([classID, nftID]) => this.pawnshopQuery.getListedNft$(classID, nftID)),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();

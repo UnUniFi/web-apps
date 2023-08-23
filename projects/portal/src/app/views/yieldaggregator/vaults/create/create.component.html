@@ -221,12 +221,16 @@
             </button>
             <dialog id="addStrategyModal" class="modal">
               <form method="dialog" class="modal-box">
-                <h3 class="font-bold text-lg">Strategies for {{ selectedSymbol }}</h3>
+                <h3 class="font-bold text-lg">
+                  Strategies for {{ symbolMetadataMap?.[selectedSymbol || '']?.display  }}
+                </h3>
                 <ng-container *ngIf="!selectedSymbol">
                   <p class="py-4">Select an asset first</p>
                 </ng-container>
                 <ng-container *ngIf="selectedSymbol && !strategies?.length">
-                  <p class="py-4">No strategy for {{ selectedSymbol }}</p>
+                  <p class="py-4">
+                    No strategy for {{ symbolMetadataMap?.[selectedSymbol || '']?.display  }}
+                  </p>
                 </ng-container>
 
                 <ul class="menu w-full">
@@ -275,12 +279,15 @@
                 disabled
                 class="join-item input input-bordered w-full"
               />
-              <div class="join-item btn btn-disabled">{{ deposit?.symbol }}</div>
+              <div class="join-item btn btn-disabled">
+                {{ symbolMetadataMap?.[deposit?.symbol || '']?.display  }}
+              </div>
             </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[deposit?.symbol|| ''] || 0 }} {{ deposit?.symbol }}
+                {{ symbolBalancesMap?.[deposit?.symbol|| ''] || 0 }}
+                {{ symbolMetadataMap?.[deposit?.symbol || '']?.display  }}
               </span>
             </label>
           </div>
@@ -312,12 +319,15 @@
                 disabled
                 class="join-item input input-bordered w-full"
               />
-              <div class="join-item btn btn-disabled">{{ fee?.symbol }}</div>
+              <div class="join-item btn btn-disabled">
+                {{ symbolMetadataMap?.[fee?.symbol || '']?.display  }}
+              </div>
             </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[fee?.symbol|| ''] || 0 }} {{ fee?.symbol }}
+                {{ symbolBalancesMap?.[fee?.symbol || ''] || 0 }}
+                {{ symbolMetadataMap?.[fee?.symbol || '']?.display }}
               </span>
             </label>
           </div>
@@ -340,8 +350,10 @@
             <div class="modal-box">
               <h3 class="font-bold text-lg">Are you sure to create this Vault, OK?</h3>
               <p class="py-4">
-                A deposit of {{ deposit?.amount }}{{ deposit?.symbol }} & a fee {{ fee?.amount
-                }}{{ fee?.symbol }} will be deducted from your balance.
+                A deposit of {{ deposit?.amount
+                }}{{ symbolMetadataMap?.[deposit?.symbol || '']?.display }} & a fee {{ fee?.amount
+                }}{{ symbolMetadataMap?.[fee?.symbol || '']?.display }} will be deducted from your
+                balance.
               </p>
               <div class="modal-action">
                 <label for="create-modal" class="btn btn-outline">Cancel</label>

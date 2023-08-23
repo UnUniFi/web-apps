@@ -1,28 +1,21 @@
 <div class="mx-auto max-w-screen-xl">
-  <!-- <div class="flex flex-col md:flex-row mb-4">
-    <div class="stats shadow">
-      <div class="stat">
-        <div class="stat-title">Deposited</div>
-        <div class="stat-value text-primary">$ 123</div>
-        <div class="stat-desc"></div>
-      </div>
-      <div class="stat">
-        <div class="stat-title">Earnings</div>
-        <div class="stat-value">$ 12.3</div>
-        <div class="stat-desc"></div>
-      </div>
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li>Vaults</li>
+      </ul>
     </div>
     <span class="flex-auto"></span>
-    <button class="btn btn-outline btn-secondary px-8 my-4" routerLink="/yield-aggregator">
-      Top page
+    <button class="btn btn-primary btn-outline mr-4" routerLink="deposit/{{ address }}">
+      <span class="material-symbols-outlined">monetization_on</span>
+      <span>Deposited Vault</span>
     </button>
-  </div> -->
-
-  <div class="text-xl breadcrumbs">
-    <ul>
-      <li>Vaults</li>
-    </ul>
+    <button class="btn btn-info btn-outline" routerLink="..">
+      <span class="material-symbols-outlined">info</span>
+      <span>About</span>
+    </button>
   </div>
+
   <div class="flex flex-row flex-wrap items-end mb-8">
     <form #formRef="ngForm" (submit)="onSubmit()">
       <div class="form-control w-full md:max-w-xs">
@@ -115,11 +108,6 @@
         </table>
         <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
       </div>
-      <div class="card-actions justify-end">
-        <button class="btn btn-secondary" routerLink="deposit/{{ address }}">
-          Deposited Vault
-        </button>
-      </div>
     </div>
   </div>
 
@@ -134,10 +122,10 @@
         <li>Set your commission rate</li>
       </ol>
       <div class="card-actions justify-end">
-        <!-- <button class="btn btn-outline btn-info" routerLink="/yield-aggregator/strategies">
-          View Strategies
-        </button> -->
-        <button class="btn btn-primary" routerLink="create">Create</button>
+        <button class="btn btn-secondary" routerLink="create">
+          <span class="material-symbols-outlined">create</span>
+          <span>Create</span>
+        </button>
       </div>
     </div>
   </div>

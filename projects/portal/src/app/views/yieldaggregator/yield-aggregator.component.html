@@ -1,48 +1,59 @@
-<h2 class="mb-0">Yield Aggregator Dashboard</h2>
-<div class="flex justify-center">
-  <div class="w-full text-base-content">
-    <ng-container *ngFor="let config of configs">
-      <div class="card lg:card-side bg-base-100 shadow-xl mb-4">
-        <div class="card-body">
-          <h2 class="card-title break-all">{{ config.name }}</h2>
-          <p style="white-space: pre-wrap">{{ config.description }}</p>
-          <div class="card-actions justify-end" *ngIf="config.route === 'vaults'">
-            <button class="btn btn-primary gap-2" routerLink="{{ config.route }}">
-              <span class="material-symbols-outlined">monetization_on</span>
-              <span>Deposit</span>
-            </button>
-            <button class="btn btn-secondary gap-2" routerLink="{{ config.route }}/create">
-              <span class="material-symbols-outlined">create</span>
-              <span>create</span>
-            </button>
-          </div>
-
-          <div class="card-actions justify-end" *ngIf="config.route === 'strategies'">
-            <form #formRef="ngForm" class="flex flex-row">
-              <select
-                required
-                class="select select-bordered mr-2"
-                [(ngModel)]="selectedSymbol"
-                name="symbol"
-                (change)="onChangeSymbol()"
-              >
-                <option [value]="undefined" disabled>Select an asset</option>
-                <ng-container *ngFor="let symbol of availableSymbols">
-                  <option [value]="symbol">{{ symbol }}</option>
-                </ng-container>
-              </select>
-              <button
-                class="btn btn-primary gap-2"
-                [disabled]="formRef.invalid"
-                routerLink="{{ config.route }}/{{ selectedDenom }}"
-              >
-                <span class="material-symbols-outlined">explore</span>
-                <span>View</span>
-              </button>
-            </form>
+<div class="mx-auto max-w-screen-xl">
+  <ng-container *ngFor="let config of configs">
+    <div class="card lg:card-side bg-base-100 shadow-xl rounded-lg mb-8">
+      <figure class="aspect-square lg:w-1/4">
+        <img src="{{ config.image }}" />
+      </figure>
+      <div class="card-body lg:w-3/4">
+        <h2 class="card-title break-all">{{ config.name }}</h2>
+        <p style="white-space: pre-wrap">{{ config.description }}</p>
+        <div class="stats" *ngIf="config.name === 'Vaults'">
+          <div class="stat">
+            <div class="stat-title">Available Vaults</div>
+            <div class="stat-value text-info">{{ vaults?.length }}</div>
+            <div class="stat-desc"></div>
           </div>
         </div>
+
+        <div class="card-actions justify-end" *ngIf="config.route === 'vaults'">
+          <button
+            class="btn btn-secondary btn-outline gap-2"
+            routerLink="{{ config.route }}/create"
+          >
+            <span class="material-symbols-outlined">create</span>
+            <span>create</span>
+          </button>
+          <button class="btn btn-primary gap-2 lg:px-8" routerLink="{{ config.route }}">
+            <span class="material-symbols-outlined">monetization_on</span>
+            <span>Deposit</span>
+          </button>
+        </div>
+
+        <div class="card-actions justify-end" *ngIf="config.route === 'strategies'">
+          <form #formRef="ngForm" class="flex flex-row">
+            <select
+              required
+              class="select select-bordered mr-2"
+              [(ngModel)]="selectedSymbol"
+              name="symbol"
+              (change)="onChangeSymbol()"
+            >
+              <option [value]="undefined" disabled>Select an asset</option>
+              <ng-container *ngFor="let symbol of availableSymbols">
+                <option [value]="symbol">{{ symbolMetadataMap?.[symbol || '']?.display  }}</option>
+              </ng-container>
+            </select>
+            <button
+              class="btn btn-primary gap-2"
+              [disabled]="formRef.invalid"
+              [routerLink]="[config.route, selectedDenom]"
+            >
+              <span class="material-symbols-outlined">explore</span>
+              <span>View</span>
+            </button>
+          </form>
+        </div>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 </div>

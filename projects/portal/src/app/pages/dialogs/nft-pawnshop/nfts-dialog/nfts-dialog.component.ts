@@ -4,7 +4,7 @@ import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawn
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { ListedClass200Response } from 'ununifi-client/esm/openapi';
+import { ListedClasses200ResponseClassesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-nfts-dialog',
@@ -13,7 +13,7 @@ import { ListedClass200Response } from 'ununifi-client/esm/openapi';
 })
 export class NftsDialogComponent implements OnInit {
   classID: string | undefined;
-  listedClass$: Observable<ListedClass200Response>;
+  listedClass$: Observable<ListedClasses200ResponseClassesInner>;
   classImage$: Observable<string>;
   nftImages$: Observable<string[]>;
 

@@ -43,7 +43,7 @@
               <div class="stat-value text-secondary">
                 {{ symbolBalancesMap[symbol || ''] || 0 }}
               </div>
-              <div class="stat-desc">{{ symbol }}</div>
+              <div class="stat-desc">{{ symbolMetadataMap?.[symbol || '']?.display  }}</div>
             </div>
           </div>
 

@@ -19,7 +19,7 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
   denom: string;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
-  reward$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   constructor(
     @Inject(DIALOG_DATA)
@@ -37,8 +37,10 @@ export class WithdrawIncentiveRewardFormDialogComponent implements OnInit {
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
 
-    this.reward$ = address$.pipe(
-      mergeMap((address) => this.incentiveQuery.getReward$(address.toString(), this.denom)),
+    this.rewards$ = address$.pipe(
+      mergeMap((address) =>
+        this.incentiveQuery.getEcosystemRewards$(address.toString(), this.denom),
+      ),
     );
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }

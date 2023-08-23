@@ -18,7 +18,7 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import ununificlient from 'ununifi-client';
 import {
   ListedNfts200ResponseListingsInnerListing,
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -42,7 +42,7 @@ export class BorrowComponent implements OnInit, OnChanges {
   @Input()
   symbolImage?: string | null;
   @Input()
-  bids?: BidderBids200ResponseBidsInner[] | null;
+  bids?: NftBids200ResponseBidsInner[] | null;
   @Input()
   borrowAmount?: number | null;
   @Input()

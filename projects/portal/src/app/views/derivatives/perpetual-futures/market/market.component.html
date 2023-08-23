@@ -59,7 +59,7 @@
         <div class="stat">
           <div class="stat-title"></div>
           <div class="stat-value text-primary">{{ price | number }}</div>
-          <div class="stat-desc">{{ quoteSymbol }}</div>
+          <div class="stat-desc">{{ symbolMetadataMap?.[quoteSymbol || '']?.display }}</div>
         </div>
         <div class="stat">
           <div class="stat-title">Borrow Fee</div>
@@ -68,11 +68,6 @@
           </div>
           <div class="stat-desc"></div>
         </div>
-        <!-- <div class="stat">
-        <div class="stat-title">Available Liquidity</div>
-        <div class="stat-value text-secondary"></div>
-        <div class="stat-desc"></div>
-      </div> -->
       </div>
       <!-- TradingView Widget BEGIN -->
       <div class="tradingview-widget-container">
@@ -201,7 +196,7 @@
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                   (input)="onSetMargin()"
                 />
-                <span class="text-info">{{ baseSymbol }}</span>
+                <span class="text-info">{{ symbolMetadataMap?.[baseSymbol || '']?.display }}</span>
               </label>
             </div>
 
@@ -322,8 +317,12 @@
                   class="select select-bordered"
                   (change)="onSetMargin()"
                 >
-                  <option [value]="baseSymbol">{{ baseSymbol }}</option>
-                  <option [value]="quoteSymbol">{{ quoteSymbol }}</option>
+                  <option [value]="baseSymbol">
+                    {{ symbolMetadataMap?.[baseSymbol || '']?.display }}
+                  </option>
+                  <option [value]="quoteSymbol">
+                    {{ symbolMetadataMap?.[quoteSymbol || '']?.display }}
+                  </option>
                 </select>
               </label>
 
@@ -334,7 +333,7 @@
                   [class]="{'text-error': (symbolBalancesMap?.[marginSymbol || ''] || 0)<marginAmount}"
                 >
                   {{ symbolBalancesMap?.[marginSymbol || ''] || 0 }}
-                  {{ marginSymbol }}
+                  {{ symbolMetadataMap?.[marginSymbol || '']?.display }}
                 </span>
               </label>
             </div>
@@ -398,7 +397,8 @@
             <tr>
               <th>#{{ position?.position?.id }}</th>
               <td>
-                {{ baseSymbol }}/{{ quoteSymbol }}<br />
+                {{ symbolMetadataMap?.[baseSymbol || '']?.display
+                }}/{{ symbolMetadataMap?.[quoteSymbol || '']?.display }}<br />
                 <ng-container *ngIf="positionInstances![i]?.position_type === positionType.LONG">
                   <div class="badge badge-primary">Long</div>
                 </ng-container>

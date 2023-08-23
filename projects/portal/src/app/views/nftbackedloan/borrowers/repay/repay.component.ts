@@ -17,7 +17,7 @@ import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops
 import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
   ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
@@ -43,7 +43,7 @@ export class RepayComponent implements OnInit, OnChanges {
   @Input()
   symbolImage?: string | null;
   @Input()
-  bids?: BidderBids200ResponseBidsInner[] | null;
+  bids?: NftBids200ResponseBidsInner[] | null;
   @Input()
   liquidation?: Liquidation200ResponseLiquidations | null;
   @Input()

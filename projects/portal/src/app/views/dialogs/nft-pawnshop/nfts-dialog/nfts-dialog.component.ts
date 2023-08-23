@@ -1,6 +1,6 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ListedClass200Response } from 'ununifi-client/esm/openapi';
+import { ListedClasses200ResponseClassesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-nfts-dialog',
@@ -11,7 +11,7 @@ export class NftsDialogComponent implements OnInit {
   @Input()
   classID: string | undefined;
   @Input()
-  listedClass?: ListedClass200Response | null;
+  listedClass?: ListedClasses200ResponseClassesInner | null;
   @Input()
   classImage?: string | null;
   @Input()

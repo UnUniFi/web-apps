@@ -110,7 +110,7 @@
               </h2>
               <button
                 class="btn btn-outline btn-primary"
-                routerLink="../../nfts/{{ nft.nft_id?.class_id }}/{{ nft.nft_id?.token_id }}"
+                [routerLink]="['../../nfts', nft.nft_id?.class_id, nft.nft_id?.token_id]"
               >
                 View
               </button>

@@ -2,7 +2,7 @@ import { getDenomExponent } from '../cosmos/bank.model';
 import { Injectable } from '@angular/core';
 import { Chart, ChartItem } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import { BidderBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
+import { NftBids200ResponseBidsInner } from 'ununifi-client/esm/openapi';
 
 export type BidChartData = {
   price: number;
@@ -34,7 +34,7 @@ export const chartUtils = {
 export class NftPawnshopChartService {
   constructor() {}
 
-  convertChartData(bids: BidderBids200ResponseBidsInner[], denom: string): BidChartData[] {
+  convertChartData(bids: NftBids200ResponseBidsInner[], denom: string): BidChartData[] {
     const exponent = getDenomExponent(denom);
     const chartData = bids.map((bid) => {
       return {
@@ -375,7 +375,7 @@ export class NftPawnshopChartService {
     };
   }
 
-  createBidAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
+  createBidAmountChartData(bids: NftBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     if (bids.length === 0) {
       return [];
@@ -396,7 +396,7 @@ export class NftPawnshopChartService {
     });
   }
 
-  createDepositAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
+  createDepositAmountChartData(bids: NftBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     const disableColor = '#BFBFBF';
     if (bids.length === 0) {
@@ -429,7 +429,7 @@ export class NftPawnshopChartService {
     return data;
   }
 
-  createBorrowingAmountChartData(bids: BidderBids200ResponseBidsInner[]) {
+  createBorrowingAmountChartData(bids: NftBids200ResponseBidsInner[]) {
     const primaryColor = '#3A4D8F';
     if (bids.length === 0) {
       return [];

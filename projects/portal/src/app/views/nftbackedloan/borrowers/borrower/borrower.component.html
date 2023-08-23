@@ -5,9 +5,9 @@
       <li>Borrowing</li>
     </ul>
   </div>
-  <div>
-    <h2>Your NFTs</h2>
-    <ng-container *ngIf="ownNfts === null; then loading; else loaded"> </ng-container>
+  <div class="mb-4">
+    <h2 class="mb-4">Your NFTs</h2>
+    <ng-container *ngIf="notListedOwnNfts === null; then loading; else loaded"> </ng-container>
     <ng-template #loading>
       <p class="text-center">
         <span class="loading loading-ring loading-lg"></span>
@@ -15,26 +15,26 @@
     </ng-template>
     <ng-template #loaded>
       <ng-container
-        *ngIf="!ownNfts || !ownNfts.nfts || ownNfts.nfts.length === 0; then empty; else filled"
+        *ngIf="!notListedOwnNfts || notListedOwnNfts.length === 0; then empty; else filled"
       ></ng-container>
     </ng-template>
 
     <ng-template #filled>
       <div class="flex flex-row flex-wrap sm:-mr-12 -mb-12">
         <div
-          *ngFor="let nft of ownNfts?.nfts; let i = index"
+          *ngFor="let nft of notListedOwnNfts; let i = index"
           class="sm:pr-12 pb-12 md:w-1/3 lg:w-1/4 xl:w-1/5"
         >
           <div class="card w-full glass shadow-xl">
             <figure class="aspect-square w-full">
               <img
-                *ngIf="ownNftImages"
-                src="{{ ownNftImages[i] || 'assets/UnUniFi-logo.png' }}"
+                *ngIf="notListedOwnNftImages"
+                src="{{ notListedOwnNftImages[i] || 'assets/UnUniFi-logo.png' }}"
                 alt=""
                 class="h-full object-cover"
               />
               <img
-                *ngIf="!ownNftImages"
+                *ngIf="!notListedOwnNftImages"
                 src="assets/UnUniFi-logo.png"
                 alt=""
                 class="h-full object-cover"
@@ -42,15 +42,21 @@
             </figure>
             <div class="card-body">
               <span class="badge badge-primary">NOT LISTING</span>
-              <h2 *ngIf="ownNftsMetadata" class="card-title break-all">
-                {{ ownNftsMetadata[i].name + '/' + nft.id }}
-              </h2>
-              <h2 *ngIf="!ownNftsMetadata" class="card-title break-all">
-                {{ nft.id }}
+              <h2 class="card-title break-all">
+                <span
+                  *ngIf="
+                    notListedOwnNftsMetadata &&
+                    notListedOwnNftsMetadata.length &&
+                    notListedOwnNftsMetadata[i].name
+                  "
+                >
+                  {{ notListedOwnNftsMetadata[i].name }}
+                </span>
+                <span>{{ nft.id }}</span>
               </h2>
               <button
                 class="btn btn-outline btn-info"
-                routerLink="../../nfts/{{ nft.class_id }}/{{ nft.id }}/list"
+                [routerLink]="['../../nfts', nft.class_id, nft.id, 'list']"
               >
                 List
               </button>
@@ -65,7 +71,7 @@
   </div>
 
   <div>
-    <h2>Listed NFTs</h2>
+    <h2 class="mb-4">Listed NFTs</h2>
     <ng-container
       *ngIf="listedOwnNfts === null; then loadingListing; else loadedListing"
     ></ng-container>
@@ -102,17 +108,25 @@
             </figure>
             <div class="card-body">
               <span class="badge badge-primary">{{ nft.listing?.state }}</span>
-              <h2 *ngIf="listedOwnNftsMetadata" class="card-title break-all">
-                {{ listedOwnNftsMetadata[i].name + '/' + nft.listing?.nft_id?.token_id }}
-              </h2>
-              <h2 *ngIf="!listedOwnNftsMetadata" class="card-title break-all">
-                {{ nft.listing?.nft_id?.token_id }}
+              <h2 class="card-title break-all">
+                <span
+                  *ngIf="
+                    notListedOwnNftsMetadata &&
+                    notListedOwnNftsMetadata.length &&
+                    notListedOwnNftsMetadata[i].name
+                  "
+                >
+                  {{ notListedOwnNftsMetadata[i].name }}
+                </span>
+                <span>{{ nft.listing?.nft_id?.token_id }}</span>
               </h2>
               <button
                 class="btn btn-outline btn-secondary"
-                routerLink="../../nfts/{{ nft.listing?.nft_id?.class_id }}/{{
+                [routerLink]="[
+                  '../../nfts',
+                  nft.listing?.nft_id?.class_id,
                   nft.listing?.nft_id?.token_id
-                }}"
+                ]"
               >
                 View
               </button>

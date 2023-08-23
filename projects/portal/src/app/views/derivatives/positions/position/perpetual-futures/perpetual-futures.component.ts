@@ -32,10 +32,10 @@ export class PerpetualFuturesComponent implements OnInit {
   market?: string;
 
   @Input()
-  baseSymbol?: string | null;
+  baseSymbolDisplay?: string | null;
 
   @Input()
-  quoteSymbol?: string | null;
+  quoteSymbolDisplay?: string | null;
 
   @Input()
   openedRate?: number;

@@ -88,6 +88,6 @@ export class StrategiesComponent implements OnInit {
   ngOnInit(): void {}
 
   onChangeDenom(denom: string): void {
-    this.router.navigate(['/yield-aggregator/strategies/' + denom]);
+    this.router.navigate(['/yield-aggregator/strategies/', denom]);
   }
 }

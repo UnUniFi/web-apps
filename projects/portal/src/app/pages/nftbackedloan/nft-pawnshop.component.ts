@@ -10,6 +10,7 @@ import {
   ListedClasses200ResponseClassesInner,
   ListedNfts200ResponseListingsInner,
   NftBackedLoanParams200ResponseParams,
+  NftBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -23,6 +24,8 @@ export class NftPawnshopComponent implements OnInit {
   listedNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
   ownNfts$: Observable<Nfts>;
   listedOwnNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
+  allBids$: Observable<NftBids200ResponseBidsInner[]>;
+  averageInterestRate$: Observable<number>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -40,6 +43,18 @@ export class NftPawnshopComponent implements OnInit {
     this.ownNfts$ = address$.pipe(mergeMap((address) => this.pawnshopQuery.listOwnNfts$(address)));
     this.listedOwnNfts$ = combineLatest([address$, this.listedNfts$]).pipe(
       map(([address, listedNfts]) => listedNfts.filter((nft) => nft.listing?.owner == address)),
+    );
+    this.allBids$ = this.pawnshopQuery.listNftBids$();
+    this.averageInterestRate$ = this.allBids$.pipe(
+      map((bids) => {
+        const interest = bids.reduce(
+          (a, b) => a + Number(b.interest_rate) * parseInt(b.deposit?.amount!),
+          0,
+        );
+        const totalAmount = bids.reduce((a, b) => a + parseInt(b.deposit?.amount!), 0);
+        const averageRate = interest / totalAmount;
+        return averageRate;
+      }),
     );
   }
 

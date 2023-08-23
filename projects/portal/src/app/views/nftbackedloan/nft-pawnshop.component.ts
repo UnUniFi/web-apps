@@ -4,6 +4,7 @@ import {
   ListedClasses200ResponseClassesInner,
   ListedNfts200ResponseListingsInner,
   NftBackedLoanParams200ResponseParams,
+  NftBids200ResponseBidsInner,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -22,6 +23,10 @@ export class NftPawnshopComponent implements OnInit {
   ownNfts?: Nfts | null;
   @Input()
   listedOwnNfts?: ListedNfts200ResponseListingsInner[] | null;
+  @Input()
+  allBids?: NftBids200ResponseBidsInner[] | null;
+  @Input()
+  averageInterestRate?: number | null;
 
   constructor() {}
 

@@ -40,6 +40,16 @@
           <div class="stat-value text-info">{{ listedNfts?.length || 0 }}</div>
           <div class="stat-desc"></div>
         </div>
+        <div class="stat">
+          <div class="stat-title">Bids</div>
+          <div class="stat-value text-accent">{{ allBids?.length || 0 }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Average Interest Rate</div>
+          <div class="stat-value text-secondary">{{ averageInterestRate | percent : '1.2-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
       </div>
 
       <div class="card-actions justify-end">

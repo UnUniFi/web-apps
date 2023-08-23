@@ -36,7 +36,7 @@ export class CreateComponent implements OnInit {
 
   reserveRate?: number;
   name?: string;
-  selectedStrategies: { id?: string; name?: string; weight: number }[] = [];
+  selectedStrategies: { id?: string; name?: string; denom?: string; weight: number }[] = [];
 
   constructor() {
     this.reserveRate = 10;
@@ -50,13 +50,17 @@ export class CreateComponent implements OnInit {
     return this.selectedStrategies.some((s) => s.id === strategyId);
   }
 
-  onAddStrategy(strategyId: string) {
+  onAddStrategy(strategyId: string, strategyDenom: string) {
     if (!strategyId) {
       return;
+    }
+    if (!this.denom) {
+      this.changeDenom.emit(strategyDenom);
     }
     this.selectedStrategies.push({
       id: strategyId,
       name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
+      denom: strategyDenom,
       weight: 0,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
@@ -113,5 +117,14 @@ export class CreateComponent implements OnInit {
       depositAmount: this.deposit.amount,
       depositSymbol: this.deposit.symbol,
     });
+  }
+
+  createStrategyURL(strategy: { id?: string; name?: string; denom?: string; weight: number }) {
+    const url =
+      '/portal/yield-aggregator/strategies/' +
+      encodeURIComponent(strategy.denom || '') +
+      '/' +
+      strategy.id;
+    return url;
   }
 }

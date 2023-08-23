@@ -17,20 +17,15 @@
 
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
-      <div class="tabs tabs-boxed w-full">
-        <a class="tab tab-lg tab-active">Create</a>
-      </div>
       <div class="card-body">
         <form #formRef="ngForm" (submit)="onSubmitCreate()">
-          <div class="form-control">
+          <!-- <div class="form-control">
             <label class="label">
               <span class="label-text">Enter Vault Name</span>
-              <!-- The button to open modal -->
               <label for="modal-name" class="label-text cursor-pointer">
                 <span class="material-symbols-outlined">help</span>
               </label>
 
-              <!-- Put this part before </body> tag -->
               <input type="checkbox" id="modal-name" class="modal-toggle" />
               <div class="modal modal-bottom sm:modal-middle">
                 <div class="modal-box">
@@ -48,7 +43,6 @@
             </label>
             <input
               type="text"
-              readonly
               #nameNgModelRef="ngModel"
               placeholder="Entering name will be supported in next upgrade"
               class="input input-bordered w-full"
@@ -58,7 +52,7 @@
               [(ngModel)]="name"
               name="name"
             />
-          </div>
+          </div> -->
           <div class="form-control">
             <label class="label">
               <span class="label-text">Select Asset for the Vault</span>
@@ -183,7 +177,7 @@
               <div class="flex flex-row flex-wrap gap-2 mb-2">
                 <a
                   class="btn btn-outline normal-case w-full sm:w-64 gap-2"
-                  href="/portal/yield-aggregator/strategies/{{ denom }}/{{ strategy.id }}"
+                  [href]="createStrategyURL(strategy)"
                   target="_blank"
                 >
                   {{ strategy.name }}
@@ -225,7 +219,7 @@
                   Strategies for {{ symbolMetadataMap?.[selectedSymbol || '']?.display  }}
                 </h3>
                 <ng-container *ngIf="!selectedSymbol">
-                  <p class="py-4">Select an asset first</p>
+                  <p class="py-4 text-error">Select an asset first</p>
                 </ng-container>
                 <ng-container *ngIf="selectedSymbol && !strategies?.length">
                   <p class="py-4">
@@ -237,7 +231,9 @@
                   <ng-container *ngFor="let s of strategies">
                     <ng-container *ngIf="!isAlreadySelectedStrategy(s.strategy?.id || '')">
                       <li>
-                        <a (click)="onAddStrategy(s.strategy?.id || '')">{{ s.strategy?.name }}</a>
+                        <a (click)="onAddStrategy(s.strategy?.id || '', s.strategy?.denom || '')">{{
+                          s.strategy?.name
+                        }}</a>
                       </li>
                     </ng-container>
                   </ng-container>

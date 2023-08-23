@@ -113,7 +113,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.mintAmount,
-      symbol: this.displaySymbol!,
+      symbol: this.symbol!,
     });
   }
 
@@ -128,7 +128,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
       amount: this.burnAmount,
-      symbol: this.displaySymbol!,
+      symbol: this.symbol!,
     });
   }
 

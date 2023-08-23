@@ -99,8 +99,8 @@
                     </span>
                   </div>
                 </td>
-                <td>{{ apy?.[i] || 0 | percent : '1.0-4' }}</td>
-                <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-4' }}</td>
+                <td>{{ apy?.[i] || 0 | percent : '1.0-2' }}</td>
+                <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
                 <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>
             </ng-container>

@@ -102,7 +102,7 @@
           <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
             <div class="stat-value text-info">
-              {{ totalDepositAmount?.symbolAmount }} {{ displaySymbol }}
+              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
               {{ totalDepositAmount?.usdAmount | currency }}
@@ -113,28 +113,28 @@
           <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value text-primary">
-              <td>{{ totalBondedAmount?.symbolAmount }} {{ displaySymbol }}</td>
+              <td>{{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}</td>
             </div>
             <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
-              ${{ totalBondedAmount?.usdAmount | currency }}
+              {{ totalBondedAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
             <div class="stat-value text-secondary">
-              {{ totalUnbondingAmount?.symbolAmount }} {{ displaySymbol }}
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
-              ${{ totalUnbondingAmount?.usdAmount | currency }}
+              {{ totalUnbondingAmount?.usdAmount | currency }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Withdraw Reserve Amount</div>
             <div class="stat-value text-info">
-              {{ withdrawReserve?.symbolAmount }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
             <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
-              ${{ withdrawReserve?.usdAmount | currency }}
+              {{ withdrawReserve?.usdAmount | currency }}
             </div>
           </div>
         </div>

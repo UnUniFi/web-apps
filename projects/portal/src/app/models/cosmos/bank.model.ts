@@ -15,7 +15,7 @@ export const denomExponentMap: { [denom: string]: number } = {
 };
 
 const ibcPattern = /^ibc\//;
-const iyaPattern = /^yield-aggregator\/vaults\//;
+const iyaPattern = /^yieldaggregator\/vaults\//;
 
 export function getDenomExponent(denom?: string): number {
   if (!denom) {

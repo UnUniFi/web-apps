@@ -168,7 +168,7 @@ export class VaultComponent implements OnInit {
         if (!id) {
           return of({ redeem_amount: { amount: '0', denom: '' } });
         }
-        const exponent = getDenomExponent('yield-aggregator/vaults/' + id);
+        const exponent = getDenomExponent('yieldaggregator/vaults/' + id);
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );

@@ -12,9 +12,9 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-  BidderBids200ResponseBidsInner,
+  NftBids200ResponseBidsInner,
   Liquidation200ResponseLiquidations,
-  ListedNft200ResponseListing,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -25,13 +25,13 @@ import {
 export class RepayComponent implements OnInit {
   classID$: Observable<string>;
   nftID$: Observable<string>;
-  listingInfo$: Observable<ListedNft200ResponseListing>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
   symbol$: Observable<string | null | undefined>;
   symbolMetadataMap$: Observable<{
     [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
   symbolImage$: Observable<string | undefined>;
-  bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  bids$: Observable<NftBids200ResponseBidsInner[]>;
   liquidation$: Observable<Liquidation200ResponseLiquidations>;
   repayAmount$: Observable<number>;
   nftMetadata$: Observable<Metadata>;

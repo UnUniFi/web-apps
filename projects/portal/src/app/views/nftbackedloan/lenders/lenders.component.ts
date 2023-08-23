@@ -2,7 +2,7 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { BidderNftsInfo } from '../../../pages/nftbackedloan/lenders/lenders.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { ListedClass200Response } from 'ununifi-client/esm/openapi';
+import { ListedClasses200ResponseClassesInner } from 'ununifi-client/esm/openapi';
 
 export interface LendParams {
   classID: string;
@@ -30,7 +30,7 @@ export class LendersComponent implements OnInit {
   @Input()
   denoms?: string[] | null;
   @Input()
-  listedClasses?: ListedClass200Response[] | null;
+  listedClasses?: ListedClasses200ResponseClassesInner[] | null;
   @Input()
   classImages?: string[] | null;
   @Output()

@@ -13,8 +13,8 @@ import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.m
 import { combineLatest, Observable, zip } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
-  BidderBids200ResponseBidsInner,
-  ListedNft200ResponseListing,
+  NftBids200ResponseBidsInner,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -29,8 +29,8 @@ export class PlaceBidComponent implements OnInit {
   symbolImage$: Observable<string | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balance$: Observable<number>;
-  listingInfo$: Observable<ListedNft200ResponseListing>;
-  bids$: Observable<BidderBids200ResponseBidsInner[]>;
+  listingInfo$: Observable<ListedNfts200ResponseListingsInnerListing>;
+  bids$: Observable<NftBids200ResponseBidsInner[]>;
   bidAmount$: Observable<number | undefined>;
   depositAmount$: Observable<number | undefined>;
   interestRate$: Observable<number>;

@@ -7,7 +7,7 @@ import cosmosclient from '@cosmos-client/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
-  ListedClass200Response,
+  ListedClasses200ResponseClassesInner,
   ListedNfts200ResponseListingsInner,
   NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
@@ -19,7 +19,7 @@ import {
 })
 export class NftPawnshopComponent implements OnInit {
   params$: Observable<NftBackedLoanParams200ResponseParams>;
-  listedClasses$: Observable<ListedClass200Response[]>;
+  listedClasses$: Observable<ListedClasses200ResponseClassesInner[]>;
   listedNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
   ownNfts$: Observable<Nfts>;
   listedOwnNfts$: Observable<ListedNfts200ResponseListingsInner[]>;

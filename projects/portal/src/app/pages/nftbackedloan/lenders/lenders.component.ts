@@ -11,10 +11,10 @@ import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
-  BidderBids200ResponseBidsInner,
-  ListedClass200Response,
+  NftBids200ResponseBidsInner,
+  ListedClasses200ResponseClassesInner,
   ListedNfts200ResponseListingsInner,
-  ListedNft200ResponseListing,
+  ListedNfts200ResponseListingsInnerListing,
 } from 'ununifi-client/esm/openapi';
 
 export interface BidderNftsInfo {
@@ -32,13 +32,13 @@ export interface BidderNftsInfo {
 export class LendersComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   balances$: Observable<{ [symbol: string]: number }>;
-  bidderBids$: Observable<BidderBids200ResponseBidsInner[]>;
+  bidderBids$: Observable<NftBids200ResponseBidsInner[]>;
   depositCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   lendCoins$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
-  biddingNfts$: Observable<ListedNft200ResponseListing[]>;
+  biddingNfts$: Observable<ListedNfts200ResponseListingsInnerListing[]>;
   biddingNftsInfo$: Observable<BidderNftsInfo>;
   rewards$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
-  listedClasses$: Observable<ListedClass200Response[]>;
+  listedClasses$: Observable<ListedClasses200ResponseClassesInner[]>;
   classImages$: Observable<string[]>;
   listedNfts$: Observable<ListedNfts200ResponseListingsInner[]>;
 

@@ -1,7 +1,7 @@
 import { Nfts } from '../../models/nft-pawnshops/nft-pawnshop.model';
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  ListedClass200Response,
+  ListedClasses200ResponseClassesInner,
   ListedNfts200ResponseListingsInner,
   NftBackedLoanParams200ResponseParams,
 } from 'ununifi-client/esm/openapi';
@@ -15,7 +15,7 @@ export class NftPawnshopComponent implements OnInit {
   @Input()
   params?: NftBackedLoanParams200ResponseParams | null;
   @Input()
-  listedClasses?: ListedClass200Response[] | null;
+  listedClasses?: ListedClasses200ResponseClassesInner[] | null;
   @Input()
   listedNfts?: ListedNfts200ResponseListingsInner[] | null;
   @Input()

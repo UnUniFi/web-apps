@@ -135,4 +135,14 @@ export class VaultComponent implements OnInit, OnChanges {
   getStrategyInfo(id?: string): StrategyAll200ResponseStrategiesInnerStrategy | undefined {
     return this.vault?.strategies?.find((strategy) => strategy.id === id);
   }
+
+  setMintAmount(rate: number) {
+    this.mintAmount = (this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate;
+    this.onDepositAmountChange();
+  }
+
+  setBurnAmount(rate: number) {
+    this.burnAmount = (this.symbolBalancesMap?.['YA-VAULT-' + this.vault?.vault?.id] || 0) * rate;
+    this.onWithdrawAmountChange();
+  }
 }

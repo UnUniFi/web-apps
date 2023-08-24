@@ -212,24 +212,9 @@
             <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
-                <span
-                  class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 4"
-                >
-                  25%
-                </span>
-                <span
-                  class="cursor-pointer"
-                  (click)="mintAmount = (symbolBalancesMap?.[symbol || ''] || 0) / 2"
-                >
-                  50%
-                </span>
-                <span
-                  class="cursor-pointer"
-                  (click)="mintAmount = symbolBalancesMap?.[symbol || ''] || 0"
-                >
-                  100%
-                </span>
+                <span class="cursor-pointer" (click)="setMintAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(1)"> 100% </span>
               </span>
             </label>
             <label class="input-group">
@@ -287,24 +272,9 @@
             <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
-                <span
-                  class="cursor-pointer"
-                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 4"
-                >
-                  25%
-                </span>
-                <span
-                  class="cursor-pointer"
-                  (click)="burnAmount = (symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0) / 2"
-                >
-                  50%
-                </span>
-                <span
-                  class="cursor-pointer"
-                  (click)="burnAmount = symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0"
-                >
-                  100%
-                </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(1)"> 100% </span>
               </span>
             </label>
             <label class="input-group">

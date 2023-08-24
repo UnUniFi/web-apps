@@ -66,26 +66,69 @@
               <tr>
                 <td class="flex flex-row items-center gap-2">
                   <span>Withdraw Commission Rate</span>
-                  <a
-                    href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
-                    target="_blank"
-                    class="h-[24px]"
-                  >
+                  <!-- The button to open modal -->
+                  <label for="modal-commission" class="label-text cursor-pointer">
                     <span class="material-symbols-outlined">help</span>
-                  </a>
+                  </label>
+
+                  <!-- Put this part before </body> tag -->
+                  <input type="checkbox" id="modal-commission" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the withdraw commission rate?</h3>
+                      <p class="py-4">
+                        This is the commission charged for withdrawals from the vault. In addition
+                        to this, in some cases, a commission is imposed on the strategy.
+                      </p>
+                      <p>
+                        For more information of commissions visit
+                        <a
+                          href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
+                          target="_blank"
+                        >
+                          <u class="text-info">UnUniFi Documentation</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-commission" class="btn">Understood</label>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
                   <span>Withdraw Reserve Rate</span>
-                  <a
-                    href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
-                    target="_blank"
-                    class="h-[24px]"
-                  >
+                  <!-- The button to open modal -->
+                  <label for="modal-reserve" class="label-text cursor-pointer">
                     <span class="material-symbols-outlined">help</span>
-                  </a>
+                  </label>
+
+                  <!-- Put this part before </body> tag -->
+                  <input type="checkbox" id="modal-reserve" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the withdraw reserve rate?</h3>
+                      <p class="py-4">
+                        This is the percentage of withdraw reserves to all deposits. The withdraw
+                        reserves will be used for withdrawal with zero unbonding time. Additionally,
+                        the withdraw reserve rate is used to calculate withdrawal fees.
+                      </p>
+                      <p>
+                        For more information of the withdraw reserve rate visit
+                        <a
+                          href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                          target="_blank"
+                        >
+                          <u class="text-info">UnUniFi Documentation</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-reserve" class="btn">Understood</label>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
               </tr>

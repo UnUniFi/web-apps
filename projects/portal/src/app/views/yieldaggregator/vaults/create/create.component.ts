@@ -91,10 +91,6 @@ export class CreateComponent implements OnInit {
       return;
     }
     const filteredStrategies = strategies.map((s) => ({ id: s.id!, weight: s.weight }));
-    if (!this.name) {
-      alert('Invalid Name.');
-      return;
-    }
     if (!this.selectedSymbol) {
       alert('Invalid Asset.');
       return;
@@ -107,7 +103,7 @@ export class CreateComponent implements OnInit {
       return;
     }
     this.appCreate.emit({
-      name: this.name,
+      name: this.name || '',
       symbol: this.selectedSymbol,
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),

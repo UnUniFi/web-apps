@@ -10,8 +10,8 @@
         <table class="table w-full">
           <tr>
             <th>TxHash</th>
-            <td class="font-mono">
-              <div class="flex items-center gap-2">
+            <td class="font-mono text-end">
+              <div class="items-center gap-2">
                 {{ tx?.tx_response?.txhash }}
                 <button
                   class="btn btn-circle btn-sm"
@@ -25,43 +25,20 @@
           </tr>
           <tr>
             <th>Height</th>
-            <td>{{ tx?.tx_response?.height }}</td>
+            <td class="text-end">{{ tx?.tx_response?.height }}</td>
           </tr>
           <tr>
             <th>Gas Used</th>
-            <td>{{ tx?.tx_response?.gas_used }}</td>
+            <td class="text-end">{{ tx?.tx_response?.gas_used }}</td>
           </tr>
           <tr>
             <th>Gas Wanted</th>
-            <td>{{ tx?.tx_response?.gas_wanted }}</td>
+            <td class="text-end">{{ tx?.tx_response?.gas_wanted }}</td>
           </tr>
           <tr>
             <th>Timestamp</th>
-            <td>
+            <td class="text-end">
               {{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}
-            </td>
-          </tr>
-          <tr>
-            <th>Raw Log</th>
-            <td>
-              <div tabindex="0" class="collapse">
-                <div class="collapse-title flex items-center gap-2 font-medium">
-                  Click to show log
-                  <button
-                    class="btn btn-circle btn-sm"
-                    type="button"
-                    (click)="copyClipboard(tx?.tx_response?.raw_log || '')"
-                  >
-                    <span class="material-symbols-outlined">content_copy</span>
-                  </button>
-                </div>
-
-                <div class="collapse-content">
-                  <p class="font-mono" style="white-space: pre-wrap">
-                    {{ tx?.tx_response?.raw_log | jsonFormat }}
-                  </p>
-                </div>
-              </div>
             </td>
           </tr>
         </table>
@@ -78,12 +55,12 @@
             <table class="table w-full">
               <tr>
                 <th>Type</th>
-                <td>{{ constructorName(msg) }}</td>
+                <td class="font-mono text-end">{{ constructorName(msg) }}</td>
               </tr>
               <ng-template ngFor let-data [ngForOf]="entries(msg)">
                 <tr>
                   <th>{{ data[0] }}</th>
-                  <td class="font-mono">{{ data[1] | json }}</td>
+                  <td class="font-mono text-end">{{ data[1] | json }}</td>
                 </tr>
               </ng-template>
             </table>
@@ -102,15 +79,15 @@
             <table class="table w-full">
               <tr>
                 <th>Key Type</th>
-                <td>{{ constructorName(pubKey) }}</td>
+                <td class="font-mono text-end">{{ constructorName(pubKey) }}</td>
               </tr>
               <tr>
                 <th>Public Key</th>
-                <td class="font-mono">{{ pubKey | json }}</td>
+                <td class="font-mono text-end">{{ pubKey | json }}</td>
               </tr>
               <tr>
                 <th>Signature</th>
-                <td class="font-mono">{{ signerInfo?.mode_info | json }}</td>
+                <td class="font-mono text-end">{{ signerInfo?.mode_info | json }}</td>
               </tr>
             </table>
           </div>
@@ -128,12 +105,12 @@
             <table class="table w-full">
               <tr>
                 <th>Type</th>
-                <td>{{ event.type }}</td>
+                <td class="font-mono text-end">{{ event.type }}</td>
               </tr>
               <ng-template ngFor let-attr [ngForOf]="event.attributes">
                 <tr>
                   <th>{{ attr.key }}</th>
-                  <td class="font-mono">{{ attr.value | json }}</td>
+                  <td class="font-mono text-end">{{ attr.value | json }}</td>
                 </tr>
               </ng-template>
             </table>
@@ -142,6 +119,23 @@
       </div>
     </ng-template>
   </ng-template>
+
+  <h3 class="m-2">Raw Log</h3>
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <div class="overflow-x-auto">
+        <div class="collapse bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title text-xl font-medium">Click to show Raw Log</div>
+          <div class="collapse-content">
+            <p class="font-mono" style="white-space: pre-wrap">
+              {{ tx?.tx_response?.raw_log | jsonFormat }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!--

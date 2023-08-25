@@ -36,6 +36,7 @@ export class CreateComponent implements OnInit {
 
   reserveRate?: number;
   name?: string;
+  description?: string;
   selectedStrategies: { id?: string; name?: string; denom?: string; weight: number }[] = [];
 
   constructor() {
@@ -61,7 +62,7 @@ export class CreateComponent implements OnInit {
       id: strategyId,
       name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
       denom: strategyDenom,
-      weight: 0,
+      weight: this.selectedStrategies.length ? 0 : 100,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
 
@@ -102,9 +103,14 @@ export class CreateComponent implements OnInit {
     if (!this.reserveRate) {
       return;
     }
+    if (!this.address) {
+      alert('Invalid Fee Collector Address.');
+      return;
+    }
     this.appCreate.emit({
       name: this.name || '',
       symbol: this.selectedSymbol,
+      description: this.description || '',
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),
       reserveRate: Number(this.reserveRate),
@@ -112,6 +118,7 @@ export class CreateComponent implements OnInit {
       feeSymbol: this.fee.symbol,
       depositAmount: this.deposit.amount,
       depositSymbol: this.deposit.symbol,
+      feeCollectorAddress: this.address || '',
     });
   }
 

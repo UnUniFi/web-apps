@@ -19,40 +19,6 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <form #formRef="ngForm" (submit)="onSubmitCreate()">
-          <!-- <div class="form-control">
-            <label class="label">
-              <span class="label-text">Enter Vault Name</span>
-              <label for="modal-name" class="label-text cursor-pointer">
-                <span class="material-symbols-outlined">help</span>
-              </label>
-
-              <input type="checkbox" id="modal-name" class="modal-toggle" />
-              <div class="modal modal-bottom sm:modal-middle">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
-                  <p class="py-2">
-                    The Vault must have a unique name. Please give it a name that describes its
-                    purpose and how it will be operated.
-                  </p>
-
-                  <div class="modal-action">
-                    <label for="modal-name" class="btn">Understood</label>
-                  </div>
-                </div>
-              </div>
-            </label>
-            <input
-              type="text"
-              #nameNgModelRef="ngModel"
-              placeholder="Entering name will be supported in next upgrade"
-              class="input input-bordered w-full"
-              [class]="{
-                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
-              }"
-              [(ngModel)]="name"
-              name="name"
-            />
-          </div> -->
           <div class="form-control">
             <label class="label">
               <span class="label-text">Select Asset for the Vault</span>
@@ -81,6 +47,89 @@
                 <option [value]="symbol?.symbol">{{ symbol?.display }}</option>
               </ng-container>
             </select>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Vault Name</span>
+              <label for="modal-name" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <input type="checkbox" id="modal-name" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
+                  <p class="py-2">
+                    The Vault should have a unique name. Please give it a name that describes its
+                    purpose and how it will be operated.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-name" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              #nameNgModelRef="ngModel"
+              placeholder="Enter your vault name"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+              }"
+              [(ngModel)]="name"
+              name="name"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Vault Description</span>
+            </label>
+            <textarea
+              type="text"
+              #descriptionNgModelRef="ngModel"
+              placeholder="Enter your vault description"
+              class="textarea textarea-bordered"
+              [class]="{
+                'input-error': descriptionNgModelRef.errors && descriptionNgModelRef.touched
+              }"
+              [(ngModel)]="description"
+              name="description"
+            >
+            </textarea>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Fee Collector Address</span>
+              <label for="modal-collector" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <input type="checkbox" id="modal-collector" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Fee Collector?</h3>
+                  <p class="py-2">
+                    The address from which this vault fee is earned must be specified.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-collector" class="btn">Understood</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              #collectorNgModelRef="ngModel"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': collectorNgModelRef.errors && collectorNgModelRef.touched
+              }"
+              [(ngModel)]="address"
+              name="collector"
+            />
           </div>
           <div class="form-control">
             <span class="label">

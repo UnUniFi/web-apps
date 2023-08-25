@@ -137,6 +137,7 @@ export class YieldAggregatorApplicationService {
   async createVault(
     name: string,
     symbol: string,
+    description: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
@@ -144,6 +145,7 @@ export class YieldAggregatorApplicationService {
     feeSymbol: string,
     depositAmount: number,
     depositSymbol: string,
+    feeCollectorAddress: string,
   ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
@@ -159,6 +161,8 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgCreateVault(
       address,
       symbol,
+      name,
+      description,
       strategies,
       commissionRate,
       reserveRate,
@@ -166,6 +170,7 @@ export class YieldAggregatorApplicationService {
       feeSymbol,
       depositAmount,
       depositSymbol,
+      feeCollectorAddress,
       symbolMetadataMap,
     );
 

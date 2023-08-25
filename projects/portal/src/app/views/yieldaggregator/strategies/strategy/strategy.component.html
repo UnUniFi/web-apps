@@ -25,17 +25,17 @@
           <span>
             {{ strategy?.strategy?.name }}
           </span>
+          <div class="badge badge-primary">{{ displaySymbol }}</div>
         </h2>
+        <p *ngIf="strategy?.strategy?.description" class="m-8" style="white-space: pre-wrap">
+          {{ strategy?.strategy?.description }}
+        </p>
 
         <table class="table w-full">
           <tbody>
             <tr>
               <td>Strategy ID</td>
               <td>{{ id }}</td>
-            </tr>
-            <tr>
-              <td>Asset</td>
-              <td>{{ displaySymbol }}</td>
             </tr>
             <tr>
               <td>Contract Address</td>

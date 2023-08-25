@@ -19,31 +19,13 @@
           <ng-container *ngIf="!symbolImage">
             <span class="material-symbols-outlined">question_mark</span>
           </ng-container>
-          <span>Vault #{{ vault?.vault?.id }}</span>
+          <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
+          <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           <div class="badge badge-primary">{{ displaySymbol }}</div>
         </h2>
-        <!-- <div class="stats">
-          <div class="stat">
-            <div class="stat-title">APY</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">TVL</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Deposited</div>
-            <div class="stat-value text-primary">$ 123</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Earnings</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div> -->
+        <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
+          {{ vault?.vault?.description }}
+        </p>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
@@ -51,21 +33,9 @@
                 <td>Vault ID</td>
                 <td>{{ vault?.vault?.id }}</td>
               </tr>
-              <!-- <tr>
-                <td>Vault Name</td>
-                <td>{{ 'Coming soon' }}</td>
-              </tr> -->
-              <!-- <tr>
-                <td>Owner</td>
-                <td class="font-mono break-all">{{ vault?.vault?.owner }}</td>
-              </tr>
-              <tr>
-                <td>Owner's Deposit</td>
-                <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
-              </tr> -->
               <tr>
                 <td class="flex flex-row items-center gap-2">
-                  <span>Withdraw Commission Rate</span>
+                  <span>Withdrawal Commission Rate</span>
                   <!-- The button to open modal -->
                   <label for="modal-commission" class="label-text cursor-pointer">
                     <span class="material-symbols-outlined">help</span>
@@ -75,22 +45,22 @@
                   <input type="checkbox" id="modal-commission" class="modal-toggle" />
                   <div class="modal modal-bottom sm:modal-middle">
                     <div class="modal-box">
-                      <h3 class="font-bold text-lg">What is the withdraw commission rate?</h3>
+                      <h3 class="font-bold text-lg">What is the withdrawal commission rate?</h3>
                       <p class="py-4">
-                        This is the commission charged for withdrawals from the vault. In addition
-                        to this, in some cases, a commission is imposed on the strategy.
+                        This is the commission charged for withdrawals from the vault. Additionally,
+                        sometimes an additional commission may be imposed based on the strategy.
                       </p>
                       <p>
-                        For more information of commissions visit
+                        For more information on commissions visit
                         <a
                           href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
                           target="_blank"
                         >
-                          <u class="text-info">UnUniFi Documentation</u> </a
+                          <u class="text-info">the UnUniFi Documentation</u> </a
                         >.
                       </p>
                       <div class="modal-action">
-                        <label for="modal-commission" class="btn">Understood</label>
+                        <label for="modal-commission" class="btn">Okay</label>
                       </div>
                     </div>
                   </div>
@@ -99,7 +69,7 @@
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
-                  <span>Withdraw Reserve Rate</span>
+                  <span>Withdrawal Reserve Rate</span>
                   <!-- The button to open modal -->
                   <label for="modal-reserve" class="label-text cursor-pointer">
                     <span class="material-symbols-outlined">help</span>
@@ -109,23 +79,24 @@
                   <input type="checkbox" id="modal-reserve" class="modal-toggle" />
                   <div class="modal modal-bottom sm:modal-middle">
                     <div class="modal-box">
-                      <h3 class="font-bold text-lg">What is the withdraw reserve rate?</h3>
+                      <h3 class="font-bold text-lg">What is the withdrawal reserve rate?</h3>
                       <p class="py-4">
-                        This is the percentage of withdraw reserves to all deposits. The withdraw
-                        reserves will be used for withdrawal with zero unbonding time. Additionally,
-                        the withdraw reserve rate is used to calculate withdrawal fees.
+                        This is the percentage of withdrawal reserves available for all deposits.
+                        The withdrawal reserves will be used for withdrawing with zero unbonding
+                        time. Additionally, the Withdrawal Reserve Rate is used to calculate
+                        withdrawal fees.
                       </p>
                       <p>
-                        For more information of the withdraw reserve rate visit
+                        For more information about the Withdrawal Reserve Rate, visit
                         <a
                           href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
                           target="_blank"
                         >
-                          <u class="text-info">UnUniFi Documentation</u> </a
+                          <u class="text-info">the UnUniFi Documentation</u> </a
                         >.
                       </p>
                       <div class="modal-action">
-                        <label for="modal-reserve" class="btn">Understood</label>
+                        <label for="modal-reserve" class="btn">Okay</label>
                       </div>
                     </div>
                   </div>
@@ -172,7 +143,7 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Withdraw Reserve Amount</div>
+            <div class="stat-title">Withdrawal Reserve Amount</div>
             <div class="stat-value text-info">
               {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
@@ -203,7 +174,7 @@
           Deposit
         </a>
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
-          Withdraw
+          Withdrawal
         </a>
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
@@ -328,7 +299,7 @@
 
           <div class="card-actions justify-end mt-8">
             <button class="btn btn-secondary px-8" [disabled]="withdrawFormRef.invalid">
-              Withdraw
+              Withdrawal
             </button>
           </div>
         </form>
@@ -360,7 +331,7 @@
           </h2>
           <div class="stats">
             <div class="stat">
-              <div class="stat-title">Allocation weight</div>
+              <div class="stat-title">Allocation Weight</div>
               <div class="stat-value">{{ strategy.weight | percent : '1.0-2' }}</div>
               <div class="stat-desc"></div>
             </div>

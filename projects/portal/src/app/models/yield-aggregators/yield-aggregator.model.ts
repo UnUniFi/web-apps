@@ -13,6 +13,7 @@ export type WithdrawFromVaultRequest = {
 export type CreateVaultRequest = {
   name: string;
   symbol: string;
+  description: string;
   strategies: { id: string; weight: number }[];
   commissionRate: number;
   reserveRate: number;
@@ -20,6 +21,7 @@ export type CreateVaultRequest = {
   feeSymbol: string;
   depositAmount: number;
   depositSymbol: string;
+  feeCollectorAddress: string;
 };
 
 export type TransferVaultRequest = {

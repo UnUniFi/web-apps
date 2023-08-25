@@ -109,6 +109,7 @@ export class CreateComponent implements OnInit {
     this.iyaApp.createVault(
       data.name,
       data.symbol,
+      data.description,
       data.strategies,
       data.commissionRate,
       data.reserveRate,
@@ -116,6 +117,7 @@ export class CreateComponent implements OnInit {
       data.feeSymbol,
       data.depositAmount,
       data.depositSymbol,
+      data.feeCollectorAddress,
     );
   }
 }

@@ -1,4 +1,6 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { CosmosTxV1beta1GetTxResponse } from '@cosmos-client/core/esm/openapi';
 
@@ -11,9 +13,9 @@ export class TxComponent implements OnInit {
   @Input()
   tx?: CosmosTxV1beta1GetTxResponse | null;
 
-  constructor() { }
+  constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   unpackMsg(value: any) {
     try {
@@ -37,5 +39,15 @@ export class TxComponent implements OnInit {
 
   entries(value: unknown) {
     return Object.entries(value as any);
+  }
+
+  copyClipboard(value: string) {
+    if (value.length > 0) {
+      this.clipboard.copy(value);
+      this.snackBar.open('Copied to clipboard', undefined, {
+        duration: 3000,
+      });
+    }
+    return false;
   }
 }

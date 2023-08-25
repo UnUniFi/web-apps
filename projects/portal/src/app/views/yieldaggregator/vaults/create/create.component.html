@@ -19,40 +19,6 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <form #formRef="ngForm" (submit)="onSubmitCreate()">
-          <!-- <div class="form-control">
-            <label class="label">
-              <span class="label-text">Enter Vault Name</span>
-              <label for="modal-name" class="label-text cursor-pointer">
-                <span class="material-symbols-outlined">help</span>
-              </label>
-
-              <input type="checkbox" id="modal-name" class="modal-toggle" />
-              <div class="modal modal-bottom sm:modal-middle">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
-                  <p class="py-2">
-                    The Vault must have a unique name. Please give it a name that describes its
-                    purpose and how it will be operated.
-                  </p>
-
-                  <div class="modal-action">
-                    <label for="modal-name" class="btn">Understood</label>
-                  </div>
-                </div>
-              </div>
-            </label>
-            <input
-              type="text"
-              #nameNgModelRef="ngModel"
-              placeholder="Entering name will be supported in next upgrade"
-              class="input input-bordered w-full"
-              [class]="{
-                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
-              }"
-              [(ngModel)]="name"
-              name="name"
-            />
-          </div> -->
           <div class="form-control">
             <label class="label">
               <span class="label-text">Select Asset for the Vault</span>
@@ -83,15 +49,119 @@
             </select>
           </div>
           <div class="form-control">
-            <span class="label">
-              <span class="label-text">Enter Commission Rate</span>
-              <a
-                href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
-                target="_blank"
-                class="label-text"
-              >
+            <label class="label">
+              <span class="label-text">Enter Vault Name</span>
+              <label for="modal-name" class="label-text cursor-pointer">
                 <span class="material-symbols-outlined">help</span>
-              </a>
+              </label>
+
+              <input type="checkbox" id="modal-name" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Vault Name?</h3>
+                  <p class="py-2">
+                    The Vault should have a unique name. Please give it a name that describes its
+                    purpose and how it will be operated.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-name" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              #nameNgModelRef="ngModel"
+              placeholder="Enter your vault name"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+              }"
+              [(ngModel)]="name"
+              name="name"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Vault Description</span>
+            </label>
+            <textarea
+              type="text"
+              #descriptionNgModelRef="ngModel"
+              placeholder="Enter your vault description"
+              class="textarea textarea-bordered"
+              [class]="{
+                'input-error': descriptionNgModelRef.errors && descriptionNgModelRef.touched
+              }"
+              [(ngModel)]="description"
+              name="description"
+            >
+            </textarea>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter Fee Collector Address</span>
+              <label for="modal-collector" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <input type="checkbox" id="modal-collector" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is Fee Collector?</h3>
+                  <p class="py-2">
+                    The address from which this vault fee is earned must be specified.
+                  </p>
+
+                  <div class="modal-action">
+                    <label for="modal-collector" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="text"
+              #collectorNgModelRef="ngModel"
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': collectorNgModelRef.errors && collectorNgModelRef.touched
+              }"
+              [(ngModel)]="address"
+              name="collector"
+            />
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Enter Withdraw Commission Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-commission" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-commission" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the withdraw commission rate?</h3>
+                  <p class="py-4">
+                    This is the commission charged for withdrawals from the vault. Additionally,
+                    sometimes an additional commission may be imposed based on the strategy.
+                  </p>
+                  <p>
+                    For more information on commissions visit
+                    <a
+                      href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
+                      target="_blank"
+                    >
+                      <u class="text-info">the UnUniFi Documentation</u> </a
+                    >.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-commission" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
             </span>
             <div class="join">
               <input
@@ -115,13 +185,35 @@
           <div class="form-control">
             <div class="label">
               <span class="label-text">Enter Withdraw Reserve Rate</span>
-              <a
-                href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
-                target="_blank"
-                class="label-text"
-              >
+              <!-- The button to open modal -->
+              <label for="modal-reserve" class="label-text cursor-pointer">
                 <span class="material-symbols-outlined">help</span>
-              </a>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-reserve" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the withdraw reserve rate?</h3>
+                  <p class="py-4">
+                    This is the percentage of withdrawal reserves available for all deposits. The
+                    withdrawal reserves will be used for withdrawing with zero unbonding time.
+                    Additionally, the Withdrawal Reserve Rate is used to calculate withdrawal fees.
+                  </p>
+                  <p>
+                    For more information about the Withdrawal Reserve Rate, visit
+                    <a
+                      href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                      target="_blank"
+                    >
+                      <u class="text-info">the UnUniFi Documentation</u> </a
+                    >.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-reserve" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="join">
               <input
@@ -167,7 +259,7 @@
                     >.
                   </p>
                   <div class="modal-action">
-                    <label for="modal-strategy" class="btn">Understood</label>
+                    <label for="modal-strategy" class="btn">Okay</label>
                   </div>
                 </div>
               </div>
@@ -262,7 +354,7 @@
                     The creator must deposit a specified amount of tokens in advance in the Vault.
                   </p>
                   <div class="modal-action">
-                    <label for="modal-deposit" class="btn">Understood</label>
+                    <label for="modal-deposit" class="btn">Okay</label>
                   </div>
                 </div>
               </div>
@@ -302,7 +394,7 @@
                   <h3 class="font-bold text-lg">What is the fee?</h3>
                   <p class="py-4">A specified fee is charged for the creation of a new Vault.</p>
                   <div class="modal-action">
-                    <label for="modal-fee" class="btn">Understood</label>
+                    <label for="modal-fee" class="btn">Okay</label>
                   </div>
                 </div>
               </div>

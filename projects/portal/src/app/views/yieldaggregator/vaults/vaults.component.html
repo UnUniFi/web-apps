@@ -20,7 +20,7 @@
     <form #formRef="ngForm" (submit)="onSubmit()">
       <div class="form-control w-full md:max-w-xs">
         <label class="label">
-          <span class="label-text">Filtering</span>
+          <span class="label-text">Filters</span>
         </label>
         <div class="input-group">
           <input
@@ -50,27 +50,19 @@
         </div>
       </div>
     </form>
-    <!-- <div class="flex-auto flex flex-row">
-      <span class="flex-auto"></span>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Only deposited</span>
-          <input type="checkbox" checked="checked" class="checkbox checkbox-primary" />
-        </label>
-      </div>
-    </div> -->
   </div>
 
-  <h3 class="pb-2">Select the Vault to deposit</h3>
   <div class="card bg-base-100 shadow-xl mb-8">
     <div class="card-body">
+      <h2 class="card-title">Available Vaults</h2>
+      <P>Select a vault to deposit funds based on your preferences, and earn yield.</P>
       <div class="overflow-x-auto">
         <table class="table w-full">
           <!-- head -->
           <thead>
             <tr>
               <th></th>
-              <!-- <td>Name</td> -->
+              <td>Name</td>
               <td>Asset</td>
               <td>APY</td>
               <td>Commission Rate</td>
@@ -81,7 +73,7 @@
             <ng-container *ngFor="let vault of vaults; let i = index">
               <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
                 <th>#{{ vault.vault?.id }}</th>
-                <!-- <td>{{ vault.name }}</td> -->
+                <td>{{ vault.vault?.name }}</td>
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
                     <ng-container *ngIf="symbols[i]?.img">
@@ -113,18 +105,20 @@
 
   <div class="card lg:card-side bg-base-100 shadow-xl mb-4">
     <div class="card-body">
-      <h2 class="card-title">
-        Create your own unique vault, earn commission from strategy adopters
-      </h2>
+      <h2 class="card-title">Vault Creation</h2>
+      <P>
+        You can become a Vault Creator if you choose to create your own unique vault. Earn
+        commission based on strategy popularity.
+      </P>
       <ol class="list-decimal ml-4">
-        <li>Tailor assets according to your preference</li>
+        <li>Tailor assets according to your preferences</li>
         <li>Fine-tune your strategy weights</li>
         <li>Set your commission rate</li>
       </ol>
       <div class="card-actions justify-end">
         <button class="btn btn-secondary" routerLink="create">
           <span class="material-symbols-outlined">create</span>
-          <span>Create</span>
+          <span>Create Vault</span>
         </button>
       </div>
     </div>

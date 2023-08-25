@@ -67,6 +67,8 @@ export class YieldAggregatorService {
   buildMsgCreateVault(
     senderAddress: string,
     symbol: string,
+    name: string,
+    description: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
@@ -74,6 +76,7 @@ export class YieldAggregatorService {
     feeSymbol: string,
     deposit: number,
     depositSymbol: string,
+    feeCollectorAddress: string,
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
     const denom = symbolMetadataMap[symbol].base;
@@ -96,11 +99,14 @@ export class YieldAggregatorService {
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgCreateVault({
       sender: senderAddress,
       denom: denom,
+      name: name,
+      description: description,
       commission_rate: decCommission,
       withdraw_reserve_rate: decReserve,
       strategy_weights: strategyWeights,
       fee: coinFee,
       deposit: coinDeposit,
+      fee_collector_address: feeCollectorAddress,
     });
     return msg;
   }

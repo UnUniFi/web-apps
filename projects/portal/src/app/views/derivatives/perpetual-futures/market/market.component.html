@@ -36,7 +36,7 @@
                 </p>
 
                 <div class="modal-action">
-                  <label for="modal-perpetual" class="btn">Understood</label>
+                  <label for="modal-perpetual" class="btn">Okay</label>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@
                     </p>
 
                     <div class="modal-action">
-                      <label for="modal-position-type" class="btn">Understood</label>
+                      <label for="modal-position-type" class="btn">Okay</label>
                     </div>
                   </div>
                 </div>
@@ -170,7 +170,7 @@
                       risk by sizing positions appropriately.
                     </p>
                     <div class="modal-action">
-                      <label for="modal-position-size" class="btn">Understood</label>
+                      <label for="modal-position-size" class="btn">Okay</label>
                     </div>
                   </div>
                 </div>
@@ -223,7 +223,7 @@
                       of market volatility.
                     </p>
                     <div class="modal-action">
-                      <label for="modal-leverage" class="btn">Understood</label>
+                      <label for="modal-leverage" class="btn">Okay</label>
                     </div>
                   </div>
                 </div>
@@ -285,7 +285,7 @@
                       drops below 50%, a loss cut is triggered and the position is settled.
                     </p>
                     <div class="modal-action">
-                      <label for="modal-margin" class="btn">Understood</label>
+                      <label for="modal-margin" class="btn">Okay</label>
                     </div>
                   </div>
                 </div>
@@ -398,6 +398,7 @@
               <th>#{{ position?.position?.id }}</th>
               <td>
                 {{ symbolMetadataMap?.[baseSymbol || '']?.display
+
                 }}/{{ symbolMetadataMap?.[quoteSymbol || '']?.display }}<br />
                 <ng-container *ngIf="positionInstances![i]?.position_type === positionType.LONG">
                   <div class="badge badge-primary">Long</div>

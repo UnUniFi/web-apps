@@ -19,31 +19,13 @@
           <ng-container *ngIf="!symbolImage">
             <span class="material-symbols-outlined">question_mark</span>
           </ng-container>
-          <span>Vault #{{ vault?.vault?.id }}</span>
+          <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
+          <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           <div class="badge badge-primary">{{ displaySymbol }}</div>
         </h2>
-        <!-- <div class="stats">
-          <div class="stat">
-            <div class="stat-title">APY</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">TVL</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Deposited</div>
-            <div class="stat-value text-primary">$ 123</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Earnings</div>
-            <div class="stat-value">$ 12.3</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div> -->
+        <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
+          {{ vault?.vault?.description }}
+        </p>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
@@ -51,18 +33,6 @@
                 <td>Vault ID</td>
                 <td>{{ vault?.vault?.id }}</td>
               </tr>
-              <!-- <tr>
-                <td>Vault Name</td>
-                <td>{{ 'Coming soon' }}</td>
-              </tr> -->
-              <!-- <tr>
-                <td>Owner</td>
-                <td class="font-mono break-all">{{ vault?.vault?.owner }}</td>
-              </tr>
-              <tr>
-                <td>Owner's Deposit</td>
-                <td>{{ vault?.vault?.owner_deposit | coin | async }}</td>
-              </tr> -->
               <tr>
                 <td class="flex flex-row items-center gap-2">
                   <span>Withdraw Commission Rate</span>

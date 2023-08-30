@@ -22,6 +22,7 @@
           <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
           <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           <div class="badge badge-primary">{{ displaySymbol }}</div>
+          <div class="badge badge-info">NO KYC</div>
         </h2>
         <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
           {{ vault?.vault?.description }}

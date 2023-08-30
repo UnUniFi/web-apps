@@ -1,1 +1,67 @@
-<p>kyc works!</p>
+<div class="mx-auto px-4 max-w-screen-xl">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">Know Your Customer</h2>
+
+      <form #formRef="ngForm" (submit)="onSubmit()">
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Email</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #emailNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': emailNgModelRef.errors && emailNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            autocomplete="email"
+            [(ngModel)]="email"
+            name="email"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Name</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #nameNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            [(ngModel)]="name"
+            name="name"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+
+        <label class="label">
+          <span class="label-text"></span>
+          <span class="label-text-alt"></span>
+        </label>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary" [disabled]="formRef.invalid || processing">
+            Sign In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

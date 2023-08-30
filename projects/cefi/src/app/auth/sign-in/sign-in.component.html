@@ -1,0 +1,70 @@
+<div class="mx-auto px-4 max-w-screen-xl">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">Sign In</h2>
+      <div class="flex flex-col">
+        <button class="btn btn-neutral btn-outline w-full my-2" (click)="signInGoogle()">
+          Google
+        </button>
+        <button class="btn btn-neutral btn-outline w-full my-2" (click)="signInGithub()">
+          GitHub
+        </button>
+      </div>
+      <form #formRef="ngForm" (submit)="signInEmail(email, password)">
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Email</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #emailNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': emailNgModelRef.errors && emailNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            autocomplete="email"
+            [(ngModel)]="email"
+            name="email"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Password</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #passwordNgModelRef="ngModel"
+            type="password"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': passwordNgModelRef.errors && passwordNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            autocomplete="current-password"
+            [(ngModel)]="password"
+            name="password"
+          />
+        </div>
+        <label class="label">
+          <span class="label-text"></span>
+          <span class="label-text-alt"></span>
+        </label>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary" [disabled]="formRef.invalid || processing">
+            Sign In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

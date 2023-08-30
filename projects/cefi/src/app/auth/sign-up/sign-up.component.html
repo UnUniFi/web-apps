@@ -1,0 +1,111 @@
+<div class="mx-auto px-4 max-w-screen-xl">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">Sign Up</h2>
+      <ng-container *ngIf="!idEntered">
+        <form #idFormRef="ngForm" (submit)="submitUniqueName()">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Id</span>
+              <span class="label-text-alt"></span>
+            </label>
+            <div class="input-group">
+              <span>@</span>
+              <input
+                #idNgModelRef="ngModel"
+                type="text"
+                placeholder="'0'-'9', 'a'-'z', 'A'-'Z', '_' are available"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': idNgModelRef.errors && idNgModelRef.touched
+                }"
+                required
+                [readOnly]="processing"
+                pattern="^[0-9a-zA-Z_]+$"
+                autocomplete="nickname"
+                [(ngModel)]="uniqueName"
+                name="id"
+              />
+            </div>
+            <label class="label">
+              <span class="label-text"></span>
+              <span class="label-text-alt"></span>
+            </label>
+          </div>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" [disabled]="idFormRef.invalid || processing">
+              Continue
+            </button>
+          </div>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="idEntered">
+        <div class="flex flex-col">
+          <button class="btn btn-neutral btn-outline w-full my-2" (click)="signUpGoogle()">
+            Google
+          </button>
+          <button class="btn btn-neutral btn-outline w-full my-2" (click)="signUpGithub()">
+            GitHub
+          </button>
+        </div>
+
+        <form #formRef="ngForm" (submit)="signUpEmail(email, password)">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Email</span>
+              <span class="label-text-alt"></span>
+            </label>
+            <input
+              #emailNgModelRef="ngModel"
+              type="text"
+              placeholder=""
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': emailNgModelRef.errors && emailNgModelRef.touched
+              }"
+              required
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              [readOnly]="processing"
+              autocomplete="email"
+              [(ngModel)]="email"
+              name="email"
+            />
+            <label class="label">
+              <span class="label-text"></span>
+              <span class="label-text-alt"></span>
+            </label>
+          </div>
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Password</span>
+              <span class="label-text-alt"></span>
+            </label>
+            <input
+              #passwordNgModelRef="ngModel"
+              type="password"
+              placeholder=""
+              class="input input-bordered w-full"
+              [class]="{
+                'input-error': passwordNgModelRef.errors && passwordNgModelRef.touched
+              }"
+              required
+              [readOnly]="processing"
+              autocomplete="new-password"
+              [(ngModel)]="password"
+              name="password"
+            />
+            <label class="label">
+              <span class="label-text"></span>
+              <span class="label-text-alt"></span>
+            </label>
+          </div>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" [disabled]="formRef.invalid || processing">
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</div>

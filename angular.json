@@ -26,7 +26,10 @@
             "main": "projects/explorer/src/main.ts",
             "polyfills": "projects/explorer/src/polyfills.ts",
             "tsConfig": "projects/explorer/tsconfig.app.json",
-            "assets": ["projects/explorer/src/favicon.png", "projects/explorer/src/assets"],
+            "assets": [
+              "projects/explorer/src/favicon.png",
+              "projects/explorer/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/explorer/src/styles.css"
@@ -100,7 +103,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/explorer/**/*.ts", "projects/explorer/**/*.html"]
+            "lintFilePatterns": [
+              "projects/explorer/**/*.ts",
+              "projects/explorer/**/*.html"
+            ]
           }
         },
         "cypress-run": {
@@ -168,7 +174,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/shared/**/*.ts", "projects/shared/**/*.html"]
+            "lintFilePatterns": [
+              "projects/shared/**/*.ts",
+              "projects/shared/**/*.html"
+            ]
           }
         },
         "cypress-run": {
@@ -225,7 +234,10 @@
             "main": "projects/portal/src/main.ts",
             "polyfills": "projects/portal/src/polyfills.ts",
             "tsConfig": "projects/portal/tsconfig.app.json",
-            "assets": ["projects/portal/src/favicon.png", "projects/portal/src/assets"],
+            "assets": [
+              "projects/portal/src/favicon.png",
+              "projects/portal/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/portal/src/styles.css"
@@ -294,7 +306,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/portal/**/*.ts", "projects/portal/**/*.html"]
+            "lintFilePatterns": [
+              "projects/portal/**/*.ts",
+              "projects/portal/**/*.html"
+            ]
           }
         },
         "cypress-run": {
@@ -328,6 +343,109 @@
             "production": {
               "devServerTarget": "portal:serve:production"
             }
+          }
+        }
+      }
+    },
+    "cefi": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/cefi",
+      "sourceRoot": "projects/cefi/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/cefi",
+            "index": "projects/cefi/src/index.html",
+            "main": "projects/cefi/src/main.ts",
+            "polyfills": "projects/cefi/src/polyfills.ts",
+            "tsConfig": "projects/cefi/tsconfig.app.json",
+            "assets": [
+              "projects/cefi/src/favicon.ico",
+              "projects/cefi/src/assets"
+            ],
+            "styles": [
+              "projects/cefi/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/cefi/src/environments/environment.ts",
+                  "with": "projects/cefi/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "cefi:build:production"
+            },
+            "development": {
+              "browserTarget": "cefi:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "cefi:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/cefi/src/test.ts",
+            "polyfills": "projects/cefi/src/polyfills.ts",
+            "tsConfig": "projects/cefi/tsconfig.spec.json",
+            "karmaConfig": "projects/cefi/karma.conf.js",
+            "assets": [
+              "projects/cefi/src/favicon.ico",
+              "projects/cefi/src/assets"
+            ],
+            "styles": [
+              "projects/cefi/src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/cefi/**/*.ts",
+              "projects/cefi/**/*.html"
+            ]
           }
         }
       }

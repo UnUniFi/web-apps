@@ -3,17 +3,17 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-connect-external-cosmos-dialog',
-  templateUrl: './connect-external-cosmos-dialog.component.html',
-  styleUrls: ['./connect-external-cosmos-dialog.component.css'],
+  selector: 'view-connect-external-wallet-dialog',
+  templateUrl: './connect-external-wallet-dialog.component.html',
+  styleUrls: ['./connect-external-wallet-dialog.component.css'],
 })
-export class ConnectExternalCosmosDialogComponent implements OnInit {
+export class ConnectExternalWalletDialogComponent implements OnInit {
   walletOptions?: { logo: string; walletType: WalletType; name: string }[];
 
   constructor(
     @Inject(DIALOG_DATA)
     public readonly data: string,
-    public dialogRef: DialogRef<WalletType, ConnectExternalCosmosDialogComponent>,
+    public dialogRef: DialogRef<WalletType, ConnectExternalWalletDialogComponent>,
   ) {
     if (data == 'cosmoshub' || data == 'osmosis' || data == 'neutron' || data == 'sei') {
       this.walletOptions = [

@@ -1,3 +1,4 @@
+import { UserService } from '../services/users/user.service';
 import { Injectable } from '@angular/core';
 import {
   Auth,
@@ -21,7 +22,7 @@ export class AuthService {
   authorized$: Observable<boolean>;
   authUid$: Observable<string | undefined>;
 
-  constructor(private readonly auth: Auth) {
+  constructor(private readonly auth: Auth, private readonly userService: UserService) {
     this.currentUser$ = user(this.auth);
     this.authorized$ = this.currentUser$.pipe(map((user) => user !== null));
     this.authUid$ = this.currentUser$.pipe(map((user) => user?.uid));
@@ -88,6 +89,13 @@ export class AuthService {
       await this.auth.currentUser?.delete();
       throw { code: 'ext/user-not-found' };
     }
+
+    // Create User document on firestore
+    await this.userService.create({
+      auth_uid: credential.user.uid,
+      name: credential.user.displayName || '',
+      image_url: credential.user.photoURL || '',
+    });
 
     return credential;
   }

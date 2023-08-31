@@ -52,6 +52,78 @@
           </label>
         </div>
 
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Country</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #countryNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': countryNgModelRef.errors && countryNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            [(ngModel)]="country"
+            name="country"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Zipcode</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #zipcodeNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': zipcodeNgModelRef.errors && zipcodeNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            [(ngModel)]="zipcode"
+            name="zipcode"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text">Address</span>
+            <span class="label-text-alt"></span>
+          </label>
+          <input
+            #addressNgModelRef="ngModel"
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            [class]="{
+              'input-error': addressNgModelRef.errors && addressNgModelRef.touched
+            }"
+            required
+            [readOnly]="processing"
+            [(ngModel)]="address"
+            name="address"
+          />
+          <label class="label">
+            <span class="label-text"></span>
+            <span class="label-text-alt"></span>
+          </label>
+        </div>
+
         <label class="label">
           <span class="label-text"></span>
           <span class="label-text-alt"></span>

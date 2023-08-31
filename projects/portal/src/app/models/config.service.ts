@@ -22,7 +22,7 @@ export type Config = {
   }[];
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
-  strategiesInfo: StrategyInfo[];
+  strategiesInfo: YieldInfo[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
@@ -57,12 +57,14 @@ export type AppNavigation = {
   icon: string;
 };
 
-export type StrategyInfo = {
+export type YieldInfo = {
   id: string;
   name: string;
   description: string;
   gitURL: string;
-  apy: number;
+  min_apy: number;
+  max_apy: number;
+  apr_certainty: boolean;
   poolInfo:
     | {
         type: 'osmosis';

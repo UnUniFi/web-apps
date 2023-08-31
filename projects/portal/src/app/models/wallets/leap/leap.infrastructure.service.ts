@@ -38,6 +38,27 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     return key;
   }
 
+  private async getExternalKey(id: string): Promise<Key | undefined> {
+    if (!window.leap) {
+      // alert('Please install Leap extension');
+      return;
+    }
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainID = externalChains.find((chain) => chain.id === id)?.chainId;
+    if (!chainID) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    await window.leap.enable(chainID);
+
+    const key = await window.leap.getKey(chainID);
+    return key;
+  }
+
   private async suggestChain(): Promise<void> {
     if (!window.leap) {
       alert('Please install Leap extension');
@@ -102,6 +123,24 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     await window.leap.experimentalSuggestChain(chainInfo);
   }
 
+  private async suggestExternalChain(id: string): Promise<void> {
+    if (!window.leap) {
+      alert('Please install Leap extension');
+      return;
+    }
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainInfo = externalChains.find((chain) => chain.id === id);
+    if (!chainInfo) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    await window.leap.experimentalSuggestChain(chainInfo);
+  }
+
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
     const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Leap...');
     try {
@@ -116,6 +155,30 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     let keyData: Key | undefined;
     try {
       keyData = await this.getKey();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Leap Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+    } finally {
+      dialogRefSuggestChainAndGetKey.close();
+    }
+    return keyData;
+  }
+
+  private async suggestExternalChainAndGetKey(id: string): Promise<Key | undefined> {
+    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Leap...');
+    try {
+      await this.suggestExternalChain(id);
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Leap Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      dialogRefSuggestChainAndGetKey.close();
+      return;
+    }
+    let keyData: Key | undefined;
+    try {
+      keyData = await this.getExternalKey(id);
     } catch (error) {
       console.error(error);
       const errorMessage = `Leap Connection failed: ${(error as Error).toString()}`;
@@ -181,6 +244,12 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     return storedWallet;
   }
 
+  async connectExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+    const keyData = await this.suggestExternalChainAndGetKey(id);
+    const storedWallet = this.convertLeapKeyToStoredWallet(keyData);
+    return storedWallet;
+  }
+
   async checkWallet(): Promise<StoredWallet | null | undefined> {
     const keyData = await this.getKey();
     const storedWallet = this.convertLeapKeyToStoredWallet(keyData);
@@ -192,18 +261,18 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
-    const signKeplr = await this.signDirect(
+    const signLeap = await this.signDirect(
       signerBaseAccount.address,
       signDoc.body_bytes,
       signDoc.auth_info_bytes,
       signDoc.account_number,
     );
-    if (!signKeplr) {
+    if (!signLeap) {
       throw Error('Invalid signature!');
     }
-    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
-    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
-    txBuilder.addSignature(signKeplr.signature);
+    txBuilder.txRaw.auth_info_bytes = signLeap.authInfoBytes;
+    txBuilder.txRaw.body_bytes = signLeap.bodyBytes;
+    txBuilder.addSignature(signLeap.signature);
 
     return txBuilder;
   }

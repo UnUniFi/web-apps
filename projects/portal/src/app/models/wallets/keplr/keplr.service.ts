@@ -5,6 +5,7 @@ import cosmosclient from '@cosmos-client/core';
 
 export interface IKeplrInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
+  connectExternalWallet: (id: string) => Promise<StoredWallet | null | undefined>;
   signTx: (
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -24,6 +25,10 @@ export class KeplrService {
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {
     return await this.iKeplrInfrastructureService.connectWallet();
+  }
+
+  async connectExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+    return await this.iKeplrInfrastructureService.connectExternalWallet(id);
   }
 
   async signTx(

@@ -37,6 +37,27 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     return key;
   }
 
+  private async getExternalKey(id: string): Promise<Key | undefined> {
+    if (!window.keplr) {
+      // alert('Please install Keplr extension');
+      return;
+    }
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainID = externalChains.find((chain) => chain.id === id)?.chainId;
+    if (!chainID) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    await window.keplr.enable(chainID);
+
+    const key = await window.keplr.getKey(chainID);
+    return key;
+  }
+
   private async suggestChain(): Promise<void> {
     if (!window.keplr) {
       alert('Please install Keplr extension');
@@ -97,6 +118,24 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     await window.keplr.experimentalSuggestChain(chainInfo);
   }
 
+  private async suggestExternalChain(id: string): Promise<void> {
+    if (!window.keplr) {
+      alert('Please install Keplr extension');
+      return;
+    }
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainInfo = externalChains.find((chain) => chain.id === id);
+    if (!chainInfo) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    await window.keplr.experimentalSuggestChain(chainInfo);
+  }
+
   private async suggestChainAndGetKey(): Promise<Key | undefined> {
     const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Keplr...');
     try {
@@ -111,6 +150,30 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     let keyData: Key | undefined;
     try {
       keyData = await this.getKey();
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+    } finally {
+      dialogRefSuggestChainAndGetKey.close();
+    }
+    return keyData;
+  }
+
+  private async suggestExternalChainAndGetKey(id: string): Promise<Key | undefined> {
+    const dialogRefSuggestChainAndGetKey = this.loadingDialog.open('connecting to Keplr...');
+    try {
+      await this.suggestExternalChain(id);
+    } catch (error) {
+      console.error(error);
+      const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
+      this.snackBar.open(`An error has occur: ${errorMessage}`, 'Close');
+      dialogRefSuggestChainAndGetKey.close();
+      return;
+    }
+    let keyData: Key | undefined;
+    try {
+      keyData = await this.getExternalKey(id);
     } catch (error) {
       console.error(error);
       const errorMessage = `Keplr Connection failed: ${(error as Error).toString()}`;
@@ -178,6 +241,12 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
 
   async checkWallet(): Promise<StoredWallet | null | undefined> {
     const keyData = await this.getKey();
+    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
+    return storedWallet;
+  }
+
+  async connectExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+    const keyData = await this.suggestExternalChainAndGetKey(id);
     const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
     return storedWallet;
   }

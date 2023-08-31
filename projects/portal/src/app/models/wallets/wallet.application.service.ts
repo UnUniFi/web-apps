@@ -1,3 +1,4 @@
+import { ConnectExternalWalletDialogComponent } from '../../views/dialogs/wallets/connect-external-cosmos-dialog/connect-external-wallet-dialog.component';
 import { ConnectWalletCompletedDialogComponent } from '../../views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.component';
 import { ConnectWalletStartDialogComponent } from '../../views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.component';
 import { UnunifiBackupMnemonicAndPrivateKeyWizardDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-backup-mnemonic-and-private-key-wizard-dialog/ununifi-backup-mnemonic-and-private-key-wizard-dialog.component';
@@ -188,6 +189,28 @@ export class WalletApplicationService {
     return true;
   }
 
+  async getExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+    if (id == 'ununifi') {
+      return;
+    }
+    const selectedWalletType = await this.openConnectExternalWalletDialog(id);
+    const connectedWallet = await (async () => {
+      switch (selectedWalletType) {
+        case WalletType.keplr:
+          return await this.connectExternalWallet(this.keplrService, id);
+        case WalletType.leap:
+          return await this.connectExternalWallet(this.leapService, id);
+        case WalletType.metamask:
+          // return await this.connectWallet(this.metaMaskService);
+          this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
+          return;
+        default:
+          return;
+      }
+    })();
+    return connectedWallet;
+  }
+
   async connectWallet(walletService: {
     connectWallet(): Promise<StoredWallet | null | undefined>;
   }): Promise<boolean> {
@@ -198,6 +221,16 @@ export class WalletApplicationService {
     await this.walletService.setCurrentStoredWallet(connectedStoredWallet);
     await this.openConnectWalletCompletedDialog(connectedStoredWallet);
     return true;
+  }
+
+  async connectExternalWallet(
+    walletService: {
+      connectExternalWallet(id: string): Promise<StoredWallet | null | undefined>;
+    },
+    id: string,
+  ): Promise<StoredWallet | null | undefined> {
+    const connectedStoredWallet = await walletService.connectExternalWallet(id);
+    return connectedStoredWallet;
   }
 
   async keplrConnectWallet(): Promise<boolean> {
@@ -226,6 +259,13 @@ export class WalletApplicationService {
   async openConnectWalletStartDialog(): Promise<WalletType | undefined> {
     const selectedWalletType: WalletType | undefined = await this.dialog
       .open<WalletType>(ConnectWalletStartDialogComponent)
+      .closed.toPromise();
+    return selectedWalletType;
+  }
+
+  async openConnectExternalWalletDialog(id: string): Promise<WalletType | undefined> {
+    const selectedWalletType: WalletType | undefined = await this.dialog
+      .open<WalletType>(ConnectExternalWalletDialogComponent, { data: id })
       .closed.toPromise();
     return selectedWalletType;
   }

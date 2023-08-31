@@ -6,7 +6,7 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -47,7 +47,7 @@ export class VaultComponent implements OnInit {
   withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
-  vaultAPY$: Observable<number>;
+  vaultInfo$: Observable<YieldInfo>;
 
   constructor(
     private route: ActivatedRoute,
@@ -172,23 +172,8 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
-      mergeMap(async ([vault, config]) => {
-        // TODO: go to a function
-        // same in vaults.component.ts
-        if (!vault.vault?.strategy_weights) {
-          return 0;
-        }
-        let vaultAPY = 0;
-        for (const strategyWeight of vault.vault.strategy_weights) {
-          const strategyInfo = config?.strategiesInfo?.find(
-            (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
-          );
-          const strategyAPY = await this.iyaService.getStrategyAPR(strategyInfo);
-          vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
-        }
-        return vaultAPY;
-      }),
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      mergeMap(async ([vault, config]) => this.iyaService.calcVaultAPY(vault, config)),
     );
   }
 

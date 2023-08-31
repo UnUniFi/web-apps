@@ -1,17 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
+import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
@@ -54,7 +44,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
-  vaultAPY?: number | null;
+  vaultInfo?: YieldInfo | null;
 
   @Output()
   changeDeposit: EventEmitter<number>;
@@ -67,11 +57,6 @@ export class VaultComponent implements OnInit, OnChanges {
 
   mintAmount?: number;
   burnAmount?: number;
-  // chartType: ChartType;
-  // chartTitle: string;
-  // chartData: any[];
-  // chartColumnNames: any[];
-  // chartOptions: any;
   tab: 'mint' | 'burn' = 'mint';
 
   chains = [
@@ -122,33 +107,16 @@ export class VaultComponent implements OnInit, OnChanges {
     },
   ];
 
-  constructor(private readonly iyaChart: YieldAggregatorChartService) {
+  constructor() {
     this.changeDeposit = new EventEmitter();
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
-    // this.chartTitle = '';
-    // this.chartType = ChartType.LineChart;
-    // const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
-    // this.chartOptions = this.iyaChart.createChartOption(width);
-
-    // this.chartData = this.iyaChart.createDummyChartData();
-    // this.chartColumnNames = ['Date', 'APY'];
-  }
-
-  @ViewChild('chartRef') chartRef?: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onWindowResize() {
-    // const width: number = this.chartRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
   }
 
   ngOnInit(): void {}
 
-  ngOnChanges(): void {
-    // const width: number = this.chartRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
-  }
+  ngOnChanges(): void {}
 
   onClickChain(id: string) {
     (global as any).chain_select_modal.close();

@@ -109,9 +109,13 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
-            <div class="stat-title">APY</div>
+            <div class="stat-title" *ngIf="!vaultInfo?.apr_certainty">Estimated APY</div>
+            <div class="stat-title" *ngIf="vaultInfo?.apr_certainty">Secure APY</div>
             <div class="stat-value text-accent">
-              {{ vaultAPY | percent : '1.2-2' }}
+              {{ vaultInfo?.min_apy | percent : '1.2-2' }}
+            </div>
+            <div class="stat-desc" *ngIf="vaultInfo?.max_apy !== vaultInfo?.min_apy">
+              - {{ vaultInfo?.max_apy | percent : '1.2-2' }}
             </div>
           </div>
           <div class="stat">

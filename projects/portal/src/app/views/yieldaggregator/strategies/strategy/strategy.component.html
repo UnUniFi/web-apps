@@ -55,7 +55,9 @@
 
         <div class="stats flex flex-col md:flex-row">
           <div class="stat">
-            <div class="stat-title">APR</div>
+            <div class="stat-title" *ngIf="!strategyInfo?.apr_certainty">Estimated APR</div>
+            <div class="stat-title" *ngIf="strategyInfo?.apr_certainty">Secure APR</div>
+
             <div class="stat-value text-secondary">
               <ng-container *ngIf="strategyAPR !== null">
                 {{ strategyAPR | percent : '1.2-2' }}
@@ -67,39 +69,6 @@
             <div class="stat-desc"></div>
           </div>
         </div>
-
-        <!-- <div class="stats flex flex-col md:flex-row">
-          <div class="stat">
-            <div class="stat-title">APR</div>
-            <div class="stat-value text-secondary">12.34%</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Capital Allocation</div>
-            <div class="stat-value text-primary">1234.56 axlUSDC</div>
-            <div class="stat-desc"></div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Performance Fee</div>
-            <div class="stat-value">0.12%</div>
-            <div class="stat-desc"></div>
-          </div>
-        </div>
-        <p style="white-space: pre-wrap">
-          {{ description }}
-        </p> -->
-
-        <!-- <h3 class="mt-4">Historical APR (Demo)</h3>
-        <div class="flex w-full justify-center" #chartRef>
-          <google-chart
-            [title]="chartTitle"
-            [type]="chartType"
-            [data]="chartData"
-            [columns]="chartColumnNames"
-            [options]="chartOptions"
-          >
-          </google-chart>
-        </div> -->
       </div>
     </div>
   </div>

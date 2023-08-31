@@ -115,10 +115,10 @@
               <div class="badge badge-info">Secure</div>
             </div>
             <div class="stat-value text-accent">
-              {{ vaultInfo?.min_apy | percent : '1.2-2' }}
+              {{ vaultInfo?.minApy | percent : '1.2-2' }}
             </div>
-            <div class="stat-desc" *ngIf="vaultInfo?.max_apy !== vaultInfo?.min_apy">
-              - {{ vaultInfo?.max_apy | percent : '1.2-2' }}
+            <div class="stat-desc" *ngIf="vaultInfo?.maxApy !== vaultInfo?.minApy">
+              - {{ vaultInfo?.maxApy | percent : '1.2-2' }}
             </div>
           </div>
           <div class="stat">
@@ -160,17 +160,6 @@
             </div>
           </div>
         </div>
-        <!-- <h3 class="mt-4">Historical APY (Demo)</h3>
-        <div class="flex w-full justify-center" #chartRef>
-          <google-chart
-            [title]="chartTitle"
-            [type]="chartType"
-            [data]="chartData"
-            [columns]="chartColumnNames"
-            [options]="chartOptions"
-          >
-          </google-chart>
-        </div> -->
       </div>
     </div>
   </div>

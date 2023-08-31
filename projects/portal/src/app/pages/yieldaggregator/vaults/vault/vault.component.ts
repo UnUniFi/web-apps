@@ -194,4 +194,6 @@ export class VaultComponent implements OnInit {
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
     this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
   }
+
+  onClickChain(chain: string) {}
 }

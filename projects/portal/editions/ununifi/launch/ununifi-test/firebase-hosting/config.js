@@ -138,7 +138,7 @@ const denomMetadata = [
     symbol: 'ATOM',
   },
   {
-    description: 'OSMO from Osmosis',
+    description: 'OSMO from Osmosis (deprecated)',
     denom_units: [
       {
         denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
@@ -147,6 +147,20 @@ const denomMetadata = [
       },
     ],
     base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+    name: 'OSMO',
+    display: 'OSMO (deprecated)',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'OSMO from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
     name: 'OSMO',
     display: 'OSMO',
     symbol: 'OSMO',

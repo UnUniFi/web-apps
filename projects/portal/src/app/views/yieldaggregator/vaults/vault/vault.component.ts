@@ -74,6 +74,54 @@ export class VaultComponent implements OnInit, OnChanges {
   // chartOptions: any;
   tab: 'mint' | 'burn' = 'mint';
 
+  chains = [
+    {
+      id: 'ununifi',
+      display: 'UnUniFi',
+      disabled: false,
+    },
+    {
+      id: 'ethereum',
+      display: 'Ethereum',
+      disabled: true,
+    },
+    {
+      id: 'avalanche',
+      display: 'Avalanche',
+      disabled: true,
+    },
+    {
+      id: 'polygon',
+      display: 'Polygon',
+      disabled: true,
+    },
+    {
+      id: 'arbitrum',
+      display: 'Arbitrum',
+      disabled: true,
+    },
+    {
+      id: 'cosmoshub',
+      display: 'Cosmos Hub',
+      disabled: true,
+    },
+    {
+      id: 'neutron',
+      display: 'Neutron',
+      disabled: true,
+    },
+    {
+      id: 'osmosis',
+      display: 'Osmosis',
+      disabled: true,
+    },
+    {
+      id: 'sei',
+      display: 'Sei',
+      disabled: true,
+    },
+  ];
+
   constructor(private readonly iyaChart: YieldAggregatorChartService) {
     this.changeDeposit = new EventEmitter();
     this.appDeposit = new EventEmitter();
@@ -100,6 +148,10 @@ export class VaultComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     // const width: number = this.chartRef!.nativeElement.offsetWidth;
     // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
+  }
+
+  onClickChain(id: string) {
+    (global as any).chain_select_modal.close();
   }
 
   onDepositAmountChange() {

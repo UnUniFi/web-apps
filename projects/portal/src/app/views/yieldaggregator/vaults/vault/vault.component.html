@@ -22,6 +22,7 @@
           <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
           <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           <div class="badge badge-primary">{{ displaySymbol }}</div>
+          <div class="badge badge-info">NO KYC</div>
         </h2>
         <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
           {{ vault?.vault?.description }}
@@ -179,6 +180,37 @@
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
         <form #depositFormRef="ngForm" (submit)="onSubmitDeposit()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Chain that you deposit from</span>
+              <span class="label-text-alt"></span>
+            </label>
+            <button class="btn btn-outline btn-block" onclick="chain_select_modal.showModal()">
+              UnUniFi
+            </button>
+
+            <dialog id="chain_select_modal" class="modal">
+              <form method="dialog" class="modal-box">
+                <h3 class="font-bold text-lg">Chain that you deposit from</h3>
+
+                <div class="flex flex-row flex-wrap gap-2 mt-2">
+                  <ng-container *ngFor="let chain of chains">
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      [disabled]="chain.disabled"
+                      (click)="onClickChain(chain.id)"
+                    >
+                      {{ chain.display }}
+                    </button>
+                  </ng-container>
+                </div>
+              </form>
+              <form method="dialog" class="modal-backdrop">
+                <button onclick="chain_select_modal.close()">close</button>
+              </form>
+            </dialog>
+          </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>

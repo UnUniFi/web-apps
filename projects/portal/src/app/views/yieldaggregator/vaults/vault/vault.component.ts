@@ -54,6 +54,8 @@ export class VaultComponent implements OnInit, OnChanges {
   changeWithdraw: EventEmitter<number>;
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
+  @Output()
+  appClickChain: EventEmitter<string>;
 
   mintAmount?: number;
   burnAmount?: number;
@@ -98,7 +100,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'osmosis',
       display: 'Osmosis',
-      disabled: true,
+      disabled: false,
     },
     {
       id: 'sei',
@@ -112,6 +114,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
+    this.appClickChain = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -119,6 +122,7 @@ export class VaultComponent implements OnInit, OnChanges {
   ngOnChanges(): void {}
 
   onClickChain(id: string) {
+    this.appClickChain.emit(id);
     (global as any).chain_select_modal.close();
   }
 

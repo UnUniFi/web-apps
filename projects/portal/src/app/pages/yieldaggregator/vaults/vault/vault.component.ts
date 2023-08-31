@@ -9,6 +9,7 @@ import {
 import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
@@ -55,6 +56,7 @@ export class VaultComponent implements OnInit {
     private readonly iyaApp: YieldAggregatorApplicationService,
     private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
+    private readonly walletApp: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
@@ -195,5 +197,7 @@ export class VaultComponent implements OnInit {
     this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
   }
 
-  onClickChain(chain: string) {}
+  onClickChain(chain: string) {
+    this.walletApp.getExternalWallet(chain);
+  }
 }

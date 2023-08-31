@@ -95,10 +95,6 @@ export class WalletApplicationService {
           return await this.connectWallet(this.keplrService);
         case WalletType.leap:
           return await this.connectWallet(this.leapService);
-        case WalletType.metamask:
-          // return await this.connectWallet(this.metaMaskService);
-          this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
-          return false;
         default:
           return false;
       }
@@ -201,8 +197,12 @@ export class WalletApplicationService {
         case WalletType.leap:
           return await this.connectExternalWallet(this.leapService, id);
         case WalletType.metamask:
-          // return await this.connectWallet(this.metaMaskService);
-          this.snackBar.open('Selected Wallet is not supported yet.', 'Close');
+          // return await this.connectExternalWallet(this.metaMaskService);
+          this.snackBar.open('MetaMask is not supported yet.', 'Close');
+          return;
+        case WalletType.walletConnect:
+          // return await this.connectExternalWallet(this.walletConnectService);
+          this.snackBar.open('WalletConnect is not supported yet.', 'Close');
           return;
         default:
           return;

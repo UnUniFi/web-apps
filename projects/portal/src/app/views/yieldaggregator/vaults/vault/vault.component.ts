@@ -100,7 +100,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'osmosis',
       display: 'Osmosis',
-      disabled: false,
+      disabled: true,
     },
     {
       id: 'sei',

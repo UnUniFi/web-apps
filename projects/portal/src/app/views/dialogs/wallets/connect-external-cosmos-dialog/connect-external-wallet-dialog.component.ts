@@ -29,6 +29,20 @@ export class ConnectExternalWalletDialogComponent implements OnInit {
         },
       ];
     }
+    if (data == 'ethereum' || data == 'avalanche' || data == 'polygon' || data == 'arbitrum') {
+      this.walletOptions = [
+        {
+          logo: 'assets/wallets/metamask.svg',
+          walletType: WalletType.metamask,
+          name: 'MetaMask',
+        },
+        {
+          logo: 'assets/wallets/wallet-connect.svg',
+          walletType: WalletType.walletConnect,
+          name: 'WalletConnect',
+        },
+      ];
+    }
   }
 
   ngOnInit(): void {}

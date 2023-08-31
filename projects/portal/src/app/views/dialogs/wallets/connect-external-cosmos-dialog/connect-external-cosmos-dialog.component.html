@@ -1,0 +1,23 @@
+<div class="card bg-base-100 shadow-xl overflow-y-auto">
+  <div class="flex flex-col items-end md:hidden">
+    <button mat-icon-button class="mt-2 mr-2" (click)="onClickClose()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="flex flex-col items-center">
+      <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
+      <div class="font-bold text-xl m-3">Connect Your Wallet</div>
+      <div class="text-base m-3">Start earning high yield on your crypto</div>
+      <ng-container *ngFor="let walletOption of walletOptions">
+        <button class="btn btn-ghost btn-block" (click)="onClickButton(walletOption.walletType)">
+          <div class="btn-block inline-flex items-center">
+            <img class="w-6 h-6" src="{{ walletOption.logo }}" alt="{{ walletOption.name }} logo" />
+            <span class="mx-3">{{ walletOption.name }}</span>
+            <span class="material-symbols-outlined text-primary">arrow_forward</span>
+          </div>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

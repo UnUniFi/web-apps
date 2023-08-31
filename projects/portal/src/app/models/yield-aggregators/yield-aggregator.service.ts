@@ -1,4 +1,4 @@
-import { StrategyInfo } from '../config.service';
+import { Config, YieldInfo } from '../config.service';
 import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
@@ -196,7 +196,7 @@ export class YieldAggregatorService {
       });
   }
 
-  async getStrategyAPR(strategyInfo?: StrategyInfo): Promise<number> {
+  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<number> {
     if (!strategyInfo) {
       return 0;
     }
@@ -205,6 +205,40 @@ export class YieldAggregatorService {
         return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
       }
     }
-    return strategyInfo.apy || 0;
+    return strategyInfo.min_apy || 0;
+  }
+
+  async calcVaultAPY(vault: Vault200Response, config?: Config): Promise<YieldInfo> {
+    if (!vault.vault?.strategy_weights) {
+      return {
+        id: vault.vault?.id || '',
+        name: vault.vault?.name || '',
+        description: vault.vault?.description || '',
+        gitURL: '',
+        min_apy: 0,
+        max_apy: 0,
+        apr_certainty: false,
+        poolInfo: { type: 'osmosis', poolId: '' },
+      };
+    }
+    let vaultAPY = 0;
+    let vaultAPYCertainty = false;
+    for (const strategyWeight of vault.vault.strategy_weights) {
+      const strategyInfo = config?.strategiesInfo?.find(
+        (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
+      );
+      const strategyAPY = await this.getStrategyAPR(strategyInfo);
+      vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
+    }
+    return {
+      id: vault.vault?.id || '',
+      name: vault.vault?.name || '',
+      description: vault.vault?.description || '',
+      gitURL: '',
+      min_apy: vaultAPY,
+      max_apy: vaultAPY,
+      apr_certainty: vaultAPYCertainty,
+      poolInfo: { type: 'osmosis', poolId: '' },
+    };
   }
 }

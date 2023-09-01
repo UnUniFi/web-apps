@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
+import { Key } from '@keplr-wallet/types';
 import {
   BandProtocolService,
   TokenAmountUSD,
@@ -49,6 +50,7 @@ export class VaultComponent implements OnInit {
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultInfo$: Observable<YieldInfo>;
+  externalWallet: Key | null | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -197,7 +199,7 @@ export class VaultComponent implements OnInit {
     this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
   }
 
-  onClickChain(chain: string) {
-    this.walletApp.getExternalWallet(chain);
+  async onClickChain(chain: string) {
+    this.externalWallet = await this.walletApp.getExternalWallet(chain);
   }
 }

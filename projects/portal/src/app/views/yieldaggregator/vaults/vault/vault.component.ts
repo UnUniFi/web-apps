@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
+import { Key } from '@keplr-wallet/types';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
@@ -45,7 +46,8 @@ export class VaultComponent implements OnInit, OnChanges {
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
   vaultInfo?: YieldInfo | null;
-
+  @Input()
+  externalWallet: Key | null | undefined;
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()
@@ -60,52 +62,67 @@ export class VaultComponent implements OnInit, OnChanges {
   mintAmount?: number;
   burnAmount?: number;
   tab: 'mint' | 'burn' = 'mint';
+  selectedChain = {
+    id: 'ununifi',
+    display: 'UnUniFi',
+    disabled: false,
+    external: false,
+  };
 
   chains = [
     {
       id: 'ununifi',
       display: 'UnUniFi',
       disabled: false,
+      external: false,
     },
     {
       id: 'ethereum',
       display: 'Ethereum',
-      disabled: true,
+      disabled: false,
+      external: true,
     },
     {
       id: 'avalanche',
       display: 'Avalanche',
       disabled: true,
+      external: true,
     },
     {
       id: 'polygon',
       display: 'Polygon',
-      disabled: true,
+      disabled: false,
+      external: true,
     },
     {
       id: 'arbitrum',
       display: 'Arbitrum',
       disabled: true,
+      external: true,
     },
     {
       id: 'cosmoshub',
       display: 'Cosmos Hub',
-      disabled: true,
+      disabled: false,
+      external: true,
     },
     {
       id: 'neutron',
       display: 'Neutron',
       disabled: true,
+      external: true,
     },
     {
       id: 'osmosis',
       display: 'Osmosis',
-      disabled: true,
+      disabled: false,
+      external: true,
     },
     {
       id: 'sei',
       display: 'Sei',
       disabled: true,
+      external: true,
     },
   ];
 
@@ -123,6 +140,7 @@ export class VaultComponent implements OnInit, OnChanges {
 
   onClickChain(id: string) {
     this.appClickChain.emit(id);
+    this.selectedChain = this.chains.find((chain) => chain.id === id)!;
     (global as any).chain_select_modal.close();
   }
 

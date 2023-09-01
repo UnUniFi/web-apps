@@ -182,7 +182,7 @@
               <span class="label-text-alt"></span>
             </label>
             <button class="btn btn-outline btn-block" onclick="chain_select_modal.showModal()">
-              UnUniFi
+              {{ selectedChain.display }}
             </button>
 
             <dialog id="chain_select_modal" class="modal">
@@ -206,6 +206,20 @@
                 <button onclick="chain_select_modal.close()">close</button>
               </form>
             </dialog>
+          </div>
+          <div class="form-control" *ngIf="selectedChain.external">
+            <label class="label">
+              <span class="label-text">{{ selectedChain.display }} Address</span>
+            </label>
+
+            <label class="input-group">
+              <span>{{ selectedChain.display }}</span>
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ externalWallet?.bech32Address }}"
+              />
+            </label>
           </div>
           <div class="form-control">
             <label class="label">

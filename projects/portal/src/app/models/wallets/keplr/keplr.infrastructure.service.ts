@@ -245,10 +245,9 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     return storedWallet;
   }
 
-  async connectExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+  async connectExternalWallet(id: string): Promise<Key | undefined> {
     const keyData = await this.suggestExternalChainAndGetKey(id);
-    const storedWallet = this.convertKeplrKeyToStoredWallet(keyData);
-    return storedWallet;
+    return keyData;
   }
 
   async signTx(

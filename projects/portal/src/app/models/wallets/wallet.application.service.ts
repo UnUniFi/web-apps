@@ -20,6 +20,7 @@ import { WalletService } from './wallet.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 
 @Injectable({
@@ -185,7 +186,7 @@ export class WalletApplicationService {
     return true;
   }
 
-  async getExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+  async getExternalWallet(id: string): Promise<Key | null | undefined> {
     if (id == 'ununifi') {
       return;
     }
@@ -225,10 +226,10 @@ export class WalletApplicationService {
 
   async connectExternalWallet(
     walletService: {
-      connectExternalWallet(id: string): Promise<StoredWallet | null | undefined>;
+      connectExternalWallet(id: string): Promise<Key | null | undefined>;
     },
     id: string,
-  ): Promise<StoredWallet | null | undefined> {
+  ): Promise<Key | null | undefined> {
     const connectedStoredWallet = await walletService.connectExternalWallet(id);
     return connectedStoredWallet;
   }

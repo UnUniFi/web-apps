@@ -244,10 +244,9 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     return storedWallet;
   }
 
-  async connectExternalWallet(id: string): Promise<StoredWallet | null | undefined> {
+  async connectExternalWallet(id: string): Promise<Key | undefined> {
     const keyData = await this.suggestExternalChainAndGetKey(id);
-    const storedWallet = this.convertLeapKeyToStoredWallet(keyData);
-    return storedWallet;
+    return keyData;
   }
 
   async checkWallet(): Promise<StoredWallet | null | undefined> {

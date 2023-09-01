@@ -188,13 +188,21 @@ export class VaultComponent implements OnInit, OnChanges {
     return this.vault?.strategies?.find((strategy) => strategy.id === id);
   }
 
+  // todo: fix use denom exponent
   setMintAmount(rate: number) {
-    this.mintAmount = Math.floor((this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate);
+    this.mintAmount =
+      Math.floor((this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate * Math.pow(10, 6)) /
+      Math.pow(10, 6);
     this.onDepositAmountChange();
   }
 
   setBurnAmount(rate: number) {
-    this.burnAmount = (this.symbolBalancesMap?.['YA-VAULT-' + this.vault?.vault?.id] || 0) * rate;
+    this.burnAmount =
+      Math.floor(
+        (this.symbolBalancesMap?.['YA-VAULT-' + this.vault?.vault?.id] || 0) *
+          rate *
+          Math.pow(10, 6),
+      ) / Math.pow(10, 6);
     this.onWithdrawAmountChange();
   }
 }

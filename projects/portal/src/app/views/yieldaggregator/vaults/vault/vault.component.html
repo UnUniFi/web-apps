@@ -185,7 +185,11 @@
               <span class="label-text">Chain that you deposit from</span>
               <span class="label-text-alt"></span>
             </label>
-            <button class="btn btn-outline btn-block" onclick="chain_select_modal.showModal()">
+            <button
+              type="button"
+              class="btn btn-outline btn-block"
+              onclick="chain_select_modal.showModal()"
+            >
               UnUniFi
             </button>
 
@@ -207,7 +211,7 @@
                 </div>
               </form>
               <form method="dialog" class="modal-backdrop">
-                <button onclick="chain_select_modal.close()">close</button>
+                <button type="button" onclick="chain_select_modal.close()">close</button>
               </form>
             </dialog>
           </div>

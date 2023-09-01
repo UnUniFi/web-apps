@@ -205,7 +205,7 @@ export class YieldAggregatorService {
         return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
       }
     }
-    return strategyInfo.min_apy || 0;
+    return strategyInfo.minApy || 0;
   }
 
   async calcVaultAPY(vault: Vault200Response, config?: Config): Promise<YieldInfo> {
@@ -215,9 +215,9 @@ export class YieldAggregatorService {
         name: vault.vault?.name || '',
         description: vault.vault?.description || '',
         gitURL: '',
-        min_apy: 0,
-        max_apy: 0,
-        apr_certainty: false,
+        minApy: 0,
+        maxApy: 0,
+        aprCertainty: false,
         poolInfo: { type: 'osmosis', poolId: '' },
       };
     }
@@ -235,9 +235,9 @@ export class YieldAggregatorService {
       name: vault.vault?.name || '',
       description: vault.vault?.description || '',
       gitURL: '',
-      min_apy: vaultAPY,
-      max_apy: vaultAPY,
-      apr_certainty: vaultAPYCertainty,
+      minApy: vaultAPY,
+      maxApy: vaultAPY,
+      aprCertainty: vaultAPYCertainty,
       poolInfo: { type: 'osmosis', poolId: '' },
     };
   }

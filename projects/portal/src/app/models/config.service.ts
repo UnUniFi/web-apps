@@ -23,6 +23,7 @@ export type Config = {
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: YieldInfo[];
+  externalChains: ChainInfo[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
@@ -62,9 +63,9 @@ export type YieldInfo = {
   name: string;
   description: string;
   gitURL: string;
-  min_apy: number;
-  max_apy: number;
-  apr_certainty: boolean;
+  minApy: number;
+  maxApy: number;
+  aprCertainty: boolean;
   poolInfo:
     | {
         type: 'osmosis';
@@ -77,6 +78,47 @@ export type YieldInfo = {
     | {
         type: 'astroport';
       };
+};
+
+export type ChainInfo = {
+  id: string;
+  chainId: string;
+  chainName: string;
+  rpc: string;
+  rest: string;
+  bip44: { coinType: number };
+  bech32Config: {
+    bech32PrefixAccAddr: string;
+    bech32PrefixAccPub: string;
+    bech32PrefixValAddr: string;
+    bech32PrefixValPub: string;
+    bech32PrefixConsAddr: string;
+    bech32PrefixConsPub: string;
+  };
+  currencies: {
+    coinDenom: string;
+    coinMinimalDenom: string;
+    coinDecimals: number;
+    coinGeckoId: string;
+  }[];
+  feeCurrencies: {
+    coinDenom: string;
+    coinMinimalDenom: string;
+    coinDecimals: number;
+    coinGeckoId: string;
+  }[];
+  stakeCurrency: {
+    coinDenom: string;
+    coinMinimalDenom: string;
+    coinDecimals: number;
+    coinGeckoId: string;
+  };
+  gasPriceStep: {
+    low: number;
+    average: number;
+    high: number;
+  };
+  features?: string[];
 };
 
 declare const configs: Config[];

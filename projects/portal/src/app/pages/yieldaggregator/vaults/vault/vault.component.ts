@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
+import { Key } from '@keplr-wallet/types';
 import {
   BandProtocolService,
   TokenAmountUSD,
@@ -9,6 +10,7 @@ import {
 import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
@@ -18,6 +20,7 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
+import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vaults/vault/vault.component';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -48,6 +51,7 @@ export class VaultComponent implements OnInit {
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultInfo$: Observable<YieldInfo>;
+  externalWalletAddress: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +59,7 @@ export class VaultComponent implements OnInit {
     private readonly iyaApp: YieldAggregatorApplicationService,
     private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
+    private readonly walletApp: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
@@ -193,5 +198,9 @@ export class VaultComponent implements OnInit {
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
     this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
+  }
+
+  async onClickChain(chain: ExternalChain) {
+    this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
   }
 }

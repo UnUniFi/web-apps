@@ -109,16 +109,16 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
-            <div class="stat-title" *ngIf="!vaultInfo?.apr_certainty">Estimated APY</div>
-            <div class="stat-title" *ngIf="vaultInfo?.apr_certainty">
+            <div class="stat-title" *ngIf="!vaultInfo?.aprCertainty">Estimated APY</div>
+            <div class="stat-title" *ngIf="vaultInfo?.aprCertainty">
               APY
               <div class="badge badge-info">Secure</div>
             </div>
             <div class="stat-value text-accent">
-              {{ vaultInfo?.min_apy | percent : '1.2-2' }}
+              {{ vaultInfo?.minApy | percent : '1.2-2' }}
             </div>
-            <div class="stat-desc" *ngIf="vaultInfo?.max_apy !== vaultInfo?.min_apy">
-              - {{ vaultInfo?.max_apy | percent : '1.2-2' }}
+            <div class="stat-desc" *ngIf="vaultInfo?.maxApy !== vaultInfo?.minApy">
+              - {{ vaultInfo?.maxApy | percent : '1.2-2' }}
             </div>
           </div>
           <div class="stat">
@@ -160,17 +160,6 @@
             </div>
           </div>
         </div>
-        <!-- <h3 class="mt-4">Historical APY (Demo)</h3>
-        <div class="flex w-full justify-center" #chartRef>
-          <google-chart
-            [title]="chartTitle"
-            [type]="chartType"
-            [data]="chartData"
-            [columns]="chartColumnNames"
-            [options]="chartOptions"
-          >
-          </google-chart>
-        </div> -->
       </div>
     </div>
   </div>
@@ -192,8 +181,8 @@
               <span class="label-text">Chain that you deposit from</span>
               <span class="label-text-alt"></span>
             </label>
-            <button class="btn btn-outline btn-block" onclick="chain_select_modal.showModal()">
-              UnUniFi
+            <button type="button" class="btn btn-block" onclick="chain_select_modal.showModal()">
+              {{ selectedChain.display }}
             </button>
 
             <dialog id="chain_select_modal" class="modal">
@@ -214,9 +203,23 @@
                 </div>
               </form>
               <form method="dialog" class="modal-backdrop">
-                <button onclick="chain_select_modal.close()">close</button>
+                <button type="button" onclick="chain_select_modal.close()">close</button>
               </form>
             </dialog>
+          </div>
+          <div class="form-control" *ngIf="selectedChain.external">
+            <label class="label">
+              <span class="label-text">{{ selectedChain.display }} Address</span>
+            </label>
+
+            <label class="input-group">
+              <span>{{ selectedChain.display }}</span>
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ externalWalletAddress }}"
+              />
+            </label>
           </div>
           <div class="form-control">
             <label class="label">
@@ -245,14 +248,25 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span>{{ displaySymbol }}</span>
+              <span *ngIf="selectedChain.cosmos">{{ displaySymbol }}</span>
+              <span *ngIf="!selectedChain.cosmos">{{ symbol }}.{{ selectedChain.id }}</span>
             </label>
-            <span class="label">
+            <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
                 {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
+          </div>
+
+          <div class="form-control" *ngIf="!selectedChain.cosmos">
+            <label class="label">
+              <span class="label-text">Converted to</span>
+            </label>
+            <label class="input-group">
+              <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
+              <span>{{ displaySymbol }}</span>
+            </label>
           </div>
 
           <div class="form-control">
@@ -328,9 +342,9 @@
               />
               <span>{{ displaySymbol }}</span>
             </label>
-            <span class="label" *ngIf="estimatedRedeemAmount?.share_amount">
+            <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
               <span class="label-text-alt">
-                Total {{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }} - Fee
+                Total {{ estimatedRedeemAmount?.total_amount?.amount | coinAmount }} - Fee
                 {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
               </span>
             </span>

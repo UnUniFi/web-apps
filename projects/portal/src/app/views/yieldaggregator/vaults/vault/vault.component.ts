@@ -89,7 +89,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'ethereum',
       display: 'Ethereum',
-      disabled: false,
+      disabled: true,
       external: true,
       cosmos: false,
     },
@@ -103,7 +103,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'polygon',
       display: 'Polygon',
-      disabled: false,
+      disabled: true,
       external: true,
       cosmos: false,
     },
@@ -117,7 +117,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'cosmoshub',
       display: 'Cosmos Hub',
-      disabled: false,
+      disabled: true,
       external: true,
       cosmos: true,
     },
@@ -131,7 +131,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'osmosis',
       display: 'Osmosis',
-      disabled: false,
+      disabled: true,
       external: true,
       cosmos: true,
     },

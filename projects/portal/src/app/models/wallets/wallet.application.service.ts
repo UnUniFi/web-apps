@@ -12,6 +12,7 @@ import {
   UnunifiSelectCreateImportDialogComponent,
 } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
+import { ExternalChain } from '../../views/yieldaggregator/vaults/vault/vault.component';
 import { KeplrService } from './keplr/keplr.service';
 import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
@@ -186,23 +187,21 @@ export class WalletApplicationService {
     return true;
   }
 
-  async getExternalWallet(id: string): Promise<string | undefined> {
-    if (id == 'ununifi') {
+  async getExternalWallet(chain: ExternalChain): Promise<string | undefined> {
+    if (chain.id == 'ununifi') {
       return;
     }
-    const selectedWalletType = await this.openConnectExternalWalletDialog(id);
+    const selectedWalletType = await this.openConnectExternalWalletDialog(chain);
     const connectedWallet = await (async () => {
       switch (selectedWalletType) {
         case WalletType.keplr:
-          const keplrKey = await this.connectExternalWallet(this.keplrService, id);
+          const keplrKey = await this.connectExternalWallet(this.keplrService, chain.id);
           return keplrKey?.bech32Address;
         case WalletType.leap:
-          const leapKey = await this.connectExternalWallet(this.leapService, id);
+          const leapKey = await this.connectExternalWallet(this.leapService, chain.id);
           return leapKey?.bech32Address;
         case WalletType.metamask:
-          // return await this.connectExternalWallet(this.metaMaskService);
-          this.snackBar.open('MetaMask is not supported yet.', 'Close');
-          return;
+          return await this.metaMaskService.getEthAddress();
         case WalletType.walletConnect:
           // return await this.connectExternalWallet(this.walletConnectService);
           this.snackBar.open('WalletConnect is not supported yet.', 'Close');
@@ -266,9 +265,9 @@ export class WalletApplicationService {
     return selectedWalletType;
   }
 
-  async openConnectExternalWalletDialog(id: string): Promise<WalletType | undefined> {
+  async openConnectExternalWalletDialog(chain: ExternalChain): Promise<WalletType | undefined> {
     const selectedWalletType: WalletType | undefined = await this.dialog
-      .open<WalletType>(ConnectExternalWalletDialogComponent, { data: id })
+      .open<WalletType>(ConnectExternalWalletDialogComponent, { data: chain })
       .closed.toPromise();
     return selectedWalletType;
   }

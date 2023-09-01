@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npm i -g npm
+      - run: npm i -g npm@8.19.4
       - run: npm ci
       - run: npm run build:all:prod:ununifi-beta-test
       - run: npx firebase deploy --only hosting:ununifi-beta-test --project=default --token=${{ secrets.FIREBASE_TOKEN }}

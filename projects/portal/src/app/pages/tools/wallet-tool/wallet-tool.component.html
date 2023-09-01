@@ -1,8 +1,8 @@
 <view-wallet-tool
   [currentStoredWallet]="currentStoredWallet$ | async"
-  [symbol]="symbol$ | async"
-  [symbolBalancesMap]="symbolBalancesMap$ | async"
-  [symbolMetadataMap]="symbolMetadataMap$ | async"
+  [denom]="denom$ | async"
+  [denomBalancesMap]="denomBalancesMap$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
   [keplrStoredWallet]="keplrStoredWallet$ | async"
   [leapStoredWallet]="leapStoredWallet$ | async"
   (appConnectWallet)="onConnectWallet($event)"

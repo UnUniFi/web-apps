@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'coinAmount',
 })
 export class CoinAmountPipe implements PipeTransform {
-  transform(value: string | undefined | null, denom?: string): string {
+  transform(value: string | undefined | null, denom?: string | null): string {
     if (denom) {
       const exponent = getDenomExponent(denom);
       const amount = Number(value) / Math.pow(10, exponent);

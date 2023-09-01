@@ -7,10 +7,8 @@ import { WalletService } from '../../models/wallets/wallet.service';
 import { throughMap } from '../../utils/pipes';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
-import {
-  CosmosDistributionV1beta1QueryDelegationTotalRewardsResponse,
-  GetNodeInfo200Response,
-} from '@cosmos-client/core/esm/openapi';
+import cosmosclient from '@cosmos-client/core';
+import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
@@ -28,8 +26,8 @@ export class BalanceComponent implements OnInit {
   valAddress$: Observable<string | null | undefined>;
   symbolDisplayMap$: Observable<{ [symbol: string]: string }>;
   symbolImageMap: { [symbol: string]: string };
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
-  symbolRewardsMap$: Observable<{ [symbol: string]: number }>;
+  denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+
   faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
     | {
@@ -68,19 +66,12 @@ export class BalanceComponent implements OnInit {
       throughMap((wallet) => wallet.address.toValAddress().toString()),
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
-    this.symbolBalancesMap$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
+    this.denomBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address!)),
     );
     this.symbolDisplayMap$ = this.bankQuery.getSymbolDisplayMap$();
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    const rewards$ = cosmosWallet$.pipe(
-      mergeMap((wallet) => this.rest.getDelegationTotalRewards$(wallet?.address!)),
-    );
-    this.symbolRewardsMap$ = combineLatest([rewards$, denomMetadataMap$]).pipe(
-      map(([rewards, denomMetadataMap]) =>
-        this.bank.convertCoinsToSymbolAmount(rewards?.total!, denomMetadataMap),
-      ),
-    );
+
     this.faucets$ = this.usecase.faucets$;
     this.faucetSymbols$ = combineLatest([this.faucets$, denomMetadataMap$]).pipe(
       map(([faucets, denomMetadataMap]) =>
@@ -89,9 +80,6 @@ export class BalanceComponent implements OnInit {
     );
     this.nodeInfo$ = this.rest.getNodeInfo$();
     this.accountTypeName$ = this.usecase.accountTypeName$;
-    this.symbolBalancesMap$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
-    );
   }
 
   ngOnInit(): void {}

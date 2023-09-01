@@ -35,7 +35,8 @@ export class BankApplicationService {
     private readonly txCommon: TxCommonService,
     private readonly txCommonApplication: TxCommonApplicationService,
   ) {}
-  async bankSend(toAddress: string, symbolAmounts: { symbol: string; amount: number }[]) {
+
+  async bankSend(toAddress: string, denomReadableAmountMap: { [denom: string]: number }) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -47,7 +48,12 @@ export class BankApplicationService {
       .pipe(take(1))
       .toPromise();
 
-    const msg = this.bank.buildMsgBankSend(address, toAddress, symbolAmounts, symbolMetadataMap);
+    const msg = this.bank.buildMsgBankSend(
+      address,
+      toAddress,
+      denomReadableAmountMap,
+      symbolMetadataMap,
+    );
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

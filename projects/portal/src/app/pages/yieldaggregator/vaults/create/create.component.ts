@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -23,11 +23,13 @@ export class CreateComponent implements OnInit {
   availableSymbols$: Observable<({ symbol: string; display: string } | undefined)[]>;
   selectedSymbol$: Observable<string | undefined>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
-  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   commissionRate$: Observable<number>;
-  deposit$: Observable<{ symbol: string; amount: number }>;
-  fee$: Observable<{ symbol: string; amount: number }>;
+  deposit$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  fee$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
 
   constructor(
     private router: Router,
@@ -45,12 +47,11 @@ export class CreateComponent implements OnInit {
     this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
     this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
     const allStrategies$ = this.iyaQuery.listStrategies$();
-    this.symbolBalancesMap$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.availableSymbols$ = combineLatest([allStrategies$, denomMetadataMap$]).pipe(
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.availableSymbols$ = combineLatest([allStrategies$, this.denomMetadataMap$]).pipe(
       map(([allStrategies, denomMetadataMap]) => {
         const symbols = allStrategies
           .map((strategy) => {
@@ -70,7 +71,7 @@ export class CreateComponent implements OnInit {
     );
     this.availableSymbols$.subscribe((symbols) => console.log(symbols));
 
-    this.selectedSymbol$ = combineLatest([this.denom$, denomMetadataMap$]).pipe(
+    this.selectedSymbol$ = combineLatest([this.denom$, this.denomMetadataMap$]).pipe(
       map(([denom, denomMetadataMap]) => {
         if (denom && denomMetadataMap) {
           return denomMetadataMap[denom].symbol || undefined;
@@ -81,16 +82,8 @@ export class CreateComponent implements OnInit {
     );
     const params$ = this.iyaQuery.getYieldAggregatorParam$();
     this.commissionRate$ = params$.pipe(map((params) => Number(params.commission_rate) * 100));
-    this.deposit$ = combineLatest([params$, denomMetadataMap$]).pipe(
-      map(([params, denomMetadataMap]) =>
-        this.bank.convertCoinToSymbolAmount(params.vault_creation_deposit!, denomMetadataMap),
-      ),
-    );
-    this.fee$ = combineLatest([params$, denomMetadataMap$]).pipe(
-      map(([params, denomMetadataMap]) =>
-        this.bank.convertCoinToSymbolAmount(params.vault_creation_fee!, denomMetadataMap),
-      ),
-    );
+    this.deposit$ = params$.pipe(map((params) => params.vault_creation_deposit!));
+    this.fee$ = params$.pipe(map((params) => params.vault_creation_fee!));
   }
 
   ngOnInit(): void {}
@@ -108,15 +101,13 @@ export class CreateComponent implements OnInit {
   onCreate(data: CreateVaultRequest) {
     this.iyaApp.createVault(
       data.name,
-      data.symbol,
+      data.denom,
       data.description,
       data.strategies,
       data.commissionRate,
       data.reserveRate,
-      data.feeAmount,
-      data.feeSymbol,
-      data.depositAmount,
-      data.depositSymbol,
+      data.fee,
+      data.deposit,
       data.feeCollectorAddress,
     );
   }

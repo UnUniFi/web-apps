@@ -1,3 +1,4 @@
+import { PipesModule } from '../../../pipes/pipes.module';
 import { MaterialModule } from '../../material.module';
 import { SendComponent } from './send.component';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [SendComponent],
-  imports: [CommonModule, FormsModule, RouterModule, MaterialModule],
+  imports: [CommonModule, FormsModule, RouterModule, MaterialModule, PipesModule],
   exports: [SendComponent],
 })
 export class SendModule {}

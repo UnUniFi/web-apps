@@ -186,7 +186,7 @@ export class WalletApplicationService {
     return true;
   }
 
-  async getExternalWallet(id: string): Promise<Key | null | undefined> {
+  async getExternalWallet(id: string): Promise<string | undefined> {
     if (id == 'ununifi') {
       return;
     }
@@ -194,9 +194,11 @@ export class WalletApplicationService {
     const connectedWallet = await (async () => {
       switch (selectedWalletType) {
         case WalletType.keplr:
-          return await this.connectExternalWallet(this.keplrService, id);
+          const keplrKey = await this.connectExternalWallet(this.keplrService, id);
+          return keplrKey?.bech32Address;
         case WalletType.leap:
-          return await this.connectExternalWallet(this.leapService, id);
+          const leapKey = await this.connectExternalWallet(this.leapService, id);
+          return leapKey?.bech32Address;
         case WalletType.metamask:
           // return await this.connectExternalWallet(this.metaMaskService);
           this.snackBar.open('MetaMask is not supported yet.', 'Close');

@@ -1,4 +1,5 @@
 import { WalletType } from '../../../../models/wallets/wallet.model';
+import { ExternalChain } from '../../../yieldaggregator/vaults/vault/vault.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 
@@ -12,10 +13,10 @@ export class ConnectExternalWalletDialogComponent implements OnInit {
 
   constructor(
     @Inject(DIALOG_DATA)
-    public readonly data: string,
+    public readonly data: ExternalChain,
     public dialogRef: DialogRef<WalletType, ConnectExternalWalletDialogComponent>,
   ) {
-    if (data == 'cosmoshub' || data == 'osmosis' || data == 'neutron' || data == 'sei') {
+    if (data.cosmos) {
       this.walletOptions = [
         {
           logo: 'assets/wallets/keplr.svg',
@@ -28,8 +29,7 @@ export class ConnectExternalWalletDialogComponent implements OnInit {
           name: 'Leap',
         },
       ];
-    }
-    if (data == 'ethereum' || data == 'avalanche' || data == 'polygon' || data == 'arbitrum') {
+    } else {
       this.walletOptions = [
         {
           logo: 'assets/wallets/metamask.svg',

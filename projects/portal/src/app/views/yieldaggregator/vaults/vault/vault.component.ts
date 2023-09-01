@@ -14,6 +14,14 @@ import {
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
 
+export type ExternalChain = {
+  id: string;
+  display: string;
+  disabled: boolean;
+  external: boolean;
+  cosmos: boolean;
+};
+
 @Component({
   selector: 'view-vault',
   templateUrl: './vault.component.html',
@@ -57,72 +65,82 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
-  appClickChain: EventEmitter<string>;
+  appClickChain: EventEmitter<ExternalChain>;
 
   mintAmount?: number;
   burnAmount?: number;
   tab: 'mint' | 'burn' = 'mint';
-  selectedChain = {
+  selectedChain: ExternalChain = {
     id: 'ununifi',
     display: 'UnUniFi',
     disabled: false,
     external: false,
+    cosmos: true,
   };
 
-  chains = [
+  chains: ExternalChain[] = [
     {
       id: 'ununifi',
       display: 'UnUniFi',
       disabled: false,
       external: false,
+      cosmos: true,
     },
     {
       id: 'ethereum',
       display: 'Ethereum',
       disabled: false,
       external: true,
+      cosmos: false,
     },
     {
       id: 'avalanche',
       display: 'Avalanche',
       disabled: true,
       external: true,
+      cosmos: false,
     },
     {
       id: 'polygon',
       display: 'Polygon',
       disabled: false,
       external: true,
+      cosmos: false,
     },
     {
       id: 'arbitrum',
       display: 'Arbitrum',
       disabled: true,
       external: true,
+      cosmos: false,
     },
     {
       id: 'cosmoshub',
       display: 'Cosmos Hub',
       disabled: false,
       external: true,
+      cosmos: true,
     },
     {
       id: 'neutron',
       display: 'Neutron',
       disabled: true,
       external: true,
+      cosmos: true,
     },
     {
       id: 'osmosis',
       display: 'Osmosis',
       disabled: false,
       external: true,
+      cosmos: true,
     },
     {
       id: 'sei',
       display: 'Sei',
       disabled: true,
       external: true,
+      cosmos: true,
     },
   ];
 
@@ -139,8 +157,8 @@ export class VaultComponent implements OnInit, OnChanges {
   ngOnChanges(): void {}
 
   onClickChain(id: string) {
-    this.appClickChain.emit(id);
     this.selectedChain = this.chains.find((chain) => chain.id === id)!;
+    this.appClickChain.emit(this.selectedChain);
     (global as any).chain_select_modal.close();
   }
 

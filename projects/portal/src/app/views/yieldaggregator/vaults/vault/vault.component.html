@@ -248,14 +248,25 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span>{{ displaySymbol }}</span>
+              <span *ngIf="selectedChain.cosmos">{{ displaySymbol }}</span>
+              <span *ngIf="!selectedChain.cosmos">{{ symbol }}.{{ selectedChain.id }}</span>
             </label>
-            <span class="label">
+            <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
                 {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ displaySymbol }}
               </label>
             </span>
+          </div>
+
+          <div class="form-control" *ngIf="!selectedChain.cosmos">
+            <label class="label">
+              <span class="label-text">Converted to</span>
+            </label>
+            <label class="input-group">
+              <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
+              <span>{{ displaySymbol }}</span>
+            </label>
           </div>
 
           <div class="form-control">

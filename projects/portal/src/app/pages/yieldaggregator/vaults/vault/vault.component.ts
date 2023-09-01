@@ -20,6 +20,7 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
+import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vaults/vault/vault.component';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -199,7 +200,7 @@ export class VaultComponent implements OnInit {
     this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
   }
 
-  async onClickChain(chain: string) {
+  async onClickChain(chain: ExternalChain) {
     this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
   }
 }

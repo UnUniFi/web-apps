@@ -197,7 +197,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   setMintAmount(rate: number) {
-    this.mintAmount = (this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate;
+    this.mintAmount = Math.floor((this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate);
     this.onDepositAmountChange();
   }
 

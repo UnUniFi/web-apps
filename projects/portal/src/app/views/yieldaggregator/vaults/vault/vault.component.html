@@ -323,8 +323,7 @@
             </label>
             <span class="label" *ngIf="estimatedRedeemAmount?.share_amount">
               <span class="label-text-alt">
-                Total {{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }} - Fee
-                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+                Fee {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
               </span>
             </span>
           </div>

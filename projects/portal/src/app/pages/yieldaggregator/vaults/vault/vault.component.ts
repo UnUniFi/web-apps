@@ -50,7 +50,7 @@ export class VaultComponent implements OnInit {
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultInfo$: Observable<YieldInfo>;
-  externalWallet: Key | null | undefined;
+  externalWalletAddress: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -200,6 +200,6 @@ export class VaultComponent implements OnInit {
   }
 
   async onClickChain(chain: string) {
-    this.externalWallet = await this.walletApp.getExternalWallet(chain);
+    this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
   }
 }

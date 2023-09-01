@@ -47,7 +47,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
-  externalWallet: Key | null | undefined;
+  externalWalletAddress?: string;
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()

@@ -17,13 +17,12 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() symbolDisplayMap?: { [symbol: string]: string } | null;
   @Input() symbolImageMap?: { [symbol: string]: string };
   @Input() denomBalancesMap?: {
     [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
   } | null;
   @Input() denomMetadataMap?: {
-    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.Metadata;
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   } | null;
 
   @Input() faucetSymbols?: string[] | null;

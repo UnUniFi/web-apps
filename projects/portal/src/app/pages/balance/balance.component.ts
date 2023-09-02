@@ -24,9 +24,11 @@ export class BalanceComponent implements OnInit {
   accountTypeName$: Observable<string | null | undefined>;
   publicKey$: Observable<string | null | undefined>;
   valAddress$: Observable<string | null | undefined>;
-  symbolDisplayMap$: Observable<{ [symbol: string]: string }>;
   symbolImageMap: { [symbol: string]: string };
   denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
 
   faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
@@ -69,11 +71,10 @@ export class BalanceComponent implements OnInit {
     this.denomBalancesMap$ = address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address!)),
     );
-    this.symbolDisplayMap$ = this.bankQuery.getSymbolDisplayMap$();
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
 
     this.faucets$ = this.usecase.faucets$;
-    this.faucetSymbols$ = combineLatest([this.faucets$, denomMetadataMap$]).pipe(
+    this.faucetSymbols$ = combineLatest([this.faucets$, this.denomMetadataMap$]).pipe(
       map(([faucets, denomMetadataMap]) =>
         faucets?.map((f) => denomMetadataMap?.[f.denom!].symbol || 'Invalid Token'),
       ),

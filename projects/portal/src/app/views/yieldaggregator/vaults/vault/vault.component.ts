@@ -193,6 +193,7 @@ export class VaultComponent implements OnInit, OnChanges {
     return this.vault?.strategies?.find((strategy) => strategy.id === id);
   }
 
+  // todo: fix use denom exponent
   setMintAmount(rate: number) {
     this.mintAmount =
       Number(
@@ -201,6 +202,7 @@ export class VaultComponent implements OnInit, OnChanges {
           this.vault?.vault?.denom,
         ),
       ) * rate;
+    this.mintAmount = Math.floor(this.mintAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onDepositAmountChange();
   }
 
@@ -208,6 +210,7 @@ export class VaultComponent implements OnInit, OnChanges {
     const denom = 'yieldaggregator/vault/' + this.vault?.vault?.id;
     this.burnAmount =
       Number(this.coinAmountPipe.transform(this.denomBalancesMap?.[denom].amount, denom)) * rate;
+    this.burnAmount = Math.floor(this.burnAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onWithdrawAmountChange();
   }
 }

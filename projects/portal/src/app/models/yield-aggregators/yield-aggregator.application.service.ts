@@ -30,17 +30,11 @@ export class YieldAggregatorApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.yieldAggregatorService.buildMsgDepositToVault(
       address,
       vaultId,
       symbol,
       amount,
-      symbolMetadataMap,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(
@@ -85,17 +79,11 @@ export class YieldAggregatorApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
       symbol,
       amount,
-      symbolMetadataMap,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

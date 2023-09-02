@@ -29,12 +29,10 @@ export class YieldAggregatorService {
     vaultId: string,
     denom: string,
     readableAmount: number,
-    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const coin = this.bankService.convertDenomReadableAmountMapToCoins(
-      { [denom]: readableAmount },
-      denomMetadataMap,
-    )[0];
+    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
+      [denom]: readableAmount,
+    })[0];
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgDepositToVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
@@ -49,12 +47,10 @@ export class YieldAggregatorService {
     vaultId: string,
     denom: string,
     readableAmount: number,
-    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const coin = this.bankService.convertDenomReadableAmountMapToCoins(
-      { [denom]: readableAmount },
-      denomMetadataMap,
-    )[0];
+    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
+      [denom]: readableAmount,
+    })[0];
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),

@@ -43,17 +43,7 @@ export class BankApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
-    const msg = this.bank.buildMsgBankSend(
-      address,
-      toAddress,
-      denomReadableAmountMap,
-      symbolMetadataMap,
-    );
+    const msg = this.bank.buildMsgBankSend(address, toAddress, denomReadableAmountMap);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

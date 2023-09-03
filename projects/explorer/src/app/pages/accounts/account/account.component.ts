@@ -21,6 +21,9 @@ export class AccountComponent implements OnInit {
     | undefined
   >;
   denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbolImageMap: { [symbol: string]: string };
 
   constructor(
@@ -55,6 +58,7 @@ export class AccountComponent implements OnInit {
         return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
       }),
     );
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );

@@ -135,6 +135,15 @@
               {{ totalDepositAmount?.usdAmount | currency }}
             </div>
           </div>
+          <div class="stat">
+            <div class="stat-title">Your Deposit Amount</div>
+            <div class="stat-value text-info">
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+            </div>
+            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+              {{ usdDepositAmount?.usdAmount | currency }}
+            </div>
+          </div>
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">

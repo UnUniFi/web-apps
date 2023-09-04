@@ -56,6 +56,8 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vaultBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
+  usdDepositAmount?: TokenAmountUSD | null;
+  @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
   externalWalletAddress?: string;

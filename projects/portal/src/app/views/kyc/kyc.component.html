@@ -1,0 +1,35 @@
+<ng-container *ngFor="let provider of providers">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">{{ provider.name }}</h2>
+      <p>{{ provider.details }}</p>
+
+      <div class="overflow-x-auto">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Address</th>
+              <td class="font-mono">{{ provider.address }}</td>
+            </tr>
+            <tr>
+              <th>Security Contact</th>
+              <td>{{ provider.security_contact }}</td>
+            </tr>
+            <tr>
+              <th>Website</th>
+              <td>{{ provider.website }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="providers === null">
+  <div class="mx-auto">
+    <span class="loading loading-ring loading-lg"></span>
+  </div>
+</ng-container>
+<ng-container *ngIf="providers?.length === 0">
+  <p class="text-center">There is no provider.</p>
+</ng-container>

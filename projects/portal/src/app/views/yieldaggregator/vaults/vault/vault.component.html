@@ -8,22 +8,27 @@
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
-        <h2 class="card-title">
-          <ng-container *ngIf="symbolImage">
-            <div class="avatar">
-              <div class="mask mask-circle w-6 h-6">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+        <div class="flex flex-row flex-wrap items-center gap-4">
+          <h2 class="card-title">
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
               </div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="!symbolImage">
-            <span class="material-symbols-outlined">question_mark</span>
-          </ng-container>
-          <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
-          <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
-          <div class="badge badge-primary">{{ displaySymbol }}</div>
-          <div class="badge badge-info">NO KYC</div>
-        </h2>
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
+            <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
+          </h2>
+          <div class="flex flex-row items-center gap-2">
+            <div class="badge badge-primary">{{ displaySymbol }}</div>
+            <div class="badge badge-info">NO KYC</div>
+          </div>
+        </div>
+
         <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
           {{ vault?.vault?.description }}
         </p>

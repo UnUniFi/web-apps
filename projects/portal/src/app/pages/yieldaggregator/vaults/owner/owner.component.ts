@@ -38,10 +38,6 @@ export class OwnerComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onDelete(data: string) {
-    this.iyaApp.deleteVault(data);
-  }
-
   onTransfer(data: TransferVaultRequest) {
     this.iyaApp.transferVaultOwnership(data.vaultId, data.recipientAddress);
   }

@@ -55,8 +55,8 @@
 
         <div class="stats flex flex-col md:flex-row">
           <div class="stat">
-            <div class="stat-title" *ngIf="!strategyInfo?.aprCertainty">Estimated APR</div>
-            <div class="stat-title" *ngIf="strategyInfo?.aprCertainty">
+            <div class="stat-title" *ngIf="!strategyInfo?.certainty">Estimated APR</div>
+            <div class="stat-title" *ngIf="strategyInfo?.certainty">
               APR
               <div class="badge badge-info">Secure</div>
             </div>

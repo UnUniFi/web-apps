@@ -65,7 +65,7 @@ export type YieldInfo = {
   gitURL: string;
   minApy: number;
   maxApy: number;
-  aprCertainty: boolean;
+  certainty: boolean;
   poolInfo:
     | {
         type: 'osmosis';

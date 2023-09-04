@@ -217,7 +217,7 @@ export class YieldAggregatorService {
         gitURL: '',
         minApy: 0,
         maxApy: 0,
-        aprCertainty: false,
+        certainty: false,
         poolInfo: { type: 'osmosis', poolId: '' },
       };
     }
@@ -237,7 +237,7 @@ export class YieldAggregatorService {
       gitURL: '',
       minApy: vaultAPY,
       maxApy: vaultAPY,
-      aprCertainty: vaultAPYCertainty,
+      certainty: vaultAPYCertainty,
       poolInfo: { type: 'osmosis', poolId: '' },
     };
   }

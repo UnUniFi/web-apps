@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
@@ -40,7 +39,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  denomMetadataMap?: { [denom: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   totalDepositAmount?: TokenAmountUSD | null;
   @Input()

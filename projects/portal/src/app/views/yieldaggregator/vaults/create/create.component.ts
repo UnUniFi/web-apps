@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
 import { CreateVaultRequest } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi/api';
 
@@ -29,7 +28,7 @@ export class CreateComponent implements OnInit {
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  denomMetadataMap?: { [denom: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Output()
   changeDenom: EventEmitter<string>;
   @Output()

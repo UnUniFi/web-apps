@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 export interface OptionConfig {
@@ -16,7 +16,7 @@ export interface OptionConfig {
 })
 export class YieldAggregatorComponent implements OnInit {
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   availableSymbols?: string[] | null;
   @Input()

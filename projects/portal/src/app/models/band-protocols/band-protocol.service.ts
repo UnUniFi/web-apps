@@ -1,7 +1,7 @@
 import { getDenomExponent } from '../cosmos/bank.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 
 export const rest = 'https://laozi1.bandchain.org/api';
 export type TokenAmountUSD = {
@@ -32,7 +32,7 @@ export class BandProtocolService {
   async convertToUSDAmountSymbol(
     symbol: string,
     amount: string,
-    symbolMetadataMap: { [symbol: string]: cosmos.bank.v1beta1.IMetadata },
+    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): Promise<TokenAmountUSD> {
     const price = await this.getPrice(symbol);
     const denom = symbolMetadataMap?.[symbol].base;
@@ -52,7 +52,7 @@ export class BandProtocolService {
   async convertToUSDAmountDenom(
     denom: string,
     amount: string,
-    denomMetadataMap: { [denom: string]: cosmos.bank.v1beta1.IMetadata },
+    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): Promise<TokenAmountUSD> {
     const symbol = denomMetadataMap[denom].symbol;
     const display = denomMetadataMap[denom].display;

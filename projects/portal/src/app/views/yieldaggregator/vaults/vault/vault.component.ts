@@ -216,7 +216,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   setBurnAmount(rate: number) {
-    const denom = 'yieldaggregator/vault/' + this.vault?.vault?.id;
+    const denom = 'yieldaggregator/vaults/' + this.vault?.vault?.id;
     this.burnAmount =
       Number(this.coinAmountPipe.transform(this.denomBalancesMap?.[denom].amount, denom)) * rate;
     this.burnAmount = Math.floor(this.burnAmount * Math.pow(10, 6)) / Math.pow(10, 6);

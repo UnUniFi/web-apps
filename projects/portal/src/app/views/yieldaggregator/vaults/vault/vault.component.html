@@ -256,7 +256,7 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom"
+                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
@@ -268,7 +268,7 @@
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom }}
+                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom }}
                 {{ displaySymbol }}
               </label>
             </span>
@@ -328,7 +328,7 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id || '']?.amount| coinAmount:vault?.vault?.denom"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
@@ -339,7 +339,7 @@
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id] || 0 }}
+                {{ denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id]?.amount | coinAmount }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </label>
             </span>

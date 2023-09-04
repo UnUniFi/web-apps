@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
@@ -55,6 +56,8 @@ export class VaultComponent implements OnInit, OnChanges {
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
   vaultAPY?: number | null;
+  @Input()
+  vaultBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   @Output()
   changeDeposit: EventEmitter<number>;

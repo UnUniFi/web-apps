@@ -48,6 +48,7 @@ export class VaultComponent implements OnInit {
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultAPY$: Observable<number>;
+  vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -189,6 +190,12 @@ export class VaultComponent implements OnInit {
         }
         return vaultAPY;
       }),
+    );
+    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
+    this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(
+      map(([id, balance]) =>
+        balance.find((balance) => balance.denom?.includes('yieldaggregator/vaults/' + id)),
+      ),
     );
   }
 

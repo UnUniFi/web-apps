@@ -62,24 +62,28 @@
                 <tr *ngFor="let balance of denomBalancesMap | keyvalue">
                   <th>
                     <div class="flex items-center space-x-3">
-                      <div
-                        class="avatar mr-2"
-                        *ngIf="
-                          symbolImageMap &&
-                          symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || '']
-                        "
-                      >
-                        <div class="mask mask-circle w-8 h-8">
+                      <div class="avatar mr-2">
+                        <div
+                          class="mask mask-circle w-6 h-6"
+                          *ngIf="symbolImageMap &&symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || '']"
+                        >
                           <img
                             src="{{ symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || ''] }}"
                             alt="Asset Symbol"
                           />
                         </div>
+
+                        <span
+                          class="material-symbols-outlined"
+                          *ngIf="!symbolImageMap ||!symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || '']"
+                        >
+                          question_mark
+                        </span>
                       </div>
-                      {{ balance.key }}
+                      {{ denomMetadataMap?.[balance.key]?.display || balance.key }}
                     </div>
                   </th>
-                  <td>{{ balance.value }}</td>
+                  <td>{{ balance.value.amount | coinAmount : balance.key }}</td>
                 </tr>
               </tbody>
             </table>

@@ -1,6 +1,6 @@
 export type BankSendRequest = {
   toAddress: string;
-  symbolAmounts: { symbol: string; amount: number }[];
+  denomReadableAmountMap: { [denom: string]: number };
 };
 
 export const denomExponentMap: { [denom: string]: number } = {

@@ -6,14 +6,16 @@
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <button class="btn btn-primary btn-outline mr-4" routerLink="deposit/{{ address }}">
-      <span class="material-symbols-outlined">monetization_on</span>
-      <span>Your Deposits</span>
-    </button>
-    <button class="btn btn-info btn-outline" routerLink="..">
-      <span class="material-symbols-outlined">info</span>
-      <span>About</span>
-    </button>
+    <div class="flex flex-row gap-2">
+      <button class="btn btn-primary btn-outline" routerLink="deposit/{{ address }}">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span>Your Deposits</span>
+      </button>
+      <button class="btn btn-info btn-outline" routerLink="..">
+        <span class="material-symbols-outlined">info</span>
+        <span>About</span>
+      </button>
+    </div>
   </div>
 
   <div class="flex flex-row flex-wrap items-end mb-8">
@@ -91,7 +93,7 @@
                     </span>
                   </div>
                 </td>
-                <td>{{ apy?.[i] || 0 | percent : '1.0-2' }}</td>
+                <td>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</td>
                 <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
                 <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>

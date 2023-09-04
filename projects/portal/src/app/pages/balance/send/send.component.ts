@@ -5,7 +5,8 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, combineLatest } from 'rxjs';
+import cosmosclient from '@cosmos-client/core';
+import { Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -16,10 +17,12 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class SendComponent implements OnInit {
   address$: Observable<string>;
   toAddress$: Observable<string>;
-  selectedTokens$: Observable<{ symbol: string; amount?: number }[]>;
-  balanceSymbols$: Observable<({ symbol: string; display: string } | undefined)[]>;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  selectedTokens$: Observable<{ denom: string; amount?: number }[]>;
+  denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   symbolImageMap: { [symbol: string]: string };
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,35 +38,17 @@ export class SendComponent implements OnInit {
     this.selectedTokens$ = this.route.queryParams.pipe(
       map((queryParams) => queryParams.amounts || []),
     );
-    this.symbolBalancesMap$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address!)),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address!)),
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
-    const balance$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getBalance$(address!)),
-    );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
 
-    this.balanceSymbols$ = combineLatest([balance$, denomMetadataMap$]).pipe(
-      map(([balances, denomMetadataMap]) =>
-        balances?.map((b) => {
-          const denomMetadata = denomMetadataMap?.[b.denom || ''];
-          if (denomMetadata) {
-            return {
-              symbol: denomMetadata.symbol!,
-              display: denomMetadata.display!,
-            };
-          } else {
-            return undefined;
-          }
-        }),
-      ),
-    );
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
   }
 
   ngOnInit(): void {}
 
   onSubmitSend(data: BankSendRequest) {
-    this.bankApp.bankSend(data.toAddress, data.symbolAmounts);
+    this.bankApp.bankSend(data.toAddress, data.denomReadableAmountMap);
   }
 }

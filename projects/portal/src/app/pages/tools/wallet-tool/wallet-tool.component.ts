@@ -17,10 +17,10 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class WalletToolComponent implements OnInit {
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
-  symbol$: Observable<string | null | undefined>;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
-  symbolMetadataMap$: Observable<{
-    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  denom$: Observable<string | null | undefined>;
+  denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
   keplrStoredWallet$: Observable<StoredWallet | null | undefined>;
   leapStoredWallet$: Observable<StoredWallet | null | undefined>;
@@ -38,16 +38,12 @@ export class WalletToolComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    const denom$ = this.configService.config$.pipe(
+    this.denom$ = this.configService.config$.pipe(
       map((config) => config?.minimumGasPrices?.[0]?.denom),
     );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    this.symbol$ = combineLatest([denom$, denomMetadataMap$]).pipe(
-      map(([denom, metadata]) => metadata[denom || ''].symbol),
-    );
-    this.symbolBalancesMap$ = address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.denomBalancesMap$ = address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     this.keplrStoredWallet$ = from(this.keplrService.checkWallet());
     this.leapStoredWallet$ = from(this.leapService.checkWallet());

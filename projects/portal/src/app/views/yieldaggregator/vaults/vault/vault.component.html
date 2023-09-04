@@ -8,22 +8,27 @@
   <div class="w-full md:w-auto mb-8">
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
-        <h2 class="card-title">
-          <ng-container *ngIf="symbolImage">
-            <div class="avatar">
-              <div class="mask mask-circle w-6 h-6">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+        <div class="flex flex-row flex-wrap items-center gap-4">
+          <h2 class="card-title">
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
               </div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="!symbolImage">
-            <span class="material-symbols-outlined">question_mark</span>
-          </ng-container>
-          <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
-          <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
-          <div class="badge badge-primary">{{ displaySymbol }}</div>
-          <div class="badge badge-info">NO KYC</div>
-        </h2>
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
+            <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
+          </h2>
+          <div class="flex flex-row items-center gap-2">
+            <div class="badge badge-primary">{{ displaySymbol }}</div>
+            <div class="badge badge-info">NO KYC</div>
+          </div>
+        </div>
+
         <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
           {{ vault?.vault?.description }}
         </p>
@@ -109,9 +114,16 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
-            <div class="stat-title">APY</div>
+            <div class="stat-title" *ngIf="!vaultInfo?.certainty">Estimated APY</div>
+            <div class="stat-title" *ngIf="vaultInfo?.certainty">
+              APY
+              <div class="badge badge-info">Secure</div>
+            </div>
             <div class="stat-value text-accent">
-              {{ vaultAPY | percent : '1.2-2' }}
+              {{ vaultInfo?.minApy | percent : '1.2-2' }}
+            </div>
+            <div class="stat-desc" *ngIf="vaultInfo?.maxApy !== vaultInfo?.minApy">
+              - {{ vaultInfo?.maxApy | percent : '1.2-2' }}
             </div>
           </div>
           <div class="stat">
@@ -153,17 +165,6 @@
             </div>
           </div>
         </div>
-        <!-- <h3 class="mt-4">Historical APY (Demo)</h3>
-        <div class="flex w-full justify-center" #chartRef>
-          <google-chart
-            [title]="chartTitle"
-            [type]="chartType"
-            [data]="chartData"
-            [columns]="chartColumnNames"
-            [options]="chartOptions"
-          >
-          </google-chart>
-        </div> -->
       </div>
     </div>
   </div>
@@ -185,12 +186,8 @@
               <span class="label-text">Chain that you deposit from</span>
               <span class="label-text-alt"></span>
             </label>
-            <button
-              type="button"
-              class="btn btn-outline btn-block"
-              onclick="chain_select_modal.showModal()"
-            >
-              UnUniFi
+            <button type="button" class="btn btn-block" onclick="chain_select_modal.showModal()">
+              {{ selectedChain.display }}
             </button>
 
             <dialog id="chain_select_modal" class="modal">
@@ -215,6 +212,20 @@
               </form>
             </dialog>
           </div>
+          <div class="form-control" *ngIf="selectedChain.external">
+            <label class="label">
+              <span class="label-text">{{ selectedChain.display }} Address</span>
+            </label>
+
+            <label class="input-group">
+              <span>{{ selectedChain.display }}</span>
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ externalWalletAddress }}"
+              />
+            </label>
+          </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Enter amount</span>
@@ -236,20 +247,32 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.[symbol || ''] || 0"
+                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span>{{ displaySymbol }}</span>
+              <span *ngIf="selectedChain.cosmos">{{ displaySymbol }}</span>
+              <span *ngIf="!selectedChain.cosmos">{{ symbol }}.{{ selectedChain.id }}</span>
             </label>
-            <span class="label">
+            <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ symbolBalancesMap?.[symbol || ''] || 0 }} {{ displaySymbol }}
+                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom }}
+                {{ displaySymbol }}
               </label>
             </span>
+          </div>
+
+          <div class="form-control" *ngIf="!selectedChain.cosmos">
+            <label class="label">
+              <span class="label-text">Converted to</span>
+            </label>
+            <label class="input-group">
+              <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
+              <span>{{ displaySymbol }}</span>
+            </label>
           </div>
 
           <div class="form-control">
@@ -296,7 +319,7 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id || ''] || 0"
+                [max]="denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id || '']?.amount| coinAmount:vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
@@ -307,7 +330,7 @@
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ symbolBalancesMap?.['YA-VAULT-'+ vault?.vault?.id] || 0 }}
+                {{ denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id] || 0 }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </label>
             </span>

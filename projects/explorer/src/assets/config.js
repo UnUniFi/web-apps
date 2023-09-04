@@ -62,7 +62,7 @@ const denomMetadata = [
     ],
     base: 'uguu',
     name: 'UnUniFi',
-    display: 'guu',
+    display: 'GUU',
     symbol: 'GUU',
   },
   {
@@ -79,7 +79,7 @@ const denomMetadata = [
     ],
     base: 'uosmo',
     name: 'OSMOSIS',
-    display: 'osmo',
+    display: 'OSMO',
     symbol: 'OSMO',
   },
   {
@@ -96,7 +96,7 @@ const denomMetadata = [
     ],
     base: 'uatom',
     name: 'COSMOS',
-    display: 'atom',
+    display: 'ATOM',
     symbol: 'ATOM',
   },
   {
@@ -172,7 +172,7 @@ const denomMetadata = [
     ],
     base: 'udlp',
     name: 'Liquidity Provider',
-    display: 'dlp',
+    display: 'DLP',
     symbol: 'DLP',
   },
 ];

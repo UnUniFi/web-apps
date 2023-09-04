@@ -2,7 +2,7 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from '../../../models/band-protocols/band-protocol.service';
-import { ConfigService } from '../../../models/config.service';
+import { ConfigService, YieldInfo } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
@@ -11,7 +11,7 @@ import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, first, map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -23,7 +23,7 @@ export class VaultsComponent implements OnInit {
   address$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
-  apy$: Observable<number[]>;
+  vaultsInfo$: Observable<YieldInfo[]>;
   totalDeposited$: Observable<TokenAmountUSD[]>;
   keyword$: Observable<string>;
 
@@ -90,26 +90,9 @@ export class VaultsComponent implements OnInit {
         ),
       ),
     );
-    this.apy$ = combineLatest([this.vaults$, this.configService.config$]).pipe(
+    this.vaultsInfo$ = combineLatest([this.vaults$, this.configService.config$]).pipe(
       mergeMap(async ([vaults, config]) =>
-        Promise.all(
-          vaults.map(async (vault) => {
-            // TODO: go to a function
-            // same in vault.component.ts
-            if (!vault.vault?.strategy_weights) {
-              return 0;
-            }
-            let vaultAPY = 0;
-            for (const strategyWeight of vault.vault?.strategy_weights) {
-              const strategyInfo = config?.strategiesInfo?.find(
-                (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
-              );
-              const strategyAPY = await this.iyaService.getStrategyAPR(strategyInfo);
-              vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
-            }
-            return vaultAPY;
-          }),
-        ),
+        Promise.all(vaults.map(async (vault) => this.iyaService.calcVaultAPY(vault, config))),
       ),
     );
   }

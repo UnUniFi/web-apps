@@ -8,7 +8,7 @@ export type TokenAmountUSD = {
   symbol: string;
   display: string;
   symbolAmount: number;
-  usdAmount: number;
+  usdAmount?: number;
 };
 @Injectable({
   providedIn: 'root',
@@ -16,17 +16,22 @@ export type TokenAmountUSD = {
 export class BandProtocolService {
   constructor(private http: HttpClient) {}
 
-  async getPrice(symbol: string): Promise<number> {
+  async getPrice(symbol: string): Promise<number | undefined> {
     const url = `${rest}/oracle/v1/request_prices?symbols=${symbol}`;
-    const result = await this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const multiplier = Number(res.price_results[0].multiplier);
-        const px = Number(res.price_results[0].px);
-        return px / multiplier;
-      });
-    return result;
+    try {
+      const result = await this.http
+        .get(url)
+        .toPromise()
+        .then((res: any) => {
+          const multiplier = Number(res.price_results[0].multiplier);
+          const px = Number(res.price_results[0].px);
+          return px / multiplier;
+        });
+      return result;
+    } catch {
+      console.log(`Failed to get price for ${symbol}`);
+      return;
+    }
   }
 
   async convertToUSDAmountSymbol(
@@ -34,7 +39,6 @@ export class BandProtocolService {
     amount: string,
     symbolMetadataMap: { [symbol: string]: cosmos.bank.v1beta1.IMetadata },
   ): Promise<TokenAmountUSD> {
-    const price = await this.getPrice(symbol);
     const denom = symbolMetadataMap?.[symbol].base;
     const display = symbolMetadataMap?.[symbol].display;
     if (!denom) {
@@ -45,6 +49,10 @@ export class BandProtocolService {
     }
     const exponent = getDenomExponent(denom);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
+    const price = await this.getPrice(symbol);
+    if (!price) {
+      return { symbol, display, symbolAmount };
+    }
     const usdAmount = symbolAmount * price;
     return { symbol, display, symbolAmount, usdAmount };
   }
@@ -62,9 +70,13 @@ export class BandProtocolService {
     if (!display) {
       throw new Error(`Display not found for denom ${denom}`);
     }
-    const price = await this.getPrice(symbol);
     const exponent = getDenomExponent(denom);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
+    const price = await this.getPrice(symbol);
+    if (!price) {
+      return { symbol, display, symbolAmount };
+    }
+
     const usdAmount = symbolAmount * price;
     return { symbol, display, symbolAmount, usdAmount };
   }

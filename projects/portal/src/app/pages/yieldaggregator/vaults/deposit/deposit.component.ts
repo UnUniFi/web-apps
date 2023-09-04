@@ -91,7 +91,9 @@ export class DepositComponent implements OnInit {
       ),
     );
     this.usdTotalAmount$ = this.usdDepositAmount$.pipe(
-      map((usdDepositAmount) => usdDepositAmount.reduce((a, b) => a + b.usdAmount, 0)),
+      map((usdDepositAmount) =>
+        usdDepositAmount.reduce((a, b) => (b.usdAmount ? a + b.usdAmount : a), 0),
+      ),
     );
   }
 

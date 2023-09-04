@@ -128,49 +128,54 @@
           </div>
           <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
-            <div class="stat-value text-info">
-              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
-            </div>
-            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount">
               {{ totalDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="!withdrawReserve?.usdAmount">$</div>
+            <div class="stat-desc">
+              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Your Deposit Amount</div>
-            <div class="stat-value text-info">
-              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
-            </div>
-            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount">
               {{ usdDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="!withdrawReserve?.usdAmount">$</div>
+            <div class="stat-desc">
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
-            <div class="stat-value text-primary">
-              <td>{{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}</td>
-            </div>
-            <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount">
               {{ totalBondedAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-primary" *ngIf="!totalBondedAmount?.usdAmount">$</div>
+            <div class="stat-desc">
+              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
-            <div class="stat-value text-secondary">
-              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
-            </div>
-            <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
+            <div class="stat-value text-secondary" *ngIf="totalUnbondingAmount?.usdAmount">
               {{ totalUnbondingAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-secondary" *ngIf="!totalUnbondingAmount?.usdAmount">$</div>
+            <div class="stat-desc">
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Withdrawal Reserve Amount</div>
-            <div class="stat-value text-info">
-              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
-            </div>
-            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount">
               {{ withdrawReserve?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="!withdrawReserve?.usdAmount">$</div>
+            <div class="stat-desc">
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
         </div>

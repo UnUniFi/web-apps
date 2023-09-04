@@ -27,25 +27,21 @@
             </span>
 
             <ng-container *ngFor="let token of selectedTokens; let i = index">
-              <span class="label">
+              <span
+                class="label"
+                *ngIf="
+                  denomBalancesMap?.[token.denom || '']?.amount | coinAmount : token.denom as balance
+                "
+              >
                 <span class="label-text">Enter amount</span>
                 <span class="label-text-alt flex flex-row gap-2">
-                  <span
-                    class="cursor-pointer"
-                    (click)="token.amount = (symbolBalancesMap?.[token.symbol || ''] || 0) / 4"
-                  >
+                  <span class="cursor-pointer" (click)="token.readableAmount = number(balance) / 4">
                     25%
                   </span>
-                  <span
-                    class="cursor-pointer"
-                    (click)="token.amount = (symbolBalancesMap?.[token.symbol || ''] || 0) / 2"
-                  >
+                  <span class="cursor-pointer" (click)="token.readableAmount = number(balance) / 2">
                     50%
                   </span>
-                  <span
-                    class="cursor-pointer"
-                    (click)="token.amount = symbolBalancesMap?.[token.symbol || ''] || 0"
-                  >
+                  <span class="cursor-pointer" (click)="token.readableAmount = number(balance)">
                     100%
                   </span>
                 </span>
@@ -53,10 +49,13 @@
               <div class="join">
                 <div
                   class="join-item btn btn-neutral btn-disabled"
-                  *ngIf="symbolImageMap && symbolImageMap[token.symbol]"
+                  *ngIf="symbolImageMap && symbolImageMap[denomMetadataMap?.[token.denom]?.symbol || '']"
                 >
                   <div class="mask mask-circle w-8 h-8">
-                    <img src="{{ symbolImageMap[token.symbol] }}" alt="Asset Symbol" />
+                    <img
+                      src="{{ symbolImageMap[denomMetadataMap?.[token.denom]?.symbol || ''] }}"
+                      alt="Asset Symbol"
+                    />
                   </div>
                 </div>
                 <input
@@ -65,10 +64,10 @@
                   required
                   placeholder="12.123456"
                   [min]="0"
-                  [max]="symbolBalancesMap?.[token.symbol] || 0"
+                  [max]="(denomBalancesMap?.[token.denom]?.amount | coinAmount:token.denom) || 0"
                   [step]="1"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
-                  [(ngModel)]="token.amount"
+                  [(ngModel)]="token.readableAmount"
                   name="amount{{ i }}"
                   class="join-item input input-bordered w-full"
                   [class]="{
@@ -76,7 +75,7 @@
                   }"
                 />
                 <div class="join-item btn btn-neutral btn-disabled">
-                  {{ convertSymbolToDisplay(token.symbol) }}
+                  {{ denomMetadataMap?.[token.denom]?.display }}
                 </div>
                 <label class="join-item btn btn-error" (click)="onClickDeleteToken(i)">
                   <span class="material-symbols-outlined">delete</span>
@@ -85,8 +84,8 @@
               <span class="label">
                 <span class="label-text">Available:</span>
                 <span class="label-text-alt">
-                  {{ symbolBalancesMap?.[token.symbol] || 0 }}
-                  {{ convertSymbolToDisplay(token.symbol) }}
+                  {{ (denomBalancesMap?.[token.denom]?.amount | coinAmount:token.denom) || 0 }}
+                  {{ denomMetadataMap?.[token.denom]?.display  }}
                 </span>
               </span>
             </ng-container>
@@ -95,13 +94,13 @@
               <select
                 [required]="selectedTokens?.length === 0"
                 class="join-item select select-bordered w-full"
-                [(ngModel)]="selectedSymbol"
+                [(ngModel)]="selectedDenom"
                 name="strategyId"
               >
                 <option [value]="undefined" disabled>Select a token</option>
-                <ng-container *ngFor="let s of balanceSymbols">
-                  <option [value]="s?.symbol" *ngIf="!isAlreadySelectedSymbol(s?.symbol)">
-                    {{ s?.display }}
+                <ng-container *ngFor="let kv of denomBalancesMap | keyvalue">
+                  <option [value]="kv.key" *ngIf="!isAlreadySelectedDenom(kv.key)">
+                    {{ denomMetadataMap?.[kv.key]?.display}}
                   </option>
                 </ng-container>
               </select>
@@ -109,12 +108,12 @@
                 type="button"
                 class="join-item btn btn-outline"
                 (click)="onClickAddToken()"
-                [disabled]="!selectedSymbol"
+                [disabled]="!selectedDenom"
               >
                 <span class="material-symbols-outlined">add</span>
               </button>
             </div>
-            <label class="label" *ngIf="selectedSymbol">
+            <label class="label" *ngIf="selectedDenom">
               <span class="label-text-alt text-warning">Click + and enter the amount to send!</span>
             </label>
           </div>

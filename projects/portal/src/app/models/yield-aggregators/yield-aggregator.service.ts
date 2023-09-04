@@ -27,14 +27,12 @@ export class YieldAggregatorService {
   buildMsgDepositToVault(
     senderAddress: string,
     vaultId: string,
-    symbol: string,
-    amount: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+    denom: string,
+    readableAmount: number,
   ) {
-    const coin = this.bankService.convertSymbolAmountMapToCoins(
-      { [symbol]: amount },
-      symbolMetadataMap,
-    )[0];
+    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
+      [denom]: readableAmount,
+    })[0];
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgDepositToVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
@@ -47,14 +45,12 @@ export class YieldAggregatorService {
   buildMsgWithdrawFromVault(
     senderAddress: string,
     vaultId: string,
-    symbol: string,
-    amount: number,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+    denom: string,
+    readableAmount: number,
   ) {
-    const coin = this.bankService.convertSymbolAmountMapToCoins(
-      { [symbol]: amount },
-      symbolMetadataMap,
-    )[0];
+    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
+      [denom]: readableAmount,
+    })[0];
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault({
       sender: senderAddress,
       vault_id: Long.fromString(vaultId),
@@ -66,28 +62,16 @@ export class YieldAggregatorService {
 
   buildMsgCreateVault(
     senderAddress: string,
-    symbol: string,
+    denom: string,
     name: string,
     description: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
-    fee: number,
-    feeSymbol: string,
-    deposit: number,
-    depositSymbol: string,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    deposit: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     feeCollectorAddress: string,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ) {
-    const denom = symbolMetadataMap[symbol].base;
-    const coinDeposit = this.bankService.convertSymbolAmountMapToCoins(
-      { [depositSymbol]: deposit },
-      symbolMetadataMap,
-    )[0];
-    const coinFee = this.bankService.convertSymbolAmountMapToCoins(
-      { [feeSymbol]: fee },
-      symbolMetadataMap,
-    )[0];
     const strategyWeights = strategies.map((strategy) => {
       return {
         strategy_id: Long.fromString(strategy.id),
@@ -104,8 +88,8 @@ export class YieldAggregatorService {
       commission_rate: decCommission,
       withdraw_reserve_rate: decReserve,
       strategy_weights: strategyWeights,
-      fee: coinFee,
-      deposit: coinDeposit,
+      fee,
+      deposit,
       fee_collector_address: feeCollectorAddress,
     });
     return msg;

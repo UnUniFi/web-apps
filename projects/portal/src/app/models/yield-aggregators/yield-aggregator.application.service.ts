@@ -8,6 +8,7 @@ import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { take } from 'rxjs/operators';
 
 @Injectable({
@@ -29,17 +30,11 @@ export class YieldAggregatorApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.yieldAggregatorService.buildMsgDepositToVault(
       address,
       vaultId,
       symbol,
       amount,
-      symbolMetadataMap,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(
@@ -84,17 +79,11 @@ export class YieldAggregatorApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
       symbol,
       amount,
-      symbolMetadataMap,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(
@@ -136,15 +125,13 @@ export class YieldAggregatorApplicationService {
 
   async createVault(
     name: string,
-    symbol: string,
+    denom: string,
     description: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
-    feeAmount: number,
-    feeSymbol: string,
-    depositAmount: number,
-    depositSymbol: string,
+    fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
+    deposit: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     feeCollectorAddress: string,
   ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
@@ -153,25 +140,17 @@ export class YieldAggregatorApplicationService {
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
     const msg = this.yieldAggregatorService.buildMsgCreateVault(
       address,
-      symbol,
+      denom,
       name,
       description,
       strategies,
       commissionRate,
       reserveRate,
-      feeAmount,
-      feeSymbol,
-      depositAmount,
-      depositSymbol,
+      fee,
+      deposit,
       feeCollectorAddress,
-      symbolMetadataMap,
     );
 
     // comment-out simulate

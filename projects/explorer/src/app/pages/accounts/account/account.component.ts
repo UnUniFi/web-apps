@@ -20,7 +20,10 @@ export class AccountComponent implements OnInit {
     | unknown
     | undefined
   >;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
+  denomBalancesMap$: Observable<{ [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbolImageMap: { [symbol: string]: string };
 
   constructor(
@@ -55,8 +58,9 @@ export class AccountComponent implements OnInit {
         return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
       }),
     );
-    this.symbolBalancesMap$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
   }

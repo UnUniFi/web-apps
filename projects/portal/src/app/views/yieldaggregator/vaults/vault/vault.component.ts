@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
-import { Key } from '@keplr-wallet/types';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
+import { CoinAmountPipe } from 'projects/portal/src/app/pipes/coin-amount.pipe';
 import {
   EstimateMintAmount200Response,
   EstimateRedeemAmount200Response,
@@ -37,9 +38,9 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   symbolImage?: string | null;
   @Input()
-  symbolBalancesMap?: { [symbol: string]: number } | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   totalDepositAmount?: TokenAmountUSD | null;
   @Input()
@@ -144,7 +145,7 @@ export class VaultComponent implements OnInit, OnChanges {
     },
   ];
 
-  constructor() {
+  constructor(private coinAmountPipe: CoinAmountPipe) {
     this.changeDeposit = new EventEmitter();
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
@@ -172,8 +173,8 @@ export class VaultComponent implements OnInit, OnChanges {
     }
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
-      amount: this.mintAmount,
-      symbol: this.symbol!,
+      readableAmount: this.mintAmount,
+      denom: this.vault?.vault?.denom!,
     });
   }
 
@@ -187,8 +188,8 @@ export class VaultComponent implements OnInit, OnChanges {
     }
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
-      amount: this.burnAmount,
-      symbol: this.symbol!,
+      readableAmount: this.burnAmount,
+      denom: this.vault?.vault?.denom!,
     });
   }
 
@@ -199,18 +200,21 @@ export class VaultComponent implements OnInit, OnChanges {
   // todo: fix use denom exponent
   setMintAmount(rate: number) {
     this.mintAmount =
-      Math.floor((this.symbolBalancesMap?.[this.symbol || ''] || 0) * rate * Math.pow(10, 6)) /
-      Math.pow(10, 6);
+      Number(
+        this.coinAmountPipe.transform(
+          this.denomBalancesMap?.[this.vault?.vault?.denom || ''].amount,
+          this.vault?.vault?.denom,
+        ),
+      ) * rate;
+    this.mintAmount = Math.floor(this.mintAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onDepositAmountChange();
   }
 
   setBurnAmount(rate: number) {
+    const denom = 'yieldaggregator/vault/' + this.vault?.vault?.id;
     this.burnAmount =
-      Math.floor(
-        (this.symbolBalancesMap?.['YA-VAULT-' + this.vault?.vault?.id] || 0) *
-          rate *
-          Math.pow(10, 6),
-      ) / Math.pow(10, 6);
+      Number(this.coinAmountPipe.transform(this.denomBalancesMap?.[denom].amount, denom)) * rate;
+    this.burnAmount = Math.floor(this.burnAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onWithdrawAmountChange();
   }
 }

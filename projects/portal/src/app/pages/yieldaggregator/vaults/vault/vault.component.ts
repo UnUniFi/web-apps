@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
-import { Key } from '@keplr-wallet/types';
 import {
   BandProtocolService,
   TokenAmountUSD,
@@ -37,8 +35,10 @@ import {
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
   vault$: Observable<Vault200Response>;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
-  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbol$: Observable<string>;
   displaySymbol$: Observable<string>;
   symbolImage$: Observable<string | null>;
@@ -70,15 +70,14 @@ export class VaultComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    this.symbolBalancesMap$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
       map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol || ''),
     );
-    this.displaySymbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
+    this.displaySymbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
       map(
         ([vault, denomMetadataMap]) =>
           denomMetadataMap?.[vault.vault?.denom!].display || vault.vault?.denom!,
@@ -86,63 +85,43 @@ export class VaultComponent implements OnInit {
     );
 
     const timer$ = timer(0, 1000 * 60);
-    this.totalDepositAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalDepositAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           (
             Number(vault.total_bonded_amount) +
             Number(vault.total_unbonding_amount) +
             Number(vault.withdraw_reserve)
           ).toString(),
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.totalBondedAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalBondedAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.total_bonded_amount!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.totalUnbondingAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalUnbondingAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.total_unbonding_amount!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.withdrawReserve$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.withdrawReserve$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.withdraw_reserve!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
@@ -189,7 +168,7 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitDeposit(data: DepositToVaultRequest) {
-    this.iyaApp.depositToVault(data.vaultId, data.symbol, data.amount);
+    this.iyaApp.depositToVault(data.vaultId, data.denom, data.readableAmount);
   }
 
   onChangeWithdraw(amount: number) {
@@ -197,7 +176,7 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
+    this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
   }
 
   async onClickChain(chain: ExternalChain) {

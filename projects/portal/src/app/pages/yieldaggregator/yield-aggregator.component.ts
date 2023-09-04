@@ -1,7 +1,7 @@
 import { BankQueryService } from '../../models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from '../../models/yield-aggregators/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -12,7 +12,9 @@ import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
   styleUrls: ['./yield-aggregator.component.css'],
 })
 export class YieldAggregatorComponent implements OnInit {
-  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   availableSymbols$: Observable<string[]>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
 

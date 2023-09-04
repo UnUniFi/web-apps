@@ -2,6 +2,6 @@
   [address]="address$ | async"
   [owner]="owner$ | async"
   [vaults]="vaults$ | async"
-  (appDelete)="onDelete($event)"
+  [strategies]="strategies$ | async"
   (appTransfer)="onTransfer($event)"
 ></view-owner>

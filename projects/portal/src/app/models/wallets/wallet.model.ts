@@ -9,6 +9,7 @@ export enum WalletType {
   keplr = 'Keplr',
   leap = 'Leap',
   metamask = 'MetaMask',
+  walletConnect = 'WalletConnect',
 }
 
 export interface WalletWindow extends KeplrWindow, LeapWindow {}

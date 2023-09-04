@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
 import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
@@ -18,6 +18,7 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
+import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vaults/vault/vault.component';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -34,8 +35,10 @@ import {
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
   vault$: Observable<Vault200Response>;
-  symbolBalancesMap$: Observable<{ [symbol: string]: number }>;
-  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbol$: Observable<string>;
   displaySymbol$: Observable<string>;
   symbolImage$: Observable<string | null>;
@@ -47,7 +50,10 @@ export class VaultComponent implements OnInit {
   withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
-  vaultAPY$: Observable<number>;
+  vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  usdDepositAmount$: Observable<TokenAmountUSD>;
+  vaultInfo$: Observable<YieldInfo>;
+  externalWalletAddress: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +61,7 @@ export class VaultComponent implements OnInit {
     private readonly iyaApp: YieldAggregatorApplicationService,
     private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
+    private readonly walletApp: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
@@ -65,15 +72,14 @@ export class VaultComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    this.symbolBalancesMap$ = this.address$.pipe(
-      mergeMap((address) => this.bankQuery.getSymbolBalanceMap$(address)),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    this.symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.symbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
       map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol || ''),
     );
-    this.displaySymbol$ = combineLatest([this.vault$, denomMetadataMap$]).pipe(
+    this.displaySymbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
       map(
         ([vault, denomMetadataMap]) =>
           denomMetadataMap?.[vault.vault?.denom!].display || vault.vault?.denom!,
@@ -81,63 +87,43 @@ export class VaultComponent implements OnInit {
     );
 
     const timer$ = timer(0, 1000 * 60);
-    this.totalDepositAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalDepositAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           (
             Number(vault.total_bonded_amount) +
             Number(vault.total_unbonding_amount) +
             Number(vault.withdraw_reserve)
           ).toString(),
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.totalBondedAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalBondedAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.total_bonded_amount!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.totalUnbondingAmount$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.totalUnbondingAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.total_unbonding_amount!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
-    this.withdrawReserve$ = combineLatest([
-      timer$,
-      this.symbol$,
-      this.vault$,
-      this.symbolMetadataMap$,
-    ]).pipe(
-      mergeMap(([_, symbol, vault, symbolMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountSymbol(
-          symbol!,
+    this.withdrawReserve$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
+      mergeMap(([_, vault, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmountDenom(
+          vault.vault?.denom!,
           vault.withdraw_reserve!,
-          symbolMetadataMap,
+          denomMetadataMap,
         ),
       ),
     );
@@ -172,22 +158,27 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
-      mergeMap(async ([vault, config]) => {
-        // TODO: go to a function
-        // same in vaults.component.ts
-        if (!vault.vault?.strategy_weights) {
-          return 0;
-        }
-        let vaultAPY = 0;
-        for (const strategyWeight of vault.vault.strategy_weights) {
-          const strategyInfo = config?.strategiesInfo?.find(
-            (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
-          );
-          const strategyAPY = await this.iyaService.getStrategyAPR(strategyInfo);
-          vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
-        }
-        return vaultAPY;
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      mergeMap(async ([vault, config]) => this.iyaService.calcVaultAPY(vault, config)),
+    );
+    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
+    this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(
+      map(([id, balance]) =>
+        balance.find((balance) => balance.denom?.includes('yieldaggregator/vaults/' + id)),
+      ),
+    );
+    this.usdDepositAmount$ = combineLatest([
+      vaultId$,
+      this.vaultBalance$,
+      this.denomMetadataMap$,
+    ]).pipe(
+      mergeMap(async ([id, balance, denomMetadataMap]) => {
+        const redeemAmount = await this.iyaQuery.getEstimatedRedeemAmount(id, balance?.amount!);
+        return this.bandProtocolService.convertToUSDAmountDenom(
+          redeemAmount.total_amount?.denom!,
+          redeemAmount.total_amount?.amount!,
+          denomMetadataMap,
+        );
       }),
     );
   }
@@ -199,7 +190,7 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitDeposit(data: DepositToVaultRequest) {
-    this.iyaApp.depositToVault(data.vaultId, data.symbol, data.amount);
+    this.iyaApp.depositToVault(data.vaultId, data.denom, data.readableAmount);
   }
 
   onChangeWithdraw(amount: number) {
@@ -207,6 +198,10 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVault(data.vaultId, data.symbol, data.amount);
+    this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
+  }
+
+  async onClickChain(chain: ExternalChain) {
+    this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
   }
 }

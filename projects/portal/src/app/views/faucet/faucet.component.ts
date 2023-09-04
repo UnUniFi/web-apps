@@ -2,7 +2,7 @@ import { getDenomExponent } from '../../models/cosmos/bank.model';
 import { validateAccAddress } from '../../utils/validation';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 
 export type Amount = {
   amount: number;
@@ -28,7 +28,7 @@ export class FaucetComponent implements OnInit {
   @Input() symbol?: string | null;
   @Input() amount?: number | null;
   @Input() symbolMetadataMap?: {
-    [symbol: string]: cosmos.bank.v1beta1.IMetadata;
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   } | null;
   @Input() creditAmount?: number | null;
   @Input() maxCredit?: number | null;

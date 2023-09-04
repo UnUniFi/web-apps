@@ -2,6 +2,7 @@ import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 
 @Component({
@@ -16,10 +17,14 @@ export class ViewBalanceComponent implements OnInit {
   @Input() accountTypeName?: string | null;
   @Input() publicKey?: string | null;
   @Input() valAddress?: string | null;
-  @Input() symbolDisplayMap?: { [symbol: string]: string } | null;
   @Input() symbolImageMap?: { [symbol: string]: string };
-  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
-  @Input() symbolRewardsMap?: { [symbol: string]: number } | null;
+  @Input() denomBalancesMap?: {
+    [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  } | null;
+  @Input() denomMetadataMap?: {
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  } | null;
+
   @Input() faucetSymbols?: string[] | null;
   @Input() faucets?:
     | {

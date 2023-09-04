@@ -60,7 +60,7 @@ export class MetaMaskInfrastructureService implements IMetaMaskInfrastructureSer
     return publicKeyWithout0x;
   }
 
-  private async getEthAddress(): Promise<string> {
+  async getEthAddress(): Promise<string> {
     await detectEthereumProvider({ mustBeMetaMask: true });
     if (!window.ethereum?.isMetaMask) {
       throw Error('MetaMask is not installed!');

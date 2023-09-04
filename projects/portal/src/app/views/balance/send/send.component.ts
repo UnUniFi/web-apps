@@ -1,5 +1,6 @@
 import { BankSendRequest } from '../../../models/cosmos/bank.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-send',
@@ -9,12 +10,18 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class SendComponent implements OnInit {
   @Input() address?: string | null;
   @Input() toAddress?: string | null;
-  @Input() selectedTokens?: { symbol: string; amount?: number }[] | null;
-  @Input() balanceSymbols?: ({ symbol: string; display: string } | undefined)[] | null;
+  @Input() selectedTokens?: { denom: string; readableAmount?: number }[] | null;
   @Input() symbolImageMap?: { [symbol: string]: string };
-  @Input() symbolBalancesMap?: { [symbol: string]: number } | null;
+  @Input() denomBalancesMap?: {
+    [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+  } | null;
+  @Input() denomMetadataMap?: {
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  } | null;
+
   @Output() appSend: EventEmitter<BankSendRequest>;
-  selectedSymbol?: string;
+
+  selectedDenom?: string;
 
   constructor() {
     this.appSend = new EventEmitter();
@@ -22,21 +29,25 @@ export class SendComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  isAlreadySelectedSymbol(symbol?: string) {
-    return this.selectedTokens?.some((s) => s.symbol === symbol);
+  isAlreadySelectedDenom(denom?: string) {
+    return this.selectedTokens?.some((s) => s.denom === denom);
   }
 
   onClickAddToken() {
-    if (!this.selectedSymbol) {
+    if (!this.selectedDenom) {
       alert('Please select a token.');
       return;
     }
     this.selectedTokens?.push({
-      symbol: this.selectedSymbol,
+      denom: this.selectedDenom,
     });
-    this.selectedTokens?.sort((a, b) => a.symbol!.localeCompare(b.symbol!));
+    this.selectedTokens?.sort((a, b) => a.denom!.localeCompare(b.denom!));
 
-    this.selectedSymbol = undefined;
+    this.selectedDenom = undefined;
+  }
+
+  number(value: string) {
+    return Number(value);
   }
 
   onClickDeleteToken(index: number) {
@@ -47,14 +58,14 @@ export class SendComponent implements OnInit {
     if (!this.toAddress) {
       return;
     }
-    const amounts = this.selectedTokens?.filter((s) => s.amount) as {
-      symbol: string;
-      amount: number;
-    }[];
-    this.appSend.emit({ toAddress: this.toAddress, symbolAmounts: amounts });
-  }
 
-  convertSymbolToDisplay(symbol: string): string | undefined {
-    return this.balanceSymbols?.find((s) => s?.symbol === symbol)?.display;
+    const denomReadableAmountMap: { [denom: string]: number } = {};
+    this.selectedTokens?.forEach((s) => {
+      if (s.readableAmount) {
+        denomReadableAmountMap[s.denom] = s.readableAmount;
+      }
+    });
+
+    this.appSend.emit({ toAddress: this.toAddress, denomReadableAmountMap });
   }
 }

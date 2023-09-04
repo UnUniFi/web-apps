@@ -37,13 +37,13 @@
             </button>
           </h3>
 
-          <div class="stats stats-vertical md:stats-horizontal" *ngIf="symbolBalancesMap">
+          <div class="stats stats-vertical md:stats-horizontal" *ngIf="denomBalancesMap">
             <div class="stat">
               <div class="stat-title">Available</div>
               <div class="stat-value text-secondary">
-                {{ symbolBalancesMap[symbol || ''] || 0 }}
+                {{ denomBalancesMap[denom || ''].amount | coinAmount : denom }}
               </div>
-              <div class="stat-desc">{{ symbolMetadataMap?.[symbol || '']?.display  }}</div>
+              <div class="stat-desc">{{ denomMetadataMap?.[denom || '']?.display  }}</div>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import cosmosclient from '@cosmos-client/core';
 
 @Component({
   selector: 'view-account',
@@ -14,7 +14,9 @@ export class AccountComponent implements OnInit, OnChanges {
   @Input()
   account?: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | unknown | null;
   @Input()
-  symbolBalancesMap?: { [symbol: string]: number } | null;
+  denomBalancesMap?: { [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
+  @Input()
+  denomMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   symbolImageMap?: { [symbol: string]: string };
 

@@ -35,19 +35,15 @@ export class BankApplicationService {
     private readonly txCommon: TxCommonService,
     private readonly txCommonApplication: TxCommonApplicationService,
   ) {}
-  async bankSend(toAddress: string, symbolAmounts: { symbol: string; amount: number }[]) {
+
+  async bankSend(toAddress: string, denomReadableAmountMap: { [denom: string]: number }) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const symbolMetadataMap = await this.bankQueryService
-      .getSymbolMetadataMap$()
-      .pipe(take(1))
-      .toPromise();
-
-    const msg = this.bank.buildMsgBankSend(address, toAddress, symbolAmounts, symbolMetadataMap);
+    const msg = this.bank.buildMsgBankSend(address, toAddress, denomReadableAmountMap);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

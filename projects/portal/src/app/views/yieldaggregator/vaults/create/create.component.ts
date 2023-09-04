@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { CreateVaultRequest } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi/api';
 
@@ -22,13 +22,13 @@ export class CreateComponent implements OnInit {
   @Input()
   commissionRate?: number | null;
   @Input()
-  deposit?: { symbol: string; amount: number } | null;
+  deposit?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  fee?: { symbol: string; amount: number } | null;
+  fee?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  symbolBalancesMap?: { [symbol: string]: number } | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Output()
   changeDenom: EventEmitter<string>;
   @Output()
@@ -78,7 +78,7 @@ export class CreateComponent implements OnInit {
     if (!this.selectedSymbol) {
       return;
     }
-    const denom = this.symbolMetadataMap?.[this.selectedSymbol].base;
+    const denom = this.denomMetadataMap?.[this.selectedSymbol].base;
     if (denom) {
       this.changeDenom.emit(denom);
     }
@@ -109,15 +109,19 @@ export class CreateComponent implements OnInit {
     }
     this.appCreate.emit({
       name: this.name || '',
-      symbol: this.selectedSymbol,
+      denom: this.denom || '',
       description: this.description || '',
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),
       reserveRate: Number(this.reserveRate),
-      feeAmount: this.fee.amount,
-      feeSymbol: this.fee.symbol,
-      depositAmount: this.deposit.amount,
-      depositSymbol: this.deposit.symbol,
+      fee: {
+        denom: this.fee.denom || '',
+        amount: this.fee.amount || '',
+      },
+      deposit: {
+        denom: this.deposit.denom || '',
+        amount: this.deposit.amount || '',
+      },
       feeCollectorAddress: this.address || '',
     });
   }

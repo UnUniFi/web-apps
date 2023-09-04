@@ -93,7 +93,7 @@
                     </span>
                   </div>
                 </td>
-                <td>{{ apy?.[i] || 0 | percent : '1.0-2' }}</td>
+                <td>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</td>
                 <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
                 <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>

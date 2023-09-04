@@ -1,18 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { cosmos } from '@cosmos-client/core/esm/proto';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { YieldAggregatorChartService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.chart.service';
+import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
@@ -24,6 +14,14 @@ import {
   StrategyAll200ResponseStrategiesInnerStrategy,
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
+
+export type ExternalChain = {
+  id: string;
+  display: string;
+  disabled: boolean;
+  external: boolean;
+  cosmos: boolean;
+};
 
 @Component({
   selector: 'view-vault',
@@ -56,8 +54,9 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
-  vaultAPY?: number | null;
-
+  vaultInfo?: YieldInfo | null;
+  @Input()
+  externalWalletAddress?: string;
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()
@@ -66,96 +65,101 @@ export class VaultComponent implements OnInit, OnChanges {
   changeWithdraw: EventEmitter<number>;
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
+  @Output()
+  appClickChain: EventEmitter<ExternalChain>;
 
   mintAmount?: number;
   burnAmount?: number;
-  // chartType: ChartType;
-  // chartTitle: string;
-  // chartData: any[];
-  // chartColumnNames: any[];
-  // chartOptions: any;
   tab: 'mint' | 'burn' = 'mint';
+  selectedChain: ExternalChain = {
+    id: 'ununifi',
+    display: 'UnUniFi',
+    disabled: false,
+    external: false,
+    cosmos: true,
+  };
 
-  chains = [
+  chains: ExternalChain[] = [
     {
       id: 'ununifi',
       display: 'UnUniFi',
       disabled: false,
+      external: false,
+      cosmos: true,
     },
     {
       id: 'ethereum',
       display: 'Ethereum',
       disabled: true,
+      external: true,
+      cosmos: false,
     },
     {
       id: 'avalanche',
       display: 'Avalanche',
       disabled: true,
+      external: true,
+      cosmos: false,
     },
     {
       id: 'polygon',
       display: 'Polygon',
       disabled: true,
+      external: true,
+      cosmos: false,
     },
     {
       id: 'arbitrum',
       display: 'Arbitrum',
       disabled: true,
+      external: true,
+      cosmos: false,
     },
     {
       id: 'cosmoshub',
       display: 'Cosmos Hub',
       disabled: true,
+      external: true,
+      cosmos: true,
     },
     {
       id: 'neutron',
       display: 'Neutron',
       disabled: true,
+      external: true,
+      cosmos: true,
     },
     {
       id: 'osmosis',
       display: 'Osmosis',
       disabled: true,
+      external: true,
+      cosmos: true,
     },
     {
       id: 'sei',
       display: 'Sei',
       disabled: true,
+      external: true,
+      cosmos: true,
     },
   ];
 
-  constructor(
-    private readonly iyaChart: YieldAggregatorChartService,
-    private coinAmountPipe: CoinAmountPipe,
-  ) {
+  constructor(private coinAmountPipe: CoinAmountPipe) {
     this.changeDeposit = new EventEmitter();
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
-    // this.chartTitle = '';
-    // this.chartType = ChartType.LineChart;
-    // const width: number = this.chartRef?.nativeElement.offsetWidth || 480;
-    // this.chartOptions = this.iyaChart.createChartOption(width);
-
-    // this.chartData = this.iyaChart.createDummyChartData();
-    // this.chartColumnNames = ['Date', 'APY'];
-  }
-
-  @ViewChild('chartRef') chartRef?: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onWindowResize() {
-    // const width: number = this.chartRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
+    this.appClickChain = new EventEmitter();
   }
 
   ngOnInit(): void {}
 
-  ngOnChanges(): void {
-    // const width: number = this.chartRef!.nativeElement.offsetWidth;
-    // this.chartOptions = this.iyaChart.createChartOption(width >= 960 ? width / 2 : width);
-  }
+  ngOnChanges(): void {}
 
   onClickChain(id: string) {
+    this.selectedChain = this.chains.find((chain) => chain.id === id)!;
+    this.appClickChain.emit(this.selectedChain);
     (global as any).chain_select_modal.close();
   }
 

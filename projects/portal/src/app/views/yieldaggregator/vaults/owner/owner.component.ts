@@ -12,16 +12,17 @@ export class OwnerComponent implements OnInit {
   address?: string | null;
   @Input()
   owner?: string | null;
+
+  @Input()
+  symbolImage?: string | null;
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
-  @Output()
-  appDelete: EventEmitter<string>;
+
   @Output()
   appTransfer: EventEmitter<TransferVaultRequest>;
   recipientAddress?: string;
 
   constructor() {
-    this.appDelete = new EventEmitter();
     this.appTransfer = new EventEmitter();
   }
 
@@ -32,12 +33,5 @@ export class OwnerComponent implements OnInit {
       return;
     }
     this.appTransfer.emit({ vaultId, recipientAddress: this.recipientAddress });
-  }
-
-  onSubmitDelete(vaultId?: string) {
-    if (!vaultId) {
-      return;
-    }
-    this.appDelete.emit(vaultId);
   }
 }

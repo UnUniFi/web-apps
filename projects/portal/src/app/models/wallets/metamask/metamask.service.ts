@@ -5,6 +5,7 @@ import cosmosclient from '@cosmos-client/core';
 
 export interface IMetaMaskInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
+  getEthAddress: () => Promise<string>;
   signTx: (
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -23,6 +24,10 @@ export class MetaMaskService {
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {
     return await this.iMetaMaskInfrastructureService.connectWallet();
+  }
+
+  async getEthAddress(): Promise<string> {
+    return await this.iMetaMaskInfrastructureService.getEthAddress();
   }
 
   async signTx(

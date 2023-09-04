@@ -5,9 +5,10 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService } from 'projects/portal/src/app/models/config.service';
+import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
@@ -17,6 +18,7 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
+import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vaults/vault/vault.component';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -48,7 +50,8 @@ export class VaultComponent implements OnInit {
   withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
-  vaultAPY$: Observable<number>;
+  vaultInfo$: Observable<YieldInfo>;
+  externalWalletAddress: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +59,7 @@ export class VaultComponent implements OnInit {
     private readonly iyaApp: YieldAggregatorApplicationService,
     private readonly iyaService: YieldAggregatorService,
     private readonly walletService: WalletService,
+    private readonly walletApp: WalletApplicationService,
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
@@ -152,23 +156,8 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    this.vaultAPY$ = combineLatest([this.vault$, this.configService.config$]).pipe(
-      mergeMap(async ([vault, config]) => {
-        // TODO: go to a function
-        // same in vaults.component.ts
-        if (!vault.vault?.strategy_weights) {
-          return 0;
-        }
-        let vaultAPY = 0;
-        for (const strategyWeight of vault.vault.strategy_weights) {
-          const strategyInfo = config?.strategiesInfo?.find(
-            (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
-          );
-          const strategyAPY = await this.iyaService.getStrategyAPR(strategyInfo);
-          vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
-        }
-        return vaultAPY;
-      }),
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      mergeMap(async ([vault, config]) => this.iyaService.calcVaultAPY(vault, config)),
     );
   }
 
@@ -188,5 +177,9 @@ export class VaultComponent implements OnInit {
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
     this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
+  }
+
+  async onClickChain(chain: ExternalChain) {
+    this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
   }
 }

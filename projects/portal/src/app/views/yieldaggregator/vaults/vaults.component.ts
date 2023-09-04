@@ -1,4 +1,5 @@
 import { TokenAmountUSD } from '../../../models/band-protocols/band-protocol.service';
+import { YieldInfo } from '../../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -16,7 +17,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   symbols?: { symbol: string; display: string; img: string }[] | null;
   @Input()
-  apy?: (number | null)[] | null;
+  vaultsInfo?: YieldInfo[] | null;
   @Input()
   totalDeposited?: TokenAmountUSD[] | null;
   @Input()

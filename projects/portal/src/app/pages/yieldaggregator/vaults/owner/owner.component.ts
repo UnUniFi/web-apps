@@ -7,7 +7,10 @@ import { TransferVaultRequest } from 'projects/portal/src/app/models/yield-aggre
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  StrategyAll200ResponseStrategiesInner,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-owner',
@@ -18,6 +21,7 @@ export class OwnerComponent implements OnInit {
   address$: Observable<string>;
   owner$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
+  strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 
   constructor(
     private router: Router,
@@ -34,6 +38,7 @@ export class OwnerComponent implements OnInit {
     this.vaults$ = combineLatest([this.iyaQuery.listVaults$(), this.owner$]).pipe(
       map(([vaults, owner]) => vaults.filter((vault) => vault.vault?.owner === owner)),
     );
+    this.strategies$ = this.iyaQuery.listStrategies$();
   }
 
   ngOnInit(): void {}

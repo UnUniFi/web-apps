@@ -128,40 +128,82 @@
           </div>
           <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
-            <div class="stat-value text-info">
+            <div class="stat-value" *ngIf="totalDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount">
+              {{ totalDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
               {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
-            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
-              {{ totalDepositAmount?.usdAmount | currency }}
+          </div>
+          <div class="stat">
+            <div class="stat-title">Your Deposit Amount</div>
+            <div class="stat-value" *ngIf="usdDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount">
+              {{ usdDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
-            <div class="stat-value text-primary">
-              <td>{{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}</td>
+            <div class="stat-value" *ngIf="totalBondedAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-desc" *ngIf="totalBondedAmount?.usdAmount">
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount">
               {{ totalBondedAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>
-            <div class="stat-value text-secondary">
-              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+            <div class="stat-value" *ngIf="totalUnbondingAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-desc" *ngIf="totalUnbondingAmount?.usdAmount">
+            <div class="stat-value text-secondary" *ngIf="totalUnbondingAmount?.usdAmount">
               {{ totalUnbondingAmount?.usdAmount | currency }}
+            </div>
+            <div
+              class="stat-value text-secondary"
+              *ngIf="totalUnbondingAmount?.usdAmount === undefined"
+            >
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
           <div class="stat">
             <div class="stat-title">Withdrawal Reserve Amount</div>
-            <div class="stat-value text-info">
-              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+            <div class="stat-value" *ngIf="withdrawReserve === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-desc" *ngIf="withdrawReserve?.usdAmount">
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount">
               {{ withdrawReserve?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
             </div>
           </div>
         </div>
@@ -247,7 +289,7 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom"
+                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
@@ -259,7 +301,7 @@
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount| coinAmount:vault?.vault?.denom }}
+                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom }}
                 {{ displaySymbol }}
               </label>
             </span>
@@ -319,7 +361,7 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id || '']?.amount| coinAmount:vault?.vault?.denom"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: vault?.vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
@@ -330,7 +372,7 @@
             <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.['yieldaggregator/vault/'+ vault?.vault?.id] || 0 }}
+                {{ denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id]?.amount | coinAmount }}
                 {{ 'YA-VAULT-' + vault?.vault?.id }}
               </label>
             </span>

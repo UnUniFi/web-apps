@@ -34,7 +34,7 @@
                 </tr>
                 <tr>
                   <th>Vault Name</th>
-                  <td>{{ 'Coming soon' }}</td>
+                  <td>{{ vault.vault?.name }}</td>
                 </tr>
                 <tr>
                   <th>Owner's Deposit</th>
@@ -57,7 +57,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Strategy Name (coming soon)</th>
+                  <th>Strategy Name</th>
                   <th>Percentage</th>
                 </tr>
               </thead>
@@ -75,7 +75,7 @@
                     ]"
                   >
                     <th>#{{ strategy.strategy_id }}</th>
-                    <td>{{ 'Coming Soon' }}</td>
+                    <td>{{ getStrategyDetail(strategy.strategy_id)?.strategy?.name }}</td>
                     <td>{{ strategy.weight | percent : '1.0-2' }}</td>
                   </tr>
                 </ng-container>

@@ -374,7 +374,7 @@
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ denomBalancesMap?.[deposit?.denom|| ''] || 0 }}
+                {{ denomBalancesMap?.[deposit?.denom|| '']?.amount | coinAmount: deposit?.denom}}
                 {{ denomMetadataMap?.[deposit?.denom || '']?.display  }}
               </span>
             </label>
@@ -414,7 +414,7 @@
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ denomBalancesMap?.[fee?.denom || ''] || 0 }}
+                {{ denomBalancesMap?.[fee?.denom || '']?.amount | coinAmount: fee?.denom }}
                 {{ denomMetadataMap?.[fee?.denom || '']?.display }}
               </span>
             </label>

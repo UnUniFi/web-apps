@@ -50,6 +50,8 @@ export class VaultComponent implements OnInit {
   withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
+  vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  usdDepositAmount$: Observable<TokenAmountUSD>;
   vaultInfo$: Observable<YieldInfo>;
   externalWalletAddress: string | undefined;
 
@@ -158,6 +160,26 @@ export class VaultComponent implements OnInit {
     );
     this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
       mergeMap(async ([vault, config]) => this.iyaService.calcVaultAPY(vault, config)),
+    );
+    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
+    this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(
+      map(([id, balance]) =>
+        balance.find((balance) => balance.denom?.includes('yieldaggregator/vaults/' + id)),
+      ),
+    );
+    this.usdDepositAmount$ = combineLatest([
+      vaultId$,
+      this.vaultBalance$,
+      this.denomMetadataMap$,
+    ]).pipe(
+      mergeMap(async ([id, balance, denomMetadataMap]) => {
+        const redeemAmount = await this.iyaQuery.getEstimatedRedeemAmount(id, balance?.amount!);
+        return this.bandProtocolService.convertToUSDAmountDenom(
+          redeemAmount.total_amount?.denom!,
+          redeemAmount.total_amount?.amount!,
+          denomMetadataMap,
+        );
+      }),
     );
   }
 

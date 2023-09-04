@@ -53,9 +53,14 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
+  vaultBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  usdDepositAmount?: TokenAmountUSD | null;
+  @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
   externalWalletAddress?: string;
+
   @Output()
   changeDeposit: EventEmitter<number>;
   @Output()
@@ -210,7 +215,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   setBurnAmount(rate: number) {
-    const denom = 'yieldaggregator/vault/' + this.vault?.vault?.id;
+    const denom = 'yieldaggregator/vaults/' + this.vault?.vault?.id;
     this.burnAmount =
       Number(this.coinAmountPipe.transform(this.denomBalancesMap?.[denom].amount, denom)) * rate;
     this.burnAmount = Math.floor(this.burnAmount * Math.pow(10, 6)) / Math.pow(10, 6);

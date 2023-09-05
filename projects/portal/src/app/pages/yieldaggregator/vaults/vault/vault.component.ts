@@ -50,7 +50,7 @@ export class VaultComponent implements OnInit {
   withdrawReserve$: Observable<TokenAmountUSD>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
-  vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<TokenAmountUSD>;
   vaultInfo$: Observable<YieldInfo>;
   externalWalletAddress: string | undefined;
@@ -163,9 +163,18 @@ export class VaultComponent implements OnInit {
     );
     const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
     this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(
-      map(([id, balance]) =>
-        balance.find((balance) => balance.denom?.includes('yieldaggregator/vaults/' + id)),
-      ),
+      map(([id, balances]) => {
+        const balance = balances.find((balance) =>
+          balance.denom?.includes('yieldaggregator/vaults/' + id),
+        );
+        if (!balance) {
+          return {
+            denom: 'yieldaggregator/vaults/' + id,
+            amount: '0',
+          };
+        }
+        return balance;
+      }),
     );
     this.usdDepositAmount$ = combineLatest([
       vaultId$,
@@ -181,6 +190,7 @@ export class VaultComponent implements OnInit {
         );
       }),
     );
+    this.usdDepositAmount$.subscribe((usdDepositAmount) => console.log(usdDepositAmount));
   }
 
   ngOnInit(): void {}

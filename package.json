@@ -51,6 +51,8 @@
     "@angular/platform-browser-dynamic": "~14.0.4",
     "@angular/router": "~14.0.4",
     "@apollo/client": "^3.0.0",
+    "@cosmjs/cosmwasm": "^0.25.6",
+    "@cosmjs/tendermint-rpc": "^0.31.1",
     "@cosmos-client/core": "0.47.1",
     "@metamask/detect-provider": "^1.2.0",
     "angular-google-charts": "^2.2.3",

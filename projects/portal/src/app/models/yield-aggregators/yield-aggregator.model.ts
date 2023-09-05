@@ -4,6 +4,24 @@ export type DepositToVaultRequest = {
   readableAmount: number;
 };
 
+export type DepositToVaultFromCosmosRequest = {
+  vaultId: string;
+  externalChainId: string;
+  externalAddress: string;
+  externalDenom: string;
+  denom: string;
+  readableAmount: number;
+};
+
+export type DepositToVaultFromEvmRequest = {
+  vaultId: string;
+  externalChainId: string;
+  externalAddress: string;
+  externalDenom: string;
+  denom: string;
+  readableAmount: number;
+};
+
 export type WithdrawFromVaultRequest = {
   vaultId: string;
   denom: string;

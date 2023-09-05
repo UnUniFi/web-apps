@@ -23,19 +23,14 @@ export class YieldAggregatorApplicationService {
     private readonly dialog: Dialog,
   ) {}
 
-  async depositToVault(vaultId: string, symbol: string, amount: number) {
+  async depositToVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.yieldAggregatorService.buildMsgDepositToVault(
-      address,
-      vaultId,
-      symbol,
-      amount,
-    );
+    const msg = this.yieldAggregatorService.buildMsgDepositToVault(address, vaultId, denom, amount);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,
@@ -72,7 +67,29 @@ export class YieldAggregatorApplicationService {
     location.reload();
   }
 
-  async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
+  async depositToVaultFromCosmos(
+    vaultId: string,
+    externalChainId: string,
+    externalAddress: string,
+    externalDenom: string,
+    denom: string,
+    amount: number,
+  ) {
+    //todo
+  }
+
+  async depositToVaultFromEvm(
+    vaultId: string,
+    externalChainId: string,
+    externalAddress: string,
+    externalDenom: string,
+    denom: string,
+    amount: number,
+  ) {
+    //todo
+  }
+
+  async withdrawFromVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -82,7 +99,7 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
-      symbol,
+      denom,
       amount,
     );
 

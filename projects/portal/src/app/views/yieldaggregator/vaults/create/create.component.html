@@ -363,7 +363,7 @@
               <input
                 type="number"
                 name="deposit"
-                [(ngModel)]="deposit && deposit.amount"
+                value="{{ deposit?.amount | coinAmount : deposit?.denom }}"
                 disabled
                 class="join-item input input-bordered w-full"
               />
@@ -403,7 +403,7 @@
               <input
                 type="number"
                 name="fee"
-                [(ngModel)]="fee && fee.amount"
+                value="{{ fee?.amount | coinAmount : fee?.denom }}"
                 disabled
                 class="join-item input input-bordered w-full"
               />

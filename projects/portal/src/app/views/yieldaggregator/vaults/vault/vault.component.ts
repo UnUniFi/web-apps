@@ -3,6 +3,8 @@ import cosmosclient from '@cosmos-client/core';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
+  DepositToVaultFromCosmosRequest,
+  DepositToVaultFromEvmRequest,
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -71,6 +73,10 @@ export class VaultComponent implements OnInit, OnChanges {
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
   appClickChain: EventEmitter<ExternalChain>;
+  @Output()
+  appDepositFromCosmos: EventEmitter<DepositToVaultFromCosmosRequest>;
+  @Output()
+  appDepositFromEvm: EventEmitter<DepositToVaultFromEvmRequest>;
 
   mintAmount?: number;
   burnAmount?: number;
@@ -155,6 +161,8 @@ export class VaultComponent implements OnInit, OnChanges {
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
     this.appClickChain = new EventEmitter();
+    this.appDepositFromCosmos = new EventEmitter();
+    this.appDepositFromEvm = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -175,11 +183,31 @@ export class VaultComponent implements OnInit, OnChanges {
     if (!this.mintAmount) {
       return;
     }
-    this.appDeposit.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.mintAmount,
-      denom: this.vault?.vault?.denom!,
-    });
+    if (this.selectedChain.id === 'ununifi') {
+      this.appDeposit.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.mintAmount,
+        denom: this.vault?.vault?.denom!,
+      });
+    } else if (this.selectedChain.cosmos) {
+      this.appDepositFromCosmos.emit({
+        vaultId: this.vault?.vault?.id!,
+        externalChainId: this.selectedChain.id,
+        externalAddress: this.externalWalletAddress!,
+        externalDenom: this.vault?.vault?.denom!,
+        readableAmount: this.mintAmount,
+        denom: this.vault?.vault?.denom!,
+      });
+    } else {
+      this.appDepositFromEvm.emit({
+        vaultId: this.vault?.vault?.id!,
+        externalChainId: this.selectedChain.id,
+        externalAddress: this.externalWalletAddress!,
+        externalDenom: this.vault?.vault?.denom!,
+        readableAmount: this.mintAmount,
+        denom: this.vault?.vault?.denom!,
+      });
+    }
   }
 
   onWithdrawAmountChange() {

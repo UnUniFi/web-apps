@@ -13,6 +13,8 @@ import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.mode
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
+  DepositToVaultFromCosmosRequest,
+  DepositToVaultFromEvmRequest,
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -200,6 +202,28 @@ export class VaultComponent implements OnInit {
 
   onSubmitDeposit(data: DepositToVaultRequest) {
     this.iyaApp.depositToVault(data.vaultId, data.denom, data.readableAmount);
+  }
+
+  onSubmitDepositFromExternalCosmos(data: DepositToVaultFromCosmosRequest) {
+    this.iyaApp.depositToVaultFromCosmos(
+      data.vaultId,
+      data.externalChainId,
+      data.externalAddress,
+      data.externalDenom,
+      data.denom,
+      data.readableAmount,
+    );
+  }
+
+  onSubmitDepositFromEvm(data: DepositToVaultFromEvmRequest) {
+    this.iyaApp.depositToVaultFromEvm(
+      data.vaultId,
+      data.externalChainId,
+      data.externalAddress,
+      data.externalDenom,
+      data.denom,
+      data.readableAmount,
+    );
   }
 
   onChangeWithdraw(amount: number) {

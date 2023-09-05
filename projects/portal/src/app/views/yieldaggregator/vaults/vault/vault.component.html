@@ -131,7 +131,7 @@
             <div class="stat-value" *ngIf="totalDepositAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount">
+            <div class="stat-value text-info">
               {{ totalDepositAmount?.usdAmount | currency }}
             </div>
             <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount === undefined">
@@ -146,7 +146,7 @@
             <div class="stat-value" *ngIf="usdDepositAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount">
+            <div class="stat-value text-info">
               {{ usdDepositAmount?.usdAmount | currency }}
             </div>
             <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount === undefined">
@@ -196,7 +196,7 @@
             <div class="stat-value" *ngIf="withdrawReserve === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount">
+            <div class="stat-value text-info">
               {{ withdrawReserve?.usdAmount | currency }}
             </div>
             <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount === undefined">

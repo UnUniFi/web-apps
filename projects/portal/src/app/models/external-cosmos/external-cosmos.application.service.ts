@@ -17,6 +17,7 @@ export class ExternalCosmosApplicationService {
 
   async broadcast(
     id: string,
+    walletType: string,
     msg: any,
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -45,13 +46,13 @@ export class ExternalCosmosApplicationService {
         id,
         txBuilder,
         signerBaseAccount,
-        currentCosmosWallet,
+        walletType,
       );
       if (!signedTxBuilder) {
         throw Error('Failed to sign!');
       }
 
-      txResult = await this.externalCosmosTxService.announceTx(txBuilder);
+      txResult = await this.externalCosmosTxService.announceTx(id, txBuilder);
       txHash = txResult?.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error(txResult?.tx_response?.raw_log);

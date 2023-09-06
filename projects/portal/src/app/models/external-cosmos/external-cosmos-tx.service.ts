@@ -9,6 +9,7 @@ import { CosmosWallet, WalletType } from '../wallets/wallet.model';
 import { ExternalCosmosSdkService } from './external-cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
 import cosmwasmclient from '@cosmos-client/cosmwasm';
 import Long from 'long';
 
@@ -128,12 +129,12 @@ export class ExternalCosmosTxService {
     id: string,
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-    currentCosmosWallet: CosmosWallet,
+    walletType: string,
   ): Promise<cosmosclient.TxBuilder | undefined> {
-    if (currentCosmosWallet.type === WalletType.keplr) {
+    if (walletType === WalletType.keplr) {
       return await this.signTxWithKeplr(id, txBuilder, signerBaseAccount);
     }
-    if (currentCosmosWallet.type === WalletType.leap) {
+    if (walletType === WalletType.leap) {
       return await this.signTxWithLeap(id, txBuilder, signerBaseAccount);
     }
     throw Error('Unsupported wallet type!');
@@ -159,5 +160,23 @@ export class ExternalCosmosTxService {
   ): Promise<cosmosclient.TxBuilder> {
     const signedTxBuilder = await this.leapService.signTxExternal(id, txBuilder, signerBaseAccount);
     return signedTxBuilder;
+  }
+
+  async announceTx(id: string, txBuilder: cosmosclient.TxBuilder): Promise<BroadcastTx200Response> {
+    const sdk = await this.cosmwasmSdkService.sdk(id).then((sdk) => sdk.rest);
+    console.log(txBuilder);
+
+    // broadcast tx
+    const result = await cosmosclient.rest.tx.broadcastTx(sdk, {
+      tx_bytes: txBuilder.txBytes(),
+      mode: cosmosclient.rest.tx.BroadcastTxMode.Sync,
+    });
+
+    // check broadcast tx error
+    if (result.data.tx_response?.code !== 0) {
+      throw Error(result.data.tx_response?.raw_log);
+    }
+
+    return result.data;
   }
 }

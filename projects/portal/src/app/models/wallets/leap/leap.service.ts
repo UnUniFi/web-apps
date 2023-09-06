@@ -11,6 +11,11 @@ export interface ILeapInfrastructureService {
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ) => Promise<cosmosclient.TxBuilder>;
+  signTxExternal: (
+    id: string,
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+  ) => Promise<cosmosclient.TxBuilder>;
   checkWallet: () => Promise<StoredWallet | null | undefined>;
 }
 
@@ -37,6 +42,14 @@ export class LeapService {
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     return await this.iLeapInfrastructureService.signTx(txBuilder, signerBaseAccount);
+  }
+
+  async signTxExternal(
+    id: string,
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    return await this.iLeapInfrastructureService.signTxExternal(id, txBuilder, signerBaseAccount);
   }
 
   async checkWallet(): Promise<StoredWallet | null | undefined> {

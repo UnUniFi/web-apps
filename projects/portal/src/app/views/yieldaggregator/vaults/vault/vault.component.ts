@@ -82,6 +82,7 @@ export class VaultComponent implements OnInit, OnChanges {
     external: false,
     cosmos: true,
   };
+  withUnbondingPeriod = false;
 
   chains: ExternalChain[] = [
     {

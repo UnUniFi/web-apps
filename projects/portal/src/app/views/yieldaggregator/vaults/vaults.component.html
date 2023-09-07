@@ -65,6 +65,7 @@
             <tr>
               <th></th>
               <td>Name</td>
+              <td>description</td>
               <td>Asset</td>
               <td>APY</td>
               <td>Commission Rate</td>
@@ -76,6 +77,22 @@
               <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
                 <th>#{{ vault.vault?.id }}</th>
                 <td>{{ vault.vault?.name }}</td>
+                <div class="dropdown dropdown-hover items-center">
+                  <label tabindex="0">
+                    <td class="max-w-xs truncate">
+                      {{ vault.vault?.description }}
+                    </td>
+                  </label>
+                  <div
+                    tabindex="0"
+                    class="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-200 text-primary-content"
+                  >
+                    <div class="card-body">
+                      <h3 class="card-title">#{{ vault.vault?.id }} {{ vault.vault?.name }}</h3>
+                      <p>{{ vault.vault?.description || 'No description' }}</p>
+                    </div>
+                  </div>
+                </div>
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
                     <ng-container *ngIf="symbols[i]?.img">

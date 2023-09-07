@@ -190,7 +190,6 @@ export class VaultComponent implements OnInit {
         );
       }),
     );
-    this.usdDepositAmount$.subscribe((usdDepositAmount) => console.log(usdDepositAmount));
   }
 
   ngOnInit(): void {}

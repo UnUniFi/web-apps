@@ -82,7 +82,19 @@ export class VaultComponent implements OnInit, OnChanges {
     external: false,
     cosmos: true,
   };
-
+  withdrawOptions = [
+    {
+      id: 'immediate',
+      display: 'Immediate withdrawal',
+      disabled: false,
+    },
+    {
+      id: 'unbonding',
+      display: 'Withdrawal after the unbonding period (coming soon)',
+      disabled: true,
+    },
+  ];
+  withdrawOption = this.withdrawOptions[0];
   chains: ExternalChain[] = [
     {
       id: 'ununifi',
@@ -155,6 +167,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
     this.appClickChain = new EventEmitter();
+    this.withdrawOption = this.withdrawOptions[0];
   }
 
   ngOnInit(): void {}

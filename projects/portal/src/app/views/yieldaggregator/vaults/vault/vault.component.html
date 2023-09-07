@@ -342,6 +342,55 @@
         <form #withdrawFormRef="ngForm" (submit)="onSubmitWithdraw()">
           <div class="form-control">
             <label class="label">
+              <div class="flex flex-row items-center gap-2">
+                <span class="label-text">Withdrawal Option</span>
+                <!-- The button to open modal -->
+                <label for="modal-unbonding" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+              </div>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-unbonding" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the unbonding period?</h3>
+                  <p class="py-4">
+                    The unbonding period is the time required for the asset to be returned after the
+                    request. The unbonding period is set by the chain parameter. You can withdraw
+                    your funds immediately, but a specified fee will be charged.
+                  </p>
+                  <p>
+                    For more information on this fee, visit
+                    <a
+                      href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                      target="_blank"
+                    >
+                      <u class="text-info">the UnUniFi Documentation</u> </a
+                    >.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-unbonding" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <label class="input-group">
+              <select
+                class="select select-bordered w-full"
+                name="withdrawOption"
+                [(ngModel)]="withdrawOption.id"
+              >
+                <ng-container *ngFor="let option of withdrawOptions">
+                  <option [value]="option.id" [disabled]="option.disabled">
+                    {{ option.display }}
+                  </option>
+                </ng-container>
+              </select>
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
                 <span class="cursor-pointer" (click)="setBurnAmount(0.25)"> 25% </span>

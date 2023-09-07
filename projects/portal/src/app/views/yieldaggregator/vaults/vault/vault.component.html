@@ -343,7 +343,7 @@
           <div class="form-control">
             <label class="label">
               <div class="flex flex-row items-center gap-2">
-                <span class="label-text">With Unbonding Period (coming soon)</span>
+                <span class="label-text">Withdrawal Option</span>
                 <!-- The button to open modal -->
                 <label for="modal-unbonding" class="label-text cursor-pointer">
                   <span class="material-symbols-outlined">help</span>
@@ -375,14 +375,18 @@
                 </div>
               </div>
             </label>
-            <label class="cursor-pointer label">
-              <input
-                type="checkbox"
-                class="toggle toggle-primary"
-                name="openSearch"
-                disabled
-                [(ngModel)]="withUnbondingPeriod"
-              />
+            <label class="input-group">
+              <select
+                class="select select-bordered w-full"
+                name="withdrawOption"
+                [(ngModel)]="withdrawOption.id"
+              >
+                <ng-container *ngFor="let option of withdrawOptions">
+                  <option [value]="option.id" [disabled]="option.disabled">
+                    {{ option.display }}
+                  </option>
+                </ng-container>
+              </select>
             </label>
           </div>
           <div class="form-control">

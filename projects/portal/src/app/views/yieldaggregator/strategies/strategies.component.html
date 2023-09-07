@@ -2,7 +2,7 @@
   <div class="text-xl breadcrumbs">
     <ul>
       <li routerLink="/yield-aggregator/vaults"><a>Vaults</a></li>
-      <li>Strategies {{ displaySymbol }}</li>
+      <li>Strategies {{ denom | coinDenom | async }}</li>
     </ul>
   </div>
   <div class="form-control mb-4">
@@ -12,21 +12,21 @@
     <select
       class="select select-bordered text-center w-auto sm:w-64"
       name="symbol"
-      [(ngModel)]="symbol"
-      (change)="onChangeSymbol()"
+      [(ngModel)]="denom"
+      (change)="onChangeDenom()"
     >
       <option [value]="undefined" disabled>
         <span>Select an Asset</span>
       </option>
-      <ng-container *ngFor="let symbol of availableSymbols">
-        <option [value]="symbol.symbol">
-          {{ symbol.display }}
+      <ng-container *ngFor="let d of availableDenoms">
+        <option [value]="d">
+          {{ d | coinDenom | async }}
         </option>
       </ng-container>
     </select>
   </div>
 
-  <div class="flex flex-row flex-wrap -mr-12 -mb-12" *ngIf="displaySymbol">
+  <div class="flex flex-row flex-wrap -mr-12 -mb-12">
     <div
       *ngFor="let strategy of strategies; let i = index"
       class="pr-12 pb-12 w-full md:w-1/2 xl:w-1/3"
@@ -35,18 +35,25 @@
         <div class="card-body">
           <div class="flex flex-row">
             <div class="badge badge-lg badge-primary mr-1">
-              {{ displaySymbol }}#{{ strategy.strategy?.id }}
+              {{ strategy.strategy?.denom | coinDenom | async }}#{{ strategy.strategy?.id }}
             </div>
           </div>
           <h2 class="card-title break-all">
-            <ng-container *ngIf="symbolImage">
+            <ng-container
+              *ngIf="symbolImageMap && symbolImageMap[denomMetadataMap?.[strategy.strategy?.denom!]?.symbol || '']"
+            >
               <div class="avatar">
                 <div class="mask mask-circle w-6 h-6">
-                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  <img
+                    src="{{ symbolImageMap[denomMetadataMap?.[strategy.strategy?.denom!]?.symbol || ''] }}"
+                    alt="Asset Symbol"
+                  />
                 </div>
               </div>
             </ng-container>
-            <ng-container *ngIf="!symbolImage">
+            <ng-container
+              *ngIf="!symbolImageMap || !symbolImageMap[denomMetadataMap?.[strategy.strategy?.denom!]?.symbol || '']"
+            >
               <span class="material-symbols-outlined">question_mark</span>
             </ng-container>
             <span>
@@ -54,7 +61,15 @@
             </span>
           </h2>
 
-          <button routerLink="{{ strategy.strategy?.id }}" class="btn btn-outline btn-info">
+          <button
+            [routerLink]="[
+              '/yield-aggregator/strategies',
+              strategy.strategy?.denom,
+              strategy.strategy?.id
+            ]"
+            class="btn btn-outline btn-info"
+            [disabled]="!strategy.strategy?.denom || !strategy.strategy?.id"
+          >
             View
           </button>
         </div>

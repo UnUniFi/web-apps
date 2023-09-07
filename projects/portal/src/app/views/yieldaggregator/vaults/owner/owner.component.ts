@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TransferVaultRequest } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  StrategyAll200ResponseStrategiesInner,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-owner',
@@ -12,16 +15,19 @@ export class OwnerComponent implements OnInit {
   address?: string | null;
   @Input()
   owner?: string | null;
+
+  @Input()
+  symbolImage?: string | null;
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
-  @Output()
-  appDelete: EventEmitter<string>;
+  @Input()
+  strategies?: StrategyAll200ResponseStrategiesInner[] | null;
+
   @Output()
   appTransfer: EventEmitter<TransferVaultRequest>;
   recipientAddress?: string;
 
   constructor() {
-    this.appDelete = new EventEmitter();
     this.appTransfer = new EventEmitter();
   }
 
@@ -34,10 +40,14 @@ export class OwnerComponent implements OnInit {
     this.appTransfer.emit({ vaultId, recipientAddress: this.recipientAddress });
   }
 
-  onSubmitDelete(vaultId?: string) {
-    if (!vaultId) {
+  getStrategyDetail(strategyId?: string): StrategyAll200ResponseStrategiesInner | undefined {
+    if (!strategyId) {
       return;
     }
-    this.appDelete.emit(vaultId);
+    const strategy = this.strategies?.find((strategy) => strategy.strategy?.id === strategyId);
+    if (!strategy) {
+      return;
+    }
+    return strategy;
   }
 }

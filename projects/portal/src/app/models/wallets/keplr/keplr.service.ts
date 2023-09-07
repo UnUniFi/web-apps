@@ -2,9 +2,11 @@ import { StoredWallet } from '../wallet.model';
 import { KeplrInfrastructureService } from './keplr.infrastructure.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
+import { Key } from '@keplr-wallet/types';
 
 export interface IKeplrInfrastructureService {
   connectWallet: () => Promise<StoredWallet | null | undefined>;
+  connectExternalWallet: (id: string) => Promise<Key | null | undefined>;
   signTx: (
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
@@ -24,6 +26,10 @@ export class KeplrService {
 
   async connectWallet(): Promise<StoredWallet | null | undefined> {
     return await this.iKeplrInfrastructureService.connectWallet();
+  }
+
+  async connectExternalWallet(id: string): Promise<Key | null | undefined> {
+    return await this.iKeplrInfrastructureService.connectExternalWallet(id);
   }
 
   async signTx(

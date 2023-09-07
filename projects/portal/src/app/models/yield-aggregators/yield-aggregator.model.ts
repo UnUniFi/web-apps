@@ -1,26 +1,24 @@
 export type DepositToVaultRequest = {
   vaultId: string;
-  symbol: string;
-  amount: number;
+  denom: string;
+  readableAmount: number;
 };
 
 export type WithdrawFromVaultRequest = {
   vaultId: string;
-  symbol: string;
-  amount: number;
+  denom: string;
+  readableAmount: number;
 };
 
 export type CreateVaultRequest = {
   name: string;
-  symbol: string;
+  denom: string;
   description: string;
   strategies: { id: string; weight: number }[];
   commissionRate: number;
   reserveRate: number;
-  feeAmount: number;
-  feeSymbol: string;
-  depositAmount: number;
-  depositSymbol: string;
+  fee: { denom: string; amount: string };
+  deposit: { denom: string; amount: string };
   feeCollectorAddress: string;
 };
 

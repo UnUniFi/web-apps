@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { CoinAmountPipe } from 'projects/portal/src/app/pipes/coin-amount.pipe';
 import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
 
 @NgModule({
@@ -18,5 +19,6 @@ import { PipesModule } from 'projects/portal/src/app/pipes/pipes.module';
     PipesModule,
   ],
   exports: [VaultComponent],
+  providers: [CoinAmountPipe],
 })
 export class VaultModule {}

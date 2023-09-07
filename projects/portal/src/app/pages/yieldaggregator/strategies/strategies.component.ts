@@ -2,7 +2,7 @@ import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
@@ -18,7 +18,9 @@ export class StrategiesComponent implements OnInit {
   symbol$: Observable<string>;
   displaySymbol$: Observable<string>;
   availableSymbols$: Observable<{ symbol: string; display: string }[]>;
-  symbolMetadataMap$: Observable<{ [symbol: string]: cosmos.bank.v1beta1.IMetadata }>;
+  symbolMetadataMap$: Observable<{
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
   symbolImage$: Observable<string | null>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 

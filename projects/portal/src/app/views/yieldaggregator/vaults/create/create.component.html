@@ -308,14 +308,14 @@
             <dialog id="addStrategyModal" class="modal">
               <form method="dialog" class="modal-box">
                 <h3 class="font-bold text-lg">
-                  Strategies for {{ symbolMetadataMap?.[selectedSymbol || '']?.display  }}
+                  Strategies for {{ denomMetadataMap?.[denom || '']?.display  }}
                 </h3>
-                <ng-container *ngIf="!selectedSymbol">
+                <ng-container *ngIf="!denom">
                   <p class="py-4 text-error">Select an asset first</p>
                 </ng-container>
-                <ng-container *ngIf="selectedSymbol && !strategies?.length">
+                <ng-container *ngIf="denom && !strategies?.length">
                   <p class="py-4">
-                    No strategy for {{ symbolMetadataMap?.[selectedSymbol || '']?.display  }}
+                    No strategy for {{ denomMetadataMap?.[denom || '']?.display  }}
                   </p>
                 </ng-container>
 
@@ -363,19 +363,19 @@
               <input
                 type="number"
                 name="deposit"
-                [(ngModel)]="deposit && deposit.amount"
+                value="{{ deposit?.amount | coinAmount : deposit?.denom }}"
                 disabled
                 class="join-item input input-bordered w-full"
               />
               <div class="join-item btn btn-disabled">
-                {{ symbolMetadataMap?.[deposit?.symbol || '']?.display  }}
+                {{ denomMetadataMap?.[deposit?.denom || '']?.display  }}
               </div>
             </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[deposit?.symbol|| ''] || 0 }}
-                {{ symbolMetadataMap?.[deposit?.symbol || '']?.display  }}
+                {{ denomBalancesMap?.[deposit?.denom|| '']?.amount | coinAmount: deposit?.denom}}
+                {{ denomMetadataMap?.[deposit?.denom || '']?.display  }}
               </span>
             </label>
           </div>
@@ -403,19 +403,19 @@
               <input
                 type="number"
                 name="fee"
-                [(ngModel)]="fee && fee.amount"
+                value="{{ fee?.amount | coinAmount : fee?.denom }}"
                 disabled
                 class="join-item input input-bordered w-full"
               />
               <div class="join-item btn btn-disabled">
-                {{ symbolMetadataMap?.[fee?.symbol || '']?.display  }}
+                {{ denomMetadataMap?.[fee?.denom || '']?.display  }}
               </div>
             </div>
             <label class="label">
               <span class="label-text-alt">Available balance:</span>
               <span class="label-text-alt">
-                {{ symbolBalancesMap?.[fee?.symbol || ''] || 0 }}
-                {{ symbolMetadataMap?.[fee?.symbol || '']?.display }}
+                {{ denomBalancesMap?.[fee?.denom || '']?.amount | coinAmount: fee?.denom }}
+                {{ denomMetadataMap?.[fee?.denom || '']?.display }}
               </span>
             </label>
           </div>
@@ -439,8 +439,8 @@
               <h3 class="font-bold text-lg">Are you sure to create this Vault, OK?</h3>
               <p class="py-4">
                 A deposit of {{ deposit?.amount
-                }}{{ symbolMetadataMap?.[deposit?.symbol || '']?.display }} & a fee {{ fee?.amount
-                }}{{ symbolMetadataMap?.[fee?.symbol || '']?.display }} will be deducted from your
+                }}{{ denomMetadataMap?.[deposit?.denom || '']?.display }} & a fee {{ fee?.amount
+                }}{{ denomMetadataMap?.[fee?.denom || '']?.display }} will be deducted from your
                 balance.
               </p>
               <div class="modal-action">

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -15,9 +15,9 @@ export class StrategiesComponent implements OnInit {
   @Input()
   displaySymbol?: string | null;
   @Input()
-  availableSymbols?: {symbol:string, display:string}[] | null;
+  availableSymbols?: { symbol: string; display: string }[] | null;
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmos.bank.v1beta1.IMetadata } | null;
+  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   symbolImage?: string | null;
   @Input()

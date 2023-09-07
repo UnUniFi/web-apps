@@ -26,11 +26,11 @@ export class WalletToolComponent implements OnInit, OnChanges {
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()
-  symbol?: string | null;
+  denom?: string | null;
   @Input()
-  symbolBalancesMap?: { [symbol: string]: number } | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
+  denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
   keplrStoredWallet?: StoredWallet | null;
   @Input()

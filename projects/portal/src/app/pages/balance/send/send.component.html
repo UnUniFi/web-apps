@@ -2,8 +2,8 @@
   [address]="address$ | async"
   [toAddress]="toAddress$ | async"
   [selectedTokens]="selectedTokens$ | async"
-  [balanceSymbols]="balanceSymbols$ | async"
   [symbolImageMap]="symbolImageMap"
-  [symbolBalancesMap]="symbolBalancesMap$ | async"
+  [denomBalancesMap]="denomBalancesMap$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
   (appSend)="onSubmitSend($event)"
 ></view-send>

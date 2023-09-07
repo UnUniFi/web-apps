@@ -7,7 +7,7 @@ import { FaucetOnSubmitEvent } from '../../views/faucet/faucet.component';
 import { FaucetUseCaseService } from './faucet.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { cosmos } from '@cosmos-client/core/esm/proto';
+import cosmosclient from '@cosmos-client/core';
 import { FaucetRequest } from 'projects/portal/src/app/models/faucets/faucet.model';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class FaucetComponent implements OnInit {
   symbol$: Observable<string>;
   amount$: Observable<number>;
   symbolMetadataMap$: Observable<{
-    [symbol: string]: cosmos.bank.v1beta1.IMetadata;
+    [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
   creditAmount$: Observable<number>;
   maxCredit$: Observable<number>;

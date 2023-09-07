@@ -17,6 +17,27 @@ export class BankService {
     private readonly txCommonService: TxCommonService,
   ) {}
 
+  convertDenomReadableAmountMapToCoins(denomReadableAmountMap: {
+    [denom: string]: number;
+  }): cosmosclient.proto.cosmos.base.v1beta1.ICoin[] {
+    const coins = Object.keys(denomReadableAmountMap).map((denom) => {
+      const denomExponent = getDenomExponent(denom);
+      const amount = denomReadableAmountMap[denom].toFixed(denomExponent).replace('.', '');
+      return {
+        denom,
+        amount: parseInt(amount).toString(),
+      } as cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+    });
+
+    return coins;
+  }
+
+  /**
+   * @deprecated
+   * @param symbolAmountMap
+   * @param symbolMetadataMap
+   * @returns
+   */
   convertSymbolAmountMapToCoins(
     symbolAmountMap: { [symbol: string]: number },
     symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
@@ -34,6 +55,12 @@ export class BankService {
     return coins;
   }
 
+  /**
+   * @deprecated use coinAmount pipe
+   * @param coin
+   * @param denomMetadataMap
+   * @returns
+   */
   convertCoinToSymbolAmount(
     coin: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
@@ -45,6 +72,12 @@ export class BankService {
     return { symbol, amount };
   }
 
+  /**
+   * @deprecated use coinAmount pipe
+   * @param coins
+   * @param denomMetadataMap
+   * @returns
+   */
   convertCoinsToSymbolAmount(
     coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[],
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
@@ -144,6 +177,13 @@ export class BankService {
     return txBuilder;
   }
 
+  /**
+   * deprecated?
+   * @param fromAddress
+   * @param toAddress
+   * @param amount
+   * @returns
+   */
   buildMsgSend(
     fromAddress: cosmosclient.AccAddress,
     toAddress: cosmosclient.AccAddress,
@@ -160,14 +200,9 @@ export class BankService {
   buildMsgBankSend(
     fromAddress: string,
     toAddress: string,
-    symbolAmounts: { symbol: string; amount: number }[],
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+    denomReadableAmountMap: { [denom: string]: number },
   ): cosmosclient.proto.cosmos.bank.v1beta1.MsgSend {
-    const map: { [symbol: string]: number } = {};
-    for (const s of symbolAmounts) {
-      map[s.symbol] = s.amount;
-    }
-    const coins = this.convertSymbolAmountMapToCoins(map, symbolMetadataMap);
+    const coins = this.convertDenomReadableAmountMapToCoins(denomReadableAmountMap);
     const msgSend = new cosmosclient.proto.cosmos.bank.v1beta1.MsgSend({
       from_address: fromAddress,
       to_address: toAddress,

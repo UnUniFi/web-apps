@@ -60,6 +60,7 @@ export type AppNavigation = {
 
 export type YieldInfo = {
   id: string;
+  denom: string;
   name: string;
   description: string;
   gitURL: string;

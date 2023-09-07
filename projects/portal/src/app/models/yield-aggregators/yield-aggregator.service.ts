@@ -196,6 +196,7 @@ export class YieldAggregatorService {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
+        denom: vault.vault?.denom || '',
         name: vault.vault?.name || '',
         description: vault.vault?.description || '',
         gitURL: '',
@@ -209,13 +210,16 @@ export class YieldAggregatorService {
     let vaultAPYCertainty = false;
     for (const strategyWeight of vault.vault.strategy_weights) {
       const strategyInfo = config?.strategiesInfo?.find(
-        (strategyInfo) => strategyInfo.id === strategyWeight.strategy_id,
+        (strategyInfo) =>
+          strategyInfo.id === strategyWeight.strategy_id &&
+          strategyInfo.denom === vault.vault?.denom,
       );
       const strategyAPY = await this.getStrategyAPR(strategyInfo);
       vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
     }
     return {
       id: vault.vault?.id || '',
+      denom: vault.vault?.denom || '',
       name: vault.vault?.name || '',
       description: vault.vault?.description || '',
       gitURL: '',

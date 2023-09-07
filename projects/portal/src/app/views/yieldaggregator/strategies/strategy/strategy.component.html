@@ -3,7 +3,7 @@
     <ul>
       <li routerLink="/yield-aggregator/vaults"><a>Vaults</a></li>
       <li routerLink="..">
-        <a>Strategies {{ displaySymbol }}</a>
+        <a>Strategies {{ denom | coinDenom | async }}</a>
       </li>
       <li>{{ strategy?.strategy?.name }}</li>
     </ul>
@@ -12,20 +12,27 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div #cardRef class="card-body">
         <h2 class="card-title">
-          <ng-container *ngIf="symbolImage">
+          <ng-container
+            *ngIf="symbolImageMap && symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || '']"
+          >
             <div class="avatar">
               <div class="mask mask-circle w-6 h-6">
-                <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                <img
+                  src="{{ symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || ''] }}"
+                  alt="Asset Symbol"
+                />
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="!symbolImage">
+          <ng-container
+            *ngIf="!symbolImageMap || !symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || '']"
+          >
             <span class="material-symbols-outlined">question_mark</span>
           </ng-container>
           <span>
             {{ strategy?.strategy?.name }}
           </span>
-          <div class="badge badge-primary">{{ displaySymbol }}</div>
+          <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
           <div class="badge badge-info">NO KYC</div>
         </h2>
         <p *ngIf="strategy?.strategy?.description" class="m-8" style="white-space: pre-wrap">
@@ -82,14 +89,21 @@
       <div class="card bg-base-100 shadow-xl w-full">
         <div class="card-body">
           <h2 class="card-title break-all">
-            <ng-container *ngIf="symbolImage">
+            <ng-container
+              *ngIf="symbolImageMap && symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || '']"
+            >
               <div class="avatar">
                 <div class="mask mask-circle w-6 h-6">
-                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  <img
+                    src="{{ symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || '']  }}"
+                    alt="Asset Symbol"
+                  />
                 </div>
               </div>
             </ng-container>
-            <ng-container *ngIf="!symbolImage">
+            <ng-container
+              *ngIf="!symbolImageMap || !symbolImageMap[denomMetadataMap?.[denom||'']?.symbol || '']"
+            >
               <span class="material-symbols-outlined">question_mark</span>
             </ng-container>
             <span>Vault #{{ vault.vault?.id }}</span>

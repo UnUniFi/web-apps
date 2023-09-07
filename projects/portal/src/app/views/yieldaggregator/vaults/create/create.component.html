@@ -438,9 +438,10 @@
             <div class="modal-box">
               <h3 class="font-bold text-lg">Are you sure to create this Vault, OK?</h3>
               <p class="py-4">
-                A deposit of {{ deposit?.amount
-                }}{{ denomMetadataMap?.[deposit?.denom || '']?.display }} & a fee {{ fee?.amount
-                }}{{ denomMetadataMap?.[fee?.denom || '']?.display }} will be deducted from your
+                A deposit of {{ deposit?.amount | coinAmount : deposit?.denom }}
+                {{ denomMetadataMap?.[deposit?.denom || '']?.display }} & a fee
+                {{ fee?.amount | coinAmount : fee?.denom }}
+                {{ denomMetadataMap?.[fee?.denom || '']?.display }} will be deducted from your
                 balance.
               </p>
               <div class="modal-action">

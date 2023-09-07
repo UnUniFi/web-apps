@@ -10,7 +10,7 @@ import Long from 'long';
 export class IbcService {
   constructor(private readonly bankService: BankService) {}
 
-  buildMsgExecuteContract(
+  buildMsgTransfer(
     sourcePort: string,
     sourceChannel: string,
     sender: string,
@@ -42,7 +42,7 @@ export class IbcService {
     }
 
     const memoString = JSON.stringify(memo);
-    const ExecuteMsg = new ibcclient.ibcproto.ibc.applications.transfer.v1.MsgTransfer({
+    const msg = new ibcclient.ibcproto.ibc.applications.transfer.v1.MsgTransfer({
       source_port: sourcePort,
       source_channel: sourceChannel,
       token: coin,
@@ -52,6 +52,6 @@ export class IbcService {
       timeout_timestamp: Long.fromNumber(timeoutTimestamp),
       memo: memoString,
     });
-    return ExecuteMsg;
+    return msg;
   }
 }

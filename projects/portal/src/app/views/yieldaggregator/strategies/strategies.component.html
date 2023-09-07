@@ -45,7 +45,7 @@
               <div class="avatar">
                 <div class="mask mask-circle w-6 h-6">
                   <img
-                    src="{{ symbolImageMap[denomMetadataMap?.[strategy.strategy?.denom!]?.symbol || ''] }}"
+                    src="{{ symbolImageMap[denomMetadataMap?.[strategy.strategy?.denom||'']?.symbol || ''] }}"
                     alt="Asset Symbol"
                   />
                 </div>

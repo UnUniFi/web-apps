@@ -24,7 +24,7 @@
             <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           </h2>
           <div class="flex flex-row items-center gap-2">
-            <div class="badge badge-primary">{{ displaySymbol }}</div>
+            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
             <div class="badge badge-info">NO KYC</div>
           </div>
         </div>
@@ -166,7 +166,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -181,7 +182,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
         </div>
@@ -198,7 +200,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -216,7 +219,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -231,7 +235,7 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ denom | coinDenom | async }}
             </div>
           </div>
         </div>
@@ -323,14 +327,18 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span *ngIf="selectedChain.cosmos">{{ displaySymbol }}</span>
-              <span *ngIf="!selectedChain.cosmos">{{ symbol }}.{{ selectedChain.id }}</span>
+              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
+              <span *ngIf="!selectedChain.cosmos"
+                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
+                  selectedChain.id
+                }}</span
+              >
             </label>
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom }}
-                {{ displaySymbol }}
+                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
+                {{ denom | coinDenom | async }}
               </label>
             </span>
           </div>
@@ -341,7 +349,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
-              <span>{{ displaySymbol }}</span>
+              <span>{{ denom | coinDenom | async }}</span>
             </label>
           </div>
 
@@ -465,7 +473,7 @@
                 class="input input-bordered w-full"
                 value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
               />
-              <span>{{ displaySymbol }}</span>
+              <span>{{ denom | coinDenom | async }}</span>
             </label>
             <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
               <span class="label-text-alt">

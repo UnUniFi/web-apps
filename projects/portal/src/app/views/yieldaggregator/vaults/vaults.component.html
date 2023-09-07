@@ -114,7 +114,14 @@
                     </span>
                   </div>
                 </td>
-                <td>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</td>
+                <td>
+                  <span *ngIf="vaultsInfo?.[i]?.certainty">=</span>
+                  <span *ngIf="vaultsInfo?.[i]?.certainty === false">≒</span>
+                  <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
+                  <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
+                    ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
+                  </span>
+                </td>
                 <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
                 <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
               </tr>

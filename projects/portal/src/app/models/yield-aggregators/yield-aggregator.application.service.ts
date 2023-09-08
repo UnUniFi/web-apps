@@ -1,25 +1,33 @@
+import { ExternalTxConfirmDialogComponent } from '../../views/dialogs/txs/external-tx-confirm/external-tx-confirm-dialog.component';
 import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
-import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
+import { ExternalCosmosSdkService } from '../external-cosmos/external-cosmos-sdk.service';
+import { ExternalCosmosApplicationService } from '../external-cosmos/external-cosmos.application.service';
+import { IbcService } from '../ibc/ibc.service';
+import { WalletType } from '../wallets/wallet.model';
 import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YieldAggregatorApplicationService {
+  // todo
+  ununifiContractAddress = '';
+
   constructor(
     private readonly router: Router,
-    private readonly bankQueryService: BankQueryService,
     private readonly yieldAggregatorService: YieldAggregatorService,
     private readonly txCommonApplication: TxCommonApplicationService,
+    private readonly externalCosmosSdkService: ExternalCosmosSdkService,
+    private readonly externalCosmosApp: ExternalCosmosApplicationService,
+    private readonly ibcService: IbcService,
     private readonly dialog: Dialog,
   ) {}
 
@@ -69,13 +77,49 @@ export class YieldAggregatorApplicationService {
 
   async depositToVaultFromCosmos(
     vaultId: string,
-    externalChainId: string,
+    externalChainName: string,
     externalAddress: string,
     externalDenom: string,
     denom: string,
-    amount: number,
+    readableAmount: number,
+    walletType: WalletType,
+    pubKey: Uint8Array,
   ) {
-    //todo
+    const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
+    if (!chain?.iyaSourceChannel || !chain?.iyaSourcePort) {
+      return;
+    }
+    const now = new Date();
+    const after5min = now.getTime() + 5 * 60 * 1000;
+    // todo
+    const memo = { vault_id: vaultId, denom: denom };
+    const msg = this.ibcService.buildMsgTransfer(
+      chain.iyaSourcePort,
+      chain.iyaSourceChannel,
+      externalAddress,
+      this.ununifiContractAddress,
+      memo,
+      after5min,
+      undefined,
+      { readableAmount: readableAmount, denom: externalDenom },
+    );
+
+    const txHash = await this.externalCosmosApp.broadcast(
+      externalChainName,
+      walletType,
+      msg,
+      pubKey,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    await this.dialog
+      .open<TxConfirmDialogData>(ExternalTxConfirmDialogComponent, {
+        data: { txHash: txHash, msg: 'Sent the Deposit to vault request to ' + externalChainName },
+      })
+      .closed.toPromise();
+    location.reload();
   }
 
   async depositToVaultFromEvm(

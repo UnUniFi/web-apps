@@ -37,12 +37,11 @@ import {
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
   vault$: Observable<Vault200Response>;
+  denom$: Observable<string | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   denomMetadataMap$: Observable<{
     [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
-  symbol$: Observable<string>;
-  displaySymbol$: Observable<string>;
   symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
@@ -70,6 +69,7 @@ export class VaultComponent implements OnInit {
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
+    this.denom$ = this.vault$.pipe(map((vault) => vault.vault?.denom));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -78,15 +78,6 @@ export class VaultComponent implements OnInit {
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
-      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol || ''),
-    );
-    this.displaySymbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
-      map(
-        ([vault, denomMetadataMap]) =>
-          denomMetadataMap?.[vault.vault?.denom!].display || vault.vault?.denom!,
-      ),
-    );
 
     const timer$ = timer(0, 1000 * 60);
     this.totalDepositAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
@@ -130,7 +121,10 @@ export class VaultComponent implements OnInit {
       ),
     );
 
-    this.symbolImage$ = this.symbol$.pipe(
+    const symbol$ = combineLatest([this.vault$, this.denomMetadataMap$]).pipe(
+      map(([vault, denomMetadataMap]) => denomMetadataMap?.[vault.vault?.denom!].symbol || ''),
+    );
+    this.symbolImage$ = symbol$.pipe(
       map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] || '' : null)),
     );
     this.mintAmount$ = new BehaviorSubject(0);

@@ -170,7 +170,30 @@ const denomMetadata = [
 const strategiesInfo = [
   {
     id: '0',
-    name: 'Osmosis ATOM/OSMO Farm',
+    denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+    name: 'MARS/OSMO strategy',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '907',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+    name: 'MARS/OSMO strategy v2',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '907',
+    },
+  },
+  {
+    id: '1',
+    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+    name: 'ATOM/OSMO strategy v2',
     description: '',
     gitUrl: '',
     poolInfo: {
@@ -179,13 +202,14 @@ const strategiesInfo = [
     },
   },
   {
-    id: '1',
-    name: 'Osmosis MARS/OSMO Farm',
+    id: '0',
+    denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+    name: 'Osmosis ATOM/OSMO Farm',
     description: '',
     gitUrl: '',
     poolInfo: {
       type: 'osmosis',
-      poolId: '9',
+      poolId: '1',
     },
   },
 ];

@@ -1,10 +1,8 @@
 <view-strategies
   [denom]="denom$ | async"
-  [symbol]="symbol$ | async"
-  [displaySymbol]="displaySymbol$ | async"
-  [availableSymbols]="availableSymbols$ | async"
-  [symbolMetadataMap]="symbolMetadataMap$ | async"
-  [symbolImage]="symbolImage$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  [symbolImageMap]="symbolImageMap"
+  [availableDenoms]="availableDenoms$ | async"
   [strategies]="strategies$ | async"
   (changeDenom)="onChangeDenom($event)"
 ></view-strategies>

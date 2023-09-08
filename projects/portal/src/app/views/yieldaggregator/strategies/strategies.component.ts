@@ -11,15 +11,13 @@ export class StrategiesComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
-  symbol?: string | null;
+  denomMetadataMap?: {
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  } | null;
   @Input()
-  displaySymbol?: string | null;
+  symbolImageMap?: { [symbol: string]: string };
   @Input()
-  availableSymbols?: { symbol: string; display: string }[] | null;
-  @Input()
-  symbolMetadataMap?: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
-  @Input()
-  symbolImage?: string | null;
+  availableDenoms?: string[] | null;
   @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
   @Output()
@@ -31,13 +29,10 @@ export class StrategiesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChangeSymbol() {
-    if (!this.symbol) {
+  onChangeDenom() {
+    if (!this.denom) {
       return;
     }
-    const denom = this.symbolMetadataMap?.[this.symbol].base;
-    if (denom) {
-      this.changeDenom.emit(denom);
-    }
+    this.changeDenom.emit(this.denom);
   }
 }

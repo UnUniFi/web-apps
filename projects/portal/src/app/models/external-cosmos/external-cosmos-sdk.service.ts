@@ -1,4 +1,4 @@
-import { ChainInfo, Config, ConfigService } from '../config.service';
+import { ChainInfo, ConfigService } from '../config.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { first, map } from 'rxjs/operators';
@@ -8,6 +8,13 @@ import { first, map } from 'rxjs/operators';
 })
 export class ExternalCosmosSdkService {
   constructor(private readonly configS: ConfigService) {}
+
+  async chainInfo(id: string): Promise<ChainInfo | undefined> {
+    const chain$ = this.configS.config$.pipe(
+      map((config) => config?.externalChains.find((chain) => chain.id === id)),
+    );
+    return chain$.pipe(first()).toPromise();
+  }
 
   async sdk(
     id: string,

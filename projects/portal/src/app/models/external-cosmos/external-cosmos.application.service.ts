@@ -1,3 +1,6 @@
+import { createCosmosPublicKeyFromUint8Array } from '../../utils/key';
+import { KeyType } from '../keys/key.model';
+import { WalletType } from '../wallets/wallet.model';
 import { ExternalCosmosTxService } from './external-cosmos-tx.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,12 +19,25 @@ export class ExternalCosmosApplicationService {
   ) {}
 
   async broadcast(
-    id: string,
-    walletType: string,
+    chainName: string,
+    walletType: WalletType,
     msg: any,
-    cosmosPublicKey: cosmosclient.PubKey,
-    baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+    pubkey: Uint8Array,
   ) {
+    const cosmosPublicKey = createCosmosPublicKeyFromUint8Array(KeyType.secp256k1, pubkey);
+    if (!cosmosPublicKey) {
+      console.error('Invalid Pubkey.');
+      return;
+    }
+    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
+    const account = await this.externalCosmosTxService.getBaseAccountFromAddress(
+      chainName,
+      accAddress,
+    );
+    if (!account) {
+      this.snackBar.open(`Unsupported account type.`, 'Close');
+      return null;
+    }
     const dialogRef = this.loadingDialog.open('Sending');
 
     let txResult: BroadcastTx200Response | undefined;
@@ -29,21 +45,21 @@ export class ExternalCosmosApplicationService {
 
     try {
       const txBuilder = await this.externalCosmosTxService.buildTxBuilder(
-        id,
+        chainName,
         [msg], // TODO
         cosmosPublicKey,
-        baseAccount,
+        account,
       );
 
       const signerBaseAccount = await this.externalCosmosTxService.getBaseAccount(
-        id,
+        chainName,
         cosmosPublicKey,
       );
       if (!signerBaseAccount) {
         throw Error('Unsupported Account!');
       }
       const signedTxBuilder = await this.externalCosmosTxService.signTx(
-        id,
+        chainName,
         txBuilder,
         signerBaseAccount,
         walletType,
@@ -52,7 +68,7 @@ export class ExternalCosmosApplicationService {
         throw Error('Failed to sign!');
       }
 
-      txResult = await this.externalCosmosTxService.announceTx(id, txBuilder);
+      txResult = await this.externalCosmosTxService.announceTx(chainName, txBuilder);
       txHash = txResult?.tx_response?.txhash;
       if (txHash === undefined) {
         throw Error(txResult?.tx_response?.raw_log);

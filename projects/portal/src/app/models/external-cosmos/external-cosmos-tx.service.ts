@@ -1,16 +1,11 @@
-import {
-  convertHexStringToUint8Array,
-  convertUnknownAccountToBaseAccount,
-} from '../../utils/converter';
-import { BankService } from '../cosmos/bank.service';
+import { convertUnknownAccountToBaseAccount } from '../../utils/converter';
 import { KeplrService } from '../wallets/keplr/keplr.service';
 import { LeapService } from '../wallets/leap/leap.service';
-import { CosmosWallet, WalletType } from '../wallets/wallet.model';
+import { WalletType } from '../wallets/wallet.model';
 import { ExternalCosmosSdkService } from './external-cosmos-sdk.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200Response } from '@cosmos-client/core/esm/openapi';
-import cosmwasmclient from '@cosmos-client/cosmwasm';
 import Long from 'long';
 
 @Injectable({
@@ -18,44 +13,20 @@ import Long from 'long';
 })
 export class ExternalCosmosTxService {
   constructor(
-    private readonly bankService: BankService,
     private readonly keplrService: KeplrService,
     private readonly leapService: LeapService,
     private readonly cosmwasmSdkService: ExternalCosmosSdkService,
   ) {}
 
-  buildMsgExecuteContract(
-    sender: string,
-    contractAddress: string,
-    msg: any,
-    amounts: { denom: string; readableAmount: number }[],
-  ) {
-    const coins = amounts.map(
-      (amount) =>
-        this.bankService.convertDenomReadableAmountMapToCoins({
-          [amount.denom]: amount.readableAmount,
-        })[0],
-    );
-    const msgString = JSON.stringify(msg);
-    const msgUint8Array = convertHexStringToUint8Array(msgString);
-    const ExecuteMsg = new cosmwasmclient.proto.cosmwasm.wasm.v1.MsgExecuteContract({
-      sender,
-      contract: contractAddress,
-      msg: msgUint8Array,
-      funds: coins,
-    });
-    return ExecuteMsg;
-  }
-
   async buildTxBuilder(
-    id: string,
+    chainId: string,
     messages: any[],
     cosmosPublicKey: cosmosclient.PubKey,
     baseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
     gas?: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
     fee?: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ): Promise<cosmosclient.TxBuilder> {
-    const sdk = await this.cosmwasmSdkService.sdk(id).then((sdk) => sdk.rest);
+    const sdk = await this.cosmwasmSdkService.sdk(chainId).then((sdk) => sdk.rest);
     const packedAnyMessages: cosmosclient.proto.google.protobuf.IAny[] = messages.map((message) =>
       cosmosclient.codec.instanceToProtoAny(message),
     );
@@ -106,10 +77,10 @@ export class ExternalCosmosTxService {
   }
 
   async getBaseAccountFromAddress(
-    id: string,
+    chainId: string,
     address: cosmosclient.AccAddress,
   ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
-    const sdk = await this.cosmwasmSdkService.sdk(id).then((sdk) => sdk.rest);
+    const sdk = await this.cosmwasmSdkService.sdk(chainId).then((sdk) => sdk.rest);
     const account = await cosmosclient.rest.auth
       .account(sdk, address)
       .then((res) =>
@@ -126,27 +97,27 @@ export class ExternalCosmosTxService {
   }
 
   async signTx(
-    id: string,
+    chainId: string,
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
-    walletType: string,
+    walletType: WalletType,
   ): Promise<cosmosclient.TxBuilder | undefined> {
     if (walletType === WalletType.keplr) {
-      return await this.signTxWithKeplr(id, txBuilder, signerBaseAccount);
+      return await this.signTxWithKeplr(chainId, txBuilder, signerBaseAccount);
     }
     if (walletType === WalletType.leap) {
-      return await this.signTxWithLeap(id, txBuilder, signerBaseAccount);
+      return await this.signTxWithLeap(chainId, txBuilder, signerBaseAccount);
     }
     throw Error('Unsupported wallet type!');
   }
 
   async signTxWithKeplr(
-    id: string,
+    chainId: string,
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
     const signedTxBuilder = await this.keplrService.signTxExternal(
-      id,
+      chainId,
       txBuilder,
       signerBaseAccount,
     );
@@ -154,11 +125,15 @@ export class ExternalCosmosTxService {
   }
 
   async signTxWithLeap(
-    id: string,
+    chainId: string,
     txBuilder: cosmosclient.TxBuilder,
     signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
   ): Promise<cosmosclient.TxBuilder> {
-    const signedTxBuilder = await this.leapService.signTxExternal(id, txBuilder, signerBaseAccount);
+    const signedTxBuilder = await this.leapService.signTxExternal(
+      chainId,
+      txBuilder,
+      signerBaseAccount,
+    );
     return signedTxBuilder;
   }
 

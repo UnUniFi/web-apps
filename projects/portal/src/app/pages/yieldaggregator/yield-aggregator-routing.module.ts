@@ -49,10 +49,6 @@ const routes: Routes = [
     path: 'strategies/:denom/:strategy_id',
     component: StrategyComponent,
   },
-  {
-    path: 'kyc',
-    component: KycComponent,
-  },
 ];
 
 @NgModule({

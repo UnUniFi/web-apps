@@ -1,27 +1,16 @@
 import {
-	Auth,
-	user,
-	AuthProvider,
-	UserCredential,
+	type Auth,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 	signInWithPopup,
-	User as FirebaseUser,
-	getAdditionalUserInfo
-} from '@angular/fire/auth';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+	getAdditionalUserInfo,
+	type AuthProvider,
+	type UserCredential
+} from 'firebase/auth';
+import type { UserService } from './users/user.service';
 
 export class AuthService {
-	currentUser$: Observable<FirebaseUser | null>;
-	authorized$: Observable<boolean>;
-	authUid$: Observable<string | undefined>;
-
-	constructor(private readonly auth: Auth, private readonly userService: UserService) {
-		this.currentUser$ = user(this.auth);
-		this.authorized$ = this.currentUser$.pipe(map((user) => user !== null));
-		this.authUid$ = this.currentUser$.pipe(map((user) => user?.uid));
-	}
+	constructor(private auth: Auth, private readonly userService: UserService) {}
 
 	/**
 	 * @param uniqueName

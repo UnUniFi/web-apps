@@ -7,7 +7,10 @@
 	let passwordMatch = '';
 
 	const validators = {};
-	const formValidators = {};
+	const formValidators = {
+		passwordsMatch: (values: any) =>
+			values.password === values.passwordMatch ? null : 'Passwords Must Match'
+	};
 
 	const { touched, validity, isFormValid } = formula({
 		validators,

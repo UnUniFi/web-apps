@@ -17,7 +17,16 @@ export type ExecuteMsg = {
   create_verification: CreateVerificationMsg;
 } | {
   remove_verification: RemoveVerificationMsg;
+} | {
+  request_information: RequestInformationMsg;
+} | {
+  approve_information_request: ApproveInformationRequestMsg;
+} | {
+  reject_information_request: RejectInformationRequestMsg;
+} | {
+  remove_information_request: RemoveInformationRequestMsg;
 };
+export type Uint128 = string;
 export interface UpdateParamsMsg {
   authority?: string | null;
 }
@@ -25,15 +34,22 @@ export interface RegisterProviderMsg {
   address: string;
   details: string;
   identity: string;
+  information_fee: Coin;
   name: string;
   security_contact: string;
   website: string;
+}
+export interface Coin {
+  amount: Uint128;
+  denom: string;
+  [k: string]: unknown;
 }
 export interface UpdateProviderMsg {
   address?: string | null;
   details?: string | null;
   id: number;
   identity?: string | null;
+  information_fee?: Coin | null;
   name?: string | null;
   security_contact?: string | null;
   website?: string | null;
@@ -46,6 +62,21 @@ export interface RemoveVerificationMsg {
   customer: string;
   provider_id: number;
 }
+export interface RequestInformationMsg {
+  customer: string;
+  email: string;
+  provider_id: number;
+}
+export interface ApproveInformationRequestMsg {
+  request_id: number;
+}
+export interface RejectInformationRequestMsg {
+  request_id: number;
+}
+export interface RemoveInformationRequestMsg {
+  customer: string;
+  request_id: number;
+}
 export type QueryMsg = {
   params: {};
 } | {
@@ -54,8 +85,22 @@ export type QueryMsg = {
   verifications: {
     address: string;
   };
+} | {
+  information_requests: {
+    address: string;
+  };
 };
 export type Addr = string;
+export type ArrayOfInformationRequest = InformationRequest[];
+export interface InformationRequest {
+  approved?: boolean | null;
+  customer: Addr;
+  email: string;
+  id: number;
+  information_fee: Coin;
+  provider_id: number;
+  sender: Addr;
+}
 export interface Params {
   authority: Addr;
 }
@@ -65,6 +110,7 @@ export interface Provider {
   details: string;
   id: number;
   identity: string;
+  information_fee: Coin;
   name: string;
   security_contact: string;
   website: string;

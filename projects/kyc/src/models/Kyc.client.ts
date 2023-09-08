@@ -5,8 +5,8 @@
 */
 
 import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
-import { Coin, StdFee } from "@cosmjs/amino";
-import { InstantiateMsg, ExecuteMsg, UpdateParamsMsg, RegisterProviderMsg, UpdateProviderMsg, CreateVerificationMsg, RemoveVerificationMsg, QueryMsg, Addr, Params, ArrayOfProvider, Provider, ArrayOfVerification, Verification } from "./Kyc.types";
+import { StdFee } from "@cosmjs/amino";
+import { InstantiateMsg, ExecuteMsg, Uint128, UpdateParamsMsg, RegisterProviderMsg, Coin, UpdateProviderMsg, CreateVerificationMsg, RemoveVerificationMsg, RequestInformationMsg, ApproveInformationRequestMsg, RejectInformationRequestMsg, RemoveInformationRequestMsg, QueryMsg, Addr, ArrayOfInformationRequest, InformationRequest, Params, ArrayOfProvider, Provider, ArrayOfVerification, Verification } from "./Kyc.types";
 export interface KycReadOnlyInterface {
   contractAddress: string;
   params: () => Promise<Params>;
@@ -16,6 +16,11 @@ export interface KycReadOnlyInterface {
   }: {
     address: string;
   }) => Promise<ArrayOfVerification>;
+  informationRequests: ({
+    address
+  }: {
+    address: string;
+  }) => Promise<ArrayOfInformationRequest>;
 }
 export class KycQueryClient implements KycReadOnlyInterface {
   client: CosmWasmClient;
@@ -27,6 +32,7 @@ export class KycQueryClient implements KycReadOnlyInterface {
     this.params = this.params.bind(this);
     this.providers = this.providers.bind(this);
     this.verifications = this.verifications.bind(this);
+    this.informationRequests = this.informationRequests.bind(this);
   }
 
   params = async (): Promise<Params> => {
@@ -50,6 +56,17 @@ export class KycQueryClient implements KycReadOnlyInterface {
       }
     });
   };
+  informationRequests = async ({
+    address
+  }: {
+    address: string;
+  }): Promise<ArrayOfInformationRequest> => {
+    return this.client.queryContractSmart(this.contractAddress, {
+      information_requests: {
+        address
+      }
+    });
+  };
 }
 export interface KycInterface extends KycReadOnlyInterface {
   contractAddress: string;
@@ -63,6 +80,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     address,
     details,
     identity,
+    informationFee,
     name,
     securityContact,
     website
@@ -70,6 +88,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     address: string;
     details: string;
     identity: string;
+    informationFee: Coin;
     name: string;
     securityContact: string;
     website: string;
@@ -79,6 +98,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     details,
     id,
     identity,
+    informationFee,
     name,
     securityContact,
     website
@@ -87,6 +107,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     details?: string;
     id: number;
     identity?: string;
+    informationFee?: Coin;
     name?: string;
     securityContact?: string;
     website?: string;
@@ -105,6 +126,32 @@ export interface KycInterface extends KycReadOnlyInterface {
     customer: string;
     providerId: number;
   }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
+  requestInformation: ({
+    customer,
+    email,
+    providerId
+  }: {
+    customer: string;
+    email: string;
+    providerId: number;
+  }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
+  approveInformationRequest: ({
+    requestId
+  }: {
+    requestId: number;
+  }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
+  rejectInformationRequest: ({
+    requestId
+  }: {
+    requestId: number;
+  }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
+  removeInformationRequest: ({
+    customer,
+    requestId
+  }: {
+    customer: string;
+    requestId: number;
+  }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
 }
 export class KycClient extends KycQueryClient implements KycInterface {
   client: SigningCosmWasmClient;
@@ -121,6 +168,10 @@ export class KycClient extends KycQueryClient implements KycInterface {
     this.updateProvider = this.updateProvider.bind(this);
     this.createVerification = this.createVerification.bind(this);
     this.removeVerification = this.removeVerification.bind(this);
+    this.requestInformation = this.requestInformation.bind(this);
+    this.approveInformationRequest = this.approveInformationRequest.bind(this);
+    this.rejectInformationRequest = this.rejectInformationRequest.bind(this);
+    this.removeInformationRequest = this.removeInformationRequest.bind(this);
   }
 
   updateParams = async ({
@@ -138,6 +189,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     address,
     details,
     identity,
+    informationFee,
     name,
     securityContact,
     website
@@ -145,6 +197,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     address: string;
     details: string;
     identity: string;
+    informationFee: Coin;
     name: string;
     securityContact: string;
     website: string;
@@ -154,6 +207,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
         address,
         details,
         identity,
+        information_fee: informationFee,
         name,
         security_contact: securityContact,
         website
@@ -165,6 +219,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     details,
     id,
     identity,
+    informationFee,
     name,
     securityContact,
     website
@@ -173,6 +228,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     details?: string;
     id: number;
     identity?: string;
+    informationFee?: Coin;
     name?: string;
     securityContact?: string;
     website?: string;
@@ -183,6 +239,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
         details,
         id,
         identity,
+        information_fee: informationFee,
         name,
         security_contact: securityContact,
         website
@@ -214,6 +271,59 @@ export class KycClient extends KycQueryClient implements KycInterface {
       remove_verification: {
         customer,
         provider_id: providerId
+      }
+    }, fee, memo, _funds);
+  };
+  requestInformation = async ({
+    customer,
+    email,
+    providerId
+  }: {
+    customer: string;
+    email: string;
+    providerId: number;
+  }, fee: number | StdFee | "auto" = "auto", memo?: string, _funds?: Coin[]): Promise<ExecuteResult> => {
+    return await this.client.execute(this.sender, this.contractAddress, {
+      request_information: {
+        customer,
+        email,
+        provider_id: providerId
+      }
+    }, fee, memo, _funds);
+  };
+  approveInformationRequest = async ({
+    requestId
+  }: {
+    requestId: number;
+  }, fee: number | StdFee | "auto" = "auto", memo?: string, _funds?: Coin[]): Promise<ExecuteResult> => {
+    return await this.client.execute(this.sender, this.contractAddress, {
+      approve_information_request: {
+        request_id: requestId
+      }
+    }, fee, memo, _funds);
+  };
+  rejectInformationRequest = async ({
+    requestId
+  }: {
+    requestId: number;
+  }, fee: number | StdFee | "auto" = "auto", memo?: string, _funds?: Coin[]): Promise<ExecuteResult> => {
+    return await this.client.execute(this.sender, this.contractAddress, {
+      reject_information_request: {
+        request_id: requestId
+      }
+    }, fee, memo, _funds);
+  };
+  removeInformationRequest = async ({
+    customer,
+    requestId
+  }: {
+    customer: string;
+    requestId: number;
+  }, fee: number | StdFee | "auto" = "auto", memo?: string, _funds?: Coin[]): Promise<ExecuteResult> => {
+    return await this.client.execute(this.sender, this.contractAddress, {
+      remove_information_request: {
+        customer,
+        request_id: requestId
       }
     }, fee, memo, _funds);
   };

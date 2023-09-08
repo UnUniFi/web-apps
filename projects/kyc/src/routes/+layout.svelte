@@ -4,11 +4,11 @@
 </script>
 
 <div class="app">
-  <script src="static/config.js"></script>
+	<script src="static/config.js"></script>
 
 	<Header />
 
-	<main class="max-w-xl mx-auto">
+	<main class="mx-auto px-4 max-w-screen-xl">
 		<slot />
 	</main>
 

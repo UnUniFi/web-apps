@@ -6,7 +6,7 @@
 <div class="app">
 	<Header />
 
-	<main>
+	<main class="mx-auto px-4 max-w-screen-xl">
 		<slot />
 	</main>
 

@@ -1,4 +1,5 @@
 import { WalletGuard } from '../../models/wallets/wallet.guard';
+import { KycComponent } from '../kyc/kyc.component';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { StrategyComponent } from './strategies/strategy/strategy.component';
 import { CreateComponent } from './vaults/create/create.component';
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'strategies/:denom/:strategy_id',
     component: StrategyComponent,
+  },
+  {
+    path: 'kyc',
+    component: KycComponent,
   },
 ];
 

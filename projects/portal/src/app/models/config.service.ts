@@ -119,6 +119,9 @@ export type ChainInfo = {
     average: number;
     high: number;
   };
+  iyaSourcePort?: string;
+  iyaSourceChannel?: string;
+  iyaContractAddress?: string;
   features?: string[];
 };
 

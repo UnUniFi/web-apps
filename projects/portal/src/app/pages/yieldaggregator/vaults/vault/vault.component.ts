@@ -215,10 +215,10 @@ export class VaultComponent implements OnInit {
     this.iyaApp.depositToVaultFromEvm(
       data.vaultId,
       data.externalChainName,
-      data.externalWallet.address!,
       data.externalDenom,
       data.denom,
       data.readableAmount,
+      data.externalWallet.address,
     );
   }
 

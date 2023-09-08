@@ -1,4 +1,4 @@
-import { ChainInfo, ConfigService } from '../config.service';
+import { ChainInfoIYA, ConfigService } from '../config.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { first, map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { first, map } from 'rxjs/operators';
 export class ExternalCosmosSdkService {
   constructor(private readonly configS: ConfigService) {}
 
-  async chainInfo(id: string): Promise<ChainInfo | undefined> {
+  async chainInfo(id: string): Promise<ChainInfoIYA | undefined> {
     const chain$ = this.configS.config$.pipe(
       map((config) => config?.externalChains.find((chain) => chain.id === id)),
     );
@@ -36,7 +36,7 @@ export class ExternalCosmosSdkService {
     return sdk$.pipe(first()).toPromise();
   }
 
-  setBech32PrefixToCosmosclient(chain: ChainInfo) {
+  setBech32PrefixToCosmosclient(chain: ChainInfoIYA) {
     cosmosclient.config.setBech32Prefix({
       accAddr: chain.bech32Config.bech32PrefixAccAddr,
       accPub: chain.bech32Config.bech32PrefixAccPub,

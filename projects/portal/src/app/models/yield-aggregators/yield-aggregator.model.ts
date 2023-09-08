@@ -59,3 +59,13 @@ export type OsmosisPools = {
     apr_superfluid: number;
   }[];
 }[];
+
+export type DepositToVaultFromEvmArg = {
+  destinationChain: string;
+  destinationAddress: string;
+  depositor: string;
+  vaultId: string;
+  vaultDenom: string;
+  erc20: string;
+  amount: number;
+};

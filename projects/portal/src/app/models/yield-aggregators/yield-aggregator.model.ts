@@ -1,3 +1,5 @@
+import { ExternalWallet } from '../wallets/wallet.model';
+
 export type DepositToVaultRequest = {
   vaultId: string;
   denom: string;
@@ -6,8 +8,8 @@ export type DepositToVaultRequest = {
 
 export type DepositToVaultFromCosmosRequest = {
   vaultId: string;
-  externalChainId: string;
-  externalAddress: string;
+  externalChainName: string;
+  externalWallet: ExternalWallet;
   externalDenom: string;
   denom: string;
   readableAmount: number;
@@ -15,8 +17,8 @@ export type DepositToVaultFromCosmosRequest = {
 
 export type DepositToVaultFromEvmRequest = {
   vaultId: string;
-  externalChainId: string;
-  externalAddress: string;
+  externalChainName: string;
+  externalWallet: ExternalWallet;
   externalDenom: string;
   denom: string;
   readableAmount: number;

@@ -16,7 +16,7 @@ import { ExternalChain } from '../../views/yieldaggregator/vaults/vault/vault.co
 import { KeplrService } from './keplr/keplr.service';
 import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
-import { WalletType, StoredWallet } from './wallet.model';
+import { WalletType, StoredWallet, ExternalWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
@@ -187,7 +187,7 @@ export class WalletApplicationService {
     return true;
   }
 
-  async getExternalWallet(chain: ExternalChain): Promise<string | undefined> {
+  async getExternalWalletAddress(chain: ExternalChain): Promise<ExternalWallet | undefined> {
     if (chain.id == 'ununifi') {
       return;
     }
@@ -196,12 +196,13 @@ export class WalletApplicationService {
       switch (selectedWalletType) {
         case WalletType.keplr:
           const keplrKey = await this.connectExternalWallet(this.keplrService, chain.id);
-          return keplrKey?.bech32Address;
+          return { walletType: WalletType.keplr, address: keplrKey?.bech32Address, key: keplrKey };
         case WalletType.leap:
           const leapKey = await this.connectExternalWallet(this.leapService, chain.id);
-          return leapKey?.bech32Address;
+          return { walletType: WalletType.leap, address: leapKey?.bech32Address, key: leapKey };
         case WalletType.metamask:
-          return await this.metaMaskService.getEthAddress();
+          const address = await this.metaMaskService.getEthAddress();
+          return { walletType: WalletType.metamask, address: address };
         case WalletType.walletConnect:
           // return await this.connectExternalWallet(this.walletConnectService);
           this.snackBar.open('WalletConnect is not supported yet.', 'Close');

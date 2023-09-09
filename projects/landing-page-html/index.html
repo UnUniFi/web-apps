@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>UnUniFi website</title>
+  <title>UnUniFi</title>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +11,14 @@
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <meta name="description" content="UnUniFi Protocol | The Blockchain for NFT-Fi infrastructure" />
-  <meta property="og:title" content="UnUniFi Protocol | The Blockchain for NFT-Fi infrastructure" />
+  <meta name="description" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
+  <meta property="og:title" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://ununifi.io" />
   <meta property="og:image" content="https://ununifi.io/assets/images/ogp.png" />
   <meta property="og:site_name" content="UnUniFi website" />
-  <meta property="og:description" content="UnUniFi is a fast, open, interoperable smart contracts layer 1 blockchain optimized for NFT-Fi infrastructure." />
+  <meta property="og:description"
+    content="UnUniFi is a Cross-Chain Asset Management Platform with Combined DeFi + CeFi Yield Aggregation, RWAs, Collateralized Assets, and more" />
   <meta name="twitter:card" content="summary" />
 
   <link rel="stylesheet"
@@ -84,7 +85,7 @@
 
         </li>
         <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
-        <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li>
+        <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li> -->
         <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
         <li>
           <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
@@ -114,7 +115,7 @@
                 </ul>
               </li>
               <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
-              <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Page</a></li>
+              <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Page</a></li> -->
               <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
               <li>
                 <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
@@ -136,18 +137,18 @@
           <div class="flex flex-row flex-wrap">
             <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
               <h2 class="text-5xl font-bold">
-                The Blockchain <br />for NFT-Fi <br />Infrastructure
+                Asset Management <br />with DeFi + CeFi Yield <br />Aggregation
               </h2>
               <p class="my-6">
-                Build and Use cross-chain Web 3 apps on UnUniFi, a fast, open, interoperable
-                Layer1 Blockchain optimized for NFT-Fi
+                Aggregating the Best-in-Class yield strategies for the efficient operation of on-chain assets across
+                blockchains
               </p>
               <div class="flex flex-row">
-                <a class="btn btn-secondary" href="https://docs.ununifi.io" target="_blank">
-                  Start Building
-                </a>
-                <a class="btn btn-secondary btn-outline ml-2" href="/portal" target="_blank">
+                <a class="btn btn-secondary" href="/portal" target="_blank">
                   Launch App
+                </a>
+                <a class="btn btn-secondary btn-outline ml-2" href="https://docs.ununifi.io" target="_blank">
+                  Learn More
                 </a>
               </div>
             </div>
@@ -289,85 +290,187 @@
         }
       </style>
       <script>
-        const tabNftBackedLoan = 'tab-nft-backed-loan';
-        const tabInterchainYieldAggregator = 'tab-interchain-yield-aggregator';
-        const tabDerivatives = 'tab-derivatives';
+        const tabDeFi = 'tab-defi';
+        const tabCeFi = 'tab-cefi';
+        const tabCollateral = 'tab-collateral';
 
-        const tabItemNftBackedLoan = 'tab-item-nft-backed-loan';
-        const tabItemInterchainYieldAggregator = 'tab-item-interchain-yield-aggregator';
-        const tabItemDerivatives = 'tab-item-derivatives';
+        const tabItemDeFi = 'tab-item-defi';
+        const tabItemCeFi = 'tab-item-cefi';
+        const tabItemCollateral = 'tab-item-collateral';
 
         function switchTab(activeTabId) {
-          document.getElementById(tabNftBackedLoan).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
-          document.getElementById(tabInterchainYieldAggregator).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
-          document.getElementById(tabDerivatives).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+          document.getElementById(tabDeFi).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+          document.getElementById(tabCeFi).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
+          document.getElementById(tabCollateral).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
 
-          document.getElementById(tabItemNftBackedLoan).classList.remove('active');
-          document.getElementById(tabItemInterchainYieldAggregator).classList.remove('active');
-          document.getElementById(tabItemDerivatives).classList.remove('active');
+          document.getElementById(tabItemDeFi).classList.remove('active');
+          document.getElementById(tabItemCeFi).classList.remove('active');
+          document.getElementById(tabItemCollateral).classList.remove('active');
 
           switch (activeTabId) {
-            case tabNftBackedLoan:
-              document.getElementById(tabNftBackedLoan).classList.add('bg-base-300', 'hover:bg-base-300');
-              document.getElementById(tabInterchainYieldAggregator).classList.add('hover:bg-base-200');
-              document.getElementById(tabDerivatives).classList.add('hover:bg-base-200');
+            case tabDeFi:
+              document.getElementById(tabDeFi).classList.add('bg-base-300', 'hover:bg-base-300');
+              document.getElementById(tabCeFi).classList.add('hover:bg-base-200');
+              document.getElementById(tabCollateral).classList.add('hover:bg-base-200');
 
-              document.getElementById(tabItemNftBackedLoan).classList.add('active');
+              document.getElementById(tabItemDeFi).classList.add('active');
               break;
-            case tabInterchainYieldAggregator:
-              document.getElementById(tabNftBackedLoan).classList.add('hover:bg-base-200');
-              document.getElementById(tabInterchainYieldAggregator).classList.add('bg-base-300', 'hover:bg-base-300');
-              document.getElementById(tabDerivatives).classList.add('hover:bg-base-200');
+            case tabCeFi:
+              document.getElementById(tabDeFi).classList.add('hover:bg-base-200');
+              document.getElementById(tabCeFi).classList.add('bg-base-300', 'hover:bg-base-300');
+              document.getElementById(tabCollateral).classList.add('hover:bg-base-200');
 
-              document.getElementById(tabItemInterchainYieldAggregator).classList.add('active');
+              document.getElementById(tabItemCeFi).classList.add('active');
               break;
-            case tabDerivatives:
-              document.getElementById(tabNftBackedLoan).classList.add('hover:bg-base-200');
-              document.getElementById(tabInterchainYieldAggregator).classList.add('hover:bg-base-200');
-              document.getElementById(tabDerivatives).classList.add('bg-base-300', 'hover:bg-base-300');
+            case tabCollateral:
+              document.getElementById(tabDeFi).classList.add('hover:bg-base-200');
+              document.getElementById(tabCeFi).classList.add('hover:bg-base-200');
+              document.getElementById(tabCollateral).classList.add('bg-base-300', 'hover:bg-base-300');
 
-              document.getElementById(tabItemDerivatives).classList.add('active');
+              document.getElementById(tabItemCollateral).classList.add('active');
               break;
           }
         }
 
         window.addEventListener('load', () => {
-          switchTab(tabInterchainYieldAggregator);
+          switchTab(tabDeFi);
         });
       </script>
+
+      <section class="scroll-fade-in my-8">
+        <div class="mx-auto max-w-screen-xl p-4">
+          <h3 class="text-3xl font-bold my-4">
+            UnUniFi's Asset Management Platform
+          </h3>
+          <div class="w-full">
+            <div class="text-lg font-bold rounded-lg bg-base-300 p-4">
+              <p>
+                Powering the UnUniFi (<i>pronounced un-unify</i>) Asset Management Platform is the UnUniFi Yield
+                Aggregator or UYA. The UYA app functions as a cross-chain hub, enabling users to explore the true
+                possibilities of cross-chain asset operation.
+              </p>
+              <p class="my-8">
+                The unlimited creation of Yield Strategies and Vaults fosters competitive and diverse opportunities.
+                Manage all on-chain assets, across all blockchains, regardless of whether they are DeFi or NFT-based.
+              </p>
+              <div class="flex flex-row">
+                <span class="flex-auto"></span>
+                <a class="btn btn-secondary" href="/portal" target="_blank">
+                  Get Started
+                </a>
+                <a class="btn btn-secondary btn-outline ml-2" href="https://docs.ununifi.io/" target="_blank">
+                  Learn more
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="mx-auto max-w-screen-xl p-4">
+        <h3 class="text-3xl font-bold">
+          UnUniFi Yield Aggregator (UYA)
+        </h3>
+        <p class="text-xl font-bold ml-4 my-4">Unlimited Strategies, Unlimited Customization, Unlimited Potential</p>
         <div class="flex flex-row flex-wrap justify-between rounded-full md:border border-solid">
           <div
             class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-nft-backed-loan" onclick="switchTab('tab-nft-backed-loan')">
-            <h3 class="text-xl font-extrabold text-center">NFT Backed Loan</h3>
+            id="tab-defi" onclick="switchTab('tab-defi')">
+            <h3 class="text-xl font-extrabold text-center">DeFi Strategies</h3>
           </div>
           <div
             class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-interchain-yield-aggregator" onclick="switchTab('tab-interchain-yield-aggregator')">
-            <h3 class="text-xl font-extrabold text-center">Interchain Yield Aggregator</h3>
+            id="tab-cefi" onclick="switchTab('tab-cefi')">
+            <h3 class="text-xl font-extrabold text-center">CeFi Strategies</h3>
           </div>
           <div
             class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-derivatives" onclick="switchTab('tab-derivatives')">
-            <h3 class="text-xl font-extrabold text-center">Derivatives</h3>
+            id="tab-collateral" onclick="switchTab('tab-collateral')">
+            <h3 class="text-xl font-extrabold text-center">Collateralized Assets</h3>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="tab-item-nft-backed-loan" class="tab-item-fade-in">
+    <section id="tab-item-defi" class="tab-item-fade-in">
       <div class="mx-auto max-w-screen-xl p-4">
         <div class="flex flex-row flex-wrap">
           <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-3xl font-bold">
-              Efficient & Flexible Collateralization for any NFT Asset
+            <h3 class="text-4xl font-bold">
+              Unlimited DeFi Yield Strategies Aggregated into One Platform
             </h3>
-            <ul class="list-disc ml-6 mt-8">
-              <li>Oracle-Free NFT valuations based on a unique, algorithmically governed valuation mechanism</li>
+            <ul class="text-lg list-disc ml-6 mt-8">
               <li>
-                Support for any NFT on any blockchain, enabling
-                cross-chain liquidity aggregation
+                The UnUniFi Yield Aggregator directly integrates the best DeFi Strategies across chains from external
+                DeFi protocols
+              </li>
+              <li>
+                Strategy creators can deploy their own contracts, providing limitless potential and competitive
+                development
+              </li>
+              <li>
+                Cross-chain integrations foster interoperability and minimize liquidity fragmentation
+              </li>
+              <li>
+                Support for DeFi protocols, AMM, DeFi RWA, and more
+              </li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 md:pl-4">
+            <img loading="lazy" src="assets/images/screenshots/portal-yield-aggregator-vaults.png" alt="" width="100%"
+              class="rounded-lg" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-item-cefi" class="tab-item-fade-in">
+      <div class="mx-auto max-w-screen-xl p-4">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
+            <h3 class="text-4xl font-bold">
+              Integrations with major CeFi services to cover all risk profiles
+            </h3>
+            <ul class="text-lg list-disc ml-6 mt-8">
+              <li>
+                Access centralized strategies to diversify and build a rounded portfolio
+              </li>
+              <li>
+                Direct access to DeFi + CeFi strategies in the same vault
+              </li>
+              <li>
+                Support for centralized lending, CeFi RWA, and more
+              </li>
+              <li>
+                KYC Required
+              </li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 md:pl-4">
+            <img loading="lazy" src="assets/images/screenshots/portal-yield-aggregator.png" alt="" width="100%"
+              class="rounded-lg" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-item-collateral" class="tab-item-fade-in">
+      <div class="mx-auto max-w-screen-xl p-4">
+        <div class="flex flex-row flex-wrap">
+          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
+            <h3 class="text-4xl font-bold">
+              Earn Yield Against Any Collateralized On-Chain Asset
+            </h3>
+            <ul class="text-lg list-disc ml-6 mt-8">
+              <li>
+                Lend against listed assets (NFT-based) to earn yield, or borrow by listing your own asset to extract
+                liquidity from it and use borrowed funds in the UnUniFi Yield Aggregator
+              </li>
+              <li>
+                Oracle-Free valuations based on a unique, algorithmically governed valuation mechanism
+              </li>
+              <li>
+                Support for any NFT-based asset on any blockchain, enabling cross-chain liquidity aggregation
               </li>
               <li>
                 Extending NFT-Fi beyond PFPs, with support for RWAs, GameFi, Tokenized DeFi positions, and more
@@ -381,54 +484,6 @@
         </div>
       </div>
     </section>
-
-    <section id="tab-item-interchain-yield-aggregator" class="tab-item-fade-in">
-      <div class="mx-auto max-w-screen-xl p-4">
-        <div class="flex flex-row flex-wrap">
-          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-3xl font-bold">
-              Decentralized Asset Management with integrations to Major DeFi Protocols
-            </h3>
-            <ul class="list-disc ml-6 mt-8">
-              <li>
-                Generate Automatic DeFi Yield on any assets held with our platform, including assets borrowed from
-                NFT-Fi
-              </li>
-              <li>
-                Extensive yield strategies offered with third-party creation, competitive to market changes
-              </li>
-            </ul>
-          </div>
-          <div class="w-full md:w-1/2 md:pl-4">
-            <img loading="lazy" src="assets/images/screenshots/portal-yield-aggregator-vaults.png" alt="" width="100%"
-              class="rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-item-derivatives" class="tab-item-fade-in">
-      <div class="mx-auto max-w-screen-xl p-4">
-        <div class="flex flex-row flex-wrap">
-          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-3xl font-bold">
-              Perps Trading via a Custom, Improved, GMX-style Model
-            </h3>
-            <ul class="list-disc ml-6 mt-8">
-              <li>Familiar UI/UX for experienced DeFi traders & users</li>
-              <li>Stabilized Pool prevents liquidity provider loss, while
-                servicing larger institutionally-sized positions</li>
-              <li>Create complex DeFi trading strategies by incorporating assets borrowed from NFT-Fi</li>
-              <li>NFT price index perps offered alongside DeFi products</li>
-            </ul>
-          </div>
-          <div class="w-full md:w-1/2 md:pl-4">
-            <img loading="lazy" src="assets/images/screenshots/portal-derivatives-perpetual-futures-BTC-USDC.png" alt=""
-              width="100%" class="rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </section>
   </section>
 
   <section class="scroll-fade-in my-8">
@@ -436,28 +491,20 @@
       <div class="flex flex-row flex-wrap">
         <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
           <h3 class="text-3xl font-bold">
-            UnUniFi's Cross-Chain Infrastructure
+            DeFi + CeFi Aggregation for an Unprecedented Level of Customizability
           </h3>
         </div>
         <div class="w-full md:w-1/2 md:pl-4">
-          <div class="rounded-lg bg-base-300 p-4">
-            <p class="font-bold">
-              Our core Apps are designed to excel individually, providing tools for DeFi or NFT or NFT-Fi based users.
-            </p>
-            <p class="my-8">
-              However, once combined, the UnUniFi core apps become a true Decentralized Asset Management Platform,
-              providing one unified infrastructure to manage all assets, across all blockchains,
-              regardless of whether they are DeFi or NFT based.
-            </p>
-            <div class="flex flex-row">
-              <span class="flex-auto"></span>
-              <a class="btn btn-secondary" href="/portal" target="_blank">
-                Get Started
-              </a>
-              <a class="btn btn-secondary btn-outline ml-2" href="https://docs.ununifi.io/" target="_blank">
-                Learn more
-              </a>
-            </div>
+          <div class="text-lg rounded-lg bg-base-300 p-4">
+            <P>
+              Create your own <b>Vaults</b> or choose from a selection of pre-created vaults
+            </P>
+            <P class="my-8">
+              Create your own <b>Strategies</b> or choose from the highest performing strategies on chain
+            </P>
+            <P>
+              Create your own mix of <b>DeFi</b> + <b>CeFi</b> portfolio exposure
+            </P>
           </div>
         </div>
       </div>
@@ -469,20 +516,20 @@
       <div class="flex flex-row flex-wrap">
         <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
           <h3 class="text-3xl font-bold">
-            Scalability for UnUniFi's sector-specific blockchain
+            Become a Strategy Provider Today
           </h3>
         </div>
         <div class="w-full md:w-1/2 md:pl-4">
-          <div class="rounded-lg bg-base-300 p-4">
-            <p class="font-bold">
-              Start building on UnUniFi now and help create the future of NFT-Fi.
+          <div class="text-lg rounded-lg bg-base-300 p-4">
+            <P class="mb-4">
+              DeFi Protocols and Institutional Borrowers can partner with UnUniFi and deploy their smart contracts on
+              the UYA App. By launching your pool on UnUniFi, you can tap into global liquidity, sourcing liquidity
+              providers from any blockchain.
+            </P>
+            <p>
+              Eliminate the overhead traditionally required for multi-chain interoperability and minimize liquidity
+              fragmentation by launching on UnUniFi today.
             </p>
-            <ul class="list-disc ml-6">
-              <li>NFT Backed Loans</li>
-              <li>Interchain Yield Aggregator</li>
-              <li>Derivatives</li>
-              <li>Extension Contracts</li>
-            </ul>
           </div>
         </div>
       </div>
@@ -491,32 +538,24 @@
 
   <section class="scroll-fade-in my-8">
     <div class="mx-auto max-w-screen-xl p-4">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            Extending Core App Functionality via External Party Contracts
-          </h3>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <div class="rounded-lg bg-base-300 p-4">
-            <h4>NFT Backed Loan Extensions:</h4>
-            <ul class="list-disc ml-6">
-              <li>Tokenized DeFi Positions</li>
-              <li>Automatic Bid Pools</li>
-              <li>Lending for Non-Collateralized Borrowers</li>
-            </ul>
-          </div>
-          <div class="rounded-lg bg-base-300 p-4 mt-4">
-            <h4>Interchain Yield Aggregator Extensions:</h4>
-            <ul class="list-disc ml-6">
-              <li>DEX LP Farming in external chain</li>
-              <li>DAO-based VC</li>
-              <li>Centralized Asset Management Services</li>
-            </ul>
+      <h3 class="text-3xl font-bold my-4">
+        Request to Partner with UnUniFi
+      </h3>
+      <div class="w-full">
+        <div class="text-xl rounded-lg bg-base-300 p-4">
+          <p class="mb-8">
+            UnUniFi works with DeFi protocols, trusted custodians, institutional lenders, and borrowers
+          </p>
+          <div class="flex flex-row">
+            <span class="flex-auto"></span>
+            <a class="btn btn-secondary"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScYwc5ZjVNv-6lN39dUFQaAqIOw75lcLbeXqL0xkpYiW3F9-g/viewform"
+              target="_blank">
+              Partnership Request
+            </a>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -677,13 +716,14 @@
       <span class="footer-title">Services</span>
       <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
       <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
+      <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
     </div>
     <div>
       <span class="footer-title">Information</span>
       <a class="link link-hover" href="https://ununifi.io/assets/download/UnUniFi-Whitepaper.pdf"
         target="_blank">Whitepaper</a>
-      <a class="link link-hover" href="https://ununifi.io/assets/download/UnUniFi-OnePage.pdf" target="_blank">One
-        Pager</a>
+      <!-- <a class="link link-hover" href="https://ununifi.io/assets/download/UnUniFi-OnePage.pdf" target="_blank">One
+        Pager</a> -->
       <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
       <a class="link link-hover" href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
         target="_blank">Jobs</a>
@@ -692,7 +732,7 @@
     <div>
       <span class="footer-title">Social</span>
       <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">Discord</a>
-      <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">Twitter</a>
+      <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">X (Twitter)</a>
       <a class="link link-hover" href="https://http//linkedin.com/company/ununifi" target="_blank">LinkedIn</a>
       <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">YouTube</a>
       <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">Linktree</a>

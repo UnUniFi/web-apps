@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
@@ -19,10 +20,10 @@ import {
 export class StrategyComponent implements OnInit {
   id$: Observable<string>;
   denom$: Observable<string>;
-  ibcDenom$: Observable<string>;
-  symbol$: Observable<string>;
-  displaySymbol$: Observable<string>;
-  symbolImage$: Observable<string | null>;
+  denomMetadataMap$: Observable<{
+    [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
+  }>;
+  symbolImageMap: { [symbol: string]: string };
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
@@ -39,42 +40,19 @@ export class StrategyComponent implements OnInit {
     const params$ = this.route.params;
     this.id$ = params$.pipe(map((params) => params.strategy_id));
     this.denom$ = params$.pipe(map((params) => params.denom));
-    this.ibcDenom$ = this.route.params.pipe(
-      map((params) => (params.ibc_denom ? 'ibc/' + params.ibc_denom : '')),
-    );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
-      map(([denom, ibcDenom, denomMetadataMap]) =>
-        ibcDenom == ''
-          ? denomMetadataMap[denom]?.symbol || ''
-          : denomMetadataMap[ibcDenom]?.symbol || '',
-      ),
-    );
-    this.displaySymbol$ = combineLatest([this.denom$, this.ibcDenom$, denomMetadataMap$]).pipe(
-      map(([denom, ibcDenom, denomMetadataMap]) =>
-        ibcDenom == ''
-          ? denomMetadataMap[denom]?.display || denom
-          : denomMetadataMap[ibcDenom]?.display || ibcDenom,
-      ),
-    );
-    this.symbolImage$ = this.symbol$.pipe(
-      map((symbol) => (symbol ? this.bankQuery.getSymbolImageMap()[symbol] : null)),
-    );
-    const strategies$ = combineLatest([this.denom$, this.ibcDenom$]).pipe(
-      mergeMap(([denom, ibcDenom]) =>
-        ibcDenom == ''
-          ? this.iyaQuery.listStrategies$(denom)
-          : this.iyaQuery.listStrategies$(ibcDenom),
-      ),
-    );
+    this.symbolImageMap = this.bankQuery.getSymbolImageMap();
+    this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
     this.strategy$ = combineLatest([this.id$, strategies$]).pipe(
       map(([id, strategies]) => strategies.find((s) => s.strategy?.id == id)),
     );
     const allVaults$ = this.iyaQuery.listVaults$();
-    this.vaults$ = combineLatest([allVaults$, this.id$]).pipe(
-      map(([vaults, id]) =>
+    this.vaults$ = combineLatest([allVaults$, this.id$, this.denom$]).pipe(
+      map(([vaults, id, denom]) =>
         vaults.filter((vault) =>
-          vault.vault?.strategy_weights?.find((strategy) => strategy.strategy_id === id),
+          vault.vault?.strategy_weights?.find(
+            (strategy) => vault.vault?.denom === denom && strategy.strategy_id === id,
+          ),
         ),
       ),
     );
@@ -88,7 +66,9 @@ export class StrategyComponent implements OnInit {
     );
     this.strategyInfo$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
       map(([strategy, config]) =>
-        config?.strategiesInfo?.find((s) => s.id == strategy?.strategy?.id),
+        config?.strategiesInfo?.find(
+          (s) => s.denom && strategy?.strategy?.denom && s.id == strategy?.strategy?.id,
+        ),
       ),
     );
     this.strategyAPR$ = this.strategyInfo$.pipe(

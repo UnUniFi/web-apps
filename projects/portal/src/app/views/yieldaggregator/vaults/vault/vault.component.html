@@ -24,7 +24,7 @@
             <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           </h2>
           <div class="flex flex-row items-center gap-2">
-            <div class="badge badge-primary">{{ displaySymbol }}</div>
+            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
             <div class="badge badge-info">NO KYC</div>
           </div>
         </div>
@@ -109,6 +109,32 @@
                 </td>
                 <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
               </tr>
+              <!-- <tr>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Bonus APY</span>
+                  <label for="modal-bonus" class="label-text cursor-pointer">
+                    <span class="material-symbols-outlined">help</span>
+                  </label>
+
+                  <input type="checkbox" id="modal-bonus" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the bonus APY?</h3>
+                      <p class="my-4">You can receive additional APYs for the campaign period.</p>
+                      <p>
+                        For more information on the bonus APY, visit
+                        <a href="https://docs.ununifi.io" target="_blank">
+                          <u class="text-info">the UnUniFi Campaign Website</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-bonus" class="btn">Okay</label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ 'Coming soon' }}</td>
+              </tr> -->
             </tbody>
           </table>
         </div>
@@ -138,7 +164,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -153,7 +180,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
         </div>
@@ -170,7 +198,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -188,7 +217,8 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
             </div>
           </div>
           <div class="stat">
@@ -203,7 +233,7 @@
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ displaySymbol }}
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ denom | coinDenom | async }}
             </div>
           </div>
         </div>
@@ -295,14 +325,18 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span *ngIf="selectedChain.cosmos">{{ displaySymbol }}</span>
-              <span *ngIf="!selectedChain.cosmos">{{ symbol }}.{{ selectedChain.id }}</span>
+              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
+              <span *ngIf="!selectedChain.cosmos"
+                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
+                  selectedChain.id
+                }}</span
+              >
             </label>
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom }}
-                {{ displaySymbol }}
+                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
+                {{ denom | coinDenom | async }}
               </label>
             </span>
           </div>
@@ -313,7 +347,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
-              <span>{{ displaySymbol }}</span>
+              <span>{{ denom | coinDenom | async }}</span>
             </label>
           </div>
 
@@ -343,7 +377,7 @@
           <div class="form-control">
             <label class="label">
               <div class="flex flex-row items-center gap-2">
-                <span class="label-text">With Unbonding Period (coming soon)</span>
+                <span class="label-text">Withdrawal Option</span>
                 <!-- The button to open modal -->
                 <label for="modal-unbonding" class="label-text cursor-pointer">
                   <span class="material-symbols-outlined">help</span>
@@ -375,14 +409,18 @@
                 </div>
               </div>
             </label>
-            <label class="cursor-pointer label">
-              <input
-                type="checkbox"
-                class="toggle toggle-primary"
-                name="openSearch"
-                disabled
-                [(ngModel)]="withUnbondingPeriod"
-              />
+            <label class="input-group">
+              <select
+                class="select select-bordered w-full"
+                name="withdrawOption"
+                [(ngModel)]="withdrawOption.id"
+              >
+                <ng-container *ngFor="let option of withdrawOptions">
+                  <option [value]="option.id" [disabled]="option.disabled">
+                    {{ option.display }}
+                  </option>
+                </ng-container>
+              </select>
             </label>
           </div>
           <div class="form-control">
@@ -433,7 +471,7 @@
                 class="input input-bordered w-full"
                 value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
               />
-              <span>{{ displaySymbol }}</span>
+              <span>{{ denom | coinDenom | async }}</span>
             </label>
             <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
               <span class="label-text-alt">

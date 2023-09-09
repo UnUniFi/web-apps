@@ -2,7 +2,7 @@ import { Provider } from '../../models/kyc/Kyc.types';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-kyc',
+  selector: 'view-kyc',
   templateUrl: './kyc.component.html',
   styleUrls: ['./kyc.component.css'],
 })

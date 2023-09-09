@@ -1,8 +1,9 @@
 <view-strategy
-  [strategy]="strategy$ | async"
   [id]="id$ | async"
-  [displaySymbol]="displaySymbol$ | async"
-  [symbolImage]="symbolImage$ | async"
+  [denom]="denom$ | async"
+  [denomMetadataMap]="denomMetadataMap$ | async"
+  [symbolImageMap]="symbolImageMap"
+  [strategy]="strategy$ | async"
   [vaults]="vaults$ | async"
   [weights]="weights$ | async"
   [strategyInfo]="strategyInfo$ | async"

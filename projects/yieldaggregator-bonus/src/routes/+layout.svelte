@@ -3,16 +3,16 @@
 	import Header from './Header.svelte';
 </script>
 
-<div class="app">
+<div class="app bg-base-200">
 	<script src="static/config.js"></script>
 
 	<Header />
 
-	<main class="mx-auto px-4 max-w-screen-xl">
+	<main class="mx-auto p-4 max-w-screen-xl">
 		<slot />
 	</main>
 
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+	<footer class="footer p-4 bg-neutral text-neutral-content">
+		<nav />
 	</footer>
 </div>

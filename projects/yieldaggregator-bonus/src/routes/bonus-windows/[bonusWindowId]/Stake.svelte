@@ -16,15 +16,13 @@
 		formValidators
 	});
 
-	$: {
-		vaultShareStaking = new Promise((resolve) => {
-			setTimeout(() => {
-				resolve({ bonusWindowId } as any);
-			}, 1000);
-		}) as Promise<VaultShareStaking | undefined>;
+	$: vaultShareStaking = new Promise((resolve) => {
+		setTimeout(() => {
+			resolve({ bonusWindowId } as any);
+		}, 1000);
+	}) as Promise<VaultShareStaking | undefined>;
 
-		alreadyStaked = vaultShareStaking.then((v) => v !== undefined);
-	}
+	$: alreadyStaked = vaultShareStaking.then((v) => v !== undefined);
 
 	function stake() {}
 </script>
@@ -34,7 +32,7 @@
 		<div class="card-body">
 			<h2 class="card-title">Stake your Vault Share Token</h2>
 
-			{#await alreadyStaked}
+			{#await alreadyStaked then alreadyStaked}
 				{#if alreadyStaked}
 					<p>You have already staked in this bonus window</p>
 				{:else}

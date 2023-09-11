@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [YieldAggregatorComponent],
-  imports: [CommonModule, RouterModule, FormsModule, MaterialModule, GoogleChartsModule],
+  imports: [CommonModule, RouterModule, FormsModule, MaterialModule],
   exports: [YieldAggregatorComponent],
 })
 export class YieldAggregatorModule {}

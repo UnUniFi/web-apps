@@ -2,7 +2,7 @@ import { KeyType } from '../keys/key.model';
 import { Window as LeapWindow } from './leap/leap.model';
 import cosmosclient from '@cosmos-client/core';
 import { PubKey } from '@cosmos-client/core/esm/types';
-import { Window as KeplrWindow } from '@keplr-wallet/types';
+import { Window as KeplrWindow, Key } from '@keplr-wallet/types';
 
 export enum WalletType {
   ununifi = 'UnUniFi',
@@ -44,3 +44,5 @@ export type CosmosWallet = {
   public_key: PubKey;
   address: cosmosclient.AccAddress;
 };
+
+export type ExternalWallet = { walletType: WalletType; address?: string; key?: Key | null };

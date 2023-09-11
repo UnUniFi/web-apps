@@ -9,10 +9,12 @@ import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
+import { ExternalWallet, StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
+  DepositToVaultFromCosmosRequest,
+  DepositToVaultFromEvmRequest,
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -52,7 +54,7 @@ export class VaultComponent implements OnInit {
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<TokenAmountUSD>;
   vaultInfo$: Observable<YieldInfo>;
-  externalWalletAddress: string | undefined;
+  externalWallet: ExternalWallet | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -196,6 +198,30 @@ export class VaultComponent implements OnInit {
     this.iyaApp.depositToVault(data.vaultId, data.denom, data.readableAmount);
   }
 
+  onSubmitDepositFromExternalCosmos(data: DepositToVaultFromCosmosRequest) {
+    this.iyaApp.depositToVaultFromCosmos(
+      data.vaultId,
+      data.externalChainName,
+      data.externalWallet.address!,
+      data.externalDenom,
+      data.denom,
+      data.readableAmount,
+      data.externalWallet.walletType,
+      data.externalWallet.key?.pubKey!,
+    );
+  }
+
+  onSubmitDepositFromEvm(data: DepositToVaultFromEvmRequest) {
+    this.iyaApp.depositToVaultFromEvm(
+      data.vaultId,
+      data.externalChainName,
+      data.externalDenom,
+      data.denom,
+      data.readableAmount,
+      data.externalWallet.address,
+    );
+  }
+
   onChangeWithdraw(amount: number) {
     this.burnAmount$.next(amount);
   }
@@ -205,6 +231,6 @@ export class VaultComponent implements OnInit {
   }
 
   async onClickChain(chain: ExternalChain) {
-    this.externalWalletAddress = await this.walletApp.getExternalWallet(chain);
+    this.externalWallet = await this.walletApp.getExternalWalletAddress(chain);
   }
 }

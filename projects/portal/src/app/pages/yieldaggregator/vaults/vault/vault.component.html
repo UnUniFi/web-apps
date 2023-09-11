@@ -13,10 +13,12 @@
   [vaultBalance]="vaultBalance$ | async"
   [usdDepositAmount]="usdDepositAmount$ | async"
   [vaultInfo]="vaultInfo$ | async"
-  [externalWalletAddress]="externalWalletAddress"
+  [externalWallet]="externalWallet"
   (changeDeposit)="onChangeDeposit($event)"
   (changeWithdraw)="onChangeWithdraw($event)"
   (appDeposit)="onSubmitDeposit($event)"
   (appWithdraw)="onSubmitWithdraw($event)"
   (appClickChain)="onClickChain($event)"
+  (appDepositFromCosmos)="onSubmitDepositFromExternalCosmos($event)"
+  (appDepositFromEvm)="onSubmitDepositFromEvm($event)"
 ></view-vault>

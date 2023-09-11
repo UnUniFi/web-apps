@@ -213,11 +213,41 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     authInfoBytes: Uint8Array,
     accountNumber: Long,
   ): Promise<signKeplr | undefined> {
+    const chainId = this.configService.configs[0].chainID;
+    return this.sign(chainId, signer, bodyBytes, authInfoBytes, accountNumber);
+  }
+
+  private async signDirectExternal(
+    id: string,
+    signer: string,
+    bodyBytes: Uint8Array,
+    authInfoBytes: Uint8Array,
+    accountNumber: Long,
+  ): Promise<signKeplr | undefined> {
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainId = externalChains.find((chain) => chain.id === id)?.chainId;
+    if (!chainId) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    return this.sign(chainId, signer, bodyBytes, authInfoBytes, accountNumber);
+  }
+
+  async sign(
+    chainId: string,
+    signer: string,
+    bodyBytes: Uint8Array,
+    authInfoBytes: Uint8Array,
+    accountNumber: Long,
+  ) {
     if (!window.keplr) {
       alert('Please install Keplr extension');
       return;
     }
-    const chainId = this.configService.configs[0].chainID;
     await window.keplr.enable(chainId);
     const directSignResponse = await window.keplr.signDirect(chainId, signer, {
       bodyBytes,
@@ -256,6 +286,29 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
   ): Promise<cosmosclient.TxBuilder> {
     const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
     const signKeplr = await this.signDirect(
+      signerBaseAccount.address,
+      signDoc.body_bytes,
+      signDoc.auth_info_bytes,
+      signDoc.account_number,
+    );
+    if (!signKeplr) {
+      throw Error('Invalid signature!');
+    }
+    txBuilder.txRaw.auth_info_bytes = signKeplr.authInfoBytes;
+    txBuilder.txRaw.body_bytes = signKeplr.bodyBytes;
+    txBuilder.addSignature(signKeplr.signature);
+
+    return txBuilder;
+  }
+
+  async signTxExternal(
+    id: string,
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
+    const signKeplr = await this.signDirectExternal(
+      id,
       signerBaseAccount.address,
       signDoc.body_bytes,
       signDoc.auth_info_bytes,

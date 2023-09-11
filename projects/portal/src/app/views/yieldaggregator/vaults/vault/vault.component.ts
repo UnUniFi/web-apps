@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import cosmosclient from '@cosmos-client/core';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ExternalWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import {
+  DepositToVaultFromCosmosRequest,
+  DepositToVaultFromEvmRequest,
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -57,7 +60,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
-  externalWalletAddress?: string;
+  externalWallet?: ExternalWallet;
 
   @Output()
   changeDeposit: EventEmitter<number>;
@@ -69,6 +72,10 @@ export class VaultComponent implements OnInit, OnChanges {
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
   appClickChain: EventEmitter<ExternalChain>;
+  @Output()
+  appDepositFromCosmos: EventEmitter<DepositToVaultFromCosmosRequest>;
+  @Output()
+  appDepositFromEvm: EventEmitter<DepositToVaultFromEvmRequest>;
 
   mintAmount?: number;
   burnAmount?: number;
@@ -165,7 +172,8 @@ export class VaultComponent implements OnInit, OnChanges {
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
     this.appClickChain = new EventEmitter();
-    this.withdrawOption = this.withdrawOptions[0];
+    this.appDepositFromCosmos = new EventEmitter();
+    this.appDepositFromEvm = new EventEmitter();
   }
 
   ngOnInit(): void {}
@@ -184,13 +192,47 @@ export class VaultComponent implements OnInit, OnChanges {
 
   onSubmitDeposit() {
     if (!this.mintAmount) {
+      alert('Please enter the amount to deposit.');
       return;
     }
-    this.appDeposit.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.mintAmount,
-      denom: this.vault?.vault?.denom!,
-    });
+    if (!this.vault?.vault?.denom || !this.vault?.vault?.id) {
+      alert('Invalid vault info.');
+      return;
+    }
+
+    if (this.selectedChain.id === 'ununifi') {
+      this.appDeposit.emit({
+        vaultId: this.vault.vault.id,
+        readableAmount: this.mintAmount,
+        denom: this.vault.vault.denom,
+      });
+    } else {
+      if (!this.externalWallet) {
+        alert('Please connect your wallet of External Chain.');
+        return;
+      }
+      if (this.selectedChain.cosmos) {
+        this.appDepositFromCosmos.emit({
+          vaultId: this.vault.vault.id,
+          externalChainName: this.selectedChain.id,
+          externalWallet: this.externalWallet,
+          // TODO
+          externalDenom: this.vault.vault.denom,
+          readableAmount: this.mintAmount,
+          denom: this.vault.vault.denom,
+        });
+      } else {
+        this.appDepositFromEvm.emit({
+          vaultId: this.vault.vault.id,
+          externalChainName: this.selectedChain.id,
+          externalWallet: this.externalWallet,
+          // TODO
+          externalDenom: this.vault.vault.denom,
+          readableAmount: this.mintAmount,
+          denom: this.vault.vault.denom,
+        });
+      }
+    }
   }
 
   onWithdrawAmountChange() {
@@ -199,6 +241,7 @@ export class VaultComponent implements OnInit, OnChanges {
 
   onSubmitWithdraw() {
     if (!this.burnAmount) {
+      alert('Please enter the amount to withdraw.');
       return;
     }
     this.appWithdraw.emit({

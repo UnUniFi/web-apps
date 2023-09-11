@@ -218,11 +218,41 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
     authInfoBytes: Uint8Array,
     accountNumber: Long,
   ): Promise<any | undefined> {
+    const chainId = this.configService.configs[0].chainID;
+    return this.sign(chainId, signer, bodyBytes, authInfoBytes, accountNumber);
+  }
+
+  private async signDirectExternal(
+    id: string,
+    signer: string,
+    bodyBytes: Uint8Array,
+    authInfoBytes: Uint8Array,
+    accountNumber: Long,
+  ): Promise<any | undefined> {
+    const externalChains = this.configService.configs[0].externalChains;
+    if (!externalChains) {
+      alert('There is no external chain data.');
+      return;
+    }
+    const chainId = externalChains.find((chain) => chain.id === id)?.chainId;
+    if (!chainId) {
+      alert("this chain doesn't exist");
+      return;
+    }
+    return this.sign(chainId, signer, bodyBytes, authInfoBytes, accountNumber);
+  }
+
+  async sign(
+    chainId: string,
+    signer: string,
+    bodyBytes: Uint8Array,
+    authInfoBytes: Uint8Array,
+    accountNumber: Long,
+  ) {
     if (!window.leap) {
       alert('Please install Leap extension');
       return;
     }
-    const chainId = this.configService.configs[0].chainID;
     await window.leap.enable(chainId);
     const directSignResponse = await window.leap.signDirect(chainId, signer, {
       bodyBytes,
@@ -261,6 +291,29 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
   ): Promise<cosmosclient.TxBuilder> {
     const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
     const signLeap = await this.signDirect(
+      signerBaseAccount.address,
+      signDoc.body_bytes,
+      signDoc.auth_info_bytes,
+      signDoc.account_number,
+    );
+    if (!signLeap) {
+      throw Error('Invalid signature!');
+    }
+    txBuilder.txRaw.auth_info_bytes = signLeap.authInfoBytes;
+    txBuilder.txRaw.body_bytes = signLeap.bodyBytes;
+    txBuilder.addSignature(signLeap.signature);
+
+    return txBuilder;
+  }
+
+  async signTxExternal(
+    id: string,
+    txBuilder: cosmosclient.TxBuilder,
+    signerBaseAccount: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount,
+  ): Promise<cosmosclient.TxBuilder> {
+    const signDoc = txBuilder.signDoc(signerBaseAccount.account_number);
+    const signLeap = await this.signDirectExternal(
+      id,
       signerBaseAccount.address,
       signDoc.body_bytes,
       signDoc.auth_info_bytes,

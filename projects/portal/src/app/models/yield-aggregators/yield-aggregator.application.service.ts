@@ -1,41 +1,47 @@
+import { ExternalTxConfirmDialogComponent } from '../../views/dialogs/txs/external-tx-confirm/external-tx-confirm-dialog.component';
 import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
-import { BankQueryService } from '../cosmos/bank.query.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
+import { EthersService } from '../ethers/ethers.service';
+import { ExternalCosmosSdkService } from '../external-cosmos/external-cosmos-sdk.service';
+import { ExternalCosmosApplicationService } from '../external-cosmos/external-cosmos.application.service';
+import { IbcService } from '../ibc/ibc.service';
+import { WalletType } from '../wallets/wallet.model';
+import { DepositToVaultFromEvmArg } from './yield-aggregator.model';
 import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YieldAggregatorApplicationService {
+  // todo
+  ununifiContractAddress = '';
+
   constructor(
     private readonly router: Router,
-    private readonly bankQueryService: BankQueryService,
     private readonly yieldAggregatorService: YieldAggregatorService,
     private readonly txCommonApplication: TxCommonApplicationService,
+    private readonly externalCosmosSdkService: ExternalCosmosSdkService,
+    private readonly externalCosmosApp: ExternalCosmosApplicationService,
+    private readonly ibcService: IbcService,
+    private readonly ethersService: EthersService,
     private readonly dialog: Dialog,
   ) {}
 
-  async depositToVault(vaultId: string, symbol: string, amount: number) {
+  async depositToVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.yieldAggregatorService.buildMsgDepositToVault(
-      address,
-      vaultId,
-      symbol,
-      amount,
-    );
+    const msg = this.yieldAggregatorService.buildMsgDepositToVault(address, vaultId, denom, amount);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,
@@ -72,7 +78,106 @@ export class YieldAggregatorApplicationService {
     location.reload();
   }
 
-  async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
+  async depositToVaultFromCosmos(
+    vaultId: string,
+    externalChainName: string,
+    externalAddress: string,
+    externalDenom: string,
+    denom: string,
+    readableAmount: number,
+    walletType: WalletType,
+    pubKey: Uint8Array,
+  ) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address } = prerequisiteData;
+
+    const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
+    if (!chain?.iyaSourceChannel || !chain?.iyaSourcePort) {
+      return;
+    }
+    const now = new Date();
+    const after5min = now.getTime() + 5 * 60 * 1000;
+    // todo
+    const memo = { depositor: address, vault_id: vaultId, denom: denom };
+    const msg = this.ibcService.buildMsgTransfer(
+      chain.iyaSourcePort,
+      chain.iyaSourceChannel,
+      externalAddress,
+      this.ununifiContractAddress,
+      memo,
+      after5min,
+      undefined,
+      { readableAmount: readableAmount, denom: externalDenom },
+    );
+
+    const txHash = await this.externalCosmosApp.broadcast(
+      externalChainName,
+      walletType,
+      msg,
+      pubKey,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    await this.dialog
+      .open<TxConfirmDialogData>(ExternalTxConfirmDialogComponent, {
+        data: { txHash: txHash, msg: 'Sent the Deposit to vault request to ' + externalChainName },
+      })
+      .closed.toPromise();
+    location.reload();
+  }
+
+  async depositToVaultFromEvm(
+    vaultId: string,
+    externalChainName: string,
+    externalDenom: string,
+    denom: string,
+    amount: number,
+    externalAddress?: string,
+  ) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address } = prerequisiteData;
+
+    const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
+    if (!chain?.iyaContractAddress || !chain.iyaContractABI || !chain.iyaContractFunction) {
+      return;
+    }
+    const arg: DepositToVaultFromEvmArg = {
+      destinationChain: 'ununifi-beta-v1',
+      destinationAddress: this.ununifiContractAddress,
+      depositor: address,
+      vaultId: vaultId,
+      vaultDenom: denom,
+      erc20: externalDenom,
+      amount: amount,
+    };
+    const txHash = this.ethersService.connectContract(
+      chain.iyaContractAddress,
+      chain.iyaContractABI,
+      chain.iyaContractFunction,
+      arg,
+      externalAddress,
+    );
+
+    if (!txHash) {
+      return;
+    }
+    await this.dialog
+      .open<TxConfirmDialogData>(ExternalTxConfirmDialogComponent, {
+        data: { txHash: txHash, msg: 'Sent the Deposit to vault request to ' + externalChainName },
+      })
+      .closed.toPromise();
+    location.reload();
+  }
+
+  async withdrawFromVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -82,7 +187,7 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
-      symbol,
+      denom,
       amount,
     );
 

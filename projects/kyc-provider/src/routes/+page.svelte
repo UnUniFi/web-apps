@@ -20,12 +20,16 @@
 </svelte:head>
 
 <section>
-	<h1>Start your KYC</h1>
+	<h1 class="text-5xl font-bold py-4">Start your KYC</h1>
 
 	{#await user}
 		<div class="loading loading-ring loading-lg mx-auto" />
 	{:then user}
-		<VerifyUser {user} />
-		<VerifyAddress {user} />
+		{#if user}
+			<div class="flex flex-col gap-4">
+				<VerifyUser {user} />
+				<VerifyAddress {user} />
+			</div>
+		{/if}
 	{/await}
 </section>

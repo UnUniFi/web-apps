@@ -6,7 +6,7 @@ export class FunctionsService {
 	getKycToken(givenName: string, familyName: string, email: string) {
 		return httpsCallable<{ givenName: string; familyName: string; email: string }, string>(
 			this.functions,
-			'getKycToken'
+			'getkyctoken'
 		)({ givenName, familyName, email });
 	}
 }

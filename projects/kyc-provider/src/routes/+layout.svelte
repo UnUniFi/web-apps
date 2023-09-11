@@ -10,7 +10,7 @@
 		<slot />
 	</main>
 
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+	<footer class="footer bg-neutral text-neutral-content">
+		<nav />
 	</footer>
 </div>

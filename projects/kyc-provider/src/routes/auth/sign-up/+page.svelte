@@ -26,7 +26,7 @@
 
 <div class="card bg-base-100 shadow-xl">
 	<div class="card-body">
-		<h2 class="card-title">Sign In</h2>
+		<h2 class="card-title">Sign Up</h2>
 		<div class="flex flex-col">
 			<button class="btn btn-neutral btn-outline w-full my-2" on:click={signUpGoogle}>
 				Google

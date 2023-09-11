@@ -5,7 +5,7 @@ import { mainnet } from '@wagmi/core/chains';
 
 export function getEvmWalletManager() {
 	const chains = [mainnet];
-	const projectId = 'YOUR_PROJECT_ID';
+	const projectId = '4e66683f93467fd09ea8a876ea88f621';
 
 	const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 	const wagmiConfig = createConfig({

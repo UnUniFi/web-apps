@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { formula } from 'svelte-formula';
 	import { auth, functionsService } from '../models/state';
+	import type { User } from '@local/common';
+
+	export let user: User;
 
 	let processing = false;
+
 	let givenName = '';
 	let familyName = '';
 
@@ -17,12 +21,20 @@
 	let complyCube = {};
 
 	async function startVerification() {
-		const email = auth.currentUser?.email || '';
-		const token = functionsService.getKycToken(givenName, familyName, email);
-		complyCube = (window as any).ComplyCube.mount({
-			token,
-			onComplete
-		});
+		processing = true;
+
+		try {
+			const email = auth.currentUser?.email || '';
+			const token = functionsService.getKycToken(givenName, familyName, email);
+			complyCube = (window as any).ComplyCube.mount({
+				token,
+				onComplete
+			});
+		} catch (error) {
+			console.error(error);
+		} finally {
+			processing = false;
+		}
 	}
 
 	function onComplete(data: any) {
@@ -40,48 +52,50 @@
 	<div class="card-body">
 		<h2 class="card-title">Verify Your Identity</h2>
 		<form on:submit={startVerification}>
-			<div class="form-control w-full">
-				<span class="label">
-					<span class="label-text">Given Name</span>
-					<span class="label-text-alt" />
-				</span>
-				<input
-					type="text"
-					placeholder=""
-					class="input input-bordered w-full"
-					class:input-error={$touched.givenName && !$validity.givenName}
-					required
-					readonly={processing}
-					autocomplete="given-name"
-					bind:value={givenName}
-					name="givenName"
-				/>
-				<span class="label">
-					<span class="label-text" />
-					<span class="label-text-alt" />
-				</span>
-			</div>
-			<div class="form-control w-full">
-				<span class="label">
-					<span class="label-text">Family Name</span>
-					<span class="label-text-alt" />
-				</span>
-				<input
-					type="text"
-					placeholder=""
-					class="input input-bordered w-full"
-					class:input-error={$touched.familyName && !$validity.familyName}
-					required
-					readonly={processing}
-					autocomplete="family-name"
-					bind:value={familyName}
-					name="familyName"
-				/>
-				<span class="label">
-					<span class="label-text" />
-					<span class="label-text-alt" />
-				</span>
-			</div>
+			{#if !user.client_id}
+				<div class="form-control w-full">
+					<span class="label">
+						<span class="label-text">Given Name</span>
+						<span class="label-text-alt" />
+					</span>
+					<input
+						type="text"
+						placeholder=""
+						class="input input-bordered w-full"
+						class:input-error={$touched.givenName && !$validity.givenName}
+						required
+						readonly={processing}
+						autocomplete="given-name"
+						bind:value={givenName}
+						name="givenName"
+					/>
+					<span class="label">
+						<span class="label-text" />
+						<span class="label-text-alt" />
+					</span>
+				</div>
+				<div class="form-control w-full">
+					<span class="label">
+						<span class="label-text">Family Name</span>
+						<span class="label-text-alt" />
+					</span>
+					<input
+						type="text"
+						placeholder=""
+						class="input input-bordered w-full"
+						class:input-error={$touched.familyName && !$validity.familyName}
+						required
+						readonly={processing}
+						autocomplete="family-name"
+						bind:value={familyName}
+						name="familyName"
+					/>
+					<span class="label">
+						<span class="label-text" />
+						<span class="label-text-alt" />
+					</span>
+				</div>
+			{/if}
 			<div class="card-actions justify-end">
 				<button class="btn btn-primary" disabled={!$isFormValid || processing}> Submit </button>
 			</div>

@@ -7,6 +7,7 @@ import { getFunctions } from 'firebase/functions';
 import { FunctionsService } from './functions';
 import { UserService } from './users/user.service';
 import { AuthService } from './auth.service';
+import { AddressProofService } from './users/address-proofs/address-proof.service';
 
 export const evmWalletManager = getEvmWalletManager();
 export const cosmosWalletManager = getCosmosWalletManager();
@@ -27,5 +28,6 @@ export const firestore = getFirestore(app);
 export const functions = getFunctions(app);
 
 export const userService = new UserService(firestore);
+export const addressProofService = new AddressProofService(firestore);
 export const authService = new AuthService(auth, userService);
 export const functionsService = new FunctionsService(functions);

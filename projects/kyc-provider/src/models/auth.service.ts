@@ -43,6 +43,12 @@ export class AuthService {
 			throw { code: 'ext/existing-user-signup' };
 		}
 
+		await this.userService.create({
+			auth_uid: credential.user.uid,
+			name: credential.user.displayName || '',
+			image_url: credential.user.photoURL || ''
+		});
+
 		return credential;
 	}
 

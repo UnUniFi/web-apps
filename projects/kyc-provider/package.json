@@ -36,6 +36,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@local/common": "file:common/dist",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@wagmi/core": "^1.4.1",
     "@web3modal/ethereum": "^2.7.1",

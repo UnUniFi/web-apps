@@ -21,6 +21,7 @@ export class UserFirestore {
 				data.auth_uid,
 				data.name,
 				data.image_url,
+				data.client_id,
 				data.created_at.toDate(),
 				data.updated_at.toDate()
 			);

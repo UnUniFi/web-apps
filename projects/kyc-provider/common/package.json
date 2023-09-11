@@ -1,0 +1,34 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "exports": {
+    ".": {
+      "node": "./cjs/index.js",
+      "default": "./esm/index.js"
+    },
+    "./party": {
+      "node": "./cjs/party.js",
+      "default": "./esm/party.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "lint": "eslint \"src/**/*\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "rm -r dist ; mkdir dist && npm run build:cjs && npm run build:esm && node bundle",
+    "build:cjs": "tsc --build --clean && tsc --target es5 --module commonjs && mv lib dist/cjs",
+    "build:esm": "tsc --build --clean && tsc --target es2015 --module es2015 && mv lib dist/esm"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^9.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}

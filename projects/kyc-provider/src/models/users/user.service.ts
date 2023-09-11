@@ -1,5 +1,4 @@
-import { type IUser, User } from './user';
-import { UserFirestore } from './user.firestore';
+import { type IUser, User, UserFirestore } from '@local/common';
 import {
 	Firestore,
 	collection,
@@ -65,7 +64,15 @@ export class UserService {
 	async create(data: IUser) {
 		const now = serverTimestamp();
 
-		const user = new User('', data.auth_uid, data.name, data.image_url, now as any, now as any);
+		const user = new User(
+			'',
+			data.auth_uid,
+			data.name,
+			data.image_url,
+			data.client_id,
+			now as any,
+			now as any
+		);
 
 		const doc = await addDoc(this.collection(), user);
 

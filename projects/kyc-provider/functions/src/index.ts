@@ -1,19 +1,13 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { initializeApp, cert } from 'firebase-admin/app';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+initializeApp({
+	credential: cert(resolve(__dirname, './service-account.json'))
+});
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+export { firestoreBackup } from './firestore-backup/index.js';
+export { onCreate as onCreateUser } from './users/controller.js';
+export { getKycToken } from './get-kyc-token.js';

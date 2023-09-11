@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { formula } from 'svelte-formula';
-	import type { AddressProof } from '../models/users';
-	import { evmWalletManager, cosmosWalletManager } from '../models/state';
+	import { evmWalletManager, cosmosWalletManager, addressProofService } from '../models/state';
 	import { signMessage } from '@wagmi/core';
+	import type { User } from '@local/common';
+
+	export let user: User;
 
 	let processing = false;
-	let addressProofs: AddressProof[] = [];
+
+	const addressProofs = addressProofService.list(user.id);
 	let chain = '';
 
 	const chains = [
@@ -31,68 +34,87 @@
 		formValidators
 	});
 
-	function removeAddress(i: number) {
-		addressProofs.splice(i, 1);
-		addressProofs = addressProofs;
-	}
+	async function removeAddress(i: number) {}
 
 	function getMessage(address: string) {
 		return `The owner of the address ${address} declares that he/she agrees to the KYC process and terms.`;
 	}
 
-	async function addAddress() {
-		switch (chain) {
-			case 'evm': {
-				if (evmWalletManager.ethereumClient.getAccount().address === undefined) {
-					await evmWalletManager.web3modal.openModal();
-				}
-				const account = evmWalletManager.ethereumClient.getAccount();
-				const address = account.address;
-				if (!address) {
-					return;
-				}
-				const message = getMessage(address);
-				const signatureHex = (await signMessage({ message })).substring(2);
+	async function submit() {
+		processing = true;
 
-				addressProofs = [
-					...addressProofs,
-					{
+		try {
+			switch (chain) {
+				case 'evm': {
+					if (evmWalletManager.ethereumClient.getAccount().address === undefined) {
+						await evmWalletManager.web3modal.openModal();
+					}
+					const account = evmWalletManager.ethereumClient.getAccount();
+					const address = account.address;
+					if (!address) {
+						return;
+					}
+					const message = getMessage(address);
+					const signatureHex = (await signMessage({ message })).substring(2);
+
+					await addressProofService.create({
+						user_id: user.id,
 						address,
 						message_hex: Buffer.from(message).toString('hex'),
 						signature_hex: signatureHex
-					}
-				];
+					});
 
-				break;
-			}
-			default: {
-				const chainWallet = cosmosWalletManager.getChainWallet(chain, 'keplr-extension');
-				chainWallet.activate();
-				await chainWallet.connect(true);
-
-				const address = chainWallet.address;
-				if (!address) {
-					return;
+					break;
 				}
-				const result = await chainWallet.sign([], undefined, getMessage(address));
-				const signature = result.signatures[0];
-				const signatureHex = Buffer.from(signature).toString('hex');
+				default: {
+					const chainWallet = cosmosWalletManager.getChainWallet(chain, 'keplr-extension');
+					chainWallet.activate();
+					await chainWallet.connect(true);
 
-				console.log(result);
+					const address = chainWallet.address;
+					if (!address) {
+						return;
+					}
+					if (!chainWallet.client.signArbitrary) {
+						return;
+					}
+					const message = getMessage(address);
+					const result = await chainWallet.client.signArbitrary(
+						chainWallet.chainId,
+						address,
+						message
+					);
+					const signatureBase64 = result.signature;
+					console.log(signatureBase64);
+					const signatureHex = Buffer.from(signatureBase64, 'base64').toString('hex');
+					console.log(signatureHex);
 
-				break;
+					await addressProofService.create({
+						user_id: user.id,
+						address,
+						message_hex: Buffer.from(message).toString('hex'),
+						signature_hex: signatureHex
+					});
+
+					break;
+				}
 			}
+		} catch (e) {
+			console.error(e);
+		} finally {
+			processing = false;
 		}
 	}
-
-	async function submit() {}
 </script>
 
 <div class="card bg-base-100 shadow-xl">
 	<div class="card-body">
 		<h2 class="card-title">Verify Your Addresses</h2>
-		<form on:submit={submit}>
-			{#each addressProofs as addressProof, i}
+
+		{#await addressProofs}
+			<div class="loading loading-ring loading-lg mx-auto" />
+		{:then addressProofs}
+			{#each addressProofs || [] as addressProof, i}
 				<div class="form-control w-full">
 					<span class="label">
 						<span class="label-text">Address</span>
@@ -124,7 +146,9 @@
 					</span>
 				</div>
 			{/each}
+		{/await}
 
+		<form on:submit={submit}>
 			<div class="form-control w-full">
 				<span class="label">
 					<span class="label-text">Add Your Address</span>
@@ -142,14 +166,6 @@
 							<option value={chain.value}>{chain.display}</option>
 						{/each}
 					</select>
-					<button
-						type="button"
-						class="join-item btn btn-neutral"
-						disabled={processing}
-						on:click={addAddress}
-					>
-						Add
-					</button>
 				</div>
 				<span class="label">
 					<span class="label-text" />
@@ -158,7 +174,9 @@
 			</div>
 
 			<div class="card-actions justify-end">
-				<button class="btn btn-primary" disabled={!$isFormValid || processing}> Submit </button>
+				<button class="btn btn-primary" disabled={!$isFormValid || processing}>
+					Add Address
+				</button>
 			</div>
 		</form>
 	</div>

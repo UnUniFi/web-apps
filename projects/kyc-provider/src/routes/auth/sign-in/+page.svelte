@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { formula } from 'svelte-formula';
+	import { authService } from '../../../models/state';
+	import { GoogleAuthProvider } from 'firebase/auth';
 
 	let processing = false;
 	let email = '';
@@ -13,7 +15,9 @@
 		formValidators
 	});
 
-	function signInGoogle() {}
+	function signInGoogle() {
+		authService.signIn(new GoogleAuthProvider());
+	}
 
 	function signInGithub() {}
 

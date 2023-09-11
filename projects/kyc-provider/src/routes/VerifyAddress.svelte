@@ -51,9 +51,7 @@
 		try {
 			switch (chain) {
 				case 'evm': {
-					if (evmWalletManager.ethereumClient.getAccount().address === undefined) {
-						await evmWalletManager.web3modal.openModal();
-					}
+					await evmWalletManager.web3modal.openModal();
 					const account = evmWalletManager.ethereumClient.getAccount();
 					const address = account.address;
 					if (!address) {
@@ -166,6 +164,7 @@
 						placeholder="Chain"
 						class="join-item select select-bordered w-full"
 						class:input-error={$touched.chain && !$validity.chain}
+						required
 						bind:value={chain}
 						name="chain"
 					>

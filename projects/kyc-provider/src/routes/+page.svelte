@@ -3,14 +3,18 @@
 	import VerifyAddress from './VerifyAddress.svelte';
 	import VerifyUser from './VerifyUser.svelte';
 
-	if (auth.currentUser === null) {
-		location.href = '/auth/sign-in';
-	}
+	auth.authStateReady().then(() => {
+		if (auth.currentUser === null) {
+			location.href = '/auth/sign-in';
+		}
+	});
 
-	const userId = userService.userIdByAuthUid(auth.currentUser!.uid);
+	const userId = auth
+		.authStateReady()
+		.then(() => userService.userIdByAuthUid(auth.currentUser!.uid));
 
-	const user = userId.then(async (id) => {
-		return id ? await userService.get(id) : undefined;
+	const user = userId.then((id) => {
+		return id ? userService.get(id) : undefined;
 	});
 </script>
 

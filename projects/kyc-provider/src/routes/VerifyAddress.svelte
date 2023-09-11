@@ -7,8 +7,13 @@
 	export let user: User;
 
 	let processing = false;
+	let reload = true;
 
-	const addressProofs = addressProofService.list(user.id);
+	let addressProofs = addressProofService.list(user.id);
+
+	$: if (reload) {
+		addressProofs = addressProofService.list(user.id);
+	}
 	let chain = '';
 
 	const chains = [
@@ -29,7 +34,7 @@
 	const validators = {};
 	const formValidators = {};
 
-	const { touched, validity, isFormValid } = formula({
+	const { form, touched, validity, isFormValid } = formula({
 		validators,
 		formValidators
 	});
@@ -63,6 +68,7 @@
 						message_hex: Buffer.from(message).toString('hex'),
 						signature_hex: signatureHex
 					});
+					reload = true;
 
 					break;
 				}
@@ -95,6 +101,7 @@
 						message_hex: Buffer.from(message).toString('hex'),
 						signature_hex: signatureHex
 					});
+					reload = true;
 
 					break;
 				}
@@ -148,7 +155,7 @@
 			{/each}
 		{/await}
 
-		<form on:submit={submit}>
+		<form use:form on:submit={submit}>
 			<div class="form-control w-full">
 				<span class="label">
 					<span class="label-text">Add Your Address</span>

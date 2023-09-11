@@ -19,8 +19,9 @@
 		formValidators
 	});
 
-	function signUpGoogle() {
-		authService.signUp(new GoogleAuthProvider());
+	async function signUpGoogle() {
+		await authService.signUp(new GoogleAuthProvider());
+		location.href = '/';
 	}
 
 	function signUpGithub() {}

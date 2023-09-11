@@ -8,6 +8,9 @@ import { FunctionsService } from './functions';
 import { UserService } from './users/user.service';
 import { AuthService } from './auth.service';
 import { AddressProofService } from './users/address-proofs/address-proof.service';
+import { Buffer } from 'buffer';
+
+window.Buffer = Buffer;
 
 export const evmWalletManager = getEvmWalletManager();
 export const cosmosWalletManager = getCosmosWalletManager();

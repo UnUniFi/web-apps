@@ -13,7 +13,7 @@
 	const validators = {};
 	const formValidators = {};
 
-	const { touched, validity, isFormValid } = formula({
+	const { form, touched, validity, isFormValid } = formula({
 		validators,
 		formValidators
 	});
@@ -25,9 +25,23 @@
 
 		try {
 			const email = auth.currentUser?.email || '';
-			const token = functionsService.getKycToken(givenName, familyName, email);
+			const result = await functionsService.getKycToken(givenName, familyName, email);
+			const token = result.data;
+
 			complyCube = (window as any).ComplyCube.mount({
 				token,
+				containerId: 'complycube-mount',
+				stages: [
+					'intro',
+					'documentCapture',
+					{
+						name: 'faceCapture',
+						options: {
+							mode: 'video'
+						}
+					},
+					'completion'
+				],
 				onComplete
 			});
 		} catch (error) {
@@ -51,7 +65,7 @@
 <div class="card bg-base-100 shadow-xl">
 	<div class="card-body">
 		<h2 class="card-title">Verify Your Identity</h2>
-		<form on:submit={startVerification}>
+		<form use:form on:submit={startVerification}>
 			{#if !user.client_id}
 				<div class="form-control w-full">
 					<span class="label">

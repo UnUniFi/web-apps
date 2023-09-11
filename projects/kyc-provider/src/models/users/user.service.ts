@@ -46,7 +46,10 @@ export class UserService {
 	}
 
 	get(id: string) {
-		return getDoc(this.document(id)).then((snapshot) => snapshot.data() as User);
+		return getDoc(this.document(id)).then((snapshot) => {
+			console.log(snapshot);
+			return snapshot.data() as User;
+		});
 	}
 
 	list() {

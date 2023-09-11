@@ -46,7 +46,8 @@ export class AuthService {
 		await this.userService.create({
 			auth_uid: credential.user.uid,
 			name: credential.user.displayName || '',
-			image_url: credential.user.photoURL || ''
+			image_url: credential.user.photoURL || '',
+			client_id: ''
 		});
 
 		return credential;
@@ -78,15 +79,6 @@ export class AuthService {
 			await this.auth.currentUser?.delete();
 			throw { code: 'ext/user-not-found' };
 		}
-
-		// Create User document on firestore
-		await this.userService.create({
-			auth_uid: credential.user.uid,
-			name: credential.user.displayName || '',
-			image_url: credential.user.photoURL || '',
-			client_id: '',
-			address_proofs: []
-		});
 
 		return credential;
 	}

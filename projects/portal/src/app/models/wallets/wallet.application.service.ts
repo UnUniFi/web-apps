@@ -18,6 +18,7 @@ import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
 import { WalletType, StoredWallet, ExternalWallet } from './wallet.model';
 import { WalletService } from './wallet.service';
+import { Web3ModalService } from './web3modal/web3modal.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -33,6 +34,7 @@ export class WalletApplicationService {
     private readonly keplrService: KeplrService,
     private readonly leapService: LeapService,
     private readonly metaMaskService: MetaMaskService,
+    private readonly web3ModalService: Web3ModalService,
     private readonly dialog: Dialog,
     private snackBar: MatSnackBar,
     private loadingDialog: LoadingDialogService,
@@ -204,9 +206,12 @@ export class WalletApplicationService {
           const address = await this.metaMaskService.getEthAddress();
           return { walletType: WalletType.metamask, address: address };
         case WalletType.walletConnect:
-          // return await this.connectExternalWallet(this.walletConnectService);
-          this.snackBar.open('WalletConnect is not supported yet.', 'Close');
-          return;
+          const wallet = this.web3ModalService.getEvmWalletManager();
+          console.log(wallet);
+          return {
+            walletType: WalletType.walletConnect,
+            address: wallet.ethereumClient.getAccount().address,
+          };
         default:
           return;
       }

@@ -10,7 +10,7 @@
 	const validators = {};
 	const formValidators = {};
 
-	const { touched, validity, isFormValid } = formula({
+	const { form, touched, validity, isFormValid } = formula({
 		validators,
 		formValidators
 	});
@@ -36,7 +36,7 @@
 				GitHub
 			</button>
 		</div>
-		<form on:submit={signInEmail}>
+		<form use:form on:submit={signInEmail}>
 			<div class="form-control w-full">
 				<span class="label">
 					<span class="label-text">Email</span>

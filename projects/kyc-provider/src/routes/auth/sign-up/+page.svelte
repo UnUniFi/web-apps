@@ -14,7 +14,7 @@
 			values.password === values.passwordMatch ? null : 'Passwords Must Match'
 	};
 
-	const { touched, validity, isFormValid } = formula({
+	const { form, touched, validity, isFormValid } = formula({
 		validators,
 		formValidators
 	});
@@ -40,7 +40,7 @@
 				GitHub
 			</button>
 		</div>
-		<form on:submit={signUpEmail}>
+		<form use:form on:submit={signUpEmail}>
 			<div class="form-control w-full">
 				<span class="label">
 					<span class="label-text">Email</span>

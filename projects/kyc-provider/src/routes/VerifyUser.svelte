@@ -2,6 +2,7 @@
 	import { formula } from 'svelte-formula';
 	import { auth, functionsService } from '../models/state';
 	import type { User } from '@local/common';
+	import { onDestroy } from 'svelte';
 
 	export let user: User;
 
@@ -18,7 +19,7 @@
 		formValidators
 	});
 
-	let complyCube = {};
+	let complyCube: any = {};
 
 	async function startVerification() {
 		processing = true;
@@ -31,18 +32,10 @@
 			complyCube = (window as any).ComplyCube.mount({
 				token,
 				containerId: 'complycube-mount',
-				stages: [
-					'intro',
-					'documentCapture',
-					{
-						name: 'faceCapture',
-						options: {
-							mode: 'video'
-						}
-					},
-					'completion'
-				],
-				onComplete
+				onComplete,
+				onError: (e: any) => {
+					console.error(e);
+				}
 			});
 		} catch (error) {
 			console.error(error);
@@ -55,6 +48,12 @@
 		console.log('Capture complete', data);
 		location.href = '/';
 	}
+
+	onDestroy(() => {
+		if (complyCube.unmount) {
+			complyCube.unmount();
+		}
+	});
 </script>
 
 <svelte:head>
@@ -111,7 +110,7 @@
 				</div>
 			{/if}
 			<div class="card-actions justify-end">
-				<button class="btn btn-primary" disabled={!$isFormValid || processing}> Submit </button>
+				<button class="btn btn-primary" disabled={!$isFormValid || processing}> Start </button>
 			</div>
 		</form>
 	</div>

@@ -20,8 +20,8 @@ import cosmosclient from '@cosmos-client/core';
   providedIn: 'root',
 })
 export class YieldAggregatorApplicationService {
-  // todo
-  ununifiContractAddress = '';
+  // todo enter contract address
+  ununifiContractAddress = 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w';
 
   constructor(
     private readonly router: Router,
@@ -96,6 +96,7 @@ export class YieldAggregatorApplicationService {
 
     const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
     if (!chain?.iyaSourceChannel || !chain?.iyaSourcePort) {
+      alert('No chain info for ' + externalChainName);
       return;
     }
     const now = new Date();
@@ -115,6 +116,7 @@ export class YieldAggregatorApplicationService {
 
     const txHash = await this.externalCosmosApp.broadcast(
       externalChainName,
+      externalAddress,
       walletType,
       msg,
       pubKey,

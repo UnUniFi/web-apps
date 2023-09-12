@@ -55,30 +55,9 @@ export class ExternalCosmosTxService {
     return txBuilder;
   }
 
-  async getBaseAccount(
-    id: string,
-    cosmosPublicKey: cosmosclient.PubKey,
-  ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
-    const sdk = await this.cosmwasmSdkService.sdk(id).then((sdk) => sdk.rest);
-    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
-    const account = await cosmosclient.rest.auth
-      .account(sdk, accAddress)
-      .then((res) =>
-        cosmosclient.codec.protoJSONToInstance(
-          cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
-        ),
-      )
-      .catch((_) => undefined);
-    const baseAccount = convertUnknownAccountToBaseAccount(account);
-    if (!baseAccount) {
-      throw Error('Unused Account or Unsupported Account Type!');
-    }
-    return baseAccount;
-  }
-
   async getBaseAccountFromAddress(
     chainId: string,
-    address: cosmosclient.AccAddress,
+    address: string,
   ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
     const sdk = await this.cosmwasmSdkService.sdk(chainId).then((sdk) => sdk.rest);
     const account = await cosmosclient.rest.auth

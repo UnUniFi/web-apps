@@ -20,6 +20,7 @@ export class ExternalCosmosApplicationService {
 
   async broadcast(
     chainName: string,
+    address: string,
     walletType: WalletType,
     msg: any,
     pubkey: Uint8Array,
@@ -29,10 +30,9 @@ export class ExternalCosmosApplicationService {
       console.error('Invalid Pubkey.');
       return;
     }
-    const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const account = await this.externalCosmosTxService.getBaseAccountFromAddress(
       chainName,
-      accAddress,
+      address,
     );
     if (!account) {
       this.snackBar.open(`Unsupported account type.`, 'Close');
@@ -51,9 +51,9 @@ export class ExternalCosmosApplicationService {
         account,
       );
 
-      const signerBaseAccount = await this.externalCosmosTxService.getBaseAccount(
+      const signerBaseAccount = await this.externalCosmosTxService.getBaseAccountFromAddress(
         chainName,
-        cosmosPublicKey,
+        address,
       );
       if (!signerBaseAccount) {
         throw Error('Unsupported Account!');

@@ -217,10 +217,10 @@ const strategiesInfo = [
 const externalChains = [
   {
     id: 'cosmoshub',
-    chainId: 'cosmoshub-4',
-    chainName: 'Cosmos Hub',
-    rpc: 'https://rpc-cosmoshub.keplr.app',
-    rest: 'https://lcd-cosmoshub.keplr.app',
+    chainId: 'theta-testnet-001',
+    chainName: 'Cosmos Hub testnet',
+    rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
+    rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'cosmos',
@@ -266,10 +266,12 @@ const externalChains = [
   },
   {
     id: 'osmosis',
-    chainId: 'osmosis-1',
-    chainName: 'Osmosis',
-    rpc: 'https://rpc-osmosis.keplr.app',
-    rest: 'https://lcd-osmosis.keplr.app',
+    chainId: 'osmo-test-5',
+    chainName: 'Osmosis testnet',
+    rpc: 'https://rpc.osmotest5.osmosis.zone',
+    rest: 'https://lcd.osmotest5.osmosis.zone',
+    iyaSourcePort: 'transfer',
+    iyaSourceChannel: 'channel-1493',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',

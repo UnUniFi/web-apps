@@ -176,6 +176,117 @@ const denomMetadata = [
   },
 ];
 
+const externalChains = [
+  {
+    id: 'cosmoshub',
+    chainId: 'theta-testnet-001',
+    chainName: 'Cosmos Hub testnet',
+    rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
+    rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'cosmos',
+      bech32PrefixAccPub: 'cosmospub',
+      bech32PrefixConsAddr: 'cosmosvalcons',
+      bech32PrefixConsPub: 'cosmosvalconspub',
+      bech32PrefixValAddr: 'cosmosvaloper',
+      bech32PrefixValPub: 'cosmosvaloperpub',
+    },
+    currencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+        gasPriceStep: {
+          average: 0.025,
+          high: 0.03,
+          low: 0.01,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDecimals: 6,
+      coinDenom: 'ATOM',
+      coinGeckoId: 'cosmos',
+      coinMinimalDenom: 'uatom',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+    },
+  },
+  {
+    id: 'osmosis',
+    chainId: 'osmo-test-5',
+    chainName: 'Osmosis testnet',
+    rpc: 'https://rpc.osmotest5.osmosis.zone',
+    rest: 'https://lcd.osmotest5.osmosis.zone',
+    iyaSourcePort: 'transfer',
+    iyaSourceChannel: 'channel-1493',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'osmo',
+      bech32PrefixAccPub: 'osmopub',
+      bech32PrefixValAddr: 'osmovaloper',
+      bech32PrefixValPub: 'osmovaloperpub',
+      bech32PrefixConsAddr: 'osmovalcons',
+      bech32PrefixConsPub: 'osmovalconspub',
+    },
+    currencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+      },
+      {
+        coinDenom: 'ION',
+        coinMinimalDenom: 'uion',
+        coinDecimals: 6,
+        coinGeckoId: 'ion',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uion.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+        gasPriceStep: {
+          low: 0.0025,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDenom: 'OSMO',
+      coinMinimalDenom: 'uosmo',
+      coinDecimals: 6,
+      coinGeckoId: 'osmosis',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+    },
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -193,6 +304,7 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    externalChains,
     extension: {
       faucet: [
         {

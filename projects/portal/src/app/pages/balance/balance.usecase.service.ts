@@ -66,7 +66,7 @@ export class BalanceUsecaseService {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return this.rest.getAccount$(cosmosAccAddress);
+        return this.rest.getAccount$(cosmosAccAddress.toString());
       }),
       map((account) => {
         const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
@@ -82,7 +82,7 @@ export class BalanceUsecaseService {
         if (!cosmosAccAddress) {
           return of(cosmosAccAddress);
         }
-        return this.rest.getAllBalances$(cosmosAccAddress);
+        return this.rest.getAllBalances$(cosmosAccAddress.toString());
       }),
     );
   }

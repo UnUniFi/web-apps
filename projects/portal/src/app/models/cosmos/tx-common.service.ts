@@ -63,7 +63,7 @@ export class TxCommonService {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const accAddress = cosmosclient.AccAddress.fromPublicKey(cosmosPublicKey);
     const account = await cosmosclient.rest.auth
-      .account(sdk, accAddress)
+      .account(sdk, accAddress.toString())
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
           cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
@@ -78,7 +78,7 @@ export class TxCommonService {
   }
 
   async getBaseAccountFromAddress(
-    address: cosmosclient.AccAddress,
+    address: string,
   ): Promise<cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | null | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const account = await cosmosclient.rest.auth

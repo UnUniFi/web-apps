@@ -47,7 +47,9 @@ export class DelegateFormDialogComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
     );
-    const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
+    const coins$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getAllBalances$(address.toString())),
+    );
     const config$ = this.configS.config$;
     this.denom$ = config$.pipe(map((config) => config?.minimumGasPrices[0].denom));
     this.balance$ = combineLatest([coins$, this.denom$]).pipe(

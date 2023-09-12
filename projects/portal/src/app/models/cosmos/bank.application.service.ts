@@ -103,7 +103,7 @@ export class BankApplicationService {
       throw Error('Invalid public key!');
     }
 
-    const fromAccount = await this.txCommon.getBaseAccountFromAddress(fromAddress);
+    const fromAccount = await this.txCommon.getBaseAccountFromAddress(fromAddress.toString());
     if (!fromAccount) {
       throw Error('Unsupported account type.');
     }

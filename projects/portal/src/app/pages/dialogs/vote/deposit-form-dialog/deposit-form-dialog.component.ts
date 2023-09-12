@@ -40,7 +40,7 @@ export class DepositFormDialogComponent implements OnInit {
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+      map((wallet) => wallet.address),
     );
     const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     const config$ = this.configS.config$;

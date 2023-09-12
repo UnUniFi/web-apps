@@ -100,7 +100,7 @@ export class StakingService {
 
     // get account info
     const account = await cosmosclient.rest.auth
-      .account(sdk, accAddress)
+      .account(sdk, accAddress.toString())
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
           cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),
@@ -255,7 +255,7 @@ export class StakingService {
 
     // get account info
     const account = await cosmosclient.rest.auth
-      .account(sdk, accAddress)
+      .account(sdk, accAddress.toString())
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
           cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),

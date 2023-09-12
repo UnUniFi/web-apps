@@ -69,9 +69,9 @@ export class CosmosRestService {
     );
   }
 
-  getAllBalances$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Balances[] | undefined> {
+  getAllBalances$(address: string): Observable<Balances[] | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, cosmosAccAddress)),
+      mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, address)),
       map((res) => res.data.balances),
       catchError(this._handleError),
     );
@@ -84,9 +84,9 @@ export class CosmosRestService {
     );
   }
 
-  getAccount$(cosmosAccAddress: cosmosclient.AccAddress): Observable<Accounts | undefined> {
+  getAccount$(address: string): Observable<Accounts | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.auth.account(sdk, cosmosAccAddress)),
+      mergeMap((sdk) => cosmosclient.rest.auth.account(sdk, address)),
       tap((res) => console.log(res.data.account)),
       map((res) => res.data.account),
       catchError(this._handleError),

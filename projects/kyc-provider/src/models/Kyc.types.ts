@@ -26,12 +26,14 @@ export type ExecuteMsg = {
 } | {
   remove_information_request: RemoveInformationRequestMsg;
 };
+export type Decimal = string;
 export type Uint128 = string;
 export interface UpdateParamsMsg {
   authority?: string | null;
 }
 export interface RegisterProviderMsg {
   address: string;
+  customer_fee_back_rate: Decimal;
   details: string;
   identity: string;
   information_fee: Coin;
@@ -46,6 +48,7 @@ export interface Coin {
 }
 export interface UpdateProviderMsg {
   address?: string | null;
+  customer_fee_back_rate?: Decimal | null;
   details?: string | null;
   id: number;
   identity?: string | null;
@@ -107,6 +110,7 @@ export interface Params {
 export type ArrayOfProvider = Provider[];
 export interface Provider {
   address: Addr;
+  customer_fee_back_rate: Decimal;
   details: string;
   id: number;
   identity: string;

@@ -3,7 +3,11 @@
     {
       "target": "ununifi-alpha-test",
       "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -22,7 +26,11 @@
     {
       "target": "ununifi-beta-test",
       "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -41,7 +49,11 @@
     {
       "target": "ununifi-test",
       "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -60,7 +72,11 @@
     {
       "target": "ununifi",
       "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "/explorer/**",
@@ -79,7 +95,11 @@
     {
       "target": "ununifi-stable",
       "public": "dist/landing-page",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "/explorer/**",

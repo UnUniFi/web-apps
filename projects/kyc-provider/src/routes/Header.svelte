@@ -16,7 +16,7 @@
 
 <header>
 	<div class="navbar glass px-4 sticky top-0 z-50 shadow-xl">
-		<h1 class="text-xl font-bold">UnUniFi KYC</h1>
+		<h1 class="text-xl font-bold">KYC</h1>
 		<span class="flex-auto" />
 		<div class="flex flex-row gap-4">
 			{#await user then user}

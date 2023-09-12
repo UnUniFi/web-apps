@@ -26,6 +26,10 @@
 			value: 'ununifi'
 		},
 		{
+			display: 'Neutron',
+			value: 'neutron'
+		},
+		{
 			display: 'Sei',
 			value: 'sei'
 		}

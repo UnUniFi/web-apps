@@ -6,7 +6,7 @@
 
 import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
-import { InstantiateMsg, ExecuteMsg, Uint128, UpdateParamsMsg, RegisterProviderMsg, Coin, UpdateProviderMsg, CreateVerificationMsg, RemoveVerificationMsg, RequestInformationMsg, ApproveInformationRequestMsg, RejectInformationRequestMsg, RemoveInformationRequestMsg, QueryMsg, Addr, ArrayOfInformationRequest, InformationRequest, Params, ArrayOfProvider, Provider, ArrayOfVerification, Verification } from "./Kyc.types";
+import { InstantiateMsg, ExecuteMsg, Decimal, Uint128, UpdateParamsMsg, RegisterProviderMsg, Coin, UpdateProviderMsg, CreateVerificationMsg, RemoveVerificationMsg, RequestInformationMsg, ApproveInformationRequestMsg, RejectInformationRequestMsg, RemoveInformationRequestMsg, QueryMsg, Addr, ArrayOfInformationRequest, InformationRequest, Params, ArrayOfProvider, Provider, ArrayOfVerification, Verification } from "./Kyc.types";
 export interface KycReadOnlyInterface {
   contractAddress: string;
   params: () => Promise<Params>;
@@ -78,6 +78,7 @@ export interface KycInterface extends KycReadOnlyInterface {
   }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
   registerProvider: ({
     address,
+    customerFeeBackRate,
     details,
     identity,
     informationFee,
@@ -86,6 +87,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     website
   }: {
     address: string;
+    customerFeeBackRate: Decimal;
     details: string;
     identity: string;
     informationFee: Coin;
@@ -95,6 +97,7 @@ export interface KycInterface extends KycReadOnlyInterface {
   }, fee?: number | StdFee | "auto", memo?: string, _funds?: Coin[]) => Promise<ExecuteResult>;
   updateProvider: ({
     address,
+    customerFeeBackRate,
     details,
     id,
     identity,
@@ -104,6 +107,7 @@ export interface KycInterface extends KycReadOnlyInterface {
     website
   }: {
     address?: string;
+    customerFeeBackRate?: Decimal;
     details?: string;
     id: number;
     identity?: string;
@@ -187,6 +191,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
   };
   registerProvider = async ({
     address,
+    customerFeeBackRate,
     details,
     identity,
     informationFee,
@@ -195,6 +200,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     website
   }: {
     address: string;
+    customerFeeBackRate: Decimal;
     details: string;
     identity: string;
     informationFee: Coin;
@@ -205,6 +211,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     return await this.client.execute(this.sender, this.contractAddress, {
       register_provider: {
         address,
+        customer_fee_back_rate: customerFeeBackRate,
         details,
         identity,
         information_fee: informationFee,
@@ -216,6 +223,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
   };
   updateProvider = async ({
     address,
+    customerFeeBackRate,
     details,
     id,
     identity,
@@ -225,6 +233,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     website
   }: {
     address?: string;
+    customerFeeBackRate?: Decimal;
     details?: string;
     id: number;
     identity?: string;
@@ -236,6 +245,7 @@ export class KycClient extends KycQueryClient implements KycInterface {
     return await this.client.execute(this.sender, this.contractAddress, {
       update_provider: {
         address,
+        customer_fee_back_rate: customerFeeBackRate,
         details,
         id,
         identity,

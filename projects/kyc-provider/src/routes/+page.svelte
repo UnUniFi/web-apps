@@ -3,12 +3,6 @@
 	import VerifyAddress from './VerifyAddress.svelte';
 	import VerifyUser from './VerifyUser.svelte';
 
-	auth.authStateReady().then(() => {
-		if (auth.currentUser === null) {
-			location.href = '/auth/sign-in';
-		}
-	});
-
 	const userId = auth
 		.authStateReady()
 		.then(() => userService.userIdByAuthUid(auth.currentUser!.uid));

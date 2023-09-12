@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { auth, userService } from '../models/state';
-
-	auth.authStateReady().then(() => {
-		if (auth.currentUser === null) {
-			location.href = '/auth/sign-in';
-		}
-	});
+	import { guard } from './auth-guard';
+	guard();
 
 	const userId = auth
 		.authStateReady()
 		.then(() =>
-			auth.currentUser!.uid ? userService.userIdByAuthUid(auth.currentUser!.uid) : undefined
+			auth.currentUser?.uid ? userService.userIdByAuthUid(auth.currentUser!.uid) : undefined
 		);
 
 	const user = userId.then((id) => {

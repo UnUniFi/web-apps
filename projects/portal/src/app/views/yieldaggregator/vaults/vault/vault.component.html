@@ -298,7 +298,7 @@
               />
             </label>
           </div>
-          <div class="form-control">
+          <div class="form-control" *ngIf="selectedChain.id === 'ununifi'">
             <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
@@ -325,20 +325,47 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
-              <span *ngIf="!selectedChain.cosmos"
-                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
-                  selectedChain.id
-                }}</span
-              >
+              <span>{{ denom | coinDenom | async }}</span>
             </label>
-            <span class="label" *ngIf="selectedChain.id === 'ununifi'">
+            <span class="label">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
                 {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
                 {{ denom | coinDenom | async }}
               </label>
             </span>
+          </div>
+
+          <div class="form-control" *ngIf="selectedChain.id !== 'ununifi'">
+            <label class="label">
+              <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span class="cursor-pointer" (click)="setMintAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(1)"> 100% </span>
+              </span>
+            </label>
+            <label class="input-group">
+              <input
+                #depositAmountRef
+                #depositAmountNgModelRef="ngModel"
+                required
+                type="number"
+                placeholder="0.000000"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                }"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="mintAmount"
+                name="mintAmount"
+                (input)="onDepositAmountChange()"
+              />
+              <span>
+                {{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{ selectedChain.id }}
+              </span>
+            </label>
           </div>
 
           <div class="form-control" *ngIf="!selectedChain.cosmos">

@@ -3,6 +3,13 @@
 	import Header from './Header.svelte';
 </script>
 
+<svelte:head>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+		rel="stylesheet"
+	/>
+</svelte:head>
+
 <div class="app bg-base-200">
 	<script src="static/config.js"></script>
 

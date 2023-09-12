@@ -28,8 +28,8 @@
 		<div class="flex flex-row gap-4">
 			<div class="flex-none">
 				<div class="dropdown dropdown-end">
-					<label tabindex="0" class="btn btn-ghost btn-sm btn-circle avatar">
-						<img src="" loading="lazy" width="32px" height="32px" class="rounded-full" />
+					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+						<span class="material-symbols-outlined"> wallet </span>
 					</label>
 					<div tabindex="0" class="dropdown-content card bg-base-100 shadow-xl w-96">
 						<div class="card-body">
@@ -40,7 +40,9 @@
 										bind:value={$currentChainWallet.address}
 										readonly
 									/>
-									<button type="button" class="join-item btn btn-info">Copy</button>
+									<button type="button" class="join-item btn btn-info">
+										<span class="material-symbols-outlined"> content_copy </span>
+									</button>
 								</div>
 							{/if}
 							<ul class="menu">

@@ -80,7 +80,6 @@
     "stream-http": "^3.2.0",
     "tslib": "^2.3.0",
     "ununifi-client": "^4.0.0-rc5",
-    "viem": "^1.10.9",
     "zone.js": "~0.13.1"
   },
   "devDependencies": {

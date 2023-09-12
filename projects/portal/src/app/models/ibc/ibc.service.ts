@@ -1,7 +1,7 @@
 import { BankService } from '../cosmos/bank.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { ibcproto } from '@cosmos-client/ibc';
+import ibcclient from '@cosmos-client/ibc';
 import Long from 'long';
 
 @Injectable({
@@ -31,7 +31,7 @@ export class IbcService {
         [amount.denom]: amount.readableAmount,
       })[0];
     }
-    let IHeightTimeout: ibcproto.ibc.core.client.v1.IHeight | undefined;
+    let IHeightTimeout: ibcclient.ibcproto.ibc.core.client.v1.IHeight | undefined;
     if (!timeoutHeight) {
       IHeightTimeout = undefined;
     } else {
@@ -42,7 +42,7 @@ export class IbcService {
     }
 
     const memoString = JSON.stringify(memo);
-    const msg = new ibcproto.ibc.applications.transfer.v1.MsgTransfer({
+    const msg = new ibcclient.ibcproto.ibc.applications.transfer.v1.MsgTransfer({
       source_port: sourcePort,
       source_channel: sourceChannel,
       token: coin,

@@ -102,7 +102,7 @@ export class YieldAggregatorApplicationService {
     const now = new Date();
     const after5min = now.getTime() + 5 * 60 * 1000;
     // todo
-    const memo = { depositor: address, vault_id: vaultId, denom: denom };
+    const memo = { depositor: address, vault_id: vaultId, swap_output_denom: denom };
     const msg = this.ibcService.buildMsgTransfer(
       chain.iyaSourcePort,
       chain.iyaSourceChannel,

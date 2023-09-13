@@ -101,7 +101,8 @@ export class YieldAggregatorApplicationService {
       return;
     }
     const now = new Date();
-    const after5min = now.getTime() + 5 * 60 * 1000;
+    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+    const timestamp = oneHourLater.getTime() * Math.pow(10, 6);
     // todo
     const memo: { wasm: DepositToVaultMsg } = {
       wasm: {
@@ -116,7 +117,7 @@ export class YieldAggregatorApplicationService {
       externalAddress,
       this.ununifiContractAddress,
       memo,
-      after5min,
+      timestamp,
       undefined,
       { readableAmount: readableAmount, denom: externalDenom },
     );

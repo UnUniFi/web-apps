@@ -218,7 +218,7 @@ export class VaultComponent implements OnInit, OnChanges {
           externalChainName: this.selectedChain.id,
           externalWallet: this.externalWallet,
           // TODO
-          externalDenom: this.vault.vault.denom,
+          externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
           readableAmount: this.mintAmount,
           denom: this.vault.vault.denom,
         });
@@ -228,7 +228,7 @@ export class VaultComponent implements OnInit, OnChanges {
           externalChainName: this.selectedChain.id,
           externalWallet: this.externalWallet,
           // TODO
-          externalDenom: this.vault.vault.denom,
+          externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
           readableAmount: this.mintAmount,
           denom: this.vault.vault.denom,
         });

@@ -153,7 +153,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 'osmosis',
       display: 'Osmosis',
-      disabled: true,
+      disabled: false,
       external: true,
       cosmos: true,
     },
@@ -212,6 +212,7 @@ export class VaultComponent implements OnInit, OnChanges {
         return;
       }
       if (this.selectedChain.cosmos) {
+        console.log(this.externalWallet);
         this.appDepositFromCosmos.emit({
           vaultId: this.vault.vault.id,
           externalChainName: this.selectedChain.id,

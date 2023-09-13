@@ -1,10 +1,5 @@
 <ng-container *ngIf="txDetail">
-  <div class="card bg-base-100 shadow-xl mb-4">
-    <div class="card-body">
-      <span class="badge badge-info"> {{ txDetail.txType }} </span>
-    </div>
-    <div class="overflow-x-auto">
-      <P>{{ txDetail | json }} </P>
-    </div>
+  <div class="mockup-code mt-2 mb-4">
+    <pre><code>{{ tx?.tx_response | json }}</code></pre>
   </div>
 </ng-container>

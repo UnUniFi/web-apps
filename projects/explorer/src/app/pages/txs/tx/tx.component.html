@@ -1,3 +1,3 @@
 <view-tx [tx]="tx$ | async"></view-tx>
-<app-tx-messages [txDetails]=" txDetails$ | async"></app-tx-messages>
-<view-tx-signature [txSignature]=" txSignature$ | async"></view-tx-signature>
+<app-tx-messages [tx]="tx$ | async" [txDetails]="txDetails$ | async"></app-tx-messages>
+<view-tx-signature [txSignature]="txSignature$ | async"></view-tx-signature>

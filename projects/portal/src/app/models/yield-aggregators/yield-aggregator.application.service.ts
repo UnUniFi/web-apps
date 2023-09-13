@@ -9,6 +9,7 @@ import { ExternalCosmosSdkService } from '../external-cosmos/external-cosmos-sdk
 import { ExternalCosmosApplicationService } from '../external-cosmos/external-cosmos.application.service';
 import { IbcService } from '../ibc/ibc.service';
 import { WalletType } from '../wallets/wallet.model';
+import { DepositToVaultMsg } from './YieldaggregatorAdapter.types';
 import { DepositToVaultFromEvmArg } from './yield-aggregator.model';
 import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -102,7 +103,13 @@ export class YieldAggregatorApplicationService {
     const now = new Date();
     const after5min = now.getTime() + 5 * 60 * 1000;
     // todo
-    const memo = { depositor: address, vault_id: vaultId, swap_output_denom: denom };
+    const memo: { wasm: DepositToVaultMsg } = {
+      wasm: {
+        depositor: address,
+        swap_output_denom: denom,
+        vault_id: parseInt(vaultId),
+      },
+    };
     const msg = this.ibcService.buildMsgTransfer(
       chain.iyaSourcePort,
       chain.iyaSourceChannel,

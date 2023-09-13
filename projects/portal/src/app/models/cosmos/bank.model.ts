@@ -6,12 +6,13 @@ export type BankSendRequest = {
 export const denomExponentMap: { [denom: string]: number } = {
   uguu: 6,
   uatom: 6,
+  uosmo: 6,
   ubtc: 6,
   ueth: 6,
   uusd: 6,
   uusdc: 6,
   udlp: 6,
-  '': 0,
+  '': 6,
 };
 
 const ibcPattern = /^ibc\//;

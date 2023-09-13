@@ -124,44 +124,44 @@ const denomMetadata = [
     symbol: 'DLP',
   },
   {
-    description: 'ATOM from Osmosis',
+    description: 'IBC token from transfer/channel-996/uatom',
     denom_units: [
       {
-        denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        denom: 'uatom',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-    name: 'ATOM from Osmosis',
+    name: 'transfer/channel-996/uatom',
     display: 'ATOM.osmosis',
     symbol: 'ATOM',
   },
   {
-    description: 'OSMO from Osmosis (deprecated)',
+    description: 'IBC token from transfer/channel-996/uosmo (deprecated)',
     denom_units: [
       {
-        denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+        denom: 'uosmo',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
-    name: 'OSMO (deprecated)',
+    name: 'IBC token from transfer/channel-996/uosmo (deprecated)',
     display: 'OSMO (deprecated)',
     symbol: 'OSMO',
   },
   {
-    description: 'OSMO from Osmosis',
+    description: 'IBC token from transfer/channel-1493/uosmo',
     denom_units: [
       {
-        denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+        denom: 'uosmo',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'OSMO',
+    name: 'transfer/channel-1493/uosmo IBC token',
     display: 'OSMO',
     symbol: 'OSMO',
   },

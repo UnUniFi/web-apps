@@ -323,6 +323,12 @@ const externalChains = [
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
   },
+  {
+    id: 'ethereum',
+    chainId: '5',
+    chainName: 'ethereum-2',
+    iyaContractAddress: '0xe432150cce91c13a887f7D836923d5597adD8E31',
+  },
 ];
 
 const configs = [

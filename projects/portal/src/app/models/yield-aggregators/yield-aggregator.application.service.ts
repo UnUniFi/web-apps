@@ -22,7 +22,7 @@ import cosmosclient from '@cosmos-client/core';
 })
 export class YieldAggregatorApplicationService {
   // todo enter contract address
-  ununifiContractAddress = 'ununifi155u042u8wk3al32h3vzxu989jj76k4zcu44v6w';
+  ununifiContractAddress = 'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
 
   constructor(
     private readonly router: Router,
@@ -104,11 +104,13 @@ export class YieldAggregatorApplicationService {
     const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
     const timestamp = oneHourLater.getTime() * Math.pow(10, 6);
     // todo
-    const memo: { wasm: DepositToVaultMsg } = {
+    const memo: { wasm: { deposit_to_vault: DepositToVaultMsg } } = {
       wasm: {
-        depositor: address,
-        swap_output_denom: denom,
-        vault_id: parseInt(vaultId),
+        deposit_to_vault: {
+          depositor: address,
+          swap_output_denom: denom,
+          vault_id: parseInt(vaultId),
+        },
       },
     };
     const msg = this.ibcService.buildMsgTransfer(

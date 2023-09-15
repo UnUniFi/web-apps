@@ -5,5 +5,8 @@
   [vaultsInfo]="vaultsInfo$ | async"
   [totalDeposited]="totalDeposited$ | async"
   [keyword]="keyword$ | async"
+  [sortType]="sortType$ | async"
+  [sortTypes]="sortTypes"
   (search)="appSearchValueChanged($event)"
+  (sort)="appSortValueChanged($event)"
 ></view-vaults>

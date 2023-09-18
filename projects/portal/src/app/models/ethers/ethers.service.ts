@@ -67,10 +67,7 @@ export class EthersService {
         parseUnits(arg.amount.toString()),
         { gasPrice: gasPrice, gasLimit: gasLimit },
       );
-      const dialogRef = this.loadingDialog.open('Mining');
-      await tx.wait();
-      dialogRef.close();
-      console.log('tx', tx);
+      tx.wait();
       return tx.hash;
     } catch (error) {
       console.error(error);

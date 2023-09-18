@@ -11,7 +11,7 @@ export type DepositToVaultFromCosmosRequest = {
   externalChainName: string;
   externalWallet: ExternalWallet;
   externalDenom: string;
-  denom: string;
+  vaultDenom: string;
   readableAmount: number;
 };
 
@@ -19,8 +19,8 @@ export type DepositToVaultFromEvmRequest = {
   vaultId: string;
   externalChainName: string;
   externalWallet: ExternalWallet;
-  externalDenom: string;
-  denom: string;
+  erc20Symbol: string;
+  vaultDenom: string;
   readableAmount: number;
 };
 

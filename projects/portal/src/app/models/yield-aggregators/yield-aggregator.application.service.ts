@@ -23,6 +23,7 @@ import cosmosclient from '@cosmos-client/core';
 export class YieldAggregatorApplicationService {
   // todo enter contract address
   ununifiContractAddress = 'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
+  neutronAddress = 'neutron155u042u8wk3al32h3vzxu989jj76k4zcwg0u68';
 
   constructor(
     private readonly router: Router,
@@ -146,9 +147,9 @@ export class YieldAggregatorApplicationService {
   async depositToVaultFromEvm(
     vaultId: string,
     externalChainName: string,
-    externalDenom: string,
+    erc20Symbol: string,
     denom: string,
-    amount: number,
+    readableAmount: number,
     externalAddress?: string,
   ) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
@@ -162,15 +163,17 @@ export class YieldAggregatorApplicationService {
       return;
     }
     const arg: DepositToVaultFromEvmArg = {
-      destinationChain: 'ununifi-beta-v1',
-      destinationAddress: this.ununifiContractAddress,
+      // destinationChain: 'ununifi',
+      destinationChain: 'neutron',
+      destinationAddress: this.neutronAddress,
       depositor: address,
-      vaultId: vaultId,
       vaultDenom: denom,
-      erc20: externalDenom,
-      amount: amount,
+      vaultId: vaultId,
+      // erc20: erc20Symbol,
+      erc20: 'aUSDC',
+      amount: readableAmount,
     };
-    const txHash = this.ethersService.connectContract(
+    const txHash = await this.ethersService.connectContract(
       chain.iyaContractAddress,
       chain.iyaContractABI,
       chain.iyaContractFunction,

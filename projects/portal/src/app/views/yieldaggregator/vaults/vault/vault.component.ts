@@ -110,8 +110,8 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'ethereum',
-      display: 'Ethereum',
-      disabled: true,
+      display: 'Ethereum (Test)',
+      disabled: false,
       external: true,
       cosmos: false,
     },
@@ -152,7 +152,7 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'osmosis',
-      display: 'Osmosis',
+      display: 'Osmosis (Test)',
       disabled: false,
       external: true,
       cosmos: true,
@@ -220,7 +220,7 @@ export class VaultComponent implements OnInit, OnChanges {
           // TODO
           externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
           readableAmount: this.mintAmount,
-          denom: this.vault.vault.denom,
+          vaultDenom: this.vault.vault.denom,
         });
       } else {
         this.appDepositFromEvm.emit({
@@ -228,9 +228,9 @@ export class VaultComponent implements OnInit, OnChanges {
           externalChainName: this.selectedChain.id,
           externalWallet: this.externalWallet,
           // TODO
-          externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
+          erc20Symbol: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
           readableAmount: this.mintAmount,
-          denom: this.vault.vault.denom,
+          vaultDenom: this.vault.vault.denom,
         });
       }
     }

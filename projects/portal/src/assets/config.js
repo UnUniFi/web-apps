@@ -327,7 +327,189 @@ const externalChains = [
     id: 'ethereum',
     chainId: '5',
     chainName: 'ethereum-2',
-    iyaContractAddress: '0xe432150cce91c13a887f7D836923d5597adD8E31',
+    iyaContractAddress: '0xc889f690dfd3d862868dcad9e8893dbbbf819f4a',
+    iyaContractFunction: 'depositToVault',
+    iyaContractABI: [
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'gateway_',
+            type: 'address',
+          },
+          {
+            internalType: 'address',
+            name: 'gasReceiver_',
+            type: 'address',
+          },
+          {
+            internalType: 'string',
+            name: 'chainName_',
+            type: 'string',
+          },
+        ],
+        stateMutability: 'nonpayable',
+        type: 'constructor',
+      },
+      {
+        inputs: [],
+        name: 'InvalidAddress',
+        type: 'error',
+      },
+      {
+        inputs: [],
+        name: 'NotApprovedByGateway',
+        type: 'error',
+      },
+      {
+        inputs: [],
+        name: 'chainName',
+        outputs: [
+          {
+            internalType: 'string',
+            name: '',
+            type: 'string',
+          },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+      },
+      {
+        inputs: [
+          {
+            internalType: 'string',
+            name: 'destinationChain',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'destinationAddress',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'depositor',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'vaultDenom',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'vaultId',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'symbol',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+        ],
+        name: 'depositToVault',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+      },
+      {
+        inputs: [
+          {
+            internalType: 'bytes32',
+            name: 'commandId',
+            type: 'bytes32',
+          },
+          {
+            internalType: 'string',
+            name: 'sourceChain',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'sourceAddress',
+            type: 'string',
+          },
+          {
+            internalType: 'bytes',
+            name: 'payload',
+            type: 'bytes',
+          },
+        ],
+        name: 'execute',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+      {
+        inputs: [
+          {
+            internalType: 'bytes32',
+            name: 'commandId',
+            type: 'bytes32',
+          },
+          {
+            internalType: 'string',
+            name: 'sourceChain',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'sourceAddress',
+            type: 'string',
+          },
+          {
+            internalType: 'bytes',
+            name: 'payload',
+            type: 'bytes',
+          },
+          {
+            internalType: 'string',
+            name: 'tokenSymbol',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+        ],
+        name: 'executeWithToken',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+      {
+        inputs: [],
+        name: 'gasService',
+        outputs: [
+          {
+            internalType: 'contract IAxelarGasService',
+            name: '',
+            type: 'address',
+          },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+      },
+      {
+        inputs: [],
+        name: 'gateway',
+        outputs: [
+          {
+            internalType: 'contract IAxelarGateway',
+            name: '',
+            type: 'address',
+          },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
   },
 ];
 

@@ -30,6 +30,10 @@
             <th>Timestamp</th>
             <td>{{ tx?.tx_response?.timestamp | date : 'yyyy-MM-dd a hh:mm:ss z' }}</td>
           </tr>
+          <tr>
+            <th>Raw Log</th>
+            <td>{{ tx?.tx_response?.raw_log | json }}</td>
+          </tr>
         </table>
       </div>
     </div>

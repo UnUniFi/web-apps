@@ -19,7 +19,6 @@ export class EthersService {
   async depositToVault(
     contractAddress: string,
     contractAbi: any[],
-    functionName: string,
     arg: DepositToVaultFromEvmArg,
     signerAddress?: string,
   ): Promise<string | undefined> {
@@ -67,6 +66,49 @@ export class EthersService {
         parseUnits(arg.amount.toString()),
         { gasPrice: gasPrice, gasLimit: gasLimit },
       );
+      tx.wait();
+      return tx.hash;
+    } catch (error) {
+      console.error(error);
+      this.snackBar.open(`Contract connection failed: ${error}`, 'Close');
+      return;
+    }
+  }
+
+  async send(
+    contractAddress: string,
+    contractAbi: any[],
+    distChain: string,
+    distAddress: string,
+    message: string,
+    signerAddress?: string,
+  ): Promise<string | undefined> {
+    try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        alert('Please install MetaMask extension.');
+        return;
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner(signerAddress);
+      const gasPrice = await provider.getGasPrice();
+      console.log('gasPrice', gasPrice.toString());
+
+      const connectedContract = new ethers.Contract(
+        contractAddress,
+        contractAbi, // artifacts/contracts/xxx.sol/xxx.json
+        signer,
+      );
+
+      const blockNum = await provider.getBlockNumber();
+      const block = await provider.getBlock(blockNum);
+      const gasLimit = block.gasLimit;
+
+      let tx = await connectedContract.send(distChain, distAddress, message, {
+        gasPrice: gasPrice,
+        gasLimit: gasLimit,
+      });
       tx.wait();
       return tx.hash;
     } catch (error) {

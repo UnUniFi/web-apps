@@ -327,7 +327,7 @@ const externalChains = [
     id: 'ethereum',
     chainId: '5',
     chainName: 'ethereum-2',
-    iyaContractAddress: '0xc889f690dfd3d862868dcad9e8893dbbbf819f4a',
+    iyaContractAddress: '0xa2aC5d5E4B223f90C5DD761b0511a611fE2Ceae4',
     iyaContractFunction: 'depositToVault',
     iyaContractABI: [
       {
@@ -372,49 +372,6 @@ const externalChains = [
           },
         ],
         stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'string',
-            name: 'destinationChain',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: 'destinationAddress',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: 'depositor',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: 'vaultDenom',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: 'vaultId',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: 'symbol',
-            type: 'string',
-          },
-          {
-            internalType: 'uint256',
-            name: 'amount',
-            type: 'uint256',
-          },
-        ],
-        name: 'depositToVault',
-        outputs: [],
-        stateMutability: 'payable',
         type: 'function',
       },
       {
@@ -504,6 +461,47 @@ const externalChains = [
             internalType: 'contract IAxelarGateway',
             name: '',
             type: 'address',
+          },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+      },
+      {
+        inputs: [
+          {
+            internalType: 'string',
+            name: 'destinationChain',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'destinationAddress',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'message',
+            type: 'string',
+          },
+        ],
+        name: 'send',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+      },
+      {
+        inputs: [],
+        name: 'storedMessage',
+        outputs: [
+          {
+            internalType: 'string',
+            name: 'sender',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'message',
+            type: 'string',
           },
         ],
         stateMutability: 'view',

@@ -217,6 +217,20 @@ const denomMetadata = [
   },
 ];
 
+const strategiesInfo = [
+  {
+    id: '0',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis ATOM/OSMO LP Strategy',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {

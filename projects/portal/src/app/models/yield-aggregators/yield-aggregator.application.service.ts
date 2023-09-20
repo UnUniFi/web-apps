@@ -173,7 +173,7 @@ export class YieldAggregatorApplicationService {
       erc20: 'aUSDC',
       amount: readableAmount,
     };
-    const txHash = await this.ethersService.connectContract(
+    const txHash = await this.ethersService.depositToVault(
       chain.iyaContractAddress,
       chain.iyaContractABI,
       chain.iyaContractFunction,

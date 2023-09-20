@@ -16,7 +16,7 @@ export class EthersService {
     private readonly snackBar: MatSnackBar,
   ) {}
 
-  async connectContract(
+  async depositToVault(
     contractAddress: string,
     contractAbi: any[],
     functionName: string,
@@ -57,7 +57,7 @@ export class EthersService {
       // );
       // console.log('estimatedGasLimit', estimatedGasLimit);
 
-      let tx = await connectedContract[functionName](
+      let tx = await connectedContract.depositToVault(
         arg.destinationChain,
         arg.destinationAddress,
         arg.depositor,

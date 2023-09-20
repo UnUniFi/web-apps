@@ -248,6 +248,7 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -279,6 +280,7 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [
         {
@@ -310,6 +312,7 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [],
       // monitor: {},
@@ -333,6 +336,7 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
     extension: {
       faucet: [],
       // monitor: {},

@@ -23,6 +23,7 @@ import cosmosclient from '@cosmos-client/core';
 export class YieldAggregatorApplicationService {
   // todo enter contract address
   ununifiContractAddress = 'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
+  neutronContractAddress = 'neutron1c33hsxnj9jxgwag3v9lq5qyey02cg8dq3r8erm67qht6r25w4rds6cyres';
   neutronAddress = 'neutron155u042u8wk3al32h3vzxu989jj76k4zcwg0u68';
 
   constructor(
@@ -165,8 +166,8 @@ export class YieldAggregatorApplicationService {
     const arg: DepositToVaultFromEvmArg = {
       // destinationChain: 'ununifi',
       destinationChain: 'neutron',
-      destinationAddress: this.neutronAddress,
-      depositor: address,
+      destinationAddress: this.neutronContractAddress,
+      depositor: this.neutronAddress,
       vaultDenom: denom,
       vaultId: vaultId,
       // erc20: erc20Symbol,

@@ -159,7 +159,7 @@ export class YieldAggregatorApplicationService {
     const { address } = prerequisiteData;
 
     const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
-    if (!chain?.iyaContractAddress || !chain.iyaContractABI || !chain.iyaContractFunction) {
+    if (!chain?.iyaContractAddress || !chain.iyaTokenAddress) {
       return;
     }
     const arg: DepositToVaultFromEvmArg = {
@@ -173,18 +173,10 @@ export class YieldAggregatorApplicationService {
       erc20: 'aUSDC',
       amount: readableAmount,
     };
-    // const txHash = await this.ethersService.depositToVault(
-    //   chain.iyaContractAddress,
-    //   chain.iyaContractABI,
-    //   arg,
-    //   externalAddress,
-    // );
-    const txHash = await this.ethersService.send(
+    const txHash = await this.ethersService.depositToVault(
       chain.iyaContractAddress,
-      chain.iyaContractABI,
-      arg.destinationChain,
-      arg.destinationAddress,
-      '',
+      chain.iyaTokenAddress,
+      arg,
       externalAddress,
     );
 

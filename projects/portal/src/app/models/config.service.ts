@@ -124,8 +124,7 @@ export type ChainInfoIYA = {
   iyaSourcePort?: string;
   iyaSourceChannel?: string;
   iyaContractAddress?: string;
-  iyaContractABI?: any[];
-  iyaContractFunction?: string;
+  iyaTokenAddress?: string;
   features?: string[];
 };
 

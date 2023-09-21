@@ -1,5 +1,6 @@
 import { MetaMaskService } from '../wallets/metamask/metamask.service';
 import { DepositToVaultFromEvmArg } from '../yield-aggregators/yield-aggregator.model';
+import { IERC20Abi, depositToVaultAbi } from './ethers.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { parseUnits } from '@ethersproject/units';
@@ -18,7 +19,7 @@ export class EthersService {
 
   async depositToVault(
     contractAddress: string,
-    contractAbi: any[],
+    tokenAddress: string,
     arg: DepositToVaultFromEvmArg,
     signerAddress?: string,
   ): Promise<string | undefined> {
@@ -28,17 +29,17 @@ export class EthersService {
         alert('Please install MetaMask extension.');
         return;
       }
+      const amount = arg.amount * 10 ** 6;
 
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner(signerAddress);
       const gasPrice = await provider.getGasPrice();
       console.log('gasPrice', gasPrice.toString());
 
-      const connectedContract = new ethers.Contract(
-        contractAddress,
-        contractAbi, // artifacts/contracts/xxx.sol/xxx.json
-        signer,
-      );
+      const deposit = new ethers.Contract(contractAddress, depositToVaultAbi, signer);
+      const usda = new ethers.Contract(tokenAddress, IERC20Abi, signer);
+      console.log(`decimals is ${await usda.decimals}`);
+      console.log(`gateway is ${await deposit.gateway()}`);
 
       const blockNum = await provider.getBlockNumber();
       const block = await provider.getBlock(blockNum);
@@ -56,17 +57,21 @@ export class EthersService {
       // );
       // console.log('estimatedGasLimit', estimatedGasLimit);
 
-      let tx = await connectedContract.depositToVault(
+      const approveTx = await usda.approve(deposit.address, amount);
+      const dialogRef = this.loadingDialog.open('Waiting for approval...');
+      await approveTx.wait();
+      dialogRef.close();
+      const sendTx = await deposit.depositToVault(
         arg.destinationChain,
         arg.destinationAddress,
         arg.depositor,
         arg.vaultDenom,
         arg.vaultId,
         arg.erc20,
-        parseUnits(arg.amount.toString()),
+        amount,
         { gasPrice: gasPrice, gasLimit: gasLimit },
       );
-      tx.wait();
+      const tx = sendTx.wait();
       return tx.hash;
     } catch (error) {
       console.error(error);

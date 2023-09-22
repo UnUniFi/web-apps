@@ -1,10 +1,11 @@
 <ng-container *ngIf="txDetail">
-  <div class="card bg-base-100 shadow-xl mb-4">
-    <div class="card-body">
-      <span class="badge badge-info"> {{ txDetail.txType }} </span>
-    </div>
-    <div class="overflow-x-auto">
-      <P>{{ txDetail | json }} </P>
+  <div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mb-4">
+    <input type="checkbox" />
+    <div class="collapse-title text-xl font-medium">Click to See Tx Response Detail</div>
+    <div class="collapse-content">
+      <div class="mockup-code mt-2">
+        <pre><code>{{ tx?.tx_response | json }}</code></pre>
+      </div>
     </div>
   </div>
 </ng-container>

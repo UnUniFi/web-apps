@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/openapi';
+import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi';
 
 @Component({
   selector: 'view-txs',
@@ -7,7 +7,7 @@ import { CosmosTxV1beta1GetTxsEventResponse } from '@cosmos-client/core/esm/open
   styleUrls: ['./txs.component.css'],
 })
 export class TxsComponent implements OnInit {
-  @Input() txsWithPagination?: CosmosTxV1beta1GetTxsEventResponse | null;
+  @Input() txs?: BroadcastTx200ResponseTxResponse[] | null;
 
   constructor() {}
 

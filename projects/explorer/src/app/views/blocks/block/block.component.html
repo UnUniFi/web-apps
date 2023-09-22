@@ -71,22 +71,20 @@
         </ng-template>
 
         <ng-template #existTransactions>
-          <mat-nav-list>
-            <mat-list-item
-              routerLink="/txs/{{ tx.txhash }}"
-              *ngFor="let tx of transactions?.tx_responses; let i = index"
-            >
-              <th class="font-mono">
-                {{ tx.txhash }}
-              </th>
-              <th>
-                {{ txTitles?.[i]?.txType }}
-              </th>
-              <th class="font-mono">
-                {{ txTitles?.[i]?.fromAddress }}
-              </th>
-            </mat-list-item>
-          </mat-nav-list>
+          <tr
+            routerLink="/txs/{{ tx.txhash }}"
+            *ngFor="let tx of transactions?.tx_responses; let i = index"
+          >
+            <th class="font-mono">
+              {{ tx.txhash }}
+            </th>
+            <th>
+              {{ txTitles?.[i]?.txType }}
+            </th>
+            <th class="font-mono">
+              {{ txTitles?.[i]?.fromAddress }}
+            </th>
+          </tr>
         </ng-template>
       </tbody>
     </table>

@@ -1,16 +1,14 @@
 <div class="card bg-base-100 shadow-xl mb-4">
   <div class="card-body">
-    <h2 class="card-title">Transactions</h2>
-    <ng-container *ngIf="txsWithPagination === null; then loading; else loaded"></ng-container>
+    <h2 class="card-title">Latest Transactions</h2>
+    <ng-container *ngIf="txs === null; then loading; else loaded"></ng-container>
     <ng-template #loading>
       <p class="text-center">
         <span class="loading loading-ring loading-lg"></span>
       </p>
     </ng-template>
     <ng-template #loaded>
-      <ng-container
-        *ngIf="!txsWithPagination?.tx_responses?.length; then empty; else filled"
-      ></ng-container>
+      <ng-container *ngIf="!txs?.length; then empty; else filled"></ng-container>
       <ng-template #empty>
         <p class="ml-4">*This account has no transactions</p>
       </ng-template>
@@ -24,7 +22,7 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let tx of txsWithPagination?.tx_responses"
+              *ngFor="let tx of txs"
               class="hover cursor-pointer"
               routerLink="{{ '/txs/' + tx.txhash }}"
             >

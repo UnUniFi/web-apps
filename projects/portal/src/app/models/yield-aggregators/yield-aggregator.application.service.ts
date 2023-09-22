@@ -162,23 +162,31 @@ export class YieldAggregatorApplicationService {
     const { address } = prerequisiteData;
 
     const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
-    if (!chain?.iyaContractAddress || !chain.iyaTokenAddress) {
+    if (!chain?.iyaContractAddress || !chain.iyaTokens) {
+      alert('No chain info for ' + externalChainName);
+      return;
+    }
+
+    const erc20 = chain.iyaTokens.find((token) => token.symbol === erc20Symbol);
+    if (!erc20) {
+      alert('Not certified for ' + erc20Symbol);
       return;
     }
     const arg: DepositToVaultFromEvmArg = {
       // destinationChain: 'ununifi',
       destinationChain: 'neutron',
       destinationAddress: this.neutronContractAddress,
+      // depositor: address,
       depositor: this.neutronAddress,
       vaultDenom: denom,
       vaultId: vaultId,
       // erc20: erc20Symbol,
       erc20: 'aUSDC',
-      amount: readableAmount,
+      amount: readableAmount * Math.pow(10, erc20.decimal || 6),
     };
     const txHash = await this.ethersService.depositToVault(
       chain.iyaContractAddress,
-      chain.iyaTokenAddress,
+      erc20.contractAddress,
       arg,
       externalAddress,
     );

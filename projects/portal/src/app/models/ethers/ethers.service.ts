@@ -30,7 +30,7 @@ export class EthersService {
       alert('Please install MetaMask extension.');
       return;
     }
-    const amount = arg.amount * 10 ** 6;
+    const amount = arg.amount;
 
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner(signerAddress);

@@ -328,7 +328,26 @@ const externalChains = [
     chainId: '5',
     chainName: 'ethereum-2',
     iyaContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
-    iyaTokenAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+    iyaTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    id: 'polygon',
+    chainId: '80001',
+    chainName: 'Polygon',
+    iyaContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
+    iyaTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
+        decimal: 6,
+      },
+    ],
   },
 ];
 

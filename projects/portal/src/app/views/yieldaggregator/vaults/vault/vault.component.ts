@@ -110,7 +110,7 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'ethereum',
-      display: 'Ethereum (Test)',
+      display: 'Ethereum (Goerli)',
       disabled: false,
       external: true,
       cosmos: false,
@@ -124,8 +124,8 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'polygon',
-      display: 'Polygon',
-      disabled: true,
+      display: 'Polygon (Mumbai)',
+      disabled: false,
       external: true,
       cosmos: false,
     },
@@ -152,7 +152,7 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'osmosis',
-      display: 'Osmosis (Test)',
+      display: 'Osmosis (osmo-test-5)',
       disabled: false,
       external: true,
       cosmos: true,
@@ -228,7 +228,7 @@ export class VaultComponent implements OnInit, OnChanges {
           externalChainName: this.selectedChain.id,
           externalWallet: this.externalWallet,
           // TODO
-          erc20Symbol: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
+          erc20Symbol: 'aUSDC',
           readableAmount: this.mintAmount,
           vaultDenom: this.vault.vault.denom,
         });

@@ -23,8 +23,10 @@ import cosmosclient from '@cosmos-client/core';
 export class YieldAggregatorApplicationService {
   // todo enter contract address
   ununifiContractAddress = 'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
-  neutronContractAddress = 'neutron1c33hsxnj9jxgwag3v9lq5qyey02cg8dq3r8erm67qht6r25w4rds6cyres';
-  neutronAddress = 'neutron155u042u8wk3al32h3vzxu989jj76k4zcwg0u68';
+  neutronContractAddress = 'neutron1curfjnyl4jhrggg5zuyu354xqrdh5r5k5qz47eq64lmcnn93whhqqdw507';
+  neutronAddress = 'neutron1m63dprapnud2sy3npvw5mgh4nw606u7xzypsu6';
+  osmoAddress = 'osmo155u042u8wk3al32h3vzxu989jj76k4zczv4wkj';
+  cosmosAddress = 'cosmos1m63dprapnud2sy3npvw5mgh4nw606u7xxmgjxa';
 
   constructor(
     private readonly router: Router,

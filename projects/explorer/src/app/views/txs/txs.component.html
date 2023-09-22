@@ -2,7 +2,7 @@
   <div class="flex flex-row flex-wrap mb-4">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li>Transactions</li>
+        <li>Latest Transactions</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
@@ -39,7 +39,7 @@
         <label class="label">
           <span class="label-text-alt"
             >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of
-            {{ pageLength }}items</span
+            {{ pageLength || 0 }}items</span
           >
         </label>
       </div>

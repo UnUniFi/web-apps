@@ -34,8 +34,9 @@ export class EthersService {
 
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner(signerAddress);
-    const gasPrice = await provider.getGasPrice();
-    console.log('gasPrice', gasPrice.toString());
+    const latestPrice = await provider.getGasPrice();
+    console.log('gasPrice', latestPrice.toString());
+    const gasPrice = latestPrice.mul(2);
 
     const deposit = new ethers.Contract(contractAddress, depositToVaultAbi, signer);
     const usda = new ethers.Contract(tokenAddress, IERC20Abi, signer);
@@ -45,6 +46,7 @@ export class EthersService {
     const blockNum = await provider.getBlockNumber();
     const block = await provider.getBlock(blockNum);
     const gasLimit = block.gasLimit;
+    console.log('gasLimit', gasLimit.toString());
 
     const approvalDialogRef = this.loadingDialog.open('Waiting for approval...');
     try {

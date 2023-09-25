@@ -192,6 +192,7 @@ export class YieldAggregatorApplicationService {
     );
 
     if (!txHash) {
+      console.log("txHash doesn't exist");
       return;
     }
     await this.dialog

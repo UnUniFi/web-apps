@@ -58,8 +58,9 @@ export class EthersService {
     }
 
     const dialogRef = this.loadingDialog.open('Sending...');
+    let tx;
     try {
-      const sendTx = await deposit.depositToVault(
+      tx = await deposit.depositToVault(
         arg.destinationChain,
         arg.destinationAddress,
         arg.depositor,
@@ -69,15 +70,14 @@ export class EthersService {
         amount,
         { gasPrice: gasPrice, gasLimit: gasLimit },
       );
-      const tx = sendTx.wait();
-      dialogRef.close();
-      return tx.hash;
+      tx.wait();
     } catch (error) {
       console.error(error);
       this.snackBar.open(`Contract connection failed: ${error}`, 'Close');
       return;
     } finally {
       dialogRef.close();
+      return tx.hash;
     }
   }
 

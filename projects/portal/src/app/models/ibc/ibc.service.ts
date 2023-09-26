@@ -42,6 +42,7 @@ export class IbcService {
     }
 
     const memoString = JSON.stringify(memo);
+    console.log('memo', memoString);
     const msg = new ibcclient.ibcproto.ibc.applications.transfer.v1.MsgTransfer({
       source_port: sourcePort,
       source_channel: sourceChannel,

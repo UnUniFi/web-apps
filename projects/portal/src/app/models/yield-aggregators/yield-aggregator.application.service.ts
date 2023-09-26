@@ -108,12 +108,15 @@ export class YieldAggregatorApplicationService {
     const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
     const timestamp = oneHourLater.getTime() * Math.pow(10, 6);
     // todo
-    const memo: { wasm: { deposit_to_vault: DepositToVaultMsg } } = {
+    const memo: { wasm: { contract: string; msg: { deposit_to_vault: DepositToVaultMsg } } } = {
       wasm: {
-        deposit_to_vault: {
-          depositor: address,
-          swap_output_denom: denom,
-          vault_id: parseInt(vaultId),
+        contract: this.ununifiContractAddress,
+        msg: {
+          deposit_to_vault: {
+            depositor: address,
+            swap_output_denom: denom,
+            vault_id: parseInt(vaultId),
+          },
         },
       },
     };

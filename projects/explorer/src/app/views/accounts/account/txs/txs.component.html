@@ -1,6 +1,32 @@
 <div class="card bg-base-100 shadow-xl mb-4">
   <div class="card-body">
-    <h2 class="card-title">Latest Transactions</h2>
+    <h2 class="card-title">Transactions</h2>
+    <div class="flex flex-wrap">
+      <span class="flex-auto"></span>
+      <div class="form-control">
+        <label class="input-group">
+          <select
+            class="select select-bordered w-20 sm:w-64"
+            [(ngModel)]="pageInfo && pageInfo.pageSize"
+            (change)="onPaginationChange()"
+          >
+            <option disabled selected>Select items amount</option>
+            <ng-container *ngFor="let size of pageSizeOptions">
+              <option [value]="size">{{ size }}</option>
+            </ng-container>
+          </select>
+          <button class="btn" (click)="onPaginationChange(1)">«</button>
+          <span>Page {{ (pageInfo && pageInfo.pageNumber) || 1 }}</span>
+          <button class="btn" (click)="onPaginationChange(2)">»</button>
+        </label>
+        <label class="label">
+          <span class="label-text-alt"
+            >{{ calcItemsIndex().start }} - {{ calcItemsIndex().end }} of
+            {{ pageLength }}items</span
+          >
+        </label>
+      </div>
+    </div>
     <ng-container *ngIf="txs === null; then loading; else loaded"></ng-container>
     <ng-template #loading>
       <p class="text-center">
@@ -18,6 +44,7 @@
             <tr>
               <th>Block Height</th>
               <td>Tx Hash</td>
+              <td>Timestamp</td>
             </tr>
           </thead>
           <tbody>
@@ -28,6 +55,9 @@
             >
               <th>{{ tx.height }}</th>
               <td class="font-mono">{{ tx.txhash }}</td>
+              <td>
+                {{ tx.timestamp | date : 'yy/MM/dd HH:mm' }}
+              </td>
             </tr>
           </tbody>
         </table>

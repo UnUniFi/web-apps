@@ -46,7 +46,9 @@ export class TxCommonApplicationService {
       this.snackBar.open(`Invalid public key.`, 'Close');
       return null;
     }
-    const account = await this.txCommon.getBaseAccountFromAddress(currentCosmosWallet.address);
+    const account = await this.txCommon.getBaseAccountFromAddress(
+      currentCosmosWallet.address.toString(),
+    );
     if (!account) {
       this.snackBar.open(`Unsupported account type.`, 'Close');
       return null;

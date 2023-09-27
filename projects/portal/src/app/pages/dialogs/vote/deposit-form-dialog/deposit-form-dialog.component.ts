@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
+import { GovV1Proposal200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -17,8 +17,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./deposit-form-dialog.component.css'],
 })
 export class DepositFormDialogComponent implements OnInit {
-  proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
-  proposalContent$: Observable<any | undefined>;
+  proposal$: Observable<GovV1Proposal200ResponseProposalsInner | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   denom$: Observable<string | undefined>;
   balance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
@@ -36,11 +35,10 @@ export class DepositFormDialogComponent implements OnInit {
   ) {
     this.proposalID = data;
     this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
-    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     const address$ = this.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => cosmosclient.AccAddress.fromString(wallet.address)),
+      map((wallet) => wallet.address),
     );
     const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
     const config$ = this.configS.config$;

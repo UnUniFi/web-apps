@@ -2,7 +2,7 @@
   <div class="text-xl breadcrumbs mb-4">
     <ul>
       <li routerLink=".."><a>Proposals</a></li>
-      <li># {{ proposal?.proposal_id }}</li>
+      <li># {{ proposal?.id }}</li>
     </ul>
   </div>
   <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
@@ -17,35 +17,21 @@
         <span class="badge badge-info badge-lg">
           {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
         </span>
-        <h2 class="card-title break-all">
-          # {{ proposal?.proposal_id }} {{ proposalContent?.title }}
-        </h2>
-
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr *ngFor="let content of proposalContent | keyvalue">
-                <th>{{ content.key }}</th>
-                <td>
-                  {{ jsonToSting(content.value) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 class="card-title break-all"># {{ proposal?.id }} {{ proposal?.title }}</h2>
 
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
-                <th>Type</th>
+                <th>Summary</th>
                 <td>
-                  {{
-                    proposalType?.substring(
-                      proposalType?.lastIndexOf('.')! + 1,
-                      proposalType?.length
-                    )
-                  }}
+                  {{ proposal?.summary }}
+                </td>
+              </tr>
+              <tr>
+                <th>Proposer</th>
+                <td>
+                  {{ proposal?.proposer }}
                 </td>
               </tr>
               <tr>
@@ -78,7 +64,7 @@
             <div class="stat-title">Yes</div>
             <div class="stat-value text-success">
               <span class="material-symbols-outlined">thumb_up</span>
-              {{ tally?.yes }}
+              {{ tally?.yes_count }}
             </div>
             <div class="stat-desc"></div>
           </div>
@@ -86,7 +72,7 @@
             <div class="stat-title">No</div>
             <div class="stat-value text-warning">
               <span class="material-symbols-outlined">thumb_down</span>
-              {{ tally?.no }}
+              {{ tally?.no_count }}
             </div>
             <div class="stat-desc"></div>
           </div>
@@ -94,7 +80,7 @@
             <div class="stat-title">No with Veto</div>
             <div class="stat-value text-error">
               <span class="material-symbols-outlined">not_interested</span>
-              {{ tally?.no_with_veto }}
+              {{ tally?.no_with_veto_count }}
             </div>
             <div class="stat-desc"></div>
           </div>
@@ -102,7 +88,7 @@
             <div class="stat-title">Abstain</div>
             <div class="stat-value text-primary">
               <span class="material-symbols-outlined">subtitles_off</span>
-              {{ tally?.abstain }}
+              {{ tally?.abstain_count }}
             </div>
             <div class="stat-desc"></div>
           </div>
@@ -127,7 +113,7 @@
           </table>
         </div>
 
-        <label class="cursor-pointer label">
+        <label class="cursor-pointer label" *ngIf="votes?.length">
           <span class="label-text mr-2">Voting Details</span>
           <input
             type="checkbox"
@@ -157,7 +143,7 @@
         <div class="card-actions justify-end">
           <button
             class="btn btn-outline btn-secondary w-full md:w-auto md:px-8 gap-2"
-            (click)="onClickVote(proposal?.proposal_id!)"
+            (click)="onClickVote(proposal?.id!)"
           >
             <span class="material-symbols-outlined">how_to_vote</span>Vote
           </button>
@@ -199,7 +185,7 @@
         <div class="card-actions justify-end">
           <button
             class="btn btn-outline btn-info px-8 gap-2"
-            (click)="onClickDeposit(proposal?.proposal_id!)"
+            (click)="onClickDeposit(proposal?.id!)"
           >
             <span class="material-symbols-outlined">add</span>Deposit
           </button>

@@ -32,7 +32,7 @@ export class BankQueryService {
     if (!denoms) {
       return this.restSdk$.pipe(
         mergeMap((sdk) =>
-          cosmosclient.rest.bank.allBalances(sdk, cosmosclient.AccAddress.fromString(address)),
+          cosmosclient.rest.bank.allBalances(sdk, address),
         ),
         map((res) => res.data.balances || []),
       );

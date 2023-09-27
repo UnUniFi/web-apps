@@ -52,7 +52,7 @@ export class KeyComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return this.cosmosRest.getAllBalances$(address).pipe(map((res) => res || []));
+        return this.cosmosRest.getAllBalances$(address.toString()).pipe(map((res) => res || []));
       }),
     );
 

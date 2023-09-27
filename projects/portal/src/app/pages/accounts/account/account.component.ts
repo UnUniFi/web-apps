@@ -44,7 +44,7 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of(undefined);
         }
-        return this.cosmosRest.getAccount$(address);
+        return this.cosmosRest.getAccount$(address.toString());
       }),
       map((account) => {
         const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
@@ -56,7 +56,7 @@ export class AccountComponent implements OnInit {
         if (address === undefined) {
           return of([]);
         }
-        return this.cosmosRest.getAllBalances$(address);
+        return this.cosmosRest.getAllBalances$(address.toString());
       }),
       map((balances) => balances || []),
     );

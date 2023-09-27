@@ -9,15 +9,12 @@
       <img class="m-6 w-12 h-12" src="assets/favicon.png" alt="UnUniFi logo" />
       <div class="font-bold text-xl m-3">Vote to this proposal</div>
     </div>
-    <ng-container *ngIf="proposalContent">
-      <ul class="menu w-full">
-        <li class="disabled">
-          <a class="text-base-content">
-            # {{ proposal?.proposal_id }} {{ proposalContent.title }}
-          </a>
-        </li>
-      </ul>
-    </ng-container>
+
+    <ul class="menu w-full">
+      <li class="disabled">
+        <a class="text-base-content"> # {{ proposal?.id }} {{ proposal?.title }} </a>
+      </li>
+    </ul>
 
     <div class="form-control w-full">
       <label class="label">

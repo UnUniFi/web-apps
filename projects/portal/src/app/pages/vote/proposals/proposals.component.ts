@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi/api';
+import { GovV1Proposal200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi/api';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./proposals.component.css'],
 })
 export class ProposalsComponent implements OnInit {
-  paginatedProposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  paginatedProposals$: Observable<GovV1Proposal200ResponseProposalsInner[]>;
   tallies$: Observable<
     { yes: number; no: number; abstain: number; noWithVeto: number; max: number }[]
   >;
@@ -23,7 +23,7 @@ export class ProposalsComponent implements OnInit {
   pageLength$: Observable<number | undefined>;
   pageSizeOptions = [5, 10, 15];
 
-  private proposals$: Observable<Proposals200ResponseProposalsInner[]>;
+  private proposals$: Observable<GovV1Proposal200ResponseProposalsInner[]>;
   private defaultPageSize = this.pageSizeOptions[1];
   private defaultPageNumber = 1;
 
@@ -68,10 +68,10 @@ export class ProposalsComponent implements OnInit {
     this.tallies$ = this.usecase.tallies$(this.proposals$, this.pageNumber$, this.pageSize$).pipe(
       map((tallies) =>
         tallies.map((tally) => {
-          const yes = this.lnValue(tally?.yes);
-          const no = this.lnValue(tally?.no);
-          const abstain = this.lnValue(tally?.abstain);
-          const noWithVeto = this.lnValue(tally?.no_with_veto);
+          const yes = this.lnValue(tally?.yes_count);
+          const no = this.lnValue(tally?.no_count);
+          const abstain = this.lnValue(tally?.abstain_count);
+          const noWithVeto = this.lnValue(tally?.no_with_veto_count);
           const max = Math.max(yes, no, abstain, noWithVeto);
           return { yes, no, abstain, noWithVeto, max };
         }),
@@ -97,10 +97,10 @@ export class ProposalsComponent implements OnInit {
   }
 
   getPaginatedProposals(
-    proposals: Proposals200ResponseProposalsInner[],
+    proposals: GovV1Proposal200ResponseProposalsInner[],
     pageNumber: number,
     pageSize: number,
-  ): Proposals200ResponseProposalsInner[] {
+  ): GovV1Proposal200ResponseProposalsInner[] {
     const max = proposals.length - (pageNumber - 1) * pageSize;
     const min = max - pageSize;
     return proposals.filter((_, i) => min <= i && i < max).reverse();

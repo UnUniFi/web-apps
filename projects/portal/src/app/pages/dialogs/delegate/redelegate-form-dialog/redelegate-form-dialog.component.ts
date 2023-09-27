@@ -65,7 +65,9 @@ export class RedelegateFormDialogComponent implements OnInit {
           )?.balance,
       ),
     );
-    const coins$ = address$.pipe(mergeMap((address) => this.cosmosRest.getAllBalances$(address)));
+    const coins$ = address$.pipe(
+      mergeMap((address) => this.cosmosRest.getAllBalances$(address.toString())),
+    );
     this.denom$ = this.delegateCoin$.pipe(map((coin) => coin?.denom));
     this.balance$ = combineLatest([coins$, this.denom$]).pipe(
       map(([coins, denom]) => coins?.find((coin) => coin.denom === denom)),

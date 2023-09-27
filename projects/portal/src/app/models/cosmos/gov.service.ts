@@ -70,7 +70,7 @@ export class GovService {
 
     // get account info
     const account = await cosmosclient.rest.auth
-      .account(sdk, fromAddress)
+      .account(sdk, fromAddress.toString())
       .then((res) =>
         cosmosclient.codec.protoJSONToInstance(
           cosmosclient.codec.castProtoJSONOfProtoAny(res.data?.account),

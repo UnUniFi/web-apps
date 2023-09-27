@@ -58,9 +58,12 @@ export class TxsComponent implements OnInit {
             [`message.module='${selectedTxType}'`],
             undefined,
             undefined,
-            undefined,
-            false,
+            '5',
             true,
+            true,
+            2 as any,
+            '1',
+            '5',
           )
           .then((res) => res.data.tx_responses)
           .catch((error) => {
@@ -68,7 +71,6 @@ export class TxsComponent implements OnInit {
             return [];
           });
       }),
-      map((latestTxs) => latestTxs?.reverse().slice(0, 5)),
     );
   }
 

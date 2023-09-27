@@ -2,10 +2,10 @@ import { ProposalContent } from '../proposals.component';
 import { Component, Input, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import {
-  Proposals200ResponseProposalsInner,
+  GovV1Proposal200ResponseProposalsInner,
   Deposits200ResponseDepositsInner,
-  Proposals200ResponseProposalsInnerFinalTallyResult,
-  Votes200ResponseVotesInner,
+  GovV1Proposal200ResponseProposalsInnerFinalTallyResult,
+  GovV1Votes200ResponseVotesInner,
   GovParams200ResponseDepositParams,
   GovParams200ResponseTallyParams,
   GovParams200ResponseVotingParams,
@@ -18,7 +18,7 @@ import {
 })
 export class ProposalComponent implements OnInit {
   @Input()
-  proposal?: Proposals200ResponseProposalsInner | null;
+  proposal?: GovV1Proposal200ResponseProposalsInner | null;
   @Input()
   proposalType?: string | null;
   @Input()
@@ -26,11 +26,11 @@ export class ProposalComponent implements OnInit {
   @Input()
   depositParams?: GovParams200ResponseDepositParams | null;
   @Input()
-  tally?: Proposals200ResponseProposalsInnerFinalTallyResult | null;
+  tally?: GovV1Proposal200ResponseProposalsInnerFinalTallyResult | null;
   @Input()
   tallyParams?: GovParams200ResponseTallyParams | null;
   @Input()
-  votes?: Votes200ResponseVotesInner[] | null;
+  votes?: GovV1Votes200ResponseVotesInner[] | null;
   @Input()
   votingParams?: GovParams200ResponseVotingParams | null;
   @Input()

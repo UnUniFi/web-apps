@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  Proposals200ResponseProposalsInner,
+  GovV1Proposal200ResponseProposalsInner,
   Deposits200ResponseDepositsInner,
-  Proposals200ResponseProposalsInnerFinalTallyResult,
-  Votes200ResponseVotesInner,
+  GovV1Proposal200ResponseProposalsInnerFinalTallyResult,
+  GovV1Votes200ResponseVotesInner,
   GovParams200ResponseDepositParams,
   GovParams200ResponseTallyParams,
   GovParams200ResponseVotingParams,
@@ -20,14 +20,14 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./proposal.component.css'],
 })
 export class ProposalComponent implements OnInit {
-  proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
+  proposal$: Observable<GovV1Proposal200ResponseProposalsInner | undefined>;
   proposalType$: Observable<string | undefined>;
   proposalContent$: Observable<any | undefined>;
   deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
   depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
-  tally$: Observable<Proposals200ResponseProposalsInnerFinalTallyResult | undefined>;
+  tally$: Observable<GovV1Proposal200ResponseProposalsInnerFinalTallyResult | undefined>;
   tallyParams$: Observable<GovParams200ResponseTallyParams | undefined>;
-  votes$: Observable<Votes200ResponseVotesInner[] | undefined>;
+  votes$: Observable<GovV1Votes200ResponseVotesInner[] | undefined>;
   votingParams$: Observable<GovParams200ResponseVotingParams | undefined>;
 
   constructor(private route: ActivatedRoute, private cosmosSDK: CosmosSDKService) {

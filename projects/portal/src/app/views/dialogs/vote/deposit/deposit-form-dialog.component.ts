@@ -1,7 +1,7 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
+import { GovV1Proposal200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import * as crypto from 'crypto';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
@@ -19,9 +19,7 @@ export type DepositOnSubmitEvent = {
 })
 export class DepositFormDialogComponent implements OnInit, OnChanges {
   @Input()
-  proposal?: Proposals200ResponseProposalsInner | null;
-  @Input()
-  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
+  proposal?: GovV1Proposal200ResponseProposalsInner | null;
   @Input()
   currentStoredWallet?: StoredWallet | null;
   @Input()

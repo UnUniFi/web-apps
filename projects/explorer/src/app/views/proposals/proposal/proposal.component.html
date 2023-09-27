@@ -2,7 +2,7 @@
   <div class="text-xl breadcrumbs mb-4">
     <ul>
       <li routerLink=".."><a>Proposals</a></li>
-      <li># {{ proposal?.proposal_id }}</li>
+      <li># {{ proposal?.id }}</li>
     </ul>
   </div>
   <ng-container *ngIf="proposal === null; then loading; else loaded"> </ng-container>
@@ -15,9 +15,7 @@
         <span class="badge badge-info badge-lg">
           {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
         </span>
-        <h2 class="card-title break-all">
-          # {{ proposal?.proposal_id }} {{ proposalContent?.title }}
-        </h2>
+        <h2 class="card-title break-all"># {{ proposal?.id }} {{ proposalContent?.title }}</h2>
 
         <div class="overflow-x-auto">
           <table class="table w-full">

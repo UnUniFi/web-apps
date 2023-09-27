@@ -68,8 +68,11 @@ export class TxsComponent implements OnInit {
             undefined,
             undefined,
             true,
+            true,
+            2 as any,
           )
           .then((res) => {
+            console.log(res);
             return res.data;
           })
           .catch((error) => {
@@ -110,16 +113,28 @@ export class TxsComponent implements OnInit {
       map((paginationInfo) => paginationInfo),
     );
 
-    this.txs$ = combineLatest([txsResponse$, this.paginationInfoChanged$]).pipe(
-      map(([txsResponse, paginationInfo]) =>
-        txsResponse?.tx_responses
-          ? this.getPaginatedTxs(
-              txsResponse.tx_responses,
-              paginationInfo.pageNumber,
-              paginationInfo.pageSize,
-            )
-          : undefined,
-      ),
+    this.txs$ = this.paginationInfoChanged$.pipe(
+      withLatestFrom(sdk$, this.selectedTxType$),
+      mergeMap(([paginationInfo, sdk, selectedTxType]) => {
+        return cosmosclient.rest.tx
+          .getTxsEvent(
+            sdk.rest,
+            [`message.module='${selectedTxType}'`],
+            undefined,
+            undefined,
+            paginationInfo.pageSize.toString(),
+            true,
+            true,
+            2 as any,
+            paginationInfo.pageNumber.toString(),
+            paginationInfo.pageSize.toString(),
+          )
+          .then((res) => res.data.tx_responses)
+          .catch((error) => {
+            console.error(error);
+            return [];
+          });
+      }),
     );
   }
 
@@ -144,15 +159,5 @@ export class TxsComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
-  }
-
-  getPaginatedTxs(
-    txs: BroadcastTx200ResponseTxResponse[],
-    pageNumber: number,
-    pageSize: number,
-  ): BroadcastTx200ResponseTxResponse[] {
-    const max = txs.length - (pageNumber - 1) * pageSize;
-    const min = max - pageSize;
-    return txs.filter((_, i) => min <= i && i < max).reverse();
   }
 }

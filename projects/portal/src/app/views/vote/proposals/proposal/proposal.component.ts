@@ -30,8 +30,6 @@ export class ProposalComponent implements OnInit {
   votes?: GovV1Votes200ResponseVotesInner[] | null;
   @Input()
   votingParams?: GovParams200ResponseVotingParams | null;
-  @Input()
-  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
@@ -46,14 +44,6 @@ export class ProposalComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-
-  jsonToSting(value: any) {
-    if (typeof value === 'string') {
-      return value;
-    } else {
-      return JSON.stringify(value);
-    }
-  }
 
   onClickVote(proposalID: string) {
     this.appClickVote.emit(Number(proposalID));

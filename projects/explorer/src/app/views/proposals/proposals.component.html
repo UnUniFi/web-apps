@@ -52,9 +52,7 @@
       <div class="card bg-base-100 w-full shadow-xl">
         <div class="card-body">
           <div class="flex items-center">
-            <h2 class="card-title break-all">
-              #{{ proposal.id }} {{ getProposalTitle(proposal) }}
-            </h2>
+            <h2 class="card-title break-all">#{{ proposal.id }} {{ proposal.title }}</h2>
             <span class="flex-auto"></span>
             <span class="badge badge-primary badge-lg">
               {{ proposal.status?.replace('PROPOSAL_STATUS_', '') }}

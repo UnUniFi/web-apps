@@ -37,14 +37,6 @@ export class ProposalsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getProposalTitle(proposal: GovV1Proposal200ResponseProposalsInner): string {
-    if (proposal.content) {
-      return (proposal.content as any).title;
-    } else {
-      return '';
-    }
-  }
-
   onPaginationChange($event?: number): void {
     if (!this.pageNumber || !this.pageSize || !this.pageLength) {
       return;

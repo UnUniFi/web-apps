@@ -21,8 +21,6 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 })
 export class ProposalComponent implements OnInit {
   proposal$: Observable<GovV1Proposal200ResponseProposalsInner | undefined>;
-  proposalType$: Observable<string | undefined>;
-  proposalContent$: Observable<any | undefined>;
   deposits$: Observable<Deposits200ResponseDepositsInner[] | undefined>;
   depositParams$: Observable<GovParams200ResponseDepositParams | undefined>;
   tally$: Observable<GovV1Proposal200ResponseProposalsInnerFinalTallyResult | undefined>;
@@ -35,24 +33,13 @@ export class ProposalComponent implements OnInit {
 
     const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
     this.proposal$ = combined$.pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.gov.proposal(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.govV1Proposal(sdk.rest, address)),
       map((result) => result.data.proposal!),
       catchError((error) => {
         console.error(error);
         return of(undefined);
       }),
     );
-
-    this.proposalType$ = this.proposal$.pipe(
-      map((proposal) => {
-        if (proposal && proposal.content) {
-          return (proposal.content as any)['@type'];
-        }
-      }),
-    );
-
-    // todo set type proposal content
-    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
 
     this.deposits$ = combined$.pipe(
       mergeMap(([sdk, address]) => cosmosclient.rest.gov.deposits(sdk.rest, address)),
@@ -69,7 +56,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.tally$ = combined$.pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.gov.tallyresult(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.govV1TallyResult(sdk.rest, address)),
       map((result) => result.data.tally!),
       catchError((error) => {
         console.error(error);
@@ -87,7 +74,7 @@ export class ProposalComponent implements OnInit {
     );
 
     this.votes$ = combined$.pipe(
-      mergeMap(([sdk, address]) => cosmosclient.rest.gov.votes(sdk.rest, address)),
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.govV1Votes(sdk.rest, address)),
       map((result) => result.data.votes!),
       catchError((error) => {
         console.error(error);

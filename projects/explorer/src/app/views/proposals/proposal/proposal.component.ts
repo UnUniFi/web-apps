@@ -20,8 +20,6 @@ export class ProposalComponent implements OnInit {
   @Input()
   proposal?: GovV1Proposal200ResponseProposalsInner | null;
   @Input()
-  proposalType?: string | null;
-  @Input()
   deposits?: Deposits200ResponseDepositsInner[] | null;
   @Input()
   depositParams?: GovParams200ResponseDepositParams | null;
@@ -33,8 +31,6 @@ export class ProposalComponent implements OnInit {
   votes?: GovV1Votes200ResponseVotesInner[] | null;
   @Input()
   votingParams?: GovParams200ResponseVotingParams | null;
-  @Input()
-  proposalContent?: cosmosclient.proto.cosmos.gov.v1beta1.TextProposal | null;
 
   voteDetailEnabled = false;
 

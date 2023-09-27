@@ -17,20 +17,7 @@
         <span class="badge badge-info badge-lg">
           {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
         </span>
-        <h2 class="card-title break-all"># {{ proposal?.id }} {{ proposalContent?.title }}</h2>
-
-        <div class="overflow-x-auto">
-          <table class="table w-full">
-            <tbody>
-              <tr *ngFor="let content of proposalContent | keyvalue">
-                <th>{{ content.key }}</th>
-                <td>
-                  {{ jsonToSting(content.value) }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 class="card-title break-all"># {{ proposal?.id }} {{ proposal?.title }}</h2>
 
         <div class="overflow-x-auto">
           <table class="table w-full">
@@ -85,7 +72,7 @@
             <div class="stat-title">No</div>
             <div class="stat-value text-warning">
               <span class="material-symbols-outlined">thumb_down</span>
-              {{ tally?.no_with_veto_count }}
+              {{ tally?.no_count }}
             </div>
             <div class="stat-desc"></div>
           </div>

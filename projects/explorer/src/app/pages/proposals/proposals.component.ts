@@ -30,7 +30,7 @@ export class ProposalsComponent implements OnInit {
     private readonly cosmosSDK: CosmosSDKService,
   ) {
     const proposals$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk.rest)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Proposals(sdk.rest)),
       map((result) => result.data.proposals!),
     );
 
@@ -71,7 +71,7 @@ export class ProposalsComponent implements OnInit {
       mergeMap(([sdk, proposals]) =>
         Promise.all(
           proposals.map((proposal) =>
-            cosmosclient.rest.gov.tallyresult(sdk.rest, proposal, id!).catch((err) => {
+            cosmosclient.rest.gov.govV1TallyResult(sdk.rest, proposal.id!).catch((err) => {
               console.log(err);
               return;
             }),
@@ -81,10 +81,10 @@ export class ProposalsComponent implements OnInit {
       map((result) => result.map((res) => res?.data.tally)),
       map((tallies) =>
         tallies.map((tally) => {
-          const yes = this.lnValue(tally?.yes);
-          const no = this.lnValue(tally?.no);
-          const abstain = this.lnValue(tally?.abstain);
-          const noWithVeto = this.lnValue(tally?.no_with_veto);
+          const yes = this.lnValue(tally?.yes_count);
+          const no = this.lnValue(tally?.no_count);
+          const abstain = this.lnValue(tally?.abstain_count);
+          const noWithVeto = this.lnValue(tally?.no_with_veto_count);
           const max = Math.max(yes, no, abstain, noWithVeto);
           return { yes, no, abstain, noWithVeto, max };
         }),

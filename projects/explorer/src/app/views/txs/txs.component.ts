@@ -48,11 +48,6 @@ export class TxsComponent implements OnInit {
       this.pageInfo.pageNumber -= 1;
     } else if ($event == 2) {
       this.pageInfo.pageNumber += 1;
-      if (this.pageInfo.pageNumber * this.pageInfo.pageSize > 100) {
-        alert('Currently limited to displaying the 100 latest entries');
-        this.pageInfo.pageNumber -= 1;
-        return;
-      }
     }
     if (this.pageInfo.pageNumber < 1) {
       alert('This is the first page!');

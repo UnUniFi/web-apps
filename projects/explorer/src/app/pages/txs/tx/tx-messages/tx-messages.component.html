@@ -1,6 +1,6 @@
-<h3 *ngIf="txDetails" class="mt-4 ml-2 font-medium">Message</h3>
 <ng-container *ngIf="(txDetails?.length || 0) > 0; else empty">
-  <ng-container *ngFor="let txDetail of txDetails">
+  <ng-container *ngFor="let txDetail of txDetails; let i = index">
+    <h3 *ngIf="txDetail" class="mt-4 ml-2 font-medium">Message #{{ i + 1 }}</h3>
     <ng-container [ngSwitch]="txDetail.txType">
       <!--distribution-->
       <view-msg-fund-community-pool *ngSwitchCase="'MsgFundCommunityPool'" [txDetail]="txDetail">

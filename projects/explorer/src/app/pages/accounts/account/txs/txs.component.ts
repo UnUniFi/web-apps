@@ -1,9 +1,12 @@
+import { PaginationInfo } from '../../../txs/txs.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { BroadcastTx200ResponseTxResponse } from '@cosmos-client/core/esm/openapi';
-import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { CosmosSDKService } from 'projects/explorer/src/app/models/cosmos-sdk.service';
+import { Observable, combineLatest, of, timer } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-txs',
@@ -11,22 +14,116 @@ import { map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./txs.component.css'],
 })
 export class TxsComponent implements OnInit {
+  pollingInterval = 30;
+  pageSizeOptions = [5, 10, 20, 50, 100];
+  defaultPageSize = this.pageSizeOptions[0];
+  defaultPageNumber = 1;
+
   address$: Observable<string | undefined>;
+  txsTotalCount$: Observable<bigint>;
+  paginationInfo$: Observable<PaginationInfo>;
+  paginationInfoChanged$: Observable<PaginationInfo>;
+  pageLength$: Observable<number | undefined>;
   txs$: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
 
-  constructor(private route: ActivatedRoute, private cosmosRest: CosmosRestService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private cosmosSDK: CosmosSDKService,
+  ) {
     this.address$ = this.route.params.pipe(map((params) => params.address));
-    this.txs$ = this.address$.pipe(
-      mergeMap((address) => {
-        if (address === undefined) {
-          return of(undefined);
-        }
-        return this.cosmosRest
-          .getAccountTxsEvent$(address)
-          .pipe(map((txs) => txs?.tx_responses?.reverse()));
+    const timer$ = timer(0, this.pollingInterval * 1000);
+    const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
+    const txsResponse$ = combineLatest([sdk$, this.address$]).pipe(
+      switchMap(([sdk, address]) => {
+        return cosmosclient.rest.tx
+          .getTxsEvent(
+            sdk.rest,
+            [`message.sender='${address}'`],
+            undefined,
+            undefined,
+            undefined,
+            true,
+            true,
+            2 as any,
+          )
+          .then((res) => {
+            console.log(res);
+            return res.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            return undefined;
+          });
+      }),
+    );
+
+    this.txsTotalCount$ = txsResponse$.pipe(
+      map((txs) => (txs?.total ? BigInt(txs.total) : BigInt(0))),
+    );
+
+    this.pageLength$ = this.txsTotalCount$.pipe(
+      map((txsTotalCount) => (txsTotalCount ? parseInt(txsTotalCount.toString()) : undefined)),
+    );
+
+    this.paginationInfo$ = combineLatest([this.txsTotalCount$, this.route.queryParams]).pipe(
+      switchMap(([txTotalCount, params]) => {
+        //get page size from query param
+        const pageSize = this.pageSizeOptions.includes(Number(params.perPage))
+          ? Number(params.perPage)
+          : this.defaultPageSize;
+
+        //get page number from query param
+        const pages = Number(params.pages);
+        const pageNumber =
+          txTotalCount === undefined || !pages || pages > Number(txTotalCount) / pageSize + 1
+            ? this.defaultPageNumber
+            : pages;
+
+        return of({ pageNumber, pageSize });
+      }),
+    );
+
+    this.paginationInfoChanged$ = this.paginationInfo$.pipe(
+      distinctUntilChanged(),
+      map((paginationInfo) => paginationInfo),
+    );
+
+    this.txs$ = this.paginationInfoChanged$.pipe(
+      withLatestFrom(sdk$, this.address$),
+      mergeMap(([paginationInfo, sdk, address]) => {
+        return cosmosclient.rest.tx
+          .getTxsEvent(
+            sdk.rest,
+            [`message.sender='${address}'`],
+            undefined,
+            undefined,
+            paginationInfo.pageSize.toString(),
+            true,
+            true,
+            2 as any,
+            paginationInfo.pageNumber.toString(),
+            paginationInfo.pageSize.toString(),
+          )
+          .then((res) => res.data.tx_responses)
+          .catch((error) => {
+            console.error(error);
+            return [];
+          });
       }),
     );
   }
 
   ngOnInit(): void {}
+
+  appPaginationChanged(pageEvent: PageEvent): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        perPage: pageEvent.pageSize,
+        pages: pageEvent.pageIndex + 1,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 }

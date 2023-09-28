@@ -24,7 +24,8 @@ export type Config = {
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: YieldInfo[];
-  externalChains: ChainInfoIYA[];
+  externalChains: ExternalChainInfo[];
+  yieldAggregatorContractAddress?: string;
   outpostDepositContractAddress?: string;
   extension?: {
     faucet?: {
@@ -83,7 +84,7 @@ export type YieldInfo = {
       };
 };
 
-export type ChainInfoIYA = {
+export type ExternalChainInfo = {
   id: string;
   chainId: string;
   chainName: string;
@@ -121,10 +122,10 @@ export type ChainInfoIYA = {
     average: number;
     high: number;
   };
-  iyaSourcePort?: string;
-  iyaSourceChannel?: string;
-  iyaContractAddress?: string;
-  iyaTokens?: { symbol: string; contractAddress: string; decimal: number }[];
+  ibcSourcePort?: string;
+  ibcSourceChannel?: string;
+  yieldAggregatorContractAddress?: string;
+  availableTokens?: { symbol: string; denom: string; contractAddress: string; decimal: number }[];
   features?: string[];
 };
 

@@ -5,7 +5,11 @@ import {
   BandProtocolService,
   TokenAmountUSD,
 } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
+import {
+  ConfigService,
+  ExternalChainInfo,
+  YieldInfo,
+} from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
@@ -20,7 +24,6 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
-import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vaults/vault/vault.component';
 import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
@@ -54,6 +57,7 @@ export class VaultComponent implements OnInit {
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<TokenAmountUSD>;
   vaultInfo$: Observable<YieldInfo>;
+  externalChains$: Observable<ExternalChainInfo[] | undefined>;
   externalWallet: ExternalWallet | undefined;
 
   constructor(
@@ -186,6 +190,7 @@ export class VaultComponent implements OnInit {
         );
       }),
     );
+    this.externalChains$ = this.configService.config$.pipe(map((config) => config?.externalChains));
   }
 
   ngOnInit(): void {}
@@ -201,7 +206,7 @@ export class VaultComponent implements OnInit {
   onSubmitDepositFromExternalCosmos(data: DepositToVaultFromCosmosRequest) {
     this.iyaApp.depositToVaultFromCosmos(
       data.vaultId,
-      data.externalChainName,
+      data.externalChainId,
       data.externalWallet.address!,
       data.externalDenom,
       data.vaultDenom,
@@ -230,7 +235,9 @@ export class VaultComponent implements OnInit {
     this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
   }
 
-  async onClickChain(chain: ExternalChain) {
-    this.externalWallet = await this.walletApp.getExternalWalletAddress(chain);
+  async onClickChain(chain?: ExternalChainInfo) {
+    if (chain) {
+      this.externalWallet = await this.walletApp.getExternalWalletAddress(chain);
+    }
   }
 }

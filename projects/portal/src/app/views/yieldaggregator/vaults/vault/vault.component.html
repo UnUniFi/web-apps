@@ -259,7 +259,7 @@
               <span class="label-text-alt"></span>
             </label>
             <button type="button" class="btn btn-block" onclick="chain_select_modal.showModal()">
-              {{ selectedChain.display }}
+              {{ selectedChain?.display || 'UnUniFi' }}
             </button>
 
             <dialog id="chain_select_modal" class="modal">
@@ -267,12 +267,15 @@
                 <h3 class="font-bold text-lg">Chain that you deposit from</h3>
 
                 <div class="flex flex-row flex-wrap gap-2 mt-2">
-                  <ng-container *ngFor="let chain of chains">
+                  <button type="button" class="btn btn-outline" (click)="onClickChain()">
+                    UnUniFi
+                  </button>
+                  <ng-container *ngFor="let chain of externalChains">
                     <button
                       type="button"
                       class="btn btn-outline"
                       [disabled]="chain.disabled"
-                      (click)="onClickChain(chain.id)"
+                      (click)="onClickChain(chain)"
                     >
                       {{ chain.display }}
                     </button>
@@ -284,7 +287,7 @@
               </form>
             </dialog>
           </div>
-          <div class="form-control" *ngIf="selectedChain.external">
+          <div class="form-control" *ngIf="selectedChain">
             <label class="label">
               <span class="label-text">{{ selectedChain.display }} Address</span>
             </label>
@@ -298,7 +301,7 @@
               />
             </label>
           </div>
-          <div class="form-control" *ngIf="selectedChain.id === 'ununifi'">
+          <div class="form-control" *ngIf="!selectedChain">
             <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
@@ -336,7 +339,7 @@
             </span>
           </div>
 
-          <div class="form-control" *ngIf="selectedChain.id !== 'ununifi'">
+          <div class="form-control" *ngIf="selectedChain">
             <label class="label">
               <span class="label-text">Enter amount</span>
               <span class="label-text-alt flex flex-row gap-2">
@@ -363,12 +366,14 @@
                 (input)="onDepositAmountChange()"
               />
               <span>
-                {{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{ selectedChain.id }}
+                {{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
+                  selectedChain.chainName
+                }}
               </span>
             </label>
           </div>
 
-          <div class="form-control" *ngIf="!selectedChain.cosmos">
+          <div class="form-control" *ngIf="!selectedChain?.cosmos">
             <label class="label">
               <span class="label-text">Converted to</span>
             </label>

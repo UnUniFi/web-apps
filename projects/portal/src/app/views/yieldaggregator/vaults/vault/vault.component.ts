@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ExternalChainInfo, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { ExternalWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import {
   DepositToVaultFromCosmosRequest,
@@ -16,14 +16,6 @@ import {
   StrategyAll200ResponseStrategiesInnerStrategy,
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
-
-export type ExternalChain = {
-  id: string;
-  display: string;
-  disabled: boolean;
-  external: boolean;
-  cosmos: boolean;
-};
 
 @Component({
   selector: 'view-vault',
@@ -60,6 +52,8 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
+  externalChains?: ExternalChainInfo[] | null;
+  @Input()
   externalWallet?: ExternalWallet;
 
   @Output()
@@ -71,7 +65,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
-  appClickChain: EventEmitter<ExternalChain>;
+  appClickChain: EventEmitter<ExternalChainInfo>;
   @Output()
   appDepositFromCosmos: EventEmitter<DepositToVaultFromCosmosRequest>;
   @Output()
@@ -80,13 +74,7 @@ export class VaultComponent implements OnInit, OnChanges {
   mintAmount?: number;
   burnAmount?: number;
   tab: 'mint' | 'burn' = 'mint';
-  selectedChain: ExternalChain = {
-    id: 'ununifi',
-    display: 'UnUniFi',
-    disabled: false,
-    external: false,
-    cosmos: true,
-  };
+  selectedChain?: ExternalChainInfo | undefined;
   withdrawOptions = [
     {
       id: 'immediate',
@@ -100,71 +88,6 @@ export class VaultComponent implements OnInit, OnChanges {
     },
   ];
   withdrawOption = this.withdrawOptions[0];
-  chains: ExternalChain[] = [
-    {
-      id: 'ununifi',
-      display: 'UnUniFi',
-      disabled: false,
-      external: false,
-      cosmos: true,
-    },
-    {
-      id: 'ethereum',
-      display: 'Ethereum (Goerli)',
-      disabled: false,
-      external: true,
-      cosmos: false,
-    },
-    {
-      id: 'avalanche',
-      display: 'Avalanche',
-      disabled: true,
-      external: true,
-      cosmos: false,
-    },
-    {
-      id: 'polygon',
-      display: 'Polygon (Mumbai)',
-      disabled: false,
-      external: true,
-      cosmos: false,
-    },
-    {
-      id: 'arbitrum',
-      display: 'Arbitrum',
-      disabled: true,
-      external: true,
-      cosmos: false,
-    },
-    {
-      id: 'cosmoshub',
-      display: 'Cosmos Hub',
-      disabled: true,
-      external: true,
-      cosmos: true,
-    },
-    {
-      id: 'neutron',
-      display: 'Neutron',
-      disabled: true,
-      external: true,
-      cosmos: true,
-    },
-    {
-      id: 'osmosis',
-      display: 'Osmosis (osmo-test-5)',
-      disabled: false,
-      external: true,
-      cosmos: true,
-    },
-    {
-      id: 'sei',
-      display: 'Sei',
-      disabled: true,
-      external: true,
-      cosmos: true,
-    },
-  ];
 
   constructor(private coinAmountPipe: CoinAmountPipe) {
     this.changeDeposit = new EventEmitter();
@@ -180,8 +103,8 @@ export class VaultComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {}
 
-  onClickChain(id: string) {
-    this.selectedChain = this.chains.find((chain) => chain.id === id)!;
+  onClickChain(chain?: ExternalChainInfo) {
+    this.selectedChain = chain;
     this.appClickChain.emit(this.selectedChain);
     (global as any).chain_select_modal.close();
   }
@@ -200,7 +123,7 @@ export class VaultComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (this.selectedChain.id === 'ununifi') {
+    if (!this.selectedChain) {
       this.appDeposit.emit({
         vaultId: this.vault.vault.id,
         readableAmount: this.mintAmount,
@@ -215,9 +138,8 @@ export class VaultComponent implements OnInit, OnChanges {
         console.log(this.externalWallet);
         this.appDepositFromCosmos.emit({
           vaultId: this.vault.vault.id,
-          externalChainName: this.selectedChain.id,
+          externalChainId: this.selectedChain.chainId,
           externalWallet: this.externalWallet,
-          // TODO
           externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
           readableAmount: this.mintAmount,
           vaultDenom: this.vault.vault.denom,
@@ -225,9 +147,9 @@ export class VaultComponent implements OnInit, OnChanges {
       } else {
         this.appDepositFromEvm.emit({
           vaultId: this.vault.vault.id,
-          externalChainName: this.selectedChain.id,
+          externalChainName: this.selectedChain.chainName,
           externalWallet: this.externalWallet,
-          // TODO
+          // todo: fix erc20Symbol
           erc20Symbol: 'aUSDC',
           readableAmount: this.mintAmount,
           vaultDenom: this.vault.vault.denom,

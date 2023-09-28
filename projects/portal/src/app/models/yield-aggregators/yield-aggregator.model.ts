@@ -8,7 +8,7 @@ export type DepositToVaultRequest = {
 
 export type DepositToVaultFromCosmosRequest = {
   vaultId: string;
-  externalChainName: string;
+  externalChainId: string;
   externalWallet: ExternalWallet;
   externalDenom: string;
   vaultDenom: string;

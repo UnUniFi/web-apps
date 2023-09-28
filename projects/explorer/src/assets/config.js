@@ -208,10 +208,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {
@@ -241,10 +238,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {
@@ -274,10 +268,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {

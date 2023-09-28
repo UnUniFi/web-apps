@@ -22,8 +22,14 @@ export class VaultsComponent implements OnInit {
   totalDeposited?: TokenAmountUSD[] | null;
   @Input()
   keyword?: string | null;
+  @Input()
+  sortType?: string | null;
+  @Input()
+  sortTypes?: { value: string; display: string }[];
   @Output()
   search = new EventEmitter<string>();
+  @Output()
+  sort = new EventEmitter<string>();
 
   constructor(private router: Router) {}
 
@@ -33,7 +39,11 @@ export class VaultsComponent implements OnInit {
     this.router.navigate(['path']);
   }
 
-  onSubmit() {
+  onSearch() {
     this.search.emit(this.keyword || '');
+  }
+
+  onSort() {
+    this.sort.emit(this.sortType || '');
   }
 }

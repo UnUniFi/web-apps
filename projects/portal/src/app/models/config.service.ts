@@ -63,14 +63,14 @@ export type AppNavigation = {
 
 export type YieldInfo = {
   id: string;
-  denom: string;
-  name: string;
-  description: string;
-  gitURL: string;
+  denom?: string;
+  name?: string;
+  description?: string;
+  gitURL?: string;
   minApy: number;
-  maxApy: number;
+  maxApy?: number;
   certainty: boolean;
-  poolInfo:
+  poolInfo?:
     | {
         type: 'osmosis';
         poolId: string;

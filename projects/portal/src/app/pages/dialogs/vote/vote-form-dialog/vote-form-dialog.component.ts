@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
+import { GovV1Proposal200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
@@ -17,11 +17,10 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./vote-form-dialog.component.css'],
 })
 export class VoteFormDialogComponent implements OnInit {
-  proposal$: Observable<Proposals200ResponseProposalsInner | undefined>;
+  proposal$: Observable<GovV1Proposal200ResponseProposalsInner | undefined>;
   currentStoredWallet$: Observable<StoredWallet | null | undefined>;
   minimumGasPrices$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
   proposalID: number | undefined;
-  proposalContent$: Observable<any | undefined>;
 
   constructor(
     @Inject(DIALOG_DATA)
@@ -34,7 +33,6 @@ export class VoteFormDialogComponent implements OnInit {
   ) {
     this.proposalID = data;
     this.proposal$ = this.cosmosRest.getProposal$(String(this.proposalID));
-    this.proposalContent$ = this.proposal$.pipe(map((proposal) => proposal && proposal.content));
     this.currentStoredWallet$ = this.walletService.currentStoredWallet$;
     this.minimumGasPrices$ = this.configS.config$.pipe(map((config) => config?.minimumGasPrices));
   }

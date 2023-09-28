@@ -16,10 +16,10 @@ import {
   GovParams200ResponseDepositParams as DepositParams,
   GovParams200ResponseTallyParams as TallyParams,
   GovParams200ResponseVotingParams as VotingParams,
-  Proposals200ResponseProposalsInnerFinalTallyResult as TallyResult,
-  Proposals200ResponseProposalsInner as Proposals,
+  GovV1TallyResult200ResponseTally as TallyResult,
+  GovV1Proposal200ResponseProposalsInner as Proposals,
   Deposits200ResponseDepositsInner as Deposits,
-  Votes200ResponseVotesInner as Votes,
+  GovV1Votes200ResponseVotesInner as Votes,
   DelegatorDelegations200Response as DelegatorDelegationsResponse,
   AllBalances200ResponseBalancesInner as Balances,
   StakingDelegatorValidators200Response as DelegatorValidatorsResponse,
@@ -228,7 +228,7 @@ export class CosmosRestService {
 
   getProposals$(): Observable<Proposals[] | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.proposals(sdk)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Proposals(sdk)),
       map((res) => res.data.proposals),
       catchError(this._handleError),
     );
@@ -236,7 +236,7 @@ export class CosmosRestService {
 
   getProposal$(proposalId: string): Observable<Proposals | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.proposal(sdk, proposalId)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Proposal(sdk, proposalId)),
       map((res) => res.data.proposal),
       catchError(this._handleError),
     );
@@ -268,7 +268,7 @@ export class CosmosRestService {
 
   getDeposits$(proposalId: string): Observable<Deposits[] | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.deposits(sdk, proposalId)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Deposits(sdk, proposalId)),
       map((res) => res.data.deposits),
       catchError(this._handleError),
     );
@@ -276,7 +276,7 @@ export class CosmosRestService {
 
   getVotes$(proposalId: string): Observable<Votes[] | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.votes(sdk, proposalId)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Votes(sdk, proposalId)),
       map((res) => res.data.votes),
       catchError(this._handleError),
     );
@@ -284,7 +284,7 @@ export class CosmosRestService {
 
   getTallyResult$(proposalId: string): Observable<TallyResult | undefined> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.gov.tallyresult(sdk, proposalId)),
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1TallyResult(sdk, proposalId)),
       map((res) => res.data.tally),
       catchError(this._handleError),
     );

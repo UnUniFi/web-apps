@@ -2,16 +2,16 @@ import * as txParser from './../../../../../../explorer/src/app/utils/tx-parser'
 import { CosmosRestService } from './../../../models/cosmos-rest.service';
 import { ProposalsUseCaseService } from './proposals.usecase.service';
 import { TestBed } from '@angular/core/testing';
-import { Proposals200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
+import { GovV1Proposal200ResponseProposalsInner } from '@cosmos-client/core/esm/openapi';
 import { of } from 'rxjs';
 
 jest.spyOn(txParser, 'txParseProposalContent');
 
 const setup = (props?: { mockCosmosRestService?: any }) => {
   // Mock Values
-  const mockProposal1: Proposals200ResponseProposalsInner = { proposal_id: '1' };
-  const mockProposal2: Proposals200ResponseProposalsInner = { proposal_id: '2' };
-  const mockProposal3: Proposals200ResponseProposalsInner = { proposal_id: '3' };
+  const mockProposal1: GovV1Proposal200ResponseProposalsInner = { id: '1' };
+  const mockProposal2: GovV1Proposal200ResponseProposalsInner = { id: '2' };
+  const mockProposal3: GovV1Proposal200ResponseProposalsInner = { id: '3' };
   const mockProposalArray = [mockProposal1, mockProposal2, mockProposal3];
 
   const mockCosmosRestService = {
@@ -64,14 +64,6 @@ describe('ProposalsUseCaseService', () => {
     const { service, mockProposalArray } = setup();
     service.paginatedProposals$(service.proposals$, of(1), of(2)).subscribe((value) => {
       expect(value).toStrictEqual(mockProposalArray.slice(1, 3).reverse());
-      done();
-    });
-  });
-
-  test('proposalContents$ calls txParseProposalContent for the number of pagesize', (done) => {
-    const { service } = setup();
-    service.proposalContents$(service.proposals$, of(1), of(2)).subscribe(() => {
-      expect(txParser.txParseProposalContent).toBeCalledTimes(2);
       done();
     });
   });

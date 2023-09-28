@@ -191,7 +191,7 @@
             <div class="stat-value" *ngIf="totalBondedAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount">
+            <div class="stat-value text-primary">
               {{ totalBondedAmount?.usdAmount | currency }}
             </div>
             <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount === undefined">
@@ -207,7 +207,7 @@
             <div class="stat-value" *ngIf="totalUnbondingAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-secondary" *ngIf="totalUnbondingAmount?.usdAmount">
+            <div class="stat-value text-secondary">
               {{ totalUnbondingAmount?.usdAmount | currency }}
             </div>
             <div

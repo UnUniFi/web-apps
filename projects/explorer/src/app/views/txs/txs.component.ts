@@ -54,6 +54,7 @@ export class TxsComponent implements OnInit {
       this.pageInfo.pageNumber = 1;
       return;
     }
+
     this.paginationChange.emit({
       pageIndex: this.pageInfo.pageNumber - 1,
       pageSize: this.pageInfo.pageSize,

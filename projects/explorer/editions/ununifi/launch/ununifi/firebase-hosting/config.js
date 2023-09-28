@@ -169,6 +169,48 @@ const denomMetadata = [
     display: 'DLP',
     symbol: 'DLP',
   },
+  {
+    description: 'ATOM from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'ATOM from Osmosis',
+    display: 'ATOM.osmosis',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'USDC from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/A01367FF44D9DE359A984FC14EC5227AA96ED08B8B4B31B539BB63B9B9305F80',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/A01367FF44D9DE359A984FC14EC5227AA96ED08B8B4B31B539BB63B9B9305F80',
+    name: 'USDC from Osmosis',
+    display: 'USDC.osmosis',
+    symbol: 'USDC',
+  },
+  {
+    description: 'OSMO from Osmosis',
+    denom_units: [
+      {
+        denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'OSMO from Osmosis',
+    display: 'OSMO.osmosis',
+    symbol: 'OSMO',
+  },
 ];
 
 const configs = [

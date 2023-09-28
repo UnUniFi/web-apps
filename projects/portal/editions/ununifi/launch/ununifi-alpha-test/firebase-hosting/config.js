@@ -12,6 +12,9 @@ const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
 const chainID = 'ununifi-alpha-test';
 const chainName = 'UnUniFi (alpha-test)';
 
+const yieldAggregatorContractAddress =
+  'ununifi14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sm5z28e';
+
 const bech32Prefix = {
   accAddr: 'ununifi',
   accPub: 'ununifipub',
@@ -32,11 +35,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  'derivatives',
   'pricefeed',
+  'nftbackedloan',
+  'nftfactory',
+  'ecosystemincentive',
 ];
 
 const apps = [
@@ -174,6 +180,20 @@ const denomMetadata = [
     display: 'DLP',
     symbol: 'DLP',
   },
+  {
+    description: 'IBC token from transfer/channel-1786/uosmo',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
+    name: 'IBC token from transfer/channel-1786/uosmo',
+    display: 'OSMO.osmosis',
+    symbol: 'OSMO',
+  },
 ];
 
 const externalChains = [
@@ -232,8 +252,8 @@ const externalChains = [
     chainName: 'Osmosis testnet',
     rpc: 'https://rpc.osmotest5.osmosis.zone',
     rest: 'https://lcd.osmotest5.osmosis.zone',
-    iyaSourcePort: 'transfer',
-    iyaSourceChannel: 'channel-1493',
+    ibcSourcePort: 'transfer',
+    ibcSourceChannel: 'channel-1786',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',
@@ -285,6 +305,32 @@ const externalChains = [
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
   },
+  {
+    id: 'ethereum',
+    chainId: '5',
+    chainName: 'ethereum-2',
+    iyaContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
+    iyaTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    id: 'polygon',
+    chainId: '80001',
+    chainName: 'Polygon',
+    iyaContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
+    iyaTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
+        decimal: 6,
+      },
+    ],
+  },
 ];
 
 const configs = [
@@ -305,6 +351,7 @@ const configs = [
     apps,
     denomMetadata,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {

@@ -31,11 +31,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
-  'pricefeed',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  // 'derivatives',
+  // 'pricefeed',
+  // 'nftbackedloan',
+  // 'nftfactory',
+  // 'ecosystemincentive',
 ];
 
 const apps = [

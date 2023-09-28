@@ -14,6 +14,9 @@ const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
 const chainID = 'ununifi-test-v1';
 const chainName = 'UnUniFi (test)';
 
+const yieldAggregatorContractAddress =
+  'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
+
 const bech32Prefix = {
   accAddr: 'ununifi',
   accPub: 'ununifipub',
@@ -34,11 +37,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  'derivatives',
   'pricefeed',
+  'nftbackedloan',
+  'nftfactory',
+  'ecosystemincentive',
 ];
 
 const apps = [
@@ -270,8 +276,8 @@ const externalChains = [
     chainName: 'Osmosis testnet',
     rpc: 'https://rpc.osmotest5.osmosis.zone',
     rest: 'https://lcd.osmotest5.osmosis.zone',
-    iyaSourcePort: 'transfer',
-    iyaSourceChannel: 'channel-1493',
+    ibcSourcePort: 'transfer',
+    ibcSourceChannel: 'channel-1493',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',
@@ -322,6 +328,14 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
+    iyaTokens: [
+      {
+        symbol: 'OSMO',
+        denom: 'uosmo',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
   },
   {
     id: 'ethereum',
@@ -331,6 +345,7 @@ const externalChains = [
     iyaTokens: [
       {
         symbol: 'aUSDC',
+        denom: 'uausdc',
         contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
         decimal: 6,
       },
@@ -344,6 +359,7 @@ const externalChains = [
     iyaTokens: [
       {
         symbol: 'aUSDC',
+        denom: 'uausdc',
         contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
         decimal: 6,
       },
@@ -370,6 +386,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {

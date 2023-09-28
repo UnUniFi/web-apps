@@ -34,11 +34,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
-  'pricefeed',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  // 'derivatives',
+  // 'pricefeed',
+  // 'nftbackedloan',
+  // 'nftfactory',
+  // 'ecosystemincentive',
 ];
 
 const apps = [
@@ -270,8 +273,8 @@ const externalChains = [
     chainName: 'Osmosis testnet',
     rpc: 'https://rpc.osmotest5.osmosis.zone',
     rest: 'https://lcd.osmotest5.osmosis.zone',
-    iyaSourcePort: 'transfer',
-    iyaSourceChannel: 'channel-1493',
+    ibcSourcePort: 'transfer',
+    ibcSourceChannel: 'channel-1493',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',

@@ -40,11 +40,11 @@ const messageModules = [
   'nft',
   'wasm',
   'yieldaggregator',
-  'derivatives',
-  'pricefeed',
-  'nftbackedloan',
-  'nftfactory',
-  'ecosystemincentive',
+  // 'derivatives',
+  // 'pricefeed',
+  // 'nftbackedloan',
+  // 'nftfactory',
+  // 'ecosystemincentive',
 ];
 
 const apps = [
@@ -222,9 +222,11 @@ const strategiesInfo = [
 
 const externalChains = [
   {
-    id: 'cosmoshub',
     chainId: 'theta-testnet-001',
-    chainName: 'Cosmos Hub testnet',
+    chainName: 'cosmoshub(test)',
+    display: 'Cosmoshub Theta Testnet',
+    disabled: true,
+    cosmos: true,
     rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
     rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
     bip44: { coinType: 118 },
@@ -269,11 +271,21 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
     },
+    availableTokens: [
+      {
+        symbol: 'ATOM',
+        denom: 'uatom',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
   },
   {
-    id: 'osmosis',
     chainId: 'osmo-test-5',
-    chainName: 'Osmosis testnet',
+    chainName: 'osmosis(test)',
+    display: 'Osmosis testnet 5',
+    disabled: false,
+    cosmos: true,
     rpc: 'https://rpc.osmotest5.osmosis.zone',
     rest: 'https://lcd.osmotest5.osmosis.zone',
     ibcSourcePort: 'transfer',
@@ -328,7 +340,7 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
-    iyaTokens: [
+    availableTokens: [
       {
         symbol: 'OSMO',
         denom: 'uosmo',
@@ -338,11 +350,13 @@ const externalChains = [
     ],
   },
   {
-    id: 'ethereum',
     chainId: '5',
     chainName: 'ethereum-2',
-    iyaContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
-    iyaTokens: [
+    display: 'Ethereum Goerli Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
+    availableTokens: [
       {
         symbol: 'aUSDC',
         denom: 'uausdc',
@@ -352,15 +366,49 @@ const externalChains = [
     ],
   },
   {
-    id: 'polygon',
     chainId: '80001',
     chainName: 'Polygon',
-    iyaContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
-    iyaTokens: [
+    display: 'Polygon Mumbai Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
+    availableTokens: [
       {
         symbol: 'aUSDC',
         denom: 'uausdc',
         contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '43113',
+    chainName: 'Avalanche',
+    display: 'Avalanche Fuji Testnet',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x57F1c63497AEe0bE305B8852b354CEc793da43bB',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '421613',
+    chainName: 'arbitrum',
+    display: 'Arbitrum Goerli Testnet',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
         decimal: 6,
       },
     ],
@@ -420,6 +468,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {
@@ -453,6 +502,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {
@@ -486,6 +536,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {

@@ -44,13 +44,6 @@ const messageModules = [
   // 'ecosystemincentive',
 ];
 
-const apps = [
-  { name: 'Utilities', link: '/', icon: 'assistant' },
-  // { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
-  { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
-  // { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
-];
-
 const denomMetadata = [
   {
     description: 'The governance token of UnUniFi protocol.',
@@ -170,164 +163,6 @@ const denomMetadata = [
   },
 ];
 
-const strategiesInfo = [
-  {
-    id: '0',
-    denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
-    name: 'MARS/OSMO strategy',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '907',
-    },
-  },
-  {
-    id: '0',
-    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'MARS/OSMO strategy v2',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '907',
-    },
-  },
-  {
-    id: '1',
-    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'ATOM/OSMO strategy v2',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '1',
-    },
-  },
-  {
-    id: '0',
-    denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-    name: 'Osmosis ATOM/OSMO Farm',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '1',
-    },
-  },
-];
-
-const externalChains = [
-  {
-    id: 'cosmoshub',
-    chainId: 'theta-testnet-001',
-    chainName: 'Cosmos Hub testnet',
-    rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
-    rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
-    bip44: { coinType: 118 },
-    bech32Config: {
-      bech32PrefixAccAddr: 'cosmos',
-      bech32PrefixAccPub: 'cosmospub',
-      bech32PrefixConsAddr: 'cosmosvalcons',
-      bech32PrefixConsPub: 'cosmosvalconspub',
-      bech32PrefixValAddr: 'cosmosvaloper',
-      bech32PrefixValPub: 'cosmosvaloperpub',
-    },
-    currencies: [
-      {
-        coinDecimals: 6,
-        coinDenom: 'ATOM',
-        coinGeckoId: 'cosmos',
-        coinMinimalDenom: 'uatom',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDecimals: 6,
-        coinDenom: 'ATOM',
-        coinGeckoId: 'cosmos',
-        coinMinimalDenom: 'uatom',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-        gasPriceStep: {
-          average: 0.025,
-          high: 0.03,
-          low: 0.01,
-        },
-      },
-    ],
-    stakeCurrency: {
-      coinDecimals: 6,
-      coinDenom: 'ATOM',
-      coinGeckoId: 'cosmos',
-      coinMinimalDenom: 'uatom',
-      coinImageUrl:
-        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-    },
-  },
-  {
-    id: 'osmosis',
-    chainId: 'osmo-test-5',
-    chainName: 'Osmosis testnet',
-    rpc: 'https://rpc.osmotest5.osmosis.zone',
-    rest: 'https://lcd.osmotest5.osmosis.zone',
-    ibcSourcePort: 'transfer',
-    ibcSourceChannel: 'channel-1493',
-    bip44: { coinType: 118 },
-    bech32Config: {
-      bech32PrefixAccAddr: 'osmo',
-      bech32PrefixAccPub: 'osmopub',
-      bech32PrefixValAddr: 'osmovaloper',
-      bech32PrefixValPub: 'osmovaloperpub',
-      bech32PrefixConsAddr: 'osmovalcons',
-      bech32PrefixConsPub: 'osmovalconspub',
-    },
-    currencies: [
-      {
-        coinDenom: 'OSMO',
-        coinMinimalDenom: 'uosmo',
-        coinDecimals: 6,
-        coinGeckoId: 'osmosis',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
-      },
-      {
-        coinDenom: 'ION',
-        coinMinimalDenom: 'uion',
-        coinDecimals: 6,
-        coinGeckoId: 'ion',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uion.png',
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: 'OSMO',
-        coinMinimalDenom: 'uosmo',
-        coinDecimals: 6,
-        coinGeckoId: 'osmosis',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
-        gasPriceStep: {
-          low: 0.0025,
-          average: 0.025,
-          high: 0.04,
-        },
-      },
-    ],
-    stakeCurrency: {
-      coinDenom: 'OSMO',
-      coinMinimalDenom: 'uosmo',
-      coinDecimals: 6,
-      coinGeckoId: 'osmosis',
-      coinImageUrl:
-        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
-    },
-  },
-];
-
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -343,10 +178,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {
@@ -376,10 +208,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {
@@ -409,10 +238,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {
@@ -442,10 +268,7 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
-    strategiesInfo,
-    externalChains,
     extension: {
       faucet: [
         {

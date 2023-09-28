@@ -11,6 +11,8 @@ const domainCauchyED = 'ununifi.mainnet.lcd-02.kabab.io';
 const chainID = 'ununifi-beta-v1';
 const chainName = 'UnUniFi';
 
+const yieldAggregatorContractAddress = '';
+
 const bech32Prefix = {
   accAddr: 'ununifi',
   accPub: 'ununifipub',
@@ -180,9 +182,11 @@ const denomMetadata = [
 
 const externalChains = [
   {
-    id: 'cosmoshub',
     chainId: 'cosmoshub-4',
-    chainName: 'Cosmos Hub',
+    chainName: 'cosmoshub',
+    display: 'Cosmos Hub',
+    disabled: true,
+    cosmos: true,
     rpc: 'https://rpc-cosmoshub.keplr.app',
     rest: 'https://lcd-cosmoshub.keplr.app',
     bip44: { coinType: 118 },
@@ -227,11 +231,21 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
     },
+    availableTokens: [
+      {
+        symbol: 'ATOM',
+        denom: 'uatom',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
   },
   {
-    id: 'osmosis',
     chainId: 'osmosis-1',
-    chainName: 'Osmosis',
+    chainName: 'osmosis',
+    display: 'Osmosis',
+    disabled: true,
+    cosmos: true,
     rpc: 'https://rpc-osmosis.keplr.app',
     rest: 'https://lcd-osmosis.keplr.app',
     bip44: { coinType: 118 },
@@ -284,6 +298,41 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
+    availableTokens: [
+      {
+        symbol: 'OSMO',
+        denom: 'uosmo',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '1',
+    chainName: 'Ethereum',
+    display: 'Ethereum',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [],
+  },
+  {
+    chainId: '137',
+    chainName: 'Polygon',
+    display: 'Polygon',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [],
+  },
+  {
+    chainId: '43114',
+    chainName: 'Avalanche',
+    display: 'Avalanche',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [],
   },
 ];
 

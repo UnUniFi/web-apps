@@ -3,6 +3,7 @@ import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import { Config, ConfigService } from '../config.service';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { EthersService } from '../ethers/ethers.service';
 import { ExternalCosmosSdkService } from '../external-cosmos/external-cosmos-sdk.service';
@@ -16,18 +17,12 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { first, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class YieldAggregatorApplicationService {
-  // todo enter contract address
-  ununifiContractAddress = 'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
-  neutronContractAddress = 'neutron1curfjnyl4jhrggg5zuyu354xqrdh5r5k5qz47eq64lmcnn93whhqqdw507';
-  neutronAddress = 'neutron1m63dprapnud2sy3npvw5mgh4nw606u7xzypsu6';
-  osmoAddress = 'osmo155u042u8wk3al32h3vzxu989jj76k4zczv4wkj';
-  cosmosAddress = 'cosmos1m63dprapnud2sy3npvw5mgh4nw606u7xxmgjxa';
-
   constructor(
     private readonly router: Router,
     private readonly yieldAggregatorService: YieldAggregatorService,
@@ -36,8 +31,14 @@ export class YieldAggregatorApplicationService {
     private readonly externalCosmosApp: ExternalCosmosApplicationService,
     private readonly ibcService: IbcService,
     private readonly ethersService: EthersService,
+    private readonly configS: ConfigService,
     private readonly dialog: Dialog,
   ) {}
+
+  async getConfig(): Promise<Config | undefined> {
+    const config$ = this.configS.config$.pipe(map((config) => config));
+    return config$.pipe(first()).toPromise();
+  }
 
   async depositToVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
@@ -85,7 +86,7 @@ export class YieldAggregatorApplicationService {
 
   async depositToVaultFromCosmos(
     vaultId: string,
-    externalChainName: string,
+    externalChainId: string,
     externalAddress: string,
     externalDenom: string,
     denom: string,
@@ -99,40 +100,57 @@ export class YieldAggregatorApplicationService {
     }
     const { address } = prerequisiteData;
 
-    const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
-    if (!chain?.iyaSourceChannel || !chain?.iyaSourcePort) {
-      alert('No chain info for ' + externalChainName);
+    const config = await this.getConfig();
+    if (!config) {
+      alert('Invalid UnUniFi config');
       return;
     }
+    const contract = config.yieldAggregatorContractAddress;
+    if (!contract) {
+      alert('No contract address for yield aggregator on ' + config.chainID);
+      return;
+    }
+
+    const chain = config?.externalChains.find((chain) => chain.chainId === externalChainId);
+    if (!chain?.ibcSourcePort || !chain.ibcSourceChannel || !chain.availableTokens) {
+      alert('No chain info for ' + externalChainId);
+      return;
+    }
+    const token = chain.availableTokens.find((token) => token.denom === externalDenom);
+    if (!token) {
+      alert('Not certified for ' + externalDenom);
+      return;
+    }
+
     const now = new Date();
     const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
     const timestamp = oneHourLater.getTime() * Math.pow(10, 6);
-    // todo
     const memo: { wasm: { contract: string; msg: { deposit_to_vault: DepositToVaultMsg } } } = {
       wasm: {
-        contract: this.ununifiContractAddress,
+        contract: contract,
         msg: {
           deposit_to_vault: {
             depositor: address,
             swap_output_denom: denom,
-            vault_id: parseInt(vaultId),
+            vault_id: vaultId,
           },
         },
       },
     };
     const msg = this.ibcService.buildMsgTransfer(
-      chain.iyaSourcePort,
-      chain.iyaSourceChannel,
+      chain.ibcSourcePort,
+      chain.ibcSourceChannel,
       externalAddress,
-      this.ununifiContractAddress,
+      contract,
       memo,
       timestamp,
       undefined,
-      { readableAmount: readableAmount, denom: externalDenom },
+      { amount: (readableAmount * Math.pow(10, token.decimal)).toString(), denom: externalDenom },
     );
+    console.log('MsgTransfer', msg);
 
     const txHash = await this.externalCosmosApp.broadcast(
-      externalChainName,
+      externalChainId,
       externalAddress,
       walletType,
       msg,
@@ -144,7 +162,7 @@ export class YieldAggregatorApplicationService {
 
     await this.dialog
       .open<TxConfirmDialogData>(ExternalTxConfirmDialogComponent, {
-        data: { txHash: txHash, msg: 'Sent the Deposit to vault request to ' + externalChainName },
+        data: { txHash: txHash, msg: 'Sent the Deposit to vault request to ' + externalChainId },
       })
       .closed.toPromise();
     location.reload();
@@ -163,32 +181,40 @@ export class YieldAggregatorApplicationService {
       return;
     }
     const { address } = prerequisiteData;
+    const config = await this.getConfig();
+    if (!config) {
+      alert('Invalid UnUniFi config');
+      return;
+    }
+    const contract = config.yieldAggregatorContractAddress;
+    if (!contract) {
+      alert('No contract address for yield aggregator on ' + config.chainID);
+      return;
+    }
 
-    const chain = await this.externalCosmosSdkService.chainInfo(externalChainName);
-    if (!chain?.iyaContractAddress || !chain.iyaTokens) {
+    const chain = config?.externalChains.find((chain) => chain.chainName === externalChainName);
+    if (!chain?.yieldAggregatorContractAddress || !chain.availableTokens) {
       alert('No chain info for ' + externalChainName);
       return;
     }
 
-    const erc20 = chain.iyaTokens.find((token) => token.symbol === erc20Symbol);
+    const erc20 = chain.availableTokens.find((token) => token.symbol === erc20Symbol);
     if (!erc20) {
       alert('Not certified for ' + erc20Symbol);
       return;
     }
     const arg: DepositToVaultFromEvmArg = {
-      // destinationChain: 'ununifi',
-      destinationChain: 'neutron',
-      destinationAddress: this.neutronContractAddress,
-      // depositor: address,
-      depositor: this.neutronAddress,
+      destinationChain: 'ununifi',
+      // destinationChain: 'neutron',
+      destinationAddress: contract,
+      depositor: address,
       vaultDenom: denom,
       vaultId: vaultId,
-      // erc20: erc20Symbol,
-      erc20: 'aUSDC',
+      erc20: erc20Symbol,
       amount: readableAmount * Math.pow(10, erc20.decimal || 6),
     };
     const txHash = await this.ethersService.depositToVault(
-      chain.iyaContractAddress,
+      chain.yieldAggregatorContractAddress,
       erc20.contractAddress,
       arg,
       externalAddress,

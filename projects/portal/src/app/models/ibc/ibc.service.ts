@@ -21,16 +21,8 @@ export class IbcService {
       revisionNumber: number;
       revisionHeight: number;
     },
-    amount?: { denom: string; readableAmount: number },
+    coin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
   ) {
-    let coin: cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined;
-    if (!amount) {
-      coin = undefined;
-    } else {
-      coin = this.bankService.convertDenomReadableAmountMapToCoins({
-        [amount.denom]: amount.readableAmount,
-      })[0];
-    }
     let IHeightTimeout: ibcclient.ibcproto.ibc.core.client.v1.IHeight | undefined;
     if (!timeoutHeight) {
       IHeightTimeout = undefined;
@@ -42,7 +34,6 @@ export class IbcService {
     }
 
     const memoString = JSON.stringify(memo);
-    console.log('memo', memoString);
     const msg = new ibcclient.ibcproto.ibc.applications.transfer.v1.MsgTransfer({
       source_port: sourcePort,
       source_channel: sourceChannel,

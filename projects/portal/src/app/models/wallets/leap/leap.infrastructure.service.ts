@@ -48,7 +48,7 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       alert('There is no external chain data.');
       return;
     }
-    const chainID = externalChains.find((chain) => chain.id === id)?.chainId;
+    const chainID = externalChains.find((chain) => chain.chainId === id)?.chainId;
     if (!chainID) {
       alert("this chain doesn't exist");
       return;
@@ -133,7 +133,7 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       alert('There is no external chain data.');
       return;
     }
-    const chainInfo = externalChains.find((chain) => chain.id === id);
+    const chainInfo = externalChains.find((chain) => chain.chainId === id);
     if (!chainInfo) {
       alert("this chain doesn't exist");
       return;
@@ -234,7 +234,7 @@ export class LeapInfrastructureService implements ILeapInfrastructureService {
       alert('There is no external chain data.');
       return;
     }
-    const chainId = externalChains.find((chain) => chain.id === id)?.chainId;
+    const chainId = externalChains.find((chain) => chain.chainId === id)?.chainId;
     if (!chainId) {
       alert("this chain doesn't exist");
       return;

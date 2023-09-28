@@ -197,7 +197,6 @@ export class YieldAggregatorApplicationService {
       alert('No chain info for ' + externalChainName);
       return;
     }
-
     const erc20 = chain.availableTokens.find((token) => token.symbol === erc20Symbol);
     if (!erc20) {
       alert('Not certified for ' + erc20Symbol);
@@ -214,6 +213,7 @@ export class YieldAggregatorApplicationService {
       amount: readableAmount * Math.pow(10, erc20.decimal || 6),
     };
     const txHash = await this.ethersService.depositToVault(
+      externalChainName,
       chain.yieldAggregatorContractAddress,
       erc20.contractAddress,
       arg,

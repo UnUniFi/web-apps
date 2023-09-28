@@ -12,7 +12,7 @@ import {
   UnunifiSelectCreateImportDialogComponent,
 } from '../../views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.component';
 import { UnunifiSelectWalletDialogComponent } from '../../views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.component';
-import { ExternalChain } from '../../views/yieldaggregator/vaults/vault/vault.component';
+import { ExternalChainInfo } from '../config.service';
 import { KeplrService } from './keplr/keplr.service';
 import { LeapService } from './leap/leap.service';
 import { MetaMaskService } from './metamask/metamask.service';
@@ -187,18 +187,15 @@ export class WalletApplicationService {
     return true;
   }
 
-  async getExternalWalletAddress(chain: ExternalChain): Promise<ExternalWallet | undefined> {
-    if (chain.id == 'ununifi') {
-      return;
-    }
+  async getExternalWalletAddress(chain: ExternalChainInfo): Promise<ExternalWallet | undefined> {
     const selectedWalletType = await this.openConnectExternalWalletDialog(chain);
     const connectedWallet = await (async () => {
       switch (selectedWalletType) {
         case WalletType.keplr:
-          const keplrKey = await this.connectExternalWallet(this.keplrService, chain.id);
+          const keplrKey = await this.connectExternalWallet(this.keplrService, chain.chainId);
           return { walletType: WalletType.keplr, address: keplrKey?.bech32Address, key: keplrKey };
         case WalletType.leap:
-          const leapKey = await this.connectExternalWallet(this.leapService, chain.id);
+          const leapKey = await this.connectExternalWallet(this.leapService, chain.chainId);
           return { walletType: WalletType.leap, address: leapKey?.bech32Address, key: leapKey };
         case WalletType.metamask:
           const address = await this.metaMaskService.getEthAddress();
@@ -266,7 +263,7 @@ export class WalletApplicationService {
     return selectedWalletType;
   }
 
-  async openConnectExternalWalletDialog(chain: ExternalChain): Promise<WalletType | undefined> {
+  async openConnectExternalWalletDialog(chain: ExternalChainInfo): Promise<WalletType | undefined> {
     const selectedWalletType: WalletType | undefined = await this.dialog
       .open<WalletType>(ConnectExternalWalletDialogComponent, { data: chain })
       .closed.toPromise();

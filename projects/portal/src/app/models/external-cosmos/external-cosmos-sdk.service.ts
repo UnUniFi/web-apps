@@ -13,7 +13,7 @@ export class ExternalCosmosSdkService {
     id: string,
   ): Promise<{ rest: cosmosclient.CosmosSDK; websocket: cosmosclient.CosmosSDK }> {
     const chain$ = this.configS.config$.pipe(
-      map((config) => config?.externalChains.find((chain) => chain.id === id)),
+      map((config) => config?.externalChains.find((chain) => chain.chainId === id)),
     );
     const sdk$ = chain$.pipe(
       map((chain) => {

@@ -85,9 +85,11 @@ export type YieldInfo = {
 };
 
 export type ExternalChainInfo = {
-  id: string;
   chainId: string;
   chainName: string;
+  display: string;
+  disabled: boolean;
+  cosmos: boolean;
   rpc: string;
   rest: string;
   bip44: { coinType: number };

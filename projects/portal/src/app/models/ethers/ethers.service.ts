@@ -3,6 +3,13 @@ import { DepositToVaultFromEvmArg } from '../yield-aggregators/yield-aggregator.
 import { IERC20Abi, depositToVaultAbi } from './ethers.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+// import {
+//   AxelarQueryAPI,
+//   AxelarQueryAPIFeeResponse,
+//   Environment,
+//   EvmChain,
+// } from '@axelar-network/axelarjs-sdk';
+// import { TransferFeeResponse } from '@axelar-network/axelarjs-types/axelar/nexus/v1beta1/query';
 import { parseUnits } from '@ethersproject/units';
 import { ethers } from 'ethers';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
@@ -18,6 +25,7 @@ export class EthersService {
   ) {}
 
   async depositToVault(
+    chainName: string,
     contractAddress: string,
     tokenAddress: string,
     arg: DepositToVaultFromEvmArg,
@@ -40,14 +48,35 @@ export class EthersService {
 
     const deposit = new ethers.Contract(contractAddress, depositToVaultAbi, signer);
     const usda = new ethers.Contract(tokenAddress, IERC20Abi, signer);
-    console.log(`decimals is ${await usda.decimals}`);
-    console.log(`gateway is ${await deposit.gateway()}`);
+
+    try {
+      const gateway = await deposit.gateway();
+      console.log('gateway is ' + gateway);
+    } catch (error) {
+      console.error(error);
+      this.snackBar.open(
+        `Contract connection failed on ${chainName}. Check the network of wallet app.`,
+        'Close',
+      );
+      return;
+    }
 
     const blockNum = await provider.getBlockNumber();
     const block = await provider.getBlock(blockNum);
+    // const sdk = new AxelarQueryAPI({
+    //   environment: Environment.TESTNET,
+    // });
     const gasLimit = block.gasLimit;
     console.log('gasLimit', gasLimit.toString());
 
+    // const gas = await sdk.estimateGasFee(
+    //   'ethereum-2',
+    //   arg.destinationChain,
+    //   arg.erc20,
+    //   gasLimit,
+    //   1.1,
+    // );
+    // console.log(gas);
     const approvalDialogRef = this.loadingDialog.open('Waiting for approval...');
     try {
       const approveTx = await usda.approve(deposit.address, amount);
@@ -55,6 +84,7 @@ export class EthersService {
     } catch (error) {
       console.error(error);
       this.snackBar.open(`Contract connection failed: ${error}`, 'Close');
+      return;
     } finally {
       approvalDialogRef.close();
     }

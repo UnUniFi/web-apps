@@ -342,11 +342,6 @@
           <div class="form-control" *ngIf="selectedChain">
             <label class="label">
               <span class="label-text">Enter amount</span>
-              <span class="label-text-alt flex flex-row gap-2">
-                <span class="cursor-pointer" (click)="setMintAmount(0.25)"> 25% </span>
-                <span class="cursor-pointer" (click)="setMintAmount(0.5)"> 50% </span>
-                <span class="cursor-pointer" (click)="setMintAmount(1)"> 100% </span>
-              </span>
             </label>
             <label class="input-group">
               <input
@@ -365,21 +360,19 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span>
-                {{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
-                  selectedChain.chainName
-                }}
-              </span>
-            </label>
-          </div>
-
-          <div class="form-control" *ngIf="!selectedChain?.cosmos">
-            <label class="label">
-              <span class="label-text">Converted to</span>
-            </label>
-            <label class="input-group">
-              <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
-              <span>{{ denom | coinDenom | async }}</span>
+              <select
+                #depositTokenRef
+                required
+                [(ngModel)]="selectedToken"
+                name="mint-symbol"
+                class="select select-info"
+              >
+                <ng-container *ngFor="let token of selectedChain.availableTokens">
+                  <option [value]="token">
+                    {{ token.symbol }}
+                  </option>
+                </ng-container>
+              </select>
             </label>
           </div>
 

@@ -75,6 +75,7 @@ export class VaultComponent implements OnInit, OnChanges {
   burnAmount?: number;
   tab: 'mint' | 'burn' = 'mint';
   selectedChain?: ExternalChainInfo | undefined;
+  selectedToken?: { symbol: string; denom: string; contractAddress: string; decimal: number };
   withdrawOptions = [
     {
       id: 'immediate',
@@ -106,6 +107,7 @@ export class VaultComponent implements OnInit, OnChanges {
   onClickChain(chain?: ExternalChainInfo) {
     this.selectedChain = chain;
     this.appClickChain.emit(this.selectedChain);
+    this.selectedToken = this.selectedChain?.availableTokens![0];
     (global as any).chain_select_modal.close();
   }
 

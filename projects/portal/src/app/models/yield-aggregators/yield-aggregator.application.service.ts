@@ -131,7 +131,6 @@ export class YieldAggregatorApplicationService {
         msg: {
           deposit_to_vault: {
             depositor: address,
-            swap_output_denom: denom,
             vault_id: vaultId,
           },
         },

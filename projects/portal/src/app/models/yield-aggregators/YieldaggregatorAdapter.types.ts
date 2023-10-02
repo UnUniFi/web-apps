@@ -25,7 +25,6 @@ export interface UpdateParamsMsg {
 }
 export interface DepositToVaultMsg {
   depositor: string;
-  swap_output_denom?: string | null;
   vault_id: string;
 }
 export type QueryMsg = {

@@ -3,6 +3,7 @@ import { DepositToVaultFromEvmArg } from '../yield-aggregators/yield-aggregator.
 import { IERC20Abi, depositToVaultAbi } from './ethers.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AxelarQueryAPI, AxelarQueryAPIConfig, Environment } from '@axelar-network/axelarjs-sdk';
 // import {
 //   AxelarQueryAPI,
 //   AxelarQueryAPIFeeResponse,
@@ -63,19 +64,14 @@ export class EthersService {
 
     const blockNum = await provider.getBlockNumber();
     const block = await provider.getBlock(blockNum);
-    // const sdk = new AxelarQueryAPI({
-    //   environment: Environment.TESTNET,
-    // });
     const gasLimit = block.gasLimit;
     console.log('gasLimit', gasLimit.toString());
 
-    // const gas = await sdk.estimateGasFee(
-    //   'ethereum-2',
-    //   arg.destinationChain,
-    //   arg.erc20,
-    //   gasLimit,
-    //   1.1,
-    // );
+    // const queryConfig: AxelarQueryAPIConfig = {
+    //   environment: Environment.TESTNET,
+    // };
+    // const sdk = new AxelarQueryAPI(queryConfig);
+    // const gas = await sdk.estimateGasFee('ethereum-2', arg.destinationChain, arg.erc20, gasLimit);
     // console.log(gas);
     const approvalDialogRef = this.loadingDialog.open('Waiting for approval...');
     try {
@@ -96,7 +92,6 @@ export class EthersService {
         arg.destinationChain,
         arg.destinationAddress,
         arg.depositor,
-        arg.vaultDenom,
         arg.vaultId,
         arg.erc20,
         amount,

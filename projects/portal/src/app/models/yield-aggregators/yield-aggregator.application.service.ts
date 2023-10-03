@@ -89,7 +89,6 @@ export class YieldAggregatorApplicationService {
     externalChainId: string,
     externalAddress: string,
     externalDenom: string,
-    denom: string,
     readableAmount: number,
     walletType: WalletType,
     pubKey: Uint8Array,
@@ -171,7 +170,6 @@ export class YieldAggregatorApplicationService {
     vaultId: string,
     externalChainName: string,
     erc20Symbol: string,
-    denom: string,
     readableAmount: number,
     externalAddress?: string,
   ) {
@@ -206,7 +204,6 @@ export class YieldAggregatorApplicationService {
       // destinationChain: 'neutron',
       destinationAddress: contract,
       depositor: address,
-      vaultDenom: denom,
       vaultId: vaultId,
       erc20: erc20Symbol,
       amount: readableAmount * Math.pow(10, erc20.decimal || 6),

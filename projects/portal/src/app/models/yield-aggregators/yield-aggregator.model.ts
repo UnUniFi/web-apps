@@ -65,7 +65,6 @@ export type DepositToVaultFromEvmArg = {
   destinationAddress: string;
   depositor: string;
   vaultId: string;
-  vaultDenom: string;
   erc20: string;
   amount: number;
 };

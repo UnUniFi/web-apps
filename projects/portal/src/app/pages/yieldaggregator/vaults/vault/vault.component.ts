@@ -209,7 +209,6 @@ export class VaultComponent implements OnInit {
       data.externalChainId,
       data.externalWallet.address!,
       data.externalDenom,
-      data.vaultDenom,
       data.readableAmount,
       data.externalWallet.walletType,
       data.externalWallet.key?.pubKey!,
@@ -221,7 +220,6 @@ export class VaultComponent implements OnInit {
       data.vaultId,
       data.externalChainName,
       data.erc20Symbol,
-      data.vaultDenom,
       data.readableAmount,
       data.externalWallet.address,
     );

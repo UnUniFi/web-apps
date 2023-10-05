@@ -124,6 +124,10 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Invalid vault info.');
       return;
     }
+    if (!this.selectedToken?.denom) {
+      alert('Invalid token info.');
+      return;
+    }
 
     if (!this.selectedChain) {
       this.appDeposit.emit({
@@ -142,7 +146,7 @@ export class VaultComponent implements OnInit, OnChanges {
           vaultId: this.vault.vault.id,
           externalChainId: this.selectedChain.chainId,
           externalWallet: this.externalWallet,
-          externalDenom: this.denomMetadataMap?.[this.vault.vault.denom!].denom_units?.[0].denom!,
+          externalDenom: this.selectedToken.denom,
           readableAmount: this.mintAmount,
           vaultDenom: this.vault.vault.denom,
         });

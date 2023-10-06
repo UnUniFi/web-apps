@@ -1,6 +1,4 @@
-import { ProposalContent } from '../proposals.component';
-import { Component, Input, OnInit } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import {
   GovV1Proposal200ResponseProposalsInner,
   Deposits200ResponseDepositsInner,
@@ -16,7 +14,7 @@ import {
   templateUrl: './proposal.component.html',
   styleUrls: ['./proposal.component.css'],
 })
-export class ProposalComponent implements OnInit {
+export class ProposalComponent implements OnInit, OnChanges {
   @Input()
   proposal?: GovV1Proposal200ResponseProposalsInner | null;
   @Input()
@@ -31,18 +29,36 @@ export class ProposalComponent implements OnInit {
   votes?: GovV1Votes200ResponseVotesInner[] | null;
   @Input()
   votingParams?: GovParams200ResponseVotingParams | null;
+  @Input()
+  tallyTotalCount?: number | null;
+  @Input()
+  quorum?: number | null;
+  @Input()
+  threshold?: number | null;
+  @Input()
+  vetoThreshold?: number | null;
 
   voteDetailEnabled = false;
+  depositDetailEnabled = false;
+  quorumNotReached = false;
+  thresholdNotReached = false;
+  vetoThresholdReached = false;
 
   constructor() {}
 
-  jsonToSting(value: any) {
-    if (typeof value === 'string') {
-      return value;
-    } else {
-      return JSON.stringify(value);
-    }
+  ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    this.quorumNotReached = (this.quorum || 0) < Number(this.tallyParams?.quorum);
+    this.thresholdNotReached = (this.threshold || 0) < Number(this.tallyParams?.threshold);
+    this.vetoThresholdReached =
+      (this.vetoThreshold || 0) > Number(this.tallyParams?.veto_threshold);
   }
 
-  ngOnInit(): void {}
+  calcTallyRatio(tallyCount?: string) {
+    if (!this.tallyTotalCount) {
+      return 0;
+    }
+    return Number(tallyCount) / this.tallyTotalCount;
+  }
 }

@@ -30,6 +30,14 @@ export class ProposalComponent implements OnInit {
   votes?: GovV1Votes200ResponseVotesInner[] | null;
   @Input()
   votingParams?: GovParams200ResponseVotingParams | null;
+  @Input()
+  tallyTotalCount?: number | null;
+  @Input()
+  quorum?: number | null;
+  @Input()
+  threshold?: number | null;
+  @Input()
+  vetoThreshold?: number | null;
 
   @Output()
   appClickVote: EventEmitter<number>;
@@ -37,6 +45,10 @@ export class ProposalComponent implements OnInit {
   appClickDeposit: EventEmitter<number>;
 
   voteDetailEnabled = false;
+  depositDetailEnabled = false;
+  quorumNotReached = false;
+  thresholdNotReached = false;
+  vetoThresholdReached = false;
 
   constructor() {
     this.appClickVote = new EventEmitter();
@@ -44,6 +56,13 @@ export class ProposalComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  calcTallyRatio(tallyCount?: string) {
+    if (!this.tallyTotalCount) {
+      return 0;
+    }
+    return Number(tallyCount) / this.tallyTotalCount;
+  }
 
   onClickVote(proposalID: string) {
     this.appClickVote.emit(Number(proposalID));

@@ -6,6 +6,10 @@
   [tallyParams]="tallyParams$ | async"
   [votes]="votes$ | async"
   [votingParams]="votingParams$ | async"
+  [tallyTotalCount]="tallyTotalCount$ | async"
+  [quorum]="quorum$ | async"
+  [threshold]="threshold$ | async"
+  [vetoThreshold]="vetoThreshold$ | async"
   (appClickVote)="onVoteProposal($event)"
   (appClickDeposit)="onDepositProposal($event)"
 ></view-proposal>

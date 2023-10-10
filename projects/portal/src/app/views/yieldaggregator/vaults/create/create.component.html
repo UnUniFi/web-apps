@@ -30,21 +30,21 @@
               [class]="{
                 'select-error': assetNgModelRef.errors
               }"
-              [(ngModel)]="selectedSymbol"
+              [(ngModel)]="denom"
               name="symbol"
-              (change)="onChangeSymbol()"
-              [disabled]="!availableSymbols?.length"
+              (change)="onChangeDenom()"
+              [disabled]="!availableTokens?.length"
             >
               <option [value]="undefined" disabled>
-                <span *ngIf="!availableSymbols || !availableSymbols.length"
+                <span *ngIf="!availableTokens || !availableTokens.length"
                   >No Strategy on the chain</span
                 >
-                <span *ngIf="availableSymbols && availableSymbols.length"
+                <span *ngIf="availableTokens && availableTokens.length"
                   >Select an asset's symbol</span
                 >
               </option>
-              <ng-container *ngFor="let symbol of availableSymbols">
-                <option [value]="symbol?.symbol">{{ symbol?.display }}</option>
+              <ng-container *ngFor="let denom of availableTokens">
+                <option [value]="denom.base">{{ denom.display }}</option>
               </ng-container>
             </select>
           </div>

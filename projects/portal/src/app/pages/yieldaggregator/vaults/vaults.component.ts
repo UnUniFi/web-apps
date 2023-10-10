@@ -10,7 +10,7 @@ import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/y
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
@@ -32,6 +32,9 @@ export class VaultsComponent implements OnInit {
     { value: 'name', display: 'Vault Name' },
     { value: 'apy', display: 'APY' },
   ];
+  // certified$: Observable<boolean>;
+  certified$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  certifiedVaults$: Observable<VaultAll200ResponseVaultsInner[]>;
 
   constructor(
     private router: Router,
@@ -53,6 +56,7 @@ export class VaultsComponent implements OnInit {
     this.sortType$ = this.route.queryParams.pipe(
       map((params) => params.sort || this.sortTypes[0].value),
     );
+    // this.certified$ = this.route.queryParams.pipe(map((params) => params.certified || true));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const vaultsInfo$ = combineLatest([vaults$, config$]).pipe(
       mergeMap(async ([vaults, config]) =>
@@ -110,6 +114,14 @@ export class VaultsComponent implements OnInit {
           return vaults;
         }
       }),
+    );
+    this.certifiedVaults$ = combineLatest([this.vaults$, config$]).pipe(
+      map(
+        ([vaults, config]) =>
+          config?.certifiedVaults
+            .map((id) => vaults.find((vault) => vault.vault?.id === id))
+            .filter((vault): vault is VaultAll200ResponseVaultsInner => vault !== undefined) || [],
+      ),
     );
     this.vaultsInfo$ = combineLatest([this.vaults$, vaultsInfo$]).pipe(
       map(([vaults, infos]) =>
@@ -173,5 +185,16 @@ export class VaultsComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  appCertifiedFilterChanged(value: boolean): void {
+    this.certified$.next(value);
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams: {
+    //     certified: value,
+    //   },
+    //   queryParamsHandling: 'merge',
+    // });
   }
 }

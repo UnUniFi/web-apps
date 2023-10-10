@@ -26,10 +26,16 @@ export class VaultsComponent implements OnInit {
   sortType?: string | null;
   @Input()
   sortTypes?: { value: string; display: string }[];
+  @Input()
+  certified?: boolean | null;
+  @Input()
+  certifiedVaults?: VaultAll200ResponseVaultsInner[] | null;
   @Output()
   search = new EventEmitter<string>();
   @Output()
   sort = new EventEmitter<string>();
+  @Output()
+  certifiedChange = new EventEmitter<boolean>();
 
   constructor(private router: Router) {}
 
@@ -45,5 +51,12 @@ export class VaultsComponent implements OnInit {
 
   onSort() {
     this.sort.emit(this.sortType || '');
+  }
+
+  onCertifiedChange() {
+    if (this.certified === undefined || this.certified === null) {
+      return;
+    }
+    this.certifiedChange.emit(this.certified);
   }
 }

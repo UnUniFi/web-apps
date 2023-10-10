@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import {
-  AllBalances200ResponseBalancesInner,
   Deposits200ResponseDepositsInner,
   GovV1Proposal200ResponseProposalsInner,
   GovV1Proposal200ResponseProposalsInnerFinalTallyResult,
@@ -28,7 +27,6 @@ export class ProposalComponent implements OnInit {
   tallyParams$: Observable<GovParams200ResponseTallyParams | undefined>;
   votes$: Observable<GovV1Votes200ResponseVotesInner[] | undefined>;
   votingParams$: Observable<GovParams200ResponseVotingParams | undefined>;
-  totalSupply$: Observable<AllBalances200ResponseBalancesInner | undefined>;
   tallyTotalCount$: Observable<number>;
   quorum$: Observable<number>;
   threshold$: Observable<number>;
@@ -97,9 +95,9 @@ export class ProposalComponent implements OnInit {
       }),
     );
 
-    this.totalSupply$ = this.cosmosSDK.sdk$.pipe(
-      mergeMap((sdk) => cosmosclient.rest.bank.totalSupply(sdk.rest)),
-      map((result) => result.data.supply?.find((supply) => supply.denom === 'uguu')),
+    const pool$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.pool(sdk.rest)),
+      map((result) => result.data.pool),
     );
 
     this.tallyTotalCount$ = this.tally$.pipe(
@@ -112,9 +110,11 @@ export class ProposalComponent implements OnInit {
       ),
     );
 
-    this.quorum$ = combineLatest([this.tallyTotalCount$, this.totalSupply$]).pipe(
-      map(([tallyTotalCount, totalSupply]) => tallyTotalCount / Number(totalSupply?.amount)),
+    this.quorum$ = combineLatest([this.tallyTotalCount$, pool$]).pipe(
+      map(([tallyTotalCount, pool]) => tallyTotalCount / Number(pool?.bonded_tokens)),
     );
+    this.quorum$.subscribe((quorum) => console.log(quorum));
+
     this.threshold$ = this.tally$.pipe(
       map(
         (tally) =>

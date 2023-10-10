@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import {
   GovV1Proposal200ResponseProposalsInner,
   Deposits200ResponseDepositsInner,
@@ -15,7 +14,7 @@ import {
   templateUrl: './proposal.component.html',
   styleUrls: ['./proposal.component.css'],
 })
-export class ProposalComponent implements OnInit {
+export class ProposalComponent implements OnInit, OnChanges {
   @Input()
   proposal?: GovV1Proposal200ResponseProposalsInner | null;
   @Input()
@@ -56,6 +55,13 @@ export class ProposalComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    this.quorumNotReached = (this.quorum || 0) < Number(this.tallyParams?.quorum);
+    this.thresholdNotReached = (this.threshold || 0) < Number(this.tallyParams?.threshold);
+    this.vetoThresholdReached =
+      (this.vetoThreshold || 0) > Number(this.tallyParams?.veto_threshold);
+  }
 
   calcTallyRatio(tallyCount?: string) {
     if (!this.tallyTotalCount) {

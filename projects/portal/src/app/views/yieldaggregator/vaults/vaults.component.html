@@ -21,9 +21,9 @@
   <div class="flex flex-row flex-wrap items-end mb-8">
     <form #formRef="ngForm" (submit)="onSearch()">
       <div class="form-control w-full md:max-w-md">
-        <label class="label">
+        <!-- <label class="label">
           <span class="label-text">Filters</span>
-        </label>
+        </label> -->
         <div class="input-group">
           <input
             type="text"
@@ -52,7 +52,7 @@
         </div>
       </div>
     </form>
-    <div class="form-control w-full md:max-w-md md:ml-4">
+    <!-- <div class="form-control w-full md:max-w-md md:ml-4">
       <label class="label">
         <span class="label-text">Sort</span>
       </label>
@@ -68,7 +68,7 @@
           </option>
         </ng-container>
       </select>
-    </div>
+    </div> -->
   </div>
 
   <div class="card bg-base-100 shadow-xl mb-8">
@@ -84,12 +84,10 @@
           [(ngModel)]="certified"
           (change)="onCertifiedChange()"
         />
-        <span>Only Certified {{ certified }}</span>
+        <span>Show Certified ONLY</span>
       </div>
       <div class="overflow-x-auto max-h-96">
-        <ng-container
-          *ngIf="vaults === null || certifiedVaults === null; then loading; else loaded"
-        ></ng-container>
+        <ng-container *ngIf="vaults === null; then loading; else loaded"></ng-container>
         <ng-template #loading>
           <p class="text-center">
             <span class="loading loading-ring loading-lg"></span>
@@ -100,128 +98,93 @@
             <!-- head -->
             <thead>
               <tr>
-                <th></th>
-                <td>Name</td>
+                <th>
+                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('id')">
+                    <span>ID</span>
+                    <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+                  </button>
+                </th>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('name')">
+                    <span>Name</span>
+                    <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+                  </button>
+                </td>
                 <td>description</td>
                 <td>Asset</td>
-                <td>Est.APY</td>
-                <td>Commission Rate</td>
-                <td>Total Deposited (USD)</td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('apy')">
+                    <span>Est.APY</span>
+                    <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('commission')">
+                    <span>Commission Rate</span>
+                    <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('deposit')">
+                    <span>Total Deposited (USD)</span>
+                    <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+                  </button>
+                </td>
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngIf="!certified">
-                <ng-container *ngFor="let vault of vaults; let i = index">
-                  <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
-                    <th>#{{ vault.vault?.id }}</th>
-                    <div class="dropdown dropdown-hover items-center">
-                      <label tabindex="0">
-                        <td style="max-width: 10rem" class="truncate">
-                          {{ vault.vault?.name }}
-                        </td>
-                      </label>
-                      <div
-                        tabindex="0"
-                        class="dropdown-content z-[1] card card-compact w-96 max-h-48 p-2 shadow bg-base-200 text-primary-content"
-                      >
-                        <div class="card-body">
-                          <h3 class="card-title truncate max-w-full">
-                            #{{ vault.vault?.id }} {{ vault.vault?.name }}
-                          </h3>
-                          <p class="truncate">{{ vault.vault?.description || 'No description' }}</p>
-                        </div>
+              <ng-container *ngFor="let vault of vaults; let i = index">
+                <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
+                  <th>#{{ vault.vault?.id }}</th>
+                  <div class="dropdown dropdown-hover items-center">
+                    <label tabindex="0">
+                      <td style="max-width: 10rem" class="truncate">
+                        {{ vault.vault?.name }}
+                      </td>
+                    </label>
+                    <div
+                      tabindex="0"
+                      class="dropdown-content z-[1] card card-compact w-96 max-h-48 p-2 shadow bg-base-200 text-primary-content"
+                    >
+                      <div class="card-body">
+                        <h3 class="card-title truncate max-w-full">
+                          #{{ vault.vault?.id }} {{ vault.vault?.name }}
+                        </h3>
+                        <p class="truncate">{{ vault.vault?.description || 'No description' }}</p>
                       </div>
                     </div>
-                    <td class="max-w-xs truncate">
-                      {{ vault.vault?.description }}
-                    </td>
-                    <td>
-                      <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                        <ng-container *ngIf="symbols[i]?.img">
-                          <div class="avatar">
-                            <div class="mask mask-circle w-6 h-6">
-                              <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
-                            </div>
+                  </div>
+                  <td style="max-width: 10rem" class="truncate">
+                    {{ vault.vault?.description }}
+                  </td>
+                  <td>
+                    <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
+                      <ng-container *ngIf="symbols[i]?.img">
+                        <div class="avatar">
+                          <div class="mask mask-circle w-6 h-6">
+                            <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
                           </div>
-                        </ng-container>
-                        <ng-container *ngIf="!symbols[i]?.img">
-                          <span class="material-symbols-outlined">question_mark</span>
-                        </ng-container>
-                        <span>
-                          {{ symbols[i].display }}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <!-- <span *ngIf="vaultsInfo?.[i]?.certainty">=</span>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!symbols[i]?.img">
+                        <span class="material-symbols-outlined">question_mark</span>
+                      </ng-container>
+                      <span>
+                        {{ symbols[i].display }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <!-- <span *ngIf="vaultsInfo?.[i]?.certainty">=</span>
                       <span *ngIf="vaultsInfo?.[i]?.certainty === false">≒</span> -->
-                      <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
-                      <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
-                        ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
-                      </span>
-                    </td>
-                    <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
-                    <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
-                  </tr>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="certified">
-                <ng-container *ngFor="let vault of certifiedVaults; let i = index">
-                  <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
-                    <th>#{{ vault.vault?.id }}</th>
-                    <div class="dropdown dropdown-hover items-center">
-                      <label tabindex="0">
-                        <td style="max-width: 10rem" class="truncate">
-                          {{ vault.vault?.name }}
-                        </td>
-                      </label>
-                      <div
-                        tabindex="0"
-                        class="dropdown-content z-[1] card card-compact w-96 max-h-48 p-2 shadow bg-base-200 text-primary-content"
-                      >
-                        <div class="card-body">
-                          <h3 class="card-title truncate max-w-full">
-                            #{{ vault.vault?.id }} {{ vault.vault?.name }}
-                          </h3>
-                          <p class="truncate">
-                            {{ vault.vault?.description || 'No description' }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <td class="max-w-xs truncate">
-                      {{ vault.vault?.description }}
-                    </td>
-                    <td>
-                      <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                        <ng-container *ngIf="symbols[i]?.img">
-                          <div class="avatar">
-                            <div class="mask mask-circle w-6 h-6">
-                              <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
-                            </div>
-                          </div>
-                        </ng-container>
-                        <ng-container *ngIf="!symbols[i]?.img">
-                          <span class="material-symbols-outlined">question_mark</span>
-                        </ng-container>
-                        <span>
-                          {{ symbols[i].display }}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <!-- <span *ngIf="vaultsInfo?.[i]?.certainty">=</span>
-                        <span *ngIf="vaultsInfo?.[i]?.certainty === false">≒</span> -->
-                      <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
-                      <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
-                        ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
-                      </span>
-                    </td>
-                    <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
-                    <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
-                  </tr>
-                </ng-container>
+                    <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
+                    <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
+                      ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
+                    </span>
+                  </td>
+                  <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
+                  <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
+                </tr>
               </ng-container>
             </tbody>
           </table>

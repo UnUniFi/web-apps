@@ -24,12 +24,10 @@ export class VaultsComponent implements OnInit {
   keyword?: string | null;
   @Input()
   sortType?: string | null;
-  @Input()
-  sortTypes?: { value: string; display: string }[];
+  // @Input()
+  // sortTypes?: { value: string; display: string }[];
   @Input()
   certified?: boolean | null;
-  @Input()
-  certifiedVaults?: VaultAll200ResponseVaultsInner[] | null;
   @Output()
   search = new EventEmitter<string>();
   @Output()
@@ -41,16 +39,12 @@ export class VaultsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  navigate(path: string) {
-    this.router.navigate(['path']);
-  }
-
   onSearch() {
     this.search.emit(this.keyword || '');
   }
 
-  onSort() {
-    this.sort.emit(this.sortType || '');
+  onSort(sortType: string) {
+    this.sort.emit(sortType);
   }
 
   onCertifiedChange() {

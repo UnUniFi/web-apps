@@ -26,15 +26,15 @@ export class VaultsComponent implements OnInit {
   vaultsInfo$: Observable<YieldInfo[]>;
   totalDeposited$: Observable<TokenAmountUSD[]>;
   keyword$: Observable<string>;
-  sortType$: Observable<string>;
-  sortTypes: { value: string; display: string }[] = [
-    { value: 'id', display: 'Vault ID #' },
-    { value: 'name', display: 'Vault Name' },
-    { value: 'apy', display: 'APY' },
-  ];
+  sortType$: BehaviorSubject<string> = new BehaviorSubject<string>('id');
+  // sortType$: Observable<string>;
+  // sortTypes: { value: string; display: string }[] = [
+  //   { value: 'id', display: 'Vault ID #' },
+  //   { value: 'name', display: 'Vault Name' },
+  //   { value: 'apy', display: 'APY' },
+  // ];
   // certified$: Observable<boolean>;
   certified$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  certifiedVaults$: Observable<VaultAll200ResponseVaultsInner[]>;
 
   constructor(
     private router: Router,
@@ -53,24 +53,53 @@ export class VaultsComponent implements OnInit {
     const vaults$ = this.iyaQuery.listVaults$();
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
-    this.sortType$ = this.route.queryParams.pipe(
-      map((params) => params.sort || this.sortTypes[0].value),
-    );
-    // this.certified$ = this.route.queryParams.pipe(map((params) => params.certified || true));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    const vaultsInfo$ = combineLatest([vaults$, config$]).pipe(
+    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    const vaultYields$ = combineLatest([vaults$, config$]).pipe(
       mergeMap(async ([vaults, config]) =>
         Promise.all(vaults.map(async (vault) => this.iyaService.calcVaultAPY(vault, config))),
       ),
     );
-    this.vaults$ = combineLatest([
-      vaults$,
+    const vaultDeposits$ = combineLatest([vaults$, denomMetadataMap$, symbolMetadataMap$]).pipe(
+      mergeMap(([vaults, denomMetadataMap, symbolMetadataMap]) =>
+        Promise.all(
+          vaults.map(async (vault) => {
+            const deposits = await this.bandProtocolService.convertToUSDAmountSymbol(
+              denomMetadataMap?.[vault.vault?.denom || '']?.symbol || '',
+              (
+                Number(vault.total_bonded_amount) +
+                Number(vault.total_unbonding_amount) +
+                Number(vault.withdraw_reserve)
+              ).toString(),
+              symbolMetadataMap,
+            );
+            return {
+              vaultId: vault.vault?.id,
+              depositInfo: deposits,
+            };
+          }),
+        ),
+      ),
+    );
+    const certifiedVaults$ = combineLatest([vaults$, config$, this.certified$.asObservable()]).pipe(
+      map(([vaults, config, certified]) => {
+        if (certified) {
+          return (
+            config?.certifiedVaults
+              ?.map((id) => vaults.find((vault) => vault.vault?.id === id))
+              .filter((vault): vault is VaultAll200ResponseVaultsInner => vault !== undefined) || []
+          );
+        } else {
+          return vaults;
+        }
+      }),
+    );
+    const searchedVaults$ = combineLatest([
+      certifiedVaults$,
       this.keyword$,
-      this.sortType$,
       denomMetadataMap$,
-      vaultsInfo$,
     ]).pipe(
-      map(([vaults, keyword, sort, denomMetadata, infos]) => {
+      map(([vaults, keyword, denomMetadata]) => {
         if (keyword) {
           return vaults.filter((vault) => {
             const hasIdMatch = vault.vault?.id && vault.vault?.id.includes(keyword);
@@ -81,49 +110,64 @@ export class VaultsComponent implements OnInit {
               : false;
             return hasIdMatch || hasOwnerMatch || hasDenomMatch || hasSymbolMatch;
           });
-        } else if (sort) {
-          if (sort === 'id') {
-            return vaults.sort((a, b) => Number(a.vault?.id) - Number(b.vault?.id));
-          }
-          if (sort === 'name') {
-            return vaults.sort((a, b) => {
-              const nameA = a.vault?.name;
-              const nameB = b.vault?.name;
-              if (!nameA || !nameB) {
-                if (nameA) {
-                  return -1;
-                }
-                if (nameB) {
-                  return 1;
-                }
-                return 0;
-              } else {
-                return nameA.localeCompare(nameB);
-              }
-            });
-          }
-          if (sort === 'apy') {
-            return vaults.sort((a, b) => {
-              const aInfo = infos.find((info) => info.id === a.vault?.id);
-              const bInfo = infos.find((info) => info.id === b.vault?.id);
-              return (bInfo?.minApy || 0) - (aInfo?.minApy || 0);
-            });
-          }
-          return vaults;
         } else {
           return vaults;
         }
       }),
     );
-    this.certifiedVaults$ = combineLatest([this.vaults$, config$]).pipe(
-      map(
-        ([vaults, config]) =>
-          config?.certifiedVaults
-            .map((id) => vaults.find((vault) => vault.vault?.id === id))
-            .filter((vault): vault is VaultAll200ResponseVaultsInner => vault !== undefined) || [],
-      ),
+    const sortedVaults$ = combineLatest([
+      searchedVaults$,
+      this.sortType$,
+      vaultYields$,
+      vaultDeposits$,
+    ]).pipe(
+      map(([vaults, sort, yields, deposits]) => {
+        if (sort === 'id') {
+          return vaults.sort((a, b) => Number(a.vault?.id) - Number(b.vault?.id));
+        }
+        if (sort === 'name') {
+          return vaults.sort((a, b) => {
+            const nameA = a.vault?.name;
+            const nameB = b.vault?.name;
+            if (!nameA || !nameB) {
+              if (nameA) {
+                return -1;
+              }
+              if (nameB) {
+                return 1;
+              }
+              return 0;
+            } else {
+              return nameA.localeCompare(nameB);
+            }
+          });
+        }
+        if (sort === 'apy') {
+          return vaults.sort((a, b) => {
+            const aYield = yields.find((y) => y.id === a.vault?.id);
+            const bYield = yields.find((y) => y.id === b.vault?.id);
+            return (bYield?.minApy || 0) - (aYield?.minApy || 0);
+          });
+        }
+        if (sort === 'commission') {
+          return vaults.sort(
+            (a, b) =>
+              Number(a.vault?.withdraw_commission_rate) - Number(b.vault?.withdraw_commission_rate),
+          );
+        }
+        if (sort === 'deposit') {
+          return vaults.sort((a, b) => {
+            console.log('hoge');
+            const aDeposit = deposits.find((d) => d.vaultId === a.vault?.id);
+            const bDeposit = deposits.find((d) => d.vaultId === b.vault?.id);
+            return (bDeposit?.depositInfo.usdAmount || 0) - (aDeposit?.depositInfo.usdAmount || 0);
+          });
+        }
+        return vaults;
+      }),
     );
-    this.vaultsInfo$ = combineLatest([this.vaults$, vaultsInfo$]).pipe(
+    this.vaults$ = sortedVaults$;
+    this.vaultsInfo$ = combineLatest([this.vaults$, vaultYields$]).pipe(
       map(([vaults, infos]) =>
         vaults.map(
           (vault) =>
@@ -145,7 +189,22 @@ export class VaultsComponent implements OnInit {
         }),
       ),
     );
-    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    this.totalDeposited$ = combineLatest([this.vaults$, vaultDeposits$]).pipe(
+      map(([vaults, deposits]) =>
+        vaults.map((vault) => {
+          const deposit = deposits.find((deposit) => deposit.vaultId === vault.vault?.id) || {
+            vaultId: vault.vault?.id!,
+            depositInfo: {
+              symbol: '',
+              display: '',
+              symbolAmount: 0,
+              usdAmount: 0,
+            },
+          };
+          return deposit?.depositInfo;
+        }),
+      ),
+    );
     this.totalDeposited$ = combineLatest([this.symbols$, this.vaults$, symbolMetadataMap$]).pipe(
       mergeMap(([symbols, vaults, symbolMetadataMap]) =>
         Promise.all(
@@ -178,23 +237,17 @@ export class VaultsComponent implements OnInit {
   }
 
   appSortValueChanged(value: string): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        sort: value,
-      },
-      queryParamsHandling: 'merge',
-    });
+    this.sortType$.next(value);
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams: {
+    //     sort: value,
+    //   },
+    //   queryParamsHandling: 'merge',
+    // });
   }
 
   appCertifiedFilterChanged(value: boolean): void {
     this.certified$.next(value);
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParams: {
-    //     certified: value,
-    //   },
-    //   queryParamsHandling: 'merge',
-    // });
   }
 }

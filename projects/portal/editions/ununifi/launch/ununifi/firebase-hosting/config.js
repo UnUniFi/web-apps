@@ -229,6 +229,39 @@ const strategiesInfo = [
       poolId: '1',
     },
   },
+  {
+    id: '0',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '803',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+  {
+    id: '1',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '3',
+    },
+  },
 ];
 
 const configs = [

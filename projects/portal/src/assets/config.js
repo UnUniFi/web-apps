@@ -214,6 +214,8 @@ const strategiesInfo = [
   },
 ];
 
+const certifiedVaults = ['6', '8', '9', '10', '11'];
+
 const externalChains = [
   {
     id: 'cosmoshub',
@@ -341,6 +343,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     extension: {
       faucet: [
@@ -374,6 +377,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     extension: {
       faucet: [
@@ -407,6 +411,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     extension: {
       faucet: [
@@ -440,6 +445,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     extension: {
       faucet: [

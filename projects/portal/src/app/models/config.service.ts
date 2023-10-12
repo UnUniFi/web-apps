@@ -23,6 +23,7 @@ export type Config = {
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: YieldInfo[];
+  certifiedVaults: string[];
   externalChains: ChainInfo[];
   extension?: {
     faucet?: {

@@ -41,7 +41,7 @@ export class StrategiesComponent implements OnInit {
     );
     this.strategies$ = combineLatest([allStrategies$, this.denom$]).pipe(
       map(([strategies, denom]) => {
-        if (denom) {
+        if (denom && denom !== 'all') {
           return strategies.filter((strategy) => strategy.strategy?.denom == denom);
         } else {
           return strategies;

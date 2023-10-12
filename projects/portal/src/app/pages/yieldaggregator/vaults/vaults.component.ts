@@ -27,13 +27,6 @@ export class VaultsComponent implements OnInit {
   totalDeposited$: Observable<TokenAmountUSD[]>;
   keyword$: Observable<string>;
   sortType$: BehaviorSubject<string> = new BehaviorSubject<string>('id');
-  // sortType$: Observable<string>;
-  // sortTypes: { value: string; display: string }[] = [
-  //   { value: 'id', display: 'Vault ID #' },
-  //   { value: 'name', display: 'Vault Name' },
-  //   { value: 'apy', display: 'APY' },
-  // ];
-  // certified$: Observable<boolean>;
   certified$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
@@ -205,23 +198,6 @@ export class VaultsComponent implements OnInit {
         }),
       ),
     );
-    this.totalDeposited$ = combineLatest([this.symbols$, this.vaults$, symbolMetadataMap$]).pipe(
-      mergeMap(([symbols, vaults, symbolMetadataMap]) =>
-        Promise.all(
-          vaults.map((vault, index) =>
-            this.bandProtocolService.convertToUSDAmountSymbol(
-              symbols[index].symbol,
-              (
-                Number(vault.total_bonded_amount) +
-                Number(vault.total_unbonding_amount) +
-                Number(vault.withdraw_reserve)
-              ).toString(),
-              symbolMetadataMap,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   ngOnInit(): void {}
@@ -238,13 +214,6 @@ export class VaultsComponent implements OnInit {
 
   appSortValueChanged(value: string): void {
     this.sortType$.next(value);
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParams: {
-    //     sort: value,
-    //   },
-    //   queryParamsHandling: 'merge',
-    // });
   }
 
   appCertifiedFilterChanged(value: boolean): void {

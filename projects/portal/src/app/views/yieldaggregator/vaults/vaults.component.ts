@@ -24,8 +24,6 @@ export class VaultsComponent implements OnInit {
   keyword?: string | null;
   @Input()
   sortType?: string | null;
-  // @Input()
-  // sortTypes?: { value: string; display: string }[];
   @Input()
   certified?: boolean | null;
   @Output()

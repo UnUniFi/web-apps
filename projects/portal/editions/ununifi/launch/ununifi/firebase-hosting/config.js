@@ -217,6 +217,8 @@ const denomMetadata = [
   },
 ];
 
+const certifiedVaults = ['5', '6', '7'];
+
 const strategiesInfo = [
   {
     id: '0',
@@ -282,14 +284,15 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 1000,
+          maxCredit: 1000,
         },
       ],
       // monitor: {},
@@ -314,14 +317,15 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 1000,
+          maxCredit: 1000,
         },
       ],
       // monitor: {},
@@ -346,6 +350,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [],
       // monitor: {},
@@ -370,6 +375,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [],
       // monitor: {},

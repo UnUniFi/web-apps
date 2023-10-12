@@ -15,8 +15,8 @@
       [(ngModel)]="denom"
       (change)="onChangeDenom()"
     >
-      <option [value]="undefined" disabled>
-        <span>Select an Asset</span>
+      <option [value]="'all'">
+        <span>All</span>
       </option>
       <ng-container *ngFor="let d of availableDenoms">
         <option [value]="d">

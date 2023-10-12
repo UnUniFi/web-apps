@@ -17,7 +17,7 @@ export class OwnerComponent implements OnInit {
   owner?: string | null;
 
   @Input()
-  symbolImage?: string | null;
+  symbols?: { symbol: string; display: string; img: string }[] | null;
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
   @Input()

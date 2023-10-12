@@ -6,7 +6,8 @@
   [totalDeposited]="totalDeposited$ | async"
   [keyword]="keyword$ | async"
   [sortType]="sortType$ | async"
-  [sortTypes]="sortTypes"
+  [certified]="certified$ | async"
   (search)="appSearchValueChanged($event)"
   (sort)="appSortValueChanged($event)"
+  (certifiedChange)="appCertifiedFilterChanged($event)"
 ></view-vaults>

@@ -217,6 +217,8 @@ const denomMetadata = [
   },
 ];
 
+const certifiedVaults = ['5', '6', '7'];
+
 const strategiesInfo = [
   {
     id: '0',
@@ -282,6 +284,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
@@ -314,6 +317,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
@@ -346,6 +350,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [],
       // monitor: {},
@@ -370,6 +375,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [],
       // monitor: {},

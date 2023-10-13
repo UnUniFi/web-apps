@@ -12,6 +12,9 @@ const domainCauchyEA = 'ununifi-alpha-test.cauchye.net';
 const chainID = 'ununifi-alpha-test';
 const chainName = 'UnUniFi (alpha-test)';
 
+const yieldAggregatorContractAddress =
+  'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l';
+
 const bech32Prefix = {
   accAddr: 'ununifi',
   accPub: 'ununifipub',
@@ -32,11 +35,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  'derivatives',
   'pricefeed',
+  'nftbackedloan',
+  'nftfactory',
+  'ecosystemincentive',
 ];
 
 const apps = [
@@ -174,6 +180,173 @@ const denomMetadata = [
     display: 'DLP',
     symbol: 'DLP',
   },
+  {
+    description: 'IBC token from transfer/channel-1786/uosmo',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518',
+    name: 'IBC token from transfer/channel-1786/uosmo',
+    display: 'OSMO.osmosis',
+    symbol: 'OSMO',
+  },
+];
+
+const externalChains = [
+  {
+    chainId: 'theta-testnet-001',
+    chainName: 'cosmoshub(test)',
+    display: 'Cosmoshub Theta Testnet',
+    disabled: true,
+    cosmos: true,
+    rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
+    rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'cosmos',
+      bech32PrefixAccPub: 'cosmospub',
+      bech32PrefixConsAddr: 'cosmosvalcons',
+      bech32PrefixConsPub: 'cosmosvalconspub',
+      bech32PrefixValAddr: 'cosmosvaloper',
+      bech32PrefixValPub: 'cosmosvaloperpub',
+    },
+    currencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+        gasPriceStep: {
+          average: 0.025,
+          high: 0.03,
+          low: 0.01,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDecimals: 6,
+      coinDenom: 'ATOM',
+      coinGeckoId: 'cosmos',
+      coinMinimalDenom: 'uatom',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+    },
+  },
+  {
+    chainId: 'osmo-test-5',
+    chainName: 'osmosis(test)',
+    display: 'Osmosis testnet 5',
+    disabled: false,
+    cosmos: true,
+    rpc: 'https://rpc.osmotest5.osmosis.zone',
+    rest: 'https://lcd.osmotest5.osmosis.zone',
+    ibcSourcePort: 'transfer',
+    ibcSourceChannel: 'channel-1858',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'osmo',
+      bech32PrefixAccPub: 'osmopub',
+      bech32PrefixValAddr: 'osmovaloper',
+      bech32PrefixValPub: 'osmovaloperpub',
+      bech32PrefixConsAddr: 'osmovalcons',
+      bech32PrefixConsPub: 'osmovalconspub',
+    },
+    currencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+      },
+      {
+        coinDenom: 'ION',
+        coinMinimalDenom: 'uion',
+        coinDecimals: 6,
+        coinGeckoId: 'ion',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uion.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+        gasPriceStep: {
+          low: 0.0025,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDenom: 'OSMO',
+      coinMinimalDenom: 'uosmo',
+      coinDecimals: 6,
+      coinGeckoId: 'osmosis',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+    },
+    availableTokens: [
+      {
+        symbol: 'OSMO',
+        denom: 'uosmo',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '5',
+    chainName: 'ethereum-2',
+    display: 'Ethereum Goerli Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '80001',
+    chainName: 'Polygon',
+    display: 'Polygon Mumbai Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
+        decimal: 6,
+      },
+    ],
+  },
 ];
 
 const configs = [
@@ -193,6 +366,8 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {

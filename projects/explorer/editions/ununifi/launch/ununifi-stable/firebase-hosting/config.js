@@ -31,18 +31,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  'derivatives',
   'pricefeed',
-];
-
-const apps = [
-  { name: 'Utilities', link: '/', icon: 'assistant' },
-  { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
-  { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
-  { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+  'nftbackedloan',
+  'nftfactory',
+  'ecosystemincentive',
 ];
 
 const denomMetadata = [
@@ -190,7 +186,6 @@ const configs = [
         amount: 0.015,
       },
     ],
-    apps,
     denomMetadata,
     extension: {
       faucet: [

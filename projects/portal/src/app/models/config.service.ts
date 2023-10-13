@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 export type Config = {
   id: string;
@@ -23,8 +24,10 @@ export type Config = {
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: YieldInfo[];
+  externalChains: ExternalChainInfo[];
+  yieldAggregatorContractAddress?: string;
+  outpostDepositContractAddress?: string;
   certifiedVaults: string[];
-  externalChains: ChainInfo[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
@@ -82,10 +85,12 @@ export type YieldInfo = {
       };
 };
 
-export type ChainInfo = {
-  id: string;
+export type ExternalChainInfo = {
   chainId: string;
   chainName: string;
+  display: string;
+  disabled: boolean;
+  cosmos: boolean;
   rpc: string;
   rest: string;
   bip44: { coinType: number };
@@ -120,6 +125,10 @@ export type ChainInfo = {
     average: number;
     high: number;
   };
+  ibcSourcePort?: string;
+  ibcSourceChannel?: string;
+  yieldAggregatorContractAddress?: string;
+  availableTokens?: { symbol: string; denom: string; contractAddress: string; decimal: number }[];
   features?: string[];
 };
 
@@ -144,6 +153,10 @@ export class ConfigService {
       this.configSubject$.next(randomConfig);
     }
     this.config$ = this.configSubject$.asObservable();
+  }
+
+  async getConfig(): Promise<Config | undefined> {
+    return this.config$.pipe(first()).toPromise();
   }
 
   async setCurrentConfig(configID: string) {

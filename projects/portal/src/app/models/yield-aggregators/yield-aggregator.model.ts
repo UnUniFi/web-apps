@@ -1,6 +1,26 @@
+import { ExternalWallet } from '../wallets/wallet.model';
+
 export type DepositToVaultRequest = {
   vaultId: string;
   denom: string;
+  readableAmount: number;
+};
+
+export type DepositToVaultFromCosmosRequest = {
+  vaultId: string;
+  externalChainId: string;
+  externalWallet: ExternalWallet;
+  externalDenom: string;
+  vaultDenom: string;
+  readableAmount: number;
+};
+
+export type DepositToVaultFromEvmRequest = {
+  vaultId: string;
+  externalChainName: string;
+  externalWallet: ExternalWallet;
+  erc20Symbol: string;
+  vaultDenom: string;
   readableAmount: number;
 };
 
@@ -39,3 +59,12 @@ export type OsmosisPools = {
     apr_superfluid: number;
   }[];
 }[];
+
+export type DepositToVaultFromEvmArg = {
+  destinationChain: string;
+  destinationAddress: string;
+  depositor: string;
+  vaultId: string;
+  erc20: string;
+  amount: number;
+};

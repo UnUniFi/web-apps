@@ -14,6 +14,9 @@ const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
 const chainID = 'ununifi-test-v1';
 const chainName = 'UnUniFi (test)';
 
+const yieldAggregatorContractAddress =
+  'ununifi1v6qjx5smfdxnh5gr8vprswl60rstyprj3wh4gz5mg7gcl7mtl5xqd9l8a9';
+
 const bech32Prefix = {
   accAddr: 'ununifi',
   accPub: 'ununifipub',
@@ -34,11 +37,14 @@ const messageModules = [
   'ibc',
   'slashing',
   'staking',
-  'auction',
-  'ununifidist',
-  'cdp',
-  'incentive',
-  'pricefeed',
+  'nft',
+  'wasm',
+  'yieldaggregator',
+  // 'derivatives',
+  // 'pricefeed',
+  // 'nftbackedloan',
+  // 'nftfactory',
+  // 'ecosystemincentive',
 ];
 
 const apps = [
@@ -124,44 +130,44 @@ const denomMetadata = [
     symbol: 'DLP',
   },
   {
-    description: 'ATOM from Osmosis',
+    description: 'IBC token from transfer/channel-996/uatom',
     denom_units: [
       {
-        denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        denom: 'uatom',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-    name: 'ATOM from Osmosis',
+    name: 'transfer/channel-996/uatom',
     display: 'ATOM.osmosis',
     symbol: 'ATOM',
   },
   {
-    description: 'OSMO from Osmosis (deprecated)',
+    description: 'IBC token from transfer/channel-996/uosmo (deprecated)',
     denom_units: [
       {
-        denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+        denom: 'uosmo',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
-    name: 'OSMO (deprecated)',
+    name: 'IBC token from transfer/channel-996/uosmo (deprecated)',
     display: 'OSMO (deprecated)',
     symbol: 'OSMO',
   },
   {
-    description: 'OSMO from Osmosis',
+    description: 'IBC token from transfer/channel-1493/uosmo',
     denom_units: [
       {
-        denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+        denom: 'uosmo',
         exponent: 0,
         aliases: [],
       },
     ],
     base: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'OSMO',
+    name: 'transfer/channel-1493/uosmo IBC token',
     display: 'OSMO',
     symbol: 'OSMO',
   },
@@ -218,11 +224,13 @@ const certifiedVaults = ['6', '8', '9', '10', '11'];
 
 const externalChains = [
   {
-    id: 'cosmoshub',
-    chainId: 'cosmoshub-4',
-    chainName: 'Cosmos Hub',
-    rpc: 'https://rpc-cosmoshub.keplr.app',
-    rest: 'https://lcd-cosmoshub.keplr.app',
+    chainId: 'theta-testnet-001',
+    chainName: 'cosmoshub(test)',
+    display: 'Cosmoshub Theta Testnet',
+    disabled: true,
+    cosmos: true,
+    rpc: 'https://rpc.sentry-01.theta-testnet.polypore.xyz',
+    rest: 'https://rest.sentry-01.theta-testnet.polypore.xyz',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'cosmos',
@@ -265,13 +273,25 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
     },
+    availableTokens: [
+      {
+        symbol: 'ATOM',
+        denom: 'uatom',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
   },
   {
-    id: 'osmosis',
-    chainId: 'osmosis-1',
-    chainName: 'Osmosis',
-    rpc: 'https://rpc-osmosis.keplr.app',
-    rest: 'https://lcd-osmosis.keplr.app',
+    chainId: 'osmo-test-5',
+    chainName: 'osmosis(test)',
+    display: 'Osmosis testnet 5',
+    disabled: false,
+    cosmos: true,
+    rpc: 'https://rpc.osmotest5.osmosis.zone',
+    rest: 'https://lcd.osmotest5.osmosis.zone',
+    ibcSourcePort: 'transfer',
+    ibcSourceChannel: 'channel-1493',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',
@@ -322,6 +342,132 @@ const externalChains = [
       coinImageUrl:
         'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
     },
+    availableTokens: [
+      {
+        symbol: 'OSMO',
+        denom: 'uosmo',
+        contractAddress: '',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '5',
+    chainName: 'ethereum-2',
+    display: 'Ethereum Goerli Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0x75d8dCEa1Fa5E47526020eE8ADbfAbd583A9a134',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+        decimal: 6,
+      },
+      {
+        symbol: 'wAXL',
+        denom: 'uaxl',
+        contractAddress: '0x23ee2343B892b1BB63503a4FAbc840E0e2C6810f',
+        decimal: 6,
+      },
+      {
+        symbol: 'WETH',
+        denom: 'eth-wei',
+        contractAddress: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '80001',
+    chainName: 'Polygon',
+    display: 'Polygon Mumbai Testnet',
+    disabled: false,
+    cosmos: false,
+    yieldAggregatorContractAddress: '0xa5609cb1af27a7C29466A83FC46D84F32e197D4e',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x2c852e740B62308c46DD29B982FBb650D063Bd07',
+        decimal: 6,
+      },
+      {
+        symbol: 'wAXL',
+        denom: 'uaxl',
+        contractAddress: '0x9c79782d2B13CAC0Fa2FB00D188104fe6f98E533',
+        decimal: 6,
+      },
+      {
+        symbol: 'axlWETH',
+        denom: 'eth-wei',
+        contractAddress: '0x786D82A436EA836A8669919D605FfeaEFa51744e',
+        decimal: 6,
+      },
+      {
+        symbol: 'WMATIC',
+        denom: 'wmatic-wei',
+        contractAddress: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '43113',
+    chainName: 'Avalanche',
+    display: 'Avalanche Fuji Testnet',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x57F1c63497AEe0bE305B8852b354CEc793da43bB',
+        decimal: 6,
+      },
+      {
+        symbol: 'wAXL',
+        denom: 'uaxl',
+        contractAddress: '0xa8B51e6517f9A6Ab7b247bF10b71b1A738eD8E50',
+        decimal: 6,
+      },
+      {
+        symbol: 'axlWETH',
+        denom: 'eth-wei',
+        contractAddress: '0xe840BE8D9aB1ACD5AfC7168b05EC350B7FD18709',
+        decimal: 6,
+      },
+      {
+        symbol: 'WAVAX',
+        denom: 'wavax-wei',
+        contractAddress: '0xd00ae08403B9bbb9124bB305C09058E32C39A48c',
+        decimal: 6,
+      },
+    ],
+  },
+  {
+    chainId: '421613',
+    chainName: 'arbitrum',
+    display: 'Arbitrum Goerli Testnet',
+    disabled: true,
+    cosmos: false,
+    yieldAggregatorContractAddress: '',
+    availableTokens: [
+      {
+        symbol: 'aUSDC',
+        denom: 'uausdc',
+        contractAddress: '0x254d06f33bDc5b8ee05b2ea472107E300226659A',
+        decimal: 6,
+      },
+      {
+        symbol: 'wAXL',
+        denom: 'uaxl',
+        contractAddress: '0x23ee2343B892b1BB63503a4FAbc840E0e2C6810f',
+        decimal: 6,
+      },
+    ],
   },
 ];
 
@@ -345,6 +491,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {
@@ -379,6 +526,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {
@@ -413,6 +561,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {
@@ -447,6 +596,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    yieldAggregatorContractAddress,
     extension: {
       faucet: [
         {

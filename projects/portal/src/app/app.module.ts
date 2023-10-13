@@ -16,6 +16,7 @@ import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-di
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
 import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { InactiveValidatorModule } from './views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.module';
+import { ExternalTxConfirmDialogModule } from './views/dialogs/txs/external-tx-confirm/external-tx-confirm-dialog.module';
 import { TxConfirmDialogModule } from './views/dialogs/txs/tx-confirm/tx-confirm-dialog.module';
 import { ConnectExternalWalletDialogModule } from './views/dialogs/wallets/connect-external-cosmos-dialog/connect-external-wallet-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
@@ -61,6 +62,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     TxFeeConfirmDialogModule,
     ConnectWalletCompletedDialogModule,
     ConnectWalletStartDialogModule,
+    ConnectExternalWalletDialogModule,
     UnunifiBackupMnemonicAndPrivateKeyWizardDialogModule,
     UnunifiBackupPrivateKeyWizardDialogModule,
     UnunifiCreateWalletFormDialogModule,
@@ -71,6 +73,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     UnunifiKeyFormDialogModule,
     InactiveValidatorModule,
     TxConfirmDialogModule,
+    ExternalTxConfirmDialogModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,
@@ -85,7 +88,6 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     AppWithdrawIncentiveAllRewardsFormDialogModule,
     AppNftsDialogModule,
     GraphQLModule,
-    ConnectExternalWalletDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

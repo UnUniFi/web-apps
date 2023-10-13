@@ -1,7 +1,7 @@
 import { WalletType } from '../../../../models/wallets/wallet.model';
-import { ExternalChain } from '../../../yieldaggregator/vaults/vault/vault.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
+import { ExternalChainInfo } from 'projects/portal/src/app/models/config.service';
 
 @Component({
   selector: 'view-connect-external-wallet-dialog',
@@ -13,7 +13,7 @@ export class ConnectExternalWalletDialogComponent implements OnInit {
 
   constructor(
     @Inject(DIALOG_DATA)
-    public readonly data: ExternalChain,
+    public readonly data: ExternalChainInfo,
     public dialogRef: DialogRef<WalletType, ConnectExternalWalletDialogComponent>,
   ) {
     if (data.cosmos) {

@@ -30,21 +30,21 @@
               [class]="{
                 'select-error': assetNgModelRef.errors
               }"
-              [(ngModel)]="selectedSymbol"
+              [(ngModel)]="denom"
               name="symbol"
-              (change)="onChangeSymbol()"
-              [disabled]="!availableSymbols?.length"
+              (change)="onChangeDenom()"
+              [disabled]="!availableTokens?.length"
             >
               <option [value]="undefined" disabled>
-                <span *ngIf="!availableSymbols || !availableSymbols.length"
+                <span *ngIf="!availableTokens || !availableTokens.length"
                   >No Strategy on the chain</span
                 >
-                <span *ngIf="availableSymbols && availableSymbols.length"
+                <span *ngIf="availableTokens && availableTokens.length"
                   >Select an asset's symbol</span
                 >
               </option>
-              <ng-container *ngFor="let symbol of availableSymbols">
-                <option [value]="symbol?.symbol">{{ symbol?.display }}</option>
+              <ng-container *ngFor="let denom of availableTokens">
+                <option [value]="denom.base">{{ denom.display }}</option>
               </ng-container>
             </select>
           </div>
@@ -71,12 +71,13 @@
               </div>
             </label>
             <input
+              required
               type="text"
               #nameNgModelRef="ngModel"
               placeholder="Enter your vault name"
               class="input input-bordered w-full"
               [class]="{
-                'input-error': nameNgModelRef.errors && nameNgModelRef.touched
+                'input-error': nameNgModelRef.errors
               }"
               [(ngModel)]="name"
               name="name"
@@ -121,11 +122,12 @@
               </div>
             </label>
             <input
+              required
               type="text"
               #collectorNgModelRef="ngModel"
               class="input input-bordered w-full"
               [class]="{
-                'input-error': collectorNgModelRef.errors && collectorNgModelRef.touched
+                'input-error': collectorNgModelRef.errors
               }"
               [(ngModel)]="address"
               name="collector"
@@ -273,7 +275,7 @@
                   target="_blank"
                 >
                   {{ strategy.name }}
-                  <span class="material-symbols-outlined">info</span>
+                  <!-- <span class="material-symbols-outlined">info</span> -->
                 </a>
                 <div class="w-full sm:w-auto sm:flex-auto">
                   <div class="join w-full">

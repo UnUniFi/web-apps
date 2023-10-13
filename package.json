@@ -52,7 +52,7 @@
     "@angular/router": "~14.0.4",
     "@apollo/client": "^3.0.0",
     "@axelar-network/axelarjs-sdk": "^0.12.8",
-    "@cosmos-client/core": "0.47.3",
+    "@cosmos-client/core": "0.47.4-rc1",
     "@cosmos-client/cosmwasm": "^0.40.3",
     "@cosmos-client/ibc": "^7.0.3",
     "@metamask/detect-provider": "^1.2.0",

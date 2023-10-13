@@ -14,6 +14,9 @@
         <div class="stats shadow">
           <div class="stat">
             <div class="stat-title">Total Deposited Amount</div>
+            <div class="stat-value" *ngIf="usdTotalAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
             <div class="stat-value">{{ usdTotalAmount | currency }}</div>
           </div>
         </div>

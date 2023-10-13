@@ -27,7 +27,7 @@ export class StrategiesComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
   ) {
-    this.denom$ = this.route.params.pipe(map((params) => params.denom));
+    this.denom$ = this.route.params.pipe(map((params) => params.denom || 'all'));
     this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     const allStrategies$ = this.iyaQuery.listStrategies$();
@@ -41,7 +41,7 @@ export class StrategiesComponent implements OnInit {
     );
     this.strategies$ = combineLatest([allStrategies$, this.denom$]).pipe(
       map(([strategies, denom]) => {
-        if (denom) {
+        if (denom && denom !== 'all') {
           return strategies.filter((strategy) => strategy.strategy?.denom == denom);
         } else {
           return strategies;

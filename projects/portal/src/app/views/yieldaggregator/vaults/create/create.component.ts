@@ -14,9 +14,7 @@ export class CreateComponent implements OnInit {
   @Input()
   denom?: string | null;
   @Input()
-  availableSymbols?: ({ symbol: string; display: string } | undefined)[] | null;
-  @Input()
-  selectedSymbol?: string | null;
+  availableTokens?: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] | null;
   @Input()
   strategies?: StrategyAll200ResponseStrategiesInner[] | null;
   @Input()
@@ -73,15 +71,12 @@ export class CreateComponent implements OnInit {
     this.selectedStrategies.splice(index, 1);
   }
 
-  onChangeSymbol() {
+  onChangeDenom() {
     this.selectedStrategies = [];
-    if (!this.selectedSymbol) {
+    if (!this.denom) {
       return;
     }
-    const denom = this.denomMetadataMap?.[this.selectedSymbol].base;
-    if (denom) {
-      this.changeDenom.emit(denom);
-    }
+    this.changeDenom.emit(this.denom);
   }
 
   onSubmitCreate() {
@@ -92,10 +87,6 @@ export class CreateComponent implements OnInit {
       return;
     }
     const filteredStrategies = strategies.map((s) => ({ id: s.id!, weight: s.weight }));
-    if (!this.selectedSymbol) {
-      alert('Invalid Asset.');
-      return;
-    }
     if (!this.fee || !this.deposit) {
       alert('Invalid Fee or Deposit.');
       return;

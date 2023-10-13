@@ -220,6 +220,7 @@ const strategiesInfo = [
   },
 ];
 
+const certifiedVaults = ['6', '8', '9', '10', '11'];
 const externalChains = [
   {
     chainId: 'theta-testnet-001',
@@ -425,6 +426,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -459,6 +461,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -493,6 +496,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -527,6 +531,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {

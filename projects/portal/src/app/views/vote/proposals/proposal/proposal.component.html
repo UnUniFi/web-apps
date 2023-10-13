@@ -64,50 +64,75 @@
             <div class="stat-title">Yes</div>
             <div class="stat-value text-success">
               <span class="material-symbols-outlined">thumb_up</span>
-              {{ tally?.yes_count }}
+              {{ tally?.yes_count | coinAmount }}
             </div>
-            <div class="stat-desc"></div>
+            <div class="stat-desc">{{ calcTallyRatio(tally?.yes_count) | percent : '1.0-2' }}</div>
           </div>
           <div class="stat">
             <div class="stat-title">No</div>
             <div class="stat-value text-warning">
               <span class="material-symbols-outlined">thumb_down</span>
-              {{ tally?.no_count }}
+              {{ tally?.no_count | coinAmount }}
             </div>
-            <div class="stat-desc"></div>
+            <div class="stat-desc">{{ calcTallyRatio(tally?.no_count) | percent : '1.0-2' }}</div>
           </div>
           <div class="stat">
-            <div class="stat-title">No with Veto</div>
+            <div class="stat-title">Veto</div>
             <div class="stat-value text-error">
               <span class="material-symbols-outlined">not_interested</span>
-              {{ tally?.no_with_veto_count }}
+              {{ tally?.no_with_veto_count | coinAmount }}
             </div>
-            <div class="stat-desc"></div>
+            <div class="stat-desc">
+              {{ calcTallyRatio(tally?.no_with_veto_count) | percent : '1.0-2' }}
+            </div>
           </div>
           <div class="stat">
             <div class="stat-title">Abstain</div>
             <div class="stat-value text-primary">
               <span class="material-symbols-outlined">subtitles_off</span>
-              {{ tally?.abstain_count }}
+              {{ tally?.abstain_count | coinAmount }}
             </div>
-            <div class="stat-desc"></div>
+            <div class="stat-desc">
+              {{ calcTallyRatio(tally?.abstain_count) | percent : '1.0-2' }}
+            </div>
           </div>
         </div>
 
-        <div class="overflow-x-auto mb-4" *ngIf="tallyParams">
+        <div class="overflow-x-auto" *ngIf="tallyParams">
           <table class="table w-full">
-            <thead>
-              <tr>
-                <td>Quorum</td>
-                <td>Threshold</td>
-                <td>Veto Threshold</td>
-              </tr>
-            </thead>
             <tbody>
               <tr>
-                <td>{{ tallyParams.quorum }}</td>
-                <td>{{ tallyParams.threshold }}</td>
-                <td>{{ tallyParams.veto_threshold }}</td>
+                <th>Quorum</th>
+                <td>
+                  <span class="text-error" *ngIf="quorumNotReached">Quorum not reached: </span>
+                  <span>
+                    {{ quorum | percent : '1.0-2' }} / {{ tallyParams.quorum | percent : '1.0-2' }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Threshold</th>
+                <td>
+                  <span class="text-error" *ngIf="thresholdNotReached">
+                    Threshold not reached:
+                  </span>
+                  <span>
+                    {{ threshold | percent : '1.0-2' }} /
+                    {{ tallyParams.threshold | percent : '1.0-2' }}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th>Veto Threshold</th>
+                <td>
+                  <span class="text-error" *ngIf="vetoThresholdReached">
+                    Veto Threshold reached:
+                  </span>
+                  <span>
+                    {{ vetoThreshold | percent : '1.0-2' }} /
+                    {{ tallyParams.veto_threshold | percent : '1.0-2' }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -160,14 +185,20 @@
             <div class="stat-value">{{ total.amount | coinAmount }}</div>
             <div class="stat-desc">{{ total.denom | coinDenom | async }}</div>
           </div>
-          <div class="stat" *ngFor="let min of depositParams?.min_deposit">
-            <div class="stat-title">Minimum Deposit</div>
-            <div class="stat-value">{{ min.amount | coinAmount }}</div>
-            <div class="stat-desc">{{ min.denom | coinDenom | async }}</div>
-          </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <label class="cursor-pointer label" *ngIf="deposits?.length">
+          <span class="label-text mr-2">Deposit Details</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            name="openSearch"
+            [(ngModel)]="depositDetailEnabled"
+          />
+          <span class="flex-auto"></span>
+        </label>
+
+        <div class="overflow-x-auto" *ngIf="depositDetailEnabled">
           <table class="table w-full">
             <tbody>
               <ng-container *ngFor="let deposit of deposits; last as last">
@@ -182,6 +213,26 @@
           </table>
         </div>
 
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <th>Minimum Deposit</th>
+                <td>
+                  <ng-container *ngFor="let min of depositParams?.min_deposit">
+                    {{ min.amount | coinAmount }} {{ min.denom | coinDenom | async }}
+                  </ng-container>
+                </td>
+              </tr>
+              <tr>
+                <th>Max Deposit Period</th>
+                <td>
+                  {{ depositParams?.max_deposit_period }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="card-actions justify-end">
           <button
             class="btn btn-outline btn-info px-8 gap-2"

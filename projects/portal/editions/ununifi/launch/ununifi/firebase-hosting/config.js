@@ -222,6 +222,8 @@ const denomMetadata = [
   },
 ];
 
+const certifiedVaults = ['5', '6', '7'];
+
 const strategiesInfo = [
   {
     id: '0',
@@ -232,6 +234,39 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '803',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+  {
+    id: '1',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '3',
     },
   },
 ];
@@ -410,6 +445,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -418,8 +454,8 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 1000,
+          maxCredit: 1000,
         },
       ],
       // monitor: {},
@@ -444,6 +480,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -452,8 +489,8 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 1000,
+          maxCredit: 1000,
         },
       ],
       // monitor: {},
@@ -478,6 +515,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {
@@ -504,6 +542,7 @@ const configs = [
     apps,
     denomMetadata,
     strategiesInfo,
+    certifiedVaults,
     externalChains,
     yieldAggregatorContractAddress,
     extension: {

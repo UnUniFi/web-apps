@@ -24,7 +24,7 @@ import {
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
-import { BehaviorSubject, combineLatest, Observable, of, timer } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   EstimateMintAmount200Response,
@@ -158,8 +158,9 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
-      mergeMap(async ([vault, config]) => this.iyaService.calcVaultAPY(vault, config)),
+    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$, osmoPools$]).pipe(
+      map(([vault, config, pools]) => this.iyaService.calcVaultAPY(vault, config!, pools)),
     );
     const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
     this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(

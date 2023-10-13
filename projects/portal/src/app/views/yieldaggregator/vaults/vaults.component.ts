@@ -25,25 +25,30 @@ export class VaultsComponent implements OnInit {
   @Input()
   sortType?: string | null;
   @Input()
-  sortTypes?: { value: string; display: string }[];
+  certified?: boolean | null;
   @Output()
   search = new EventEmitter<string>();
   @Output()
   sort = new EventEmitter<string>();
+  @Output()
+  certifiedChange = new EventEmitter<boolean>();
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
-  navigate(path: string) {
-    this.router.navigate(['path']);
-  }
-
   onSearch() {
     this.search.emit(this.keyword || '');
   }
 
-  onSort() {
-    this.sort.emit(this.sortType || '');
+  onSort(sortType: string) {
+    this.sort.emit(sortType);
+  }
+
+  onCertifiedChange() {
+    if (this.certified === undefined || this.certified === null) {
+      return;
+    }
+    this.certifiedChange.emit(this.certified);
   }
 }

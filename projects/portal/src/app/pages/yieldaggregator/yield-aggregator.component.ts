@@ -4,7 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  StrategyAll200ResponseStrategiesInner,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-yield-aggregator',
@@ -17,6 +20,7 @@ export class YieldAggregatorComponent implements OnInit {
   }>;
   availableSymbols$: Observable<string[]>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
+  strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
 
   constructor(
     private readonly bankQuery: BankQueryService,
@@ -42,6 +46,7 @@ export class YieldAggregatorComponent implements OnInit {
       }),
     );
     this.vaults$ = this.iyaQuery.listVaults$();
+    this.strategies$ = this.iyaQuery.listStrategies$();
   }
 
   ngOnInit(): void {}

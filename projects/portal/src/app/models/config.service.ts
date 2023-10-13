@@ -27,6 +27,7 @@ export type Config = {
   externalChains: ExternalChainInfo[];
   yieldAggregatorContractAddress?: string;
   outpostDepositContractAddress?: string;
+  certifiedVaults: string[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;

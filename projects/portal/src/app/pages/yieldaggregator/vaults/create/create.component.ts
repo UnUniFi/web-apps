@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
-import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
@@ -20,8 +19,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
   denom$: Observable<string>;
-  availableSymbols$: Observable<({ symbol: string; display: string } | undefined)[]>;
-  selectedSymbol$: Observable<string | undefined>;
+  availableTokens$: Observable<cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[]>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   denomMetadataMap$: Observable<{
@@ -34,7 +32,6 @@ export class CreateComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private readonly bank: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly walletService: WalletService,
     private readonly iyaQuery: YieldAggregatorQueryService,
@@ -51,33 +48,12 @@ export class CreateComponent implements OnInit {
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.availableSymbols$ = combineLatest([allStrategies$, this.denomMetadataMap$]).pipe(
+    this.availableTokens$ = combineLatest([allStrategies$, this.denomMetadataMap$]).pipe(
       map(([allStrategies, denomMetadataMap]) => {
         const symbols = allStrategies
-          .map((strategy) => {
-            const denomMetadata = denomMetadataMap[strategy.strategy?.denom || ''];
-            if (denomMetadata) {
-              return {
-                symbol: denomMetadata.symbol!,
-                display: denomMetadata.display!,
-              };
-            } else {
-              return undefined;
-            }
-          })
-          .filter((symbol) => symbol !== undefined);
+          .map((strategy) => denomMetadataMap[strategy.strategy?.denom || ''])
+          .filter((metadata) => metadata !== undefined);
         return [...new Set(symbols)];
-      }),
-    );
-    this.availableSymbols$.subscribe((symbols) => console.log(symbols));
-
-    this.selectedSymbol$ = combineLatest([this.denom$, this.denomMetadataMap$]).pipe(
-      map(([denom, denomMetadataMap]) => {
-        if (denom && denomMetadataMap) {
-          return denomMetadataMap[denom].symbol || undefined;
-        } else {
-          return undefined;
-        }
       }),
     );
     const params$ = this.iyaQuery.getYieldAggregatorParam$();

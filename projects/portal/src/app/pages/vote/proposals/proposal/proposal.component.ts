@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import {
   Deposits200ResponseDepositsInner,
   GovParams200ResponseDepositParams,
@@ -9,10 +10,10 @@ import {
   GovV1Proposal200ResponseProposalsInnerFinalTallyResult,
   GovV1Votes200ResponseVotesInner,
 } from '@cosmos-client/core/esm/openapi';
-import { CosmosRestService } from 'projects/portal/src/app/models/cosmos-rest.service';
+import { CosmosSDKService } from 'projects/portal/src/app/models';
 import { GovApplicationService } from 'projects/portal/src/app/models/cosmos/gov.application.service';
-import { Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { Observable, combineLatest, of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-proposal',
@@ -27,23 +28,114 @@ export class ProposalComponent implements OnInit {
   tallyParams$: Observable<GovParams200ResponseTallyParams | undefined>;
   votes$: Observable<GovV1Votes200ResponseVotesInner[] | undefined>;
   votingParams$: Observable<GovParams200ResponseVotingParams | undefined>;
+  tallyTotalCount$: Observable<number>;
+  quorum$: Observable<number>;
+  threshold$: Observable<number>;
+  vetoThreshold$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
+    private cosmosSDK: CosmosSDKService,
     private readonly govAppService: GovApplicationService,
-    private readonly cosmosRest: CosmosRestService,
   ) {
     const proposalID$ = this.route.params.pipe(map((params) => params.id as string));
 
-    this.proposal$ = proposalID$.pipe(mergeMap((id) => this.cosmosRest.getProposal$(id)));
-    this.deposits$ = proposalID$.pipe(mergeMap((id) => this.cosmosRest.getDeposits$(id)));
-    this.depositParams$ = this.cosmosRest.getDepositParams$();
-    this.tally$ = proposalID$.pipe(
-      mergeMap((proposalId) => this.cosmosRest.getTallyResult$(proposalId)),
+    const combined$ = combineLatest([this.cosmosSDK.sdk$, proposalID$]);
+    this.proposal$ = combined$.pipe(
+      mergeMap(([sdk, id]) => cosmosclient.rest.gov.govV1Proposal(sdk.rest, id)),
+      map((result) => result.data.proposal!),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
     );
-    this.tallyParams$ = this.cosmosRest.getTallyParams$();
-    this.votes$ = proposalID$.pipe(mergeMap((proposalId) => this.cosmosRest.getVotes$(proposalId)));
-    this.votingParams$ = this.cosmosRest.getVotingParams$();
+
+    this.deposits$ = combined$.pipe(
+      mergeMap(([sdk, id]) => cosmosclient.rest.gov.govV1Deposits(sdk.rest, id)),
+      map((result) => result.data.deposits!),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    this.depositParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Params(sdk.rest, 'deposit')),
+      map((result) => result.data.deposit_params),
+    );
+
+    this.tally$ = combined$.pipe(
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.govV1TallyResult(sdk.rest, address)),
+      map((result) => result.data.tally!),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    this.tallyParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Params(sdk.rest, 'tallying')),
+      map((result) => result.data.tally_params),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    this.votes$ = combined$.pipe(
+      mergeMap(([sdk, address]) => cosmosclient.rest.gov.govV1Votes(sdk.rest, address)),
+      map((result) => result.data.votes!),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    this.votingParams$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.gov.govV1Params(sdk.rest, 'voting')),
+      map((result) => result.data.voting_params),
+      catchError((error) => {
+        console.error(error);
+        return of(undefined);
+      }),
+    );
+
+    const pool$ = this.cosmosSDK.sdk$.pipe(
+      mergeMap((sdk) => cosmosclient.rest.staking.pool(sdk.rest)),
+      map((result) => result.data.pool),
+    );
+
+    this.tallyTotalCount$ = this.tally$.pipe(
+      map(
+        (tally) =>
+          Number(tally?.yes_count) +
+          Number(tally?.no_count) +
+          Number(tally?.no_with_veto_count) +
+          Number(tally?.abstain_count),
+      ),
+    );
+
+    this.quorum$ = combineLatest([this.tallyTotalCount$, pool$]).pipe(
+      map(([tallyTotalCount, pool]) => tallyTotalCount / Number(pool?.bonded_tokens)),
+    );
+    this.threshold$ = this.tally$.pipe(
+      map(
+        (tally) =>
+          Number(tally?.yes_count) /
+            (Number(tally?.yes_count) +
+              Number(tally?.no_count) +
+              Number(tally?.no_with_veto_count)) || 0,
+      ),
+    );
+    this.vetoThreshold$ = this.tally$.pipe(
+      map(
+        (tally) =>
+          Number(tally?.no_with_veto_count) /
+            (Number(tally?.yes_count) +
+              Number(tally?.no_count) +
+              Number(tally?.no_with_veto_count)) || 0,
+      ),
+    );
   }
 
   ngOnInit(): void {}

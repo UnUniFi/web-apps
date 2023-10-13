@@ -1,7 +1,9 @@
 import { AppNavigation, ConfigService } from '../../../models/config.service';
+import { StoredWallet } from '../../../models/wallets/wallet.model';
+import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-app-yield-aggregator',
@@ -11,8 +13,12 @@ import { map } from 'rxjs/operators';
 export class AppYieldAggregatorComponent implements OnInit {
   apps$: Observable<AppNavigation[] | undefined>;
   navigations$: Observable<{ name: string; link: string; icon: string }[] | undefined>;
+  address$: Observable<string>;
 
-  constructor(private readonly configS: ConfigService) {
+  constructor(
+    private readonly configS: ConfigService,
+    private readonly walletService: WalletService,
+  ) {
     const config$ = this.configS.config$;
     this.apps$ = config$.pipe(map((conf) => conf?.apps));
     this.navigations$ = config$.pipe(
@@ -48,6 +54,10 @@ export class AppYieldAggregatorComponent implements OnInit {
         }
         return navigation;
       }),
+    );
+    this.address$ = this.walletService.currentStoredWallet$.pipe(
+      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
+      map((wallet) => wallet.address),
     );
   }
 

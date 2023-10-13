@@ -78,7 +78,7 @@
             <!-- head -->
             <thead>
               <tr>
-                <th>
+                <!-- <th>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('id')">
                     <span>ID</span>
                     <span
@@ -88,7 +88,7 @@
                       keyboard_arrow_down
                     </span>
                   </button>
-                </th>
+                </th> -->
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('name')">
                     <span>Name</span>
@@ -113,7 +113,7 @@
                     </span>
                   </button>
                 </td>
-                <td>
+                <!-- <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('commission')">
                     <span>Commission Rate</span>
                     <span
@@ -123,10 +123,10 @@
                       keyboard_arrow_down
                     </span>
                   </button>
-                </td>
+                </td> -->
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('deposit')">
-                    <span>Total Deposited (USD)</span>
+                    <span>TVL</span>
                     <span
                       class="material-symbols-outlined"
                       [class]="{ 'text-info': sortType === 'deposit' }"
@@ -140,10 +140,10 @@
             <tbody>
               <ng-container *ngFor="let vault of vaults; let i = index">
                 <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
-                  <th>#{{ vault.vault?.id }}</th>
+                  <!-- <th>#{{ vault.vault?.id }}</th> -->
                   <div class="dropdown dropdown-hover items-center">
                     <label tabindex="0">
-                      <td style="max-width: 10rem" class="truncate">
+                      <td style="max-width: 15rem" class="truncate">
                         {{ vault.vault?.name }}
                       </td>
                     </label>
@@ -163,30 +163,44 @@
                     {{ vault.vault?.description }}
                   </td>
                   <td>
-                    <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                      <ng-container *ngIf="symbols[i]?.img">
+                    <div class="flex items-center space-x-3 gap-2">
+                      <ng-container *ngIf="symbols && symbols[i]?.img">
                         <div class="avatar">
                           <div class="mask mask-circle w-6 h-6">
                             <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
                           </div>
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="!symbols[i]?.img">
+                      <ng-container *ngIf="!symbols || !symbols[i]?.img">
                         <span class="material-symbols-outlined">question_mark</span>
                       </ng-container>
-                      <span>
+                      <div
+                        class="animate-pulse bg-slate-700 w-24 h-6 rounded-full"
+                        *ngIf="symbols === null"
+                      ></div>
+                      <span *ngIf="symbols">
                         {{ symbols[i].display }}
                       </span>
                     </div>
                   </td>
                   <td>
+                    <div
+                      class="animate-pulse bg-slate-700 w-12 h-6 rounded-full"
+                      *ngIf="vaultsInfo === null"
+                    ></div>
                     <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
                     <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
                       ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
                     </span>
                   </td>
-                  <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
-                  <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
+                  <!-- <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td> -->
+                  <td>
+                    <div
+                      class="animate-pulse bg-slate-700 w-12 h-6 rounded-full"
+                      *ngIf="totalDeposited === null"
+                    ></div>
+                    {{ totalDeposited?.[i]?.usdAmount | currency }}
+                  </td>
                 </tr>
               </ng-container>
             </tbody>

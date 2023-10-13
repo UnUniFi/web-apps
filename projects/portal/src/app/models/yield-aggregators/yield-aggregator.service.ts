@@ -180,6 +180,28 @@ export class YieldAggregatorService {
       });
   }
 
+  async getAllOsmoPool(): Promise<OsmosisPools> {
+    const url = 'https://api-osmosis.imperator.co/apr/v2/all';
+    return this.http
+      .get(url)
+      .toPromise()
+      .then((res: any) => {
+        const pools = res as OsmosisPools;
+        return pools;
+      });
+  }
+
+  async getOsmoPool(poolId: string): Promise<OsmosisPools> {
+    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then((res: any) => {
+        const pool = res as OsmosisPools;
+        return pool;
+      });
+  }
+
   async getStrategyAPR(strategyInfo?: YieldInfo): Promise<number> {
     if (!strategyInfo) {
       return 0;
@@ -192,7 +214,7 @@ export class YieldAggregatorService {
     return strategyInfo.minApy || 0;
   }
 
-  async calcVaultAPY(vault: Vault200Response, config?: Config): Promise<YieldInfo> {
+  calcVaultAPY(vault: Vault200Response, config: Config, osmoPools: OsmosisPools): YieldInfo {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
@@ -208,15 +230,30 @@ export class YieldAggregatorService {
     }
     let vaultAPY = 0;
     let vaultAPYCertainty = false;
+
     for (const strategyWeight of vault.vault.strategy_weights) {
       const strategyInfo = config?.strategiesInfo?.find(
         (strategyInfo) =>
           strategyInfo.id === strategyWeight.strategy_id &&
           strategyInfo.denom === vault.vault?.denom,
       );
-      const strategyAPY = await this.getStrategyAPR(strategyInfo);
-      vaultAPY += Number(strategyAPY) * Number(strategyWeight.weight);
+      if (!strategyInfo || !strategyInfo.poolInfo) {
+        continue;
+      }
+      const poolInfo = strategyInfo.poolInfo;
+      if (poolInfo.type === 'osmosis') {
+        const pool = osmoPools.find((pool) => pool.pool_id.toString() === poolInfo.poolId);
+        if (!pool) {
+          continue;
+        }
+        let totalApr = 0;
+        for (const apr of pool.apr_list) {
+          totalApr += apr.apr_superfluid;
+        }
+        vaultAPY += (Number(totalApr) / 100) * Number(strategyWeight.weight);
+      }
     }
+
     return {
       id: vault.vault?.id || '',
       denom: vault.vault?.denom || '',

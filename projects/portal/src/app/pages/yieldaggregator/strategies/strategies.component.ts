@@ -27,7 +27,7 @@ export class StrategiesComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
   ) {
-    this.denom$ = this.route.params.pipe(map((params) => params.denom));
+    this.denom$ = this.route.params.pipe(map((params) => params.denom || 'all'));
     this.denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.symbolImageMap = this.bankQuery.getSymbolImageMap();
     const allStrategies$ = this.iyaQuery.listStrategies$();

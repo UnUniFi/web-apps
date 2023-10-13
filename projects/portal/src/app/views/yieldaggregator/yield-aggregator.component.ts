@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  StrategyAll200ResponseStrategiesInner,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 export interface OptionConfig {
   name: string;
@@ -21,6 +24,8 @@ export class YieldAggregatorComponent implements OnInit {
   availableSymbols?: string[] | null;
   @Input()
   vaults?: VaultAll200ResponseVaultsInner[] | null;
+  @Input()
+  strategies?: StrategyAll200ResponseStrategiesInner[] | null;
 
   configs: OptionConfig[];
   selectedConfig: OptionConfig;

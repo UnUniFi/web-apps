@@ -11,6 +11,8 @@ export class AppYieldAggregatorComponent implements OnInit {
   navigations?: { name: string; link: string; icon: string }[] | null;
   @Input()
   apps?: AppNavigation[] | null;
+  @Input()
+  address?: string | null;
 
   constructor() {}
 

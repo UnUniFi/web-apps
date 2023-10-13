@@ -54,6 +54,15 @@ export class VaultsComponent implements OnInit {
         vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools)),
       ),
     );
+    const vaultYieldMap$ = vaultYields$.pipe(
+      map((yields) => {
+        const yieldMap: { [id: string]: YieldInfo } = {};
+        for (const y of yields) {
+          yieldMap[y.id] = y;
+        }
+        return yieldMap;
+      }),
+    );
     const vaultDeposits$ = combineLatest([vaults$, denomMetadataMap$, symbolMetadataMap$]).pipe(
       mergeMap(([vaults, denomMetadataMap, symbolMetadataMap]) =>
         Promise.all(
@@ -161,11 +170,11 @@ export class VaultsComponent implements OnInit {
       }),
     );
     this.vaults$ = sortedVaults$;
-    this.vaultsInfo$ = combineLatest([this.vaults$, vaultYields$]).pipe(
-      map(([vaults, infos]) =>
+    this.vaultsInfo$ = combineLatest([this.vaults$, vaultYieldMap$]).pipe(
+      map(([vaults, map]) =>
         vaults.map(
           (vault) =>
-            infos.find((info) => info.id === vault.vault?.id) || {
+            map[vault.vault?.id!] || {
               id: vault.vault?.id!,
               minApy: 0,
               certainty: false,

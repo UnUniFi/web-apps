@@ -51,7 +51,7 @@
           <li>
             <label class="flex gap-4" routerLink="/yield-aggregator/vaults">
               <span class="flex-none">
-                <span class="material-symbols-outlined">storage</span>
+                <span class="material-symbols-outlined">folder</span>
               </span>
               <span class="flex-1">Vaults</span>
             </label>
@@ -62,6 +62,22 @@
                 <span class="material-symbols-outlined">map</span>
               </span>
               <span class="flex-1">Strategies</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/yield-aggregator/vaults/deposit/{{ address }}">
+              <span class="flex-none">
+                <span class="material-symbols-outlined"> folder_open </span>
+              </span>
+              <span class="flex-1">Deposited Vaults</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/yield-aggregator/vaults/owner/{{ address }}">
+              <span class="flex-none">
+                <span class="material-symbols-outlined"> folder_shared </span>
+              </span>
+              <span class="flex-1">Own Vaults</span>
             </label>
           </li>
           <li>

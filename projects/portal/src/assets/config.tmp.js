@@ -13,7 +13,7 @@ const chainID = 'ununifi-alpha-test';
 const chainName = 'UnUniFi (alpha-test)';
 
 const yieldAggregatorContractAddress =
-  'ununifi14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sm5z28e';
+  'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -257,7 +257,7 @@ const externalChains = [
     rpc: 'https://rpc.osmotest5.osmosis.zone',
     rest: 'https://lcd.osmotest5.osmosis.zone',
     ibcSourcePort: 'transfer',
-    ibcSourceChannel: 'channel-1786',
+    ibcSourceChannel: 'channel-1858',
     bip44: { coinType: 118 },
     bech32Config: {
       bech32PrefixAccAddr: 'osmo',

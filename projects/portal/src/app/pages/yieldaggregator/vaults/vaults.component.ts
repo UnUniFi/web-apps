@@ -10,7 +10,7 @@ import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/y
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
@@ -48,9 +48,10 @@ export class VaultsComponent implements OnInit {
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const vaultYields$ = combineLatest([vaults$, config$]).pipe(
-      mergeMap(async ([vaults, config]) =>
-        Promise.all(vaults.map(async (vault) => this.iyaService.calcVaultAPY(vault, config))),
+    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
+    const vaultYields$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
+      map(([vaults, config, pools]) =>
+        vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools)),
       ),
     );
     const vaultDeposits$ = combineLatest([vaults$, denomMetadataMap$, symbolMetadataMap$]).pipe(

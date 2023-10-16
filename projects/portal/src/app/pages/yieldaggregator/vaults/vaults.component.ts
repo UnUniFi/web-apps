@@ -1,7 +1,4 @@
-import {
-  BandProtocolService,
-  TokenAmountUSD,
-} from '../../../models/band-protocols/band-protocol.service';
+import { BandProtocolService } from '../../../models/band-protocols/band-protocol.service';
 import { ConfigService, YieldInfo } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
@@ -24,7 +21,7 @@ export class VaultsComponent implements OnInit {
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
   vaultsInfo$: Observable<YieldInfo[]>;
-  totalDeposited$: Observable<TokenAmountUSD[]>;
+  totalDeposits$: Observable<number[]>;
   keyword$: Observable<string>;
   sortType$: BehaviorSubject<string> = new BehaviorSubject<string>('id');
   certified$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
@@ -47,34 +44,39 @@ export class VaultsComponent implements OnInit {
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const osmoPools$ = from(this.iyaService.getAllOsmoPool());
-    const vaultYields$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
-      map(([vaults, config, pools]) =>
-        vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools)),
-      ),
+    const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
+      map(([vaults, config, pools]) => {
+        const yields = vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools));
+        const yieldMap: { [id: string]: YieldInfo } = {};
+        for (const y of yields) {
+          yieldMap[y.id] = y;
+        }
+        return yieldMap;
+      }),
     );
-    const vaultDeposits$ = combineLatest([vaults$, denomMetadataMap$, symbolMetadataMap$]).pipe(
-      mergeMap(([vaults, denomMetadataMap, symbolMetadataMap]) =>
-        Promise.all(
-          vaults.map(async (vault) => {
-            const deposits = await this.bandProtocolService.convertToUSDAmountSymbol(
-              denomMetadataMap?.[vault.vault?.denom || '']?.symbol || '',
-              (
-                Number(vault.total_bonded_amount) +
-                Number(vault.total_unbonding_amount) +
-                Number(vault.withdraw_reserve)
-              ).toString(),
-              symbolMetadataMap,
-            );
-            return {
-              vaultId: vault.vault?.id,
-              depositInfo: deposits,
-            };
+
+    const availableSymbols$ = combineLatest([vaults$, denomMetadataMap$]).pipe(
+      map(([vaults, denomMetadataMap]) => {
+        const denoms = vaults
+          .map((vault) => vault.vault?.denom)
+          .filter((denom): denom is string => !!denom);
+        const symbols = denoms.map((denom) => denomMetadataMap[denom]?.symbol || '');
+        return [...new Set(symbols)];
+      }),
+    );
+    const symbolPriceMap$ = availableSymbols$.pipe(
+      mergeMap((symbols) => {
+        const symbolPriceMap: { [symbol: string]: number } = {};
+        return Promise.all(
+          symbols.map(async (symbol) => {
+            const price = await this.bandProtocolService.getPrice(symbol);
+            symbolPriceMap[symbol] = price || 0;
           }),
-        ),
-      ),
+        ).then(() => symbolPriceMap);
+      }),
     );
+
     const certifiedVaults$ = combineLatest([vaults$, config$, this.certified$.asObservable()]).pipe(
       map(([vaults, config, certified]) => {
         if (certified) {
@@ -112,10 +114,11 @@ export class VaultsComponent implements OnInit {
     const sortedVaults$ = combineLatest([
       searchedVaults$,
       this.sortType$,
-      vaultYields$,
-      vaultDeposits$,
+      vaultYieldMap$,
+      symbolPriceMap$,
+      denomMetadataMap$,
     ]).pipe(
-      map(([vaults, sort, yields, deposits]) => {
+      map(([vaults, sort, yieldMap, symbolPriceMap, denomMetadataMap]) => {
         if (sort === 'id') {
           return vaults.sort((a, b) => Number(a.vault?.id) - Number(b.vault?.id));
         }
@@ -138,8 +141,8 @@ export class VaultsComponent implements OnInit {
         }
         if (sort === 'apy') {
           return vaults.sort((a, b) => {
-            const aYield = yields.find((y) => y.id === a.vault?.id);
-            const bYield = yields.find((y) => y.id === b.vault?.id);
+            const aYield = yieldMap[a.vault?.id || ''];
+            const bYield = yieldMap[b.vault?.id || ''];
             return (bYield?.minApy || 0) - (aYield?.minApy || 0);
           });
         }
@@ -151,21 +154,30 @@ export class VaultsComponent implements OnInit {
         }
         if (sort === 'deposit') {
           return vaults.sort((a, b) => {
-            console.log('hoge');
-            const aDeposit = deposits.find((d) => d.vaultId === a.vault?.id);
-            const bDeposit = deposits.find((d) => d.vaultId === b.vault?.id);
-            return (bDeposit?.depositInfo.usdAmount || 0) - (aDeposit?.depositInfo.usdAmount || 0);
+            const aDeposit = this.bandProtocolService.calcDepositUSDAmount(
+              a.vault?.denom || '',
+              this.depositAmount(a),
+              symbolPriceMap,
+              denomMetadataMap,
+            );
+            const bDeposit = this.bandProtocolService.calcDepositUSDAmount(
+              b.vault?.denom || '',
+              this.depositAmount(b),
+              symbolPriceMap,
+              denomMetadataMap,
+            );
+            return (bDeposit || 0) - (aDeposit || 0);
           });
         }
         return vaults;
       }),
     );
     this.vaults$ = sortedVaults$;
-    this.vaultsInfo$ = combineLatest([this.vaults$, vaultYields$]).pipe(
-      map(([vaults, infos]) =>
+    this.vaultsInfo$ = combineLatest([this.vaults$, vaultYieldMap$]).pipe(
+      map(([vaults, map]) =>
         vaults.map(
           (vault) =>
-            infos.find((info) => info.id === vault.vault?.id) || {
+            map[vault.vault?.id!] || {
               id: vault.vault?.id!,
               minApy: 0,
               certainty: false,
@@ -183,20 +195,16 @@ export class VaultsComponent implements OnInit {
         }),
       ),
     );
-    this.totalDeposited$ = combineLatest([this.vaults$, vaultDeposits$]).pipe(
-      map(([vaults, deposits]) =>
-        vaults.map((vault) => {
-          const deposit = deposits.find((deposit) => deposit.vaultId === vault.vault?.id) || {
-            vaultId: vault.vault?.id!,
-            depositInfo: {
-              symbol: '',
-              display: '',
-              symbolAmount: 0,
-              usdAmount: 0,
-            },
-          };
-          return deposit?.depositInfo;
-        }),
+    this.totalDeposits$ = combineLatest([this.vaults$, symbolPriceMap$, denomMetadataMap$]).pipe(
+      map(([vaults, symbolPriceMap, denomMetadataMap]) =>
+        vaults.map((vault) =>
+          this.bandProtocolService.calcDepositUSDAmount(
+            vault.vault?.denom || '',
+            this.depositAmount(vault),
+            symbolPriceMap,
+            denomMetadataMap,
+          ),
+        ),
       ),
     );
   }
@@ -219,5 +227,13 @@ export class VaultsComponent implements OnInit {
 
   appCertifiedFilterChanged(value: boolean): void {
     this.certified$.next(value);
+  }
+
+  depositAmount(vault: VaultAll200ResponseVaultsInner): number {
+    const deposit =
+      Number(vault.total_bonded_amount) +
+      Number(vault.total_unbonding_amount) +
+      Number(vault.withdraw_reserve);
+    return deposit;
   }
 }

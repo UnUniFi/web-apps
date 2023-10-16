@@ -34,34 +34,11 @@ export class BandProtocolService {
     }
   }
 
-  async convertToUSDAmountSymbol(
-    symbol: string,
-    amount: string,
-    symbolMetadataMap: { [symbol: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): Promise<TokenAmountUSD> {
-    const denom = symbolMetadataMap?.[symbol].base;
-    const display = symbolMetadataMap?.[symbol].display;
-    if (!denom) {
-      throw new Error(`Denom not found for symbol ${symbol}`);
-    }
-    if (!display) {
-      throw new Error(`Display not found for denom ${denom}`);
-    }
-    const exponent = getDenomExponent(denom);
-    const symbolAmount = Number(amount) / 10 ** (exponent || 0);
-    const price = await this.getPrice(symbol);
-    if (!price) {
-      return { symbol, display, symbolAmount };
-    }
-    const usdAmount = symbolAmount * price;
-    return { symbol, display, symbolAmount, usdAmount };
-  }
-
-  async convertToUSDAmountDenom(
+  async convertToUSDAmount(
     denom: string,
     amount: string,
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): Promise<TokenAmountUSD> {
+  ): Promise<number> {
     const symbol = denomMetadataMap[denom].symbol;
     const display = denomMetadataMap[denom].display;
     if (!symbol) {
@@ -74,10 +51,30 @@ export class BandProtocolService {
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const price = await this.getPrice(symbol);
     if (!price) {
-      return { symbol, display, symbolAmount };
+      return 0;
     }
 
     const usdAmount = symbolAmount * price;
-    return { symbol, display, symbolAmount, usdAmount };
+    return usdAmount;
+  }
+
+  calcDepositUSDAmount(
+    denom: string,
+    amount: number,
+    symbolPriceMap: { [symbol: string]: number },
+    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
+  ): number {
+    const symbol = denomMetadataMap[denom].symbol;
+    if (!symbol) {
+      throw new Error(`Symbol not found for denom ${denom}`);
+    }
+    const price = symbolPriceMap[symbol];
+    if (!price) {
+      throw new Error(`Price not found for symbol ${symbol}`);
+    }
+    const exponent = getDenomExponent(denom);
+    const symbolAmount = amount / 10 ** (exponent || 0);
+    const usdAmount = symbolAmount * price;
+    return usdAmount;
   }
 }

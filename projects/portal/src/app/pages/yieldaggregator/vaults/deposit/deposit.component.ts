@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  BandProtocolService,
-  TokenAmountUSD,
-} from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
+import {
+  EstimateRedeemAmount200Response,
+  VaultAll200ResponseVaultsInner,
+} from 'ununifi-client/esm/openapi';
 
 export type VaultBalance = {
   vaultId: string;
@@ -29,7 +28,8 @@ export class DepositComponent implements OnInit {
   vaultBalances$: Observable<VaultBalance[]>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
-  usdDepositAmount$: Observable<TokenAmountUSD[]>;
+  estimatedRedeemAmounts$: Observable<EstimateRedeemAmount200Response[]>;
+  usdDepositAmount$: Observable<number[]>;
   usdTotalAmount$: Observable<number>;
 
   constructor(
@@ -73,17 +73,26 @@ export class DepositComponent implements OnInit {
         }),
       ),
     );
-    this.usdDepositAmount$ = combineLatest([this.vaultBalances$, denomMetadataMap$]).pipe(
-      mergeMap(([vaultBalances, denomMetadataMap]) =>
+    this.estimatedRedeemAmounts$ = this.vaultBalances$.pipe(
+      mergeMap((vaultBalances) =>
         Promise.all(
           vaultBalances.map(async (balance) => {
-            const redeemAmount = await this.iyaQuery.getEstimatedRedeemAmount(
+            const amount = await this.iyaQuery.getEstimatedRedeemAmount(
               balance.vaultId,
               balance.amount,
             );
-            return this.bandProtocolService.convertToUSDAmountDenom(
-              redeemAmount.total_amount?.denom!,
-              redeemAmount.total_amount?.amount!,
+            return amount;
+          }),
+        ),
+      ),
+    );
+    this.usdDepositAmount$ = combineLatest([this.estimatedRedeemAmounts$, denomMetadataMap$]).pipe(
+      mergeMap(([redeemAmounts, denomMetadataMap]) =>
+        Promise.all(
+          redeemAmounts.map(async (redeemAmount) => {
+            return this.bandProtocolService.convertToUSDAmount(
+              redeemAmount.total_amount?.denom || '',
+              redeemAmount.total_amount?.amount || '',
               denomMetadataMap,
             );
           }),
@@ -91,9 +100,7 @@ export class DepositComponent implements OnInit {
       ),
     );
     this.usdTotalAmount$ = this.usdDepositAmount$.pipe(
-      map((usdDepositAmount) =>
-        usdDepositAmount.reduce((a, b) => (b.usdAmount ? a + b.usdAmount : a), 0),
-      ),
+      map((usdDepositAmount) => usdDepositAmount.reduce((a, b) => a + b, 0)),
     );
   }
 

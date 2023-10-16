@@ -19,7 +19,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   vaultsInfo?: YieldInfo[] | null;
   @Input()
-  totalDeposited?: TokenAmountUSD[] | null;
+  totalDeposits?: number[] | null;
   @Input()
   keyword?: string | null;
   @Input()
@@ -42,6 +42,10 @@ export class VaultsComponent implements OnInit {
   }
 
   onSort(sortType: string) {
+    // reset sort
+    if (this.sortType === sortType) {
+      sortType = 'id';
+    }
     this.sort.emit(sortType);
   }
 

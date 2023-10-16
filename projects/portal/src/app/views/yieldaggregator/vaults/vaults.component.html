@@ -197,9 +197,9 @@
                   <td>
                     <div
                       class="animate-pulse bg-slate-700 w-12 h-6 rounded-full"
-                      *ngIf="totalDeposited === null"
+                      *ngIf="totalDeposits === null"
                     ></div>
-                    {{ totalDeposited?.[i]?.usdAmount | currency }}
+                    {{ totalDeposits?.[i] | currency }}
                   </td>
                 </tr>
               </ng-container>

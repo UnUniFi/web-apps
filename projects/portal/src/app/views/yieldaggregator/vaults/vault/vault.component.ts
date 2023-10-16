@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { TokenAmountUSD } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import {
   DepositToVaultRequest,
@@ -39,21 +38,23 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Input()
-  totalDepositAmount?: TokenAmountUSD | null;
+  totalDepositAmount?: number | null;
   @Input()
-  totalBondedAmount?: TokenAmountUSD | null;
+  totalBondedAmount?: number | null;
   @Input()
-  totalUnbondingAmount?: TokenAmountUSD | null;
+  totalUnbondingAmount?: number | null;
   @Input()
-  withdrawReserve?: TokenAmountUSD | null;
+  withdrawReserve?: number | null;
   @Input()
   estimatedMintAmount?: EstimateMintAmount200Response | null;
   @Input()
   estimatedRedeemAmount?: EstimateRedeemAmount200Response | null;
   @Input()
+  estimatedDepositedAmount?: EstimateRedeemAmount200Response | null;
+  @Input()
   vaultBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  usdDepositAmount?: TokenAmountUSD | null;
+  usdDepositAmount?: number | null;
   @Input()
   vaultInfo?: YieldInfo | null;
   @Input()
@@ -231,5 +232,16 @@ export class VaultComponent implements OnInit, OnChanges {
       Number(this.coinAmountPipe.transform(this.denomBalancesMap?.[denom].amount, denom)) * rate;
     this.burnAmount = Math.floor(this.burnAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onWithdrawAmountChange();
+  }
+
+  calcVaultAmount(vault?: Vault200Response | null): string {
+    if (!vault) {
+      return '0';
+    }
+    return (
+      Number(vault.total_bonded_amount) +
+      Number(vault.total_unbonding_amount) +
+      Number(vault.withdraw_reserve)
+    ).toString();
   }
 }

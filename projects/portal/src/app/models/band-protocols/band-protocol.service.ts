@@ -34,11 +34,11 @@ export class BandProtocolService {
     }
   }
 
-  async convertToUSDAmountDenom(
+  async convertToUSDAmount(
     denom: string,
     amount: string,
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): Promise<TokenAmountUSD> {
+  ): Promise<number> {
     const symbol = denomMetadataMap[denom].symbol;
     const display = denomMetadataMap[denom].display;
     if (!symbol) {
@@ -51,11 +51,11 @@ export class BandProtocolService {
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const price = await this.getPrice(symbol);
     if (!price) {
-      return { symbol, display, symbolAmount };
+      return 0;
     }
 
     const usdAmount = symbolAmount * price;
-    return { symbol, display, symbolAmount, usdAmount };
+    return usdAmount;
   }
 
   calcDepositUSDAmount(

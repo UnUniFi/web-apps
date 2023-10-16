@@ -1,4 +1,3 @@
-import { TokenAmountUSD } from '../../../models/band-protocols/band-protocol.service';
 import { YieldInfo } from '../../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';

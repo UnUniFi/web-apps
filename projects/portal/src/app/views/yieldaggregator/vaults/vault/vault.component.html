@@ -158,13 +158,13 @@
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
             <div class="stat-value text-info">
-              {{ totalDepositAmount?.usdAmount | currency }}
+              {{ totalDepositAmount | currency }}
             </div>
-            <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount === undefined">
+            <div class="stat-value text-info" *ngIf="totalDepositAmount === undefined">
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ calcVaultAmount(vault) | coinAmount : denom }}
               {{ denom | coinDenom | async }}
             </div>
           </div>
@@ -174,13 +174,11 @@
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
             <div class="stat-value text-info">
-              {{ usdDepositAmount?.usdAmount | currency }}
+              {{ usdDepositAmount | currency }}
             </div>
-            <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount === undefined">
-              $ Unknown
-            </div>
+            <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ estimatedDepositedAmount?.total_amount?.amount | coinAmount }}
               {{ denom | coinDenom | async }}
             </div>
           </div>
@@ -192,13 +190,13 @@
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
             <div class="stat-value text-primary">
-              {{ totalBondedAmount?.usdAmount | currency }}
+              {{ totalBondedAmount | currency }}
             </div>
-            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount === undefined">
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount === undefined">
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }}
+              {{ vault?.total_bonded_amount | coinAmount : denom }}
               {{ denom | coinDenom | async }}
             </div>
           </div>
@@ -208,16 +206,13 @@
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
             <div class="stat-value text-secondary">
-              {{ totalUnbondingAmount?.usdAmount | currency }}
+              {{ totalUnbondingAmount | currency }}
             </div>
-            <div
-              class="stat-value text-secondary"
-              *ngIf="totalUnbondingAmount?.usdAmount === undefined"
-            >
+            <div class="stat-value text-secondary" *ngIf="totalUnbondingAmount === undefined">
               $ Unknown
             </div>
             <div class="stat-desc">
-              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }}
+              {{ vault?.total_unbonding_amount | coinAmount : denom }}
               {{ denom | coinDenom | async }}
             </div>
           </div>
@@ -227,13 +222,11 @@
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
             <div class="stat-value text-info">
-              {{ withdrawReserve?.usdAmount | currency }}
+              {{ withdrawReserve | currency }}
             </div>
-            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount === undefined">
-              $ Unknown
-            </div>
+            <div class="stat-value text-info" *ngIf="withdrawReserve === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ denom | coinDenom | async }}
+              {{ vault?.withdraw_reserve | coinAmount : denom }} {{ denom | coinDenom | async }}
             </div>
           </div>
         </div>

@@ -1,0 +1,55 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li>UYA Users Accounts</li>
+    </ul>
+  </div>
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <div class="overflow-x-auto">
+        <ng-container *ngIf="addressTVLs === null; then loading; else loaded"></ng-container>
+        <ng-template #loading>
+          <p class="text-center">
+            <span class="loading loading-ring loading-lg"></span>
+          </p>
+        </ng-template>
+        <ng-template #loaded>
+          <ng-container *ngIf="!addressTVLs?.length; then empty; else filled"></ng-container>
+          <ng-template #empty>
+            <p class="ml-4">There is no depositor.</p>
+          </ng-template>
+          <ng-template #filled>
+            <table class="table w-full">
+              <thead>
+                <th>Address</th>
+                <td>Deposited Vaults</td>
+                <td>TVL</td>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let addressTVL of addressTVLs"
+                  class="hover cursor-pointer"
+                  routerLink="{{ addressTVL.address }}"
+                >
+                  <th class="font-mono">
+                    {{ addressTVL.address }}
+                  </th>
+                  <td>
+                    {{ addressTVL.vaultBalances?.length || 0 }}
+                  </td>
+                  <td>{{ addressTVL.tvl | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </ng-template>
+
+        <ng-template #empty>
+          <tr>
+            <td colspan="5">There is no depositor.</td>
+          </tr>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

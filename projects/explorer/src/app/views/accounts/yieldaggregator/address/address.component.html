@@ -1,0 +1,147 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink=".."><a>UYA Users Accounts</a></li>
+      <li>{{ address }}</li>
+    </ul>
+  </div>
+
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <ng-container *ngIf="tvl === null; then loading; else loaded"></ng-container>
+      <ng-template #loading>
+        <p class="text-center">
+          <span class="loading loading-ring loading-lg"></span>
+        </p>
+      </ng-template>
+      <ng-template #loaded>
+        <div class="stats stats-vertical md:stats-horizontal shadow">
+          <div class="stat">
+            <div class="stat-title">TVL</div>
+            <div class="stat-value text-primary">{{ tvl?.tvl | currency }}</div>
+            <div class="stat-desc"></div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-title">Deposited vaults</div>
+            <div class="stat-value">{{ tvl?.vaultBalances?.length }}</div>
+            <div class="stat-desc"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <th>Vault#</th>
+              <td>YA Token Amount</td>
+              <td>$ Value</td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let balance of tvl?.vaultBalances; let i = index">
+                <th>
+                  {{ balance.denom?.replace('yieldaggregator/vaults/', '') }}
+                </th>
+                <td>
+                  {{ balance.amount | coinAmount }}
+                </td>
+                <td>{{ tvl?.values?.[i] | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8"
+          routerLink="/accounts/{{ address }}"
+        >
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="hidden md:inline">More Info</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <h3 class="card-title">Deposit History</h3>
+      <div class="overflow-x-auto">
+        <ng-container *ngIf="depositMsgs === null; then loading; else loadedDeposit"></ng-container>
+        <ng-template #loadedDeposit>
+          <ng-container
+            *ngIf="!depositMsgs?.length; then emptyDeposit; else filledDeposit"
+          ></ng-container>
+          <ng-template #emptyDeposit>
+            <p class="ml-4">There is no deposit tx.</p>
+          </ng-template>
+          <ng-template #filledDeposit>
+            <table class="table w-full">
+              <thead>
+                <th>Vault ID</th>
+                <td>Amount</td>
+                <td>Timestamp</td>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let msg of depositMsgs"
+                  class="hover cursor-pointer"
+                  routerLink="/txs/{{ msg.txHash }}"
+                >
+                  <th>
+                    {{ msg.msg.vault_id }}
+                  </th>
+                  <td>
+                    {{ msg.msg.amount | coin | async }}
+                  </td>
+                  <td>{{ msg.timestamp | date : 'yy/MM/dd HH:mm' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <h3 class="card-title">Withdrawal History</h3>
+      <div class="overflow-x-auto">
+        <ng-container
+          *ngIf="withdrawMsgs === null; then loading; else loadedWithdraw"
+        ></ng-container>
+        <ng-template #loadedWithdraw>
+          <ng-container
+            *ngIf="!withdrawMsgs?.length; then emptyWithdraw; else filledWithdraw"
+          ></ng-container>
+          <ng-template #emptyWithdraw>
+            <p class="ml-4">There is no withdrawal tx.</p>
+          </ng-template>
+          <ng-template #filledWithdraw>
+            <table class="table w-full">
+              <thead>
+                <th>Vault ID</th>
+                <td>Amount</td>
+                <td>Timestamp</td>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let msg of withdrawMsgs"
+                  class="hover cursor-pointer"
+                  routerLink="/txs/{{ msg.txHash }}"
+                >
+                  <th>
+                    {{ msg.msg.vault_id }}
+                  </th>
+                  <td>
+                    {{ msg.msg.lp_token_amount | coinAmount }} YA-Vault-{{ msg.msg.vault_id }}
+                  </td>
+                  <td>{{ msg.timestamp | date : 'yy/MM/dd HH:mm' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

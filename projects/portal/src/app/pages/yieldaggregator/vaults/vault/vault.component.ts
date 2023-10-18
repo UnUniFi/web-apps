@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import {
-  BandProtocolService,
-  TokenAmountUSD,
-} from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
@@ -43,14 +40,15 @@ export class VaultComponent implements OnInit {
   symbolImage$: Observable<string | null>;
   mintAmount$: BehaviorSubject<number>;
   burnAmount$: BehaviorSubject<number>;
-  totalDepositAmount$: Observable<TokenAmountUSD>;
-  totalBondedAmount$: Observable<TokenAmountUSD>;
-  totalUnbondingAmount$: Observable<TokenAmountUSD>;
-  withdrawReserve$: Observable<TokenAmountUSD>;
+  totalDepositAmount$: Observable<number>;
+  totalBondedAmount$: Observable<number>;
+  totalUnbondingAmount$: Observable<number>;
+  withdrawReserve$: Observable<number>;
   estimatedMintAmount$: Observable<EstimateMintAmount200Response>;
   estimatedRedeemAmount$: Observable<EstimateRedeemAmount200Response>;
+  estimatedDepositedAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
-  usdDepositAmount$: Observable<TokenAmountUSD>;
+  usdDepositAmount$: Observable<number>;
   vaultInfo$: Observable<YieldInfo>;
   externalWalletAddress: string | undefined;
 
@@ -80,7 +78,7 @@ export class VaultComponent implements OnInit {
     const timer$ = timer(0, 1000 * 60);
     this.totalDepositAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
       mergeMap(([_, vault, denomMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountDenom(
+        this.bandProtocolService.convertToUSDAmount(
           vault.vault?.denom!,
           (
             Number(vault.total_bonded_amount) +
@@ -93,7 +91,7 @@ export class VaultComponent implements OnInit {
     );
     this.totalBondedAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
       mergeMap(([_, vault, denomMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountDenom(
+        this.bandProtocolService.convertToUSDAmount(
           vault.vault?.denom!,
           vault.total_bonded_amount!,
           denomMetadataMap,
@@ -102,7 +100,7 @@ export class VaultComponent implements OnInit {
     );
     this.totalUnbondingAmount$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
       mergeMap(([_, vault, denomMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountDenom(
+        this.bandProtocolService.convertToUSDAmount(
           vault.vault?.denom!,
           vault.total_unbonding_amount!,
           denomMetadataMap,
@@ -111,7 +109,7 @@ export class VaultComponent implements OnInit {
     );
     this.withdrawReserve$ = combineLatest([timer$, this.vault$, this.denomMetadataMap$]).pipe(
       mergeMap(([_, vault, denomMetadataMap]) =>
-        this.bandProtocolService.convertToUSDAmountDenom(
+        this.bandProtocolService.convertToUSDAmount(
           vault.vault?.denom!,
           vault.withdraw_reserve!,
           denomMetadataMap,
@@ -171,19 +169,22 @@ export class VaultComponent implements OnInit {
         return balance;
       }),
     );
+    this.estimatedDepositedAmount$ = combineLatest([vaultId$, this.vaultBalance$]).pipe(
+      mergeMap(([id, balance]) =>
+        this.iyaQuery.getEstimatedRedeemAmount(id, balance?.amount || undefined),
+      ),
+    );
     this.usdDepositAmount$ = combineLatest([
-      vaultId$,
-      this.vaultBalance$,
+      this.estimatedDepositedAmount$,
       this.denomMetadataMap$,
     ]).pipe(
-      mergeMap(async ([id, balance, denomMetadataMap]) => {
-        const redeemAmount = await this.iyaQuery.getEstimatedRedeemAmount(id, balance?.amount!);
-        return this.bandProtocolService.convertToUSDAmountDenom(
-          redeemAmount.total_amount?.denom!,
-          redeemAmount.total_amount?.amount!,
+      mergeMap(([depositedAmount, denomMetadataMap]) =>
+        this.bandProtocolService.convertToUSDAmount(
+          depositedAmount.total_amount?.denom!,
+          depositedAmount.total_amount?.amount!,
           denomMetadataMap,
-        );
-      }),
+        ),
+      ),
     );
   }
 

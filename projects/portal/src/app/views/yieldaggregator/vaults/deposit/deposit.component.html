@@ -57,9 +57,13 @@
                   </td>
                   <td>{{ balance.amount | coinAmount }}</td>
                   <td>
-                    {{ usdDepositAmount?.[i]?.symbolAmount }} {{ usdDepositAmount?.[i]?.display }}
+                    {{
+                      estimatedRedeemAmounts?.[i]?.total_amount?.amount
+                        | coinAmount : estimatedRedeemAmounts?.[i]?.total_amount?.denom
+                    }}
+                    {{ symbols?.[i]?.display }}
                   </td>
-                  <td>{{ usdDepositAmount?.[i]?.usdAmount | currency }}</td>
+                  <td>{{ usdDepositAmount?.[i] | currency }}</td>
                 </tr>
               </ng-container>
             </tbody>

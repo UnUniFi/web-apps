@@ -1,4 +1,3 @@
-import { TokenAmountUSD } from '../../../models/band-protocols/band-protocol.service';
 import { YieldInfo } from '../../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
@@ -19,7 +18,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   vaultsInfo?: YieldInfo[] | null;
   @Input()
-  totalDeposited?: TokenAmountUSD[] | null;
+  totalDeposits?: number[] | null;
   @Input()
   keyword?: string | null;
   @Input()
@@ -42,6 +41,10 @@ export class VaultsComponent implements OnInit {
   }
 
   onSort(sortType: string) {
+    // reset sort
+    if (this.sortType === sortType) {
+      sortType = 'id';
+    }
     this.sort.emit(sortType);
   }
 

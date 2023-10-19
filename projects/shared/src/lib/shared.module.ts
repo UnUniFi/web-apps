@@ -11,9 +11,6 @@ import { UnunifiKeyFormDialogModule } from './views/dialogs/wallets/ununifi/unun
 import { UnunifiSelectCreateImportDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-create-import-dialog/ununifi-select-create-import-dialog.module';
 import { UnunifiSelectWalletDialogModule } from './views/dialogs/wallets/ununifi/ununifi-select-wallet-dialog/ununifi-select-wallet-dialog.module';
 import { MaterialModule } from './views/material.module';
-import { LibViewNftsModule } from './views/nfts/nfts.module';
-import { LibWidgetListNftFormDialogModule } from './widgets/dialogs/ununifi/tx/list-nft-form-dialog/list-nft-form-dialog.module';
-import { LibWidgetNftMenuDialogModule } from './widgets/dialogs/ununifi/tx/nft-menu-dialog/nft-menu-dialog.module';
 import { NgModule } from '@angular/core';
 
 @NgModule({
@@ -30,9 +27,6 @@ import { NgModule } from '@angular/core';
     UnunifiKeyFormDialogModule,
     UnunifiSelectCreateImportDialogModule,
     UnunifiSelectWalletDialogModule,
-    LibViewNftsModule,
-    LibWidgetNftMenuDialogModule,
-    LibWidgetListNftFormDialogModule,
     TxFeeConfirmDialogModule,
   ],
   exports: [SharedComponent],

@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import ununificlient from 'ununifi-client';
 
 @Component({
   selector: 'view-yieldaggregator',
@@ -19,8 +18,14 @@ export class YieldaggregatorComponent implements OnInit {
         tvl: number;
       }[]
     | null;
+  @Output()
+  appDownloadCSV: EventEmitter<{}> = new EventEmitter();
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  downloadCSV() {
+    this.appDownloadCSV.emit();
+  }
 }

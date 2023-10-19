@@ -4,6 +4,7 @@ import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { CSVCommonService } from 'projects/shared/src/lib/models/csv/csv-common.service';
 import { Observable, combineLatest, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
@@ -36,6 +37,7 @@ export class YieldaggregatorComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly csvCommonService: CSVCommonService,
   ) {
     const timer$ = timer(0, this.pollingInterval * 1000);
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
@@ -154,8 +156,24 @@ export class YieldaggregatorComponent implements OnInit {
           }),
         ),
       ),
+      map((addressTVLs) => addressTVLs.sort((a, b) => b.tvl - a.tvl)),
     );
   }
 
   ngOnInit(): void {}
+
+  downloadTVLsCSV() {
+    this.addressTVLs$?.subscribe((addressTVLs) => {
+      const data = addressTVLs.map((addressTVL, index) => {
+        return {
+          rank: index + 1,
+          address: addressTVL.address,
+          tvl: addressTVL.tvl,
+        };
+      });
+      const csvString = this.csvCommonService.jsonToCsv(data, ',');
+      const now = new Date();
+      this.csvCommonService.downloadCsv(csvString, 'UYA-TVLs-' + now.toISOString());
+    });
+  }
 }

@@ -3,4 +3,7 @@
   [depositMsgs]="depositMsgs$ | async"
   [withdrawMsgs]="withdrawMsgs$ | async"
   [tvl]="tvl$ | async"
+  (appDownloadDeposits)="downloadDepositsCSV($event)"
+  (appDownloadDepositMsgs)="downloadDepositHistoryCSV($event)"
+  (appDownloadWithdrawalMsgs)="downloadWithdrawHistoryCSV($event)"
 ></view-address>

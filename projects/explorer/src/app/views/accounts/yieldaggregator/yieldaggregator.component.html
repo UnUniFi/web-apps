@@ -6,6 +6,7 @@
   </div>
   <div class="card bg-base-100 text-base-content shadow-xl mb-4">
     <div class="card-body">
+      <h3>Leader Board</h3>
       <div class="overflow-x-auto">
         <ng-container *ngIf="addressTVLs === null; then loading; else loaded"></ng-container>
         <ng-template #loading>
@@ -21,16 +22,18 @@
           <ng-template #filled>
             <table class="table w-full">
               <thead>
-                <th>Address</th>
+                <td>Rank</td>
+                <td>Address</td>
                 <td>Deposited Vaults</td>
                 <td>TVL</td>
               </thead>
               <tbody>
                 <tr
-                  *ngFor="let addressTVL of addressTVLs"
+                  *ngFor="let addressTVL of addressTVLs; let i = index"
                   class="hover cursor-pointer"
                   routerLink="{{ addressTVL.address }}"
                 >
+                  <td>#{{ i }}</td>
                   <th class="font-mono">
                     {{ addressTVL.address }}
                   </th>
@@ -49,6 +52,17 @@
             <td colspan="5">There is no depositor.</td>
           </tr>
         </ng-template>
+      </div>
+      <div>
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
+            (click)="downloadCSV()"
+          >
+            <span class="material-symbols-outlined">download</span>
+            <span class="hidden md:inline">Download CSV</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { ms } from 'date-fns/locale';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { CSVCommonService } from 'projects/shared/src/lib/models/csv/csv-common.service';
 import { Observable, combineLatest, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
@@ -45,6 +47,7 @@ export class AddressComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly csvCommonService: CSVCommonService,
   ) {
     this.address$ = this.route.params.pipe(map((params) => params.address));
     const timer$ = timer(0, this.pollingInterval * 1000);
@@ -101,7 +104,6 @@ export class AddressComponent implements OnInit {
         return msgs;
       }),
     );
-    this.depositMsgs$.subscribe((msgs) => console.log(msgs[0].msg.amount));
     this.withdrawMsgs$ = combineLatest([txsResponse$, this.address$]).pipe(
       map(([txs, address]) => {
         const msgs: {
@@ -146,7 +148,11 @@ export class AddressComponent implements OnInit {
       mergeMap(async ([balances, denomMetadataMap]) => {
         const vaultBalances = balances
           ?.filter((balance) => balance.denom?.includes('yieldaggregator/vaults/'))
-          .reverse();
+          .sort(
+            (a, b) =>
+              Number(a.denom?.replace('yieldaggregator/vaults/', '')) -
+              Number(b.denom?.replace('yieldaggregator/vaults/', '')),
+          );
         const amounts = await Promise.all(
           vaultBalances?.map(async (balance) => {
             const amount = await this.iyaQuery.getEstimatedRedeemAmount(
@@ -172,4 +178,75 @@ export class AddressComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  downloadDepositsCSV(address: string) {
+    this.tvl$?.subscribe((tvl) => {
+      const data = tvl.vaultBalances?.map((vaultBalance, index) => {
+        return {
+          vault: vaultBalance.denom?.replace('yieldaggregator/vaults/', ''),
+          amount: vaultBalance.amount,
+          value: tvl.values[index],
+        };
+      });
+      if (!data) {
+        alert('No data');
+        return;
+      }
+      const csvString = this.csvCommonService.jsonToCsv(data, ',');
+      const now = new Date();
+      this.csvCommonService.downloadCsv(
+        csvString,
+        'UYA-Deposits-' + address + '-' + now.toISOString(),
+      );
+    });
+  }
+
+  downloadDepositHistoryCSV(address: string) {
+    this.depositMsgs$?.subscribe((msgs) => {
+      if (msgs.length === 0) {
+        alert('No deposit history data');
+        return;
+      }
+      const data = msgs.reverse().map((msg) => {
+        return {
+          height: msg.height,
+          timestamp: msg.timestamp,
+          txHash: msg.txHash,
+          vault: msg.msg.vault_id,
+          amount: msg.msg.amount?.amount,
+          denom: msg.msg.amount?.denom,
+        };
+      });
+      const csvString = this.csvCommonService.jsonToCsv(data, ',');
+      const now = new Date();
+      this.csvCommonService.downloadCsv(
+        csvString,
+        'UYA-MsgDepositToVault-' + address + '-' + now.toISOString(),
+      );
+    });
+  }
+
+  downloadWithdrawHistoryCSV(address: string) {
+    this.withdrawMsgs$?.subscribe((msgs) => {
+      if (msgs.length === 0) {
+        alert('No withdrawal history data');
+        return;
+      }
+      const data = msgs.reverse().map((msg) => {
+        return {
+          height: msg.height,
+          timestamp: msg.timestamp,
+          txHash: msg.txHash,
+          vault: msg.msg.vault_id,
+          amount: msg.msg.lp_token_amount,
+        };
+      });
+      const csvString = this.csvCommonService.jsonToCsv(data, ',');
+      const now = new Date();
+      this.csvCommonService.downloadCsv(
+        csvString,
+        'UYA-MsgWithdrawFromVault-' + address + '-' + now.toISOString(),
+      );
+    });
+  }
 }

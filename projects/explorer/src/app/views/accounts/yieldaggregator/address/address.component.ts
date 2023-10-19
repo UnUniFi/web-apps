@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import ununificlient from 'ununifi-client';
 
@@ -34,8 +34,36 @@ export class AddressComponent implements OnInit {
     values: number[];
     tvl: number;
   } | null;
+  @Output()
+  appDownloadDeposits: EventEmitter<string> = new EventEmitter();
+  @Output()
+  appDownloadDepositMsgs: EventEmitter<string> = new EventEmitter();
+  @Output()
+  appDownloadWithdrawalMsgs: EventEmitter<string> = new EventEmitter();
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  downloadDeposits() {
+    if (!this.address) {
+      alert('Invalid address');
+      return;
+    }
+    this.appDownloadDeposits.emit();
+  }
+  downloadDepositMsgs() {
+    if (!this.address) {
+      alert('Invalid address');
+      return;
+    }
+    this.appDownloadDepositMsgs.emit();
+  }
+  downloadWithdrawalMsgs() {
+    if (!this.address) {
+      alert('Invalid address');
+      return;
+    }
+    this.appDownloadWithdrawalMsgs.emit();
+  }
 }

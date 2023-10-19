@@ -57,6 +57,13 @@
           <span class="material-symbols-outlined">account_circle</span>
           <span class="hidden md:inline">More Info</span>
         </button>
+        <button
+          class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
+          (click)="downloadDeposits()"
+        >
+          <span class="material-symbols-outlined">download</span>
+          <span class="hidden md:inline">Download</span>
+        </button>
       </div>
     </div>
   </div>
@@ -98,6 +105,15 @@
             </table>
           </ng-template>
         </ng-template>
+      </div>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
+          (click)="downloadDepositMsgs()"
+        >
+          <span class="material-symbols-outlined">download</span>
+          <span class="hidden md:inline">Download</span>
+        </button>
       </div>
     </div>
   </div>
@@ -141,6 +157,15 @@
             </table>
           </ng-template>
         </ng-template>
+      </div>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
+          (click)="downloadWithdrawalMsgs()"
+        >
+          <span class="material-symbols-outlined">download</span>
+          <span class="hidden md:inline">Download</span>
+        </button>
       </div>
     </div>
   </div>

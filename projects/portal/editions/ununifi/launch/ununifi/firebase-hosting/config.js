@@ -291,8 +291,8 @@ const configs = [
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 1000,
-          maxCredit: 1000,
+          creditAmount: 2000,
+          maxCredit: 2000,
         },
       ],
       // monitor: {},
@@ -300,87 +300,87 @@ const configs = [
       messageModules,
     },
   },
-  // CauchyE B node without Monitor
-  {
-    id: domainCauchyEB,
-    restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 1000,
-          maxCredit: 1000,
-        },
-      ],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE C node without Monitor
-  {
-    id: domainCauchyEC,
-    restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    extension: {
-      faucet: [],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE D node without Monitor
-  {
-    id: domainCauchyED,
-    restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    extension: {
-      faucet: [],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
+  // // CauchyE B node without Monitor
+  // {
+  //   id: domainCauchyEB,
+  //   restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   extension: {
+  //     faucet: [
+  //       {
+  //         hasFaucet: true,
+  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
+  //         denom: 'uguu',
+  //         creditAmount: 2000,
+  //         maxCredit: 2000,
+  //       },
+  //     ],
+  //     // monitor: {},
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
+  // // CauchyE C node without Monitor
+  // {
+  //   id: domainCauchyEC,
+  //   restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   extension: {
+  //     faucet: [],
+  //     // monitor: {},
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
+  // // CauchyE D node without Monitor
+  // {
+  //   id: domainCauchyED,
+  //   restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   extension: {
+  //     faucet: [],
+  //     // monitor: {},
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
 ];

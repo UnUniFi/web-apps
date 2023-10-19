@@ -78,6 +78,9 @@ export class FaucetComponent implements OnInit {
         return amount / 10 ** exponent;
       }),
     );
+    this.amount$ = combineLatest([this.amount$, this.creditAmount$]).pipe(
+      map(([amount, creditAmount]) => (amount ? amount : creditAmount)),
+    );
     this.maxCredit$ = combineLatest([denom$, this.usecase.maxCredit$(denom$)]).pipe(
       map(([denom, amount]) => {
         const exponent = getDenomExponent(denom);

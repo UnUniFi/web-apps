@@ -8,7 +8,7 @@ import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yiel
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { CSVCommonService } from 'projects/shared/src/lib/models/csv/csv-common.service';
 import { Observable, combineLatest, timer } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
 @Component({
@@ -180,80 +180,77 @@ export class AddressComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  downloadDepositsCSV(address: string) {
-    this.tvl$?.subscribe((tvl) => {
-      const dialogRef = this.loadingDialog.open('Downloading...');
-      const data = tvl.vaultBalances?.map((vaultBalance, index) => {
-        return {
-          vault: vaultBalance.denom?.replace('yieldaggregator/vaults/', ''),
-          amount: vaultBalance.amount,
-          value: tvl.values[index],
-        };
-      });
-      if (!data) {
-        alert('No data');
-        return;
-      }
-      const csvString = this.csvCommonService.jsonToCsv(data, ',');
-      const now = new Date();
-      dialogRef.close();
-      this.csvCommonService.downloadCsv(
-        csvString,
-        'UYA-Deposits-' + address + '-' + now.toISOString(),
-      );
+  async downloadDepositsCSV(address: string) {
+    const dialogRef = this.loadingDialog.open('Downloading...');
+    const tvl = await this.tvl$?.pipe(take(1)).toPromise();
+    const data = tvl?.vaultBalances?.map((vaultBalance, index) => {
+      return {
+        vault: vaultBalance.denom?.replace('yieldaggregator/vaults/', ''),
+        amount: vaultBalance.amount,
+        value: tvl.values[index],
+      };
     });
+    if (!data) {
+      alert('No data');
+      return;
+    }
+    const csvString = this.csvCommonService.jsonToCsv(data, ',');
+    const now = new Date();
+    dialogRef.close();
+    this.csvCommonService.downloadCsv(
+      csvString,
+      'UYA-Deposits-' + address + '-' + now.toISOString(),
+    );
   }
 
-  downloadDepositHistoryCSV(address: string) {
-    this.depositMsgs$?.subscribe((msgs) => {
-      const dialogRef = this.loadingDialog.open('Downloading...');
-      if (msgs.length === 0) {
-        alert('No deposit history data');
-        return;
-      }
-      const data = msgs.reverse().map((msg) => {
-        return {
-          height: msg.height,
-          timestamp: msg.timestamp,
-          txHash: msg.txHash,
-          vault: msg.msg.vault_id,
-          amount: msg.msg.amount?.amount,
-          denom: msg.msg.amount?.denom,
-        };
-      });
-      const csvString = this.csvCommonService.jsonToCsv(data, ',');
-      const now = new Date();
-      dialogRef.close();
-      this.csvCommonService.downloadCsv(
-        csvString,
-        'UYA-MsgDepositToVault-' + address + '-' + now.toISOString(),
-      );
+  async downloadDepositHistoryCSV(address: string) {
+    const dialogRef = this.loadingDialog.open('Downloading...');
+    const msgs = await this.depositMsgs$?.pipe(take(1)).toPromise();
+    if (!msgs || msgs.length === 0) {
+      alert('No deposit history data');
+      return;
+    }
+    const data = msgs.reverse().map((msg) => {
+      return {
+        height: msg.height,
+        timestamp: msg.timestamp,
+        txHash: msg.txHash,
+        vault: msg.msg.vault_id,
+        amount: msg.msg.amount?.amount,
+        denom: msg.msg.amount?.denom,
+      };
     });
+    const csvString = this.csvCommonService.jsonToCsv(data, ',');
+    const now = new Date();
+    dialogRef.close();
+    this.csvCommonService.downloadCsv(
+      csvString,
+      'UYA-MsgDepositToVault-' + address + '-' + now.toISOString(),
+    );
   }
 
-  downloadWithdrawHistoryCSV(address: string) {
-    this.withdrawMsgs$?.subscribe((msgs) => {
-      const dialogRef = this.loadingDialog.open('Downloading...');
-      if (msgs.length === 0) {
-        alert('No withdrawal history data');
-        return;
-      }
-      const data = msgs.reverse().map((msg) => {
-        return {
-          height: msg.height,
-          timestamp: msg.timestamp,
-          txHash: msg.txHash,
-          vault: msg.msg.vault_id,
-          amount: msg.msg.lp_token_amount,
-        };
-      });
-      const csvString = this.csvCommonService.jsonToCsv(data, ',');
-      const now = new Date();
-      dialogRef.close();
-      this.csvCommonService.downloadCsv(
-        csvString,
-        'UYA-MsgWithdrawFromVault-' + address + '-' + now.toISOString(),
-      );
+  async downloadWithdrawHistoryCSV(address: string) {
+    const dialogRef = this.loadingDialog.open('Downloading...');
+    const msgs = await this.withdrawMsgs$?.pipe(take(1)).toPromise();
+    if (!msgs || msgs?.length === 0) {
+      alert('No withdrawal history data');
+      return;
+    }
+    const data = msgs.reverse().map((msg) => {
+      return {
+        height: msg.height,
+        timestamp: msg.timestamp,
+        txHash: msg.txHash,
+        vault: msg.msg.vault_id,
+        amount: msg.msg.lp_token_amount,
+      };
     });
+    const csvString = this.csvCommonService.jsonToCsv(data, ',');
+    const now = new Date();
+    dialogRef.close();
+    this.csvCommonService.downloadCsv(
+      csvString,
+      'UYA-MsgWithdrawFromVault-' + address + '-' + now.toISOString(),
+    );
   }
 }

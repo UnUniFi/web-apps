@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { ms } from 'date-fns/locale';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { CosmosSDKService } from 'projects/portal/src/app/models/cosmos-sdk.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { CSVCommonService } from 'projects/shared/src/lib/models/csv/csv-common.service';
 import { Observable, combineLatest, timer } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -48,6 +48,7 @@ export class AddressComponent implements OnInit {
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly csvCommonService: CSVCommonService,
+    private readonly loadingDialog: LoadingDialogService,
   ) {
     this.address$ = this.route.params.pipe(map((params) => params.address));
     const timer$ = timer(0, this.pollingInterval * 1000);
@@ -181,6 +182,7 @@ export class AddressComponent implements OnInit {
 
   downloadDepositsCSV(address: string) {
     this.tvl$?.subscribe((tvl) => {
+      const dialogRef = this.loadingDialog.open('Downloading...');
       const data = tvl.vaultBalances?.map((vaultBalance, index) => {
         return {
           vault: vaultBalance.denom?.replace('yieldaggregator/vaults/', ''),
@@ -194,6 +196,7 @@ export class AddressComponent implements OnInit {
       }
       const csvString = this.csvCommonService.jsonToCsv(data, ',');
       const now = new Date();
+      dialogRef.close();
       this.csvCommonService.downloadCsv(
         csvString,
         'UYA-Deposits-' + address + '-' + now.toISOString(),
@@ -203,6 +206,7 @@ export class AddressComponent implements OnInit {
 
   downloadDepositHistoryCSV(address: string) {
     this.depositMsgs$?.subscribe((msgs) => {
+      const dialogRef = this.loadingDialog.open('Downloading...');
       if (msgs.length === 0) {
         alert('No deposit history data');
         return;
@@ -219,6 +223,7 @@ export class AddressComponent implements OnInit {
       });
       const csvString = this.csvCommonService.jsonToCsv(data, ',');
       const now = new Date();
+      dialogRef.close();
       this.csvCommonService.downloadCsv(
         csvString,
         'UYA-MsgDepositToVault-' + address + '-' + now.toISOString(),
@@ -228,6 +233,7 @@ export class AddressComponent implements OnInit {
 
   downloadWithdrawHistoryCSV(address: string) {
     this.withdrawMsgs$?.subscribe((msgs) => {
+      const dialogRef = this.loadingDialog.open('Downloading...');
       if (msgs.length === 0) {
         alert('No withdrawal history data');
         return;
@@ -243,6 +249,7 @@ export class AddressComponent implements OnInit {
       });
       const csvString = this.csvCommonService.jsonToCsv(data, ',');
       const now = new Date();
+      dialogRef.close();
       this.csvCommonService.downloadCsv(
         csvString,
         'UYA-MsgWithdrawFromVault-' + address + '-' + now.toISOString(),

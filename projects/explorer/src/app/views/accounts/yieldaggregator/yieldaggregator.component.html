@@ -57,7 +57,63 @@
         <div class="card-actions justify-end">
           <button
             class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
-            (click)="downloadCSV()"
+            (click)="downloadTVLs()"
+          >
+            <span class="material-symbols-outlined">download</span>
+            <span class="hidden md:inline">Download CSV</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 text-base-content shadow-xl mb-4">
+    <div class="card-body">
+      <h3>Tx History</h3>
+      <div class="overflow-x-auto">
+        <ng-container *ngIf="msgs === null; then loading; else loadedMsg"></ng-container>
+        <ng-template #loadedMsg>
+          <ng-container *ngIf="!msgs?.length; then emptyMsg; else filledMsg"></ng-container>
+          <ng-template #emptyMsg>
+            <p class="ml-4">There is no depositor.</p>
+          </ng-template>
+          <ng-template #filledMsg>
+            <table class="table w-full">
+              <thead>
+                <td>Type</td>
+                <td>Vault ID</td>
+                <td>Address</td>
+                <td>Amount</td>
+                <td>Timestamp</td>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let msg of msgs; let i = index"
+                  class="hover cursor-pointer"
+                  routerLink="/txs/{{ msg.txHash }}"
+                >
+                  <td>{{ msg.type }}</td>
+                  <th>{{ msg.vaultId }}</th>
+                  <th class="font-mono">{{ msg.sender }}</th>
+                  <td>{{ msg.amount }}</td>
+                  <td>{{ msg.timestamp | date : 'yy/MM/dd HH:mm' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </ng-template>
+
+        <ng-template #emptyMsg>
+          <tr>
+            <td colspan="5">There is no tx.</td>
+          </tr>
+        </ng-template>
+      </div>
+      <div>
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-outline btn-primary w-full gap-1 md:w-auto md:px-8"
+            (click)="downloadMsgs()"
           >
             <span class="material-symbols-outlined">download</span>
             <span class="hidden md:inline">Download CSV</span>

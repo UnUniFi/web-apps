@@ -2,6 +2,7 @@ import { CosmosSDKService } from '../../../models/cosmos-sdk.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
@@ -18,6 +19,19 @@ import ununificlient from 'ununifi-client';
 export class YieldaggregatorComponent implements OnInit {
   pollingInterval = 30;
   depositors$?: Observable<string[]>;
+  msgs$?: Observable<
+    {
+      type: string;
+      txHash: string;
+      height: string;
+      timestamp: string;
+      sender: string;
+      vaultId: string;
+      amount: string;
+      microAmount: string;
+      denom?: string;
+    }[]
+  >;
   addressBalances$?: Observable<
     {
       address: string;
@@ -109,6 +123,62 @@ export class YieldaggregatorComponent implements OnInit {
         return msgs;
       }),
     );
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    this.msgs$ = combineLatest([txsResponse$, denomMetadataMap$]).pipe(
+      map(([txs, denomMetadataMap]) => {
+        const msgs: {
+          type: string;
+          txHash: string;
+          height: string;
+          timestamp: string;
+          sender: string;
+          vaultId: string;
+          amount: string;
+          microAmount: string;
+          denom?: string;
+        }[] = [];
+        txs?.txs?.map((tx, index) =>
+          tx.body?.messages?.map((message) => {
+            const instance = cosmosclient.codec.protoJSONToInstance(
+              cosmosclient.codec.castProtoJSONOfProtoAny(message),
+            );
+            if (instance instanceof ununificlient.proto.ununifi.yieldaggregator.MsgDepositToVault) {
+              const denom = instance.amount?.denom || '';
+              const exponent = getDenomExponent(denom);
+              const amount = Number(instance.amount?.amount) / Math.pow(10, exponent);
+              msgs.push({
+                type: 'deposit',
+                txHash: txs.tx_responses?.[index].txhash || '',
+                height: txs.tx_responses?.[index].height || '',
+                timestamp: txs.tx_responses?.[index].timestamp || '',
+                sender: instance.sender,
+                vaultId: instance.vault_id.toString(),
+                amount: amount + ' ' + (denomMetadataMap?.[denom].display || ''),
+                microAmount: instance.amount?.amount || '',
+                denom: denom,
+              });
+            }
+            if (
+              instance instanceof ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault
+            ) {
+              const amount = Number(instance.lp_token_amount) / Math.pow(10, 6);
+              msgs.push({
+                type: 'withdraw',
+                txHash: txs.tx_responses?.[index].txhash || '',
+                height: txs.tx_responses?.[index].height || '',
+                timestamp: txs.tx_responses?.[index].timestamp || '',
+                sender: instance.sender,
+                vaultId: instance.vault_id.toString(),
+                amount: amount + ' YA-Vault-' + instance.vault_id.toString(),
+                microAmount: instance.lp_token_amount,
+                denom: 'yieldaggregator/vaults/' + instance.vault_id.toString(),
+              });
+            }
+          }),
+        );
+        return msgs;
+      }),
+    );
     this.depositors$ = depositMsgs$.pipe(
       map((msgs) => {
         const addressArray = msgs?.map((msg) => msg.sender);
@@ -127,7 +197,6 @@ export class YieldaggregatorComponent implements OnInit {
         ),
       ),
     );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     this.addressTVLs$ = combineLatest([this.addressBalances$, denomMetadataMap$]).pipe(
       mergeMap(([addressBalances, denomMetadataMap]) =>
         Promise.all(
@@ -182,5 +251,19 @@ export class YieldaggregatorComponent implements OnInit {
     const now = new Date();
     dialogRef.close();
     this.csvCommonService.downloadCsv(csvString, 'UYA-TVLs-' + now.toISOString());
+  }
+
+  async downloadMsgsCSV() {
+    const dialogRef = this.loadingDialog.open('Downloading...');
+    const msgs = await this.msgs$?.pipe(take(1)).toPromise();
+    const data = msgs;
+    if (!data) {
+      alert('No data');
+      return;
+    }
+    const csvString = this.csvCommonService.jsonToCsv(data, ',');
+    const now = new Date();
+    dialogRef.close();
+    this.csvCommonService.downloadCsv(csvString, 'UYA-Msgs-' + now.toISOString());
   }
 }

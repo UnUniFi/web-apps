@@ -18,14 +18,31 @@ export class YieldaggregatorComponent implements OnInit {
         tvl: number;
       }[]
     | null;
+  @Input()
+  msgs?:
+    | {
+        type: string;
+        txHash: string;
+        height: string;
+        timestamp: string;
+        sender: string;
+        vaultId: string;
+        amount: string;
+      }[]
+    | null;
   @Output()
-  appDownloadCSV: EventEmitter<{}> = new EventEmitter();
+  appDownloadTVLs: EventEmitter<{}> = new EventEmitter();
+  @Output()
+  appDownloadMsgs: EventEmitter<{}> = new EventEmitter();
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  downloadCSV() {
-    this.appDownloadCSV.emit();
+  downloadTVLs() {
+    this.appDownloadTVLs.emit();
+  }
+  downloadMsgs() {
+    this.appDownloadMsgs.emit();
   }
 }

@@ -1,5 +1,7 @@
 <view-yieldaggregator
   [depositors]="depositors$ | async"
   [addressTVLs]="addressTVLs$ | async"
-  (appDownloadCSV)="downloadTVLsCSV()"
+  [msgs]="msgs$ | async"
+  (appDownloadTVLs)="downloadTVLsCSV()"
+  (appDownloadMsgs)="downloadMsgsCSV()"
 ></view-yieldaggregator>

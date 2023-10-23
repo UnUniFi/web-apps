@@ -4,9 +4,10 @@ import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
+import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
 import { CSVCommonService } from 'projects/shared/src/lib/models/csv/csv-common.service';
 import { Observable, combineLatest, timer } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import ununificlient from 'ununifi-client';
 
 @Component({
@@ -38,6 +39,7 @@ export class YieldaggregatorComponent implements OnInit {
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly csvCommonService: CSVCommonService,
+    private readonly loadingDialog: LoadingDialogService,
   ) {
     const timer$ = timer(0, this.pollingInterval * 1000);
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
@@ -162,18 +164,23 @@ export class YieldaggregatorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  downloadTVLsCSV() {
-    this.addressTVLs$?.subscribe((addressTVLs) => {
-      const data = addressTVLs.map((addressTVL, index) => {
-        return {
-          rank: index + 1,
-          address: addressTVL.address,
-          tvl: addressTVL.tvl,
-        };
-      });
-      const csvString = this.csvCommonService.jsonToCsv(data, ',');
-      const now = new Date();
-      this.csvCommonService.downloadCsv(csvString, 'UYA-TVLs-' + now.toISOString());
+  async downloadTVLsCSV() {
+    const dialogRef = this.loadingDialog.open('Downloading...');
+    const tvls = await this.addressTVLs$?.pipe(take(1)).toPromise();
+    const data = tvls?.map((addressTVL, index) => {
+      return {
+        rank: index + 1,
+        address: addressTVL.address,
+        tvl: addressTVL.tvl,
+      };
     });
+    if (!data) {
+      alert('No data');
+      return;
+    }
+    const csvString = this.csvCommonService.jsonToCsv(data, ',');
+    const now = new Date();
+    dialogRef.close();
+    this.csvCommonService.downloadCsv(csvString, 'UYA-TVLs-' + now.toISOString());
   }
 }

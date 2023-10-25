@@ -5,9 +5,9 @@ import { NftPawnshopApplicationService } from 'projects/portal/src/app/models/nf
 import { NftRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {

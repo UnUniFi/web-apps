@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ListRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { min } from 'rxjs/operators';
 
 @Component({

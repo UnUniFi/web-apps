@@ -11,8 +11,8 @@ import {
 import Chart from 'chart.js/auto';
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { PlaceBidRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import {
   ListedNfts200ResponseListingsInnerListing,
   NftBids200ResponseBidsInner,

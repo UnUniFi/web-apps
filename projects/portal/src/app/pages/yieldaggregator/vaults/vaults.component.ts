@@ -48,6 +48,15 @@ export class VaultsComponent implements OnInit {
     const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
       map(([vaults, config, pools]) => {
         const yields = vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools));
+        // hard-code
+        for (const apy of config?.vaultsApys || []) {
+          const index = yields.findIndex((y) => Number(y.id) === apy.id);
+          if (index >= 0) {
+            yields[index].minApy = apy.minApy;
+            yields[index].maxApy = apy.maxApy || apy.minApy;
+          }
+        }
+
         const yieldMap: { [id: string]: YieldInfo } = {};
         for (const y of yields) {
           yieldMap[y.id] = y;

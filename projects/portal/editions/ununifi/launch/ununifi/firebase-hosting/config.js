@@ -219,6 +219,12 @@ const denomMetadata = [
 
 const certifiedVaults = ['5', '6', '7'];
 
+const vaultsApys = [
+  { id: 5, minApy: 0.219 },
+  { id: 6, minApy: 0.222 },
+  { id: 7, minApy: 0.225 },
+];
+
 const strategiesInfo = [
   {
     id: '0',
@@ -285,6 +291,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
+    vaultsApys,
     extension: {
       faucet: [
         {
@@ -318,6 +325,7 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
+    vaultsApys,
     extension: {
       faucet: [
         {

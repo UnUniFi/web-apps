@@ -53,7 +53,7 @@ export class VaultsComponent implements OnInit {
           const index = yields.findIndex((y) => Number(y.id) === apy.id);
           if (index >= 0) {
             yields[index].minApy = apy.minApy;
-            yields[index].maxApy = apy.maxApy;
+            yields[index].maxApy = apy.maxApy || apy.minApy;
           }
         }
 

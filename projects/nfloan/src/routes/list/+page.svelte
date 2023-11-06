@@ -1,0 +1,156 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="../../../.."><a>Top</a></li>
+      <li routerLink="../../.."><a>Listed NFTs</a></li>
+      <li>{{ classID }}</li>
+      <li routerLink="..">
+        <a>{{ nftID }}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li></li>
+      <li>List NFT to Receive Funds</li>
+    </ul>
+  </div>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src="{{ nftImage || 'assets/UnUniFi-logo.png' }}"
+        alt="image of the NFT"
+        class="object-cover"
+      />
+    </figure>
+    <div class="card-body w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-info">NOT LISTED</div>
+      </div>
+      <h2 class="card-title break-all">{{ nftMetadata?.name }}</h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <td>Class ID</td>
+              <td>{{ classID }}</td>
+            </tr>
+            <tr>
+              <td>NFT ID</td>
+              <td>{{ nftID }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row">
+    <span class="flex-auto"></span>
+    <div class="card bg-base-100 shadow-xl w-full lg:w-1/2">
+      <div class="card-body">
+        <h3 class="m-4 card-title">List this NFT</h3>
+        <form #formRef="ngForm" (submit)="onSubmit()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Select Bid Currency</span>
+            </label>
+            <select class="select select-bordered w-full" [(ngModel)]="bidSymbol" name="symbol">
+              <option disabled="disabled" [value]="undefined">Please Select</option>
+              <option disabled="disabled" [value]="'axlUSDC'">axlUSDC (coming soon)</option>
+              <option disabled="disabled" [value]="'ATOM'">ATOM (coming soon)</option>
+              <option [value]="'GUU'">GUU</option>
+            </select>
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Enter Minimum Deposit Rate</span>
+              <!-- The button to open modal -->
+              <label for="modal-minimum-deposit" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-minimum-deposit" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the minimum deposit rate?</h3>
+                  <p class="py-4">
+                    For example, imagine that you set it as 10%. Then some users offer the bid to
+                    your NFT with a price of 2GUU. In this situation, that user has to deposit not
+                    less than 0.2GUU. That deposit amount is the amount of token you can borrow.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-minimum-deposit" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <label class="input-group">
+              <input
+                #minDepositRateNgModelRef="ngModel"
+                required
+                type="number"
+                name="minDepositRate"
+                [(ngModel)]="minDepositRate"
+                [max]="50"
+                [min]="0"
+                [step]="1"
+                class="input input-bordered w-full"
+                [class]="{ 'input-error': minDepositRateNgModelRef.errors }"
+                pattern="^[0-9]*\.?[0-9]{0,4}$"
+              />
+              <span>%</span>
+            </label>
+          </div>
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Enter Minimum Bid Expiry Date</span>
+              <!-- The button to open modal -->
+              <label for="modal-minimum-expiry" class="label-text cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+              </label>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-minimum-expiry" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the minimum bid expiry date?</h3>
+                  <p class="py-4">
+                    For example, if you set it to 180 days, bidders will have at least 180 days to
+                    make a valid bid and you will be able to borrow tokens from the deposit during
+                    that time.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-minimum-expiry" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </span>
+            <label class="input-group">
+              <input
+                #minExpiryDateNgModelRef="ngModel"
+                required
+                type="number"
+                name="minExpiryDate"
+                [(ngModel)]="minExpiryDate"
+                [min]="0"
+                [step]="1"
+                class="input input-bordered w-full"
+                [class]="{ 'input-error': minExpiryDateNgModelRef.errors }"
+                pattern="^[0-9]*\.?[0-9]{0,4}$"
+              />
+              <span>Days</span>
+            </label>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+              List NFT
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

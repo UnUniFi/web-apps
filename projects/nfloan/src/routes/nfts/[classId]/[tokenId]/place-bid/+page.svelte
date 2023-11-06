@@ -1,0 +1,429 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li><a href="../../../..">Top</a></li>
+      <li><a href="../../..">Listed NFTs</a></li>
+      <li>{ classID }</li>
+      <li>
+        <a href="..">{ nftID }</a>
+      </li>
+    </ul>
+  </div>
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li></li>
+      <li>Place Bid to lend tokens</li>
+    </ul>
+  </div>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8 w-full xl:w-auto">
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src="{ nftImage || 'assets/UnUniFi-logo.png' }"
+        alt="image of the NFT"
+        class="object-cover"
+      />
+    </figure>
+    <div class="card-body w-full lg:w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-primary">
+          { listingInfo?.state || 'NOT_LISTING' }
+        </div>
+        <div
+          class="badge badge-lg badge-secondary ml-2"
+          *ngIf="listingInfo?.owner === currentStoredWallet?.address"
+        >
+          Your NFT
+        </div>
+      </div>
+      <h2 class="card-title break-all">
+        { nftMetadata?.name }
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <td>Class ID</td>
+              <td>{ classID }</td>
+            </tr>
+            <tr>
+              <td>NFT ID</td>
+              <td>{ nftID }</td>
+            </tr>
+            <tr>
+              <td>Owner</td>
+              <td>{ listingInfo?.owner }</td>
+            </tr>
+            <tr>
+              <td>Bid Token</td>
+              <td>{ listingInfo?.bid_denom | coinDenom | async }</td>
+            </tr>
+            <tr>
+              <td>Minimum deposit rate</td>
+              <td>{ listingInfo?.min_deposit_rate | percent : '1.0-4' }</td>
+            </tr>
+            <tr>
+              <td>Minimum bid Expiry date</td>
+              <td>{ listingInfo?.min_bid_period | secondToDate } Days</td>
+            </tr>
+            <tr>
+              <td>Listed</td>
+              <td>{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row flex-wrap mb-4">
+    <div class="card bg-base-100 shadow-xl w-full xl:w-2/3 mb-4 lg:mr-4">
+      <div class="card-body">
+        <!-- <div class="btn-group">
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="activeInterestChart"
+            (click)="onToggleChart(true)"
+          >
+            Interest-Deposit
+          </label>
+          <label
+            class="btn btn-outline w-1/2"
+            [class.btn-active]="!activeInterestChart"
+            (click)="onToggleChart(false)"
+          >
+            Expiry-Deposit
+          </label>
+        </div> -->
+        <canvas #canvasChart></canvas>
+      </div>
+    </div>
+    <!-- <div
+      #chartCardRef
+      class="card bg-base-100 shadow-xl w-full xl:w-auto xl:flex-auto mb-4 xl:mr-8"
+    >
+      <div class="card-body w-auto">
+        <h3 class="card-title">Offers</h3>
+      </div>
+
+      <google-chart
+        class="mb-20"
+        *ngIf="chartData"
+        [title]="chartTitle"
+        [type]="chartType"
+        [data]="chartData"
+        [columns]="chartColumns"
+        [options]="chartOptions"
+      >
+      </google-chart>
+    </div> -->
+    <span class="flex-auto"></span>
+    <ng-container *ngIf="listingInfo?.owner !== currentStoredWallet?.address; else listerSelf">
+      <div class="card bg-base-100 shadow-xl w-full xl:w-96 mb-4">
+        <div class="card-body">
+          <h3 class="card-title">Make Offer</h3>
+          <form #formRef="ngForm" (submit)="onSubmit()">
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Bid Price</span>
+                <!-- The button to open modal -->
+                <label for="modal-bid-price" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-bid-price" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is the bid price?</h3>
+                    <p class="py-4">
+                      This is the amount of tokens you will pay if the lister decides to sell the
+                      NFT. It is not deducted from your balance at the time of bidding. You will pay
+                      if the lister decides to sell when you are the highest bidder. Additionally,
+                      if the lister fails to repay, they may still have the option to purchase at
+                      this price.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-bid-price" class="btn">Okay</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <span>
+                  <div class="mask mask-circle w-8 h-8">
+                    <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                  </div>
+                </span>
+                <input
+                  #bidAmountNgModelRef="ngModel"
+                  required
+                  placeholder="123.123456"
+                  type="number"
+                  name="bidAmount"
+                  [(ngModel)]="bidAmount"
+                  [min]="0"
+                  [step]="1"
+                  class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': bidAmountNgModelRef.errors && bidAmountNgModelRef.touched
+                  }"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                  (input)="calculateMinimumDeposit()"
+                  (change)="onChangePrice()"
+                />
+                <span>{ listingInfo?.bid_denom | coinDenom | async }</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Deposit Amount</span>
+                <!-- The button to open modal -->
+                <label for="modal-deposit" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-deposit" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is the deposit amount?</h3>
+                    <p class="py-4">
+                      This is the maximum amount of tokens that you can lend to the lister. It is
+                      deducted from your balance at the time of bidding. The rate of the deposit/bid
+                      price must exceed the Minimum deposit rate.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-deposit" class="btn">Okay</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  #depositAmountNgModelRef="ngModel"
+                  placeholder="12.123456"
+                  required
+                  type="number"
+                  name="depositAmount"
+                  [(ngModel)]="depositAmount"
+                  [max]="balance || 0"
+                  [min]="minimumDeposit"
+                  [step]="1"
+                  class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                  }"
+                  pattern="^[0-9]*\.?[0-9]{0,6}$"
+                />
+                <span>{{ listingInfo?.bid_denom | coinDenom | async }}</span>
+              </label>
+              <label class="label">
+                <span class="label-text-alt">Minimum Deposit: </span>
+                <span
+                  class="label-text-alt"
+                  [class]="{ 'text-error': depositAmountNgModelRef.errors }"
+                >
+                  { minimumDeposit } { listingInfo?.bid_denom | coinDenom | async }
+                </span>
+              </label>
+              <label class="label -mt-4">
+                <span class="label-text-alt">Available balance:</span>
+                <span class="label-text-alt"
+                  >
+                  { balance } { listingInfo?.bid_denom | coinDenom | async }</span
+                >
+              </label>
+            </div>
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Interest Rate</span>
+                <!-- The button to open modal -->
+                <label for="modal-interest" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-interest" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is the interest rate?</h3>
+                    <p class="py-4">
+                      This is the annual interest rate for the lending tokens. The interest accrues
+                      from the point when the lister borrows tokens from your deposit and is paid to
+                      you upon repayment.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-interest" class="btn">Okay</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  #interestRateNgModelRef="ngModel"
+                  required
+                  type="number"
+                  name="interestRate"
+                  placeholder="e.g. 5.5"
+                  [(ngModel)]="interestRate"
+                  [min]="0"
+                  [step]="0.5"
+                  class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': interestRateNgModelRef.errors && interestRateNgModelRef.touched
+                  }"
+                  pattern="^[0-9]*\.?[0-9]{0,4}$"
+                />
+                <span>%</span>
+              </label>
+            </div>
+
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Expiration Date</span>
+                <!-- The button to open modal -->
+                <label for="modal-expiry" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+
+                <!-- Put this part before </body> tag -->
+                <input type="checkbox" id="modal-expiry" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is the expiration date?</h3>
+                    <p class="py-4">
+                      This is the deadline for repayment. The lister must repay the tokens to you by
+                      this date. If there are other available bids, the lister will automatically
+                      refinance. If the lister fails to refinance or repay, the NFT will be
+                      liquidated, and bidders will have the opportunity to purchase it.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-expiry" class="btn">Okay</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="input-group">
+                <input
+                  #dateNgModelRef="ngModel"
+                  required
+                  type="date"
+                  name="expiryDate"
+                  [(ngModel)]="date"
+                  class="input input-bordered w-3/5"
+                  [class]="{
+                    'input-error': dateNgModelRef.errors && dateNgModelRef.touched
+                  }"
+                />
+                <input
+                  #timeNgModelRef="ngModel"
+                  type="time"
+                  required
+                  name="expiryTime"
+                  [(ngModel)]="time"
+                  class="input input-bordered w-2/5"
+                  [class]="{
+                    'input-error': timeNgModelRef.errors && timeNgModelRef.touched
+                  }"
+                />
+              </label>
+            </div>
+
+            <!-- <div class="form-control">
+              <span class="label">
+                <span class="label-text">Auto Payment</span>
+
+                <label for="modal-auto-pay"><span class="material-symbols-outlined">help</span></label>
+
+                <input type="checkbox" id="modal-auto-pay" class="modal-toggle" />
+                <div class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="font-bold text-lg">What is auto pay?</h3>
+                    <p class="py-4">
+                      For example, imagine that you set it as 10%. Then some users offer the bid to
+                      your NFT with price 2ATOM. In this situation, that user have to deposit not
+                      less than 0.2ATOM.
+                    </p>
+                    <div class="modal-action">
+                      <label for="modal-auto-pay" class="btn">Okay</label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <label class="cursor-pointer label">
+                <span class="label-text">Enable</span>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-primary"
+                  name="autoPyament"
+                  [(ngModel)]="autoPayment"
+                />
+              </label>
+            </div> -->
+
+            <div class="card-actions justify-end mt-4">
+              <!-- <button
+                type="button"
+                class="btn btn-primary btn-outline w-full md:w-auto md:px-8"
+                (click)="onSimulate()"
+              >
+                Simulate
+              </button> -->
+              <button class="btn btn-primary w-full md:w-auto md:px-8" [disabled]="formRef.invalid">
+                Make Offer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #listerSelf>
+      <div class="card bg-base-100 shadow-xl w-full xl:w-96 mb-4">
+        <div class="flex flex-row justify-center items-center h-96">
+          <p>You can't bid to your own NFT.</p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th></th>
+            <td>Interest</td>
+            <td>Deposit</td>
+            <td>Bid price</td>
+            <td>Expiry</td>
+            <td>Bidder</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bid of bids; let i = index">
+            <ng-container
+              *ngIf="bid.id?.bidder === currentStoredWallet?.address; then color; else normal"
+            ></ng-container>
+            <ng-template #color>
+              <th class="text-secondary">#{ i + 1 }</th>
+              <td class="text-secondary">{ bid.interest_rate | percent : '1.0-4' }</td>
+              <td class="text-secondary">{ bid.deposit | coin | async }</td>
+              <td class="text-secondary">{ bid.price | coin | async }</td>
+              <td class="text-secondary">
+                { bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }
+              </td>
+              <td class="text-secondary">{ bid.id?.bidder }</td>
+            </ng-template>
+            <ng-template #normal>
+              <th>#{ i + 1 }</th>
+              <td>{ bid.interest_rate | percent : '1.0-4' }</td>
+              <td>{ bid.deposit | coin | async }</td>
+              <td>{ bid.price | coin | async }</td>
+              <td>{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }</td>
+              <td>{ bid.id?.bidder }</td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

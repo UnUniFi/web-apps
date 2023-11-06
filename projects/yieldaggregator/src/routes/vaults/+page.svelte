@@ -1,3 +1,51 @@
+<script lang="ts">
+  import { formula } from 'svelte-formula';
+	import { authService } from '../../../models/state';
+	import { GoogleAuthProvider } from 'firebase/auth';
+
+	let processing = false;
+  let address = "";
+	let vault = {
+    id: number,
+    name:string
+  }
+
+  let keyword = ""
+
+	const validators = {};
+	const formValidators = {};
+
+	const { form, touched, validity, isFormValid } = formula({
+		validators,
+		formValidators
+	});
+
+	async function signInGoogle() {
+		await authService.signIn(new GoogleAuthProvider());
+		location.href = '/';
+	}
+
+  function getSymbol(vaultId: number) {
+    return ''
+  }
+
+  function getSymbolImage(symbol:string ){
+    return ''
+  }
+
+  function getMinApy(vaultId: number) {
+    return 0
+  }
+
+  function getMaxApy(vaultId: number) {
+    return 0
+  }
+
+  function totalDepositedUsdValue(vaultId: number) {
+    return 0
+  }
+</script>
+
 <div class="mx-auto max-w-screen-xl">
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
@@ -7,19 +55,19 @@
     </div>
     <span class="flex-auto"></span>
     <div class="flex flex-row gap-2">
-      <button class="btn btn-accent btn-outline" routerLink="deposit/{{ address }}">
+      <a class="btn btn-accent btn-outline" href="deposit/{ address }">
         <span class="material-symbols-outlined">monetization_on</span>
         <span>Your Deposits</span>
-      </button>
-      <button class="btn btn-info btn-outline" routerLink="..">
+      </a>
+      <a class="btn btn-info btn-outline" href="..">
         <span class="material-symbols-outlined">info</span>
         <span>About</span>
-      </button>
+      </a>
     </div>
   </div>
 
   <div class="flex flex-row flex-wrap items-end mb-8">
-    <form #formRef="ngForm" (submit)="onSubmit()">
+    <form use:form on:submit={() => {}}>
       <div class="form-control w-full md:max-w-xs">
         <label class="label">
           <span class="label-text">Filters</span>
@@ -27,13 +75,14 @@
         <div class="input-group">
           <input
             type="text"
-            #keywordNgModelRef="ngModel"
             class="input input-bordered w-full"
             placeholder="ATOM"
-            [(ngModel)]="keyword"
+            required
+            readonly={processing}
+            bind:value={keyword}
             name="keyword"
           />
-          <button class="btn btn-square" [disabled]="formRef.invalid">
+          <button class="btn btn-square" disabled={!$isFormValid || processing}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6"
@@ -57,7 +106,7 @@
   <div class="card bg-base-100 shadow-xl mb-8">
     <div class="card-body">
       <h2 class="card-title">Available Vaults</h2>
-      <P>Select a vault to deposit funds based on your preferences, and earn yield.</P>
+      <p>Select a vault to deposit funds based on your preferences, and earn yield.</p>
       <div class="overflow-x-auto max-h-96">
         <table class="table w-full">
           <!-- head -->
@@ -74,12 +123,12 @@
           </thead>
           <tbody>
             <ng-container *ngFor="let vault of vaults; let i = index">
-              <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
-                <th>#{{ vault.vault?.id }}</th>
+              <tr class="hover cursor-pointer" routerLink="{ vault.id }">
+                <th>#{ vault.id }</th>
                 <div class="dropdown dropdown-hover items-center">
                   <label tabindex="0">
                     <td style="max-width: 10rem" class="truncate">
-                      {{ vault.vault?.name }}
+                      { vault.name }
                     </td>
                   </label>
                   <div
@@ -88,21 +137,21 @@
                   >
                     <div class="card-body">
                       <h3 class="card-title truncate max-w-full">
-                        #{{ vault.vault?.id }} {{ vault.vault?.name }}
+                        #{ vault.id } { vault.name }
                       </h3>
-                      <p class="truncate">{{ vault.vault?.description || 'No description' }}</p>
+                      <p class="truncate">{ vault.description || 'No description' }</p>
                     </div>
                   </div>
                 </div>
                 <td class="max-w-xs truncate">
-                  {{ vault.vault?.description }}
+                  { vault.description }
                 </td>
                 <td>
                   <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
                     <ng-container *ngIf="symbols[i]?.img">
                       <div class="avatar">
                         <div class="mask mask-circle w-6 h-6">
-                          <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
+                          <img src="{ getSymbolImage(getSymbol(vault.id))}" alt="Asset Symbol" />
                         </div>
                       </div>
                     </ng-container>
@@ -110,20 +159,20 @@
                       <span class="material-symbols-outlined">question_mark</span>
                     </ng-container>
                     <span>
-                      {{ symbols[i].display }}
+                      {getSymbol(vault.id)}
                     </span>
                   </div>
                 </td>
                 <td>
                   <span *ngIf="vaultsInfo?.[i]?.certainty">=</span>
                   <span *ngIf="vaultsInfo?.[i]?.certainty === false">≒</span>
-                  <span>{{ vaultsInfo?.[i]?.minApy | percent : '1.0-2' }}</span>
+                  <span>{{ getMinApy(vault.id).fixed(2) }}</span>
                   <span *ngIf="vaultsInfo?.[i]?.minApy !== vaultsInfo?.[i]?.maxApy">
-                    ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
+                    ~{getMaxApy(vault.id).fixed(2)}
                   </span>
                 </td>
-                <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
-                <td>{{ totalDeposited?.[i]?.usdAmount | currency }}</td>
+                <td>{ vault.withdraw_commission_rate.fixed(2) }</td>
+                <td>{ totalDepositedUsdValue(vault.id).fixed(2) }</td>
               </tr>
             </ng-container>
           </tbody>

@@ -1,0 +1,372 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink="../../.."><a>Top</a></li>
+      <li routerLink="../.."><a>Listed NFTs</a></li>
+      <li>{ classID }</li>
+      <li>{ nftID }</li>
+    </ul>
+  </div>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src={ nftImage || 'assets/UnUniFi-logo.png' }
+        alt="image of the NFT"
+        class="object-cover"
+      />
+    </figure>
+    <div class="card-body w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-primary">{ listingInfo?.state || 'NOT_LISTING' }</div>
+      </div>
+      <h2 class="card-title break-all">
+        { nftMetadata?.name }
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <td>Class ID</td>
+              <td>{ classID }</td>
+            </tr>
+            <tr>
+              <td>NFT ID</td>
+              <td>{ nftID }</td>
+            </tr>
+            <tr>
+              <td>Owner</td>
+              <td>{ listingInfo?.owner }</td>
+            </tr>
+            <tr>
+              <td>Minimum deposit rate</td>
+              <td>{ listingInfo?.min_deposit_rate | percent : '1.0-4' }</td>
+            </tr>
+            <tr>
+              <td>Minimum bid Expiry date</td>
+              <td>{ listingInfo?.min_bid_period | secondToDate } Days</td>
+            </tr>
+            <tr>
+              <td>Listed</td>
+              <td>{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8">
+    <div class="card-body">
+      <div class="flex flex-row items-center">
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat" *ngIf="bids && bids.length">
+            <div class="stat-title">Highest bid price</div>
+            <div class="stat-value text-primary">
+              { bids[0].price?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">{ bids[0].price?.denom | coinDenom | async }</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Your Status</div>
+            <div *ngIf="!ownBid" class="stat-value text-info">Not Offered</div>
+            <div *ngIf="ownBid" class="stat-value text-accent">Offered</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Lending Status</div>
+            <div class="stat-value text-primary">
+              { ownBid?.loan?.amount | coin | async }
+            </div>
+          </div>
+          <div *ngIf="isWinning" class="stat">
+            <div class="stat-title">Settlement Shortfall Deadline</div>
+            <div class="stat-value text-accent">
+              { listingInfo?.full_payment_end_at | date : 'yyyy-MM-dd' }
+            </div>
+            <div class="stat-desc">
+              { listingInfo?.full_payment_end_at | date : 'hh:mm:ss z' }
+            </div>
+          </div>
+        </div>
+        <span class="flex-auto"></span>
+        <div *ngIf="!ownBid && !isWinning" class="card-actions justify-end">
+          <button routerLink="place-bid" class="btn btn-primary px-8">Make Offer</button>
+        </div>
+        <div
+          *ngIf="
+            ownBid &&
+            ownBid.loan?.amount?.amount !== '0' &&
+            !isWinning &&
+            listingInfo?.state === 'BIDDING'
+          "
+          class="card-actions flex flex-row"
+        >
+          <button routerLink="place-bid" class="btn btn-primary px-8">Update Offer</button>
+          <span class="flex-auto"></span>
+          <button
+            *ngIf="bids && bids.length > 1"
+            class="btn btn-secondary px-8"
+            (click)="onSubmitCancelBid()"
+          >
+            Cancel Offer
+          </button>
+        </div>
+        <div *ngIf="isWinning" class="card-actions justify-end">
+          <button class="btn btn-primary px-8" (click)="onSubmitPayRemainder()">
+            Pay Settlement Shortfall
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th></th>
+            <td>Interest</td>
+            <td>Deposit</td>
+            <td>Bid price</td>
+            <td>Expiry</td>
+            <td>Bidder</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bid of bids; let i = index">
+            <ng-container
+              *ngIf="bid.id?.bidder === address; then color; else normal"
+            ></ng-container>
+            <ng-template #color>
+              <th class="text-secondary">#{ i + 1 }</th>
+              <td class="text-secondary">{ bid.interest_rate | percent : '1.0-4' }</td>
+              <td class="text-secondary">{ bid.deposit | coin | async }</td>
+              <td class="text-secondary">{ bid.price | coin | async }</td>
+              <td class="text-secondary">
+                { bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }
+              </td>
+              <td class="text-secondary">{ bid.id?.bidder }</td>
+            </ng-template>
+            <ng-template #normal>
+              <th>#{ i + 1 }</th>
+              <td>{ bid.interest_rate | percent : '1.0-4' }</td>
+              <td>{ bid.deposit | coin | async }</td>
+              <td>{ bid.price | coin | async }</td>
+              <td>{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }</td>
+              <td>{ bid.id?.bidder }</td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs mb-4">
+    <ul>
+      <li routerLink="../../.."><a>Top</a></li>
+      <li routerLink="../.."><a>Listed NFTs</a></li>
+      <li>{ classID }</li>
+      <li>{ nftID }</li>
+    </ul>
+  </div>
+  <div class="card lg:card-side bg-base-100 shadow-xl mb-8">
+    <figure class="aspect-square w-1/2 lg:w-1/4">
+      <!-- img width setting not working -->
+      <img
+        src={ nftImage || 'assets/UnUniFi-logo.png' }
+        alt="image of the NFT"
+        class="object-cover"
+      />
+    </figure>
+    <div class="card-body w-full lg:w-2/3">
+      <div class="flex flex-row">
+        <div class="badge badge-lg badge-primary">{ listingInfo?.state || 'NOT_LISTING' }</div>
+      </div>
+      <h2 class="card-title break-all">{ nftMetadata?.name }</h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <td>Class ID</td>
+              <td>{ classID }</td>
+            </tr>
+            <tr>
+              <td>NFT ID</td>
+              <td>{ nftID }</td>
+            </tr>
+            <tr>
+              <td>Owner</td>
+              <td>{ listingInfo?.owner }</td>
+            </tr>
+            <tr>
+              <td>Minimum deposit rate</td>
+              <td>{ listingInfo?.min_deposit_rate | percent : '1.0-4' }</td>
+            </tr>
+            <tr>
+              <td>Minimum bid Expiry date</td>
+              <td>{ listingInfo?.min_bid_period | secondToDate } Days</td>
+            </tr>
+            <tr>
+              <td>Listed</td>
+              <td>{ listingInfo?.started_at | date : 'yyyy-MM-dd a hh:mm:ss z' }</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bids && bids.length">
+    <div class="card-body">
+      <div class="flex flex-col md:flex-row justify-center items-center">
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title">Total deposits</div>
+            <div class="stat-value text-primary">
+              { loan?.total_deposit?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">{ loan?.total_deposit?.denom | coinDenom | async }</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Max Borrow Amount</div>
+            <div class="stat-value text-primary">
+              { loan?.borrowing_limit?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">{ loan?.borrowing_limit?.denom | coinDenom | async }</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Borrowed Amount</div>
+            <div class="stat-value text-secondary">
+              { loan?.borrowing_amount?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">{ loan?.borrowing_amount?.denom | coinDenom | async }</div>
+          </div>
+          <!-- <div class="stat">
+          <div class="stat-title">Available amount to borrow</div>
+          <div class="stat-value text-accent">{{ loan?.borrowing_limit }}</div>
+          <div class="stat-desc">axlUSDC</div>
+        </div> -->
+        </div>
+        <span class="flex-auto"></span>
+        <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+          <button class="btn btn-secondary px-8" routerLink="borrow">Borrow</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="liquidation && liquidation.liquidation">
+    <div class="card-body">
+      <div class="flex flex-col md:flex-row justify-center items-center">
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title">Next Repayment Deadline</div>
+            <div class="stat-value text-accent">
+              { liquidation.liquidation.liquidation_date | date : 'yyyy-MM-dd' }
+            </div>
+            <div class="stat-desc">
+              { liquidation.liquidation.liquidation_date | date : 'a hh:mm:ss z' }
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Repayment Amount</div>
+            <div class="stat-value text-secondary">
+              { liquidation.liquidation.amount?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">
+              { liquidation.liquidation.amount?.denom | coinDenom | async }
+            </div>
+          </div>
+        </div>
+        <span class="flex-auto"></span>
+        <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+          <button class="btn btn-primary px-8" routerLink="repay">Repay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="bids && bids.length">
+    <div class="card-body">
+      <div class="flex flex-col md:flex-row justify-center items-center">
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title">Highest bid price</div>
+            <div class="stat-value text-primary">
+              { bids[0].price?.amount | coinAmount }
+            </div>
+            <div class="stat-desc">{ bids[0].price?.denom | coinDenom | async }</div>
+          </div>
+        </div>
+        <span class="flex-auto"></span>
+        <div class="card-actions justify-end" *ngIf="listingInfo?.state === 'BIDDING'">
+          <button class="btn btn-secondary px-8" (click)="onSubmitSell()">Sell</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="!listingInfo?.state">
+    <div class="card-body">
+      <div class="flex flex-col md:flex-row justify-center items-center">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-title">Not Listing</div>
+          </div>
+        </div>
+        <span class="flex-auto"></span>
+        <div class="card-actions justify-end">
+          <button class="btn btn-info w-full md:w-auto md:px-8" routerLink="list">List</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-8" *ngIf="listingInfo?.state === 'LISTING'">
+    <div class="card-body">
+      <div class="flex flex-col md:flex-row justify-center items-center">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-title">No Bidder</div>
+          </div>
+        </div>
+        <span class="flex-auto"></span>
+        <div class="card-actions justify-end">
+          <button class="btn btn-secondary w-full md:w-auto md:px-8" (click)="onSubmitCancel()">
+            Cancel Listing
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="bids?.length" class="card bg-base-100 shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="table w-full" *ngIf="bids && bids.length">
+        <thead>
+          <tr>
+            <th></th>
+            <td>Interest rate</td>
+            <td>Deposit</td>
+            <td>Bid price</td>
+            <td>Expiry</td>
+            <td>Bidder address</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bid of bids; let i = index">
+            <th>#{ i + 1 }</th>
+            <td>{ bid.interest_rate | percent : '1.0-4' }</td>
+            <td>{ bid.deposit | coin | async }</td>
+            <td>{ bid.price | coin | async }</td>
+            <td>{ bid.expiry | date : 'yyyy-MM-dd a hh:mm z' }</td>
+            <td class="font-mono">{ bid.id?.bidder }</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

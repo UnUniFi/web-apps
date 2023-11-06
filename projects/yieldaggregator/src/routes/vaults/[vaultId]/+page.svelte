@@ -1,8 +1,21 @@
+<script lang="ts">
+  let denom = ''
+  let vault = {
+    id: "",
+    name: '',
+    description: '',
+    withdraw_commission_rate: 0,
+    withdraw_reserve_rate: 0
+  }
+</script>
+
 <div class="mx-auto max-w-screen-xl">
   <div class="text-xl breadcrumbs">
     <ul>
-      <li routerLink=".."><a>Vaults</a></li>
-      <li>Vault #{{ vault?.vault?.id }}</li>
+      <li>
+        <a href="..">Vaults</a>
+      </li>
+      <li>Vault #{ vault.id }</li>
     </ul>
   </div>
   <div class="w-full md:w-auto mb-8">
@@ -20,24 +33,24 @@
             <ng-container *ngIf="!symbolImage">
               <span class="material-symbols-outlined">question_mark</span>
             </ng-container>
-            <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
-            <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
+            <span *ngIf="vault?.vault?.name">{ vault.name }</span>
+            <span *ngIf="!vault?.vault?.name">Vault #{ vault.id }</span>
           </h2>
           <div class="flex flex-row items-center gap-2">
-            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
+            <div class="badge badge-primary">{ denom }</div>
             <div class="badge badge-info">NO KYC</div>
           </div>
         </div>
 
         <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
-          {{ vault?.vault?.description }}
+          { vault.description }
         </p>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
               <tr>
                 <td>Vault ID</td>
-                <td>{{ vault?.vault?.id }}</td>
+                <td>{ vault.id }</td>
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
@@ -71,7 +84,7 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
+                <td>{ vault.withdraw_commission_rate .toFixed(2) }</td>
               </tr>
               <tr>
                 <td class="flex flex-row items-center gap-2">
@@ -107,7 +120,7 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
+                <td>{ vault.withdraw_reserve_rate.toFixed(2) }</td>
               </tr>
               <!-- <tr>
                 <td class="flex flex-row items-center gap-2">

@@ -208,6 +208,11 @@ export class YieldAggregatorService {
     }
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
+        if (strategyInfo.poolInfo.apr) {
+          console.log('strategyInfo.poolInfo.apr', strategyInfo.poolInfo.apr);
+
+          return strategyInfo.poolInfo.apr;
+        }
         return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
       }
     }
@@ -242,6 +247,10 @@ export class YieldAggregatorService {
       }
       const poolInfo = strategyInfo.poolInfo;
       if (poolInfo.type === 'osmosis') {
+        if (poolInfo.apr) {
+          vaultAPY += poolInfo.apr * Number(strategyWeight.weight);
+          continue;
+        }
         const pool = osmoPools.find((pool) => pool.pool_id.toString() === poolInfo.poolId);
         if (!pool) {
           continue;

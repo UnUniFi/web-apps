@@ -219,12 +219,6 @@ const denomMetadata = [
 
 const certifiedVaults = ['5', '6', '7'];
 
-const vaultsApys = [
-  { id: 5, minApy: 0.219 },
-  { id: 6, minApy: 0.222 },
-  { id: 7, minApy: 0.225 },
-];
-
 const strategiesInfo = [
   {
     id: '0',
@@ -235,6 +229,7 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
+      apr: 0.215,
     },
   },
   {
@@ -246,6 +241,7 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '803',
+      apr: 0.157,
     },
   },
   {
@@ -257,6 +253,7 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
+      apr: 0.215,
     },
   },
   {
@@ -268,6 +265,7 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '3',
+      apr: 0.237,
     },
   },
 ];
@@ -291,7 +289,6 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
-    vaultsApys,
     extension: {
       faucet: [
         {
@@ -325,7 +322,6 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
-    vaultsApys,
     extension: {
       faucet: [
         {

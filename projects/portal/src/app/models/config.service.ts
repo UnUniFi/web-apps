@@ -24,7 +24,6 @@ export type Config = {
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
   strategiesInfo: YieldInfo[];
   certifiedVaults: string[];
-  vaultsApys: { id: number; minApy: number; maxApy?: number }[];
   externalChains: ChainInfo[];
   extension?: {
     faucet?: {
@@ -73,6 +72,7 @@ export type YieldInfo = {
     | {
         type: 'osmosis';
         poolId: string;
+        apr?: number;
       }
     | {
         type: 'osmosis_multi';

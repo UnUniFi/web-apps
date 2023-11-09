@@ -3,8 +3,8 @@ import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
-import { OsmosisPools } from './yield-aggregator.model';
-import { HttpClient } from '@angular/common/http';
+import { OsmosisAPRs } from './osmosis/osmosis-pool.model';
+import { OsmosisPoolService } from './osmosis/osmosis-pool.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
@@ -21,7 +21,7 @@ export class YieldAggregatorService {
     private readonly bankService: BankService,
     private readonly bankQueryService: BankQueryService,
     private readonly txCommonService: TxCommonService,
-    private http: HttpClient,
+    private readonly osmosisPoolService: OsmosisPoolService,
   ) {}
 
   buildMsgDepositToVault(
@@ -163,45 +163,6 @@ export class YieldAggregatorService {
     );
   }
 
-  async getOsmoPoolAPY(poolId: string): Promise<number> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pools = res as OsmosisPools;
-        let totalApr = 0;
-        for (const pool of pools) {
-          for (const apr of pool.apr_list) {
-            totalApr += apr.apr_superfluid;
-          }
-        }
-        return totalApr / 100;
-      });
-  }
-
-  async getAllOsmoPool(): Promise<OsmosisPools> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/all';
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pools = res as OsmosisPools;
-        return pools;
-      });
-  }
-
-  async getOsmoPool(poolId: string): Promise<OsmosisPools> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pool = res as OsmosisPools;
-        return pool;
-      });
-  }
-
   async getStrategyAPR(strategyInfo?: YieldInfo): Promise<number> {
     if (!strategyInfo) {
       return 0;
@@ -213,13 +174,37 @@ export class YieldAggregatorService {
 
           return strategyInfo.poolInfo.apr;
         }
-        return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
+        return this.osmosisPoolService.getPoolApr(strategyInfo.poolInfo.poolId);
       }
     }
     return strategyInfo.minApy || 0;
   }
 
-  calcVaultAPY(vault: Vault200Response, config: Config, osmoPools: OsmosisPools): YieldInfo {
+  async getStrategySuperfluidAPR(strategyInfo?: YieldInfo): Promise<number | undefined> {
+    if (!strategyInfo) {
+      return;
+    }
+    if (strategyInfo.poolInfo) {
+      if (strategyInfo.poolInfo.type === 'osmosis') {
+        return this.osmosisPoolService.getSuperfluidApr(strategyInfo.poolInfo.poolId);
+      }
+    }
+    return;
+  }
+
+  async getStrategySwapFee(strategyInfo?: YieldInfo): Promise<number | undefined> {
+    if (!strategyInfo) {
+      return;
+    }
+    if (strategyInfo.poolInfo) {
+      if (strategyInfo.poolInfo.type === 'osmosis') {
+        return this.osmosisPoolService.getSwapFeeApr(strategyInfo.poolInfo.poolId);
+      }
+    }
+    return;
+  }
+
+  calcVaultAPY(vault: Vault200Response, config: Config, osmoPools: OsmosisAPRs): YieldInfo {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',

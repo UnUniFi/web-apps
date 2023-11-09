@@ -8,6 +8,7 @@ import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.que
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
+import { OsmosisPoolService } from 'projects/portal/src/app/models/yield-aggregators/osmosis/osmosis-pool.service';
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
   DepositToVaultRequest,
@@ -62,6 +63,7 @@ export class VaultComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
+    private readonly osmosisPoolService: OsmosisPoolService,
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
@@ -150,7 +152,7 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
+    const osmoPools$ = from(this.osmosisPoolService.getAllOsmoAPRs());
     this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$, osmoPools$]).pipe(
       map(([vault, config, pools]) => this.iyaService.calcVaultAPY(vault, config!, pools)),
     );

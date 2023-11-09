@@ -3,6 +3,7 @@ import { ConfigService, YieldInfo } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
+import { OsmosisPoolService } from '../../../models/yield-aggregators/osmosis/osmosis-pool.service';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
@@ -35,6 +36,7 @@ export class VaultsComponent implements OnInit {
     private readonly iyaService: YieldAggregatorService,
     private readonly configService: ConfigService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly osmosisPoolService: OsmosisPoolService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -44,7 +46,7 @@ export class VaultsComponent implements OnInit {
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
+    const osmoPools$ = from(this.osmosisPoolService.getAllOsmoAPRs());
     const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
       map(([vaults, config, pools]) => {
         const yields = vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools));

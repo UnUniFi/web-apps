@@ -1,18 +1,15 @@
 const restPort = location.protocol === 'https:' ? 1318 : 1317;
 const websocketPort = location.protocol === 'https:' ? 26658 : 26657;
-const faucetUbtcPort = location.protocol === 'https:' ? 8001 : 8000;
-const faucetUguuPort = location.protocol === 'https:' ? 8003 : 8002;
-const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
-const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
-const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
+const faucetUbtcPort = location.protocol === 'https:' ? 8000 : 7000;
+const faucetUguuPort = location.protocol === 'https:' ? 8002 : 7002;
 
-const domainCauchyEA = 'a.ununifi-test-v1.cauchye.net';
-const domainCauchyEB = 'b.ununifi-test-v1.cauchye.net';
-const domainCauchyEC = 'c.ununifi-test-v1.cauchye.net';
-const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
+const domainCauchyEA = 'a.lcd.ununifi.cauchye.net';
+const domainCauchyEB = 'b.lcd.ununifi.cauchye.net';
+const domainCauchyEC = 'ununifi.mainnet.lcd-01.kabab.io';
+const domainCauchyED = 'ununifi.mainnet.lcd-02.kabab.io';
 
-const chainID = 'ununifi-test-v1';
-const chainName = 'UnUniFi (test)';
+const chainID = 'ununifi-beta-v1';
+const chainName = 'UnUniFi';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -67,6 +64,40 @@ const denomMetadata = [
     symbol: 'GUU',
   },
   {
+    description: 'The governance token of OSMOSIS.',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+      },
+      {
+        denom: 'osmo',
+        exponent: 6,
+      },
+    ],
+    base: 'uosmo',
+    name: 'OSMOSIS',
+    display: 'OSMO',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'The governance token of Cosmos Hub.',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+      },
+      {
+        denom: 'atom',
+        exponent: 6,
+      },
+    ],
+    base: 'uatom',
+    name: 'COSMOS',
+    display: 'ATOM',
+    symbol: 'ATOM',
+  },
+  {
     description: 'The first cryptocurrency invented in 2008',
     denom_units: [
       {
@@ -84,6 +115,25 @@ const denomMetadata = [
     display: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
+  },
+  {
+    description: 'The currency of the U.S.A.',
+    denom_units: [
+      {
+        denom: 'uusd',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'usd',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'uusd',
+    display: 'USD',
+    name: 'US Dollar',
+    symbol: 'USD',
   },
   {
     description: 'Stablecoin pegged to the USD',
@@ -127,200 +177,94 @@ const denomMetadata = [
     description: 'ATOM from Osmosis',
     denom_units: [
       {
-        denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+        denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
         exponent: 0,
         aliases: [],
       },
     ],
-    base: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
+    base: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
     name: 'ATOM from Osmosis',
     display: 'ATOM.osmosis',
     symbol: 'ATOM',
   },
   {
-    description: 'OSMO from Osmosis (deprecated)',
+    description: 'USDC from Osmosis',
     denom_units: [
       {
-        denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
+        denom: 'ibc/A01367FF44D9DE359A984FC14EC5227AA96ED08B8B4B31B539BB63B9B9305F80',
         exponent: 0,
         aliases: [],
       },
     ],
-    base: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
-    name: 'OSMO (deprecated)',
-    display: 'OSMO (deprecated)',
-    symbol: 'OSMO',
+    base: 'ibc/A01367FF44D9DE359A984FC14EC5227AA96ED08B8B4B31B539BB63B9B9305F80',
+    name: 'USDC from Osmosis',
+    display: 'USDC.osmosis',
+    symbol: 'USDC',
   },
   {
     description: 'OSMO from Osmosis',
     denom_units: [
       {
-        denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
+        denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
         exponent: 0,
         aliases: [],
       },
     ],
-    base: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'OSMO',
-    display: 'OSMO',
+    base: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'OSMO from Osmosis',
+    display: 'OSMO.osmosis',
     symbol: 'OSMO',
   },
 ];
 
+const certifiedVaults = ['5', '6', '7'];
+
 const strategiesInfo = [
   {
     id: '0',
-    denom: 'ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B',
-    name: 'MARS/OSMO strategy',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis ATOM/OSMO LP Strategy',
     description: '',
     gitUrl: '',
     poolInfo: {
       type: 'osmosis',
-      poolId: '907',
+      poolId: '1',
     },
   },
   {
     id: '0',
-    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'MARS/OSMO strategy v2',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
     description: '',
     gitUrl: '',
     poolInfo: {
       type: 'osmosis',
-      poolId: '907',
+      poolId: '803',
+      apr: 0.157,
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+      apr: 0.215,
     },
   },
   {
     id: '1',
-    denom: 'ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85',
-    name: 'ATOM/OSMO strategy v2',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
     description: '',
     gitUrl: '',
     poolInfo: {
       type: 'osmosis',
-      poolId: '1',
-    },
-  },
-  {
-    id: '0',
-    denom: 'ibc/ACBD2CEFAC2CC3ED6EEAF67BBDFDF168F1E4EDA159DFE1CA6B4A57A9CAF4DA11',
-    name: 'Osmosis ATOM/OSMO Farm',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '1',
-    },
-  },
-];
-
-const certifiedVaults = ['6', '8', '9', '10', '11'];
-
-const externalChains = [
-  {
-    id: 'cosmoshub',
-    chainId: 'cosmoshub-4',
-    chainName: 'Cosmos Hub',
-    rpc: 'https://rpc-cosmoshub.keplr.app',
-    rest: 'https://lcd-cosmoshub.keplr.app',
-    bip44: { coinType: 118 },
-    bech32Config: {
-      bech32PrefixAccAddr: 'cosmos',
-      bech32PrefixAccPub: 'cosmospub',
-      bech32PrefixConsAddr: 'cosmosvalcons',
-      bech32PrefixConsPub: 'cosmosvalconspub',
-      bech32PrefixValAddr: 'cosmosvaloper',
-      bech32PrefixValPub: 'cosmosvaloperpub',
-    },
-    currencies: [
-      {
-        coinDecimals: 6,
-        coinDenom: 'ATOM',
-        coinGeckoId: 'cosmos',
-        coinMinimalDenom: 'uatom',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDecimals: 6,
-        coinDenom: 'ATOM',
-        coinGeckoId: 'cosmos',
-        coinMinimalDenom: 'uatom',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-        gasPriceStep: {
-          average: 0.025,
-          high: 0.03,
-          low: 0.01,
-        },
-      },
-    ],
-    stakeCurrency: {
-      coinDecimals: 6,
-      coinDenom: 'ATOM',
-      coinGeckoId: 'cosmos',
-      coinMinimalDenom: 'uatom',
-      coinImageUrl:
-        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
-    },
-  },
-  {
-    id: 'osmosis',
-    chainId: 'osmosis-1',
-    chainName: 'Osmosis',
-    rpc: 'https://rpc-osmosis.keplr.app',
-    rest: 'https://lcd-osmosis.keplr.app',
-    bip44: { coinType: 118 },
-    bech32Config: {
-      bech32PrefixAccAddr: 'osmo',
-      bech32PrefixAccPub: 'osmopub',
-      bech32PrefixValAddr: 'osmovaloper',
-      bech32PrefixValPub: 'osmovaloperpub',
-      bech32PrefixConsAddr: 'osmovalcons',
-      bech32PrefixConsPub: 'osmovalconspub',
-    },
-    currencies: [
-      {
-        coinDenom: 'OSMO',
-        coinMinimalDenom: 'uosmo',
-        coinDecimals: 6,
-        coinGeckoId: 'osmosis',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
-      },
-      {
-        coinDenom: 'ION',
-        coinMinimalDenom: 'uion',
-        coinDecimals: 6,
-        coinGeckoId: 'ion',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uion.png',
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: 'OSMO',
-        coinMinimalDenom: 'uosmo',
-        coinDecimals: 6,
-        coinGeckoId: 'osmosis',
-        coinImageUrl:
-          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
-        gasPriceStep: {
-          low: 0.0025,
-          average: 0.025,
-          high: 0.04,
-        },
-      },
-    ],
-    stakeCurrency: {
-      coinDenom: 'OSMO',
-      coinMinimalDenom: 'uosmo',
-      coinDecimals: 6,
-      coinGeckoId: 'osmosis',
-      coinImageUrl:
-        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+      poolId: '3',
+      apr: 0.237,
     },
   },
 ];
@@ -344,18 +288,17 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
-    externalChains,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
+          creditAmount: 2000,
+          maxCredit: 2000,
         },
       ],
-      monitor: undefined,
+      // monitor: {},
       navigations: [],
       messageModules,
     },
@@ -378,86 +321,17 @@ const configs = [
     denomMetadata,
     strategiesInfo,
     certifiedVaults,
-    externalChains,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
+          creditAmount: 2000,
+          maxCredit: 2000,
         },
       ],
-      monitor: undefined,
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE C node without Monitor
-  {
-    id: domainCauchyEC,
-    restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    externalChains,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-      ],
-      monitor: undefined,
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE D node without Monitor
-  {
-    id: domainCauchyED,
-    restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    externalChains,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-      ],
-      monitor: undefined,
+      // monitor: {},
       navigations: [],
       messageModules,
     },

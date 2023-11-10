@@ -1,5 +1,5 @@
 import {
-  OsmosisAvgApr,
+  OsmosisAvgAPR,
   OsmosisAPRs,
   OsmosisFee,
   OsmosisPoolAssets,
@@ -20,11 +20,11 @@ import { Injectable } from '@angular/core';
 export class OsmosisQueryService {
   constructor(private http: HttpClient) {}
 
-  async getAvgApr(poolId: string): Promise<OsmosisAvgApr | undefined> {
+  async getAvgAPR(poolId: string): Promise<OsmosisAvgAPR | undefined> {
     const url = 'https://api-osmosis-chain.imperator.co/cl/v1/apr/avg/' + poolId;
     try {
       const res = await this.http.get(url).toPromise();
-      const apr = res as OsmosisAvgApr;
+      const apr = res as OsmosisAvgAPR;
       return apr;
     } catch (error) {
       console.error(error);
@@ -56,7 +56,7 @@ export class OsmosisQueryService {
     }
   }
 
-  async getAprs(poolId: string): Promise<OsmosisAPRs | undefined> {
+  async getAPRs(poolId: string): Promise<OsmosisAPRs | undefined> {
     const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
     try {
       const res = await this.http.get(url).toPromise();

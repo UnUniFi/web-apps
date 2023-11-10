@@ -1,3 +1,11 @@
+export type OsmosisPoolAPRs = {
+  totalAPR: number;
+  superfluidAPR?: number;
+  internalGaugeAPR?: number;
+  externalGaugeAPR?: number;
+  swapFeeAPR?: number;
+};
+
 export type OsmosisAPRs = {
   pool_id: number;
   apr_list: {
@@ -11,7 +19,7 @@ export type OsmosisAPRs = {
   }[];
 }[];
 
-export type OsmosisAvgApr = {
+export type OsmosisAvgAPR = {
   APR: number;
 };
 

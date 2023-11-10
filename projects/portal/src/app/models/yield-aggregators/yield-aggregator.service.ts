@@ -3,7 +3,7 @@ import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
-import { OsmosisAPRs } from './osmosis/osmosis-pool.model';
+import { OsmosisAPRs, OsmosisPoolAPRs } from './osmosis/osmosis-pool.model';
 import { OsmosisPoolService } from './osmosis/osmosis-pool.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
@@ -163,21 +163,21 @@ export class YieldAggregatorService {
     );
   }
 
-  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<number> {
+  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<OsmosisPoolAPRs> {
     if (!strategyInfo) {
-      return 0;
+      return { totalAPR: 0 };
     }
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
         if (strategyInfo.poolInfo.apr) {
           console.log('strategyInfo.poolInfo.apr', strategyInfo.poolInfo.apr);
 
-          return strategyInfo.poolInfo.apr;
+          return { totalAPR: strategyInfo.poolInfo.apr };
         }
-        return this.osmosisPoolService.getPoolApr(strategyInfo.poolInfo.poolId);
+        return this.osmosisPoolService.getPoolAPR(strategyInfo.poolInfo.poolId);
       }
     }
-    return strategyInfo.minApy || 0;
+    return { totalAPR: strategyInfo.minApy };
   }
 
   async getStrategySuperfluidAPR(strategyInfo?: YieldInfo): Promise<number | undefined> {
@@ -186,7 +186,7 @@ export class YieldAggregatorService {
     }
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
-        return this.osmosisPoolService.getSuperfluidApr(strategyInfo.poolInfo.poolId);
+        return this.osmosisPoolService.getSuperfluidAPR(strategyInfo.poolInfo.poolId);
       }
     }
     return;
@@ -198,7 +198,7 @@ export class YieldAggregatorService {
     }
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
-        return this.osmosisPoolService.getSwapFeeApr(strategyInfo.poolInfo.poolId);
+        return this.osmosisPoolService.getSwapFeeAPR(strategyInfo.poolInfo.poolId);
       }
     }
     return;
@@ -240,11 +240,11 @@ export class YieldAggregatorService {
         if (!pool) {
           continue;
         }
-        let totalApr = 0;
+        let totalAPR = 0;
         for (const apr of pool.apr_list) {
-          totalApr += apr.apr_superfluid;
+          totalAPR += apr.apr_superfluid;
         }
-        vaultAPY += (Number(totalApr) / 100) * Number(strategyWeight.weight);
+        vaultAPY += (Number(totalAPR) / 100) * Number(strategyWeight.weight);
       }
     }
 

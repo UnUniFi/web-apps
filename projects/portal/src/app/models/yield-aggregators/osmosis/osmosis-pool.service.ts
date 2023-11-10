@@ -1,4 +1,4 @@
-import { OsmosisAPRs } from './osmosis-pool.model';
+import { OsmosisAPRs, OsmosisPoolAPRs } from './osmosis-pool.model';
 import { OsmosisQueryService } from './osmosis.query.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -9,36 +9,36 @@ import { Injectable } from '@angular/core';
 export class OsmosisPoolService {
   constructor(private http: HttpClient, private readonly osmosisQuery: OsmosisQueryService) {}
 
-  async getPoolApr(poolId: string): Promise<number> {
+  async getPoolAPR(poolId: string): Promise<OsmosisPoolAPRs> {
     // average APR
-    const avgApr = await this.getAvgApr(poolId);
-    if (avgApr) {
-      return avgApr;
+    const avgAPR = await this.getAvgAPR(poolId);
+    if (avgAPR) {
+      return { totalAPR: avgAPR };
     }
 
     // aggregate APR
-    const aggregateApr = await this.aggregateApr(poolId);
-    if (aggregateApr) {
-      return aggregateApr;
+    const aggregateAPR = await this.aggregateAPR(poolId);
+    if (aggregateAPR) {
+      return aggregateAPR;
     }
 
     // swap fee APR
-    const swapFeeApr = await this.getSwapFeeApr(poolId);
-    if (swapFeeApr) {
-      return swapFeeApr;
-    }
-    return 0;
+    // const swapFeeAPR = await this.getSwapFeeAPR(poolId);
+    // if (swapFeeAPR) {
+    //   return swapFeeAPR;
+    // }
+    return { totalAPR: 0 };
   }
 
-  async getAvgApr(poolId: string): Promise<number | undefined> {
-    const apr = await this.osmosisQuery.getAvgApr(poolId);
+  async getAvgAPR(poolId: string): Promise<number | undefined> {
+    const apr = await this.osmosisQuery.getAvgAPR(poolId);
     if (!apr) {
       return;
     }
     return Number(apr.APR) / 100;
   }
 
-  async getSwapFeeApr(poolId: string): Promise<number | undefined> {
+  async getSwapFeeAPR(poolId: string): Promise<number | undefined> {
     try {
       const fee = await this.osmosisQuery.getFee(poolId);
       if (!fee) {
@@ -59,35 +59,37 @@ export class OsmosisPoolService {
     }
   }
 
-  async aggregateApr(poolId: string): Promise<number | undefined> {
+  async aggregateAPR(poolId: string): Promise<OsmosisPoolAPRs | undefined> {
     try {
-      const superfluid = await this.getSuperfluidApr(poolId);
-      console.log('super: ' + superfluid);
-      const liquidityIncentiveApr = await this.getInternalLiquidityIncentiveApr(poolId);
-      console.log('internal_liquidity: ' + liquidityIncentiveApr);
-      const activeGaugeApr = await this.getExternalLiquidityIncentiveApr(poolId);
-      console.log('external_liquidity: ' + activeGaugeApr);
+      const superfluidAPR = await this.getSuperfluidAPR(poolId);
+      console.log('superfluid: ' + superfluidAPR);
+      const internalGaugeAPR = await this.getInternalLiquidityIncentiveAPR(poolId);
+      console.log('internal_liquidity: ' + internalGaugeAPR);
+      const externalGaugeAPR = await this.getExternalLiquidityIncentiveAPR(poolId);
+      console.log('external_liquidity: ' + externalGaugeAPR);
 
-      const swapFee = await this.getSwapFeeApr(poolId);
-      console.log('swap: ' + swapFee);
-      if (
-        superfluid === undefined &&
-        liquidityIncentiveApr === undefined &&
-        swapFee === undefined
-      ) {
-        return;
-      }
-      return (
-        (superfluid || 0) + (liquidityIncentiveApr || 0) + (activeGaugeApr || 0) + (swapFee || 0)
-      );
+      const swapFeeAPR = await this.getSwapFeeAPR(poolId);
+      console.log('swap_fee: ' + swapFeeAPR);
+      const totalAPR =
+        (superfluidAPR || 0) +
+        (internalGaugeAPR || 0) +
+        (externalGaugeAPR || 0) +
+        (swapFeeAPR || 0);
+      return {
+        totalAPR,
+        superfluidAPR,
+        internalGaugeAPR,
+        externalGaugeAPR,
+        swapFeeAPR,
+      };
     } catch (error) {
       console.error(error);
       return;
     }
   }
 
-  async getSuperfluidApr(poolId: string): Promise<number | undefined> {
-    const aprs = await this.osmosisQuery.getAprs(poolId);
+  async getSuperfluidAPR(poolId: string): Promise<number | undefined> {
+    const aprs = await this.osmosisQuery.getAPRs(poolId);
     if (!aprs) {
       return;
     }
@@ -95,7 +97,7 @@ export class OsmosisPoolService {
     return superfluid;
   }
 
-  async getInternalLiquidityIncentiveApr(poolId: string): Promise<number | undefined> {
+  async getInternalLiquidityIncentiveAPR(poolId: string): Promise<number | undefined> {
     try {
       const incentivePools = await this.osmosisQuery.getIncentivePools();
       const gaugeId = incentivePools?.incentivized_pools.find(
@@ -155,7 +157,7 @@ export class OsmosisPoolService {
     }
   }
 
-  async getExternalLiquidityIncentiveApr(poolId: string): Promise<number | undefined> {
+  async getExternalLiquidityIncentiveAPR(poolId: string): Promise<number | undefined> {
     try {
       const activeGauge = await this.osmosisQuery.getActiveGauges();
       const gauges = activeGauge?.data.filter((gauge) => {
@@ -189,7 +191,7 @@ export class OsmosisPoolService {
         return;
       }
 
-      let totalApr = 0;
+      let totalAPR = 0;
       for (const gauge of gauges || []) {
         console.log(gauge.id);
         const remainingEpoch = parseInt(gauge.num_epochs_paid_over) - parseInt(gauge.filled_epochs);
@@ -210,11 +212,11 @@ export class OsmosisPoolService {
           }
           const externalIncentivePrice = (Number(coin.amount) * price.price) / Math.pow(10, 6);
           const apr = (externalIncentivePrice * yearProvision) / tvl;
-          totalApr += apr;
+          totalAPR += apr;
         }
       }
 
-      return totalApr;
+      return totalAPR;
     } catch (error) {
       console.error(error);
       return;

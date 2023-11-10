@@ -107,7 +107,7 @@ export class OsmosisPoolService {
         console.log('gaugeId not found');
         return;
       }
-      const distrInfo = await this.osmosisQuery.getDistInfo();
+      const distrInfo = await this.osmosisQuery.getDistrInfo();
       const totalWight = distrInfo?.distr_info.total_weight;
       if (!totalWight) {
         console.log('totalWight not found');

@@ -233,7 +233,7 @@ const strategiesInfo = [
     },
   },
   {
-    id: '0',
+    id: '1',
     denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
     name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
     description: '',
@@ -241,7 +241,6 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '803',
-      apr: 0.157,
     },
   },
   {
@@ -253,7 +252,6 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
-      apr: 0.215,
     },
   },
   {
@@ -265,7 +263,6 @@ const strategiesInfo = [
     poolInfo: {
       type: 'osmosis',
       poolId: '3',
-      apr: 0.237,
     },
   },
 ];

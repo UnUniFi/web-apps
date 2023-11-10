@@ -174,7 +174,8 @@ export class YieldAggregatorService {
 
           return { totalAPR: strategyInfo.poolInfo.apr };
         }
-        return this.osmosisPoolService.getPoolAPR(strategyInfo.poolInfo.poolId);
+        const apr = await this.osmosisPoolService.getPoolAPR(strategyInfo.poolInfo.poolId);
+        return apr;
       }
     }
     return { totalAPR: strategyInfo.minApy };
@@ -187,18 +188,6 @@ export class YieldAggregatorService {
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
         return this.osmosisPoolService.getSuperfluidAPR(strategyInfo.poolInfo.poolId);
-      }
-    }
-    return;
-  }
-
-  async getStrategySwapFee(strategyInfo?: YieldInfo): Promise<number | undefined> {
-    if (!strategyInfo) {
-      return;
-    }
-    if (strategyInfo.poolInfo) {
-      if (strategyInfo.poolInfo.type === 'osmosis') {
-        return this.osmosisPoolService.getSwapFeeAPR(strategyInfo.poolInfo.poolId);
       }
     }
     return;

@@ -34,6 +34,7 @@ export class OsmosisQueryService {
       return apr;
     } catch (error) {
       console.error(error);
+      this.cacheService.set(cacheKey, undefined);
       return undefined;
     }
   }

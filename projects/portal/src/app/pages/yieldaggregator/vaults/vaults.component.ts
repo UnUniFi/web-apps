@@ -45,9 +45,17 @@ export class VaultsComponent implements OnInit {
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const vaultYieldMap$ = combineLatest([vaults$, config$]).pipe(
-      mergeMap(([vaults, config]) =>
-        Promise.all(vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!))),
-      ),
+      mergeMap(async ([vaults, config]) => {
+        const results: YieldInfo[] = [];
+        if (!config) {
+          return results;
+        }
+        for (const vault of vaults) {
+          const result = await this.iyaService.calcVaultAPY(vault, config);
+          results.push(result);
+        }
+        return results;
+      }),
       map((yields) => {
         const yieldMap: { [id: string]: YieldInfo } = {};
         for (const y of yields) {

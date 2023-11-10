@@ -204,7 +204,7 @@ export class YieldAggregatorService {
     return;
   }
 
-  calcVaultAPY(vault: Vault200Response, config: Config, osmoPools: OsmosisAPRs): YieldInfo {
+  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<YieldInfo> {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
@@ -236,15 +236,8 @@ export class YieldAggregatorService {
           vaultAPY += poolInfo.apr * Number(strategyWeight.weight);
           continue;
         }
-        const pool = osmoPools.find((pool) => pool.pool_id.toString() === poolInfo.poolId);
-        if (!pool) {
-          continue;
-        }
-        let totalAPR = 0;
-        for (const apr of pool.apr_list) {
-          totalAPR += apr.apr_superfluid;
-        }
-        vaultAPY += (Number(totalAPR) / 100) * Number(strategyWeight.weight);
+        const poolAPRs = await this.osmosisPoolService.getPoolAPR(poolInfo.poolId);
+        vaultAPY += poolAPRs.totalAPR * Number(strategyWeight.weight);
       }
     }
 

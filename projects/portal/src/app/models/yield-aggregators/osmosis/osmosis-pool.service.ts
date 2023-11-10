@@ -222,28 +222,4 @@ export class OsmosisPoolService {
       return;
     }
   }
-
-  // deprecated
-  async getAllOsmoAPRs(): Promise<OsmosisAPRs> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/all';
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pools = res as OsmosisAPRs;
-        return pools;
-      });
-  }
-
-  // deprecated
-  async getOsmoAPR(poolId: string): Promise<OsmosisAPRs> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pool = res as OsmosisAPRs;
-        return pool;
-      });
-  }
 }

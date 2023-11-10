@@ -1,3 +1,4 @@
+import { CacheService } from '../../query.cache.service';
 import {
   OsmosisAvgAPR,
   OsmosisAPRs,
@@ -11,7 +12,6 @@ import {
   TokenStream,
   OsmosisSymbolPrice,
 } from './osmosis-pool.model';
-import { CacheService } from './query.cache.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 

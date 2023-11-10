@@ -1,15 +1,4 @@
-import {
-  OsmosisAvgApr,
-  OsmosisAPRs,
-  OsmosisFee,
-  OsmosisPoolAssets,
-  OsmosisIncentivePools,
-  OsmosisLockableDurations,
-  OsmosisActiveGauges,
-  OsmosisDistrInfo,
-  OsmosisMintParams,
-  TokenStream,
-} from './osmosis-pool.model';
+import { OsmosisAPRs } from './osmosis-pool.model';
 import { OsmosisQueryService } from './osmosis.query.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -75,7 +64,10 @@ export class OsmosisPoolService {
       const superfluid = await this.getSuperfluidApr(poolId);
       console.log('super: ' + superfluid);
       const liquidityIncentiveApr = await this.getInternalLiquidityIncentiveApr(poolId);
-      console.log('liquidity: ' + liquidityIncentiveApr);
+      console.log('internal_liquidity: ' + liquidityIncentiveApr);
+      const activeGaugeApr = await this.getExternalLiquidityIncentiveApr(poolId);
+      console.log('external_liquidity: ' + activeGaugeApr);
+
       const swapFee = await this.getSwapFeeApr(poolId);
       console.log('swap: ' + swapFee);
       if (
@@ -85,8 +77,11 @@ export class OsmosisPoolService {
       ) {
         return;
       }
-      return (superfluid || 0) + (liquidityIncentiveApr || 0) + (swapFee || 0);
+      return (
+        (superfluid || 0) + (liquidityIncentiveApr || 0) + (activeGaugeApr || 0) + (swapFee || 0)
+      );
     } catch (error) {
+      console.error(error);
       return;
     }
   }
@@ -106,6 +101,10 @@ export class OsmosisPoolService {
       const gaugeId = incentivePools?.incentivized_pools.find(
         (p) => p.pool_id === poolId,
       )?.gauge_id;
+      if (!gaugeId) {
+        console.log('gaugeId not found');
+        return;
+      }
       const distrInfo = await this.osmosisQuery.getDistInfo();
       const totalWight = distrInfo?.distr_info.total_weight;
       if (!totalWight) {
@@ -129,14 +128,12 @@ export class OsmosisPoolService {
         console.log('price not found');
         return;
       }
-      const yearProvision = (Number(epochProvision?.epoch_provisions) * 365) / Math.pow(10, 6);
+      const yearProvision = Number(epochProvision?.epoch_provisions) * 365;
       const yearProvisionToPots =
         yearProvision * Number(mintParams?.params.distribution_proportions.pool_incentives);
-      console.log('epoch: ' + epochProvision?.epoch_provisions);
-      console.log('incentive: ' + mintParams?.params.distribution_proportions.pool_incentives);
 
       const yearProvisionToPot = (yearProvisionToPots * Number(potWeight)) / Number(totalWight);
-      const yearProvisionToPotPrice = yearProvisionToPot * price;
+      const yearProvisionToPotPrice = (yearProvisionToPot * price) / Math.pow(10, 6);
       const assets = await this.osmosisQuery.getPool(poolId);
       if (!assets) {
         console.log('assets not found');
@@ -152,6 +149,72 @@ export class OsmosisPoolService {
       }
       const apr = yearProvisionToPotPrice / tvl;
       return apr;
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+  }
+
+  async getExternalLiquidityIncentiveApr(poolId: string): Promise<number | undefined> {
+    try {
+      const activeGauge = await this.osmosisQuery.getActiveGauges();
+      const gauges = activeGauge?.data.filter((gauge) => {
+        if (gauge.distribute_to.denom.includes('gamm/pool/')) {
+          const distributePoolId = gauge.distribute_to.denom.split('/')[2];
+          return poolId === distributePoolId;
+        }
+
+        if (gauge.distribute_to.denom.includes('cl/pool/')) {
+          const distributePoolId = gauge.distribute_to.denom.split('/')[2];
+          return poolId === distributePoolId;
+        }
+
+        return false;
+      });
+      if (!gauges?.length) {
+        console.log('gauges not found');
+        return;
+      }
+      const assets = await this.osmosisQuery.getPool(poolId);
+      if (!assets) {
+        console.log('assets not found');
+        return;
+      }
+      let tvl = 0;
+      for (const asset of assets) {
+        tvl += asset.amount * asset.price;
+      }
+      if (tvl === 0) {
+        console.log('no tvl');
+        return;
+      }
+
+      let totalApr = 0;
+      for (const gauge of gauges || []) {
+        console.log(gauge.id);
+        const remainingEpoch = parseInt(gauge.num_epochs_paid_over) - parseInt(gauge.filled_epochs);
+        if (remainingEpoch <= 0) {
+          continue;
+        }
+        const yearProvision = 365 / remainingEpoch;
+
+        const coins = gauge.coins;
+        for (const coin of coins) {
+          const symbol = await this.osmosisQuery.getSymbol(coin.denom);
+          if (!symbol) {
+            continue;
+          }
+          const price = await this.osmosisQuery.getPrice(symbol.symbol);
+          if (!price) {
+            continue;
+          }
+          const externalIncentivePrice = (Number(coin.amount) * price.price) / Math.pow(10, 6);
+          const apr = (externalIncentivePrice * yearProvision) / tvl;
+          totalApr += apr;
+        }
+      }
+
+      return totalApr;
     } catch (error) {
       console.error(error);
       return;

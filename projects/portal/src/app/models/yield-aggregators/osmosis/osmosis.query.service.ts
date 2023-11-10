@@ -9,6 +9,7 @@ import {
   OsmosisDistrInfo,
   OsmosisMintParams,
   TokenStream,
+  OsmosisSymbolPrice,
 } from './osmosis-pool.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -145,6 +146,42 @@ export class OsmosisQueryService {
       const res = await this.http.get(url).toPromise();
       const apr = res as OsmosisIncentivePools;
       return apr;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async getGaugeIncentive(gaugeId: string) {
+    const url = 'https://lcd-osmosis.keplr.app/osmosis/incentives/v1beta1/gauge_by_id/' + gaugeId;
+    try {
+      const res = await this.http.get(url).toPromise();
+      const apr = res as OsmosisIncentivePools;
+      return apr;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async getSymbol(denom: string) {
+    const url = 'https://api-osmosis.imperator.co/search/v1/symbol?denom=' + denom;
+    try {
+      const res = await this.http.get(url).toPromise();
+      const symbol = res as { symbol: string };
+      return symbol;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async getPrice(symbol: string) {
+    const url = 'https://api-osmosis.imperator.co/tokens/v2/price/' + symbol;
+    try {
+      const res = await this.http.get(url).toPromise();
+      const symbol = res as OsmosisSymbolPrice;
+      return symbol;
     } catch (error) {
       console.error(error);
       return undefined;

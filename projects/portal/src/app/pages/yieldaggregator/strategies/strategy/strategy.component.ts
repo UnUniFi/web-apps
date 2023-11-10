@@ -67,7 +67,7 @@ export class StrategyComponent implements OnInit {
     this.strategyInfo$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
       map(([strategy, config]) =>
         config?.strategiesInfo?.find(
-          (s) => s.denom && strategy?.strategy?.denom && s.id == strategy?.strategy?.id,
+          (s) => s.denom == strategy?.strategy?.denom && s.id == strategy?.strategy?.id,
         ),
       ),
     );

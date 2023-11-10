@@ -1,11 +1,16 @@
 import {
-  OsmosisApr as OsmosisAvgApr,
+  OsmosisAvgApr,
   OsmosisAPRs,
   OsmosisFee,
-  OsmosisPool as OsmosisPoolAssets,
+  OsmosisPoolAssets,
   OsmosisIncentivePools,
   OsmosisLockableDurations,
+  OsmosisActiveGauges,
+  OsmosisDistrInfo,
+  OsmosisMintParams,
+  TokenStream,
 } from './osmosis-pool.model';
+import { OsmosisQueryService } from './osmosis.query.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -13,7 +18,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class OsmosisPoolService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private readonly osmosisQuery: OsmosisQueryService) {}
 
   async getPoolApr(poolId: string): Promise<number> {
     // average APR
@@ -37,25 +42,24 @@ export class OsmosisPoolService {
   }
 
   async getAvgApr(poolId: string): Promise<number | undefined> {
-    const url = 'https://api-osmosis-chain.imperator.co/cl/v1/apr/avg/' + poolId;
-    try {
-      const res = await this.http.get(url).toPromise();
-      const apr = res as OsmosisAvgApr;
-      return Number(apr.APR) / 100;
-    } catch (error) {
-      return undefined;
+    const apr = await this.osmosisQuery.getAvgApr(poolId);
+    if (!apr) {
+      return;
     }
+    return Number(apr.APR) / 100;
   }
 
   async getSwapFeeApr(poolId: string): Promise<number | undefined> {
-    const feeUrl = 'https://api-osmosis.imperator.co/fees/v1/' + poolId;
-    const poolUrl = 'https://api-osmosis.imperator.co/pools/v2/' + poolId;
     try {
-      const resFee = await this.http.get(feeUrl).toPromise();
-      const fee = resFee as OsmosisFee;
+      const fee = await this.osmosisQuery.getFee(poolId);
+      if (!fee) {
+        return;
+      }
       const feeYear = Number(fee.data[0].fees_spent_7d / 7) * 365;
-      const resPool = await this.http.get(poolUrl).toPromise();
-      const assets = resPool as OsmosisPoolAssets;
+      const assets = await this.osmosisQuery.getPool(poolId);
+      if (!assets) {
+        return;
+      }
       let tvl = 0;
       for (const asset of assets) {
         tvl += asset.amount * asset.price;
@@ -69,56 +73,88 @@ export class OsmosisPoolService {
   async aggregateApr(poolId: string): Promise<number | undefined> {
     try {
       const superfluid = await this.getSuperfluidApr(poolId);
-      if (!superfluid) {
-        return;
-      }
-      // todo calculate daily reward
-      const dailyReward = 0;
+      console.log('super: ' + superfluid);
+      const liquidityIncentiveApr = await this.getInternalLiquidityIncentiveApr(poolId);
+      console.log('liquidity: ' + liquidityIncentiveApr);
       const swapFee = await this.getSwapFeeApr(poolId);
-      if (!swapFee) {
+      console.log('swap: ' + swapFee);
+      if (
+        superfluid === undefined &&
+        liquidityIncentiveApr === undefined &&
+        swapFee === undefined
+      ) {
         return;
       }
-      return superfluid + dailyReward + swapFee;
+      return (superfluid || 0) + (liquidityIncentiveApr || 0) + (swapFee || 0);
     } catch (error) {
       return;
     }
   }
 
   async getSuperfluidApr(poolId: string): Promise<number | undefined> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    try {
-      const res = await this.http.get(url).toPromise();
-      const apr = res as OsmosisAPRs;
-      const superfluid = Number(apr[0].apr_list[0].apr_superfluid) / 100;
-      return superfluid;
-    } catch (error) {
-      return undefined;
+    const aprs = await this.osmosisQuery.getAprs(poolId);
+    if (!aprs) {
+      return;
     }
+    const superfluid = Number(aprs[0].apr_list[0].apr_superfluid) / 100;
+    return superfluid;
   }
 
-  async getActiveGauges(poolId: string) {
-    'https://app.osmosis.zone/api/active-gauges';
-  }
-
-  async getLockableDuration() {
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/lockable_durations';
+  async getInternalLiquidityIncentiveApr(poolId: string): Promise<number | undefined> {
     try {
-      const res = await this.http.get(url).toPromise();
-      const apr = res as OsmosisLockableDurations;
+      const incentivePools = await this.osmosisQuery.getIncentivePools();
+      const gaugeId = incentivePools?.incentivized_pools.find(
+        (p) => p.pool_id === poolId,
+      )?.gauge_id;
+      const distrInfo = await this.osmosisQuery.getDistInfo();
+      const totalWight = distrInfo?.distr_info.total_weight;
+      if (!totalWight) {
+        console.log('totalWight not found');
+        return;
+      }
+      const potWeight = distrInfo?.distr_info.records.find((r) => r.gauge_id === gaugeId)?.weight;
+      if (!potWeight) {
+        console.log('potWeight not found');
+        return;
+      }
+      const epochProvision = await this.osmosisQuery.getEpochProvisions();
+      const mintParams = await this.osmosisQuery.getMintParams();
+      if (!mintParams?.params.mint_denom) {
+        console.log('mint denom not found');
+        return;
+      }
+      const stream = await this.osmosisQuery.getDenomStream(mintParams.params.mint_denom);
+      const price = stream?.price;
+      if (!price) {
+        console.log('price not found');
+        return;
+      }
+      const yearProvision = (Number(epochProvision?.epoch_provisions) * 365) / Math.pow(10, 6);
+      const yearProvisionToPots =
+        yearProvision * Number(mintParams?.params.distribution_proportions.pool_incentives);
+      console.log('epoch: ' + epochProvision?.epoch_provisions);
+      console.log('incentive: ' + mintParams?.params.distribution_proportions.pool_incentives);
+
+      const yearProvisionToPot = (yearProvisionToPots * Number(potWeight)) / Number(totalWight);
+      const yearProvisionToPotPrice = yearProvisionToPot * price;
+      const assets = await this.osmosisQuery.getPool(poolId);
+      if (!assets) {
+        console.log('assets not found');
+        return;
+      }
+      let tvl = 0;
+      for (const asset of assets) {
+        tvl += asset.amount * asset.price;
+      }
+      if (tvl === 0) {
+        console.log('no tvl');
+        return;
+      }
+      const apr = yearProvisionToPotPrice / tvl;
       return apr;
     } catch (error) {
-      return undefined;
-    }
-  }
-
-  async getIncentivePools() {
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/incentivized_pools';
-    try {
-      const res = await this.http.get(url).toPromise();
-      const apr = res as OsmosisIncentivePools;
-      return apr;
-    } catch (error) {
-      return undefined;
+      console.error(error);
+      return;
     }
   }
 

@@ -11,7 +11,7 @@ export type OsmosisAPRs = {
   }[];
 }[];
 
-export type OsmosisApr = {
+export type OsmosisAvgApr = {
   APR: number;
 };
 
@@ -27,7 +27,7 @@ export type OsmosisFee = {
   }[];
 };
 
-export type OsmosisPool = {
+export type OsmosisPoolAssets = {
   symbol: string;
   amount: number;
   denom: string;
@@ -42,11 +42,86 @@ export type OsmosisPool = {
 }[];
 
 export type OsmosisIncentivePools = {
-  pool_id: string;
-  lockable_duration: string;
-  gauge_id: string;
-}[];
+  incentivized_pools: {
+    pool_id: string;
+    lockable_duration: string;
+    gauge_id: string;
+  }[];
+};
 
 export type OsmosisLockableDurations = {
   lockable_durations: string[];
+};
+
+type Distribution = {
+  lock_query_type: string;
+  denom: string;
+  duration: string;
+  timestamp: string;
+};
+
+type Coin = {
+  denom: string;
+  amount: string;
+};
+
+export type OsmosisActiveGauges = {
+  data: {
+    id: string;
+    is_perpetual: boolean;
+    distribute_to: Distribution;
+    coins: Coin[];
+    start_time: string;
+    num_epochs_paid_over: string;
+    filled_epochs: string;
+    distributed_coins: Coin[];
+  }[];
+};
+
+type Record = {
+  gauge_id: string;
+  weight: string;
+};
+
+type DistributionInfo = {
+  total_weight: string;
+  records: Record[];
+};
+
+export type OsmosisDistrInfo = {
+  distr_info: DistributionInfo;
+};
+
+type WeightedDeveloperRewardReceiver = {
+  address: string;
+  weight: string;
+};
+
+type DistributionProportions = {
+  staking: string;
+  pool_incentives: string;
+  developer_rewards: string;
+  community_pool: string;
+};
+
+export type OsmosisMintParams = {
+  params: {
+    mint_denom: string;
+    genesis_epoch_provisions: string;
+    epoch_identifier: string;
+    reduction_period_in_epochs: string;
+    reduction_factor: string;
+    distribution_proportions: DistributionProportions;
+    weighted_developer_rewards_receivers: WeightedDeveloperRewardReceiver[];
+  };
+};
+
+export type TokenStream = {
+  name: string;
+  symbol: string;
+  denom: string;
+  price: number;
+  price_24h_change: number;
+  exponent: number;
+  display: string;
 };

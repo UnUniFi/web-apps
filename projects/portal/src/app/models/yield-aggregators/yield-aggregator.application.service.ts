@@ -125,7 +125,7 @@ export class YieldAggregatorApplicationService {
 
   async createVault(
     name: string,
-    denom: string,
+    symbol: string,
     description: string,
     strategies: { id: string; weight: number }[],
     commissionRate: number,
@@ -142,7 +142,7 @@ export class YieldAggregatorApplicationService {
 
     const msg = this.yieldAggregatorService.buildMsgCreateVault(
       address,
-      denom,
+      symbol,
       name,
       description,
       strategies,

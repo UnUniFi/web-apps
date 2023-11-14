@@ -12,7 +12,7 @@ export class CreateComponent implements OnInit {
   @Input()
   address?: string | null;
   @Input()
-  denom?: string | null;
+  symbol?: string | null;
   @Input()
   availableTokens?: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] | null;
   @Input()
@@ -28,18 +28,19 @@ export class CreateComponent implements OnInit {
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Output()
-  changeDenom: EventEmitter<string>;
+  changeSymbol: EventEmitter<string>;
   @Output()
   appCreate: EventEmitter<CreateVaultRequest>;
 
   reserveRate?: number;
   name?: string;
+
   description?: string;
   selectedStrategies: { id?: string; name?: string; denom?: string; weight: number }[] = [];
 
   constructor() {
     this.reserveRate = 10;
-    this.changeDenom = new EventEmitter();
+    this.changeSymbol = new EventEmitter();
     this.appCreate = new EventEmitter();
   }
 
@@ -49,17 +50,17 @@ export class CreateComponent implements OnInit {
     return this.selectedStrategies.some((s) => s.id === strategyId);
   }
 
-  onAddStrategy(strategyId: string, strategyDenom: string) {
+  onAddStrategy(strategyId: string) {
     if (!strategyId) {
       return;
     }
-    if (!this.denom) {
-      this.changeDenom.emit(strategyDenom);
-    }
+    // if (!this.denom) {
+    //   this.changeSymbol.emit(strategyDenom);
+    // }
     this.selectedStrategies.push({
       id: strategyId,
       name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
-      denom: strategyDenom,
+      // denom: strategyDenom,
       weight: this.selectedStrategies.length ? 0 : 100,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
@@ -71,12 +72,12 @@ export class CreateComponent implements OnInit {
     this.selectedStrategies.splice(index, 1);
   }
 
-  onChangeDenom() {
+  onChangeSymbol() {
     this.selectedStrategies = [];
-    if (!this.denom) {
+    if (!this.symbol) {
       return;
     }
-    this.changeDenom.emit(this.denom);
+    this.changeSymbol.emit(this.symbol);
   }
 
   onSubmitCreate() {
@@ -100,7 +101,7 @@ export class CreateComponent implements OnInit {
     }
     this.appCreate.emit({
       name: this.name || '',
-      denom: this.denom || '',
+      symbol: this.symbol || '',
       description: this.description || '',
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),

@@ -1,6 +1,6 @@
 <view-create
   [address]="address$ | async"
-  [denom]="denom$ | async"
+  [symbol]="symbol$ | async"
   [availableTokens]="availableTokens$ | async"
   [strategies]="strategies$ | async"
   [commissionRate]="commissionRate$ | async"
@@ -9,5 +9,5 @@
   [denomBalancesMap]="denomBalancesMap$ | async"
   [denomMetadataMap]="denomMetadataMap$ | async"
   (appCreate)="onCreate($event)"
-  (changeDenom)="onChangeDenom($event)"
+  (changeSymbol)="onChangeSymbol($event)"
 ></view-create>

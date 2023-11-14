@@ -18,7 +18,7 @@ import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openap
 })
 export class CreateComponent implements OnInit {
   address$: Observable<string>;
-  denom$: Observable<string>;
+  symbol$: Observable<string>;
   availableTokens$: Observable<cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[]>;
   strategies$: Observable<StrategyAll200ResponseStrategiesInner[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
@@ -41,8 +41,11 @@ export class CreateComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    this.denom$ = this.route.queryParams.pipe(map((params) => params.denom));
-    this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
+
+    this.symbol$ = this.route.queryParams.pipe(map((params) => params.symbol));
+    // todo fix query
+    // this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
+    this.strategies$ = this.iyaQuery.listStrategies$();
     const allStrategies$ = this.iyaQuery.listStrategies$();
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
@@ -64,11 +67,11 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChangeDenom(denom: string): void {
+  onChangeSymbol(symbol: string): void {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        denom: denom,
+        symbol: symbol,
       },
       queryParamsHandling: 'merge',
     });
@@ -77,7 +80,7 @@ export class CreateComponent implements OnInit {
   onCreate(data: CreateVaultRequest) {
     this.iyaApp.createVault(
       data.name,
-      data.denom,
+      data.symbol,
       data.description,
       data.strategies,
       data.commissionRate,

@@ -62,7 +62,7 @@ export class YieldAggregatorService {
 
   buildMsgCreateVault(
     senderAddress: string,
-    denom: string,
+    symbol: string,
     name: string,
     description: string,
     strategies: { id: string; weight: number }[],
@@ -82,7 +82,7 @@ export class YieldAggregatorService {
     const decReserve = this.txCommonService.numberToDecString(reserveRate / 100);
     const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgCreateVault({
       sender: senderAddress,
-      denom: denom,
+      symbol: symbol,
       name: name,
       description: description,
       commission_rate: decCommission,
@@ -119,7 +119,7 @@ export class YieldAggregatorService {
     mintAmount: number,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     const lpDenom = 'yieldaggregator/vaults/' + vault?.vault?.id;
-    const exponent = getDenomExponent(vault.vault?.denom);
+    const exponent = getDenomExponent(vault.vault?.symbol);
     const mintDenomAmount = mintAmount * Math.pow(10, exponent);
     const totalAmountInVault =
       Number(vault.total_bonded_amount) +
@@ -142,7 +142,7 @@ export class YieldAggregatorService {
     vault: Vault200Response,
     burnAmount: number,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
-    const denom = vault.vault?.denom;
+    const denom = vault.vault?.symbol;
     const lpDenom = 'yieldaggregator/vaults/' + vault?.vault?.id;
     const exponent = getDenomExponent(lpDenom);
     const burnDenomAmount = burnAmount * Math.pow(10, exponent);
@@ -223,7 +223,7 @@ export class YieldAggregatorService {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
-        denom: vault.vault?.denom || '',
+        denom: vault.vault?.symbol || '',
         name: vault.vault?.name || '',
         description: vault.vault?.description || '',
         gitURL: '',
@@ -240,7 +240,7 @@ export class YieldAggregatorService {
       const strategyInfo = config?.strategiesInfo?.find(
         (strategyInfo) =>
           strategyInfo.id === strategyWeight.strategy_id &&
-          strategyInfo.denom === vault.vault?.denom,
+          strategyInfo.denom === vault.vault?.symbol,
       );
       if (!strategyInfo || !strategyInfo.poolInfo) {
         continue;
@@ -265,7 +265,7 @@ export class YieldAggregatorService {
 
     return {
       id: vault.vault?.id || '',
-      denom: vault.vault?.denom || '',
+      denom: vault.vault?.symbol || '',
       name: vault.vault?.name || '',
       description: vault.vault?.description || '',
       gitURL: '',

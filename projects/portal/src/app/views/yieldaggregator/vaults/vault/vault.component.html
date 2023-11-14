@@ -24,7 +24,7 @@
             <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           </h2>
           <div class="flex flex-row items-center gap-2">
-            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
+            <div class="badge badge-primary">{{ vault?.vault?.symbol }}</div>
             <div class="badge badge-info">NO KYC</div>
           </div>
         </div>

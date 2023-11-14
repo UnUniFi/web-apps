@@ -68,9 +68,8 @@ export class DepositComponent implements OnInit {
       map(([vaults, symbolMetadataMap]) =>
         vaults.map((vault) => {
           const symbol = vault.vault?.symbol || '';
-          const display =
-            symbolMetadataMap?.[vault.vault?.symbol!]?.display || vault.vault?.symbol!;
-          const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
+          const display = symbolMetadataMap?.[symbol]?.display || symbol;
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
           return { symbol: symbol, display: display, img: img };
         }),
       ),

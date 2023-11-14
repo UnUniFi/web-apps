@@ -166,8 +166,8 @@ export class AddressComponent implements OnInit {
         const values = await Promise.all(
           amounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              redeemAmount.total_amount?.denom || '',
-              redeemAmount.total_amount?.amount || '',
+              redeemAmount.share_amount?.denom || '',
+              redeemAmount.total_amount || '',
               denomMetadataMap,
             );
           }),

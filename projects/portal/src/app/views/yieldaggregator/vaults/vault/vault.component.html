@@ -178,7 +178,7 @@
             </div>
             <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ estimatedDepositedAmount?.total_amount?.amount | coinAmount }}
+              {{ estimatedDepositedAmount?.total_amount | coinAmount }}
               {{ denom | coinDenom | async }}
             </div>
           </div>
@@ -312,7 +312,7 @@
                   'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom"
+                [max]="denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.symbol"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
@@ -320,15 +320,13 @@
               />
               <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
               <span *ngIf="!selectedChain.cosmos"
-                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
-                  selectedChain.id
-                }}</span
+                >{{ denomMetadataMap?.[denom || '']?.symbol }}.{{ selectedChain.id }}</span
               >
             </label>
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
+                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: denom }}
                 {{ denom | coinDenom | async }}
               </label>
             </span>
@@ -437,7 +435,7 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: vault?.vault?.denom"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
@@ -462,14 +460,14 @@
               <input
                 disabled
                 class="input input-bordered w-full"
-                value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
+                value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
               />
               <span>{{ denom | coinDenom | async }}</span>
             </label>
             <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
               <span class="label-text-alt">
-                Total {{ estimatedRedeemAmount?.total_amount?.amount | coinAmount }} - Fee
-                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+                Total {{ estimatedRedeemAmount?.total_amount | coinAmount }} - Fee
+                {{ estimatedRedeemAmount?.fee | coinAmount }}
               </span>
             </span>
           </div>
@@ -477,9 +475,7 @@
           <div class="card-actions justify-end mt-8">
             <button
               class="btn btn-secondary px-8"
-              [disabled]="
-                withdrawFormRef.invalid || estimatedRedeemAmount?.redeem_amount?.amount === '0'
-              "
+              [disabled]="withdrawFormRef.invalid || estimatedRedeemAmount?.redeem_amount === '0'"
             >
               Withdrawal
             </button>
@@ -521,11 +517,7 @@
 
           <button
             class="btn btn-outline btn-info"
-            [routerLink]="[
-              '/yield-aggregator/strategies',
-              vault?.vault?.denom,
-              strategy.strategy_id
-            ]"
+            [routerLink]="['/yield-aggregator/strategies', strategy.denom, strategy.strategy_id]"
           >
             View
           </button>

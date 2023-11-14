@@ -190,7 +190,8 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit.emit({
       vaultId: this.vault?.vault?.id!,
       readableAmount: this.mintAmount,
-      denom: this.vault?.vault?.denom!,
+      // todo select multiple denoms
+      denom: this.denom!,
     });
   }
 
@@ -205,7 +206,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw.emit({
       vaultId: this.vault?.vault?.id!,
       readableAmount: this.burnAmount,
-      denom: this.vault?.vault?.denom!,
+      denom: this.denom!,
     });
   }
 
@@ -217,10 +218,7 @@ export class VaultComponent implements OnInit, OnChanges {
   setMintAmount(rate: number) {
     this.mintAmount =
       Number(
-        this.coinAmountPipe.transform(
-          this.denomBalancesMap?.[this.vault?.vault?.denom || ''].amount,
-          this.vault?.vault?.denom,
-        ),
+        this.coinAmountPipe.transform(this.denomBalancesMap?.[this.denom || ''].amount, this.denom),
       ) * rate;
     this.mintAmount = Math.floor(this.mintAmount * Math.pow(10, 6)) / Math.pow(10, 6);
     this.onDepositAmountChange();

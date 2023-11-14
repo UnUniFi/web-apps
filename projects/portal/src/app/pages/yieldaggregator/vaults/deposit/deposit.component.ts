@@ -63,11 +63,13 @@ export class DepositComponent implements OnInit {
       ),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
-      map(([vaults, denomMetadataMap]) =>
+    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    this.symbols$ = combineLatest([this.vaults$, symbolMetadataMap$]).pipe(
+      map(([vaults, symbolMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.vault?.denom!]?.symbol || '';
-          const display = denomMetadataMap?.[vault.vault?.denom!]?.display || vault.vault?.denom!;
+          const symbol = vault.vault?.symbol || '';
+          const display =
+            symbolMetadataMap?.[vault.vault?.symbol!]?.display || vault.vault?.symbol!;
           const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
           return { symbol: symbol, display: display, img: img };
         }),
@@ -91,8 +93,8 @@ export class DepositComponent implements OnInit {
         Promise.all(
           redeemAmounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              redeemAmount.total_amount?.denom || '',
-              redeemAmount.total_amount?.amount || '',
+              redeemAmount.share_amount?.denom || '',
+              redeemAmount.total_amount || '',
               denomMetadataMap,
             );
           }),

@@ -1,4 +1,4 @@
-import { getDenomExponent } from '../cosmos/bank.model';
+import { getDenomExponent, getSymbolExponent } from '../cosmos/bank.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
@@ -34,24 +34,8 @@ export class BandProtocolService {
     }
   }
 
-  async convertToUSDAmount(
-    denom: string,
-    amount: string,
-    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): Promise<number> {
-    if (!denomMetadataMap[denom]) {
-      console.error(`Denom metadata not found for denom ${denom}`);
-      return 0;
-    }
-    const symbol = denomMetadataMap[denom].symbol;
-    const display = denomMetadataMap[denom].display;
-    if (!symbol) {
-      throw new Error(`Symbol not found for denom ${denom}`);
-    }
-    if (!display) {
-      throw new Error(`Display not found for denom ${denom}`);
-    }
-    const exponent = getDenomExponent(denom);
+  async convertToUSDAmount(symbol: string, amount: string): Promise<number> {
+    const exponent = getSymbolExponent(symbol);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const price = await this.getPrice(symbol);
     if (!price) {

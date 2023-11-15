@@ -87,14 +87,13 @@ export class DepositComponent implements OnInit {
         ),
       ),
     );
-    this.usdDepositAmount$ = combineLatest([this.estimatedRedeemAmounts$, denomMetadataMap$]).pipe(
-      mergeMap(([redeemAmounts, denomMetadataMap]) =>
+    this.usdDepositAmount$ = this.estimatedRedeemAmounts$.pipe(
+      mergeMap((redeemAmounts) =>
         Promise.all(
           redeemAmounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              redeemAmount.share_amount?.denom || '',
+              (redeemAmount as any).symbol || '',
               redeemAmount.total_amount || '',
-              denomMetadataMap,
             );
           }),
         ),

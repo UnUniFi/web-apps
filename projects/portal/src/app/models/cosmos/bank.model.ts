@@ -14,6 +14,8 @@ export const denomExponentMap: { [denom: string]: number } = {
   '': 6,
 };
 
+export const symbolExponent: { [symbol: string]: number } = {};
+
 const ibcPattern = /^ibc\//;
 const iyaPattern = /^yieldaggregator\/vaults\//;
 
@@ -25,4 +27,11 @@ export function getDenomExponent(denom?: string): number {
     return 6;
   }
   return denomExponentMap[denom];
+}
+
+export function getSymbolExponent(symbol?: string): number {
+  if (!symbol) {
+    return 6;
+  }
+  return symbolExponent[symbol] || 6;
 }

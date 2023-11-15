@@ -144,9 +144,8 @@ export class AddressComponent implements OnInit {
       ),
     );
 
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.tvl$ = combineLatest([balances$, denomMetadataMap$]).pipe(
-      mergeMap(async ([balances, denomMetadataMap]) => {
+    this.tvl$ = balances$.pipe(
+      mergeMap(async (balances) => {
         const vaultBalances = balances
           ?.filter((balance) => balance.denom?.includes('yieldaggregator/vaults/'))
           .sort(
@@ -166,9 +165,8 @@ export class AddressComponent implements OnInit {
         const values = await Promise.all(
           amounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              redeemAmount.share_amount?.denom || '',
+              (redeemAmount as any).symbol || '',
               redeemAmount.total_amount || '',
-              denomMetadataMap,
             );
           }),
         );

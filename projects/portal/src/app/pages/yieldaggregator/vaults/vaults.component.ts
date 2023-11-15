@@ -43,7 +43,6 @@ export class VaultsComponent implements OnInit {
     const vaults$ = this.iyaQuery.listVaults$();
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const osmoPools$ = from(this.iyaService.getAllOsmoPool());
     const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
@@ -110,10 +109,8 @@ export class VaultsComponent implements OnInit {
       this.sortType$,
       vaultYieldMap$,
       symbolPriceMap$,
-      denomMetadataMap$,
-      symbolMetadataMap$,
     ]).pipe(
-      map(([vaults, sort, yieldMap, symbolPriceMap, denomMetadataMap, symbolMetadataMap]) => {
+      map(([vaults, sort, yieldMap, symbolPriceMap]) => {
         if (sort === 'id') {
           return vaults.sort((a, b) => Number(a.vault?.id) - Number(b.vault?.id));
         }
@@ -149,17 +146,15 @@ export class VaultsComponent implements OnInit {
         }
         if (sort === 'deposit') {
           return vaults.sort((a, b) => {
-            const aDeposit = this.bandProtocolService.calcDepositUSDAmount(
-              symbolMetadataMap[a.vault?.symbol || ''].base || '',
+            const aDeposit = this.bandProtocolService.calcUSDAmount(
+              a.vault?.symbol || '',
               this.depositAmount(a),
               symbolPriceMap,
-              denomMetadataMap,
             );
-            const bDeposit = this.bandProtocolService.calcDepositUSDAmount(
-              symbolMetadataMap[a.vault?.symbol || ''].base || '',
+            const bDeposit = this.bandProtocolService.calcUSDAmount(
+              b.vault?.symbol || '',
               this.depositAmount(b),
               symbolPriceMap,
-              denomMetadataMap,
             );
             return (bDeposit || 0) - (aDeposit || 0);
           });
@@ -190,19 +185,13 @@ export class VaultsComponent implements OnInit {
         }),
       ),
     );
-    this.totalDeposits$ = combineLatest([
-      this.vaults$,
-      symbolPriceMap$,
-      denomMetadataMap$,
-      symbolMetadataMap$,
-    ]).pipe(
-      map(([vaults, symbolPriceMap, denomMetadataMap, symbolMetadataMap]) =>
+    this.totalDeposits$ = combineLatest([this.vaults$, symbolPriceMap$]).pipe(
+      map(([vaults, symbolPriceMap]) =>
         vaults.map((vault) =>
-          this.bandProtocolService.calcDepositUSDAmount(
-            symbolMetadataMap[vault.vault?.symbol || ''].base || '',
+          this.bandProtocolService.calcUSDAmount(
+            vault.vault?.symbol || '',
             this.depositAmount(vault),
             symbolPriceMap,
-            denomMetadataMap,
           ),
         ),
       ),

@@ -19,6 +19,7 @@ import { ExternalChain } from 'projects/portal/src/app/views/yieldaggregator/vau
 import { BehaviorSubject, combineLatest, from, Observable, of, timer } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
+  DenomInfos200ResponseInfoInner,
   EstimateMintAmount200Response,
   EstimateRedeemAmount200Response,
   Vault200Response,
@@ -33,6 +34,7 @@ export class VaultComponent implements OnInit {
   address$: Observable<string>;
   vault$: Observable<Vault200Response>;
   denom$: Observable<string | null | undefined>;
+  availableDenoms$: Observable<DenomInfos200ResponseInfoInner[]>;
   symbol$: Observable<string | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   denomMetadataMap$: Observable<{
@@ -78,6 +80,10 @@ export class VaultComponent implements OnInit {
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     this.denom$ = combineLatest([this.symbol$, symbolMetadataMap$]).pipe(
       map(([symbol, symbolMetadataMap]) => symbolMetadataMap?.[symbol || '']?.base),
+    );
+    const denomInfos$ = this.iyaQuery.listDenomInfos$();
+    this.availableDenoms$ = combineLatest([this.symbol$, denomInfos$]).pipe(
+      map(([symbol, infos]) => infos.filter((info) => info.symbol === symbol)),
     );
 
     const timer$ = timer(0, 1000 * 60);

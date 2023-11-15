@@ -309,7 +309,7 @@
                 placeholder="0.000000"
                 class="input input-bordered w-full"
                 [class]="{
-                  'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                  'input-error': depositAmountNgModelRef.errors
                 }"
                 [min]="0"
                 [max]="denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.symbol"
@@ -318,10 +318,23 @@
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
-              <span *ngIf="!selectedChain.cosmos"
-                >{{ denomMetadataMap?.[denom || '']?.symbol }}.{{ selectedChain.id }}</span
+              <select
+                class="select select-bordered text-center w-auto sm:w-64"
+                [class]="{
+                  'select-error': !denom
+                }"
+                name="txType"
+                [(ngModel)]="denom"
               >
+                <option [value]="undefined" disabled>
+                  <span>Select Token</span>
+                </option>
+                <ng-container *ngFor="let denomInfo of availableDenoms">
+                  <option [value]="denomInfo.denom">
+                    {{ denomInfo.denom | coinDenom | async }}
+                  </option>
+                </ng-container>
+              </select>
             </label>
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>

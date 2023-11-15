@@ -115,6 +115,60 @@ export class YieldAggregatorApplicationService {
     }
   }
 
+  async withdrawFromVaultWithUnbonding(vaultId: string, denom: string, amount: number) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const msg = this.yieldAggregatorService.buildMsgWithdrawFromVaultWithUnbondingTime(
+      address,
+      vaultId,
+      denom,
+      amount,
+    );
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully requested withdrawing from the vault. The payment will be made after the unbonding time.',
+          },
+        })
+        .closed.toPromise();
+      location.reload();
+    }
+  }
+
   async createVault(
     name: string,
     symbol: string,

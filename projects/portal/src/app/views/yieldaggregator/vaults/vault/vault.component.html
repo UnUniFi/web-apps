@@ -417,7 +417,7 @@
               <select
                 class="select select-bordered w-full"
                 name="withdrawOption"
-                [(ngModel)]="withdrawOption.id"
+                [(ngModel)]="withdrawOptionId"
               >
                 <ng-container *ngFor="let option of withdrawOptions">
                   <option [value]="option.id" [disabled]="option.disabled">
@@ -466,29 +466,44 @@
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">You will receive</span>
+              <span class="label-text">You will receive {{ withdrawOptionId }}</span>
             </label>
 
-            <label class="input-group">
-              <input
-                disabled
-                class="input input-bordered w-full"
-                value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
-              />
-              <span>{{ denom | coinDenom | async }}</span>
-            </label>
-            <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
-              <span class="label-text-alt">
-                Total {{ estimatedRedeemAmount?.total_amount | coinAmount }} - Fee
-                {{ estimatedRedeemAmount?.fee | coinAmount }}
+            <div *ngIf="withdrawOptionId === 'immediate'">
+              <label class="input-group">
+                <input
+                  disabled
+                  class="input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
+                />
+                <span>{{ denom | coinDenom | async }}</span>
+              </label>
+              <span class="label" *ngIf="estimatedRedeemAmount">
+                <span class="label-text-alt">
+                  {{ estimatedRedeemAmount.total_amount | coinAmount }} - Fee
+                  {{ estimatedRedeemAmount.fee | coinAmount }}
+                </span>
               </span>
-            </span>
+            </div>
+            <div *ngIf="withdrawOptionId === 'unbonding'">
+              <label class="input-group">
+                <input
+                  disabled
+                  class="input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.total_amount | coinAmount }}"
+                />
+                <span>{{ denom | coinDenom | async }}</span>
+              </label>
+            </div>
           </div>
 
           <div class="card-actions justify-end mt-8">
             <button
               class="btn btn-secondary px-8"
-              [disabled]="withdrawFormRef.invalid || estimatedRedeemAmount?.redeem_amount === '0'"
+              [disabled]="
+                withdrawFormRef.invalid ||
+                (withdrawOptionId === 'immediate' && estimatedRedeemAmount?.redeem_amount === '0')
+              "
             >
               Withdrawal
             </button>

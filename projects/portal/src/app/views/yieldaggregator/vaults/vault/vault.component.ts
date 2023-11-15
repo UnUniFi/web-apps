@@ -23,6 +23,12 @@ export type ExternalChain = {
   cosmos: boolean;
 };
 
+export type WithdrawOption = {
+  id: string;
+  display: string;
+  disabled: boolean;
+};
+
 @Component({
   selector: 'view-vault',
   templateUrl: './vault.component.html',
@@ -73,6 +79,8 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
+  appWithdrawWithUnbonding: EventEmitter<WithdrawFromVaultRequest>;
+  @Output()
   appClickChain: EventEmitter<ExternalChain>;
 
   mintAmount?: number;
@@ -85,7 +93,7 @@ export class VaultComponent implements OnInit, OnChanges {
     external: false,
     cosmos: true,
   };
-  withdrawOptions = [
+  withdrawOptions: WithdrawOption[] = [
     {
       id: 'immediate',
       display: 'Immediate withdrawal',
@@ -93,11 +101,11 @@ export class VaultComponent implements OnInit, OnChanges {
     },
     {
       id: 'unbonding',
-      display: 'Withdrawal after the unbonding period (coming soon)',
-      disabled: true,
+      display: 'Withdrawal after the unbonding period',
+      disabled: false,
     },
   ];
-  withdrawOption = this.withdrawOptions[0];
+  withdrawOptionId: string;
   chains: ExternalChain[] = [
     {
       id: 'ununifi',
@@ -169,8 +177,9 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appDeposit = new EventEmitter();
     this.changeWithdraw = new EventEmitter();
     this.appWithdraw = new EventEmitter();
+    this.appWithdrawWithUnbonding = new EventEmitter();
     this.appClickChain = new EventEmitter();
-    this.withdrawOption = this.withdrawOptions[0];
+    this.withdrawOptionId = this.withdrawOptions[0].id;
   }
 
   ngOnInit(): void {}
@@ -212,11 +221,23 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input amount');
       return;
     }
-    this.appWithdraw.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.burnAmount,
-      denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-    });
+    console.log(this.withdrawOptionId);
+    if (this.withdrawOptionId === 'immediate') {
+      console.log('withdraw');
+      this.appWithdraw.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.burnAmount,
+        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      });
+    }
+    if (this.withdrawOptionId === 'unbonding') {
+      console.log('withdraw with unbonding');
+      this.appWithdrawWithUnbonding.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.burnAmount,
+        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      });
+    }
   }
 
   getStrategyInfo(id?: string): StrategyAll200ResponseStrategiesInnerStrategy | undefined {

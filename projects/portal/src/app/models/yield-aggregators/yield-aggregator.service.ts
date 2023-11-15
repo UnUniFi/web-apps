@@ -60,6 +60,25 @@ export class YieldAggregatorService {
     return msg;
   }
 
+  buildMsgWithdrawFromVaultWithUnbondingTime(
+    senderAddress: string,
+    vaultId: string,
+    denom: string,
+    readableAmount: number,
+  ) {
+    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
+      [denom]: readableAmount,
+    })[0];
+    const msg =
+      new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVaultWithUnbondingTime({
+        sender: senderAddress,
+        vault_id: Long.fromString(vaultId),
+        lp_token_amount: coin.amount,
+      });
+
+    return msg;
+  }
+
   buildMsgCreateVault(
     senderAddress: string,
     symbol: string,

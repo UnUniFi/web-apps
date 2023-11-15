@@ -39,6 +39,10 @@ export class BandProtocolService {
     amount: string,
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): Promise<number> {
+    if (!denomMetadataMap[denom]) {
+      console.error(`Denom metadata not found for denom ${denom}`);
+      return 0;
+    }
     const symbol = denomMetadataMap[denom].symbol;
     const display = denomMetadataMap[denom].display;
     if (!symbol) {
@@ -64,6 +68,10 @@ export class BandProtocolService {
     symbolPriceMap: { [symbol: string]: number },
     denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): number {
+    if (!denomMetadataMap[denom]) {
+      console.error(`Denom metadata not found for denom ${denom}`);
+      return 0;
+    }
     const symbol = denomMetadataMap[denom].symbol;
     if (!symbol) {
       throw new Error(`Symbol not found for denom ${denom}`);

@@ -179,7 +179,7 @@ export class VaultComponent implements OnInit {
     this.usdDepositAmount$ = this.estimatedDepositedAmount$.pipe(
       mergeMap((depositedAmount) =>
         this.bandProtocolService.convertToUSDAmount(
-          (depositedAmount as any).symbol || '',
+          depositedAmount.symbol || '',
           depositedAmount.total_amount || '0',
         ),
       ),

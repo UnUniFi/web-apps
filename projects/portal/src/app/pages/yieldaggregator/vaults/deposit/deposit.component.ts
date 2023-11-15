@@ -92,7 +92,7 @@ export class DepositComponent implements OnInit {
         Promise.all(
           redeemAmounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              (redeemAmount as any).symbol || '',
+              redeemAmount.symbol || '',
               redeemAmount.total_amount || '',
             );
           }),

@@ -173,7 +173,7 @@ export class YieldAggregatorApplicationService {
     name: string,
     symbol: string,
     description: string,
-    strategies: { id: string; weight: number }[],
+    strategies: { denom: string; id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,

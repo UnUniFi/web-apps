@@ -43,10 +43,15 @@ export class CreateComponent implements OnInit {
     );
 
     this.symbol$ = this.route.queryParams.pipe(map((params) => params.symbol));
-    // todo fix query
-    // this.strategies$ = this.denom$.pipe(mergeMap((denom) => this.iyaQuery.listStrategies$(denom)));
-    this.strategies$ = this.iyaQuery.listStrategies$();
     const allStrategies$ = this.iyaQuery.listStrategies$();
+    this.strategies$ = combineLatest([this.symbol$, allStrategies$]).pipe(
+      map(([symbol, allStrategies]) => {
+        if (!symbol) {
+          return allStrategies;
+        }
+        return allStrategies.filter((strategy) => strategy.symbol === symbol);
+      }),
+    );
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );

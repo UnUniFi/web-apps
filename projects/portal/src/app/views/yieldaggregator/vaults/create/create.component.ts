@@ -50,17 +50,18 @@ export class CreateComponent implements OnInit {
     return this.selectedStrategies.some((s) => s.id === strategyId);
   }
 
-  onAddStrategy(strategyId: string) {
-    if (!strategyId) {
+  onAddStrategy(strategy: StrategyAll200ResponseStrategiesInner) {
+    if (!strategy.strategy) {
+      alert('Invalid Strategy.');
       return;
     }
-    // if (!this.denom) {
-    //   this.changeSymbol.emit(strategyDenom);
-    // }
+    if (!this.symbol) {
+      this.changeSymbol.emit(strategy.symbol);
+    }
     this.selectedStrategies.push({
-      id: strategyId,
-      name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
-      // denom: strategyDenom,
+      id: strategy.strategy?.id,
+      name: strategy.strategy?.name,
+      denom: strategy.strategy?.denom,
       weight: this.selectedStrategies.length ? 0 : 100,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
@@ -82,12 +83,16 @@ export class CreateComponent implements OnInit {
 
   onSubmitCreate() {
     const strategies = this.selectedStrategies.slice();
-    strategies.filter((s) => s.id && s.weight > 0);
+    strategies.filter((s) => s.denom && s.id && s.weight > 0);
     if (strategies.reduce((sum, s) => sum + s.weight, 0) !== 100) {
       alert('The total of the strategies should be 100%.');
       return;
     }
-    const filteredStrategies = strategies.map((s) => ({ id: s.id!, weight: s.weight }));
+    const filteredStrategies = strategies.map((s) => ({
+      denom: s.denom!,
+      id: s.id!,
+      weight: s.weight,
+    }));
     if (!this.fee || !this.deposit) {
       alert('Invalid Fee or Deposit.');
       return;

@@ -84,7 +84,7 @@ export class YieldAggregatorService {
     symbol: string,
     name: string,
     description: string,
-    strategies: { id: string; weight: number }[],
+    strategies: { denom: string; id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -93,6 +93,7 @@ export class YieldAggregatorService {
   ) {
     const strategyWeights = strategies.map((strategy) => {
       return {
+        denom: strategy.denom,
         strategy_id: Long.fromString(strategy.id),
         weight: this.txCommonService.numberToDecString(strategy.weight / 100),
       };

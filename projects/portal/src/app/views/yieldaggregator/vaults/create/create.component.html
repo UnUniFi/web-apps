@@ -317,11 +317,11 @@
                   <p class="py-4">No strategy for {{ symbol }}</p>
                 </ng-container>
 
-                <ul class="menu w-full" *ngIf="symbol && !strategies?.length">
+                <ul class="menu w-full">
                   <ng-container *ngFor="let s of strategies">
                     <ng-container *ngIf="!isAlreadySelectedStrategy(s.strategy?.id || '')">
                       <li>
-                        <a (click)="onAddStrategy(s.strategy?.id || '')">{{ s.strategy?.name }}</a>
+                        <a (click)="onAddStrategy(s)">{{ s.strategy?.name }}</a>
                       </li>
                     </ng-container>
                   </ng-container>

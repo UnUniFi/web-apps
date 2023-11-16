@@ -7,8 +7,8 @@ import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/y
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -45,7 +45,7 @@ export class VaultsComponent implements OnInit {
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const vaultYieldMap$ = combineLatest([vaults$, config$]).pipe(
-      mergeMap(async ([vaults, config]) => {
+      switchMap(async ([vaults, config]) => {
         const results: YieldInfo[] = [];
         if (!config) {
           return results;

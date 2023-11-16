@@ -3,7 +3,7 @@ import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
-import { OsmosisAPRs, OsmosisPoolAPRs } from './osmosis/osmosis-pool.model';
+import { OsmosisPoolAPRs } from './osmosis/osmosis-pool.model';
 import { OsmosisPoolService } from './osmosis/osmosis-pool.service';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';

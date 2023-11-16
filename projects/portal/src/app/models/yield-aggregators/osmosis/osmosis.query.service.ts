@@ -211,6 +211,9 @@ export class OsmosisQueryService {
 
   async getGaugeIncentive(gaugeId: string): Promise<OsmosisIncentivePools | undefined> {
     const cacheKey = 'gaugeIncentive_' + gaugeId;
+    if (this.cacheService.has(cacheKey)) {
+      return this.cacheService.get(cacheKey);
+    }
     const url = 'https://lcd-osmosis.keplr.app/osmosis/incentives/v1beta1/gauge_by_id/' + gaugeId;
     try {
       const res = await this.http.get(url).toPromise();

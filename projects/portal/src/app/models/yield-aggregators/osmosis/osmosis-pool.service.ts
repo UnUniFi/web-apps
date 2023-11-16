@@ -62,14 +62,10 @@ export class OsmosisPoolService {
   async aggregateAPR(poolId: string): Promise<OsmosisPoolAPRs | undefined> {
     try {
       const superfluidAPR = await this.getSuperfluidAPR(poolId);
-      console.log('superfluid: ' + superfluidAPR);
       const internalGaugeAPR = await this.getInternalLiquidityIncentiveAPR(poolId);
-      console.log('internal_liquidity: ' + internalGaugeAPR);
       const externalGaugeAPR = await this.getExternalLiquidityIncentiveAPR(poolId);
-      console.log('external_liquidity: ' + externalGaugeAPR);
 
       const swapFeeAPR = await this.getSwapFeeAPR(poolId);
-      console.log('swap_fee: ' + swapFeeAPR);
       const totalAPR =
         (superfluidAPR || 0) +
         (internalGaugeAPR || 0) +
@@ -113,7 +109,6 @@ export class OsmosisPoolService {
         (p) => p.pool_id === poolId,
       )?.gauge_id;
       if (!gaugeId) {
-        console.log('gaugeId not found');
         return;
       }
       const distrInfo = await this.osmosisQuery.getDistrInfo();

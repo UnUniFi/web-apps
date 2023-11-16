@@ -165,7 +165,7 @@
             </div>
             <div class="stat-desc">
               {{ calcVaultAmount(vault) | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -179,7 +179,7 @@
             <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
             <div class="stat-desc">
               {{ estimatedDepositedAmount?.total_amount | coinAmount }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@
             </div>
             <div class="stat-desc">
               {{ vault?.total_bonded_amount | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -213,7 +213,7 @@
             </div>
             <div class="stat-desc">
               {{ vault?.total_unbonding_amount | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -226,7 +226,7 @@
             </div>
             <div class="stat-value text-info" *ngIf="withdrawReserve === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ vault?.withdraw_reserve | coinAmount : denom }} {{ denom | coinDenom | async }}
+              {{ vault?.withdraw_reserve | coinAmount : denom }} {{ vault?.vault?.symbol }}
             </div>
           </div>
         </div>
@@ -351,7 +351,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
-              <span>{{ denom | coinDenom | async }}</span>
+              <span>{{ vault?.vault?.symbol }}</span>
             </label>
           </div>
 
@@ -476,7 +476,7 @@
                   class="input input-bordered w-full"
                   value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
                 />
-                <span>{{ denom | coinDenom | async }}</span>
+                <span>{{ vault?.vault?.symbol }}</span>
               </label>
               <span class="label" *ngIf="estimatedRedeemAmount">
                 <span class="label-text-alt">
@@ -492,7 +492,7 @@
                   class="input input-bordered w-full"
                   value="{{ estimatedRedeemAmount?.total_amount | coinAmount }}"
                 />
-                <span>{{ denom | coinDenom | async }}</span>
+                <span>{{ vault?.vault?.symbol }}</span>
               </label>
             </div>
           </div>

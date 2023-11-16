@@ -221,9 +221,7 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input amount');
       return;
     }
-    console.log(this.withdrawOptionId);
     if (this.withdrawOptionId === 'immediate') {
-      console.log('withdraw');
       this.appWithdraw.emit({
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,
@@ -231,7 +229,6 @@ export class VaultComponent implements OnInit, OnChanges {
       });
     }
     if (this.withdrawOptionId === 'unbonding') {
-      console.log('withdraw with unbonding');
       this.appWithdrawWithUnbonding.emit({
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,

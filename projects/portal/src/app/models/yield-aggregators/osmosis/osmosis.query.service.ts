@@ -256,4 +256,23 @@ export class OsmosisQueryService {
       return undefined;
     }
   }
+
+  async getSupply(
+    denom: string,
+  ): Promise<{ amount: { denom: string; amount: string } } | undefined> {
+    const cacheKey = 'supply_' + denom;
+    if (this.cacheService.has(cacheKey)) {
+      return this.cacheService.get(cacheKey);
+    }
+    const url = 'https://lcd-osmosis.keplr.app/cosmos/bank/v1beta1/supply/' + denom;
+    try {
+      const res = await this.http.get(url).toPromise();
+      const supply = res as { amount: { denom: string; amount: string } };
+      this.cacheService.set(cacheKey, supply);
+      return supply;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
 }

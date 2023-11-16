@@ -94,7 +94,16 @@ export class OsmosisPoolService {
       return;
     }
     const superfluid = Number(aprs[0].apr_list[0].apr_superfluid) / 100;
-    return superfluid;
+    const params = await this.osmosisQuery.getMintParams();
+    const epochProvision = await this.osmosisQuery.getEpochProvisions();
+    const mintingEpochProvision =
+      Number(epochProvision?.epoch_provisions) *
+      Number(params?.params.distribution_proportions.staking);
+    const yearMintingProvision = mintingEpochProvision * 365;
+    const supply = await this.osmosisQuery.getSupply('uosmo');
+    const inflatedSuperfluid =
+      superfluid * (1 + yearMintingProvision / Number(supply?.amount.amount));
+    return inflatedSuperfluid;
   }
 
   async getInternalLiquidityIncentiveAPR(poolId: string): Promise<number | undefined> {

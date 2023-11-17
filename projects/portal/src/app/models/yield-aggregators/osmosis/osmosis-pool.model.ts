@@ -6,7 +6,9 @@ export type OsmosisPoolAPRs = {
   swapFeeAPR?: number;
 };
 
-export type OsmosisAPRs = {
+export type OsmosisAPRsPools = OsmosisAPRsPool[];
+
+export type OsmosisAPRsPool = {
   pool_id: number;
   apr_list: {
     start_date: string;
@@ -17,22 +19,24 @@ export type OsmosisAPRs = {
     apr_14d: number;
     apr_superfluid: number;
   }[];
-}[];
+};
 
 export type OsmosisAvgAPR = {
   APR: number;
 };
 
-export type OsmosisFee = {
+export type OsmosisFees = {
   last_update_at: number;
-  data: {
-    pool_id: number;
-    volume_24h: number;
-    volume_7d: number;
-    fees_spent_24h: number;
-    fees_spent_7d: number;
-    fees_percentage: string;
-  }[];
+  data: OsmosisFee[];
+};
+
+export type OsmosisFee = {
+  pool_id: string;
+  volume_24h: number;
+  volume_7d: number;
+  fees_spent_24h: number;
+  fees_spent_7d: number;
+  fees_percentage: string;
 };
 
 export type OsmosisPoolAssets = {
@@ -122,6 +126,19 @@ export type OsmosisMintParams = {
     distribution_proportions: DistributionProportions;
     weighted_developer_rewards_receivers: WeightedDeveloperRewardReceiver[];
   };
+};
+export type OsmosisToken = {
+  price: number;
+  denom: string;
+  symbol: string;
+  liquidity: number;
+  volume_24h: number;
+  volume_24h_change: number;
+  name: string;
+  price_24h_change: number;
+  price_7d_change: number;
+  exponent: number;
+  display: string;
 };
 
 export type TokenStream = {

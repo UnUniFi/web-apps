@@ -1,13 +1,12 @@
-import { OsmosisAPRs, OsmosisPoolAPRs } from './osmosis-pool.model';
+import { OsmosisPoolAPRs } from './osmosis-pool.model';
 import { OsmosisQueryService } from './osmosis.query.service';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OsmosisPoolService {
-  constructor(private http: HttpClient, private readonly osmosisQuery: OsmosisQueryService) {}
+  constructor(private readonly osmosisQuery: OsmosisQueryService) {}
 
   async getPoolAPR(poolId: string): Promise<OsmosisPoolAPRs> {
     // average APR
@@ -44,7 +43,7 @@ export class OsmosisPoolService {
       if (!fee) {
         return;
       }
-      const feeYear = Number(fee.data[0].fees_spent_7d / 7) * 365;
+      const feeYear = Number(fee.fees_spent_7d / 7) * 365;
       const assets = await this.osmosisQuery.getPool(poolId);
       if (!assets) {
         return;
@@ -85,20 +84,22 @@ export class OsmosisPoolService {
   }
 
   async getSuperfluidAPR(poolId: string): Promise<number | undefined> {
-    const aprs = await this.osmosisQuery.getAPRs(poolId);
-    if (!aprs) {
+    const aprsPool = await this.osmosisQuery.getAPRs(poolId);
+    if (!aprsPool) {
       return;
     }
-    const superfluid = Number(aprs[0].apr_list[0].apr_superfluid) / 100;
-    const params = await this.osmosisQuery.getMintParams();
-    const epochProvision = await this.osmosisQuery.getEpochProvisions();
-    const mintingEpochProvision =
-      Number(epochProvision?.epoch_provisions) *
-      Number(params?.params.distribution_proportions.staking);
-    const yearMintingProvision = mintingEpochProvision * 365;
-    const supply = await this.osmosisQuery.getSupply('uosmo');
-    const inflatedSuperfluid =
-      superfluid * (1 + yearMintingProvision / Number(supply?.amount.amount));
+    const superfluid = aprsPool.apr_list[0].apr_superfluid / 100;
+    const stakingAPR = Number(await this.osmosisQuery.getStakingAPR()) / 100;
+    const inflatedSuperfluid = superfluid * (1 + stakingAPR);
+    // const params = await this.osmosisQuery.getMintParams();
+    // const epochProvision = await this.osmosisQuery.getEpochProvisions();
+    // const mintingEpochProvision =
+    //   Number(epochProvision?.epoch_provisions) *
+    //   Number(params?.params.distribution_proportions.staking);
+    // const yearMintingProvision = mintingEpochProvision * 365;
+    // const supply = await this.osmosisQuery.getSupply('uosmo');
+    // const inflatedSuperfluid =
+    //   superfluid * (1 + yearMintingProvision / Number(supply?.amount.amount));
     return inflatedSuperfluid;
   }
 
@@ -128,8 +129,8 @@ export class OsmosisPoolService {
         console.log('mint denom not found');
         return;
       }
-      const stream = await this.osmosisQuery.getDenomStream(mintParams.params.mint_denom);
-      const price = stream?.price;
+      const token = await this.osmosisQuery.getTokenByDenom(mintParams.params.mint_denom);
+      const price = token?.price;
       if (!price) {
         console.log('price not found');
         return;
@@ -206,15 +207,11 @@ export class OsmosisPoolService {
 
         const coins = gauge.coins;
         for (const coin of coins) {
-          const symbol = await this.osmosisQuery.getSymbol(coin.denom);
-          if (!symbol) {
+          const token = await this.osmosisQuery.getTokenByDenom(coin.denom);
+          if (!token) {
             continue;
           }
-          const price = await this.osmosisQuery.getPrice(symbol.symbol);
-          if (!price) {
-            continue;
-          }
-          const externalIncentivePrice = (Number(coin.amount) * price.price) / Math.pow(10, 6);
+          const externalIncentivePrice = (Number(coin.amount) * token.price) / Math.pow(10, 6);
           const apr = (externalIncentivePrice * yearProvision) / tvl;
           totalAPR += apr;
         }

@@ -1,25 +1,65 @@
 import { CacheService } from '../../query.cache.service';
 import {
   OsmosisAvgAPR,
-  OsmosisAPRs,
-  OsmosisFee,
+  OsmosisAPRsPools,
+  OsmosisFees,
   OsmosisPoolAssets,
   OsmosisIncentivePools,
   OsmosisLockableDurations,
   OsmosisActiveGauges,
   OsmosisDistrInfo,
   OsmosisMintParams,
-  TokenStream,
-  OsmosisSymbolPrice,
+  OsmosisToken,
+  OsmosisFee,
+  OsmosisAPRsPool,
 } from './osmosis-pool.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OsmosisQueryService {
-  constructor(private http: HttpClient, private cacheService: CacheService) {}
+  poolsFees$: Observable<OsmosisFees>;
+  // pools$: Observable<{ [poolId: string]: OsmosisPoolAssets }>;
+  stakingApr$: Observable<string>;
+  aprs$: Observable<OsmosisAPRsPools>;
+  mintParams$: Observable<OsmosisMintParams>;
+  epochProvisions$: Observable<{ epoch_provisions: string }>;
+  activeGauges$: Observable<OsmosisActiveGauges>;
+  distrInfo$: Observable<OsmosisDistrInfo>;
+  lockableDuration$: Observable<OsmosisLockableDurations>;
+  incentivizedPools$: Observable<OsmosisIncentivePools>;
+  tokens$: Observable<OsmosisToken[]>;
+
+  constructor(private http: HttpClient, private cacheService: CacheService) {
+    const poolsFeesUrl = 'https://api-osmosis.imperator.co/fees/v1/pools';
+    this.poolsFees$ = this.http.get<OsmosisFees>(poolsFeesUrl);
+    // const poolsUrl = 'https://api-osmosis.imperator.co/pools/v2/all?low_liquidity=false';
+    // this.pools$ = this.http.get<{ [poolId: string]: OsmosisPoolAssets }>(poolsUrl);
+    const stakingAprUrl = 'https://api-osmosis.imperator.co/apr/v2/staking';
+    this.stakingApr$ = this.http.get<string>(stakingAprUrl);
+    const aprsUrl = 'https://api-osmosis.imperator.co/apr/v2/all';
+    this.aprs$ = this.http.get<OsmosisAPRsPools>(aprsUrl);
+    const mintParamsUrl = 'https://lcd-osmosis.keplr.app/osmosis/mint/v1beta1/params';
+    this.mintParams$ = this.http.get<OsmosisMintParams>(mintParamsUrl);
+    const epochProvisionsUrl =
+      'https://lcd-osmosis.keplr.app/osmosis/mint/v1beta1/epoch_provisions';
+    this.epochProvisions$ = this.http.get<{ epoch_provisions: string }>(epochProvisionsUrl);
+    const activeGaugesUrl = 'https://app.osmosis.zone/api/active-gauges';
+    this.activeGauges$ = this.http.get<OsmosisActiveGauges>(activeGaugesUrl);
+    const distrInfoUrl = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/distr_info';
+    this.distrInfo$ = this.http.get<OsmosisDistrInfo>(distrInfoUrl);
+    const lockableDurationUrl =
+      'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/lockable_durations';
+    this.lockableDuration$ = this.http.get<OsmosisLockableDurations>(lockableDurationUrl);
+    const incentivizedPoolsUrl =
+      'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/incentivized_pools';
+    this.incentivizedPools$ = this.http.get<OsmosisIncentivePools>(incentivizedPoolsUrl);
+    const tokensUrl = 'https://api-osmosis.imperator.co/tokens/v2/all';
+    this.tokens$ = this.http.get<OsmosisToken[]>(tokensUrl);
+  }
 
   async getAvgAPR(poolId: string): Promise<OsmosisAvgAPR | undefined> {
     const cacheKey = 'avgAPR_' + poolId;
@@ -44,10 +84,10 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://api-osmosis.imperator.co/fees/v1/' + poolId;
     try {
-      const res = await this.http.get(url).toPromise();
-      const fee = res as OsmosisFee;
+      const fees = await this.poolsFees$.toPromise();
+      const fee = fees.data.find((f) => f.pool_id === poolId);
+      console.log(fee);
       this.cacheService.set(cacheKey, fee);
       return fee;
     } catch (error) {
@@ -73,34 +113,31 @@ export class OsmosisQueryService {
     }
   }
 
-  async getAPRs(poolId: string): Promise<OsmosisAPRs | undefined> {
+  async getAPRs(poolId: string): Promise<OsmosisAPRsPool | undefined> {
     const cacheKey = 'aprs_' + poolId;
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
     try {
-      const res = await this.http.get(url).toPromise();
-      const aprs = res as OsmosisAPRs;
-      this.cacheService.set(cacheKey, aprs);
-      return aprs;
+      const aprs = await this.aprs$.toPromise();
+      const apr = aprs.find((a) => a.pool_id === Number(poolId));
+      this.cacheService.set(cacheKey, apr);
+      return apr;
     } catch (error) {
       console.error(error);
       return undefined;
     }
   }
 
-  async getDenomStream(denom: string): Promise<TokenStream | undefined> {
-    const cacheKey = 'denomStream_' + denom;
+  async getStakingAPR(): Promise<string | undefined> {
+    const cacheKey = 'stakingAPR';
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://api-osmosis.imperator.co/stream/token/v1/denom?denom=' + denom;
     try {
-      const res = await this.http.get(url).toPromise();
-      const denomStream = res as TokenStream;
-      this.cacheService.set(cacheKey, denomStream);
-      return denomStream;
+      const apr = await this.stakingApr$.toPromise();
+      this.cacheService.set(cacheKey, apr);
+      return apr;
     } catch (error) {
       console.error(error);
       return undefined;
@@ -112,10 +149,8 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/mint/v1beta1/params';
     try {
-      const res = await this.http.get(url).toPromise();
-      const mintParams = res as OsmosisMintParams;
+      const mintParams = await this.mintParams$.toPromise();
       this.cacheService.set(cacheKey, mintParams);
       return mintParams;
     } catch (error) {
@@ -129,10 +164,8 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/mint/v1beta1/epoch_provisions';
     try {
-      const res = await this.http.get(url).toPromise();
-      const epochProvision = res as { epoch_provisions: string };
+      const epochProvision = await this.epochProvisions$.toPromise();
       this.cacheService.set(cacheKey, epochProvision);
       return epochProvision;
     } catch (error) {
@@ -146,10 +179,8 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://app.osmosis.zone/api/active-gauges';
     try {
-      const res = await this.http.get(url).toPromise();
-      const gauges = res as OsmosisActiveGauges;
+      const gauges = await this.activeGauges$.toPromise();
       this.cacheService.set(cacheKey, gauges);
       return gauges;
     } catch (error) {
@@ -163,29 +194,10 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/distr_info';
     try {
-      const res = await this.http.get(url).toPromise();
-      const distrInfo = res as OsmosisDistrInfo;
+      const distrInfo = await this.distrInfo$.toPromise();
       this.cacheService.set(cacheKey, distrInfo);
       return distrInfo;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
-  }
-
-  async getLockableDuration(): Promise<OsmosisLockableDurations | undefined> {
-    const cacheKey = 'lockableDuration';
-    if (this.cacheService.has(cacheKey)) {
-      return this.cacheService.get(cacheKey);
-    }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/lockable_durations';
-    try {
-      const res = await this.http.get(url).toPromise();
-      const lockableDuration = res as OsmosisLockableDurations;
-      this.cacheService.set(cacheKey, lockableDuration);
-      return lockableDuration;
     } catch (error) {
       console.error(error);
       return undefined;
@@ -197,10 +209,8 @@ export class OsmosisQueryService {
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/pool-incentives/v1beta1/incentivized_pools';
     try {
-      const res = await this.http.get(url).toPromise();
-      const pools = res as OsmosisIncentivePools;
+      const pools = await this.incentivizedPools$.toPromise();
       this.cacheService.set(cacheKey, pools);
       return pools;
     } catch (error) {
@@ -209,51 +219,32 @@ export class OsmosisQueryService {
     }
   }
 
-  async getGaugeIncentive(gaugeId: string): Promise<OsmosisIncentivePools | undefined> {
-    const cacheKey = 'gaugeIncentive_' + gaugeId;
+  async getTokenByDenom(denom: string): Promise<OsmosisToken | undefined> {
+    const cacheKey = 'token_' + denom;
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://lcd-osmosis.keplr.app/osmosis/incentives/v1beta1/gauge_by_id/' + gaugeId;
     try {
-      const res = await this.http.get(url).toPromise();
-      const incentivePools = res as OsmosisIncentivePools;
-      this.cacheService.set(cacheKey, incentivePools);
-      return incentivePools;
+      const tokens = await this.tokens$.toPromise();
+      const token = tokens.find((t) => t.denom === denom);
+      this.cacheService.set(cacheKey, token);
+      return token;
     } catch (error) {
       console.error(error);
       return undefined;
     }
   }
 
-  async getSymbol(denom: string): Promise<{ symbol: string } | undefined> {
-    const cacheKey = 'symbol_' + denom;
+  async getTokenBySymbol(symbol: string): Promise<OsmosisToken | undefined> {
+    const cacheKey = 'token_' + symbol;
     if (this.cacheService.has(cacheKey)) {
       return this.cacheService.get(cacheKey);
     }
-    const url = 'https://api-osmosis.imperator.co/search/v1/symbol?denom=' + denom;
     try {
-      const res = await this.http.get(url).toPromise();
-      const symbol = res as { symbol: string };
-      this.cacheService.set(cacheKey, symbol);
-      return symbol;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
-  }
-
-  async getPrice(symbol: string): Promise<OsmosisSymbolPrice | undefined> {
-    const cacheKey = 'price_' + symbol;
-    if (this.cacheService.has(cacheKey)) {
-      return this.cacheService.get(cacheKey);
-    }
-    const url = 'https://api-osmosis.imperator.co/tokens/v2/price/' + symbol;
-    try {
-      const res = await this.http.get(url).toPromise();
-      const price = res as OsmosisSymbolPrice;
-      this.cacheService.set(cacheKey, price);
-      return price;
+      const tokens = await this.tokens$.toPromise();
+      const token = tokens.find((t) => t.symbol === symbol);
+      this.cacheService.set(cacheKey, token);
+      return token;
     } catch (error) {
       console.error(error);
       return undefined;

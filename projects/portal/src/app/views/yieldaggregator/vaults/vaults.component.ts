@@ -32,6 +32,8 @@ export class VaultsComponent implements OnInit {
   @Output()
   certifiedChange = new EventEmitter<boolean>();
 
+  tab: 'normal' | 'fixed' = 'normal';
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

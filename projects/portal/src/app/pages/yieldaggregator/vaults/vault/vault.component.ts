@@ -203,7 +203,13 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
+    this.iyaApp.withdrawFromVault(
+      data.vaultId,
+      data.denom,
+      data.readableAmount,
+      data.redeemAmount,
+      data.feeAmount,
+    );
   }
 
   async onClickChain(chain: ExternalChain) {

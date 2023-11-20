@@ -206,6 +206,8 @@ export class VaultComponent implements OnInit, OnChanges {
       vaultId: this.vault?.vault?.id!,
       readableAmount: this.burnAmount,
       denom: this.vault?.vault?.denom!,
+      redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount?.amount),
+      feeAmount: Number(this.estimatedRedeemAmount?.fee?.amount),
     });
   }
 

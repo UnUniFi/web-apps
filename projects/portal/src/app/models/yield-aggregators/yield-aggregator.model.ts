@@ -8,6 +8,8 @@ export type WithdrawFromVaultRequest = {
   vaultId: string;
   denom: string;
   readableAmount: number;
+  redeemAmount: number;
+  feeAmount: number;
 };
 
 export type CreateVaultRequest = {

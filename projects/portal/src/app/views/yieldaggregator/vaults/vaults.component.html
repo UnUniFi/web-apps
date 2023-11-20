@@ -51,14 +51,14 @@
     </form>
   </div>
 
-  <div class="tabs tabs-boxed w-full">
+  <!-- <div class="tabs tabs-boxed w-full">
     <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'normal'" (click)="tab = 'normal'">
       Variable
     </a>
     <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'fixed'" (click)="tab = 'fixed'">
       Fixed
     </a>
-  </div>
+  </div> -->
 
   <div class="card bg-base-100 shadow-xl mb-8">
     <div class="card-body" *ngIf="tab === 'normal'">
@@ -67,10 +67,10 @@
         Select a vault to deposit funds based on your preferences, and earn yield. These interest
         rates are variable.
       </P>
-      <p>
+      <!-- <p>
         Looking for a fixed rate? Check
         <a class="link link-info" (click)="tab = 'fixed'">Fixed-rate vaults.</a>
-      </p>
+      </p> -->
       <div class="flex gap-2" *ngIf="certified !== null">
         <span class="flex-auto"></span>
         <input
@@ -202,7 +202,7 @@
     </div>
 
     <div class="card-body" *ngIf="tab === 'fixed'">
-      <h2 class="card-title">Variable-rate Vaults</h2>
+      <h2 class="card-title">Fixed-rate Vaults</h2>
       <p>
         UnUniFi offers fixed-rate asset management. You can get more yield by investing at long-term
         or variable interest rates.

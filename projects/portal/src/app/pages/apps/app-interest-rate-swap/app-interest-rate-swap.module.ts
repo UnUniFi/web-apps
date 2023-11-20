@@ -3,10 +3,9 @@ import { AppInterestRateSwapRoutingModule } from './app-interest-rate-swap-routi
 import { AppInterestRateSwapComponent } from './app-interest-rate-swap.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { VaultsComponent } from './vaults/vaults.component';
 
 @NgModule({
-  declarations: [AppInterestRateSwapComponent, VaultsComponent],
+  declarations: [AppInterestRateSwapComponent],
   imports: [CommonModule, AppInterestRateSwapRoutingModule, AppInterestRateSwapModule],
 })
 export class AppAppInterestRateSwapModule {}

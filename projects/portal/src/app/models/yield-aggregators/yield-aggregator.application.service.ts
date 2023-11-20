@@ -2,14 +2,13 @@ import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
-import { BankQueryService } from '../cosmos/bank.query.service';
+import { WithdrawFeeConfirmDialogComponent } from '../../views/dialogs/txs/withdraw-fee-confirm/withdraw-fee-confirm-dialog.component';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,6 @@ import { take } from 'rxjs/operators';
 export class YieldAggregatorApplicationService {
   constructor(
     private readonly router: Router,
-    private readonly bankQueryService: BankQueryService,
     private readonly yieldAggregatorService: YieldAggregatorService,
     private readonly txCommonApplication: TxCommonApplicationService,
     private readonly dialog: Dialog,
@@ -72,7 +70,25 @@ export class YieldAggregatorApplicationService {
     location.reload();
   }
 
-  async withdrawFromVault(vaultId: string, symbol: string, amount: number) {
+  async withdrawFromVault(
+    vaultId: string,
+    denom: string,
+    readableAmount: number,
+    redeemAmount: number,
+    feeAmount: number,
+  ) {
+    // open confirm dialog if feeAmount > redeemAmount
+    if (feeAmount > redeemAmount) {
+      const txFeeConfirmedResult = await this.dialog
+        .open<boolean>(WithdrawFeeConfirmDialogComponent, {
+          data: { redeemAmount, feeAmount, denom },
+        })
+        .closed.toPromise();
+      if (!txFeeConfirmedResult) {
+        return;
+      }
+    }
+
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -82,8 +98,8 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
-      symbol,
-      amount,
+      denom,
+      readableAmount,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

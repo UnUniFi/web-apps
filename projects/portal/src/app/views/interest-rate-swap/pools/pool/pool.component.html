@@ -3,33 +3,104 @@
     <div class="text-xl breadcrumbs">
       <ul>
         <li><a routerLink="..">Pools</a></li>
-        <li>Pool #</li>
+        <li>Pool #{{ 1 }}</li>
       </ul>
     </div>
   </div>
 
   <div class="card bg-base-200 shadow-xl mb-8">
     <div class="card-body">
-      <h2 class="card-title">Stride stATOM</h2>
-      <p class="whitespace-pre-wrap">{{ description }}</p>
-      <div class="stats stats-vertical md:stats-horizontal">
+      <h2 class="card-title">
+        <div class="avatar">
+          <div class="w-8 rounded-full">
+            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+          </div>
+          <div class="avatar -ml-2 mt-4">
+            <div class="w-4 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+            </div>
+          </div>
+        </div>
+        Stride stATOM
+      </h2>
+      <p class="whitespace-pre-wrap mb-4">{{ description }}</p>
+      <div class="stats stats-vertical md:stats-horizontal mb-4">
         <div class="stat">
           <div class="stat-title">APY</div>
           <div class="stat-value">{{ 0.642 | percent : '1.0-2' }}</div>
           <div class="stat-desc"></div>
         </div>
         <div class="stat">
-          <div class="stat-title">APY</div>
+          <div class="stat-title">TVL</div>
           <div class="stat-value">{{ 34323523 | currency }}</div>
           <div class="stat-desc"></div>
         </div>
       </div>
-      <div class="card-actions justify-end mt-4">
-        <button class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8">
+      <div class="tabs tabs-boxed w-full mb-4">
+        <a
+          class="tab tab-lg w-1/2"
+          [class.tab-active]="tab === 'deposit'"
+          (click)="tab = 'deposit'"
+        >
+          Deposit
+        </a>
+        <a
+          class="tab tab-lg w-1/2"
+          [class.tab-active]="tab === 'withdraw'"
+          (click)="tab = 'withdraw'"
+        >
+          Withdrawal
+        </a>
+      </div>
+      <form>
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Input</span>
+          </span>
+          <label class="input-group join">
+            <div class="join-item btn btn-disabled">LP</div>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+
+        <div class="flex flex-row justify-center">
+          <button type="button" class="btn btn-circle">
+            <span class="material-symbols-outlined"> swap_vert </span>
+          </button>
+        </div>
+
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Output</span>
+          </span>
+          <label class="input-group join">
+            <div class="join-item btn btn-disabled">PT</div>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <label class="input-group join">
+            <div class="join-item btn btn-disabled">USDC</div>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+      </form>
+      <div class="card-actions justify-end">
+        <button
+          class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8"
+          *ngIf="tab === 'deposit'"
+        >
           <span class="material-symbols-outlined"> attach_money </span>
           <span class="hidden md:inline">Deposit</span>
         </button>
-        <button class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8">
+        <button
+          class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8"
+          *ngIf="tab === 'withdraw'"
+        >
           <span class="material-symbols-outlined"> money_off </span>
           <span class="hidden md:inline">Withdrawal</span>
         </button>

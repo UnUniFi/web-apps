@@ -84,7 +84,6 @@ export class YieldAggregatorApplicationService {
         return;
       }
     }
-
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;

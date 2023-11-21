@@ -96,7 +96,7 @@ export class VaultComponent implements OnInit, OnChanges {
   withdrawOptions: WithdrawOption[] = [
     {
       id: 'immediate',
-      display: 'Immediate withdrawal',
+      display: 'Immediate withdrawal with extra fee',
       disabled: false,
     },
     {
@@ -226,6 +226,8 @@ export class VaultComponent implements OnInit, OnChanges {
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,
         denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+        redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
+        feeAmount: Number(this.estimatedRedeemAmount?.fee),
       });
     }
     if (this.withdrawOptionId === 'unbonding') {

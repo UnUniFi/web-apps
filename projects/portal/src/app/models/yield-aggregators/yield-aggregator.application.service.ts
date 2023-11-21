@@ -2,6 +2,7 @@ import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,
 } from '../../views/dialogs/txs/tx-confirm/tx-confirm-dialog.component';
+import { WithdrawFeeConfirmDialogComponent } from '../../views/dialogs/txs/withdraw-fee-confirm/withdraw-fee-confirm-dialog.component';
 import { TxCommonApplicationService } from '../cosmos/tx-common.application.service';
 import { YieldAggregatorService } from './yield-aggregator.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -64,7 +65,25 @@ export class YieldAggregatorApplicationService {
     location.reload();
   }
 
-  async withdrawFromVault(vaultId: string, denom: string, amount: number) {
+  async withdrawFromVault(
+    vaultId: string,
+    denom: string,
+    readableAmount: number,
+    redeemAmount: number,
+    feeAmount: number,
+  ) {
+    // open confirm dialog if feeAmount > redeemAmount
+    if (feeAmount > redeemAmount) {
+      const txFeeConfirmedResult = await this.dialog
+        .open<boolean>(WithdrawFeeConfirmDialogComponent, {
+          data: { redeemAmount, feeAmount, denom },
+        })
+        .closed.toPromise();
+      if (!txFeeConfirmedResult) {
+        return;
+      }
+    }
+
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -75,7 +94,7 @@ export class YieldAggregatorApplicationService {
       address,
       vaultId,
       denom,
-      amount,
+      readableAmount,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(

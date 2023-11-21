@@ -66,7 +66,7 @@
       </thead>
       <tbody>
         <!-- row 1 -->
-        <tr class="hover cursor-pointer">
+        <tr class="hover cursor-pointer" routerLink="1">
           <th>
             <div class="avatar">
               <div class="w-8 rounded-full">
@@ -84,11 +84,11 @@
             <br />
             <div class="badge badge-primary">ATOM</div>
           </td>
-          <td>$34323523</td>
-          <td>64%</td>
+          <td>{{ 34323523 | currency }}</td>
+          <td>{{ 0.642 | percent : '1.0-0' }}</td>
         </tr>
         <!-- row 2 -->
-        <tr class="hover cursor-pointer">
+        <tr class="hover cursor-pointer" routerLink="2">
           <th>
             <div class="avatar">
               <div class="w-8 rounded-full">
@@ -106,8 +106,8 @@
             <br />
             <div class="badge badge-primary">USDC</div>
           </td>
-          <td>$315323511</td>
-          <td>54%</td>
+          <td>{{ 315323511 | currency }}</td>
+          <td>{{ 0.546 | percent : '1.0-0' }}</td>
         </tr>
       </tbody>
     </table>

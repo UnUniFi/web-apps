@@ -1,1 +1,39 @@
-<p>pool works!</p>
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li><a routerLink="..">Pools</a></li>
+        <li>Pool #</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">Stride stATOM</h2>
+      <p class="whitespace-pre-wrap">{{ description }}</p>
+      <div class="stats stats-vertical md:stats-horizontal">
+        <div class="stat">
+          <div class="stat-title">APY</div>
+          <div class="stat-value">{{ 0.642 | percent : '1.0-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">APY</div>
+          <div class="stat-value">{{ 34323523 | currency }}</div>
+          <div class="stat-desc"></div>
+        </div>
+      </div>
+      <div class="card-actions justify-end mt-4">
+        <button class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8">
+          <span class="material-symbols-outlined"> attach_money </span>
+          <span class="hidden md:inline">Deposit</span>
+        </button>
+        <button class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8">
+          <span class="material-symbols-outlined"> money_off </span>
+          <span class="hidden md:inline">Withdrawal</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

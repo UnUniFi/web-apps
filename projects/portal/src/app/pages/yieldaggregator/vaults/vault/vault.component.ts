@@ -12,6 +12,7 @@ import { YieldAggregatorApplicationService } from 'projects/portal/src/app/model
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
+  WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
@@ -203,15 +204,16 @@ export class VaultComponent implements OnInit {
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
     this.iyaApp.withdrawFromVault(
       data.vaultId,
-      data.denom,
+      data.lp_denom,
       data.readableAmount,
       data.redeemAmount,
       data.feeAmount,
+      data.symbol,
     );
   }
 
-  onSubmitWithdrawWithUnbonding(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVaultWithUnbonding(data.vaultId, data.denom, data.readableAmount);
+  onSubmitWithdrawWithUnbonding(data: WithdrawFromVaultWithUnbondingRequest) {
+    this.iyaApp.withdrawFromVaultWithUnbonding(data.vaultId, data.lp_denom, data.readableAmount);
   }
 
   async onClickChain(chain: ExternalChain) {

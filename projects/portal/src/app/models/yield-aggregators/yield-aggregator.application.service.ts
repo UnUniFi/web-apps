@@ -67,16 +67,17 @@ export class YieldAggregatorApplicationService {
 
   async withdrawFromVault(
     vaultId: string,
-    denom: string,
+    lp_denom: string,
     readableAmount: number,
     redeemAmount: number,
     feeAmount: number,
+    symbol: string,
   ) {
     // open confirm dialog if feeAmount > redeemAmount
     if (feeAmount > redeemAmount) {
       const txFeeConfirmedResult = await this.dialog
         .open<boolean>(WithdrawFeeConfirmDialogComponent, {
-          data: { redeemAmount, feeAmount, denom },
+          data: { redeemAmount, feeAmount, symbol },
         })
         .closed.toPromise();
       if (!txFeeConfirmedResult) {
@@ -93,7 +94,7 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
-      denom,
+      lp_denom,
       readableAmount,
     );
 
@@ -134,7 +135,7 @@ export class YieldAggregatorApplicationService {
     }
   }
 
-  async withdrawFromVaultWithUnbonding(vaultId: string, denom: string, amount: number) {
+  async withdrawFromVaultWithUnbonding(vaultId: string, lp_denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -144,7 +145,7 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVaultWithUnbondingTime(
       address,
       vaultId,
-      denom,
+      lp_denom,
       amount,
     );
 

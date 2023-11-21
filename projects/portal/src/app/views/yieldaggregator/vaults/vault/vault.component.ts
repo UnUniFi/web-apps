@@ -5,6 +5,7 @@ import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.mod
 import {
   DepositToVaultRequest,
   WithdrawFromVaultRequest,
+  WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { CoinAmountPipe } from 'projects/portal/src/app/pipes/coin-amount.pipe';
 import {
@@ -79,7 +80,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
-  appWithdrawWithUnbonding: EventEmitter<WithdrawFromVaultRequest>;
+  appWithdrawWithUnbonding: EventEmitter<WithdrawFromVaultWithUnbondingRequest>;
   @Output()
   appClickChain: EventEmitter<ExternalChain>;
 
@@ -225,16 +226,17 @@ export class VaultComponent implements OnInit, OnChanges {
       this.appWithdraw.emit({
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,
-        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
         redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
         feeAmount: Number(this.estimatedRedeemAmount?.fee),
+        symbol: this.vault?.vault?.symbol!,
       });
     }
     if (this.withdrawOptionId === 'unbonding') {
       this.appWithdrawWithUnbonding.emit({
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,
-        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
       });
     }
   }

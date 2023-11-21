@@ -84,7 +84,7 @@ export class VaultComponent implements OnInit, OnChanges {
   withdrawOptions = [
     {
       id: 'immediate',
-      display: 'Immediate withdrawal',
+      display: 'Immediate withdrawal with extra fee',
       disabled: false,
     },
     {

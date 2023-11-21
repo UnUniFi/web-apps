@@ -1,0 +1,115 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li>Pools</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">Liquidity Pools</h2>
+      <p>
+        Assets deposited in this pool are automatically deposited into the vault strategy. Then the
+        share will be automatically splitted into zero-coupon bond and yield bearing token. These
+        are used for fixed-rate vaults.
+      </p>
+      <p>
+        Check <a class="link link-info" routerLink="/interest-rate-swap/vaults">here</a> for more
+        information on fixed-rate vaults.
+      </p>
+      <div class="form-control w-full">
+        <label class="label"> </label>
+        <div class="join">
+          <input
+            type="text"
+            placeholder="Search"
+            class="join-item input input-bordered w-full max-w-xs"
+          />
+          <button class="btn btn-square">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+          <select class="join-item select select-bordered">
+            <option disabled selected>Sort By</option>
+            <option>Interest Rate</option>
+          </select>
+        </div>
+        <label class="label"> </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>TVL</th>
+          <th>APY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- row 1 -->
+        <tr class="hover cursor-pointer">
+          <th>
+            <div class="avatar">
+              <div class="w-8 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+              </div>
+              <div class="avatar -ml-2 mt-4">
+                <div class="w-4 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                </div>
+              </div>
+            </div>
+          </th>
+          <td>
+            Stride stATOM
+            <br />
+            <div class="badge badge-primary">ATOM</div>
+          </td>
+          <td>$34323523</td>
+          <td>64%</td>
+        </tr>
+        <!-- row 2 -->
+        <tr class="hover cursor-pointer">
+          <th>
+            <div class="avatar">
+              <div class="w-8 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" />
+              </div>
+              <div class="avatar -ml-2 mt-4">
+                <div class="w-4 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/27607.png" />
+                </div>
+              </div>
+            </div>
+          </th>
+          <td>
+            Quasar USDC/USDT Dynamic S+
+            <br />
+            <div class="badge badge-primary">USDC</div>
+          </td>
+          <td>$315323511</td>
+          <td>54%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

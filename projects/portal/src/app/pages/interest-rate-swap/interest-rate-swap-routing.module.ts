@@ -1,4 +1,6 @@
 import { InterestRateSwapComponent } from './interest-rate-swap.component';
+import { PoolComponent } from './pools/pool/pool.component';
+import { PoolsComponent } from './pools/pools.component';
 import { VaultsComponent } from './vaults/vaults.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -11,6 +13,18 @@ const routes: Routes = [
   {
     path: 'vaults',
     component: VaultsComponent,
+  },
+  {
+    path: 'vaults/:id',
+    component: VaultsComponent,
+  },
+  {
+    path: 'pools',
+    component: PoolsComponent,
+  },
+  {
+    path: 'pools/:id',
+    component: PoolComponent,
   },
 ];
 

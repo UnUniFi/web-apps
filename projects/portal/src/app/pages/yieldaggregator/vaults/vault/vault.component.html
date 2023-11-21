@@ -1,6 +1,7 @@
 <view-vault
   [vault]="vault$ | async"
   [denom]="denom$ | async"
+  [availableDenoms]="availableDenoms$ | async"
   [denomBalancesMap]="denomBalancesMap$ | async"
   [denomMetadataMap]="denomMetadataMap$ | async"
   [symbolImage]="symbolImage$ | async"
@@ -19,5 +20,6 @@
   (changeWithdraw)="onChangeWithdraw($event)"
   (appDeposit)="onSubmitDeposit($event)"
   (appWithdraw)="onSubmitWithdraw($event)"
+  (appWithdrawWithUnbonding)="onSubmitWithdrawWithUnbonding($event)"
   (appClickChain)="onClickChain($event)"
 ></view-vault>

@@ -52,7 +52,7 @@ export class StrategyComponent implements OnInit {
       map(([vaults, id, denom]) =>
         vaults.filter((vault) =>
           vault.vault?.strategy_weights?.find(
-            (strategy) => vault.vault?.denom === denom && strategy.strategy_id === id,
+            (strategy) => strategy.denom === denom && strategy.strategy_id === id,
           ),
         ),
       ),

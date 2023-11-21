@@ -24,7 +24,7 @@
             <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
           </h2>
           <div class="flex flex-row items-center gap-2">
-            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
+            <div class="badge badge-primary">{{ vault?.vault?.symbol }}</div>
             <div class="badge badge-info">NO KYC</div>
           </div>
         </div>
@@ -165,7 +165,7 @@
             </div>
             <div class="stat-desc">
               {{ calcVaultAmount(vault) | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -178,8 +178,8 @@
             </div>
             <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ estimatedDepositedAmount?.total_amount?.amount | coinAmount }}
-              {{ denom | coinDenom | async }}
+              {{ estimatedDepositedAmount?.total_amount | coinAmount }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@
             </div>
             <div class="stat-desc">
               {{ vault?.total_bonded_amount | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -213,7 +213,7 @@
             </div>
             <div class="stat-desc">
               {{ vault?.total_unbonding_amount | coinAmount : denom }}
-              {{ denom | coinDenom | async }}
+              {{ vault?.vault?.symbol }}
             </div>
           </div>
           <div class="stat">
@@ -226,7 +226,7 @@
             </div>
             <div class="stat-value text-info" *ngIf="withdrawReserve === undefined">$ Unknown</div>
             <div class="stat-desc">
-              {{ vault?.withdraw_reserve | coinAmount : denom }} {{ denom | coinDenom | async }}
+              {{ vault?.withdraw_reserve | coinAmount : denom }} {{ vault?.vault?.symbol }}
             </div>
           </div>
         </div>
@@ -309,26 +309,37 @@
                 placeholder="0.000000"
                 class="input input-bordered w-full"
                 [class]="{
-                  'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                  'input-error': depositAmountNgModelRef.errors
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom"
+                [max]="denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.symbol"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="mintAmount"
                 name="mintAmount"
                 (input)="onDepositAmountChange()"
               />
-              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
-              <span *ngIf="!selectedChain.cosmos"
-                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
-                  selectedChain.id
-                }}</span
+              <select
+                class="select select-bordered text-center w-auto sm:w-64"
+                [class]="{
+                  'select-error': !denom
+                }"
+                name="txType"
+                [(ngModel)]="denom"
               >
+                <option [value]="undefined" disabled>
+                  <span>Select Token</span>
+                </option>
+                <ng-container *ngFor="let denomInfo of availableDenoms">
+                  <option [value]="denomInfo.denom">
+                    {{ denomInfo.denom | coinDenom | async }}
+                  </option>
+                </ng-container>
+              </select>
             </label>
             <span class="label" *ngIf="selectedChain.id === 'ununifi'">
               <span class="label-text-alt">Available balance:</span>
               <label class="label-text-alt">
-                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
+                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: denom }}
                 {{ denom | coinDenom | async }}
               </label>
             </span>
@@ -340,7 +351,7 @@
             </label>
             <label class="input-group">
               <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
-              <span>{{ denom | coinDenom | async }}</span>
+              <span>{{ vault?.vault?.symbol }}</span>
             </label>
           </div>
 
@@ -406,7 +417,7 @@
               <select
                 class="select select-bordered w-full"
                 name="withdrawOption"
-                [(ngModel)]="withdrawOption.id"
+                [(ngModel)]="withdrawOptionId"
               >
                 <ng-container *ngFor="let option of withdrawOptions">
                   <option [value]="option.id" [disabled]="option.disabled">
@@ -437,7 +448,7 @@
                   'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
                 }"
                 [min]="0"
-                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: vault?.vault?.denom"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 [(ngModel)]="burnAmount"
                 name="burnAmount"
@@ -455,30 +466,43 @@
           </div>
           <div class="form-control">
             <label class="label">
-              <span class="label-text">You will receive</span>
+              <span class="label-text">You will receive {{ withdrawOptionId }}</span>
             </label>
 
-            <label class="input-group">
-              <input
-                disabled
-                class="input input-bordered w-full"
-                value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
-              />
-              <span>{{ denom | coinDenom | async }}</span>
-            </label>
-            <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
-              <span class="label-text-alt">
-                Total {{ estimatedRedeemAmount?.total_amount?.amount | coinAmount }} - Fee
-                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+            <div *ngIf="withdrawOptionId === 'immediate'">
+              <label class="input-group">
+                <input
+                  disabled
+                  class="input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
+                />
+                <span>{{ vault?.vault?.symbol }}</span>
+              </label>
+              <span class="label" *ngIf="estimatedRedeemAmount">
+                <span class="label-text-alt">
+                  {{ estimatedRedeemAmount.total_amount | coinAmount }} - Fee
+                  {{ estimatedRedeemAmount.fee | coinAmount }}
+                </span>
               </span>
-            </span>
+            </div>
+            <div *ngIf="withdrawOptionId === 'unbonding'">
+              <label class="input-group">
+                <input
+                  disabled
+                  class="input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.total_amount | coinAmount }}"
+                />
+                <span>{{ vault?.vault?.symbol }}</span>
+              </label>
+            </div>
           </div>
 
           <div class="card-actions justify-end mt-8">
             <button
               class="btn btn-secondary px-8"
               [disabled]="
-                withdrawFormRef.invalid || estimatedRedeemAmount?.redeem_amount?.amount === '0'
+                withdrawFormRef.invalid ||
+                (withdrawOptionId === 'immediate' && estimatedRedeemAmount?.redeem_amount === '0')
               "
             >
               Withdrawal
@@ -521,11 +545,7 @@
 
           <button
             class="btn btn-outline btn-info"
-            [routerLink]="[
-              '/yield-aggregator/strategies',
-              vault?.vault?.denom,
-              strategy.strategy_id
-            ]"
+            [routerLink]="['/yield-aggregator/strategies', strategy.denom, strategy.strategy_id]"
           >
             View
           </button>

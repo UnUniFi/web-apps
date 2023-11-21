@@ -6,15 +6,24 @@ export type DepositToVaultRequest = {
 
 export type WithdrawFromVaultRequest = {
   vaultId: string;
-  denom: string;
+  lp_denom: string;
+  readableAmount: number;
+  redeemAmount: number;
+  feeAmount: number;
+  symbol: string;
+};
+
+export type WithdrawFromVaultWithUnbondingRequest = {
+  vaultId: string;
+  lp_denom: string;
   readableAmount: number;
 };
 
 export type CreateVaultRequest = {
   name: string;
-  denom: string;
+  symbol: string;
   description: string;
-  strategies: { id: string; weight: number }[];
+  strategies: { denom: string; id: string; weight: number }[];
   commissionRate: number;
   reserveRate: number;
   fee: { denom: string; amount: string };

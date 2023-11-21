@@ -215,6 +215,20 @@ const denomMetadata = [
     display: 'OSMO.osmosis',
     symbol: 'OSMO',
   },
+  {
+    description: 'ATOM from CosmosHub',
+    denom_units: [
+      {
+        denom: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+    name: 'ATOM from CosmosHub',
+    display: 'ATOM.cosmoshub',
+    symbol: 'ATOM',
+  },
 ];
 
 const certifiedVaults = ['5', '6', '7'];

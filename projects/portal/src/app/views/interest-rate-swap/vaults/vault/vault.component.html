@@ -24,6 +24,18 @@
         Stride stATOM
       </h2>
       <p class="whitespace-pre-wrap mb-4">{{ description }}</p>
+      <div class="stats stats-vertical md:stats-horizontal mb-4">
+        <div class="stat">
+          <div class="stat-title">Vault TVL</div>
+          <div class="stat-value">{{ 1634478 | currency }}</div>
+          <div class="stat-desc"></div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Pool TVL</div>
+          <div class="stat-value">{{ 34323523 | currency }}</div>
+          <div class="stat-desc"></div>
+        </div>
+      </div>
       <div class="tabs w-full">
         <a
           class="tab tab-lg tab-bordered w-1/3"
@@ -87,7 +99,45 @@
           Withdrawal
         </a>
       </div>
-      <form>
+      <form *ngIf="tab === 'deposit'">
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Input</span>
+          </span>
+          <label class="input-group join" *ngIf="yield !== 'long'">
+            <span>PT</span>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <label class="input-group join" *ngIf="yield !== 'fixed'">
+            <span>YT</span>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+
+        <div class="flex flex-row justify-center">
+          <button type="button" class="btn btn-circle" (click)="tab = 'withdraw'">
+            <span class="material-symbols-outlined"> swap_vert </span>
+          </button>
+        </div>
+
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Output</span>
+          </span>
+          <label class="input-group join">
+            <span>USDC</span>
+            <input disabled class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+      </form>
+
+      <form *ngIf="tab === 'withdraw'">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -102,7 +152,7 @@
         </div>
 
         <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle">
+          <button type="button" class="btn btn-circle" (click)="tab = 'deposit'">
             <span class="material-symbols-outlined"> swap_vert </span>
           </button>
         </div>
@@ -111,13 +161,13 @@
           <span class="label">
             <span class="label-text">Output</span>
           </span>
-          <label class="input-group join">
+          <label class="input-group join" *ngIf="yield !== 'long'">
             <span>PT</span>
-            <input class="join-item input input-bordered w-full" />
+            <input disabled class="join-item input input-bordered w-full" />
           </label>
-          <label class="input-group join">
+          <label class="input-group join" *ngIf="yield !== 'fixed'">
             <span>YT</span>
-            <input class="join-item input input-bordered w-full" />
+            <input disabled class="join-item input input-bordered w-full" />
           </label>
           <span class="label">
             <span class="label-text"></span>

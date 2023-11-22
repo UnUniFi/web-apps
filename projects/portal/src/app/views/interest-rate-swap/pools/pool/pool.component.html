@@ -52,7 +52,43 @@
           Withdrawal
         </a>
       </div>
-      <form>
+
+      <form *ngIf="tab === 'deposit'">
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Input</span>
+          </span>
+          <label class="input-group join">
+            <span>PT</span>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <label class="input-group join">
+            <span>USDC</span>
+            <input class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+        <div class="flex flex-row justify-center">
+          <button type="button" class="btn btn-circle" (click)="tab = 'withdraw'">
+            <span class="material-symbols-outlined"> swap_vert </span>
+          </button>
+        </div>
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Output</span>
+          </span>
+          <label class="input-group join">
+            <span>LP</span>
+            <input disabled class="join-item input input-bordered w-full" />
+          </label>
+          <span class="label">
+            <span class="label-text"></span>
+          </span>
+        </div>
+      </form>
+      <form *ngIf="tab === 'withdraw'">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -67,7 +103,7 @@
         </div>
 
         <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle">
+          <button type="button" class="btn btn-circle" (click)="tab = 'deposit'">
             <span class="material-symbols-outlined"> swap_vert </span>
           </button>
         </div>
@@ -78,11 +114,11 @@
           </span>
           <label class="input-group join">
             <span>PT</span>
-            <input class="join-item input input-bordered w-full" />
+            <input disabled class="join-item input input-bordered w-full" />
           </label>
           <label class="input-group join">
             <span>USDC</span>
-            <input class="join-item input input-bordered w-full" />
+            <input disabled class="join-item input input-bordered w-full" />
           </label>
           <span class="label">
             <span class="label-text"></span>

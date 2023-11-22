@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'view-simple-vaults',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./simple-vaults.component.css'],
 })
 export class SimpleVaultsComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  changeAdvanced() {
+    this.router.navigate(['interest-rate-swap', 'vaults']);
+  }
 }

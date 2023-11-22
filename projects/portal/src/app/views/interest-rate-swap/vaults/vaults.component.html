@@ -5,18 +5,25 @@
         <li>Vaults</li>
       </ul>
     </div>
+    <span class="flex-auto"></span>
+    <label class="cursor-pointer label my-4 gap-2">
+      <span class="label-text">Advanced</span>
+      <input type="checkbox" class="toggle toggle-primary" checked (click)="changeSimple()" />
+    </label>
   </div>
 
   <div class="card bg-base-200 shadow-xl mb-8">
     <div class="card-body">
-      <h2 class="card-title">Fixed-rate Vaults</h2>
+      <h2 class="card-title">Interest Rate Swap Vaults</h2>
       <p>
         UnUniFi offers fixed-rate asset management. You can get more yield by investing at long-term
         or variable interest rates.
       </p>
       <p>
         Looking to find more vaults? Check
-        <a class="link link-info" routerLink="/yield-aggregator/vaults">Variable-rate vaults.</a>
+        <a class="link link-info" routerLink="/yield-aggregator/vaults"
+          >UnUniFi Yield Aggregator Vaults.</a
+        >
       </p>
       <div class="form-control w-full">
         <label class="label"> </label>

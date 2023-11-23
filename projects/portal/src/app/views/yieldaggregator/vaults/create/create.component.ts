@@ -12,7 +12,7 @@ export class CreateComponent implements OnInit {
   @Input()
   address?: string | null;
   @Input()
-  denom?: string | null;
+  symbol?: string | null;
   @Input()
   availableTokens?: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[] | null;
   @Input()
@@ -28,18 +28,19 @@ export class CreateComponent implements OnInit {
   @Input()
   denomMetadataMap?: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata } | null;
   @Output()
-  changeDenom: EventEmitter<string>;
+  changeSymbol: EventEmitter<string>;
   @Output()
   appCreate: EventEmitter<CreateVaultRequest>;
 
   reserveRate?: number;
   name?: string;
+
   description?: string;
   selectedStrategies: { id?: string; name?: string; denom?: string; weight: number }[] = [];
 
   constructor() {
     this.reserveRate = 10;
-    this.changeDenom = new EventEmitter();
+    this.changeSymbol = new EventEmitter();
     this.appCreate = new EventEmitter();
   }
 
@@ -49,17 +50,18 @@ export class CreateComponent implements OnInit {
     return this.selectedStrategies.some((s) => s.id === strategyId);
   }
 
-  onAddStrategy(strategyId: string, strategyDenom: string) {
-    if (!strategyId) {
+  onAddStrategy(strategy: StrategyAll200ResponseStrategiesInner) {
+    if (!strategy.strategy) {
+      alert('Invalid Strategy.');
       return;
     }
-    if (!this.denom) {
-      this.changeDenom.emit(strategyDenom);
+    if (!this.symbol) {
+      this.changeSymbol.emit(strategy.symbol);
     }
     this.selectedStrategies.push({
-      id: strategyId,
-      name: this.strategies?.find((s) => s.strategy?.id === strategyId)?.strategy?.name,
-      denom: strategyDenom,
+      id: strategy.strategy?.id,
+      name: strategy.strategy?.name,
+      denom: strategy.strategy?.denom,
       weight: this.selectedStrategies.length ? 0 : 100,
     });
     this.selectedStrategies.sort((a, b) => a.id!.localeCompare(b.id!));
@@ -71,22 +73,26 @@ export class CreateComponent implements OnInit {
     this.selectedStrategies.splice(index, 1);
   }
 
-  onChangeDenom() {
+  onChangeSymbol() {
     this.selectedStrategies = [];
-    if (!this.denom) {
+    if (!this.symbol) {
       return;
     }
-    this.changeDenom.emit(this.denom);
+    this.changeSymbol.emit(this.symbol);
   }
 
   onSubmitCreate() {
     const strategies = this.selectedStrategies.slice();
-    strategies.filter((s) => s.id && s.weight > 0);
+    strategies.filter((s) => s.denom && s.id && s.weight > 0);
     if (strategies.reduce((sum, s) => sum + s.weight, 0) !== 100) {
       alert('The total of the strategies should be 100%.');
       return;
     }
-    const filteredStrategies = strategies.map((s) => ({ id: s.id!, weight: s.weight }));
+    const filteredStrategies = strategies.map((s) => ({
+      denom: s.denom!,
+      id: s.id!,
+      weight: s.weight,
+    }));
     if (!this.fee || !this.deposit) {
       alert('Invalid Fee or Deposit.');
       return;
@@ -100,7 +106,7 @@ export class CreateComponent implements OnInit {
     }
     this.appCreate.emit({
       name: this.name || '',
-      denom: this.denom || '',
+      symbol: this.symbol || '',
       description: this.description || '',
       strategies: filteredStrategies,
       commissionRate: Number(this.commissionRate),

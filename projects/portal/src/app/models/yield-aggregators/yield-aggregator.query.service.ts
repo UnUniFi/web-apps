@@ -4,9 +4,11 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
+  DenomInfos200ResponseInfoInner,
   EstimateMintAmount200Response,
   EstimateRedeemAmount200Response,
   StrategyAll200ResponseStrategiesInner,
+  SymbolInfos200ResponseInfoInner,
   Vault200Response,
   VaultAll200ResponseVaultsInner,
   YieldAggregatorParams200ResponseParams,
@@ -79,5 +81,19 @@ export class YieldAggregatorQueryService {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     const res = await ununifi.rest.yieldAggregator.estimateRedeemAmount(sdk, id, amount);
     return res.data!;
+  }
+
+  listDenomInfos$(): Observable<DenomInfos200ResponseInfoInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.denomInfos(sdk)),
+      map((res) => res.data.info!),
+    );
+  }
+
+  listSymbolInfos$(): Observable<SymbolInfos200ResponseInfoInner[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.yieldAggregator.symbolInfos(sdk)),
+      map((res) => res.data.info!),
+    );
   }
 }

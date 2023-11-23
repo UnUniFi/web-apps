@@ -63,12 +63,13 @@ export class DepositComponent implements OnInit {
       ),
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
-      map(([vaults, denomMetadataMap]) =>
+    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    this.symbols$ = combineLatest([this.vaults$, symbolMetadataMap$]).pipe(
+      map(([vaults, symbolMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.vault?.denom!]?.symbol || '';
-          const display = denomMetadataMap?.[vault.vault?.denom!]?.display || vault.vault?.denom!;
-          const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
+          const symbol = vault.vault?.symbol || '';
+          const display = symbolMetadataMap?.[symbol]?.display || symbol;
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
           return { symbol: symbol, display: display, img: img };
         }),
       ),
@@ -86,14 +87,13 @@ export class DepositComponent implements OnInit {
         ),
       ),
     );
-    this.usdDepositAmount$ = combineLatest([this.estimatedRedeemAmounts$, denomMetadataMap$]).pipe(
-      mergeMap(([redeemAmounts, denomMetadataMap]) =>
+    this.usdDepositAmount$ = this.estimatedRedeemAmounts$.pipe(
+      mergeMap((redeemAmounts) =>
         Promise.all(
           redeemAmounts.map(async (redeemAmount) => {
             return this.bandProtocolService.convertToUSDAmount(
-              redeemAmount.total_amount?.denom || '',
-              redeemAmount.total_amount?.amount || '',
-              denomMetadataMap,
+              redeemAmount.symbol || '',
+              redeemAmount.total_amount || '',
             );
           }),
         ),

@@ -4,7 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 export interface WithdrawFeeConfirmDialogData {
   redeemAmount: number;
   feeAmount: number;
-  denom: string;
+  symbol: string;
 }
 @Component({
   selector: 'app-view-withdraw-fee-confirm-dialog',

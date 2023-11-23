@@ -30,9 +30,9 @@
               [class]="{
                 'select-error': assetNgModelRef.errors
               }"
-              [(ngModel)]="denom"
+              [(ngModel)]="symbol"
               name="symbol"
-              (change)="onChangeDenom()"
+              (change)="onChangeSymbol()"
               [disabled]="!availableTokens?.length"
             >
               <option [value]="undefined" disabled>
@@ -43,8 +43,8 @@
                   >Select an asset's symbol</span
                 >
               </option>
-              <ng-container *ngFor="let denom of availableTokens">
-                <option [value]="denom.base">{{ denom.display }}</option>
+              <ng-container *ngFor="let token of availableTokens">
+                <option [value]="token.symbol">{{ token.display }}</option>
               </ng-container>
             </select>
           </div>
@@ -309,25 +309,19 @@
             </button>
             <dialog id="addStrategyModal" class="modal">
               <form method="dialog" class="modal-box">
-                <h3 class="font-bold text-lg">
-                  Strategies for {{ denomMetadataMap?.[denom || '']?.display  }}
-                </h3>
-                <ng-container *ngIf="!denom">
+                <h3 class="font-bold text-lg">Strategies for {{ symbol }}</h3>
+                <ng-container *ngIf="!symbol">
                   <p class="py-4 text-error">Select an asset first</p>
                 </ng-container>
-                <ng-container *ngIf="denom && !strategies?.length">
-                  <p class="py-4">
-                    No strategy for {{ denomMetadataMap?.[denom || '']?.display  }}
-                  </p>
+                <ng-container *ngIf="symbol && !strategies?.length">
+                  <p class="py-4">No strategy for {{ symbol }}</p>
                 </ng-container>
 
                 <ul class="menu w-full">
                   <ng-container *ngFor="let s of strategies">
                     <ng-container *ngIf="!isAlreadySelectedStrategy(s.strategy?.id || '')">
                       <li>
-                        <a (click)="onAddStrategy(s.strategy?.id || '', s.strategy?.denom || '')">{{
-                          s.strategy?.name
-                        }}</a>
+                        <a (click)="onAddStrategy(s)">{{ s.strategy?.name }}</a>
                       </li>
                     </ng-container>
                   </ng-container>

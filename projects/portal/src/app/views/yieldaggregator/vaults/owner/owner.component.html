@@ -27,7 +27,7 @@
               <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
             </h2>
             <div class="flex flex-row items-center gap-2">
-              <div class="badge badge-primary">{{ vault.vault?.denom | coinDenom | async }}</div>
+              <div class="badge badge-primary">{{ vault.vault?.symbol }}</div>
               <div class="badge badge-info">NO KYC</div>
             </div>
           </div>
@@ -133,12 +133,12 @@
                 <ng-container *ngFor="let strategy of vault.vault?.strategy_weights">
                   <tr
                     class="hover cursor-pointer"
-                    routerLink="/yield-aggregator/strategies/{{ vault.vault?.denom }}/{{
+                    routerLink="/yield-aggregator/strategies/{{ vault.vault?.symbol }}/{{
                       strategy.strategy_id
                     }}"
                     [routerLink]="[
                       '/yield-aggregator/strategies',
-                      vault.vault?.denom,
+                      vault.vault?.symbol,
                       strategy.strategy_id
                     ]"
                   >

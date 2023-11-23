@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import {
   DepositToVaultRequest,
+  VaultInfo,
   WithdrawFromVaultRequest,
   WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -25,8 +25,10 @@ export type ExternalChain = {
 };
 
 export type WithdrawOption = {
-  id: string;
-  display: string;
+  id: number;
+  name: string;
+  description: string;
+  icon?: string;
   disabled: boolean;
 };
 
@@ -67,7 +69,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   usdDepositAmount?: number | null;
   @Input()
-  vaultInfo?: YieldInfo | null;
+  vaultInfo?: VaultInfo | null;
   @Input()
   externalWalletAddress?: string;
 
@@ -96,17 +98,21 @@ export class VaultComponent implements OnInit, OnChanges {
   };
   withdrawOptions: WithdrawOption[] = [
     {
-      id: 'unbonding',
-      display: 'Withdrawal after the unbonding period',
+      id: 0,
+      name: 'unbonding',
+      description: 'Withdrawal after the following unbonding time',
+      icon: 'pending_actions',
       disabled: false,
     },
     {
-      id: 'immediate',
-      display: 'Immediate withdrawal with extra fee',
+      id: 1,
+      name: 'immediate',
+      description: 'Withdrawal as soon as transaction is approved',
+      icon: 'bolt',
       disabled: false,
     },
   ];
-  withdrawOptionId?: string;
+  selectedWithdrawOption?: WithdrawOption;
   chains: ExternalChain[] = [
     {
       id: 'ununifi',
@@ -180,6 +186,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw = new EventEmitter();
     this.appWithdrawWithUnbonding = new EventEmitter();
     this.appClickChain = new EventEmitter();
+    this.selectedWithdrawOption = this.withdrawOptions[0];
   }
 
   ngOnInit(): void {}
@@ -190,6 +197,10 @@ export class VaultComponent implements OnInit, OnChanges {
     this.selectedChain = this.chains.find((chain) => chain.id === id)!;
     this.appClickChain.emit(this.selectedChain);
     (global as any).chain_select_modal.close();
+  }
+
+  onClickWithdrawOption(option: WithdrawOption) {
+    this.selectedWithdrawOption = option;
   }
 
   onDepositAmountChange() {
@@ -221,7 +232,14 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input amount');
       return;
     }
-    if (this.withdrawOptionId === 'immediate') {
+    if (this.selectedWithdrawOption?.id === 0) {
+      this.appWithdrawWithUnbonding.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.burnAmount,
+        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      });
+    }
+    if (this.selectedWithdrawOption?.id === 1) {
       this.appWithdraw.emit({
         vaultId: this.vault?.vault?.id!,
         readableAmount: this.burnAmount,
@@ -229,13 +247,6 @@ export class VaultComponent implements OnInit, OnChanges {
         redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
         feeAmount: Number(this.estimatedRedeemAmount?.fee),
         symbol: this.vault?.vault?.symbol!,
-      });
-    }
-    if (this.withdrawOptionId === 'unbonding') {
-      this.appWithdrawWithUnbonding.emit({
-        vaultId: this.vault?.vault?.id!,
-        readableAmount: this.burnAmount,
-        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
       });
     }
   }

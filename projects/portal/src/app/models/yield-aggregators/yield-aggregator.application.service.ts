@@ -21,19 +21,14 @@ export class YieldAggregatorApplicationService {
     private readonly dialog: Dialog,
   ) {}
 
-  async depositToVault(vaultId: string, symbol: string, amount: number) {
+  async depositToVault(vaultId: string, denom: string, amount: number) {
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
     }
     const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
 
-    const msg = this.yieldAggregatorService.buildMsgDepositToVault(
-      address,
-      vaultId,
-      symbol,
-      amount,
-    );
+    const msg = this.yieldAggregatorService.buildMsgDepositToVault(address, vaultId, denom, amount);
 
     const simulationResult = await this.txCommonApplication.simulate(
       msg,
@@ -72,23 +67,23 @@ export class YieldAggregatorApplicationService {
 
   async withdrawFromVault(
     vaultId: string,
-    denom: string,
+    lp_denom: string,
     readableAmount: number,
     redeemAmount: number,
     feeAmount: number,
+    symbol: string,
   ) {
     // open confirm dialog if feeAmount > redeemAmount
     if (feeAmount > redeemAmount) {
       const txFeeConfirmedResult = await this.dialog
         .open<boolean>(WithdrawFeeConfirmDialogComponent, {
-          data: { redeemAmount, feeAmount, denom },
+          data: { redeemAmount, feeAmount, symbol },
         })
         .closed.toPromise();
       if (!txFeeConfirmedResult) {
         return;
       }
     }
-
     const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
     if (!prerequisiteData) {
       return;
@@ -98,7 +93,7 @@ export class YieldAggregatorApplicationService {
     const msg = this.yieldAggregatorService.buildMsgWithdrawFromVault(
       address,
       vaultId,
-      denom,
+      lp_denom,
       readableAmount,
     );
 
@@ -139,11 +134,65 @@ export class YieldAggregatorApplicationService {
     }
   }
 
+  async withdrawFromVaultWithUnbonding(vaultId: string, lp_denom: string, amount: number) {
+    const prerequisiteData = await this.txCommonApplication.getPrerequisiteData();
+    if (!prerequisiteData) {
+      return;
+    }
+    const { address, publicKey, account, currentCosmosWallet, minimumGasPrice } = prerequisiteData;
+
+    const msg = this.yieldAggregatorService.buildMsgWithdrawFromVaultWithUnbondingTime(
+      address,
+      vaultId,
+      lp_denom,
+      amount,
+    );
+
+    const simulationResult = await this.txCommonApplication.simulate(
+      msg,
+      publicKey,
+      account,
+      minimumGasPrice,
+    );
+    if (!simulationResult) {
+      return;
+    }
+    const { gas, fee } = simulationResult;
+
+    if (!(await this.txCommonApplication.confirmFeeIfUnUniFiWallet(currentCosmosWallet, fee))) {
+      return;
+    }
+
+    const txHash = await this.txCommonApplication.broadcast(
+      msg,
+      currentCosmosWallet,
+      publicKey,
+      account,
+      gas,
+      fee,
+    );
+    if (!txHash) {
+      return;
+    }
+
+    if (txHash) {
+      await this.dialog
+        .open<TxConfirmDialogData>(TxConfirmDialogComponent, {
+          data: {
+            txHash: txHash,
+            msg: 'Successfully requested withdrawing from the vault. The payment will be made after the unbonding time.',
+          },
+        })
+        .closed.toPromise();
+      location.reload();
+    }
+  }
+
   async createVault(
     name: string,
-    denom: string,
+    symbol: string,
     description: string,
-    strategies: { id: string; weight: number }[],
+    strategies: { denom: string; id: string; weight: number }[],
     commissionRate: number,
     reserveRate: number,
     fee: cosmosclient.proto.cosmos.base.v1beta1.ICoin,
@@ -158,7 +207,7 @@ export class YieldAggregatorApplicationService {
 
     const msg = this.yieldAggregatorService.buildMsgCreateVault(
       address,
-      denom,
+      symbol,
       name,
       description,
       strategies,

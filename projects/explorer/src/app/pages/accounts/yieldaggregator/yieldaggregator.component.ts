@@ -197,8 +197,8 @@ export class YieldaggregatorComponent implements OnInit {
         ),
       ),
     );
-    this.addressTVLs$ = combineLatest([this.addressBalances$, denomMetadataMap$]).pipe(
-      mergeMap(([addressBalances, denomMetadataMap]) =>
+    this.addressTVLs$ = this.addressBalances$.pipe(
+      mergeMap((addressBalances) =>
         Promise.all(
           addressBalances.map(async (addressBalance) => {
             const vaultBalances = addressBalance.balances?.filter((balance) =>
@@ -216,9 +216,8 @@ export class YieldaggregatorComponent implements OnInit {
             const values = await Promise.all(
               amounts.map(async (redeemAmount) => {
                 return this.bandProtocolService.convertToUSDAmount(
-                  redeemAmount.total_amount?.denom || '',
-                  redeemAmount.total_amount?.amount || '',
-                  denomMetadataMap,
+                  redeemAmount.symbol || '',
+                  redeemAmount.total_amount || '',
                 );
               }),
             );

@@ -1,4 +1,4 @@
-import { YieldInfo } from '../../../models/config.service';
+import { VaultInfo } from '../../../models/yield-aggregators/yield-aggregator.model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
@@ -16,7 +16,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   symbols?: { symbol: string; display: string; img: string }[] | null;
   @Input()
-  vaultsInfo?: YieldInfo[] | null;
+  vaultsInfo?: VaultInfo[] | null;
   @Input()
   totalDeposits?: number[] | null;
   @Input()

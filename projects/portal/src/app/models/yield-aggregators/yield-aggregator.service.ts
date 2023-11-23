@@ -1,10 +1,11 @@
-import { Config, YieldInfo } from '../config.service';
+import { Config, StrategyInfo } from '../config.service';
 import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
 import { OsmosisPoolAPRs } from './osmosis/osmosis-pool.model';
 import { OsmosisPoolService } from './osmosis/osmosis-pool.service';
+import { VaultInfo } from './yield-aggregator.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
@@ -183,7 +184,7 @@ export class YieldAggregatorService {
     );
   }
 
-  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<OsmosisPoolAPRs> {
+  async getStrategyAPR(strategyInfo?: StrategyInfo): Promise<OsmosisPoolAPRs> {
     if (!strategyInfo) {
       return { totalAPR: 0 };
     }
@@ -201,7 +202,7 @@ export class YieldAggregatorService {
     return { totalAPR: strategyInfo.minApy };
   }
 
-  async getStrategySuperfluidAPR(strategyInfo?: YieldInfo): Promise<number | undefined> {
+  async getStrategySuperfluidAPR(strategyInfo?: StrategyInfo): Promise<number | undefined> {
     if (!strategyInfo) {
       return;
     }
@@ -213,22 +214,18 @@ export class YieldAggregatorService {
     return;
   }
 
-  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<YieldInfo> {
+  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<VaultInfo> {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
-        denom: vault.vault?.symbol || '',
-        name: vault.vault?.name || '',
-        description: vault.vault?.description || '',
-        gitURL: '',
         minApy: 0,
-        maxApy: 0,
         certainty: false,
-        poolInfo: { type: 'osmosis', poolId: '' },
+        poolInfos: [],
       };
     }
     let vaultAPY = 0;
     let vaultAPYCertainty = false;
+    let poolInfos: (StrategyInfo & { weight?: string })[] = [];
 
     for (const strategyWeight of vault.vault.strategy_weights) {
       const strategyInfo = config?.strategiesInfo?.find(
@@ -241,6 +238,7 @@ export class YieldAggregatorService {
       }
       const poolInfo = strategyInfo.poolInfo;
       if (poolInfo.type === 'osmosis') {
+        poolInfos.push({ ...strategyInfo, weight: strategyWeight.weight });
         if (poolInfo.apr) {
           vaultAPY += poolInfo.apr * Number(strategyWeight.weight);
           continue;
@@ -252,14 +250,13 @@ export class YieldAggregatorService {
 
     return {
       id: vault.vault?.id || '',
-      denom: vault.vault?.symbol || '',
-      name: vault.vault?.name || '',
-      description: vault.vault?.description || '',
-      gitURL: '',
+      symbol: vault.vault?.symbol,
+      name: vault.vault?.name,
+      description: vault.vault?.description,
       minApy: vaultAPY,
       maxApy: vaultAPY,
       certainty: vaultAPYCertainty,
-      poolInfo: { type: 'osmosis', poolId: '' },
+      poolInfos,
     };
   }
 }

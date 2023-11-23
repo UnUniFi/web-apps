@@ -240,6 +240,7 @@ const strategiesInfo = [
     name: 'Osmosis ATOM/OSMO LP Strategy',
     description: '',
     gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
@@ -252,6 +253,7 @@ const strategiesInfo = [
     name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
     description: '',
     gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '803',
@@ -263,6 +265,7 @@ const strategiesInfo = [
     name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
     description: '',
     gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
@@ -274,6 +277,7 @@ const strategiesInfo = [
     name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
     description: '',
     gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '3',

@@ -234,7 +234,7 @@ export class YieldAggregatorService {
       const strategyInfo = config?.strategiesInfo?.find(
         (strategyInfo) =>
           strategyInfo.id === strategyWeight.strategy_id &&
-          strategyInfo.denom === vault.vault?.symbol,
+          strategyInfo.denom === strategyWeight.denom,
       );
       if (!strategyInfo || !strategyInfo.poolInfo) {
         continue;

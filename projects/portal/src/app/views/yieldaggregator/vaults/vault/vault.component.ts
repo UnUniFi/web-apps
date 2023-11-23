@@ -106,7 +106,7 @@ export class VaultComponent implements OnInit, OnChanges {
       disabled: false,
     },
   ];
-  withdrawOptionId: string;
+  withdrawOptionId?: string;
   chains: ExternalChain[] = [
     {
       id: 'ununifi',
@@ -180,7 +180,6 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw = new EventEmitter();
     this.appWithdrawWithUnbonding = new EventEmitter();
     this.appClickChain = new EventEmitter();
-    this.withdrawOptionId = this.withdrawOptions[0].id;
   }
 
   ngOnInit(): void {}

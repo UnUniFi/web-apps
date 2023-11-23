@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ConfigService, StrategyInfo } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { OsmosisPoolAPRs } from 'projects/portal/src/app/models/yield-aggregators/osmosis/osmosis-pool.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
@@ -28,7 +28,7 @@ export class StrategyComponent implements OnInit {
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
-  strategyInfo$: Observable<YieldInfo | undefined>;
+  strategyInfo$: Observable<StrategyInfo | undefined>;
   strategyAPR$: Observable<OsmosisPoolAPRs>;
 
   constructor(

@@ -1,3 +1,5 @@
+import { StrategyInfo } from '../config.service';
+
 export type DepositToVaultRequest = {
   vaultId: string;
   denom: string;
@@ -34,4 +36,16 @@ export type CreateVaultRequest = {
 export type TransferVaultRequest = {
   vaultId: string;
   recipientAddress: string;
+};
+
+export type VaultInfo = {
+  id: string;
+  symbol?: string;
+  name?: string;
+  description?: string;
+  gitUrl?: string;
+  minApy: number;
+  maxApy?: number;
+  certainty: boolean;
+  poolInfos: (StrategyInfo & { weight?: string })[];
 };

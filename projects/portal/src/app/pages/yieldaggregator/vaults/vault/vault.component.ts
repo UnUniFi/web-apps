@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
@@ -11,6 +11,7 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
   DepositToVaultRequest,
+  VaultInfo,
   WithdrawFromVaultRequest,
   WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
@@ -53,7 +54,7 @@ export class VaultComponent implements OnInit {
   estimatedDepositedAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<number>;
-  vaultInfo$: Observable<YieldInfo>;
+  vaultInfo$: Observable<VaultInfo>;
   externalWalletAddress: string | undefined;
 
   constructor(

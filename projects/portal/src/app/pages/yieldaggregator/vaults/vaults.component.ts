@@ -1,8 +1,9 @@
 import { BandProtocolService } from '../../../models/band-protocols/band-protocol.service';
-import { ConfigService, YieldInfo } from '../../../models/config.service';
+import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
+import { VaultInfo } from '../../../models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
@@ -20,7 +21,7 @@ export class VaultsComponent implements OnInit {
   address$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
-  vaultsInfo$: Observable<YieldInfo[]>;
+  vaultsInfo$: Observable<VaultInfo[]>;
   totalDeposits$: Observable<number[]>;
   keyword$: Observable<string>;
   sortType$: BehaviorSubject<string> = new BehaviorSubject<string>('id');
@@ -46,7 +47,7 @@ export class VaultsComponent implements OnInit {
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
     const vaultYieldMap$ = combineLatest([vaults$, config$]).pipe(
       switchMap(async ([vaults, config]) => {
-        const results: YieldInfo[] = [];
+        const results: VaultInfo[] = [];
         if (!config) {
           return results;
         }
@@ -57,7 +58,7 @@ export class VaultsComponent implements OnInit {
         return results;
       }),
       map((yields) => {
-        const yieldMap: { [id: string]: YieldInfo } = {};
+        const yieldMap: { [id: string]: VaultInfo } = {};
         for (const y of yields) {
           yieldMap[y.id] = y;
         }

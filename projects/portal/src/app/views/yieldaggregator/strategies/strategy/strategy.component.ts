@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { OsmosisPoolAPRs } from 'projects/portal/src/app/models/yield-aggregators/osmosis/osmosis-pool.model';
 import {
   StrategyAll200ResponseStrategiesInner,
   VaultAll200ResponseVaultsInner,
@@ -31,7 +32,7 @@ export class StrategyComponent implements OnInit, OnChanges {
   @Input()
   strategyInfo?: YieldInfo | null;
   @Input()
-  strategyAPR?: number | null;
+  strategyAPR?: OsmosisPoolAPRs | null;
 
   constructor() {}
 

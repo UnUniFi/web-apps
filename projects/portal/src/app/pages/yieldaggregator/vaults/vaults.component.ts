@@ -7,8 +7,8 @@ import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/y
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -44,11 +44,19 @@ export class VaultsComponent implements OnInit {
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
-    const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
-      map(([vaults, config, pools]) => {
-        const yields = vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools));
-
+    const vaultYieldMap$ = combineLatest([vaults$, config$]).pipe(
+      switchMap(async ([vaults, config]) => {
+        const results: YieldInfo[] = [];
+        if (!config) {
+          return results;
+        }
+        for (const vault of vaults) {
+          const result = await this.iyaService.calcVaultAPY(vault, config);
+          results.push(result);
+        }
+        return results;
+      }),
+      map((yields) => {
         const yieldMap: { [id: string]: YieldInfo } = {};
         for (const y of yields) {
           yieldMap[y.id] = y;

@@ -1,4 +1,4 @@
-import { Config, YieldInfo } from '../config.service';
+import { Config, StrategyInfo } from '../config.service';
 import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
@@ -183,7 +183,7 @@ export class YieldAggregatorService {
     );
   }
 
-  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<OsmosisPoolAPRs> {
+  async getStrategyAPR(strategyInfo?: StrategyInfo): Promise<OsmosisPoolAPRs> {
     if (!strategyInfo) {
       return { totalAPR: 0 };
     }
@@ -201,7 +201,7 @@ export class YieldAggregatorService {
     return { totalAPR: strategyInfo.minApy };
   }
 
-  async getStrategySuperfluidAPR(strategyInfo?: YieldInfo): Promise<number | undefined> {
+  async getStrategySuperfluidAPR(strategyInfo?: StrategyInfo): Promise<number | undefined> {
     if (!strategyInfo) {
       return;
     }
@@ -213,7 +213,7 @@ export class YieldAggregatorService {
     return;
   }
 
-  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<YieldInfo> {
+  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<StrategyInfo> {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',

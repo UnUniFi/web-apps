@@ -153,9 +153,8 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
-    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$, osmoPools$]).pipe(
-      map(([vault, config, pools]) => this.iyaService.calcVaultAPY(vault, config!, pools)),
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      mergeMap(([vault, config]) => this.iyaService.calcVaultAPY(vault, config!)),
     );
     const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
     this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(

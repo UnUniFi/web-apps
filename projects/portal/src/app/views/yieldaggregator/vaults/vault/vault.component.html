@@ -416,9 +416,13 @@
             <label class="input-group">
               <select
                 class="select select-bordered w-full"
+                [class]="{
+                  'select-error': !withdrawOptionId
+                }"
                 name="withdrawOption"
                 [(ngModel)]="withdrawOptionId"
               >
+                <option [value]="undefined" disabled>Select Withdrawal Option</option>
                 <ng-container *ngFor="let option of withdrawOptions">
                   <option [value]="option.id" [disabled]="option.disabled">
                     {{ option.display }}

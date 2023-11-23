@@ -96,13 +96,13 @@ export class VaultComponent implements OnInit, OnChanges {
   };
   withdrawOptions: WithdrawOption[] = [
     {
-      id: 'immediate',
-      display: 'Immediate withdrawal with extra fee',
+      id: 'unbonding',
+      display: 'Withdrawal after the unbonding period',
       disabled: false,
     },
     {
-      id: 'unbonding',
-      display: 'Withdrawal after the unbonding period',
+      id: 'immediate',
+      display: 'Immediate withdrawal with extra fee',
       disabled: false,
     },
   ];

@@ -99,15 +99,15 @@ export class VaultComponent implements OnInit, OnChanges {
   withdrawOptions: WithdrawOption[] = [
     {
       id: 0,
-      name: 'unbonding',
-      description: 'Withdrawal after the following unbonding time',
+      name: 'Unbonding',
+      description: 'Withdrawal will be received after unbonding time',
       icon: 'pending_actions',
       disabled: false,
     },
     {
       id: 1,
-      name: 'immediate',
-      description: 'Withdrawal as soon as transaction is approved',
+      name: 'Immediate',
+      description: 'Withdrawal will be received instantly',
       icon: 'bolt',
       disabled: false,
     },

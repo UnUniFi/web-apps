@@ -435,10 +435,12 @@
                   (click)="onClickWithdrawOption(option)"
                 >
                   <div class="card-body place-items-center">
-                    <button type="button" class="btn btn-circle btn-secondary">
-                      <span class="material-symbols-outlined">{{ option.icon }}</span>
-                    </button>
-                    <h2 class="card-title">{{ option.name }}</h2>
+                    <div class="flex flex-row gap-2">
+                      <button type="button" class="btn btn-circle btn-secondary">
+                        <span class="material-symbols-outlined">{{ option.icon }}</span>
+                      </button>
+                      <h2 class="card-title">{{ option.name }}</h2>
+                    </div>
                     <p>{{ option.description }}</p>
                     <div class="overflow-x-auto" *ngIf="option.id === 0">
                       <p class="text-center" *ngIf="vaultInfo === null">
@@ -448,8 +450,9 @@
                         <tbody>
                           <ng-container *ngFor="let pool of vaultInfo?.poolInfos">
                             <tr>
-                              <td>{{ pool.unbondingTimeSec | secondToDate }} Days</td>
+                              <td style="max-width: 12rem" class="truncate">{{ pool.name }}</td>
                               <td>{{ pool.weight | percent : '1.0-2' }}</td>
+                              <td>After {{ pool.unbondingTimeSec | secondToDate }} Days</td>
                             </tr>
                           </ng-container>
                         </tbody>

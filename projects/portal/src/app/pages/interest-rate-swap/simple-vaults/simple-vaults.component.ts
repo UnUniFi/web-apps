@@ -1,4 +1,4 @@
-import { SwapRequest } from '../../../views/interest-rate-swap/vaults/vault/vault.component';
+import { SwapRequest } from '../../../models/interest-rate-swap/interest-rate-swap.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

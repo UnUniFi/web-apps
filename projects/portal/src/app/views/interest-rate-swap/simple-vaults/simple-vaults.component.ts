@@ -1,4 +1,4 @@
-import { SwapRequest } from '../vaults/vault/vault.component';
+import { SwapRequest } from '../../../models/interest-rate-swap/interest-rate-swap.model';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 

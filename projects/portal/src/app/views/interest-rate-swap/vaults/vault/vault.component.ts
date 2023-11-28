@@ -1,17 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-
-export type SwapRequest = {
-  readableAmount: string;
-  denom: string;
-};
-
-export type RedeemUnderlyingRequest = {
-  ptReadableAmount: string;
-  ptDenom: string;
-  ytReadableAmount: string;
-  ytDenom: string;
-};
+import {
+  RedeemUnderlyingRequest,
+  SwapRequest,
+} from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.model';
 
 @Component({
   selector: 'view-vault',

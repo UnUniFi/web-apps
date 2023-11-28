@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   RedeemUnderlyingRequest,
   SwapRequest,
-} from 'projects/portal/src/app/views/interest-rate-swap/vaults/vault/vault.component';
+} from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.model';
 
 @Component({
   selector: 'app-vault',

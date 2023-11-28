@@ -1,4 +1,3 @@
-import { SwapRequest } from '../../../models/interest-rate-swap/interest-rate-swap.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,6 +9,4 @@ export class SimpleVaultsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
-
-  onMintPT(data: SwapRequest) {}
 }

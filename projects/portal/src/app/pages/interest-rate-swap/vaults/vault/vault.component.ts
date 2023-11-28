@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InterestRateSwapApplicationService } from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.application.service';
 import {
   RedeemUnderlyingRequest,
   SwapRequest,
@@ -10,14 +11,26 @@ import {
   styleUrls: ['./vault.component.css'],
 })
 export class VaultComponent implements OnInit {
-  constructor() {}
+  constructor(private readonly irsAppService: InterestRateSwapApplicationService) {}
 
   ngOnInit(): void {}
 
-  onMintYT(data: SwapRequest) {}
-  onRedeemYT(data: SwapRequest) {}
-  onMintPT(data: SwapRequest) {}
-  onRedeemPT(data: SwapRequest) {}
-  onMintPTYT(data: SwapRequest) {}
-  onRedeemPTYT(data: RedeemUnderlyingRequest) {}
+  onMintYT(data: SwapRequest) {
+    this.irsAppService.mintYT(data);
+  }
+  onRedeemYT(data: SwapRequest) {
+    this.irsAppService.redeemYT(data);
+  }
+  onMintPT(data: SwapRequest) {
+    this.irsAppService.mintPT(data);
+  }
+  onRedeemPT(data: SwapRequest) {
+    this.irsAppService.redeemPT(data);
+  }
+  onMintPTYT(data: SwapRequest) {
+    this.irsAppService.mintPTYT(data);
+  }
+  onRedeemPTYT(data: RedeemUnderlyingRequest) {
+    this.irsAppService.redeemPTYT(data);
+  }
 }

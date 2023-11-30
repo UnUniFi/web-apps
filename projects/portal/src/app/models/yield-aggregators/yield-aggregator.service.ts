@@ -274,9 +274,9 @@ export class YieldAggregatorService {
     }
     if (symbol === 'OSMO') {
       denoms.push({
-        denom: 'uatom',
-        symbol: 'ATOM',
-        chain: 'Cosmos',
+        denom: 'uosmo',
+        symbol: 'OSMO',
+        chain: 'Osmosis',
         chainImg: 'assets/osmosis-logo.svg',
         ibc: true,
       });

@@ -25,6 +25,7 @@ export class TxsComponent implements OnInit {
   paginationInfoChanged$: Observable<PaginationInfo>;
   pageLength$: Observable<number | undefined>;
   maxPageNumber$: Observable<number>;
+  txType$: Observable<string>;
   txs$: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
 
   constructor(
@@ -35,19 +36,18 @@ export class TxsComponent implements OnInit {
     this.address$ = this.route.params.pipe(map((params) => params.address));
     const timer$ = timer(0, this.pollingInterval * 1000);
     const sdk$ = timer$.pipe(mergeMap((_) => this.cosmosSDK.sdk$));
-    const txsResponse$ = combineLatest([sdk$, this.address$]).pipe(
-      switchMap(([sdk, address]) => {
+    this.txType$ = this.route.queryParams.pipe(map((params) => params.txType || 'send'));
+    const txEvent$ = combineLatest([this.address$, this.txType$]).pipe(
+      map(([address, type]) => {
+        return type === 'send'
+          ? `coin_spent.spender='${address}'`
+          : `coin_received.receiver='${address}'`;
+      }),
+    );
+    const txsResponse$ = combineLatest([sdk$, txEvent$]).pipe(
+      switchMap(([sdk, event]) => {
         return cosmosclient.rest.tx
-          .getTxsEvent(
-            sdk.rest,
-            [`transfer.recipient='${address}'`],
-            undefined,
-            undefined,
-            undefined,
-            true,
-            true,
-            2 as any,
-          )
+          .getTxsEvent(sdk.rest, [event], undefined, undefined, undefined, true, true, 2 as any)
           .then((res) => {
             console.log(res);
             return res.data;
@@ -101,12 +101,12 @@ export class TxsComponent implements OnInit {
     );
 
     this.txs$ = this.paginationInfoChanged$.pipe(
-      withLatestFrom(sdk$, this.address$),
-      mergeMap(([paginationInfo, sdk, address]) => {
+      withLatestFrom(sdk$, txEvent$),
+      mergeMap(([paginationInfo, sdk, event]) => {
         return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
-            [`transfer.recipient='${address}'`],
+            [event],
             undefined,
             undefined,
             paginationInfo.pageSize.toString(),
@@ -133,6 +133,16 @@ export class TxsComponent implements OnInit {
       queryParams: {
         perPage: pageEvent.pageSize,
         pages: pageEvent.pageIndex + 1,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  appTxTypeChanged(txType: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        txType: txType,
       },
       queryParamsHandling: 'merge',
     });

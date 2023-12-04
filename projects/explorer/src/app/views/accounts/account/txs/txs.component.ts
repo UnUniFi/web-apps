@@ -19,9 +19,13 @@ export class TxsComponent implements OnInit {
   pageLength?: number | null;
   @Input()
   maxPageNumber?: number | null;
+  @Input()
+  txType?: string | null;
 
   @Output()
   paginationChange: EventEmitter<PageEvent> = new EventEmitter();
+  @Output()
+  txTypeChange: EventEmitter<string> = new EventEmitter();
 
   constructor() {}
 
@@ -51,6 +55,11 @@ export class TxsComponent implements OnInit {
       pageSize: this.pageInfo.pageSize,
       length: this.pageLength,
     });
+  }
+
+  onTxTypeChange($event: string): void {
+    this.txType = $event;
+    this.txTypeChange.emit($event);
   }
 
   calcItemsIndex(): { start: number; end: number } {

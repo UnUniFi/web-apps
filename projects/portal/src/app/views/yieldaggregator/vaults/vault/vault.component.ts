@@ -100,7 +100,7 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 0,
       name: 'Unbonding',
-      description: 'Withdrawal will be received after unbonding time',
+      description: 'Withdrawal will be received after unbonding time (Under Maintenance)',
       icon: 'pending_actions',
       disabled: true,
     },
@@ -186,7 +186,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw = new EventEmitter();
     this.appWithdrawWithUnbonding = new EventEmitter();
     this.appClickChain = new EventEmitter();
-    this.selectedWithdrawOption = this.withdrawOptions[0];
+    this.selectedWithdrawOption = this.withdrawOptions[1];
   }
 
   ngOnInit(): void {}

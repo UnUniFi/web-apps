@@ -5,6 +5,7 @@ import { BandProtocolService } from 'projects/portal/src/app/models/band-protoco
 import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { CosmwasmQueryService } from 'projects/portal/src/app/models/cosmwasm/cosmwasm.query.service';
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
@@ -24,6 +25,7 @@ import {
   DenomInfos200ResponseInfoInner,
   EstimateMintAmount200Response,
   EstimateRedeemAmount200Response,
+  StrategyAll200ResponseStrategiesInnerStrategy,
   Vault200Response,
 } from 'ununifi-client/esm/openapi';
 
@@ -55,6 +57,16 @@ export class VaultComponent implements OnInit {
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<number>;
   vaultInfo$: Observable<VaultInfo>;
+  unbondings$: Observable<
+    | (
+        | {
+            strategy: StrategyAll200ResponseStrategiesInnerStrategy;
+            amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+          }
+        | undefined
+      )[]
+    | undefined
+  >;
   externalWalletAddress: string | undefined;
 
   constructor(
@@ -67,6 +79,7 @@ export class VaultComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly configService: ConfigService,
+    private readonly wasmQuery: CosmwasmQueryService,
   ) {
     const vaultId$ = this.route.params.pipe(map((params) => params.vault_id));
     this.vault$ = vaultId$.pipe(mergeMap((id) => this.iyaQuery.getVault$(id)));
@@ -184,6 +197,28 @@ export class VaultComponent implements OnInit {
           depositedAmount.total_amount || '0',
         ),
       ),
+    );
+    this.unbondings$ = combineLatest([this.vault$, this.address$]).pipe(
+      mergeMap(([vault, address]) => {
+        if (!vault.strategies) {
+          return of(undefined);
+        }
+        return Promise.all(
+          vault.strategies.map(async (strategy) => {
+            if (!strategy.contract_address) {
+              return;
+            }
+            const unbondingAmount = await this.wasmQuery.getUnbonding(
+              strategy.contract_address,
+              address,
+            );
+            return {
+              strategy: strategy,
+              amount: { amount: unbondingAmount, denom: strategy.denom },
+            };
+          }),
+        );
+      }),
     );
   }
 

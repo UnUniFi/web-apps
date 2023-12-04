@@ -71,6 +71,16 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   vaultInfo?: VaultInfo | null;
   @Input()
+  unbondings?:
+    | (
+        | {
+            strategy: StrategyAll200ResponseStrategiesInnerStrategy;
+            amount: cosmosclient.proto.cosmos.base.v1beta1.ICoin;
+          }
+        | undefined
+      )[]
+    | null;
+  @Input()
   externalWalletAddress?: string;
 
   @Output()

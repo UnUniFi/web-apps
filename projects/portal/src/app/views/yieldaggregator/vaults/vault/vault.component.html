@@ -127,6 +127,29 @@
             </div>
           </div>
           <div class="stat">
+            <div class="stat-title">Your Deposit Amount</div>
+            <div class="stat-value" *ngIf="usdDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info">
+              {{ usdDepositAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
+            <div class="stat-desc">
+              {{ estimatedDepositedAmount?.total_amount | coinAmount }}
+              {{ vault?.vault?.symbol }}
+            </div>
+          </div>
+          <div class="stat" *ngFor="let unbonding of unbondings">
+            <div class="stat-title">Unbonding Amount of {{ unbonding?.strategy?.name }}</div>
+            <div class="stat-value text-info">
+              {{ unbonding?.amount | coin | async }}
+            </div>
+            <div class="stat-desc">14 days after withdrawal tx</div>
+          </div>
+        </div>
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
             <div class="stat-title">Total Deposit Amount</div>
             <div class="stat-value" *ngIf="totalDepositAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
@@ -143,30 +166,14 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Your Deposit Amount</div>
-            <div class="stat-value" *ngIf="usdDepositAmount === null">
-              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
-            </div>
-            <div class="stat-value text-info">
-              {{ usdDepositAmount | currency }}
-            </div>
-            <div class="stat-value text-info" *ngIf="usdDepositAmount === undefined">$ Unknown</div>
-            <div class="stat-desc">
-              {{ estimatedDepositedAmount?.total_amount | coinAmount }}
-              {{ vault?.vault?.symbol }}
-            </div>
-          </div>
-        </div>
-        <div class="stats stats-vertical md:stats-horizontal">
-          <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value" *ngIf="totalBondedAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-primary">
+            <div class="stat-value text-secondary">
               {{ totalBondedAmount | currency }}
             </div>
-            <div class="stat-value text-primary" *ngIf="totalBondedAmount === undefined">
+            <div class="stat-value text-secondary" *ngIf="totalBondedAmount === undefined">
               $ Unknown
             </div>
             <div class="stat-desc">
@@ -195,10 +202,12 @@
             <div class="stat-value" *ngIf="withdrawReserve === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-info">
+            <div class="stat-value text-secondary">
               {{ withdrawReserve | currency }}
             </div>
-            <div class="stat-value text-info" *ngIf="withdrawReserve === undefined">$ Unknown</div>
+            <div class="stat-value text-secondary" *ngIf="withdrawReserve === undefined">
+              $ Unknown
+            </div>
             <div class="stat-desc">
               {{ vault?.withdraw_reserve | coinAmount : denom }} {{ vault?.vault?.symbol }}
             </div>

@@ -140,13 +140,17 @@
               {{ vault?.vault?.symbol }}
             </div>
           </div>
-          <div class="stat" *ngFor="let unbonding of unbondings">
-            <div class="stat-title">Unbonding Amount of {{ unbonding?.strategy?.name }}</div>
-            <div class="stat-value text-info">
-              {{ unbonding?.amount | coin | async }}
+          <ng-container *ngFor="let unbonding of unbondings; let i = index">
+            <div class="stat" *ngIf="unbonding && unbonding.amount.amount !== '0'">
+              <div class="stat-title">Unbonding of strategy #{{ i + 1 }}</div>
+              <div class="stat-value text-info">
+                {{ unbonding?.amount?.amount | coinAmount }}
+              </div>
+              <div class="stat-desc">
+                {{ unbonding?.amount?.denom | coinDenom | async }} - 14 days after withdrawal tx
+              </div>
             </div>
-            <div class="stat-desc">14 days after withdrawal tx</div>
-          </div>
+          </ng-container>
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">

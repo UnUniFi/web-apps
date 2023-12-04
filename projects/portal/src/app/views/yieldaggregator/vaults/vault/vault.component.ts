@@ -102,7 +102,7 @@ export class VaultComponent implements OnInit, OnChanges {
       name: 'Unbonding',
       description: 'Withdrawal will be received after unbonding time',
       icon: 'pending_actions',
-      disabled: false,
+      disabled: true,
     },
     {
       id: 1,
@@ -233,11 +233,13 @@ export class VaultComponent implements OnInit, OnChanges {
       return;
     }
     if (this.selectedWithdrawOption?.id === 0) {
-      this.appWithdrawWithUnbonding.emit({
-        vaultId: this.vault?.vault?.id!,
-        readableAmount: this.burnAmount,
-        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-      });
+      alert('Sorry, currently under maintenance');
+      return;
+      // this.appWithdrawWithUnbonding.emit({
+      //   vaultId: this.vault?.vault?.id!,
+      //   readableAmount: this.burnAmount,
+      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      // });
     }
     if (this.selectedWithdrawOption?.id === 1) {
       this.appWithdraw.emit({

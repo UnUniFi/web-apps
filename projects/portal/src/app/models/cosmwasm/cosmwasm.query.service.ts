@@ -19,7 +19,7 @@ export class CosmwasmQueryService {
 
   async getUnbonding(contractAddress: string, address: string): Promise<Uint128> {
     const queryMsg = {
-      unbondings: { addr: address },
+      unbonding: { addr: address },
     };
     const res = await this.executeWasmQuery(contractAddress, queryMsg);
     return res;

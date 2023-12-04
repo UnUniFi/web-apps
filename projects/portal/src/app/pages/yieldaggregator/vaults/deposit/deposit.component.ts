@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { CosmwasmQueryService } from 'projects/portal/src/app/models/cosmwasm/cosmwasm.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
@@ -9,6 +10,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   EstimateRedeemAmount200Response,
+  StrategyAll200ResponseStrategiesInner,
   VaultAll200ResponseVaultsInner,
 } from 'ununifi-client/esm/openapi';
 
@@ -31,6 +33,12 @@ export class DepositComponent implements OnInit {
   estimatedRedeemAmounts$: Observable<EstimateRedeemAmount200Response[]>;
   usdDepositAmount$: Observable<number[]>;
   usdTotalAmount$: Observable<number>;
+  strategies$: Observable<
+    {
+      strategy: StrategyAll200ResponseStrategiesInner;
+      amount?: string;
+    }[]
+  >;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +46,7 @@ export class DepositComponent implements OnInit {
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
+    private readonly wasmQuery: CosmwasmQueryService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -101,6 +110,24 @@ export class DepositComponent implements OnInit {
     );
     this.usdTotalAmount$ = this.usdDepositAmount$.pipe(
       map((usdDepositAmount) => usdDepositAmount.reduce((a, b) => a + b, 0)),
+    );
+
+    const allStrategies$ = this.iyaQuery.listStrategies$();
+    this.strategies$ = combineLatest([allStrategies$, this.address$]).pipe(
+      mergeMap(([strategies, address]) =>
+        Promise.all(
+          strategies.map(async (strategy) => {
+            if (!strategy.strategy?.contract_address) {
+              return { strategy, unbonding: undefined };
+            }
+            const unbonding = await this.wasmQuery.getUnbonding(
+              strategy.strategy?.contract_address,
+              address,
+            );
+            return { strategy, unbonding: unbonding };
+          }),
+        ),
+      ),
     );
   }
 

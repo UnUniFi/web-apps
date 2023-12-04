@@ -24,6 +24,7 @@ export class TxsComponent implements OnInit {
   paginationInfo$: Observable<PaginationInfo>;
   paginationInfoChanged$: Observable<PaginationInfo>;
   pageLength$: Observable<number | undefined>;
+  maxPageNumber$: Observable<number>;
   txs$: Observable<BroadcastTx200ResponseTxResponse[] | undefined>;
 
   constructor(
@@ -39,7 +40,7 @@ export class TxsComponent implements OnInit {
         return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
-            [`message.sender='${address}'`],
+            [`transfer.recipient='${address}'`],
             undefined,
             undefined,
             undefined,
@@ -84,6 +85,16 @@ export class TxsComponent implements OnInit {
       }),
     );
 
+    this.maxPageNumber$ = combineLatest([this.txsTotalCount$, this.paginationInfo$]).pipe(
+      map(([txTotalCount, paginationInfo]) => {
+        if (txTotalCount === undefined) {
+          return 0;
+        }
+        const maxPageNumber = Math.ceil(Number(txTotalCount) / paginationInfo.pageSize);
+        return maxPageNumber;
+      }),
+    );
+
     this.paginationInfoChanged$ = this.paginationInfo$.pipe(
       distinctUntilChanged(),
       map((paginationInfo) => paginationInfo),
@@ -95,7 +106,7 @@ export class TxsComponent implements OnInit {
         return cosmosclient.rest.tx
           .getTxsEvent(
             sdk.rest,
-            [`message.sender='${address}'`],
+            [`transfer.recipient='${address}'`],
             undefined,
             undefined,
             paginationInfo.pageSize.toString(),

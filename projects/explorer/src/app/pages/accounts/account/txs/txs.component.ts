@@ -49,7 +49,6 @@ export class TxsComponent implements OnInit {
         return cosmosclient.rest.tx
           .getTxsEvent(sdk.rest, [event], undefined, undefined, undefined, true, true, 2 as any)
           .then((res) => {
-            console.log(res);
             return res.data;
           })
           .catch((error) => {

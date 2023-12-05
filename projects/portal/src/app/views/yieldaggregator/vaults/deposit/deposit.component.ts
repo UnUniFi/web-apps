@@ -24,7 +24,7 @@ export class DepositComponent implements OnInit {
   strategies?:
     | {
         strategy: StrategyAll200ResponseStrategiesInner;
-        amount?: string;
+        unbonding?: string;
       }[]
     | null;
   @Input() strategySymbols?: { symbol: string; display: string; img: string }[] | null;

@@ -36,7 +36,7 @@ export class DepositComponent implements OnInit {
   strategies$: Observable<
     {
       strategy: StrategyAll200ResponseStrategiesInner;
-      amount?: string;
+      unbonding?: string;
     }[]
   >;
   strategySymbols$: Observable<{ symbol: string; display: string; img: string }[]>;
@@ -53,7 +53,7 @@ export class DepositComponent implements OnInit {
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => wallet.address),
+      map((wallet) => 'ununifi1r5uqj45nj6789tt9p7umtvqwqr3k9qe5rra3h8'),
     );
     this.owner$ = this.route.params.pipe(map((params) => params.address));
     const balances$ = this.owner$.pipe(mergeMap((owner) => this.bankQuery.getBalance$(owner)));
@@ -121,13 +121,13 @@ export class DepositComponent implements OnInit {
         Promise.all(
           strategies.map(async (strategy) => {
             if (!strategy.strategy?.contract_address) {
-              return { strategy, unbonding: undefined };
+              return { strategy };
             }
             const unbonding = await this.wasmQuery.getUnbonding(
               strategy.strategy?.contract_address,
               address,
             );
-            return { strategy, unbonding: unbonding };
+            return { strategy, unbonding };
           }),
         ),
       ),
@@ -148,7 +148,7 @@ export class DepositComponent implements OnInit {
           strategies.map(async (strategy) =>
             this.bandProtocolService.convertToUSDAmount(
               strategy.strategy?.symbol || '',
-              strategy.amount || '',
+              strategy.unbonding || '',
             ),
           ),
         ),

@@ -115,6 +115,7 @@
                       s.strategy.strategy?.denom,
                       s.strategy.strategy?.id
                     ]"
+                    *ngIf="s.unbonding && s.unbonding !== '0'"
                   >
                     <td>
                       <div class="flex items-center space-x-3 gap-2" *ngIf="strategySymbols">
@@ -134,13 +135,15 @@
                       </div>
                     </td>
                     <td>#{{ s.strategy.strategy?.id }}</td>
-                    <td>{{ s.amount | coinAmount }}</td>
+                    <td>{{ s.unbonding | coinAmount }}</td>
                     <td>{{ usdUnbondingAmount?.[i] | currency }}</td>
                   </tr>
                 </ng-container>
               </tbody>
             </table>
-            <p *ngIf="!strategies?.length" class="text-center">There is no unbonding amount.</p>
+            <p *ngIf="!usdTotalUnbondingAmount" class="text-center">
+              There is no unbonding amount.
+            </p>
           </ng-template>
         </div>
       </div>

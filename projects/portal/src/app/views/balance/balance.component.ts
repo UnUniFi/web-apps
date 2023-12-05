@@ -1,6 +1,6 @@
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
@@ -10,7 +10,7 @@ import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.css'],
 })
-export class ViewBalanceComponent implements OnInit {
+export class ViewBalanceComponent implements OnInit, OnChanges {
   @Input() walletId?: string | null;
   @Input() walletType?: WalletType | null;
   @Input() accAddress?: string | null;
@@ -36,6 +36,11 @@ export class ViewBalanceComponent implements OnInit {
       }[]
     | null;
   @Input() nodeInfo?: GetNodeInfo200Response | null;
+  @Input()
+  account?: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | unknown | null;
+  baseAccount?: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount;
+  vestingAccount?: cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount;
+
   @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
   constructor(private readonly snackBar: MatSnackBar, private clipboard: Clipboard) {
@@ -43,6 +48,24 @@ export class ViewBalanceComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnChanges() {
+    delete this.baseAccount;
+
+    if (this.account instanceof cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount) {
+      this.baseAccount = this.account;
+    } else if (
+      this.account instanceof cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
+    ) {
+      this.vestingAccount = this.account;
+      if (this.vestingAccount.base_vesting_account?.base_account === null) {
+        throw Error('Invalid vesting account!');
+      }
+      this.baseAccount = new cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount(
+        this.vestingAccount.base_vesting_account?.base_account,
+      );
+    }
+  }
 
   copyClipboard(value: string) {
     if (value.length > 0) {

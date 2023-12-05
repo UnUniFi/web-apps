@@ -425,58 +425,60 @@
                 </div>
               </div>
             </label>
-            <div class="flex flex-col w-full lg:flex-row">
-              <ng-container *ngFor="let option of withdrawOptions; last as last">
-                <div
-                  class="grid flex-grow card bg-base-300 rounded-box hover cursor-pointer"
-                  [class]="{
-                    'bg-primary': selectedWithdrawOption?.id === option.id
-                  }"
-                  (click)="onClickWithdrawOption(option)"
-                >
-                  <div class="card-body place-items-center">
-                    <div class="flex flex-row gap-2">
-                      <button type="button" class="btn btn-circle btn-secondary">
-                        <span class="material-symbols-outlined">{{ option.icon }}</span>
-                      </button>
-                      <h2 class="card-title">{{ option.name }}</h2>
+          </div>
+          <div class="flex flex-col lg:flex-row flex-wrap">
+            <ng-container *ngFor="let option of withdrawOptions; last as last">
+              <div
+                class="grid flex-grow place-items-center card bg-base-300 rounded-box hover cursor-pointer max-w-full"
+                [class]="{
+                  'bg-primary': selectedWithdrawOption?.id === option.id
+                }"
+                (click)="onClickWithdrawOption(option)"
+              >
+                <div class="card-body max-w-full">
+                  <div class="flex flex-row flex-wrap gap-2">
+                    <button type="button" class="btn btn-circle btn-secondary">
+                      <span class="material-symbols-outlined">{{ option.icon }}</span>
+                    </button>
+                    <h2 class="card-title">{{ option.name }}</h2>
+                  </div>
+                  <p class="break-all">{{ option.description }}</p>
+                  <div class="overflow-x-auto" *ngIf="option.id === 0">
+                    <p class="text-center" *ngIf="vaultInfo === null">
+                      <span class="loading loading-ring loading-lg"></span>
+                    </p>
+                    <table class="table table-sm">
+                      <tbody>
+                        <ng-container *ngFor="let pool of vaultInfo?.poolInfos">
+                          <tr>
+                            <td style="max-width: 12rem" class="truncate hidden sm:table-cell">
+                              {{ pool.name }}
+                            </td>
+                            <td>{{ pool.weight | percent : '1.0-2' }}</td>
+                            <td>After {{ pool.unbondingTimeSec | secondToDate }} Days</td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="card-actions">
+                    <div class="badge badge-lg badge-outline">
+                      Redeem: {{ estimatedRedeemAmount?.total_amount | coinAmount }}
+                      {{ vault?.vault?.symbol }}
                     </div>
-                    <p>{{ option.description }}</p>
-                    <div class="overflow-x-auto" *ngIf="option.id === 0">
-                      <p class="text-center" *ngIf="vaultInfo === null">
-                        <span class="loading loading-ring loading-lg"></span>
-                      </p>
-                      <table class="table w-full">
-                        <tbody>
-                          <ng-container *ngFor="let pool of vaultInfo?.poolInfos">
-                            <tr>
-                              <td style="max-width: 12rem" class="truncate">{{ pool.name }}</td>
-                              <td>{{ pool.weight | percent : '1.0-2' }}</td>
-                              <td>After {{ pool.unbondingTimeSec | secondToDate }} Days</td>
-                            </tr>
-                          </ng-container>
-                        </tbody>
-                      </table>
+                    <div>-</div>
+                    <div class="badge badge-lg badge-outline" *ngIf="option.id === 0">
+                      Fee: 0 {{ vault?.vault?.symbol }}
                     </div>
-                    <div class="card-actions">
-                      <div class="badge badge-lg badge-outline">
-                        Redeem: {{ estimatedRedeemAmount?.total_amount | coinAmount }}
-                        {{ vault?.vault?.symbol }}
-                      </div>
-                      <div>-</div>
-                      <div class="badge badge-lg badge-outline" *ngIf="option.id === 0">
-                        Fee: 0 {{ vault?.vault?.symbol }}
-                      </div>
-                      <div class="badge badge-lg badge-outline" *ngIf="option.id === 1">
-                        Fee: {{ estimatedRedeemAmount?.fee | coinAmount }}
-                        {{ vault?.vault?.symbol }}
-                      </div>
+                    <div class="badge badge-lg badge-outline" *ngIf="option.id === 1">
+                      Fee: {{ estimatedRedeemAmount?.fee | coinAmount }}
+                      {{ vault?.vault?.symbol }}
                     </div>
                   </div>
                 </div>
-                <div *ngIf="!last" class="divider lg:divider-horizontal">OR</div>
-              </ng-container>
-            </div>
+              </div>
+              <div *ngIf="!last" class="divider lg:divider-horizontal">OR</div>
+            </ng-container>
           </div>
 
           <div class="form-control">

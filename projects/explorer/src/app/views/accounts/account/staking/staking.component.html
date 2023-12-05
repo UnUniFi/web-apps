@@ -14,34 +14,38 @@
       </ng-template>
 
       <ng-template #filled>
-        <table class="table w-full mb-4">
-          <tr>
-            <th>Total Rewards</th>
-            <td *ngFor="let eachTotalReward of totalRewards?.total">
-              {{ eachTotalReward | coin | async }}
-            </td>
-          </tr>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full mb-4">
+            <tr>
+              <th>Total Rewards</th>
+              <td *ngFor="let eachTotalReward of totalRewards?.total">
+                {{ eachTotalReward | coin | async }}
+              </td>
+            </tr>
+          </table>
+        </div>
 
         <h3 class="text-lg">Rewards for each validator</h3>
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Validator Address</th>
-              <td>Amount</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let reward of totalRewards?.rewards"
-              class="hover cursor-pointer"
-              routerLink="{{ '/validators/' + reward.validator_address }}"
-            >
-              <th class="font-mono">{{ reward.validator_address }}</th>
-              <td *ngFor="let eachReward of reward?.reward">{{ eachReward | coin | async }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>Validator Address</th>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let reward of totalRewards?.rewards"
+                class="hover cursor-pointer"
+                routerLink="{{ '/validators/' + reward.validator_address }}"
+              >
+                <th class="font-mono">{{ reward.validator_address }}</th>
+                <td *ngFor="let eachReward of reward?.reward">{{ eachReward | coin | async }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </ng-template>
     </ng-template>
   </div>

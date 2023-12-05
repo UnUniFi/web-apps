@@ -1,6 +1,60 @@
 <div class="card bg-base-100 shadow-xl mb-4">
   <div class="card-body">
     <h2 class="card-title">Transactions</h2>
+    <div class="tabs tabs-boxed w-full mb-4">
+      <a
+        class="tab tab-lg w-1/2"
+        [class.tab-active]="txType === 'send'"
+        (click)="onTxTypeChange('send')"
+      >
+        Token Send
+      </a>
+      <a
+        class="tab tab-lg w-1/2"
+        [class.tab-active]="txType === 'receive'"
+        (click)="onTxTypeChange('receive')"
+      >
+        Token Receive
+      </a>
+    </div>
+    <ng-container *ngIf="txs === null; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+      <p class="text-center">
+        <span class="loading loading-ring loading-lg"></span>
+      </p>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="!txs?.length; then empty; else filled"></ng-container>
+      <ng-template #empty>
+        <p class="ml-4">*This account has no transactions</p>
+      </ng-template>
+      <ng-template #filled>
+        <div class="overflow-x-auto mb-4">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>Block Height</th>
+                <td>Tx Hash</td>
+                <td>Timestamp</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let tx of txs"
+                class="hover cursor-pointer"
+                routerLink="{{ '/txs/' + tx.txhash }}"
+              >
+                <th>{{ tx.height }}</th>
+                <td class="font-mono">{{ tx.txhash }}</td>
+                <td>
+                  {{ tx.timestamp | date : 'yy/MM/dd HH:mm' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+    </ng-template>
     <div class="flex flex-wrap">
       <span class="flex-auto"></span>
       <div class="form-control">
@@ -27,41 +81,5 @@
         </label>
       </div>
     </div>
-    <ng-container *ngIf="txs === null; then loading; else loaded"></ng-container>
-    <ng-template #loading>
-      <p class="text-center">
-        <span class="loading loading-ring loading-lg"></span>
-      </p>
-    </ng-template>
-    <ng-template #loaded>
-      <ng-container *ngIf="!txs?.length; then empty; else filled"></ng-container>
-      <ng-template #empty>
-        <p class="ml-4">*This account has no transactions</p>
-      </ng-template>
-      <ng-template #filled>
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Block Height</th>
-              <td>Tx Hash</td>
-              <td>Timestamp</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let tx of txs"
-              class="hover cursor-pointer"
-              routerLink="{{ '/txs/' + tx.txhash }}"
-            >
-              <th>{{ tx.height }}</th>
-              <td class="font-mono">{{ tx.txhash }}</td>
-              <td>
-                {{ tx.timestamp | date : 'yy/MM/dd HH:mm' }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </ng-template>
   </div>
 </div>

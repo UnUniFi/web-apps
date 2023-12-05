@@ -39,28 +39,30 @@
         <p class="ml-4">*This account has no transactions</p>
       </ng-template>
       <ng-template #filled>
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Block Height</th>
-              <td>Tx Hash</td>
-              <td>Timestamp</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let tx of txs"
-              class="hover cursor-pointer"
-              routerLink="{{ '/txs/' + tx.txhash }}"
-            >
-              <th>{{ tx.height }}</th>
-              <td class="font-mono">{{ tx.txhash }}</td>
-              <td>
-                {{ tx.timestamp | date : 'yy/MM/dd HH:mm' }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>Block Height</th>
+                <td>Tx Hash</td>
+                <td>Timestamp</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let tx of txs"
+                class="hover cursor-pointer"
+                routerLink="{{ '/txs/' + tx.txhash }}"
+              >
+                <th>{{ tx.height }}</th>
+                <td class="font-mono">{{ tx.txhash }}</td>
+                <td>
+                  {{ tx.timestamp | date : 'yy/MM/dd HH:mm' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </ng-template>
     </ng-template>
   </div>

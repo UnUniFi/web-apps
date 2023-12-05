@@ -48,7 +48,6 @@ export class TxsComponent implements OnInit {
             2 as any,
           )
           .then((res) => {
-            console.log(res);
             return res.data;
           })
           .catch((error) => {

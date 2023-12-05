@@ -29,7 +29,7 @@ export class DepositComponent implements OnInit {
   owner$: Observable<string>;
   vaultBalances$: Observable<VaultBalance[]>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
-  symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
+  vaultSymbols$: Observable<{ symbol: string; display: string; img: string }[]>;
   estimatedRedeemAmounts$: Observable<EstimateRedeemAmount200Response[]>;
   usdDepositAmount$: Observable<number[]>;
   usdTotalAmount$: Observable<number>;
@@ -39,6 +39,9 @@ export class DepositComponent implements OnInit {
       amount?: string;
     }[]
   >;
+  strategySymbols$: Observable<{ symbol: string; display: string; img: string }[]>;
+  usdUnbondingAmount$: Observable<number[]>;
+  usdTotalUnbondingAmount$: Observable<number>;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,7 +76,7 @@ export class DepositComponent implements OnInit {
     );
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    this.symbols$ = combineLatest([this.vaults$, symbolMetadataMap$]).pipe(
+    this.vaultSymbols$ = combineLatest([this.vaults$, symbolMetadataMap$]).pipe(
       map(([vaults, symbolMetadataMap]) =>
         vaults.map((vault) => {
           const symbol = vault.vault?.symbol || '';
@@ -99,12 +102,12 @@ export class DepositComponent implements OnInit {
     this.usdDepositAmount$ = this.estimatedRedeemAmounts$.pipe(
       mergeMap((redeemAmounts) =>
         Promise.all(
-          redeemAmounts.map(async (redeemAmount) => {
-            return this.bandProtocolService.convertToUSDAmount(
+          redeemAmounts.map(async (redeemAmount) =>
+            this.bandProtocolService.convertToUSDAmount(
               redeemAmount.symbol || '',
               redeemAmount.total_amount || '',
-            );
-          }),
+            ),
+          ),
         ),
       ),
     );
@@ -128,6 +131,34 @@ export class DepositComponent implements OnInit {
           }),
         ),
       ),
+    );
+    this.strategySymbols$ = combineLatest([this.strategies$, denomMetadataMap$]).pipe(
+      map(([strategies, denomMetadataMap]) =>
+        strategies.map((strategy) => {
+          const symbol = strategy.strategy?.symbol || '';
+          const display = denomMetadataMap?.[symbol]?.display || symbol;
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
+          return { symbol: symbol, display: display, img: img };
+        }),
+      ),
+    );
+    this.usdUnbondingAmount$ = this.strategies$.pipe(
+      mergeMap((strategies) =>
+        Promise.all(
+          strategies.map(async (strategy) =>
+            this.bandProtocolService.convertToUSDAmount(
+              strategy.strategy?.symbol || '',
+              strategy.amount || '',
+            ),
+          ),
+        ),
+      ),
+    );
+    this.usdTotalUnbondingAmount$ = this.usdUnbondingAmount$.pipe(
+      map((usdUnbondingAmount) => usdUnbondingAmount.reduce((a, b) => a + b, 0)),
+    );
+    this.usdTotalUnbondingAmount$.subscribe((usdTotalUnbondingAmount) =>
+      console.log(usdTotalUnbondingAmount),
     );
   }
 

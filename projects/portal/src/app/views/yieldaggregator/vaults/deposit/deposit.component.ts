@@ -16,7 +16,7 @@ export class DepositComponent implements OnInit {
   @Input() owner?: string | null;
   @Input() vaultBalances?: VaultBalance[] | null;
   @Input() vaults?: VaultAll200ResponseVaultsInner[] | null;
-  @Input() symbols?: { symbol: string; display: string; img: string }[] | null;
+  @Input() vaultSymbols?: { symbol: string; display: string; img: string }[] | null;
   @Input() estimatedRedeemAmounts?: EstimateRedeemAmount200Response[] | null;
   @Input() usdDepositAmount?: number[] | null;
   @Input() usdTotalAmount?: number | null;
@@ -27,6 +27,9 @@ export class DepositComponent implements OnInit {
         amount?: string;
       }[]
     | null;
+  @Input() strategySymbols?: { symbol: string; display: string; img: string }[] | null;
+  @Input() usdUnbondingAmount?: number[] | null;
+  @Input() usdTotalUnbondingAmount?: number | null;
 
   constructor() {}
 

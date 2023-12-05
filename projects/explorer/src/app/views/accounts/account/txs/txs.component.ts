@@ -17,9 +17,15 @@ export class TxsComponent implements OnInit {
   pageInfo?: PaginationInfo | null;
   @Input()
   pageLength?: number | null;
+  @Input()
+  maxPageNumber?: number | null;
+  @Input()
+  txType?: string | null;
 
   @Output()
   paginationChange: EventEmitter<PageEvent> = new EventEmitter();
+  @Output()
+  txTypeChange: EventEmitter<string> = new EventEmitter();
 
   constructor() {}
 
@@ -32,6 +38,10 @@ export class TxsComponent implements OnInit {
     if ($event == 1) {
       this.pageInfo.pageNumber -= 1;
     } else if ($event == 2) {
+      if (this.pageInfo.pageNumber == this.maxPageNumber) {
+        alert('This is the last page!');
+        return;
+      }
       this.pageInfo.pageNumber += 1;
     }
     if (this.pageInfo.pageNumber < 1) {
@@ -45,6 +55,11 @@ export class TxsComponent implements OnInit {
       pageSize: this.pageInfo.pageSize,
       length: this.pageLength,
     });
+  }
+
+  onTxTypeChange($event: string): void {
+    this.txType = $event;
+    this.txTypeChange.emit($event);
   }
 
   calcItemsIndex(): { start: number; end: number } {

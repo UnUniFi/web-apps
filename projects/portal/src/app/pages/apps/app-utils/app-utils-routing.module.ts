@@ -14,11 +14,6 @@ const routes: Routes = [
     loadChildren: () => import('../../txs/txs.module').then((m) => m.AppTxsModule),
   },
   {
-    path: 'cosmos',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../cosmos/cosmos.module').then((m) => m.AppCosmosModule),
-  },
-  {
     path: 'keys',
     component: AppUtilsComponent,
     loadChildren: () => import('../../keys/keys.module').then((m) => m.AppKeysModule),

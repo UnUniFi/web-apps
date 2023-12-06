@@ -1,6 +1,6 @@
 {
-  "name": "telescope",
-  "version": "3.0.0",
+  "name": "ununifi-web-apps",
+  "version": "4.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

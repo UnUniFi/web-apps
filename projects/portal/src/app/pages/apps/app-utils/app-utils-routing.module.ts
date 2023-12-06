@@ -9,21 +9,6 @@ const routes: Routes = [
     loadChildren: () => import('../../balance/balance.module').then((m) => m.AppBalanceModule),
   },
   {
-    path: 'accounts',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../accounts/accounts.module').then((m) => m.AppAccountsModule),
-  },
-  {
-    path: 'txs',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../txs/txs.module').then((m) => m.AppTxsModule),
-  },
-  {
-    path: 'cosmos',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../cosmos/cosmos.module').then((m) => m.AppCosmosModule),
-  },
-  {
     path: 'keys',
     component: AppUtilsComponent,
     loadChildren: () => import('../../keys/keys.module').then((m) => m.AppKeysModule),

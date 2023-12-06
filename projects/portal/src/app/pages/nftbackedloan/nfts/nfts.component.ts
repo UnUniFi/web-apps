@@ -2,7 +2,7 @@ import { NftPawnshopQueryService } from '../../../models/nft-pawnshops/nft-pawns
 import { NftPawnshopService } from '../../../models/nft-pawnshops/nft-pawnshop.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { ListedNfts200ResponseListingsInner } from 'ununifi-client/esm/openapi';

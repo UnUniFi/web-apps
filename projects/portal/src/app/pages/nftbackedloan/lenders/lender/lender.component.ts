@@ -7,7 +7,7 @@ import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.que
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ListedNfts200ResponseListingsInnerListing } from 'ununifi-client/esm/openapi';

@@ -16,14 +16,16 @@
       </ng-template>
 
       <ng-template #filled>
-        <table class="table w-full">
-          <tr>
-            <th>Validator Accumulated Commission</th>
-            <td *ngFor="let c of commission?.commission?.commission">
-              {{ c | coin | async }}
-            </td>
-          </tr>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tr>
+              <th>Validator Accumulated Commission</th>
+              <td *ngFor="let c of commission?.commission?.commission">
+                {{ c | coin | async }}
+              </td>
+            </tr>
+          </table>
+        </div>
       </ng-template>
     </ng-template>
 
@@ -37,14 +39,16 @@
       </ng-template>
 
       <ng-template #filledReward>
-        <table class="table w-full">
-          <tr>
-            <th>Outstanding Reward (For Delegator)</th>
-            <td *ngFor="let r of rewards?.rewards?.rewards">
-              {{ r | coin | async }}
-            </td>
-          </tr>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tr>
+              <th>Outstanding Reward (For Delegator)</th>
+              <td *ngFor="let r of rewards?.rewards?.rewards">
+                {{ r | coin | async }}
+              </td>
+            </tr>
+          </table>
+        </div>
       </ng-template>
     </ng-template>
 
@@ -56,20 +60,22 @@
       <ng-template #emptySlash></ng-template>
 
       <ng-template #filledSlash>
-        <table class="table w-full">
-          <thead>
-            <tr>
-              <th>Period</th>
-              <td>Fraction</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let slash of slashes?.slashes">
-              <th>{{ slash.validator_period }}</th>
-              <td>{{ slash.fraction }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <td>Fraction</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let slash of slashes?.slashes">
+                <th>{{ slash.validator_period }}</th>
+                <td>{{ slash.fraction }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </ng-template>
     </ng-template>
   </div>

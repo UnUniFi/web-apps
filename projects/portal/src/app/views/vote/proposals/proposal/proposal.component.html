@@ -18,10 +18,24 @@
           {{ proposal?.status?.replace('PROPOSAL_STATUS_', '') }}
         </span>
         <h2 class="card-title break-all"># {{ proposal?.id }} {{ proposal?.title }}</h2>
-
+        <div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mb-4">
+          <input type="checkbox" />
+          <div class="collapse-title text-xl font-medium">Click to See The Proposal Messages</div>
+          <div class="collapse-content overflow-x-auto">
+            <div class="mockup-code mt-2">
+              <pre><code>{{ proposal?.messages | json }}</code></pre>
+            </div>
+          </div>
+        </div>
         <div class="overflow-x-auto">
           <table class="table w-full">
             <tbody>
+              <tr>
+                <th>Proposer</th>
+                <td>
+                  {{ proposal?.proposer }}
+                </td>
+              </tr>
               <tr>
                 <th>Summary</th>
                 <td>
@@ -29,9 +43,9 @@
                 </td>
               </tr>
               <tr>
-                <th>Proposer</th>
+                <th>Metadata</th>
                 <td>
-                  {{ proposal?.proposer }}
+                  {{ proposal?.metadata }}
                 </td>
               </tr>
               <tr>
@@ -123,7 +137,7 @@
                 </td>
               </tr>
               <tr>
-                <th>Veto Threshold</th>
+                <th class="text-warning">Veto Threshold</th>
                 <td>
                   <span class="text-error" *ngIf="vetoThresholdReached">
                     Veto Threshold reached:

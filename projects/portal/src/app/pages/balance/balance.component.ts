@@ -1,6 +1,5 @@
 import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { BankQueryService } from '../../models/cosmos/bank.query.service';
-import { BankService } from '../../models/cosmos/bank.service';
 import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
 import { StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
@@ -9,7 +8,7 @@ import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -42,10 +41,15 @@ export class BalanceComponent implements OnInit {
     | undefined
   >;
   nodeInfo$: Observable<GetNodeInfo200Response>;
+  account$: Observable<
+    | cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount
+    | cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount
+    | unknown
+    | undefined
+  >;
 
   constructor(
     private readonly walletService: WalletService,
-    private readonly bank: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly rest: CosmosRestService,
     private usecase: BalanceUsecaseService,
@@ -81,6 +85,18 @@ export class BalanceComponent implements OnInit {
     );
     this.nodeInfo$ = this.rest.getNodeInfo$();
     this.accountTypeName$ = this.usecase.accountTypeName$;
+    this.account$ = address$.pipe(
+      mergeMap((address) => {
+        if (address === undefined) {
+          return of(undefined);
+        }
+        return this.rest.getAccount$(address.toString());
+      }),
+      map((account) => {
+        const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
+        return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
+      }),
+    );
   }
 
   ngOnInit(): void {}

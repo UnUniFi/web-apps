@@ -40,13 +40,13 @@ export class OwnerComponent implements OnInit {
     this.vaults$ = combineLatest([this.iyaQuery.listVaults$(), this.owner$]).pipe(
       map(([vaults, owner]) => vaults.filter((vault) => vault.vault?.owner === owner)),
     );
-    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
-    this.symbols$ = combineLatest([this.vaults$, denomMetadataMap$]).pipe(
-      map(([vaults, denomMetadataMap]) =>
+    const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
+    this.symbols$ = combineLatest([this.vaults$, symbolMetadataMap$]).pipe(
+      map(([vaults, symbolMetadataMap]) =>
         vaults.map((vault) => {
-          const symbol = denomMetadataMap?.[vault.vault?.denom!]?.symbol || '';
-          const display = denomMetadataMap?.[vault.vault?.denom!]?.display || vault.vault?.denom!;
-          const img = this.bankQuery.getSymbolImageMap()[symbol] || '';
+          const symbol = vault.vault?.symbol || '';
+          const display = symbolMetadataMap?.[symbol]?.display || symbol;
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
           return { symbol: symbol, display: display, img: img };
         }),
       ),

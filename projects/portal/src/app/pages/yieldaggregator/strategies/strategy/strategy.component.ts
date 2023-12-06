@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ConfigService, StrategyInfo } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
+import { OsmosisPoolAPRs } from 'projects/portal/src/app/models/yield-aggregators/osmosis/osmosis-pool.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -27,8 +28,8 @@ export class StrategyComponent implements OnInit {
   strategy$: Observable<StrategyAll200ResponseStrategiesInner | undefined>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   weights$: Observable<(string | undefined)[]>;
-  strategyInfo$: Observable<YieldInfo | undefined>;
-  strategyAPR$: Observable<number>;
+  strategyInfo$: Observable<StrategyInfo | undefined>;
+  strategyAPR$: Observable<OsmosisPoolAPRs>;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +52,7 @@ export class StrategyComponent implements OnInit {
       map(([vaults, id, denom]) =>
         vaults.filter((vault) =>
           vault.vault?.strategy_weights?.find(
-            (strategy) => vault.vault?.denom === denom && strategy.strategy_id === id,
+            (strategy) => strategy.denom === denom && strategy.strategy_id === id,
           ),
         ),
       ),
@@ -67,7 +68,7 @@ export class StrategyComponent implements OnInit {
     this.strategyInfo$ = combineLatest([this.strategy$, this.configService.config$]).pipe(
       map(([strategy, config]) =>
         config?.strategiesInfo?.find(
-          (s) => s.denom && strategy?.strategy?.denom && s.id == strategy?.strategy?.id,
+          (s) => s.denom == strategy?.strategy?.denom && s.id == strategy?.strategy?.id,
         ),
       ),
     );

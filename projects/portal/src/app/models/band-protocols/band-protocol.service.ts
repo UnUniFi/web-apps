@@ -1,7 +1,7 @@
-import { getDenomExponent } from '../cosmos/bank.model';
+import { getSymbolExponent } from '../cosmos/bank.model';
+import { CacheService } from '../query.cache.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import cosmosclient from '@cosmos-client/core';
 
 export const rest = 'https://laozi1.bandchain.org/api';
 export type TokenAmountUSD = {
@@ -14,9 +14,13 @@ export type TokenAmountUSD = {
   providedIn: 'root',
 })
 export class BandProtocolService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cacheService: CacheService) {}
 
   async getPrice(symbol: string): Promise<number | undefined> {
+    const cacheKey = 'oracle_price_' + symbol;
+    if (this.cacheService.has(cacheKey)) {
+      return this.cacheService.get(cacheKey);
+    }
     const url = `${rest}/oracle/v1/request_prices?symbols=${symbol}`;
     try {
       const result = await this.http
@@ -27,6 +31,7 @@ export class BandProtocolService {
           const px = Number(res.price_results[0].px);
           return px / multiplier;
         });
+      this.cacheService.set(cacheKey, result);
       return result;
     } catch {
       console.log(`Failed to get price for ${symbol}`);
@@ -34,20 +39,8 @@ export class BandProtocolService {
     }
   }
 
-  async convertToUSDAmount(
-    denom: string,
-    amount: string,
-    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
-  ): Promise<number> {
-    const symbol = denomMetadataMap[denom].symbol;
-    const display = denomMetadataMap[denom].display;
-    if (!symbol) {
-      throw new Error(`Symbol not found for denom ${denom}`);
-    }
-    if (!display) {
-      throw new Error(`Display not found for denom ${denom}`);
-    }
-    const exponent = getDenomExponent(denom);
+  async convertToUSDAmount(symbol: string, amount: string): Promise<number> {
+    const exponent = getSymbolExponent(symbol);
     const symbolAmount = Number(amount) / 10 ** (exponent || 0);
     const price = await this.getPrice(symbol);
     if (!price) {
@@ -58,21 +51,16 @@ export class BandProtocolService {
     return usdAmount;
   }
 
-  calcDepositUSDAmount(
-    denom: string,
+  calcUSDAmount(
+    symbol: string,
     amount: number,
     symbolPriceMap: { [symbol: string]: number },
-    denomMetadataMap: { [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata },
   ): number {
-    const symbol = denomMetadataMap[denom].symbol;
-    if (!symbol) {
-      throw new Error(`Symbol not found for denom ${denom}`);
-    }
     const price = symbolPriceMap[symbol];
     if (!price) {
       throw new Error(`Price not found for symbol ${symbol}`);
     }
-    const exponent = getDenomExponent(denom);
+    const exponent = getSymbolExponent(symbol);
     const symbolAmount = amount / 10 ** (exponent || 0);
     const usdAmount = symbolAmount * price;
     return usdAmount;

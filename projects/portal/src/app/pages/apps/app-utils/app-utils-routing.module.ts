@@ -9,11 +9,6 @@ const routes: Routes = [
     loadChildren: () => import('../../balance/balance.module').then((m) => m.AppBalanceModule),
   },
   {
-    path: 'txs',
-    component: AppUtilsComponent,
-    loadChildren: () => import('../../txs/txs.module').then((m) => m.AppTxsModule),
-  },
-  {
     path: 'keys',
     component: AppUtilsComponent,
     loadChildren: () => import('../../keys/keys.module').then((m) => m.AppKeysModule),

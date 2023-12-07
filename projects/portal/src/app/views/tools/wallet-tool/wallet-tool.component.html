@@ -29,8 +29,8 @@
           <h3 class="mt-4 mx-4 break-all md:whitespace-nowrap font-mono">
             {{ currentStoredWallet?.address }}
             <button
-              mat-icon-button
               type="button"
+              class="btn btn-circle"
               (click)="copyClipboard(currentStoredWallet?.address || '')"
             >
               <span class="material-symbols-outlined">content_copy</span>

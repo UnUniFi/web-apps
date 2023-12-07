@@ -99,15 +99,15 @@ export class VaultComponent implements OnInit, OnChanges {
   withdrawOptions: WithdrawOption[] = [
     {
       id: 0,
-      name: 'Unbonding',
-      description: 'Withdrawal will be received after unbonding time (Under Maintenance)',
+      name: 'Unbonding (Under Maintenance)',
+      description: 'Withdrawal will be received after unbonding time ',
       icon: 'pending_actions',
       disabled: true,
     },
     {
       id: 1,
-      name: 'Immediate',
-      description: 'Withdrawal will be received instantly  (Under Maintenance)',
+      name: 'Immediate (Under Maintenance)',
+      description: 'Withdrawal will be received instantly',
       icon: 'bolt',
       disabled: true,
     },
@@ -208,19 +208,21 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onSubmitDeposit() {
-    if (!this.mintAmount) {
-      alert('Please input amount');
-      return;
-    }
-    if (!this.denom) {
-      alert('Please select denom');
-      return;
-    }
-    this.appDeposit.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.mintAmount,
-      denom: this.denom,
-    });
+    alert('Sorry, currently under maintenance');
+    return;
+    // if (!this.mintAmount) {
+    //   alert('Please input amount');
+    //   return;
+    // }
+    // if (!this.denom) {
+    //   alert('Please select denom');
+    //   return;
+    // }
+    // this.appDeposit.emit({
+    //   vaultId: this.vault?.vault?.id!,
+    //   readableAmount: this.mintAmount,
+    //   denom: this.denom,
+    // });
   }
 
   onWithdrawAmountChange() {

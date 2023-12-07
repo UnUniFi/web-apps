@@ -107,9 +107,9 @@ export class VaultComponent implements OnInit, OnChanges {
     {
       id: 1,
       name: 'Immediate',
-      description: 'Withdrawal will be received instantly',
+      description: 'Withdrawal will be received instantly  (Under Maintenance)',
       icon: 'bolt',
-      disabled: false,
+      disabled: true,
     },
   ];
   selectedWithdrawOption?: WithdrawOption;
@@ -242,14 +242,16 @@ export class VaultComponent implements OnInit, OnChanges {
       // });
     }
     if (this.selectedWithdrawOption?.id === 1) {
-      this.appWithdraw.emit({
-        vaultId: this.vault?.vault?.id!,
-        readableAmount: this.burnAmount,
-        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-        redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
-        feeAmount: Number(this.estimatedRedeemAmount?.fee),
-        symbol: this.vault?.vault?.symbol!,
-      });
+      alert('Sorry, currently under maintenance');
+      return;
+      // this.appWithdraw.emit({
+      //   vaultId: this.vault?.vault?.id!,
+      //   readableAmount: this.burnAmount,
+      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      //   redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
+      //   feeAmount: Number(this.estimatedRedeemAmount?.fee),
+      //   symbol: this.vault?.vault?.symbol!,
+      // });
     }
   }
 

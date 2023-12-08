@@ -215,6 +215,74 @@ const denomMetadata = [
     display: 'OSMO.osmosis',
     symbol: 'OSMO',
   },
+  {
+    description: 'ATOM from CosmosHub',
+    denom_units: [
+      {
+        denom: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+    name: 'ATOM from CosmosHub',
+    display: 'ATOM.cosmoshub',
+    symbol: 'ATOM',
+  },
+];
+
+const certifiedVaults = ['5', '6', '7'];
+
+const strategiesInfo = [
+  {
+    id: '0',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis ATOM/OSMO LP Strategy',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+      apr: 0.215,
+    },
+  },
+  {
+    id: '1',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '803',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+  {
+    id: '1',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '3',
+    },
+  },
 ];
 
 const configs = [
@@ -234,14 +302,16 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 2000,
+          maxCredit: 2000,
         },
       ],
       // monitor: {},
@@ -265,62 +335,18 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
+    certifiedVaults,
     extension: {
       faucet: [
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
           denom: 'uguu',
-          creditAmount: 100,
-          maxCredit: 100,
+          creditAmount: 2000,
+          maxCredit: 2000,
         },
       ],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE C node without Monitor
-  {
-    id: domainCauchyEC,
-    restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    extension: {
-      faucet: [],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE D node without Monitor
-  {
-    id: domainCauchyED,
-    restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    extension: {
-      faucet: [],
       // monitor: {},
       navigations: [],
       messageModules,

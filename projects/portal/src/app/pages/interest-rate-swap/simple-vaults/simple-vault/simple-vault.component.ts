@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { InterestRateSwapApplicationService } from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.application.service';
-import { SwapRequest } from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.model';
+import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
+import { MintPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
 
 @Component({
   selector: 'app-simple-vault',
@@ -8,11 +8,11 @@ import { SwapRequest } from 'projects/portal/src/app/models/interest-rate-swap/i
   styleUrls: ['./simple-vault.component.css'],
 })
 export class SimpleVaultComponent implements OnInit {
-  constructor(private readonly irsAppService: InterestRateSwapApplicationService) {}
+  constructor(private readonly irsAppService: IrsApplicationService) {}
 
   ngOnInit(): void {}
 
-  onMintPT(data: SwapRequest) {
+  onMintPT(data: MintPtRequest) {
     this.irsAppService.mintPT(data);
   }
 }

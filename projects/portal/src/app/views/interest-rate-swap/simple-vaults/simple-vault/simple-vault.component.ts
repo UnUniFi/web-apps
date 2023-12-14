@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { SwapRequest } from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.model';
+import { MintPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
 
 @Component({
   selector: 'view-simple-vault',
@@ -12,7 +12,7 @@ export class SimpleVaultComponent implements OnInit {
   underlyingDenom? = 'uatom';
 
   @Output()
-  appMintPT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();
 
   description = 'This Vault provides the fixed yield of stATOM.';
   tab: 'deposit' | 'withdraw' = 'deposit';
@@ -25,7 +25,7 @@ export class SimpleVaultComponent implements OnInit {
     this.router.navigate(['interest-rate-swap', 'vaults', '1']);
   }
 
-  onMintPT() {
+  onMintPT(id: string) {
     if (!this.inputUnderlying) {
       alert('Please input the token amount.');
       return;
@@ -35,8 +35,10 @@ export class SimpleVaultComponent implements OnInit {
       return;
     }
     this.appMintPT.emit({
-      readableAmount: this.inputUnderlying,
-      denom: this.underlyingDenom,
+      trancheId: id,
+      trancheType: 1,
+      utDenom: this.underlyingDenom,
+      readableAmount: Number(this.inputUnderlying),
     });
   }
 }

@@ -1,9 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  RedeemUnderlyingRequest,
-  SwapRequest,
-} from 'projects/portal/src/app/models/interest-rate-swap/interest-rate-swap.model';
+  MintPtRequest,
+  MintPtYtRequest,
+  MintYtRequest,
+  RedeemPtRequest,
+  RedeemPtYtRequest,
+  RedeemYtRequest,
+} from 'projects/portal/src/app/models/irs/irs.model';
 
 @Component({
   selector: 'view-vault',
@@ -17,24 +21,25 @@ export class VaultComponent implements OnInit {
   underlyingDenom? = 'uatom';
   ytDenom = 'yt/';
   ptDenom = 'pt/';
+  requiredYT?: string;
+  requiredUT?: string;
 
   description = 'This Vault provides the fixed yield of stATOM.';
   yield: 'long' | 'variable' | 'fixed' = 'fixed';
   tab: 'deposit' | 'withdraw' = 'deposit';
 
   @Output()
-  appMintYT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appMintYT: EventEmitter<MintYtRequest> = new EventEmitter<MintYtRequest>();
   @Output()
-  appRedeemYT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appRedeemYT: EventEmitter<RedeemYtRequest> = new EventEmitter<RedeemYtRequest>();
   @Output()
-  appMintPT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();
   @Output()
-  appRedeemPT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appRedeemPT: EventEmitter<RedeemPtRequest> = new EventEmitter<RedeemPtRequest>();
   @Output()
-  appMintPTYT: EventEmitter<SwapRequest> = new EventEmitter<SwapRequest>();
+  appMintPTYT: EventEmitter<MintPtYtRequest> = new EventEmitter<MintPtYtRequest>();
   @Output()
-  appRedeemPTYT: EventEmitter<RedeemUnderlyingRequest> =
-    new EventEmitter<RedeemUnderlyingRequest>();
+  appRedeemPTYT: EventEmitter<RedeemPtYtRequest> = new EventEmitter<RedeemPtYtRequest>();
 
   constructor(private router: Router) {}
 
@@ -44,59 +49,7 @@ export class VaultComponent implements OnInit {
     this.router.navigate(['interest-rate-swap', 'simple-vaults', '1']);
   }
 
-  onMintYT() {
-    if (!this.inputUnderlying) {
-      alert('Please input the token amount.');
-      return;
-    }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
-      return;
-    }
-    this.appMintYT.emit({
-      readableAmount: this.inputUnderlying,
-      denom: this.underlyingDenom,
-    });
-  }
-
-  onRedeemYT() {
-    if (!this.inputYT) {
-      alert('Please input the YT token amount.');
-      return;
-    }
-    this.appRedeemYT.emit({
-      readableAmount: this.inputYT,
-      denom: this.ytDenom,
-    });
-  }
-
-  onMintPT() {
-    if (!this.inputUnderlying) {
-      alert('Please input the token amount.');
-      return;
-    }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
-      return;
-    }
-    this.appMintPT.emit({
-      readableAmount: this.inputUnderlying,
-      denom: this.underlyingDenom,
-    });
-  }
-
-  onRedeemPT() {
-    if (!this.inputPT) {
-      alert('Please input the PT token amount.');
-      return;
-    }
-    this.appRedeemPT.emit({
-      readableAmount: this.inputPT,
-      denom: this.ptDenom,
-    });
-  }
-
-  onMintPTYT() {
+  onMintPTYT(id: string) {
     if (!this.inputUnderlying) {
       alert('Please input the token amount.');
       return;
@@ -106,12 +59,14 @@ export class VaultComponent implements OnInit {
       return;
     }
     this.appMintPTYT.emit({
-      readableAmount: this.inputUnderlying,
-      denom: this.underlyingDenom,
+      trancheId: id,
+      trancheType: 0,
+      utDenom: this.underlyingDenom,
+      readableAmount: Number(this.inputUnderlying),
     });
   }
 
-  onRedeemPTYT() {
+  onRedeemPTYT(id: string) {
     if (!this.inputPT) {
       alert('Please input the PT token amount.');
       return;
@@ -120,11 +75,94 @@ export class VaultComponent implements OnInit {
       alert('Please input the YT token amount.');
       return;
     }
+    if (!this.underlyingDenom) {
+      alert('Please select the token.');
+      return;
+    }
+    if (!this.requiredUT) {
+      alert('Unable to redeem YT.');
+      return;
+    }
     this.appRedeemPTYT.emit({
-      ptReadableAmount: this.inputPT,
+      trancheId: id,
+      trancheType: 0,
+      readableAmountMap: {
+        [this.ptDenom]: Number(this.inputPT),
+        [this.ytDenom]: Number(this.inputYT),
+      },
+      utDenom: this.underlyingDenom,
+      requiredUT: Number(this.requiredUT),
+    });
+  }
+
+  onMintPT(id: string) {
+    if (!this.inputUnderlying) {
+      alert('Please input the token amount.');
+      return;
+    }
+    if (!this.underlyingDenom) {
+      alert('Please select the token.');
+      return;
+    }
+    this.appMintPT.emit({
+      trancheId: id,
+      trancheType: 1,
+      utDenom: this.underlyingDenom,
+      readableAmount: Number(this.inputUnderlying),
+    });
+  }
+
+  onRedeemPT(id: string) {
+    if (!this.inputPT) {
+      alert('Please input the PT token amount.');
+      return;
+    }
+    this.appRedeemPT.emit({
+      trancheId: id,
+      trancheType: 1,
       ptDenom: this.ptDenom,
-      ytReadableAmount: this.inputYT,
+      readableAmount: Number(this.inputPT),
+    });
+  }
+
+  onMintYT(id: string) {
+    if (!this.inputUnderlying) {
+      alert('Please input the token amount.');
+      return;
+    }
+    if (!this.underlyingDenom) {
+      alert('Please select the token.');
+      return;
+    }
+    if (!this.requiredYT) {
+      alert('Unable to mint YT.');
+      return;
+    }
+    this.appMintYT.emit({
+      trancheId: id,
+      trancheType: 2,
+      utDenom: this.underlyingDenom,
+      readableAmount: Number(this.inputUnderlying),
+      requiredYT: Number(this.requiredYT),
+    });
+  }
+
+  onRedeemYT(id: string) {
+    if (!this.inputYT) {
+      alert('Please input the YT token amount.');
+      return;
+    }
+    if (!this.requiredUT) {
+      alert('Unable to redeem YT.');
+      return;
+    }
+    this.appRedeemYT.emit({
+      trancheId: id,
+      trancheType: 2,
       ytDenom: this.ytDenom,
+      readableAmount: Number(this.inputYT),
+      utDenom: this.underlyingDenom,
+      requiredUT: Number(this.requiredUT),
     });
   }
 }

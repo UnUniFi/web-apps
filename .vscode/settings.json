@@ -3,7 +3,7 @@
   "editor.detectIndentation": false,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "ngschematics.schematics": ["./node_modules/angular-firebase-schematics/src/collection.json"],
   "jest.jestCommandLine": "ng test"

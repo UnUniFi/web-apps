@@ -18,7 +18,7 @@ const routes: Routes = [
     component: VaultsComponent,
   },
   {
-    path: 'vaults/:id',
+    path: 'vaults/:contract',
     component: VaultComponent,
   },
   {
@@ -26,7 +26,7 @@ const routes: Routes = [
     component: SimpleVaultsComponent,
   },
   {
-    path: 'simple-vaults/:id',
+    path: 'simple-vaults/:contract',
     component: SimpleVaultComponent,
   },
   {

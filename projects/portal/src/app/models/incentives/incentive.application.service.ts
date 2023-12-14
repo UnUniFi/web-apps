@@ -4,7 +4,7 @@ import { WithdrawIncentiveRewardFormDialogComponent } from '../../pages/dialogs/
 import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
-} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+} from '../../views/dialogs/tx-fee-confirm/tx-fee-confirm-dialog.component';
 import {
   TxConfirmDialogComponent,
   TxConfirmDialogData,

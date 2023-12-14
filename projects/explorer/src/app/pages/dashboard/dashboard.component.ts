@@ -12,7 +12,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  pollingInterval = 30 * 60;
+  pollingInterval = 5;
   latestBlock$: Observable<GetLatestBlock200Response | undefined>;
   latestBlockHeight$: Observable<bigint | undefined>;
   totalSupply$: Observable<number>;

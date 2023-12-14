@@ -215,6 +215,20 @@ const denomMetadata = [
     display: 'OSMO.osmosis',
     symbol: 'OSMO',
   },
+  {
+    description: 'ATOM from CosmosHub',
+    denom_units: [
+      {
+        denom: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ibc/25418646C017D377ADF3202FF1E43590D0DAE3346E594E8D78176A139A928F88',
+    name: 'ATOM from CosmosHub',
+    display: 'ATOM.cosmoshub',
+    symbol: 'ATOM',
+  },
 ];
 
 const certifiedVaults = ['5', '6', '7'];
@@ -226,30 +240,7 @@ const strategiesInfo = [
     name: 'Osmosis ATOM/OSMO LP Strategy',
     description: '',
     gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '1',
-      apr: 0.215,
-    },
-  },
-  {
-    id: '0',
-    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
-    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
-    description: '',
-    gitUrl: '',
-    poolInfo: {
-      type: 'osmosis',
-      poolId: '803',
-      apr: 0.157,
-    },
-  },
-  {
-    id: '0',
-    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
-    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
-    description: '',
-    gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '1',
@@ -258,14 +249,38 @@ const strategiesInfo = [
   },
   {
     id: '1',
+    denom: 'ibc/20D06D04E1BC1FAC482FECC06C2E2879A596904D64D8BA3285B4A3789DEAF910',
+    name: 'Osmosis stATOM/ATOM Strategy (ATOM deposit)',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '803',
+    },
+  },
+  {
+    id: '0',
+    denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
+    name: 'Osmosis ATOM/OSMO strategy (OSMO deposit)',
+    description: '',
+    gitUrl: '',
+    unbondingTimeSec: '1209600',
+    poolInfo: {
+      type: 'osmosis',
+      poolId: '1',
+    },
+  },
+  {
+    id: '1',
     denom: 'ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1',
     name: 'Osmosis AKT/OSMO strategy (OSMO deposit)',
     description: '',
     gitUrl: '',
+    unbondingTimeSec: '1209600',
     poolInfo: {
       type: 'osmosis',
       poolId: '3',
-      apr: 0.237,
     },
   },
 ];

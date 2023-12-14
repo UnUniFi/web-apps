@@ -22,7 +22,7 @@ export type Config = {
   }[];
   apps: AppNavigation[];
   denomMetadata: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata[];
-  strategiesInfo: YieldInfo[];
+  strategiesInfo: StrategyInfo[];
   certifiedVaults: string[];
   externalChains: ChainInfo[];
   extension?: {
@@ -59,7 +59,7 @@ export type AppNavigation = {
   icon: string;
 };
 
-export type YieldInfo = {
+export type StrategyInfo = {
   id: string;
   denom?: string;
   name?: string;
@@ -68,6 +68,7 @@ export type YieldInfo = {
   minApy: number;
   maxApy?: number;
   certainty: boolean;
+  unbondingTimeSec?: string;
   poolInfo?:
     | {
         type: 'osmosis';

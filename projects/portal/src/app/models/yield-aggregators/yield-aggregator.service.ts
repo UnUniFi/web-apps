@@ -1,10 +1,11 @@
-import { Config, YieldInfo } from '../config.service';
+import { Config, StrategyInfo } from '../config.service';
 import { getDenomExponent } from '../cosmos/bank.model';
 import { BankQueryService } from '../cosmos/bank.query.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
-import { OsmosisPools } from './yield-aggregator.model';
-import { HttpClient } from '@angular/common/http';
+import { OsmosisPoolAPRs } from './osmosis/osmosis-pool.model';
+import { OsmosisPoolService } from './osmosis/osmosis-pool.service';
+import { VaultInfo } from './yield-aggregator.model';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import Long from 'long';
@@ -21,7 +22,7 @@ export class YieldAggregatorService {
     private readonly bankService: BankService,
     private readonly bankQueryService: BankQueryService,
     private readonly txCommonService: TxCommonService,
-    private http: HttpClient,
+    private readonly osmosisPoolService: OsmosisPoolService,
   ) {}
 
   buildMsgDepositToVault(
@@ -183,116 +184,79 @@ export class YieldAggregatorService {
     );
   }
 
-  async getOsmoPoolAPY(poolId: string): Promise<number> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pools = res as OsmosisPools;
-        let totalApr = 0;
-        for (const pool of pools) {
-          for (const apr of pool.apr_list) {
-            totalApr += apr.apr_superfluid;
-          }
-        }
-        return totalApr / 100;
-      });
-  }
-
-  async getAllOsmoPool(): Promise<OsmosisPools> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/all';
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pools = res as OsmosisPools;
-        return pools;
-      });
-  }
-
-  async getOsmoPool(poolId: string): Promise<OsmosisPools> {
-    const url = 'https://api-osmosis.imperator.co/apr/v2/' + poolId;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then((res: any) => {
-        const pool = res as OsmosisPools;
-        return pool;
-      });
-  }
-
-  async getStrategyAPR(strategyInfo?: YieldInfo): Promise<number> {
+  async getStrategyAPR(strategyInfo?: StrategyInfo): Promise<OsmosisPoolAPRs> {
     if (!strategyInfo) {
-      return 0;
+      return { totalAPR: 0 };
     }
     if (strategyInfo.poolInfo) {
       if (strategyInfo.poolInfo.type === 'osmosis') {
         if (strategyInfo.poolInfo.apr) {
           console.log('strategyInfo.poolInfo.apr', strategyInfo.poolInfo.apr);
 
-          return strategyInfo.poolInfo.apr;
+          return { totalAPR: strategyInfo.poolInfo.apr };
         }
-        return this.getOsmoPoolAPY(strategyInfo.poolInfo.poolId);
+        const apr = await this.osmosisPoolService.getPoolAPR(strategyInfo.poolInfo.poolId);
+        return apr;
       }
     }
-    return strategyInfo.minApy || 0;
+    return { totalAPR: strategyInfo.minApy };
   }
 
-  calcVaultAPY(vault: Vault200Response, config: Config, osmoPools: OsmosisPools): YieldInfo {
+  async getStrategySuperfluidAPR(strategyInfo?: StrategyInfo): Promise<number | undefined> {
+    if (!strategyInfo) {
+      return;
+    }
+    if (strategyInfo.poolInfo) {
+      if (strategyInfo.poolInfo.type === 'osmosis') {
+        return this.osmosisPoolService.getSuperfluidAPR(strategyInfo.poolInfo.poolId);
+      }
+    }
+    return;
+  }
+
+  async calcVaultAPY(vault: Vault200Response, config: Config): Promise<VaultInfo> {
     if (!vault.vault?.strategy_weights) {
       return {
         id: vault.vault?.id || '',
-        denom: vault.vault?.symbol || '',
-        name: vault.vault?.name || '',
-        description: vault.vault?.description || '',
-        gitURL: '',
         minApy: 0,
-        maxApy: 0,
         certainty: false,
-        poolInfo: { type: 'osmosis', poolId: '' },
+        poolInfos: [],
       };
     }
     let vaultAPY = 0;
     let vaultAPYCertainty = false;
+    let poolInfos: (StrategyInfo & { weight?: string })[] = [];
 
     for (const strategyWeight of vault.vault.strategy_weights) {
       const strategyInfo = config?.strategiesInfo?.find(
         (strategyInfo) =>
           strategyInfo.id === strategyWeight.strategy_id &&
-          strategyInfo.denom === vault.vault?.symbol,
+          strategyInfo.denom === strategyWeight.denom,
       );
       if (!strategyInfo || !strategyInfo.poolInfo) {
         continue;
       }
       const poolInfo = strategyInfo.poolInfo;
       if (poolInfo.type === 'osmosis') {
+        poolInfos.push({ ...strategyInfo, weight: strategyWeight.weight });
         if (poolInfo.apr) {
           vaultAPY += poolInfo.apr * Number(strategyWeight.weight);
           continue;
         }
-        const pool = osmoPools.find((pool) => pool.pool_id.toString() === poolInfo.poolId);
-        if (!pool) {
-          continue;
-        }
-        let totalApr = 0;
-        for (const apr of pool.apr_list) {
-          totalApr += apr.apr_superfluid;
-        }
-        vaultAPY += (Number(totalApr) / 100) * Number(strategyWeight.weight);
+        const poolAPRs = await this.osmosisPoolService.getPoolAPR(poolInfo.poolId);
+        vaultAPY += poolAPRs.totalAPR * Number(strategyWeight.weight);
       }
     }
 
     return {
       id: vault.vault?.id || '',
-      denom: vault.vault?.symbol || '',
-      name: vault.vault?.name || '',
-      description: vault.vault?.description || '',
-      gitURL: '',
+      symbol: vault.vault?.symbol,
+      name: vault.vault?.name,
+      description: vault.vault?.description,
       minApy: vaultAPY,
       maxApy: vaultAPY,
       certainty: vaultAPYCertainty,
-      poolInfo: { type: 'osmosis', poolId: '' },
+      poolInfos,
     };
   }
 }

@@ -80,7 +80,7 @@
                           question_mark
                         </span>
                       </div>
-                      {{ denomMetadataMap?.[balance.key]?.display || balance.key }}
+                      {{ balance.key | coinDenom | async }}
                     </div>
                   </th>
                   <td>{{ balance.value.amount | coinAmount : balance.key }}</td>
@@ -90,6 +90,160 @@
           </div>
         </ng-template>
       </ng-template>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl mb-4" *ngIf="vestingAccount">
+    <div class="card-body">
+      <h2 class="card-title">Vesting</h2>
+
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr *ngFor="let vest of vestingAccount.base_vesting_account?.delegated_vesting">
+              <th>
+                <div class="flex items-center space-x-3">
+                  <div class="avatar mr-2">
+                    <div
+                      class="mask mask-circle w-6 h-6"
+                      *ngIf="symbolImageMap &&symbolImageMap[denomMetadataMap?.[vest.denom||'']?.symbol || '']"
+                    >
+                      <img
+                        src="{{ symbolImageMap[denomMetadataMap?.[vest.denom||'']?.symbol || ''] }}"
+                        alt="Asset Symbol"
+                      />
+                    </div>
+
+                    <span
+                      class="material-symbols-outlined"
+                      *ngIf="!symbolImageMap ||!symbolImageMap[denomMetadataMap?.[vest.denom||'']?.symbol || '']"
+                    >
+                      question_mark
+                    </span>
+                  </div>
+                  {{ vest.denom | coinDenom | async }}
+                </div>
+              </th>
+              <td>{{ vest.amount | coinAmount : vest.denom }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="divider"></div>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Vesting Start</th>
+              <th>Vesting End</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {{ vestingAccount.start_time.toNumber() * 1000 | date : 'yyyy-MM-dd a hh:mm:ss z' }}
+              </td>
+              <td>
+                {{
+                  (vestingAccount.base_vesting_account?.end_time?.toNumber() || 0) * 1000
+                    | date : 'yyyy-MM-dd a hh:mm:ss z'
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mb-4">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl font-medium">Click to See Vesting Detail</div>
+        <div class="collapse-content overflow-x-auto">
+          <p class="break-all">
+            A user may choose to delegate their tokens to validators. This may be done with tokens
+            that are vested or are still vesting. As such, vesting tokens which are delegated will
+            be listed under <b>Delegated Vesting</b>. Vested tokens which are delegated will be
+            listed under Delegated Free. Both are variable values that will change based on the
+            amount being delegated and may be updated as more and more tokens become vested.
+          </p>
+          <p class="break-all">
+            For more information on vesting, please see the
+            <a
+              href="https://docs.cosmos.network/main/build/modules/auth/vesting#vesting-account-specification"
+              target="_blank"
+              ><u class="text-info">Cosmos SDK documentation</u></a
+            >.
+          </p>
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>Delegated Vesting</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let del of vestingAccount.base_vesting_account?.delegated_vesting">
+                  <th>
+                    <div class="flex items-center space-x-3">
+                      <div class="avatar mr-2">
+                        <div
+                          class="mask mask-circle w-6 h-6"
+                          *ngIf="symbolImageMap &&symbolImageMap[denomMetadataMap?.[del.denom||'']?.symbol || '']"
+                        >
+                          <img
+                            src="{{ symbolImageMap[denomMetadataMap?.[del.denom||'']?.symbol || ''] }}"
+                            alt="Asset Symbol"
+                          />
+                        </div>
+
+                        <span
+                          class="material-symbols-outlined"
+                          *ngIf="!symbolImageMap ||!symbolImageMap[denomMetadataMap?.[del.denom||'']?.symbol || '']"
+                        >
+                          question_mark
+                        </span>
+                      </div>
+                      {{ del.denom | coinDenom | async }}
+                    </div>
+                  </th>
+                  <td>{{ del.amount | coinAmount : del.denom }}</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Delegated Free</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let free of vestingAccount.base_vesting_account?.delegated_free">
+                  <th>
+                    <div class="flex items-center space-x-3">
+                      <div class="avatar mr-2">
+                        <div
+                          class="mask mask-circle w-6 h-6"
+                          *ngIf="symbolImageMap &&symbolImageMap[denomMetadataMap?.[free.denom||'']?.symbol || '']"
+                        >
+                          <img
+                            src="{{ symbolImageMap[denomMetadataMap?.[free.denom||'']?.symbol || ''] }}"
+                            alt="Asset Symbol"
+                          />
+                        </div>
+
+                        <span
+                          class="material-symbols-outlined"
+                          *ngIf="!symbolImageMap ||!symbolImageMap[denomMetadataMap?.[free.denom||'']?.symbol || '']"
+                        >
+                          question_mark
+                        </span>
+                      </div>
+                      {{ free.denom | coinDenom | async }}
+                    </div>
+                  </th>
+                  <td>{{ free.amount | coinAmount : free.denom }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

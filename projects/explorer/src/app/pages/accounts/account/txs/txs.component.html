@@ -2,6 +2,9 @@
   [txs]="txs$ | async"
   [pageInfo]="paginationInfo$ | async"
   [pageLength]="pageLength$ | async"
+  [maxPageNumber]="maxPageNumber$ | async"
   [pageSizeOptions]="pageSizeOptions"
+  [txType]="txType$ | async"
   (paginationChange)="appPaginationChanged($event)"
+  (txTypeChange)="appTxTypeChanged($event)"
 ></view-txs>

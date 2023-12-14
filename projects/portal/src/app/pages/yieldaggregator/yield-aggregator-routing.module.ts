@@ -30,6 +30,11 @@ const routes: Routes = [
     component: OwnerComponent,
   },
   {
+    path: 'vaults/deposit',
+    redirectTo: 'vaults',
+    pathMatch: 'full',
+  },
+  {
     path: 'vaults/deposit/:address',
     component: DepositComponent,
   },

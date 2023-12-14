@@ -1,4 +1,5 @@
 import { getSymbolExponent } from '../cosmos/bank.model';
+import { CacheService } from '../query.cache.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -13,9 +14,13 @@ export type TokenAmountUSD = {
   providedIn: 'root',
 })
 export class BandProtocolService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cacheService: CacheService) {}
 
   async getPrice(symbol: string): Promise<number | undefined> {
+    const cacheKey = 'oracle_price_' + symbol;
+    if (this.cacheService.has(cacheKey)) {
+      return this.cacheService.get(cacheKey);
+    }
     const url = `${rest}/oracle/v1/request_prices?symbols=${symbol}`;
     try {
       const result = await this.http
@@ -26,6 +31,7 @@ export class BandProtocolService {
           const px = Number(res.price_results[0].px);
           return px / multiplier;
         });
+      this.cacheService.set(cacheKey, result);
       return result;
     } catch {
       console.log(`Failed to get price for ${symbol}`);

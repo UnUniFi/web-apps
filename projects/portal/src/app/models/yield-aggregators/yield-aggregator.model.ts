@@ -1,3 +1,5 @@
+import { StrategyInfo } from '../config.service';
+
 export type DepositToVaultRequest = {
   vaultId: string;
   denom: string;
@@ -6,7 +8,16 @@ export type DepositToVaultRequest = {
 
 export type WithdrawFromVaultRequest = {
   vaultId: string;
-  denom: string;
+  lp_denom: string;
+  readableAmount: number;
+  redeemAmount: number;
+  feeAmount: number;
+  symbol: string;
+};
+
+export type WithdrawFromVaultWithUnbondingRequest = {
+  vaultId: string;
+  lp_denom: string;
   readableAmount: number;
 };
 
@@ -27,15 +38,14 @@ export type TransferVaultRequest = {
   recipientAddress: string;
 };
 
-export type OsmosisPools = {
-  pool_id: number;
-  apr_list: {
-    start_date: string;
-    denom: string;
-    symbol: string;
-    apr_1d: number;
-    apr_7d: number;
-    apr_14d: number;
-    apr_superfluid: number;
-  }[];
-}[];
+export type VaultInfo = {
+  id: string;
+  symbol?: string;
+  name?: string;
+  description?: string;
+  gitUrl?: string;
+  minApy: number;
+  maxApy?: number;
+  certainty: boolean;
+  poolInfos: (StrategyInfo & { weight?: string })[];
+};

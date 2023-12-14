@@ -1,0 +1,14 @@
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title text-warning">Withdrawal Fee Warning</h2>
+    <div>
+      The Withdrawal Fee is high, in excess of 50 percent. It costs
+      {{ data.feeAmount | coinAmount }} {{ data.symbol }}.
+    </div>
+    <div>Are you sure you want to send the tx with the fee?</div>
+    <div class="text-center mt-8">
+      <button class="btn btn-primary w-2/5" (click)="okToSendTx()">OK</button>
+      <button class="btn w-2/5" (click)="cancelToSendTx()">Cancel</button>
+    </div>
+  </div>
+</div>

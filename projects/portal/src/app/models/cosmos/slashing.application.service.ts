@@ -2,7 +2,7 @@ import { createCosmosPrivateKeyFromString } from '../../utils/key';
 import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
-} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+} from '../../views/dialogs/tx-fee-confirm/tx-fee-confirm-dialog.component';
 import { KeyType } from '../keys/key.model';
 import { WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';

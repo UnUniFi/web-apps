@@ -14,9 +14,10 @@ import { AppWithdrawIncentiveRewardFormDialogModule } from './pages/dialogs/ince
 import { AppNftsDialogModule } from './pages/dialogs/nft-pawnshop/nfts-dialog/nfts-dialog.module';
 import { AppDepositFormDialogModule } from './pages/dialogs/vote/deposit-form-dialog/deposit-form-dialog.module';
 import { AppVoteFormDialogModule } from './pages/dialogs/vote/vote-form-dialog/vote-form-dialog.module';
-import { TxFeeConfirmDialogModule } from './views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.module';
 import { InactiveValidatorModule } from './views/dialogs/delegate/invalid-validator-confirm-dialog/inactive-validator-confirm-dialog.module';
+import { TxFeeConfirmDialogModule } from './views/dialogs/tx-fee-confirm/tx-fee-confirm-dialog.module';
 import { TxConfirmDialogModule } from './views/dialogs/txs/tx-confirm/tx-confirm-dialog.module';
+import { WithdrawFeeConfirmDialogModule } from './views/dialogs/txs/withdraw-fee-confirm/withdraw-fee-confirm-dialog.module';
 import { ConnectExternalWalletDialogModule } from './views/dialogs/wallets/connect-external-cosmos-dialog/connect-external-wallet-dialog.module';
 import { ConnectWalletCompletedDialogModule } from './views/dialogs/wallets/connect-wallet-completed-dialog/connect-wallet-completed-dialog.module';
 import { ConnectWalletStartDialogModule } from './views/dialogs/wallets/connect-wallet-start-dialog/connect-wallet-start-dialog.module';
@@ -71,6 +72,7 @@ import { LoadingDialogModule } from 'projects/shared/src/lib/components/loading-
     UnunifiKeyFormDialogModule,
     InactiveValidatorModule,
     TxConfirmDialogModule,
+    WithdrawFeeConfirmDialogModule,
     AppDelegateFormDialogModule,
     AppDelegateMenuDialogModule,
     AppRedelegateFormDialogModule,

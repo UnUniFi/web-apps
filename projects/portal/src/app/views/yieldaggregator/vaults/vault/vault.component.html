@@ -109,32 +109,6 @@
                 </td>
                 <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
               </tr>
-              <!-- <tr>
-                <td class="flex flex-row items-center gap-2">
-                  <span>Bonus APY</span>
-                  <label for="modal-bonus" class="label-text cursor-pointer">
-                    <span class="material-symbols-outlined">help</span>
-                  </label>
-
-                  <input type="checkbox" id="modal-bonus" class="modal-toggle" />
-                  <div class="modal modal-bottom sm:modal-middle">
-                    <div class="modal-box">
-                      <h3 class="font-bold text-lg">What is the bonus APY?</h3>
-                      <p class="my-4">You can receive additional APYs for the campaign period.</p>
-                      <p>
-                        For more information on the bonus APY, visit
-                        <a href="https://docs.ununifi.io" target="_blank">
-                          <u class="text-info">the UnUniFi Campaign Website</u> </a
-                        >.
-                      </p>
-                      <div class="modal-action">
-                        <label for="modal-bonus" class="btn">Okay</label>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>{{ 'Coming soon' }}</td>
-              </tr> -->
             </tbody>
           </table>
         </div>
@@ -238,10 +212,10 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="tabs tabs-boxed w-full">
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
-          Deposit
+          Deposit (Under Maintenance)
         </a>
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
-          Withdrawal
+          Withdrawal (Under Maintenance)
         </a>
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
@@ -380,6 +354,44 @@
         <form #withdrawFormRef="ngForm" (submit)="onSubmitWithdraw()">
           <div class="form-control">
             <label class="label">
+              <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span class="cursor-pointer" (click)="setBurnAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(1)"> 100% </span>
+              </span>
+            </label>
+            <label class="input-group">
+              <input
+                #withdrawAmountRef
+                #withdrawAmountNgModelRef="ngModel"
+                placeholder="0.000000"
+                required
+                type="number"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': withdrawAmountNgModelRef.errors
+                }"
+                [min]="0"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: denom"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="burnAmount"
+                name="burnAmount"
+                (input)="onWithdrawAmountChange()"
+              />
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
+            </label>
+            <span class="label">
+              <span class="label-text-alt">Available balance:</span>
+              <label class="label-text-alt">
+                {{ (denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id]?.amount||'0') | coinAmount }}
+                {{ 'YA-VAULT-' + vault?.vault?.id }}
+              </label>
+            </span>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
               <div class="flex flex-row items-center gap-2">
                 <span class="label-text">Withdrawal Option</span>
                 <!-- The button to open modal -->
@@ -413,63 +425,68 @@
                 </div>
               </div>
             </label>
-            <label class="input-group">
-              <select
-                class="select select-bordered w-full"
-                name="withdrawOption"
-                [(ngModel)]="withdrawOptionId"
-              >
-                <ng-container *ngFor="let option of withdrawOptions">
-                  <option [value]="option.id" [disabled]="option.disabled">
-                    {{ option.display }}
-                  </option>
-                </ng-container>
-              </select>
-            </label>
           </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Enter amount</span>
-              <span class="label-text-alt flex flex-row gap-2">
-                <span class="cursor-pointer" (click)="setBurnAmount(0.25)"> 25% </span>
-                <span class="cursor-pointer" (click)="setBurnAmount(0.5)"> 50% </span>
-                <span class="cursor-pointer" (click)="setBurnAmount(1)"> 100% </span>
-              </span>
-            </label>
-            <label class="input-group">
-              <input
-                #withdrawAmountRef
-                #withdrawAmountNgModelRef="ngModel"
-                placeholder="0.000000"
-                required
-                type="number"
-                class="input input-bordered w-full"
+          <div class="flex flex-col lg:flex-row flex-wrap">
+            <ng-container *ngFor="let option of withdrawOptions; last as last">
+              <div
+                class="grid flex-grow place-items-center card bg-base-300 rounded-box hover cursor-pointer max-w-full"
                 [class]="{
-                  'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
+                  'bg-primary': selectedWithdrawOption?.id === option.id
                 }"
-                [min]="0"
-                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: denom"
-                pattern="^[0-9]*\.?[0-9]{0,6}$"
-                [(ngModel)]="burnAmount"
-                name="burnAmount"
-                (input)="onWithdrawAmountChange()"
-              />
-              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
-            </label>
-            <span class="label">
-              <span class="label-text-alt">Available balance:</span>
-              <label class="label-text-alt">
-                {{ denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id]?.amount | coinAmount }}
-                {{ 'YA-VAULT-' + vault?.vault?.id }}
-              </label>
-            </span>
+                (click)="onClickWithdrawOption(option)"
+              >
+                <div class="card-body max-w-full">
+                  <div class="flex flex-row flex-wrap gap-2">
+                    <button type="button" class="btn btn-circle btn-secondary">
+                      <span class="material-symbols-outlined">{{ option.icon }}</span>
+                    </button>
+                    <h2 class="card-title">{{ option.name }}</h2>
+                  </div>
+                  <p class="break-all">{{ option.description }}</p>
+                  <div class="overflow-x-auto" *ngIf="option.id === 0">
+                    <p class="text-center" *ngIf="vaultInfo === null">
+                      <span class="loading loading-ring loading-lg"></span>
+                    </p>
+                    <table class="table table-sm">
+                      <tbody>
+                        <ng-container *ngFor="let pool of vaultInfo?.poolInfos">
+                          <tr>
+                            <td style="max-width: 12rem" class="truncate hidden sm:table-cell">
+                              {{ pool.name }}
+                            </td>
+                            <td>{{ pool.weight | percent : '1.0-2' }}</td>
+                            <td>After {{ pool.unbondingTimeSec | secondToDate }} Days</td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="card-actions">
+                    <div class="badge badge-lg badge-outline">
+                      Redeem: {{ estimatedRedeemAmount?.total_amount | coinAmount }}
+                      {{ vault?.vault?.symbol }}
+                    </div>
+                    <div>-</div>
+                    <div class="badge badge-lg badge-outline" *ngIf="option.id === 0">
+                      Fee: 0 {{ vault?.vault?.symbol }}
+                    </div>
+                    <div class="badge badge-lg badge-outline" *ngIf="option.id === 1">
+                      Fee: {{ estimatedRedeemAmount?.fee | coinAmount }}
+                      {{ vault?.vault?.symbol }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!last" class="divider lg:divider-horizontal">OR</div>
+            </ng-container>
           </div>
+
           <div class="form-control">
             <label class="label">
-              <span class="label-text">You will receive {{ withdrawOptionId }}</span>
+              <span class="label-text">You will receive</span>
             </label>
 
-            <div *ngIf="withdrawOptionId === 'immediate'">
+            <div *ngIf="selectedWithdrawOption?.id === 1">
               <label class="input-group">
                 <input
                   disabled
@@ -485,7 +502,7 @@
                 </span>
               </span>
             </div>
-            <div *ngIf="withdrawOptionId === 'unbonding'">
+            <div *ngIf="selectedWithdrawOption?.id === 0">
               <label class="input-group">
                 <input
                   disabled
@@ -502,7 +519,7 @@
               class="btn btn-secondary px-8"
               [disabled]="
                 withdrawFormRef.invalid ||
-                (withdrawOptionId === 'immediate' && estimatedRedeemAmount?.redeem_amount === '0')
+                (selectedWithdrawOption?.id === 1 && estimatedRedeemAmount?.redeem_amount === '0')
               "
             >
               Withdrawal

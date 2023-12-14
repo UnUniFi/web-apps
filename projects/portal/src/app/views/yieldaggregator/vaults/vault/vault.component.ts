@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { YieldInfo } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import {
   DepositToVaultRequest,
+  VaultInfo,
   WithdrawFromVaultRequest,
+  WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { CoinAmountPipe } from 'projects/portal/src/app/pipes/coin-amount.pipe';
 import {
@@ -24,8 +25,10 @@ export type ExternalChain = {
 };
 
 export type WithdrawOption = {
-  id: string;
-  display: string;
+  id: number;
+  name: string;
+  description: string;
+  icon?: string;
   disabled: boolean;
 };
 
@@ -66,7 +69,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   usdDepositAmount?: number | null;
   @Input()
-  vaultInfo?: YieldInfo | null;
+  vaultInfo?: VaultInfo | null;
   @Input()
   externalWalletAddress?: string;
 
@@ -79,7 +82,7 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appWithdraw: EventEmitter<WithdrawFromVaultRequest>;
   @Output()
-  appWithdrawWithUnbonding: EventEmitter<WithdrawFromVaultRequest>;
+  appWithdrawWithUnbonding: EventEmitter<WithdrawFromVaultWithUnbondingRequest>;
   @Output()
   appClickChain: EventEmitter<ExternalChain>;
 
@@ -95,17 +98,21 @@ export class VaultComponent implements OnInit, OnChanges {
   };
   withdrawOptions: WithdrawOption[] = [
     {
-      id: 'immediate',
-      display: 'Immediate withdrawal',
-      disabled: false,
+      id: 0,
+      name: 'Unbonding (Under Maintenance)',
+      description: 'Withdrawal will be received after unbonding time ',
+      icon: 'pending_actions',
+      disabled: true,
     },
     {
-      id: 'unbonding',
-      display: 'Withdrawal after the unbonding period',
-      disabled: false,
+      id: 1,
+      name: 'Immediate (Under Maintenance)',
+      description: 'Withdrawal will be received instantly',
+      icon: 'bolt',
+      disabled: true,
     },
   ];
-  withdrawOptionId: string;
+  selectedWithdrawOption?: WithdrawOption;
   chains: ExternalChain[] = [
     {
       id: 'ununifi',
@@ -179,7 +186,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appWithdraw = new EventEmitter();
     this.appWithdrawWithUnbonding = new EventEmitter();
     this.appClickChain = new EventEmitter();
-    this.withdrawOptionId = this.withdrawOptions[0].id;
+    this.selectedWithdrawOption = this.withdrawOptions[1];
   }
 
   ngOnInit(): void {}
@@ -192,24 +199,30 @@ export class VaultComponent implements OnInit, OnChanges {
     (global as any).chain_select_modal.close();
   }
 
+  onClickWithdrawOption(option: WithdrawOption) {
+    this.selectedWithdrawOption = option;
+  }
+
   onDepositAmountChange() {
     this.changeDeposit.emit(this.mintAmount);
   }
 
   onSubmitDeposit() {
-    if (!this.mintAmount) {
-      alert('Please input amount');
-      return;
-    }
-    if (!this.denom) {
-      alert('Please select denom');
-      return;
-    }
-    this.appDeposit.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.mintAmount,
-      denom: this.denom,
-    });
+    alert('Sorry, currently under maintenance');
+    return;
+    // if (!this.mintAmount) {
+    //   alert('Please input amount');
+    //   return;
+    // }
+    // if (!this.denom) {
+    //   alert('Please select denom');
+    //   return;
+    // }
+    // this.appDeposit.emit({
+    //   vaultId: this.vault?.vault?.id!,
+    //   readableAmount: this.mintAmount,
+    //   denom: this.denom,
+    // });
   }
 
   onWithdrawAmountChange() {
@@ -221,19 +234,26 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input amount');
       return;
     }
-    if (this.withdrawOptionId === 'immediate') {
-      this.appWithdraw.emit({
-        vaultId: this.vault?.vault?.id!,
-        readableAmount: this.burnAmount,
-        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-      });
+    if (this.selectedWithdrawOption?.id === 0) {
+      alert('Sorry, currently under maintenance');
+      return;
+      // this.appWithdrawWithUnbonding.emit({
+      //   vaultId: this.vault?.vault?.id!,
+      //   readableAmount: this.burnAmount,
+      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      // });
     }
-    if (this.withdrawOptionId === 'unbonding') {
-      this.appWithdrawWithUnbonding.emit({
-        vaultId: this.vault?.vault?.id!,
-        readableAmount: this.burnAmount,
-        denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-      });
+    if (this.selectedWithdrawOption?.id === 1) {
+      alert('Sorry, currently under maintenance');
+      return;
+      // this.appWithdraw.emit({
+      //   vaultId: this.vault?.vault?.id!,
+      //   readableAmount: this.burnAmount,
+      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      //   redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
+      //   feeAmount: Number(this.estimatedRedeemAmount?.fee),
+      //   symbol: this.vault?.vault?.symbol!,
+      // });
     }
   }
 

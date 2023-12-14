@@ -1,14 +1,15 @@
 import { BandProtocolService } from '../../../models/band-protocols/band-protocol.service';
-import { ConfigService, YieldInfo } from '../../../models/config.service';
+import { ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
+import { VaultInfo } from '../../../models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from '../../../models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from '../../../models/yield-aggregators/yield-aggregator.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { VaultAll200ResponseVaultsInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -20,7 +21,7 @@ export class VaultsComponent implements OnInit {
   address$: Observable<string>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
   symbols$: Observable<{ symbol: string; display: string; img: string }[]>;
-  vaultsInfo$: Observable<YieldInfo[]>;
+  vaultsInfo$: Observable<VaultInfo[]>;
   totalDeposits$: Observable<number[]>;
   keyword$: Observable<string>;
   sortType$: BehaviorSubject<string> = new BehaviorSubject<string>('id');
@@ -44,12 +45,20 @@ export class VaultsComponent implements OnInit {
     const config$ = this.configService.config$;
     this.keyword$ = this.route.queryParams.pipe(map((params) => params.keyword));
     const symbolMetadataMap$ = this.bankQuery.getSymbolMetadataMap$();
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
-    const vaultYieldMap$ = combineLatest([vaults$, config$, osmoPools$]).pipe(
-      map(([vaults, config, pools]) => {
-        const yields = vaults.map((vault) => this.iyaService.calcVaultAPY(vault, config!, pools));
-
-        const yieldMap: { [id: string]: YieldInfo } = {};
+    const vaultYieldMap$ = combineLatest([vaults$, config$]).pipe(
+      switchMap(async ([vaults, config]) => {
+        const results: VaultInfo[] = [];
+        if (!config) {
+          return results;
+        }
+        for (const vault of vaults) {
+          const result = await this.iyaService.calcVaultAPY(vault, config);
+          results.push(result);
+        }
+        return results;
+      }),
+      map((yields) => {
+        const yieldMap: { [id: string]: VaultInfo } = {};
         for (const y of yields) {
           yieldMap[y.id] = y;
         }

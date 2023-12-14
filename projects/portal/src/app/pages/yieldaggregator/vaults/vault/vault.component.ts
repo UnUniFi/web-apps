@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
-import { ConfigService, YieldInfo } from 'projects/portal/src/app/models/config.service';
+import { ConfigService } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { WalletApplicationService } from 'projects/portal/src/app/models/wallets/wallet.application.service';
@@ -11,7 +11,9 @@ import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.ser
 import { YieldAggregatorApplicationService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.application.service';
 import {
   DepositToVaultRequest,
+  VaultInfo,
   WithdrawFromVaultRequest,
+  WithdrawFromVaultWithUnbondingRequest,
 } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.model';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { YieldAggregatorService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.service';
@@ -52,7 +54,7 @@ export class VaultComponent implements OnInit {
   estimatedDepositedAmount$: Observable<EstimateRedeemAmount200Response>;
   vaultBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   usdDepositAmount$: Observable<number>;
-  vaultInfo$: Observable<YieldInfo>;
+  vaultInfo$: Observable<VaultInfo>;
   externalWalletAddress: string | undefined;
 
   constructor(
@@ -152,9 +154,8 @@ export class VaultComponent implements OnInit {
         return this.iyaQuery.getEstimatedRedeemAmount$(id, (burn * 10 ** exponent).toString());
       }),
     );
-    const osmoPools$ = from(this.iyaService.getAllOsmoPool());
-    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$, osmoPools$]).pipe(
-      map(([vault, config, pools]) => this.iyaService.calcVaultAPY(vault, config!, pools)),
+    this.vaultInfo$ = combineLatest([this.vault$, this.configService.config$]).pipe(
+      mergeMap(([vault, config]) => this.iyaService.calcVaultAPY(vault, config!)),
     );
     const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
     this.vaultBalance$ = combineLatest([vaultId$, balances$]).pipe(
@@ -201,11 +202,18 @@ export class VaultComponent implements OnInit {
   }
 
   onSubmitWithdraw(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVault(data.vaultId, data.denom, data.readableAmount);
+    this.iyaApp.withdrawFromVault(
+      data.vaultId,
+      data.lp_denom,
+      data.readableAmount,
+      data.redeemAmount,
+      data.feeAmount,
+      data.symbol,
+    );
   }
 
-  onSubmitWithdrawWithUnbonding(data: WithdrawFromVaultRequest) {
-    this.iyaApp.withdrawFromVaultWithUnbonding(data.vaultId, data.denom, data.readableAmount);
+  onSubmitWithdrawWithUnbonding(data: WithdrawFromVaultWithUnbondingRequest) {
+    this.iyaApp.withdrawFromVaultWithUnbonding(data.vaultId, data.lp_denom, data.readableAmount);
   }
 
   async onClickChain(chain: ExternalChain) {

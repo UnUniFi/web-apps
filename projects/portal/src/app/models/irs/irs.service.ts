@@ -12,11 +12,11 @@ export class IrsService {
   buildMsgDepositLiquidity(
     senderAddress: string,
     trancheId: string,
-    shareOutDenom: string,
     shareOutReadableAmount: number,
-    readableAmountMapInMax: { [denom: string]: number },
+    shareOutDenom: string,
+    readableAmountMapInMax?: { [denom: string]: number },
   ): ununificlient.proto.ununifi.irs.MsgDepositLiquidity {
-    const coins = this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapInMax);
+    const coins = readableAmountMapInMax ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapInMax) : undefined;
     const shareOut = this.bankService.convertDenomReadableAmountMapToCoins({
       [shareOutDenom]: shareOutReadableAmount,
     })[0];
@@ -34,9 +34,9 @@ export class IrsService {
     trancheId: string,
     shareInDenom: string,
     shareInReadableAmount: number,
-    readableAmountMapOutMin: { [denom: string]: number },
+    readableAmountMapOutMin?: { [denom: string]: number },
   ): ununificlient.proto.ununifi.irs.MsgWithdrawLiquidity {
-    const coins = this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapOutMin);
+    const coins = readableAmountMapOutMin ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapOutMin) : undefined;
     const share = this.bankService.convertDenomReadableAmountMapToCoins({
       [shareInDenom]: shareInReadableAmount,
     })[0];
@@ -46,42 +46,6 @@ export class IrsService {
       share_amount: share.amount,
       token_out_mins: coins,
     });
-    return msg;
-  }
-
-  buildMsgDepositToVault(
-    senderAddress: string,
-    vaultId: string,
-    denom: string,
-    readableAmount: number,
-  ) {
-    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
-      [denom]: readableAmount,
-    })[0];
-    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgDepositToVault({
-      sender: senderAddress,
-      vault_id: Long.fromString(vaultId),
-      amount: coin,
-    });
-
-    return msg;
-  }
-
-  buildMsgWithdrawFromVault(
-    senderAddress: string,
-    vaultId: string,
-    denom: string,
-    readableAmount: number,
-  ) {
-    const coin = this.bankService.convertDenomReadableAmountMapToCoins({
-      [denom]: readableAmount,
-    })[0];
-    const msg = new ununificlient.proto.ununifi.yieldaggregator.MsgWithdrawFromVault({
-      sender: senderAddress,
-      vault_id: Long.fromString(vaultId),
-      lp_token_amount: coin.amount,
-    });
-
     return msg;
   }
 

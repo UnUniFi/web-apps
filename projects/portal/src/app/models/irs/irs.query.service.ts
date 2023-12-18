@@ -1,6 +1,6 @@
-import cosmosclient from '@cosmos-client/core';
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { Injectable } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
@@ -18,7 +18,7 @@ import {
 export class IrsQueryService {
   restSdk$ = this.cosmosSDK.sdk$.pipe(pluck('rest'));
 
-  constructor(private readonly cosmosSDK: CosmosSDKService) { }
+  constructor(private readonly cosmosSDK: CosmosSDKService) {}
 
   getIRSParam$(): Observable<IrsParams200ResponseParams> {
     return this.restSdk$.pipe(
@@ -69,24 +69,58 @@ export class IrsQueryService {
     );
   }
 
-  estimateSwapInPool$(poolId: string, denom: string, amount: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+  estimateSwapInPool$(
+    poolId: string,
+    denom: string,
+    amount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.estimateSwapInPool(sdk, poolId, denom, amount)),
       map((res) => res.data.amount!),
     );
   }
 
-  estimateMintPtYtPair$(poolId: string, denom: string, amount: string): Observable<EstimateMintPtYtPair200Response> {
+  estimateMintPtYtPair$(
+    poolId: string,
+    denom: string,
+    amount: string,
+  ): Observable<EstimateMintPtYtPair200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.estimateMintPtYtPair(sdk, poolId, denom, amount)),
       map((res) => res.data),
     );
   }
 
-  estimateRedeemYt$(poolId: string, denom: string, amount: string): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+  estimateRedeemYt$(
+    poolId: string,
+    denom: string,
+    amount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.estimateRedeemYt(sdk, poolId, denom, amount)),
       map((res) => res.data.amount!),
+    );
+  }
+
+  estimateMintLiquidity(
+    poolId: string,
+    desiredAmount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) =>
+        ununifi.rest.irs.estimateMintLiquidityPoolToken(sdk, poolId, desiredAmount),
+      ),
+      map((res) => res.data.required_amount!),
+    );
+  }
+
+  estimateRedeemLiquidity(
+    poolId: string,
+    amount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemLiquidityPoolToken(sdk, poolId, amount)),
+      map((res) => res.data.redeem_amount!),
     );
   }
 }

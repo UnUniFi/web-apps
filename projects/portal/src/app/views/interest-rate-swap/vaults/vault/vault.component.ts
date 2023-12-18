@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   MintPtRequest,
@@ -8,6 +8,10 @@ import {
   RedeemPtYtRequest,
   RedeemYtRequest,
 } from 'projects/portal/src/app/models/irs/irs.model';
+import {
+  AllTranches200ResponseTranchesInner,
+  VaultDetails200Response,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-vault',
@@ -15,6 +19,13 @@ import {
   styleUrls: ['./vault.component.css'],
 })
 export class VaultComponent implements OnInit {
+  @Input()
+  contractAddress?: string | null;
+  @Input()
+  tranches?: AllTranches200ResponseTranchesInner[] | null;
+  @Input()
+  vaultDetails?: (VaultDetails200Response | undefined)[] | null;
+
   inputUnderlying?: string;
   inputYT?: string;
   inputPT?: string;

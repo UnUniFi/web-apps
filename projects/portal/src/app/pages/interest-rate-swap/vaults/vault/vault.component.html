@@ -1,4 +1,7 @@
 <view-vault
+  [contractAddress]="contractAddress$ | async"
+  [tranches]="tranches$ | async"
+  [vaultDetails]="vaultDetails$ | async"
   (appMintYT)="onMintYT($event)"
   (appRedeemYT)="onRedeemYT($event)"
   (appMintPT)="onMintPT($event)"

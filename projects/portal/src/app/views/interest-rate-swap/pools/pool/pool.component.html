@@ -37,23 +37,15 @@
         </div>
       </div>
       <div class="tabs tabs-boxed w-full mb-4">
-        <a
-          class="tab tab-lg w-1/2"
-          [class.tab-active]="tab === 'deposit'"
-          (click)="tab = 'deposit'"
-        >
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
           Deposit
         </a>
-        <a
-          class="tab tab-lg w-1/2"
-          [class.tab-active]="tab === 'withdraw'"
-          (click)="tab = 'withdraw'"
-        >
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'redeem'" (click)="tab = 'redeem'">
           Withdrawal
         </a>
       </div>
 
-      <form *ngIf="tab === 'deposit'">
+      <form *ngIf="tab === 'mint'">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -71,7 +63,7 @@
           </span>
         </div>
         <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle" (click)="tab = 'withdraw'">
+          <button type="button" class="btn btn-circle" (click)="tab = 'redeem'">
             <span class="material-symbols-outlined"> swap_vert </span>
           </button>
         </div>
@@ -88,7 +80,7 @@
           </span>
         </div>
       </form>
-      <form *ngIf="tab === 'withdraw'">
+      <form *ngIf="tab === 'redeem'">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -103,7 +95,7 @@
         </div>
 
         <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle" (click)="tab = 'deposit'">
+          <button type="button" class="btn btn-circle" (click)="tab = 'mint'">
             <span class="material-symbols-outlined"> swap_vert </span>
           </button>
         </div>
@@ -128,14 +120,14 @@
       <div class="card-actions justify-end">
         <button
           class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'deposit'"
+          *ngIf="tab === 'mint'"
         >
           <span class="material-symbols-outlined"> attach_money </span>
           <span class="hidden md:inline">Deposit</span>
         </button>
         <button
           class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'withdraw'"
+          *ngIf="tab === 'redeem'"
         >
           <span class="material-symbols-outlined"> money_off </span>
           <span class="hidden md:inline">Withdrawal</span>

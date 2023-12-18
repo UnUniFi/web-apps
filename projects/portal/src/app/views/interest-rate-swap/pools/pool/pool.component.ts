@@ -1,5 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import cosmosclient from '@cosmos-client/core';
 import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/irs/irs.model';
+import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-pool',
@@ -7,16 +9,34 @@ import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/i
   styleUrls: ['./pool.component.css'],
 })
 export class PoolComponent implements OnInit {
+  @Input()
+  poolId?: string | null;
+  @Input()
+  lsDenom?: string | null;
+  @Input()
+  ptDenom?: string | null;
+  @Input()
+  tranchePool?: AllTranches200ResponseTranchesInner | null;
+  @Input()
+  mintLsAmount?: number | null;
+  @Input()
+  redeemLsAmount?: number | null;
+  @Input()
+  estimateMintRequiredAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  estimateRedeemAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+
   inputUnderlying?: string;
   inputPT?: string;
-  inputLP?: string;
   underlyingDenom? = 'uatom';
-  lpDenom = 'lp/';
-  ptDenom = 'pt/';
 
   description = 'This Vault provides the fixed yield of stATOM.';
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  tab: 'mint' | 'redeem' = 'mint';
 
+  @Output()
+  appChangeMintAmount: EventEmitter<number> = new EventEmitter<number>();
+  @Output()
+  appChangeRedeemAmount: EventEmitter<number> = new EventEmitter<number>();
   @Output()
   appMintLP: EventEmitter<MintLpRequest> = new EventEmitter<MintLpRequest>();
   @Output()
@@ -27,7 +47,11 @@ export class PoolComponent implements OnInit {
   ngOnInit(): void {}
 
   onMintLP(id: string) {
-    if (!this.inputUnderlying && !this.inputLP) {
+    if (!this.lsDenom) {
+      alert('Invalid LP token.');
+      return;
+    }
+    if (!this.mintLsAmount) {
       alert('Please input the token amount.');
       return;
     }
@@ -39,30 +63,30 @@ export class PoolComponent implements OnInit {
       }
       readableAmountMapInMax[this.underlyingDenom] = Number(this.inputUnderlying);
     }
-    if (this.inputPT) {
+    if (this.ptDenom && this.inputPT) {
       readableAmountMapInMax[this.ptDenom] = Number(this.inputPT);
-    }
-    if (!this.inputLP) {
-      alert('Please input the LP token amount.');
-      return;
     }
     this.appMintLP.emit({
       trancheId: id,
-      lpReadableAmount: Number(this.inputLP),
-      lpDenom: this.lpDenom,
+      lpReadableAmount: this.mintLsAmount,
+      lpDenom: this.lsDenom,
       readableAmountMapInMax,
     });
   }
 
   onRedeemLP(id: string) {
-    if (!this.inputLP) {
+    if (!this.lsDenom) {
+      alert('Invalid LP token.');
+      return;
+    }
+    if (!this.redeemLsAmount) {
       alert('Please input the LP token amount.');
       return;
     }
     this.appRedeemLP.emit({
       trancheId: id,
-      lpReadableAmount: Number(this.inputLP),
-      lpDenom: this.lpDenom,
+      lpReadableAmount: this.redeemLsAmount,
+      lpDenom: this.lsDenom,
     });
   }
 }

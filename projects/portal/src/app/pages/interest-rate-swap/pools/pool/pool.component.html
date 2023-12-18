@@ -1,1 +1,14 @@
-<view-pool (appMintLP)="onMintLP($event)" (appRedeemLP)="onRedeemLP($event)"></view-pool>
+<view-pool
+  [poolId]="poolId$ | async"
+  [lsDenom]="lsDenom$ | async"
+  [ptDenom]="ptDenom$ | async"
+  [tranchePool]="tranchePool$ | async"
+  [mintLsAmount]="mintLsAmount$ | async"
+  [redeemLsAmount]="redeemLsAmount$ | async"
+  [estimateMintRequiredAmount]="estimateMintRequiredAmount$ | async"
+  [estimateRedeemAmount]="estimateRedeemAmount$ | async"
+  (appChangeMintAmount)="onChangeMintAmount($event)"
+  (appChangeRedeemAmount)="onChangeRedeemAmount($event)"
+  (appMintLP)="onMintLP($event)"
+  (appRedeemLP)="onRedeemLP($event)"
+></view-pool>

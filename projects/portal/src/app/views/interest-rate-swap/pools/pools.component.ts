@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-pools',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pools.component.css'],
 })
 export class PoolsComponent implements OnInit {
+  @Input()
+  tranchePools?: AllTranches200ResponseTranchesInner[] | null;
+
   constructor() {}
 
   ngOnInit(): void {}

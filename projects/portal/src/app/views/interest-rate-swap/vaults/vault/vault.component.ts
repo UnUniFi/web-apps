@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import {
   MintPtRequest,
   MintPtYtRequest,
@@ -8,8 +9,10 @@ import {
   RedeemPtYtRequest,
   RedeemYtRequest,
 } from 'projects/portal/src/app/models/irs/irs.model';
+import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintPtYtPair200Response,
   VaultDetails200Response,
 } from 'ununifi-client/esm/openapi';
 
@@ -25,6 +28,18 @@ export class VaultComponent implements OnInit {
   tranches?: AllTranches200ResponseTranchesInner[] | null;
   @Input()
   vaultDetails?: (VaultDetails200Response | undefined)[] | null;
+  @Input()
+  estimateMintPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimateRedeemPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimateMintPtYt?: EstimateMintPtYtPair200Response | null;
+  @Input()
+  estimatePtRedeemPtYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimateRequiredUtMintYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimateRedeemMaturedYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   inputUnderlying?: string;
   inputYT?: string;
@@ -40,17 +55,35 @@ export class VaultComponent implements OnInit {
   tab: 'deposit' | 'withdraw' = 'deposit';
 
   @Output()
-  appMintYT: EventEmitter<MintYtRequest> = new EventEmitter<MintYtRequest>();
-  @Output()
-  appRedeemYT: EventEmitter<RedeemYtRequest> = new EventEmitter<RedeemYtRequest>();
-  @Output()
   appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();
+  @Output()
+  appChangeMintPT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
   @Output()
   appRedeemPT: EventEmitter<RedeemPtRequest> = new EventEmitter<RedeemPtRequest>();
   @Output()
+  appChangeRedeemPT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
   appMintPTYT: EventEmitter<MintPtYtRequest> = new EventEmitter<MintPtYtRequest>();
   @Output()
+  appChangeMintPTYT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
   appRedeemPTYT: EventEmitter<RedeemPtYtRequest> = new EventEmitter<RedeemPtYtRequest>();
+  @Output()
+  appChangeRedeemPTYT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appMintYT: EventEmitter<MintYtRequest> = new EventEmitter<MintYtRequest>();
+  @Output()
+  appChangeMintYT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appRedeemYT: EventEmitter<RedeemYtRequest> = new EventEmitter<RedeemYtRequest>();
+  @Output()
+  appChangeRedeemYT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
 
   constructor(private router: Router) {}
 

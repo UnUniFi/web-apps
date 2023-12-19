@@ -91,14 +91,13 @@ export class IrsQueryService {
     );
   }
 
-  estimateRedeemYt$(
+  estimateRedeeemPtYtPair$(
     poolId: string,
-    denom: string,
-    amount: string,
+    ytAmount: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemYt(sdk, poolId, denom, amount)),
-      map((res) => res.data.amount!),
+      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemPtYtPair(sdk, poolId, ytAmount)),
+      map((res) => res.data.pt_amount!),
     );
   }
 
@@ -121,6 +120,26 @@ export class IrsQueryService {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.estimateRedeemLiquidityPoolToken(sdk, poolId, amount)),
       map((res) => res.data.redeem_amount!),
+    );
+  }
+
+  estimateRequiredUtMintYt$(
+    poolId: string,
+    desiredAmount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.estimateRequiredUtSwapToYt(sdk, poolId, desiredAmount)),
+      map((res) => res.data.required_ut_amount!),
+    );
+  }
+
+  estimateRedeemMaturedYt$(
+    poolId: string,
+    ytAmount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.estimateSwapMaturedYtToUt(sdk, poolId, ytAmount)),
+      map((res) => res.data.ut_amount!),
     );
   }
 }

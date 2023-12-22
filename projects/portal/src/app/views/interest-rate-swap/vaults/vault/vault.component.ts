@@ -90,7 +90,7 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {}
 
   changeSimple() {
-    this.router.navigate(['interest-rate-swap', 'simple-vaults', '1']);
+    this.router.navigate(['interest-rate-swap', 'simple-vaults', this.contractAddress]);
   }
 
   onMintPTYT(id: string) {

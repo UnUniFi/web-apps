@@ -1,6 +1,8 @@
 import { InterestRateSwapComponent } from './interest-rate-swap.component';
 import { PoolComponent } from './pools/pool/pool.component';
 import { PoolsComponent } from './pools/pools.component';
+import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.component';
+import { SimplePoolsComponent } from './simple-pools/simple-pools.component';
 import { SimpleVaultComponent } from './simple-vaults/simple-vault/simple-vault.component';
 import { SimpleVaultsComponent } from './simple-vaults/simple-vaults.component';
 import { VaultComponent } from './vaults/vault/vault.component';
@@ -36,6 +38,14 @@ const routes: Routes = [
   {
     path: 'pools/:id',
     component: PoolComponent,
+  },
+  {
+    path: 'simple-pools',
+    component: SimplePoolsComponent,
+  },
+  {
+    path: 'simple-pools/:id',
+    component: SimplePoolComponent,
   },
 ];
 

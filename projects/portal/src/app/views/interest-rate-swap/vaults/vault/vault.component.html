@@ -2,15 +2,15 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li><a routerLink="..">Vaults</a></li>
+        <li><a routerLink="..">Markets</a></li>
         <li>Vault #{{ 1 }}</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <label class="cursor-pointer label my-4 gap-2">
-      <span class="label-text">Advanced</span>
-      <input type="checkbox" class="toggle toggle-primary" checked (click)="changeSimple()" />
-    </label>
+    <div class="join">
+      <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
+      <button class="btn btn-sm btn-primary join-item">Trade</button>
+    </div>
   </div>
 
   <div class="card bg-base-200 shadow-xl mb-8">

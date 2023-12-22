@@ -2,31 +2,27 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li>Vaults</li>
+        <li>Markets</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <label class="cursor-pointer label my-4 gap-2">
-      <span class="label-text">Advanced</span>
-      <input type="checkbox" class="toggle toggle-primary" checked (click)="changeSimple()" />
-    </label>
+    <div class="join">
+      <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
+      <button class="btn btn-sm btn-primary join-item">Trade</button>
+    </div>
   </div>
 
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">Interest Rate Swap Vaults</h2>
-      <p>
-        UnUniFi offers fixed-rate asset management. You can get more yield by investing at long-term
-        or variable interest rates.
-      </p>
-      <p>
-        Looking to find more vaults? Check
-        <a class="link link-info" routerLink="/yield-aggregator/vaults"
-          >UnUniFi Yield Aggregator Vaults.</a
-        >
-      </p>
+  <p class="font-bold">Exit anytime at market price.</p>
+  <p class="font-light">
+    Looking to find more vaults? Check
+    <a class="link link-info font-bold" routerLink="/yield-aggregator/vaults">
+      UnUniFi Yield Aggregator Vaults</a
+    >.
+  </p>
+
+  <div class="flex my-8">
+    <form>
       <div class="form-control w-full">
-        <label class="label"> </label>
         <div class="join">
           <input
             type="text"
@@ -49,13 +45,13 @@
               />
             </svg>
           </button>
-          <select class="join-item select select-bordered">
-            <option disabled selected>Sort By</option>
-            <option>Interest Rate</option>
-          </select>
         </div>
-        <label class="label"> </label>
       </div>
+    </form>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-neutral join-item">Active</button>
+      <button class="btn join-item">Inactive</button>
     </div>
   </div>
 

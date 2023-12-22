@@ -2,22 +2,22 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li>Vaults</li>
+        <li>Earn Fixed Yield</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
-    <label class="cursor-pointer label my-4 gap-2">
-      <span class="label-text">Advanced</span>
-      <input type="checkbox" class="toggle toggle-primary" (click)="changeAdvanced()" />
-    </label>
+    <div class="join">
+      <button class="btn btn-sm btn-primary join-item">Earn</button>
+      <button class="btn btn-sm btn-primary glass join-item" (click)="changeAdvanced()">
+        Trade
+      </button>
+    </div>
   </div>
 
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">Earn Fixed Yield</h2>
-      <p>Choose Vault and get a fixed interest rate by depositing your funds.</p>
+  <p class="font-bold">Simple and secure.</p>
+  <div class="flex my-8">
+    <form>
       <div class="form-control w-full">
-        <label class="label"> </label>
         <div class="join">
           <input
             type="text"
@@ -40,14 +40,9 @@
               />
             </svg>
           </button>
-          <select class="join-item select select-bordered">
-            <option disabled selected>Sort By</option>
-            <option>Interest Rate</option>
-          </select>
         </div>
-        <label class="label"> </label>
       </div>
-    </div>
+    </form>
   </div>
 
   <div class="overflow-x-auto">

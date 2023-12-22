@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -10,7 +11,11 @@ export class PoolsComponent implements OnInit {
   @Input()
   tranchePools?: AllTranches200ResponseTranchesInner[] | null;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  changeSimple() {
+    this.router.navigate(['interest-rate-swap', 'simple-pools']);
+  }
 }

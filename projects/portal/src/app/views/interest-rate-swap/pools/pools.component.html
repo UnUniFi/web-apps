@@ -2,25 +2,26 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li>Pools</li>
+        <li>Liquidity Pools</li>
       </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
+      <button class="btn btn-sm btn-primary join-item">Trade</button>
     </div>
   </div>
 
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">Liquidity Pools</h2>
-      <p>
-        Assets deposited in this pool are automatically deposited into the vault strategy. Then the
-        share will be automatically splitted into zero-coupon bond and yield bearing token. These
-        are used for fixed-rate vaults.
-      </p>
-      <p>
-        Check <a class="link link-info" routerLink="/interest-rate-swap/vaults">here</a> for more
-        information on fixed-rate vaults.
-      </p>
+  <p class="font-bold">Exit anytime at market price.</p>
+  <p class="font-light">
+    Check
+    <a class="link link-info font-semibold" routerLink="/interest-rate-swap/vaults">here</a> for
+    more information on fixed-rate vaults.
+  </p>
+
+  <div class="flex my-8">
+    <form>
       <div class="form-control w-full">
-        <label class="label"> </label>
         <div class="join">
           <input
             type="text"
@@ -43,13 +44,13 @@
               />
             </svg>
           </button>
-          <select class="join-item select select-bordered">
-            <option disabled selected>Sort By</option>
-            <option>Interest Rate</option>
-          </select>
         </div>
-        <label class="label"> </label>
       </div>
+    </form>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-neutral join-item">Active</button>
+      <button class="btn join-item">Inactive</button>
     </div>
   </div>
 

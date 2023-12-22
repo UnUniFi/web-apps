@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'view-simple-pools',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./simple-pools.component.css'],
 })
 export class SimplePoolsComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  changeAdvanced() {
+    this.router.navigate(['interest-rate-swap', 'pools']);
+  }
 }

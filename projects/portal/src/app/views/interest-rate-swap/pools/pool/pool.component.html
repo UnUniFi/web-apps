@@ -2,9 +2,14 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li><a routerLink="..">Pools</a></li>
+        <li><a routerLink="..">Liquidity Pools</a></li>
         <li>Pool #{{ 1 }}</li>
       </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
+      <button class="btn btn-sm btn-primary join-item">Trade</button>
     </div>
   </div>
 

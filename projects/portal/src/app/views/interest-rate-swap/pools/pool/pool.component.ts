@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/irs/irs.model';
 import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
@@ -42,9 +43,13 @@ export class PoolComponent implements OnInit {
   @Output()
   appRedeemLP: EventEmitter<RedeemLpRequest> = new EventEmitter<RedeemLpRequest>();
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  changeSimple() {
+    this.router.navigate(['interest-rate-swap', 'simple-pools', this.poolId]);
+  }
 
   onMintLP(id: string) {
     if (!this.lsDenom) {

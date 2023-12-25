@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-screen-xl">
   <div class="flex flex-row flex-wrap mb-8">
-    <div class="text-xl breadcrumbs">
+    <div class="text-2xl font-bold breadcrumbs">
       <ul>
         <li>Liquidity Pools</li>
       </ul>
@@ -19,7 +19,7 @@
     more information on fixed-rate vaults.
   </p>
 
-  <div class="flex my-8">
+  <div class="flex my-8 gap-4">
     <form>
       <div class="form-control w-full">
         <div class="join">
@@ -49,25 +49,72 @@
     </form>
     <span class="flex-auto"></span>
     <div class="join">
-      <button class="btn btn-neutral join-item">Active</button>
-      <button class="btn join-item">Inactive</button>
+      <button class="btn btn-sm btn-neutral join-item">Active</button>
+      <button class="btn btn-sm join-item">Inactive</button>
     </div>
+    <button
+      class="btn btn-sm btn-square"
+      [class]="{ 'btn-neutral': viewMode === 'table' }"
+      (click)="viewMode = 'table'"
+    >
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <button
+      class="btn btn-sm btn-square"
+      [class]="{ 'btn-neutral': viewMode === 'grid' }"
+      (click)="viewMode = 'grid'"
+    >
+      <span class="material-symbols-outlined">grid_view</span>
+    </button>
   </div>
 
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
     <table class="table">
-      <!-- head -->
       <thead>
-        <tr>
+        <tr class="border-b-2 border-[#adc9ff]">
           <th></th>
-          <th>Name</th>
-          <th>TVL</th>
-          <th>APY</th>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Maturity</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'maturity' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>TVL</span>
+              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'tvl' }">
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>APY</span>
+              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
         </tr>
       </thead>
       <tbody>
-        <!-- row 1 -->
-        <tr class="hover cursor-pointer" routerLink="1">
+        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
           <th>
             <div class="avatar">
               <div class="w-8 rounded-full">
@@ -81,36 +128,114 @@
             </div>
           </th>
           <td>
-            Stride stATOM
-            <br />
-            <div class="badge badge-primary">ATOM</div>
+            <div>
+              <div class="text-xl font-bold">stATOM</div>
+              <div class="text-sm opacity-50">Stride</div>
+            </div>
           </td>
-          <td>{{ 34323523 | currency }}</td>
-          <td>{{ 0.642 | percent : '1.0-0' }}</td>
+          <td>
+            <div>
+              <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+              <div class="text-sm opacity-50">317 Days</div>
+            </div>
+          </td>
+          <td>
+            <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+          </td>
+          <td>
+            <div class="text-xl font-bold text-accent">
+              {{ '0.1003' | percent : '1.0-2' }} - {{ '0.1003' | percent : '1.0-2' }}
+            </div>
+          </td>
         </tr>
-        <!-- row 2 -->
-        <tr class="hover cursor-pointer" routerLink="2">
+
+        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
           <th>
             <div class="avatar">
               <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" />
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
               </div>
               <div class="avatar -ml-2 mt-4">
                 <div class="w-4 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/27607.png" />
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
                 </div>
               </div>
             </div>
           </th>
           <td>
-            Quasar USDC/USDT Dynamic S+
-            <br />
-            <div class="badge badge-primary">USDC</div>
+            <div>
+              <div class="text-xl font-bold">stATOM</div>
+              <div class="text-sm opacity-50">Stride</div>
+            </div>
           </td>
-          <td>{{ 315323511 | currency }}</td>
-          <td>{{ 0.546 | percent : '1.0-0' }}</td>
+          <td>
+            <div>
+              <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+              <div class="text-sm opacity-50">317 Days</div>
+            </div>
+          </td>
+          <td>
+            <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+          </td>
+          <td>
+            <div class="text-xl font-bold text-accent">
+              {{ '0.1003' | percent : '1.0-2' }} - {{ '0.1003' | percent : '1.0-2' }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <div>
+            <h2 class="card-title">stATOM</h2>
+            <div class="text-sm opacity-50">Stride</div>
+          </div>
+          <span class="flex-auto"></span>
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td class="flex flex-row flex-wrap gap-2 items-end">
+                  <div class="text-xl text-accent">{{ '0.1003' | percent : '1.0-2' }}</div>
+                  <div class="text-sm">p.a.</div>
+                  <span class="material-symbols-outlined text-accent"> bolt </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="flex flex-row flex-wrap gap-2 items-end">
+                  <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+                  <div class="text-lg">TVL</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="text-lg opacity-75">Maturity</div>
+                </td>
+                <td>
+                  <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+                  <div class="text-sm opacity-50">317 Days</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

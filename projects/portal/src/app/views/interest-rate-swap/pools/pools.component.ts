@@ -11,6 +11,9 @@ export class PoolsComponent implements OnInit {
   @Input()
   tranchePools?: AllTranches200ResponseTranchesInner[] | null;
 
+  sortType?: string;
+  viewMode?: string = 'table';
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

@@ -55,6 +55,72 @@
     </div>
   </div>
 
+  <div class="overflow-x-auto">
+    <table class="table">
+      <thead>
+        <th></th>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Name</span>
+            <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'name' }">
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Maturity</span>
+            <span
+              class="material-symbols-outlined"
+              [class]="{ 'text-info': sortType === 'maturity' }"
+            >
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Underlying APY</span>
+            <span
+              class="material-symbols-outlined"
+              [class]="{ 'text-info': sortType === 'underlying' }"
+            >
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Implied APY</span>
+            <span
+              class="material-symbols-outlined"
+              [class]="{ 'text-info': sortType === 'implied' }"
+            >
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Long Yield APY</span>
+            <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'long' }">
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs flex-nowrap">
+            <span>Fixed APY</span>
+            <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'fixed' }">
+              keyboard_arrow_down
+            </span>
+          </button>
+        </td>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
   <div class="card w-full bg-base-100 shadow-xl my-4">
     <div class="card-body">
       <h2 class="card-title">
@@ -93,7 +159,7 @@
       </div>
     </div>
   </div>
-  <div class="card w-full bg-base-100 shadow-xl my-4">
+  <!-- <div class="card w-full bg-base-100 shadow-xl my-4">
     <div class="card-body">
       <h2 class="card-title">
         <div class="avatar">
@@ -130,5 +196,5 @@
         <button class="btn btn-primary" routerLink="2">Deposit</button>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./vaults.component.css'],
 })
 export class VaultsComponent implements OnInit {
+  sortType?: string;
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

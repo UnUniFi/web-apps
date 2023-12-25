@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class VaultsComponent implements OnInit {
   sortType?: string;
+  viewMode?: string = 'table';
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

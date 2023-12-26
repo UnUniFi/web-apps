@@ -13,130 +13,264 @@
     </div>
   </div>
 
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">
-        <div class="avatar">
-          <div class="w-8 rounded-full">
-            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-          </div>
-          <div class="avatar -ml-2 mt-4">
-            <div class="w-4 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-            </div>
-          </div>
-        </div>
-        Stride stATOM
-      </h2>
-      <p class="whitespace-pre-wrap mb-4">{{ description }}</p>
-      <div class="stats stats-vertical md:stats-horizontal mb-4">
-        <div class="stat">
-          <div class="stat-title">APY</div>
-          <div class="stat-value">{{ 0.642 | percent : '1.0-2' }}</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">TVL</div>
-          <div class="stat-value">{{ 34323523 | currency }}</div>
-          <div class="stat-desc"></div>
-        </div>
-      </div>
-      <div class="tabs tabs-boxed w-full mb-4">
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
-          Deposit
+  <div class="flex flex-row flex-wrap gap-4 mb-8">
+    <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+      <div class="tabs w-full">
+        <a
+          class="tab tab-lg tab-bordered w-1/2"
+          [class.tab-active]="modeTab === 'mint'"
+          (click)="modeTab = 'mint'"
+        >
+          Add Liquidity
         </a>
-        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'redeem'" (click)="tab = 'redeem'">
-          Withdrawal
+        <a
+          class="tab tab-lg tab-bordered w-1/2"
+          [class.tab-active]="modeTab === 'redeem'"
+          (click)="modeTab = 'redeem'"
+        >
+          Remove Liquidity
         </a>
       </div>
+      <div class="card-body">
+        <form *ngIf="modeTab === 'mint'">
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Input</span>
+              <button class="btn btn-xs btn-primary">Max</button>
+            </span>
+            <label class="input-group join">
+              <button class="btn">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                {{ 'ATOM' }}
+                <div class="flex-auto"></div>
+                <div class="material-symbols-outlined">keyboard_arrow_down</div>
+              </button>
+              <input class="join-item input input-bordered w-full" />
+            </label>
+            <span class="label">
+              <span class="label-text-alt">Available Balance:</span>
+              <span class="label-text-alt">0.0000</span>
+            </span>
 
-      <form *ngIf="tab === 'mint'">
-        <div class="form-control">
-          <span class="label">
-            <span class="label-text">Input</span>
-          </span>
-          <label class="input-group join">
-            <span>PT</span>
-            <input class="join-item input input-bordered w-full" />
-          </label>
-          <label class="input-group join">
-            <span>USDC</span>
-            <input class="join-item input input-bordered w-full" />
-          </label>
-          <span class="label">
-            <span class="label-text"></span>
-          </span>
-        </div>
-        <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle" (click)="tab = 'redeem'">
-            <span class="material-symbols-outlined"> swap_vert </span>
-          </button>
-        </div>
-        <div class="form-control">
-          <span class="label">
-            <span class="label-text">Output</span>
-          </span>
-          <label class="input-group join">
-            <span>LP</span>
-            <input disabled class="join-item input input-bordered w-full" />
-          </label>
-          <span class="label">
-            <span class="label-text"></span>
-          </span>
-        </div>
-      </form>
-      <form *ngIf="tab === 'redeem'">
-        <div class="form-control">
-          <span class="label">
-            <span class="label-text">Input</span>
-          </span>
-          <label class="input-group join">
-            <span>LP</span>
-            <input class="join-item input input-bordered w-full" />
-          </label>
-          <span class="label">
-            <span class="label-text"></span>
-          </span>
-        </div>
+            <span class="label">
+              <span class="label-text"></span>
+              <button class="btn btn-xs btn-primary">Max</button>
+            </span>
+            <label class="input-group join">
+              <span class="gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                <div>PT</div>
+                <div>{{ 'ATOM' }}</div>
+              </span>
+              <input class="join-item input input-bordered w-full" />
+            </label>
+            <span class="label">
+              <span class="label-text-alt">Available Balance:</span>
+              <span class="label-text-alt">0.0000</span>
+            </span>
+          </div>
 
-        <div class="flex flex-row justify-center">
-          <button type="button" class="btn btn-circle" (click)="tab = 'mint'">
-            <span class="material-symbols-outlined"> swap_vert </span>
-          </button>
-        </div>
+          <div class="flex flex-row justify-center">
+            <span class="material-symbols-outlined"> arrow_downward </span>
+          </div>
+          <div class="divider"></div>
 
-        <div class="form-control">
-          <span class="label">
-            <span class="label-text">Output</span>
-          </span>
-          <label class="input-group join">
-            <span>PT</span>
-            <input disabled class="join-item input input-bordered w-full" />
-          </label>
-          <label class="input-group join">
-            <span>USDC</span>
-            <input disabled class="join-item input input-bordered w-full" />
-          </label>
-          <span class="label">
-            <span class="label-text"></span>
-          </span>
+          <div class="form-control gap-2">
+            <span class="label">
+              <span class="label-text">Output</span>
+            </span>
+            <label class="input-group join">
+              <span class="gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                <div>LP</div>
+                <div>{{ 'ATOM' }}</div>
+              </span>
+              <input class="join-item input input-bordered input-info w-full" />
+            </label>
+            <span class="label">
+              <span class="label-text"></span>
+            </span>
+          </div>
+          <div class="card-actions mt-4">
+            <button class="btn btn-primary w-full gap-1">
+              <span>Add Liquidity</span>
+            </button>
+          </div>
+        </form>
+
+        <form *ngIf="modeTab === 'redeem'">
+          <div class="form-control">
+            <span class="label">
+              <span class="label-text">Input</span>
+              <button class="btn btn-xs btn-primary">Max</button>
+            </span>
+
+            <label class="input-group join">
+              <span class="gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                <div>LP</div>
+                <div>{{ 'ATOM' }}</div>
+              </span>
+              <input class="join-item input input-bordered input-info w-full" />
+            </label>
+
+            <span class="label">
+              <span class="label-text-alt">Available Balance:</span>
+              <span class="label-text-alt">0.0000</span>
+            </span>
+          </div>
+
+          <div class="flex flex-row justify-center">
+            <span class="material-symbols-outlined"> arrow_downward </span>
+          </div>
+          <div class="divider"></div>
+
+          <div class="form-control gap-2">
+            <span class="label">
+              <span class="label-text">Output</span>
+            </span>
+            <label class="input-group join">
+              <button class="btn">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                {{ 'ATOM' }}
+                <div class="flex-auto"></div>
+                <div class="material-symbols-outlined">keyboard_arrow_down</div>
+              </button>
+              <input class="join-item input input-bordered w-full" disabled />
+            </label>
+
+            <span class="label">
+              <span class="label-text"></span>
+            </span>
+            <label class="input-group join">
+              <span class="gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                </div>
+                <div>PT</div>
+                <div>{{ 'ATOM' }}</div>
+              </span>
+              <input class="join-item input input-bordered w-full" disabled />
+            </label>
+            <span class="label">
+              <span class="label-text"></span>
+            </span>
+          </div>
+          <div class="card-actions mt-4">
+            <button class="btn btn-primary w-full gap-1">
+              <span class="material-symbols-outlined"> attach_money </span>
+              <span>Swap</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <div class="card bg-base-200 shadow-xl w-full md:w-auto mb-4">
+        <div class="card-body">
+          <h2 class="card-title">
+            <span>My APY</span>
+            <span class="flex-auto"></span>
+            <span class="text-accent">{{ 0.0576 | percent : '1.2-2' }}</span>
+          </h2>
+
+          <div class="overflow-x-auto">
+            <table class="table">
+              <tbody>
+                <tr class="bg-base-100">
+                  <th>Underlying Yield</th>
+                  <td>{{ 0.03078 | percent : '1.2-2' }}</td>
+                </tr>
+                <tr class="bg-base-100">
+                  <th>PT Yield</th>
+                  <td>{{ 0.06462 | percent : '1.2-2' }}</td>
+                </tr>
+                <tr class="bg-base-100">
+                  <th>LP Yield</th>
+                  <td>{{ 0.02036 | percent : '1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <th>My Liquidity</th>
+                  <td>{{ 0 | currency }}</td>
+                </tr>
+                <tr>
+                  <th>Claimable Rewards</th>
+                  <td>{{ 0 | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </form>
-      <div class="card-actions justify-end">
-        <button
-          class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'mint'"
-        >
-          <span class="material-symbols-outlined"> attach_money </span>
-          <span class="hidden md:inline">Deposit</span>
-        </button>
-        <button
-          class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'redeem'"
-        >
-          <span class="material-symbols-outlined"> money_off </span>
-          <span class="hidden md:inline">Withdrawal</span>
-        </button>
+      </div>
+      <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+        <div class="card-body">
+          <h2 class="card-title">
+            <span>Total Liquidity</span>
+            <span class="flex-auto"></span>
+            <span class="text-accent">{{ 3880000 | currency }}</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>
+                    <div class="flex flex-row items-center gap-2">
+                      <div class="avatar">
+                        <div class="w-8 rounded-full">
+                          <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                        </div>
+                      </div>
+                      ATOM
+                    </div>
+                  </th>
+                  <td>
+                    <div class="text-xl font-bold">{{ 376.86 }}</div>
+                    <div class="text-sm opacity-50">{{ 659405.68 | currency }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    <div class="flex flex-row items-center gap-2">
+                      <div class="avatar">
+                        <div class="w-8 rounded-full">
+                          <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                        </div>
+                      </div>
+                      PT ATOM
+                    </div>
+                  </th>
+                  <td>
+                    <div class="text-xl font-bold">{{ 376.86 }}</div>
+                    <div class="text-sm opacity-50">{{ 659405.68 | currency }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

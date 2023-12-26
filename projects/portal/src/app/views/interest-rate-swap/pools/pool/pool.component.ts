@@ -33,6 +33,7 @@ export class PoolComponent implements OnInit {
 
   description = 'This Vault provides the fixed yield of stATOM.';
   tab: 'mint' | 'redeem' = 'mint';
+  modeTab: 'mint' | 'redeem' = 'mint';
 
   @Output()
   appChangeMintAmount: EventEmitter<number> = new EventEmitter<number>();

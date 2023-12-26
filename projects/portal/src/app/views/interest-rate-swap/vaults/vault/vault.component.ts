@@ -51,8 +51,10 @@ export class VaultComponent implements OnInit {
   requiredUT?: string;
 
   description = 'This Vault provides the fixed yield of stATOM.';
-  yield: 'long' | 'variable' | 'fixed' = 'fixed';
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  modeTab: 'swap' | 'mint' = 'swap';
+  swapTab: 'pt' | 'yt' = 'pt';
+  txTab: 'all' | 'swap' | 'liquidity' = 'all';
+  txMode: 'mint' | 'redeem' = 'mint';
 
   @Output()
   appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();

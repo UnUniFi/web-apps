@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./simple-pools.component.css'],
 })
 export class SimplePoolsComponent implements OnInit {
+  sortType?: string;
+  viewMode?: 'table' | 'grid' = 'table';
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

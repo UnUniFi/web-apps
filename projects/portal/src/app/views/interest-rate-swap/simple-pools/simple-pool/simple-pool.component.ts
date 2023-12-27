@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./simple-pool.component.css'],
 })
 export class SimplePoolComponent implements OnInit {
+  tab: 'deposit' | 'withdraw' = 'deposit';
+  selectedMaturity?: string;
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

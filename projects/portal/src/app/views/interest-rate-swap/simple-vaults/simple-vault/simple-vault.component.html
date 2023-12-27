@@ -104,7 +104,11 @@
 
   <div class="card bg-base-200 shadow-xl mb-8">
     <div class="card-body">
-      <h2 class="card-title">Step.2 Deposit to Earn</h2>
+      <h2 class="card-title">
+        Step.2
+        <div *ngIf="tab === 'deposit'">Deposit to Earn</div>
+        <div *ngIf="tab === 'withdraw'">Withdraw your position</div>
+      </h2>
       <div class="tabs w-full">
         <a
           class="tab tab-lg tab-bordered w-1/2 text-accent"

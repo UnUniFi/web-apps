@@ -15,56 +15,115 @@
     </div>
   </div>
 
-  <div class="card bg-base-200 shadow-xl mb-8">
+  <h1 class="text-2xl mb-8">Earn Fixed Yield with {{ 'stATOM' }}</h1>
+
+  <div class="card bg-base-200 shadow-xl mb-4">
     <div class="card-body">
-      <h2 class="card-title">
-        <div class="avatar">
-          <div class="w-8 rounded-full">
-            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-          </div>
-          <div class="avatar -ml-2 mt-4">
-            <div class="w-4 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+      <h2 class="card-title">Step.1 Select a Maturity</h2>
+      <p class="opacity-50">Withdraw anytime at market prices</p>
+
+      <div class="flex flex-row flex-wrap gap-2 mb-4">
+        <button
+          class="btn btn-lg btn-outline btn-primary"
+          [class.btn-active]="selectedMaturity === '1'"
+          (click)="selectedMaturity = '1'"
+        >
+          <div>
+            <div class="text-xl flex flex-row">
+              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
+              <p class="lowercase ml-2">({{ 317 }}d)</p>
+            </div>
+            <div class="text-xl flex flex-row">
+              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
+              Fixed APY
             </div>
           </div>
-        </div>
-        Stride stATOM
-      </h2>
-      <p class="whitespace-pre-wrap mb-4">{{ description }}</p>
-      <div class="stats stats-vertical md:stats-horizontal mb-4">
-        <div class="stat">
-          <div class="stat-title">APY</div>
-          <div class="stat-value text-info">{{ 0.1805 | percent : '1.2-2' }}</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Vault TVL</div>
-          <div class="stat-value">{{ 1634478 | currency }}</div>
-          <div class="stat-desc"></div>
-        </div>
-        <div class="stat">
-          <div class="stat-title">Pool TVL</div>
-          <div class="stat-value">{{ 34323523 | currency }}</div>
-          <div class="stat-desc"></div>
-        </div>
+        </button>
+        <button
+          class="btn btn-lg btn-outline btn-primary"
+          [class.btn-active]="selectedMaturity === '2'"
+          (click)="selectedMaturity = '2'"
+        >
+          <div>
+            <div class="text-xl flex flex-row">
+              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
+              <p class="lowercase ml-2">({{ 317 }}d)</p>
+            </div>
+            <div class="text-xl flex flex-row">
+              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
+              Fixed APY
+            </div>
+          </div>
+        </button>
+        <button
+          class="btn btn-lg btn-outline btn-primary"
+          [class.btn-active]="selectedMaturity === '3'"
+          (click)="selectedMaturity = '3'"
+        >
+          <div>
+            <div class="text-xl flex flex-row">
+              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
+              <p class="lowercase ml-2">({{ 317 }}d)</p>
+            </div>
+            <div class="text-xl flex flex-row">
+              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
+              Fixed APY
+            </div>
+          </div>
+        </button>
       </div>
 
-      <div class="tabs tabs-boxed w-full mb-4">
+      <div
+        class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
+      >
+        <div class="overflow-x-auto">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th class="text-xl">My Position Value</th>
+                <td class="text-xl font-bold flex flex-row items-center gap-2">
+                  <div>{{ 0 }} {{ 'stATOM' }}</div>
+                  <span class="material-symbols-outlined"> arrow_forward </span>
+                  <div class="text-primary">{{ 0 }} {{ 'stATOM' }}</div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-xl">Redeem at Maturity</th>
+                <td class="text-xl font-bold flex flex-row items-center gap-2">
+                  <div>{{ 0 }} {{ 'stATOM' }}</div>
+                  <span class="material-symbols-outlined"> arrow_forward </span>
+                  <div class="text-primary">{{ 0 }} {{ 'stATOM' }}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">Step.2 Deposit to Earn</h2>
+      <div class="tabs w-full">
         <a
-          class="tab tab-lg w-1/2"
-          [class.tab-active]="tab === 'deposit'"
+          class="tab tab-lg tab-bordered w-1/2 text-accent"
+          [class.border-accent]="tab === 'deposit'"
+          [class.text-accent]="tab === 'deposit'"
           (click)="tab = 'deposit'"
         >
           Deposit
         </a>
         <a
-          class="tab tab-lg w-1/2"
-          [class.tab-active]="tab === 'withdraw'"
+          class="tab tab-lg tab-bordered w-1/2 text-accent"
+          [class.border-accent]="tab === 'withdraw'"
+          [class.text-accent]="tab === 'withdraw'"
           (click)="tab = 'withdraw'"
         >
-          Withdrawal
+          Withdraw
         </a>
       </div>
+
       <form *ngIf="tab === 'deposit'">
         <div class="form-control">
           <span class="label">
@@ -96,6 +155,13 @@
           <span class="label">
             <span class="label-text"></span>
           </span>
+        </div>
+
+        <div class="card-actions justify-end px-4">
+          <button class="btn btn-primary w-full gap-1">
+            <span class="material-symbols-outlined"> attach_money </span>
+            <span class="hidden md:inline">Deposit</span>
+          </button>
         </div>
       </form>
 
@@ -131,23 +197,13 @@
             <span class="label-text"></span>
           </span>
         </div>
+        <div class="card-actions justify-end px-4">
+          <button class="btn btn-primary w-full gap-1">
+            <span class="material-symbols-outlined"> money_off </span>
+            <span class="hidden md:inline">Withdraw</span>
+          </button>
+        </div>
       </form>
-      <div class="card-actions justify-end">
-        <button
-          class="btn btn-outline btn-info w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'deposit'"
-        >
-          <span class="material-symbols-outlined"> attach_money </span>
-          <span class="hidden md:inline">Deposit</span>
-        </button>
-        <button
-          class="btn btn-outline btn-accent w-full gap-1 md:w-auto md:px-8"
-          *ngIf="tab === 'withdraw'"
-        >
-          <span class="material-symbols-outlined"> money_off </span>
-          <span class="hidden md:inline">Withdrawal</span>
-        </button>
-      </div>
     </div>
   </div>
 </div>

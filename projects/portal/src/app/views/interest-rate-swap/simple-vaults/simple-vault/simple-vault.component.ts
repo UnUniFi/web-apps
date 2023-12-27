@@ -16,6 +16,7 @@ export class SimpleVaultComponent implements OnInit {
 
   description = 'This Vault provides the fixed yield of stATOM.';
   tab: 'deposit' | 'withdraw' = 'deposit';
+  selectedMaturity?: string;
 
   constructor(private router: Router) {}
 

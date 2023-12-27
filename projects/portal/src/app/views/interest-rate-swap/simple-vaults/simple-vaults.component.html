@@ -15,7 +15,8 @@
   </div>
 
   <p class="font-bold">Simple and secure.</p>
-  <div class="flex my-8">
+
+  <div class="flex my-8 gap-4">
     <form>
       <div class="form-control w-full">
         <div class="join">
@@ -43,22 +44,65 @@
         </div>
       </div>
     </form>
+    <span class="flex-auto"></span>
+    <button
+      class="btn btn-sm btn-square"
+      [class]="{ 'btn-neutral': viewMode === 'table' }"
+      (click)="viewMode = 'table'"
+    >
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <button
+      class="btn btn-sm btn-square"
+      [class]="{ 'btn-neutral': viewMode === 'grid' }"
+      (click)="viewMode = 'grid'"
+    >
+      <span class="material-symbols-outlined">grid_view</span>
+    </button>
   </div>
 
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
     <table class="table">
-      <!-- head -->
       <thead>
-        <tr>
+        <tr class="border-b-2 border-[#adc9ff]">
           <th></th>
-          <th>Name</th>
-          <th>Fixed Interest Rate</th>
-          <th>Position</th>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>My Total Position</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'position' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Fixed Yield</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'underlying' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
         </tr>
       </thead>
       <tbody>
-        <!-- row 1 -->
-        <tr class="hover cursor-pointer" routerLink="1">
+        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="1">
           <th>
             <div class="avatar">
               <div class="w-8 rounded-full">
@@ -72,36 +116,208 @@
             </div>
           </th>
           <td>
-            Stride stATOM
-            <br />
-            <div class="badge badge-primary">ATOM</div>
-          </td>
-          <td>{{ 0.182 | percent : '1.0-0' }}</td>
-          <td>{{ '-' }}</td>
-        </tr>
-        <!-- row 2 -->
-        <tr class="hover cursor-pointer" routerLink="2">
-          <th>
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" />
-              </div>
-              <div class="avatar -ml-2 mt-4">
-                <div class="w-4 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/27607.png" />
-                </div>
-              </div>
+            <div>
+              <div class="text-xl font-bold">stATOM</div>
+              <div class="text-sm opacity-50">Stride</div>
             </div>
-          </th>
-          <td>
-            Quasar USDC/USDT Dynamic S+
-            <br />
-            <div class="badge badge-primary">USDC</div>
           </td>
-          <td>{{ 0.136 | percent : '1.0-0' }}</td>
-          <td>{{ '-' }}</td>
+          <td>
+            <div>
+              <div class="text-xl font-bold">{{ 0 | number }} {{ 'stATOM' }}</div>
+              <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+            </div>
+          </td>
+          <td>
+            <div>
+              <div class="text-xl font-bold text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+    <div
+      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+      class="card shadow-xl"
+    >
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="card-title">stATOM</h2>
+            <div class="text-sm opacity-50">Stride</div>
+          </div>
+          <span class="flex-auto"></span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">FIxed APY Up To</div>
+          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+          <div>
+            <div class="text-xl">My Total Position</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
+          </div>
+        </div>
+
+        <div class="card-actions mt-4">
+          <button class="btn btn-primary w-full gap-1" routerLink="1">
+            <span>Deposit</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+      class="card shadow-xl"
+    >
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="card-title">stATOM</h2>
+            <div class="text-sm opacity-50">Stride</div>
+          </div>
+          <span class="flex-auto"></span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">FIxed APY Up To</div>
+          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+          <div>
+            <div class="text-xl">My Total Position</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
+          </div>
+        </div>
+
+        <div class="card-actions mt-4">
+          <button class="btn btn-primary w-full gap-1" routerLink="1">
+            <span>Deposit</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+      class="card shadow-xl"
+    >
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="card-title">stATOM</h2>
+            <div class="text-sm opacity-50">Stride</div>
+          </div>
+          <span class="flex-auto"></span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">FIxed APY Up To</div>
+          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+          <div>
+            <div class="text-xl">My Total Position</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
+          </div>
+        </div>
+
+        <div class="card-actions mt-4">
+          <button class="btn btn-primary w-full gap-1" routerLink="1">
+            <span>Deposit</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+      class="card shadow-xl"
+    >
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="card-title">stATOM</h2>
+            <div class="text-sm opacity-50">Stride</div>
+          </div>
+          <span class="flex-auto"></span>
+        </div>
+
+        <div class="stat">
+          <div class="stat-title">FIxed APY Up To</div>
+          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+          <div class="stat-desc"></div>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+          <div>
+            <div class="text-xl">My Total Position</div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
+          </div>
+        </div>
+
+        <div class="card-actions mt-4">
+          <button class="btn btn-primary w-full gap-1" routerLink="1">
+            <span>Deposit</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

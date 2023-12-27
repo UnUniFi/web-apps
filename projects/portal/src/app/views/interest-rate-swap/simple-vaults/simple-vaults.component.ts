@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./simple-vaults.component.css'],
 })
 export class SimpleVaultsComponent implements OnInit {
+  sortType?: string;
+  viewMode?: 'table' | 'grid' = 'grid';
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {}

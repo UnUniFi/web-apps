@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class SimpleVaultsComponent implements OnInit {
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';
+  positionTab?: 'fixed' | 'liquidity' = 'fixed';
 
   constructor(private router: Router) {}
 

@@ -43,7 +43,8 @@ const apps = [
   { name: 'Utilities', link: '/', icon: 'assistant' },
   { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
   { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
-  // { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+  { name: 'Interest Rate Swap', link: '/interest-rate-swap/simple-vaults', icon: 'table_chart' },
+  { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
 ];
 
 const denomMetadata = [
@@ -65,40 +66,6 @@ const denomMetadata = [
     symbol: 'GUU',
   },
   {
-    description: 'The governance token of OSMOSIS.',
-    denom_units: [
-      {
-        denom: 'uosmo',
-        exponent: 0,
-      },
-      {
-        denom: 'osmo',
-        exponent: 6,
-      },
-    ],
-    base: 'uosmo',
-    name: 'OSMOSIS',
-    display: 'OSMO',
-    symbol: 'OSMO',
-  },
-  {
-    description: 'The governance token of Cosmos Hub.',
-    denom_units: [
-      {
-        denom: 'uatom',
-        exponent: 0,
-      },
-      {
-        denom: 'atom',
-        exponent: 6,
-      },
-    ],
-    base: 'uatom',
-    name: 'COSMOS',
-    display: 'ATOM',
-    symbol: 'ATOM',
-  },
-  {
     description: 'The first cryptocurrency invented in 2008',
     denom_units: [
       {
@@ -116,25 +83,6 @@ const denomMetadata = [
     display: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
-  },
-  {
-    description: 'The currency of the U.S.A.',
-    denom_units: [
-      {
-        denom: 'uusd',
-        exponent: 0,
-        aliases: [],
-      },
-      {
-        denom: 'usd',
-        exponent: 6,
-        aliases: [],
-      },
-    ],
-    base: 'uusd',
-    display: 'USD',
-    name: 'US Dollar',
-    symbol: 'USD',
   },
   {
     description: 'Stablecoin pegged to the USD',
@@ -176,6 +124,119 @@ const denomMetadata = [
   },
 ];
 
+const strategiesInfo = [];
+
+const certifiedVaults = [];
+
+const externalChains = [
+  {
+    id: 'cosmoshub',
+    chainId: 'cosmoshub-4',
+    chainName: 'Cosmos Hub',
+    rpc: 'https://rpc-cosmoshub.keplr.app',
+    rest: 'https://lcd-cosmoshub.keplr.app',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'cosmos',
+      bech32PrefixAccPub: 'cosmospub',
+      bech32PrefixConsAddr: 'cosmosvalcons',
+      bech32PrefixConsPub: 'cosmosvalconspub',
+      bech32PrefixValAddr: 'cosmosvaloper',
+      bech32PrefixValPub: 'cosmosvaloperpub',
+    },
+    currencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDecimals: 6,
+        coinDenom: 'ATOM',
+        coinGeckoId: 'cosmos',
+        coinMinimalDenom: 'uatom',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+        gasPriceStep: {
+          average: 0.025,
+          high: 0.03,
+          low: 0.01,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDecimals: 6,
+      coinDenom: 'ATOM',
+      coinGeckoId: 'cosmos',
+      coinMinimalDenom: 'uatom',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/cosmoshub/uatom.png',
+    },
+  },
+  {
+    id: 'osmosis',
+    chainId: 'osmosis-1',
+    chainName: 'Osmosis',
+    rpc: 'https://rpc-osmosis.keplr.app',
+    rest: 'https://lcd-osmosis.keplr.app',
+    bip44: { coinType: 118 },
+    bech32Config: {
+      bech32PrefixAccAddr: 'osmo',
+      bech32PrefixAccPub: 'osmopub',
+      bech32PrefixValAddr: 'osmovaloper',
+      bech32PrefixValPub: 'osmovaloperpub',
+      bech32PrefixConsAddr: 'osmovalcons',
+      bech32PrefixConsPub: 'osmovalconspub',
+    },
+    currencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+      },
+      {
+        coinDenom: 'ION',
+        coinMinimalDenom: 'uion',
+        coinDecimals: 6,
+        coinGeckoId: 'ion',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uion.png',
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: 'OSMO',
+        coinMinimalDenom: 'uosmo',
+        coinDecimals: 6,
+        coinGeckoId: 'osmosis',
+        coinImageUrl:
+          'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+        gasPriceStep: {
+          low: 0.0025,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+    ],
+    stakeCurrency: {
+      coinDenom: 'OSMO',
+      coinMinimalDenom: 'uosmo',
+      coinDecimals: 6,
+      coinGeckoId: 'osmosis',
+      coinImageUrl:
+        'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/uosmo.png',
+    },
+  },
+];
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -193,15 +254,11 @@ const configs = [
     ],
     apps,
     denomMetadata,
+    strategiesInfo,
+    certifiedVaults,
+    externalChains,
     extension: {
       faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUbtcPort}`,
-          denom: 'ubtc',
-          creditAmount: 2000000, // amount to credit in max request
-          maxCredit: 2000000, // account has already maxCredit balance cannot claim anymore
-        },
         {
           hasFaucet: true,
           faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
@@ -209,23 +266,8 @@ const configs = [
           creditAmount: 2000000000,
           maxCredit: 2000000000,
         },
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEA}:${faucetUguuPort}`,
-          denom: 'uusdc',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
       ],
       monitor: undefined,
-      nftMint: {
-        enabled: true,
-        nftClasses: ['ununifi-1AFC3C85B52311F13161F724B284EF900458E3B3'],
-      },
-      developer: {
-        enabled: true,
-        developerURL: `${location.protocol}//${domainCauchyEA}:${developerPort}`,
-      },
       navigations: [],
       messageModules,
     },

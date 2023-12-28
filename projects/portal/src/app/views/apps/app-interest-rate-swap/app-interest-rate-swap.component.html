@@ -1,4 +1,4 @@
-<div class="drawer w-screen h-screen bg-base-300" data-theme="irs">
+<div class="drawer lg:drawer-open w-screen h-screen bg-base-300" data-theme="irs">
   <input id="drawer-main" type="checkbox" class="drawer-toggle" />
 
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
@@ -21,7 +21,7 @@
           </svg>
         </label>
       </div>
-      <div class="dropdown hidden md:block">
+      <div class="dropdown hidden">
         <label tabindex="0" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,19 +126,43 @@
     </div>
   </div>
 
-  <div class="drawer-side pt-16 overflow-auto">
-    <label for="drawer-main" class="drawer-overlay"></label>
+  <div class="drawer-side overflow-auto">
     <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full h-full bg-base-200">
       <!-- Sidebar content here -->
+      <app-search-tool class="w-full"></app-search-tool>
       <li class="menu-title">
         <span>Interest Rate Swap</span>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">info</span>
+          </span>
+          <span class="flex-1">About</span>
+        </label>
       </li>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/simple-vaults">
           <span class="flex-none">
             <span class="material-symbols-outlined">folder</span>
           </span>
-          <span class="flex-1">Vaults List</span>
+          <span class="flex-1">Vaults</span>
+        </label>
+      </li>
+      <!-- <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/vaults">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">topic</span>
+          </span>
+          <span class="flex-1">Vaults (Advanced)</span>
+        </label>
+      </li> -->
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/simple-pools">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">pool</span>
+          </span>
+          <span class="flex-1">Pools</span>
         </label>
       </li>
 

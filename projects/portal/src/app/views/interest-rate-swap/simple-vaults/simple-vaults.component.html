@@ -14,7 +14,32 @@
     </div>
   </div>
 
-  <p class="font-bold">Simple and secure.</p>
+  <div style="background: linear-gradient(180deg, #1f2736 50%, #354b74 100%)" class="card mb-8">
+    <div class="card-body flex-row flex-wrap">
+      <div>
+        <h2 class="card-title">UnUniFi Earn</h2>
+        <p class="card-text text-secondary opacity-50">
+          Over {{ 233000000 | currency }} deposited in UnUniFi
+        </p>
+        <p class="card-text text-secondary opacity-50">Simple & Secure</p>
+      </div>
+      <div class="flex-auto"></div>
+      <div>
+        <div class="stat">
+          <div class="stat-title">My Total Position Value</div>
+          <div class="stat-value">{{ 0 | currency }}</div>
+          <button class="btn btn-sm btn-outline mt-2">See Detail</button>
+        </div>
+      </div>
+      <div>
+        <div class="stat">
+          <div class="stat-title">Claimable Rewards</div>
+          <div class="stat-value">{{ 0 | currency }}</div>
+          <button class="btn btn-sm btn-primary mt-2">Claim</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="flex my-8 gap-4">
     <form>

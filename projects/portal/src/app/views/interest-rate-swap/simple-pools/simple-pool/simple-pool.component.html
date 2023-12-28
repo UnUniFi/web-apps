@@ -19,7 +19,7 @@
 
   <div class="card bg-base-200 shadow-xl mb-4">
     <div class="card-body">
-      <h2 class="card-title">Step.1 Select a Maturity</h2>
+      <h2 class="card-title">Step.1 Select a pool to provide liquidity</h2>
       <p class="opacity-50">Withdraw anytime at market prices</p>
 
       <div class="flex flex-row flex-wrap gap-2 mb-4">
@@ -35,7 +35,7 @@
             </div>
             <div class="text-xl flex flex-row">
               <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
+              Pool APY
             </div>
           </div>
         </button>
@@ -51,7 +51,7 @@
             </div>
             <div class="text-xl flex flex-row">
               <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
+              Pool APY
             </div>
           </div>
         </button>
@@ -67,7 +67,7 @@
             </div>
             <div class="text-xl flex flex-row">
               <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
+              Pool APY
             </div>
           </div>
         </button>
@@ -80,7 +80,7 @@
           <table class="table">
             <tbody>
               <tr>
-                <th class="text-xl">My Position Value</th>
+                <th class="text-xl">My Deposit</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
                   <div>{{ 0 }} {{ 'stATOM' }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
@@ -88,7 +88,7 @@
                 </td>
               </tr>
               <tr>
-                <th class="text-xl">Redeem at Maturity</th>
+                <th class="text-xl">Claimable Yield</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
                   <div>{{ 0 }} {{ 'stATOM' }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
@@ -106,8 +106,8 @@
     <div class="card-body">
       <h2 class="card-title">
         Step.2
-        <div *ngIf="tab === 'deposit'">Deposit to Earn</div>
-        <div *ngIf="tab === 'withdraw'">Withdraw your position</div>
+        <div *ngIf="tab === 'deposit'">Provide liquidity to earn fees and rewards</div>
+        <div *ngIf="tab === 'withdraw'">Withdraw your deposited liquidity</div>
       </h2>
       <div class="tabs w-full">
         <a
@@ -250,7 +250,7 @@
         <div class="card-actions justify-end mt-8 px-4">
           <button class="btn btn-primary w-full gap-1">
             <span class="material-symbols-outlined"> attach_money </span>
-            <span class="hidden md:inline">Deposit</span>
+            <span class="hidden md:inline">Add Liquidity</span>
           </button>
         </div>
       </form>
@@ -380,7 +380,7 @@
         <div class="card-actions justify-end mt-8 px-4">
           <button class="btn btn-primary w-full gap-1">
             <span class="material-symbols-outlined"> money_off </span>
-            <span class="hidden md:inline">Withdraw</span>
+            <span class="hidden md:inline">Withdraw Liquidity</span>
           </button>
         </div>
       </form>

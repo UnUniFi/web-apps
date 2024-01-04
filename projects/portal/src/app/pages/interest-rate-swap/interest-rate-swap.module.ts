@@ -5,6 +5,7 @@ import { SimplePoolModule } from '../../views/interest-rate-swap/simple-pools/si
 import { SimplePoolsModule } from '../../views/interest-rate-swap/simple-pools/simple-pools.module';
 import { SimpleVaultModule } from '../../views/interest-rate-swap/simple-vaults/simple-vault/simple-vault.module';
 import { SimpleVaultsModule } from '../../views/interest-rate-swap/simple-vaults/simple-vaults.module';
+import { ContractVaultsModule } from '../../views/interest-rate-swap/vaults/contract-vaults/contract-vaults.module';
 import { VaultModule } from '../../views/interest-rate-swap/vaults/vault/vault.module';
 import { VaultsModule } from '../../views/interest-rate-swap/vaults/vaults.module';
 import { InterestRateSwapRoutingModule } from './interest-rate-swap-routing.module';
@@ -15,11 +16,11 @@ import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.comp
 import { SimplePoolsComponent } from './simple-pools/simple-pools.component';
 import { SimpleVaultComponent } from './simple-vaults/simple-vault/simple-vault.component';
 import { SimpleVaultsComponent } from './simple-vaults/simple-vaults.component';
+import { ContractVaultsComponent } from './vaults/contract-vaults/contract-vaults.component';
 import { VaultComponent } from './vaults/vault/vault.component';
 import { VaultsComponent } from './vaults/vaults.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ContractVaultsComponent } from './vaults/contract-vaults/contract-vaults.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ContractVaultsComponent } from './vaults/contract-vaults/contract-vault
     PoolModule,
     SimplePoolsModule,
     SimplePoolModule,
+    ContractVaultsModule,
   ],
 })
 export class AppInterestRateSwapModule {}

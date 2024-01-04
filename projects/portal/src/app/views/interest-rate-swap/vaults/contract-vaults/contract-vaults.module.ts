@@ -1,15 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ContractVaultsComponent } from './contract-vaults.component';
-
-
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    ContractVaultsComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+  declarations: [ContractVaultsComponent],
+  imports: [CommonModule, RouterModule],
+  exports: [ContractVaultsComponent],
 })
-export class ContractVaultsModule { }
+export class ContractVaultsModule {}

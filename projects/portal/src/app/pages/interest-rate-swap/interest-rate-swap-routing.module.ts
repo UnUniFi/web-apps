@@ -5,6 +5,7 @@ import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.comp
 import { SimplePoolsComponent } from './simple-pools/simple-pools.component';
 import { SimpleVaultComponent } from './simple-vaults/simple-vault/simple-vault.component';
 import { SimpleVaultsComponent } from './simple-vaults/simple-vaults.component';
+import { ContractVaultsComponent } from './vaults/contract-vaults/contract-vaults.component';
 import { VaultComponent } from './vaults/vault/vault.component';
 import { VaultsComponent } from './vaults/vaults.component';
 import { NgModule } from '@angular/core';
@@ -21,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'vaults/:contract',
-    component: VaultComponent,
+    component: ContractVaultsComponent,
   },
   {
     path: 'vaults/:contract/:id',

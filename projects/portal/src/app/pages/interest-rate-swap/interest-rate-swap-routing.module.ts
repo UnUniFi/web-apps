@@ -24,6 +24,10 @@ const routes: Routes = [
     component: VaultComponent,
   },
   {
+    path: 'vaults/:contract/:id',
+    component: VaultComponent,
+  },
+  {
     path: 'simple-vaults',
     component: SimpleVaultsComponent,
   },

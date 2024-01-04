@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { VaultByContract200ResponseVault } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-simple-vaults',
@@ -7,6 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./simple-vaults.component.css'],
 })
 export class SimpleVaultsComponent implements OnInit {
+  @Input()
+  vaults?: VaultByContract200ResponseVault[] | null;
+
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';
   positionTab?: 'fixed' | 'liquidity' = 'fixed';

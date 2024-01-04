@@ -19,6 +19,7 @@ import { VaultComponent } from './vaults/vault/vault.component';
 import { VaultsComponent } from './vaults/vaults.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ContractVaultsComponent } from './vaults/contract-vaults/contract-vaults.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { NgModule } from '@angular/core';
     PoolComponent,
     SimplePoolsComponent,
     SimplePoolComponent,
+    ContractVaultsComponent,
   ],
   imports: [
     CommonModule,

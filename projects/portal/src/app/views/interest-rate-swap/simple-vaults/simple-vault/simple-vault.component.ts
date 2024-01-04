@@ -1,6 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import cosmosclient from '@cosmos-client/core';
 import { MintPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
+import {
+  AllTranches200ResponseTranchesInner,
+  VaultByContract200ResponseVault,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-simple-vault',
@@ -8,6 +13,13 @@ import { MintPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
   styleUrls: ['./simple-vault.component.css'],
 })
 export class SimpleVaultComponent implements OnInit {
+  @Input()
+  vault?: VaultByContract200ResponseVault | null;
+  @Input()
+  tranches?: AllTranches200ResponseTranchesInner[] | null;
+  @Input()
+  vaultBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+
   inputUnderlying?: string;
   underlyingDenom? = 'uatom';
 

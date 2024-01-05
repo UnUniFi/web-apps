@@ -2,8 +2,11 @@
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
-        <li><a routerLink="..">Markets</a></li>
-        <li>Vault #{{ 1 }}</li>
+        <li><a routerLink="../..">Markets</a></li>
+        <li>
+          <a routerLink="..">{{ vault?.name }}</a>
+        </li>
+        <li>Tranche #{{ trancheId }}</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
@@ -35,7 +38,7 @@
         </a>
       </div>
       <div class="card-body">
-        <form *ngIf="modeTab === 'swap' && txMode === 'mint'">
+        <form #swapUnderlyingFormRef="ngForm" *ngIf="modeTab === 'swap' && txMode === 'mint'">
           <div class="form-control">
             <span class="label">
               <span class="label-text">Input</span>
@@ -48,11 +51,24 @@
                     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
                   </div>
                 </div>
-                {{ 'ATOM' }}
+                {{ underlyingDenom | coinDenom | async }}
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
-              <input class="join-item input input-bordered input-info w-full" />
+              <input
+                #swapUnderlyingAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-info w-full"
+                [class]="{
+                  'input-error': swapUnderlyingAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputUnderlying"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="swapUnderlyingAmount"
+              />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -79,7 +95,7 @@
                   </div>
                 </div>
                 <div>{{ swapTab | uppercase }}</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
               <input class="join-item input input-bordered w-full" readonly />
             </label>
@@ -88,7 +104,7 @@
             </span>
           </div>
           <div class="card-actions mt-4">
-            <button class="btn btn-primary w-full gap-1">
+            <button class="btn btn-primary w-full gap-1" [disabled]="swapUnderlyingFormRef.invalid">
               <span class="material-symbols-outlined"> attach_money </span>
               <span>Swap</span>
             </button>
@@ -109,7 +125,7 @@
                   </div>
                 </div>
                 <div>{{ swapTab | uppercase }}</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
               <input class="join-item input input-bordered input-info w-full" />
             </label>
@@ -137,7 +153,7 @@
                     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
                   </div>
                 </div>
-                {{ 'ATOM' }}
+                {{ underlyingDenom | coinDenom | async }}
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
@@ -155,7 +171,7 @@
           </div>
         </form>
 
-        <form *ngIf="modeTab === 'mint' && txMode === 'mint'">
+        <form #mintUnderlyingFormRef="ngForm" *ngIf="modeTab === 'mint' && txMode === 'mint'">
           <div class="join mb-4">
             <button
               type="button"
@@ -181,11 +197,24 @@
                     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
                   </div>
                 </div>
-                {{ 'ATOM' }}
+                {{ underlyingDenom | coinDenom | async }}
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
-              <input class="join-item input input-bordered input-info w-full" />
+              <input
+                class="join-item input input-bordered input-info w-full"
+                #mintUnderlyingAmountNgModelRef="ngModel"
+                [class]="{
+                  'input-error': mintUnderlyingAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputUnderlying"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="mintUnderlyingAmount"
+              />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -210,7 +239,7 @@
                   </div>
                 </div>
                 <div>PT</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
               <input class="join-item input input-bordered w-full" readonly />
             </label>
@@ -222,7 +251,7 @@
                   </div>
                 </div>
                 <div>YT</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
               <input class="join-item input input-bordered w-full" readonly />
             </label>
@@ -231,7 +260,7 @@
             </span>
           </div>
           <div class="card-actions mt-4">
-            <button class="btn btn-primary w-full gap-1">
+            <button class="btn btn-primary w-full gap-1" [disabled]="mintUnderlyingFormRef.invalid">
               <span class="material-symbols-outlined"> attach_money </span>
               <span>Swap</span>
             </button>
@@ -265,9 +294,9 @@
                   </div>
                 </div>
                 <div>PT</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input class="join-item input input-bordered w-full" />
+              <input class="join-item input input-bordered w-full" readonly />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -287,9 +316,9 @@
                   </div>
                 </div>
                 <div>YT</div>
-                <div>{{ 'ATOM' }}</div>
+                <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input class="join-item input input-bordered w-full" />
+              <input class="join-item input input-bordered w-full" readonly />
             </label>
 
             <span class="label">
@@ -314,7 +343,7 @@
                     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
                   </div>
                 </div>
-                {{ 'ATOM' }}
+                {{ underlyingDenom | coinDenom | async }}
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
@@ -370,11 +399,15 @@
               </div>
             </div>
             <div class="mr-4">
-              <div class="text-xl font-bold">stATOM</div>
-              <div class="text-sm opacity-50">Stride</div>
+              <div class="text-xl font-bold">{{ underlyingDenom | coinDenom | async }}</div>
+              <div class="text-sm opacity-50"></div>
             </div>
-            <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
-            <div class="text-sm opacity-50">317 Days</div>
+            <div class="text-xl font-bold" *ngIf="tranchePool">
+              {{ calcMaturity(tranchePool) | date : 'mediumDate' }}
+            </div>
+            <div class="text-sm opacity-50" *ngIf="tranchePool">
+              {{ calcRestDays(tranchePool) }} Days
+            </div>
           </div>
         </div>
 
@@ -391,12 +424,12 @@
           </div>
           <div class="stat">
             <div class="stat-title">Underlying APY</div>
-            <div class="stat-value">{{ '0.1863' | percent : '1.2-2' }}</div>
+            <div class="stat-value">{{ '0' | percent : '1.2-2' }}</div>
             <div class="stat-desc"></div>
           </div>
           <div class="stat">
             <div class="stat-title">Fixed APY</div>
-            <div class="stat-value">{{ '0.1003' | percent : '1.2-2' }}</div>
+            <div class="stat-value">{{ tranchePtAPYs?.pt_apy | percent : '1.2-2' }}</div>
             <div class="stat-desc"></div>
           </div>
         </div>

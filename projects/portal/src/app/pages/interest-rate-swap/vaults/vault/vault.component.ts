@@ -17,7 +17,9 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
   EstimateMintPtYtPair200Response,
-  VaultDetails200Response,
+  TranchePtAPYs200Response,
+  TrancheYtAPYs200Response,
+  VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
 export interface EstimationInfo {
@@ -39,8 +41,13 @@ export interface ReadableEstimationInfo {
 })
 export class VaultComponent implements OnInit {
   contractAddress$: Observable<string>;
-  tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
-  vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
+  vault$: Observable<VaultByContract200ResponseVault>;
+  trancheId$: Observable<string>;
+  tranchePool$: Observable<AllTranches200ResponseTranchesInner>;
+  underlyingDenom$?: Observable<string | undefined>;
+  trancheYtAPYs$: Observable<TrancheYtAPYs200Response>;
+  tranchePtAPYs$: Observable<TranchePtAPYs200Response>;
+  // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo>;
   estimateMintPt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
@@ -62,22 +69,42 @@ export class VaultComponent implements OnInit {
     private readonly bankService: BankService,
   ) {
     this.contractAddress$ = this.route.params.pipe(map((params) => params.contract));
-    this.tranches$ = this.contractAddress$.pipe(
-      mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
+    this.vault$ = this.contractAddress$.pipe(
+      mergeMap((contract) => this.irsQuery.getVaultByContract$(contract)),
     );
-    this.vaultDetails$ = this.tranches$.pipe(
-      mergeMap((tranches) =>
-        Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.strategy_contract && tranche.maturity
-              ? await this.irsQuery
-                  .getVaultDetail$(tranche.strategy_contract, tranche.maturity)
-                  .toPromise()
-              : undefined,
-          ),
-        ),
-      ),
+    this.trancheId$ = this.route.params.pipe(map((params) => params.id));
+    this.tranchePool$ = this.trancheId$.pipe(mergeMap((id) => this.irsQuery.getTranche$(id)));
+    this.underlyingDenom$ = this.tranchePool$.pipe(
+      map((tranche) => {
+        if (tranche.pool_assets) {
+          for (const asset of tranche.pool_assets) {
+            if (!asset.denom?.includes('irs/tranche/')) {
+              return asset.denom;
+            }
+          }
+        }
+        return undefined;
+      }),
     );
+    this.trancheYtAPYs$ = this.trancheId$.pipe(
+      mergeMap((id) => this.irsQuery.getTrancheYtAPYs$(id)),
+    );
+    this.tranchePtAPYs$ = this.trancheId$.pipe(
+      mergeMap((id) => this.irsQuery.getTranchePtAPYs$(id)),
+    );
+    // this.vaultDetails$ = this.tranches$.pipe(
+    //   mergeMap((tranches) =>
+    //     Promise.all(
+    //       tranches.map(async (tranche) =>
+    //         tranche.strategy_contract && tranche.maturity
+    //           ? await this.irsQuery
+    //               .getVaultDetail$(tranche.strategy_contract, tranche.maturity)
+    //               .toPromise()
+    //           : undefined,
+    //       ),
+    //     ),
+    //   ),
+    // );
 
     const initialEstimationInfo = new BehaviorSubject({
       poolId: '',

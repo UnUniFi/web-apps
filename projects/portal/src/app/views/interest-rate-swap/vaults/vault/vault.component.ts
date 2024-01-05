@@ -13,6 +13,9 @@ import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-r
 import {
   AllTranches200ResponseTranchesInner,
   EstimateMintPtYtPair200Response,
+  TranchePtAPYs200Response,
+  TrancheYtAPYs200Response,
+  VaultByContract200ResponseVault,
   VaultDetails200Response,
 } from 'ununifi-client/esm/openapi';
 
@@ -25,7 +28,17 @@ export class VaultComponent implements OnInit {
   @Input()
   contractAddress?: string | null;
   @Input()
-  tranches?: AllTranches200ResponseTranchesInner[] | null;
+  vault?: VaultByContract200ResponseVault | null;
+  @Input()
+  trancheId?: string | null;
+  @Input()
+  tranchePool?: AllTranches200ResponseTranchesInner | null;
+  @Input()
+  underlyingDenom?: string | null;
+  @Input()
+  trancheYtAPYs?: TrancheYtAPYs200Response | null;
+  @Input()
+  tranchePtAPYs?: TranchePtAPYs200Response | null;
   @Input()
   vaultDetails?: (VaultDetails200Response | undefined)[] | null;
   @Input()
@@ -44,7 +57,6 @@ export class VaultComponent implements OnInit {
   inputUnderlying?: string;
   inputYT?: string;
   inputPT?: string;
-  underlyingDenom? = 'uatom';
   ytDenom = 'yt/';
   ptDenom = 'pt/';
   requiredYT?: string;
@@ -196,6 +208,10 @@ export class VaultComponent implements OnInit {
   onRedeemYT(id: string) {
     if (!this.inputYT) {
       alert('Please input the YT token amount.');
+      return;
+    }
+    if (!this.underlyingDenom) {
+      alert('Please select the token.');
       return;
     }
     if (!this.requiredUT) {

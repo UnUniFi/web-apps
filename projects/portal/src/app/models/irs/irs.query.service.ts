@@ -150,14 +150,14 @@ export class IrsQueryService {
     );
   }
 
-  trancheYtAPYs$(poolId: string) {
+  getTrancheYtAPYs$(poolId: string) {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.trancheYtAPYs(sdk, poolId)),
       map((res) => res.data),
     );
   }
 
-  tranchePoolAPYs$(poolId: string) {
+  getTranchePoolAPYs$(poolId: string) {
     return this.restSdk$.pipe(
       mergeMap((sdk) => ununifi.rest.irs.tranchePoolAPYs(sdk, poolId)),
       map((res) => res.data),

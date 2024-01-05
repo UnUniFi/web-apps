@@ -6,6 +6,8 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   VaultByContract200ResponseVault,
   AllTranches200ResponseTranchesInner,
+  TranchePtAPYs200Response,
+  TrancheYtAPYs200Response,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -17,6 +19,8 @@ export class ContractVaultsComponent implements OnInit {
   contractAddress$: Observable<string>;
   vault$: Observable<VaultByContract200ResponseVault>;
   tranchePools$: Observable<AllTranches200ResponseTranchesInner[]>;
+  trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
+  trancheLongAPYs$: Observable<(TrancheYtAPYs200Response | undefined)[]>;
 
   constructor(private route: ActivatedRoute, private readonly irsQuery: IrsQueryService) {
     this.contractAddress$ = this.route.params.pipe(map((params) => params.contract));
@@ -25,6 +29,24 @@ export class ContractVaultsComponent implements OnInit {
     );
     this.tranchePools$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
+    );
+    this.trancheFixedAPYs$ = this.tranchePools$.pipe(
+      mergeMap((tranches) =>
+        Promise.all(
+          tranches.map(async (tranche) =>
+            tranche.id ? await this.irsQuery.getTranchePtAPYs$(tranche.id).toPromise() : undefined,
+          ),
+        ),
+      ),
+    );
+    this.trancheLongAPYs$ = this.tranchePools$.pipe(
+      mergeMap((tranches) =>
+        Promise.all(
+          tranches.map(async (tranche) =>
+            tranche.id ? await this.irsQuery.getTrancheYtAPYs$(tranche.id).toPromise() : undefined,
+          ),
+        ),
+      ),
     );
   }
 

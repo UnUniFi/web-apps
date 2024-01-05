@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AllTranches200ResponseTranchesInner,
+  TranchePtAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -17,6 +19,10 @@ export class ContractVaultsComponent implements OnInit {
   vault?: VaultByContract200ResponseVault | null;
   @Input()
   tranchePools?: AllTranches200ResponseTranchesInner[] | null;
+  @Input()
+  trancheFixedAPYs?: (TranchePtAPYs200Response | undefined)[] | null;
+  @Input()
+  trancheLongAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

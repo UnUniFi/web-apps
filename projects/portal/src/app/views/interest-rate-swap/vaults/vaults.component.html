@@ -144,7 +144,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let pool of tranchePools">
+          <ng-container *ngFor="let pool of tranchePools; let i = index">
             <tr
               class="hover cursor-pointer border-b-2 border-[#adc9ff]"
               routerLink="{{ pool.strategy_contract }}/{{ pool.id }}"
@@ -179,12 +179,14 @@
               </td>
               <td>
                 <div>
-                  <div class="text-xl font-bold">{{ '0.1863' | percent : '1.0-2' }}</div>
-                  <div class="text-sm opacity-50">{{ '0.778' | currency }}</div>
+                  <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
+                  <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                 </div>
               </td>
               <td>
-                <div class="text-xl font-bold">{{ '0.1003' | percent : '1.0-2' }}</div>
+                <div class="text-xl font-bold">
+                  {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                </div>
               </td>
               <td>
                 <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2">
@@ -194,8 +196,10 @@
                     </div>
                   </div>
                   <div>
-                    <div class="text-xl font-bold">{{ '1.217' | percent : '1.0-2' }}</div>
-                    <div class="text-sm opacity-50">{{ '0.05944' | currency }}</div>
+                    <div class="text-xl font-bold">
+                      {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                    </div>
+                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                   </div>
                 </div>
               </td>
@@ -207,8 +211,10 @@
                     </div>
                   </div>
                   <div>
-                    <div class="text-xl font-bold">{{ '1.217' | percent : '1.0-2' }}</div>
-                    <div class="text-sm opacity-50">{{ '0.05944' | currency }}</div>
+                    <div class="text-xl font-bold">
+                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                    </div>
+                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                   </div>
                 </div>
               </td>
@@ -219,7 +225,7 @@
     </div>
 
     <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-      <ng-container *ngFor="let pool of tranchePools">
+      <ng-container *ngFor="let pool of tranchePools; let i = index">
         <div
           style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
           class="card shadow-xl"
@@ -262,8 +268,8 @@
                       <div class="text-lg opacity-75">Underlying APY</div>
                     </td>
                     <td>
-                      <div class="text-xl font-bold">{{ '0.1863' | percent : '1.2-2' }}</div>
-                      <div class="text-sm opacity-50">{{ '0.778' | currency }}</div>
+                      <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
+                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                     </td>
                   </tr>
                   <tr>
@@ -271,7 +277,9 @@
                       <div class="text-lg opacity-75">Implied APY</div>
                     </td>
                     <td>
-                      <div class="text-xl font-bold">{{ '0.1003' | percent : '1.2-2' }}</div>
+                      <div class="text-xl font-bold">
+                        {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -288,8 +296,10 @@
                 <div class="text-sm opacity-50">Price</div>
               </div>
               <div>
-                <div class="text-xl font-bold">{{ '1.217' | percent : '1.0-2' }}</div>
-                <div class="text-sm opacity-50">{{ '0.05944' | currency }}</div>
+                <div class="text-xl font-bold">
+                  {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                </div>
+                <div class="text-sm opacity-50">{{ '0' | currency }}</div>
               </div>
             </div>
             <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2 cursor-pointer hover">
@@ -303,8 +313,10 @@
                 <div class="text-sm opacity-50">Price</div>
               </div>
               <div>
-                <div class="text-xl font-bold">{{ '1.217' | percent : '1.0-2' }}</div>
-                <div class="text-sm opacity-50">{{ '0.05944' | currency }}</div>
+                <div class="text-xl font-bold">
+                  {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                </div>
+                <div class="text-sm opacity-50">{{ '0' | currency }}</div>
               </div>
             </div>
           </div>

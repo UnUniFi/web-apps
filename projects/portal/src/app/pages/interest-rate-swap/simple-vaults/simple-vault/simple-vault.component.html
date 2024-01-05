@@ -1,6 +1,8 @@
 <view-simple-vault
   [vault]="vault$ | async"
   [tranches]="tranches$ | async"
+  [trancheFixedAPYs]="trancheFixedAPYs$ | async"
+  [underlyingDenom]="underlyingDenom$ | async"
   [vaultBalances]="vaultBalances$ | async"
   (appMintPT)="onMintPT($event)"
 ></view-simple-vault>

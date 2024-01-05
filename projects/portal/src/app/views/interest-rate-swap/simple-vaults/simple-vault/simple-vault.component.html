@@ -3,7 +3,7 @@
     <div class="text-xl breadcrumbs">
       <ul>
         <li><a routerLink="..">Earn Fixed Yield</a></li>
-        <li>Vault #{{ 1 }}</li>
+        <li>{{ vault?.name }}</li>
       </ul>
     </div>
     <span class="flex-auto"></span>
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <h1 class="text-2xl mb-8">Earn Fixed Yield with {{ 'stATOM' }}</h1>
+  <h1 class="text-2xl mb-8">Earn Fixed Yield with {{ vault?.name }}</h1>
 
   <div class="card bg-base-200 shadow-xl mb-4">
     <div class="card-body">
@@ -23,54 +23,26 @@
       <p class="opacity-50">Withdraw anytime at market prices</p>
 
       <div class="flex flex-row flex-wrap gap-2 mb-4">
-        <button
-          class="btn btn-lg btn-outline btn-primary"
-          [class.btn-active]="selectedMaturity === '1'"
-          (click)="selectedMaturity = '1'"
-        >
-          <div>
-            <div class="text-xl flex flex-row">
-              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
-              <p class="lowercase ml-2">({{ 317 }}d)</p>
+        <ng-container *ngFor="let pool of tranches; let i = index">
+          <button
+            class="btn btn-lg btn-outline btn-primary"
+            [class.btn-active]="selectedTranche === pool"
+            (click)="selectTranche(pool)"
+          >
+            <div>
+              <div class="text-xl flex flex-row">
+                <p class="font-bold">{{ calcMaturity(pool) | date : 'mediumDate' }}</p>
+                <p class="lowercase ml-2">({{ calcRestDays(pool) }}d)</p>
+              </div>
+              <div class="text-xl flex flex-row">
+                <p class="text-accent font-bold">
+                  {{ trancheFixedAPYs?.[i]?.pt_apy | percent : '1.2-2' }}
+                </p>
+                Fixed APY
+              </div>
             </div>
-            <div class="text-xl flex flex-row">
-              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
-            </div>
-          </div>
-        </button>
-        <button
-          class="btn btn-lg btn-outline btn-primary"
-          [class.btn-active]="selectedMaturity === '2'"
-          (click)="selectedMaturity = '2'"
-        >
-          <div>
-            <div class="text-xl flex flex-row">
-              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
-              <p class="lowercase ml-2">({{ 317 }}d)</p>
-            </div>
-            <div class="text-xl flex flex-row">
-              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
-            </div>
-          </div>
-        </button>
-        <button
-          class="btn btn-lg btn-outline btn-primary"
-          [class.btn-active]="selectedMaturity === '3'"
-          (click)="selectedMaturity = '3'"
-        >
-          <div>
-            <div class="text-xl flex flex-row">
-              <p class="font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</p>
-              <p class="lowercase ml-2">({{ 317 }}d)</p>
-            </div>
-            <div class="text-xl flex flex-row">
-              <p class="text-accent font-bold">{{ '0.1003' | percent : '1.2-2' }}</p>
-              Fixed APY
-            </div>
-          </div>
-        </button>
+          </button>
+        </ng-container>
       </div>
 
       <div
@@ -82,17 +54,17 @@
               <tr>
                 <th class="text-xl">My Position Value</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ 'stATOM' }}</div>
+                  <div>{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ 'stATOM' }}</div>
+                  <div class="text-primary">{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
                 </td>
               </tr>
               <tr>
                 <th class="text-xl">Redeem at Maturity</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ 'stATOM' }}</div>
+                  <div>{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ 'stATOM' }}</div>
+                  <div class="text-primary">{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
                 </td>
               </tr>
             </tbody>
@@ -140,7 +112,7 @@
                 <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
               </div>
             </div>
-            {{ 'ATOM' }}
+            {{ underlyingDenom | coinDenom | async }}
             <div class="flex-auto"></div>
             <div class="material-symbols-outlined">keyboard_arrow_down</div>
           </button>
@@ -277,7 +249,7 @@
                 <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
               </div>
             </div>
-            {{ 'ATOM' }}
+            {{ underlyingDenom | coinDenom | async }}
             <div class="flex-auto"></div>
             <div class="material-symbols-outlined">keyboard_arrow_down</div>
           </button>

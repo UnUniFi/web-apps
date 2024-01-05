@@ -12,6 +12,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
   VaultByContract200ResponseVault,
+  TranchePtAPYs200Response,
 } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -24,6 +25,8 @@ export class SimpleVaultComponent implements OnInit {
   contractAddress$: Observable<string>;
   vault$: Observable<VaultByContract200ResponseVault>;
   tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
+  trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
+  underlyingDenom$?: Observable<string | undefined>;
   // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
   vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
@@ -44,6 +47,28 @@ export class SimpleVaultComponent implements OnInit {
     );
     this.tranches$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
+    );
+    this.trancheFixedAPYs$ = this.tranches$.pipe(
+      mergeMap((tranches) =>
+        Promise.all(
+          tranches.map(async (tranche) =>
+            tranche.id ? await this.irsQuery.getTranchePtAPYs$(tranche.id).toPromise() : undefined,
+          ),
+        ),
+      ),
+    );
+    this.underlyingDenom$ = this.tranches$.pipe(
+      map((tranches) => {
+        const tranche = tranches[0];
+        if (tranche.pool_assets) {
+          for (const asset of tranche.pool_assets) {
+            if (!asset.denom?.includes('irs/tranche/')) {
+              return asset.denom;
+            }
+          }
+        }
+        return undefined;
+      }),
     );
     // this.vaultDetails$ = this.tranches$.pipe(
     //   mergeMap((tranches) =>

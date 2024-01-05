@@ -142,4 +142,25 @@ export class IrsQueryService {
       map((res) => res.data.ut_amount!),
     );
   }
+
+  getTranchePtAPYs$(poolId: string) {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.tranchePtAPYs(sdk, poolId)),
+      map((res) => res.data),
+    );
+  }
+
+  trancheYtAPYs$(poolId: string) {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.trancheYtAPYs(sdk, poolId)),
+      map((res) => res.data),
+    );
+  }
+
+  tranchePoolAPYs$(poolId: string) {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.tranchePoolAPYs(sdk, poolId)),
+      map((res) => res.data),
+    );
+  }
 }

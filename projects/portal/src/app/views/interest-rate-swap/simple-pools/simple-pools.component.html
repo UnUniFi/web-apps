@@ -86,281 +86,161 @@
     </button>
   </div>
 
-  <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
-    <table class="table">
-      <thead>
-        <tr class="border-b-2 border-[#adc9ff]">
-          <th></th>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>Name</span>
-              <span
-                class="material-symbols-outlined"
-                [class]="{ 'text-info': sortType === 'name' }"
-              >
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>My Total Position</span>
-              <span
-                class="material-symbols-outlined"
-                [class]="{ 'text-info': sortType === 'position' }"
-              >
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>TVL</span>
-              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'tvl' }">
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>APY</span>
-              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="1">
-          <th>
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-              </div>
-              <div class="avatar -ml-2 mt-4">
-                <div class="w-4 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+  <ng-container *ngIf="vaults; else empty">
+    <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
+      <table class="table">
+        <thead>
+          <tr class="border-b-2 border-[#adc9ff]">
+            <th></th>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>Name</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'name' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>My Total Position</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'position' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>TVL</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'tvl' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>APY</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'apy' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let pool of tranchePools; let i = index">
+            <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="{{ pool.id }}">
+              <th>
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <td>
+                <div>
+                  <div class="text-xl font-bold">
+                    {{ getTranchePoolVault(pool.strategy_contract) }}
+                  </div>
+                  <div class="text-sm opacity-50"></div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div class="text-xl font-bold">{{ 0 | number }} {{ 'stATOM' }}</div>
+                  <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div class="text-xl font-bold text-accent">{{ 0 | currency }}</div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div class="text-xl font-bold text-accent">
+                    {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+      <ng-container *ngFor="let pool of tranchePools; let i = index">
+        <div
+          style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+          class="card shadow-xl"
+        >
+          <div class="card-body">
+            <div class="flex items-center gap-3">
+              <div class="avatar">
+                <div class="w-12 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                </div>
+                <div class="avatar -ml-3 mt-6">
+                  <div class="w-6 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                  </div>
                 </div>
               </div>
+              <div>
+                <h2 class="card-title">{{ getTranchePoolVault(pool.strategy_contract)?.name }}</h2>
+                <div class="text-sm opacity-50"></div>
+              </div>
+              <span class="flex-auto"></span>
             </div>
-          </th>
-          <td>
-            <div>
-              <div class="text-xl font-bold">stATOM</div>
-              <div class="text-sm opacity-50">Stride</div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div class="text-xl font-bold">{{ 0 | number }} {{ 'stATOM' }}</div>
-              <div class="text-sm opacity-50">{{ 0 | currency }}</div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div class="text-xl font-bold text-accent">{{ 0 | currency }}</div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div class="text-xl font-bold text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-    <div
-      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-      class="card shadow-xl"
-    >
-      <div class="card-body">
-        <div class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-12 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+            <div class="stat">
+              <div class="stat-title">Up To</div>
+              <div class="stat-value text-accent">
+                {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+              </div>
+              <div class="stat-value">{{ 0 | currency }} TVL</div>
             </div>
-            <div class="avatar -ml-3 mt-6">
-              <div class="w-6 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+
+            <div
+              class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
+            >
+              <div>
+                <div class="text-xl">My Total Position</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
               </div>
             </div>
-          </div>
-          <div>
-            <h2 class="card-title">stATOM</h2>
-            <div class="text-sm opacity-50">Stride</div>
-          </div>
-          <span class="flex-auto"></span>
-        </div>
 
-        <div class="stat">
-          <div class="stat-title">Up To</div>
-          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
-          <div class="stat-value">{{ 0 | currency }} TVL</div>
-        </div>
-
-        <div
-          class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
-        >
-          <div>
-            <div class="text-xl">My Total Position</div>
-          </div>
-          <div>
-            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
+            <div class="card-actions mt-4">
+              <button class="btn btn-primary w-full gap-1" routerLink="{{ pool.id }}">
+                <span>Deposit</span>
+              </button>
+            </div>
           </div>
         </div>
-
-        <div class="card-actions mt-4">
-          <button class="btn btn-primary w-full gap-1" routerLink="1">
-            <span>Deposit</span>
-          </button>
-        </div>
-      </div>
+      </ng-container>
     </div>
+  </ng-container>
 
-    <div
-      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-      class="card shadow-xl"
-    >
-      <div class="card-body">
-        <div class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-12 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-            </div>
-            <div class="avatar -ml-3 mt-6">
-              <div class="w-6 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 class="card-title">stATOM</h2>
-            <div class="text-sm opacity-50">Stride</div>
-          </div>
-          <span class="flex-auto"></span>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title">Up To</div>
-          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
-          <div class="stat-value">{{ 0 | currency }} TVL</div>
-        </div>
-
-        <div
-          class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
-        >
-          <div>
-            <div class="text-xl">My Total Position</div>
-          </div>
-          <div>
-            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
-          </div>
-        </div>
-
-        <div class="card-actions mt-4">
-          <button class="btn btn-primary w-full gap-1" routerLink="1">
-            <span>Deposit</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-      class="card shadow-xl"
-    >
-      <div class="card-body">
-        <div class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-12 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-            </div>
-            <div class="avatar -ml-3 mt-6">
-              <div class="w-6 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 class="card-title">stATOM</h2>
-            <div class="text-sm opacity-50">Stride</div>
-          </div>
-          <span class="flex-auto"></span>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title">Up To</div>
-          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
-          <div class="stat-value">{{ 0 | currency }} TVL</div>
-        </div>
-
-        <div
-          class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
-        >
-          <div>
-            <div class="text-xl">My Total Position</div>
-          </div>
-          <div>
-            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
-          </div>
-        </div>
-
-        <div class="card-actions mt-4">
-          <button class="btn btn-primary w-full gap-1" routerLink="1">
-            <span>Deposit</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-      class="card shadow-xl"
-    >
-      <div class="card-body">
-        <div class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-12 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-            </div>
-            <div class="avatar -ml-3 mt-6">
-              <div class="w-6 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 class="card-title">stATOM</h2>
-            <div class="text-sm opacity-50">Stride</div>
-          </div>
-          <span class="flex-auto"></span>
-        </div>
-
-        <div class="stat">
-          <div class="stat-title">Up To</div>
-          <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
-          <div class="stat-value">{{ 0 | currency }} TVL</div>
-        </div>
-
-        <div
-          class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
-        >
-          <div>
-            <div class="text-xl">My Total Position</div>
-          </div>
-          <div>
-            <div class="text-xl font-bold">{{ '0' | number }} {{ 'stATOM' }}</div>
-          </div>
-        </div>
-
-        <div class="card-actions mt-4">
-          <button class="btn btn-primary w-full gap-1" routerLink="1">
-            <span>Deposit</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ng-template #empty>
+    <p class="font-bold text-lg text-error">* No pool</p>
+  </ng-template>
 </div>

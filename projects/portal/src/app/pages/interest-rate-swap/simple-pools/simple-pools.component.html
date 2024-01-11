@@ -1,1 +1,5 @@
-<view-simple-pools></view-simple-pools>
+<view-simple-pools
+  [tranchePools]="tranchePools$ | async"
+  [vaults]="vaults$ | async"
+  [poolsAPYs]="poolsAPYs$ | async"
+></view-simple-pools>

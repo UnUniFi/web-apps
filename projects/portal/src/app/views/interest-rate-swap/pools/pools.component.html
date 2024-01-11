@@ -48,10 +48,10 @@
       </div>
     </form>
     <span class="flex-auto"></span>
-    <div class="join">
+    <!-- <div class="join">
       <button class="btn btn-sm btn-neutral join-item">Active</button>
       <button class="btn btn-sm join-item">Inactive</button>
-    </div>
+    </div> -->
     <button
       class="btn btn-sm btn-square"
       [class]="{ 'btn-neutral': viewMode === 'table' }"
@@ -68,178 +68,164 @@
     </button>
   </div>
 
-  <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
-    <table class="table">
-      <thead>
-        <tr class="border-b-2 border-[#adc9ff]">
-          <th></th>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>Name</span>
-              <span
-                class="material-symbols-outlined"
-                [class]="{ 'text-info': sortType === 'name' }"
-              >
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>Maturity</span>
-              <span
-                class="material-symbols-outlined"
-                [class]="{ 'text-info': sortType === 'maturity' }"
-              >
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>TVL</span>
-              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'tvl' }">
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-xs flex-nowrap">
-              <span>APY</span>
-              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
-                keyboard_arrow_down
-              </span>
-            </button>
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="1">
-          <th>
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-              </div>
-              <div class="avatar -ml-2 mt-4">
-                <div class="w-4 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+  <ng-container *ngIf="vaults; else empty">
+    <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
+      <table class="table">
+        <thead>
+          <tr class="border-b-2 border-[#adc9ff]">
+            <th></th>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>Name</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'name' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>Maturity</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'maturity' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>TVL</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'tvl' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-xs flex-nowrap">
+                <span>APY</span>
+                <span
+                  class="material-symbols-outlined"
+                  [class]="{ 'text-info': sortType === 'apy' }"
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let pool of tranchePools; let i = index">
+            <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="{{ pool.id }}">
+              <th>
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </th>
-          <td>
-            <div>
-              <div class="text-xl font-bold">stATOM</div>
-              <div class="text-sm opacity-50">Stride</div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
-              <div class="text-sm opacity-50">317 Days</div>
-            </div>
-          </td>
-          <td>
-            <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
-          </td>
-          <td>
-            <div class="text-xl font-bold text-accent">
-              {{ '0.1003' | percent : '1.0-2' }} - {{ '0.1003' | percent : '1.0-2' }}
-            </div>
-          </td>
-        </tr>
-
-        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="1">
-          <th>
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-              </div>
-              <div class="avatar -ml-2 mt-4">
-                <div class="w-4 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+              </th>
+              <td>
+                <div>
+                  <div class="text-xl font-bold">
+                    {{ getTranchePoolVault(pool.strategy_contract)?.name }}
+                  </div>
+                  <div class="text-sm opacity-50"></div>
                 </div>
-              </div>
-            </div>
-          </th>
-          <td>
-            <div>
-              <div class="text-xl font-bold">stATOM</div>
-              <div class="text-sm opacity-50">Stride</div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
-              <div class="text-sm opacity-50">317 Days</div>
-            </div>
-          </td>
-          <td>
-            <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
-          </td>
-          <td>
-            <div class="text-xl font-bold text-accent">
-              {{ '0.1003' | percent : '1.0-2' }} - {{ '0.1003' | percent : '1.0-2' }}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-    <div
-      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-      class="card shadow-xl hover cursor-pointer"
-      routerLink="1"
-    >
-      <div class="card-body">
-        <div class="flex items-center gap-3">
-          <div>
-            <h2 class="card-title">stATOM</h2>
-            <div class="text-sm opacity-50">Stride</div>
-          </div>
-          <span class="flex-auto"></span>
-          <div class="avatar">
-            <div class="w-12 rounded-full">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-            </div>
-            <div class="avatar -ml-3 mt-6">
-              <div class="w-6 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td class="flex flex-row flex-wrap gap-2 items-end">
-                  <div class="text-xl text-accent">{{ '0.1003' | percent : '1.0-2' }}</div>
-                  <div class="text-sm">p.a.</div>
-                  <span class="material-symbols-outlined text-accent"> bolt </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="flex flex-row flex-wrap gap-2 items-end">
-                  <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
-                  <div class="text-lg">TVL</div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="text-lg opacity-75">Maturity</div>
-                </td>
-                <td>
+              </td>
+              <td>
+                <div>
                   <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
                   <div class="text-sm opacity-50">317 Days</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                </div>
+              </td>
+              <td>
+                <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+              </td>
+              <td>
+                <div class="text-xl font-bold text-accent">
+                  {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }} -
+                  {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
-  </div>
+
+    <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+      <ng-container *ngFor="let pool of tranchePools; let i = index">
+        <div
+          style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+          class="card shadow-xl hover cursor-pointer"
+          routerLink="{{ pool.id }}"
+        >
+          <div class="card-body">
+            <div class="flex items-center gap-3">
+              <div>
+                <h2 class="card-title">stATOM</h2>
+                <div class="text-sm opacity-50">Stride</div>
+              </div>
+              <span class="flex-auto"></span>
+              <div class="avatar">
+                <div class="w-12 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                </div>
+                <div class="avatar -ml-3 mt-6">
+                  <div class="w-6 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td class="flex flex-row flex-wrap gap-2 items-end">
+                      <div class="text-xl text-accent">
+                        {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                      </div>
+                      <div class="text-sm">p.a.</div>
+                      <span class="material-symbols-outlined text-accent"> bolt </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="flex flex-row flex-wrap gap-2 items-end">
+                      <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+                      <div class="text-lg">TVL</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="text-lg opacity-75">Maturity</div>
+                    </td>
+                    <td>
+                      <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+                      <div class="text-sm opacity-50">317 Days</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #empty>
+    <p class="font-bold text-lg text-error">* No pool</p>
+  </ng-template>
 </div>

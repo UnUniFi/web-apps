@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
+import {
+  AllTranches200ResponseTranchesInner,
+  TranchePoolAPYs200Response,
+  VaultByContract200ResponseVault,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-pools',
@@ -10,6 +14,10 @@ import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi'
 export class PoolsComponent implements OnInit {
   @Input()
   tranchePools?: AllTranches200ResponseTranchesInner[] | null;
+  @Input()
+  vaults?: VaultByContract200ResponseVault[] | null;
+  @Input()
+  poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
 
   sortType?: string;
   viewMode?: string = 'table';
@@ -20,5 +28,10 @@ export class PoolsComponent implements OnInit {
 
   changeSimple() {
     this.router.navigate(['interest-rate-swap', 'simple-pools']);
+  }
+
+  getTranchePoolVault(contractAddr?: string): VaultByContract200ResponseVault | undefined {
+    const vault = this.vaults?.find((vault) => vault.strategy_contract === contractAddr);
+    return vault;
   }
 }

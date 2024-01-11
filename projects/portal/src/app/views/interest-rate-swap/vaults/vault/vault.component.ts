@@ -55,14 +55,12 @@ export class VaultComponent implements OnInit {
   estimateRedeemMaturedYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   inputUnderlying?: string;
+  inputIrsToken?: string;
   inputYT?: string;
   inputPT?: string;
-  ytDenom = 'yt/';
-  ptDenom = 'pt/';
-  requiredYT?: string;
-  requiredUT?: string;
+  inputDesiredUnderlying?: string;
+  inputDesiredYT?: string;
 
-  description = 'This Vault provides the fixed yield of stATOM.';
   modeTab: 'swap' | 'mint' = 'swap';
   swapTab: 'pt' | 'yt' = 'pt';
   txTab: 'all' | 'swap' | 'liquidity' = 'all';
@@ -122,7 +120,80 @@ export class VaultComponent implements OnInit {
     return days;
   }
 
-  onMintPTYT(id: string) {
+  onSubmitSwapMint() {
+    if (!this.trancheId) {
+      alert('Invalid tranche ID.');
+      return;
+    }
+    if (!this.inputUnderlying) {
+      alert('Please input the token amount.');
+      return;
+    }
+    if (!this.underlyingDenom) {
+      alert('Please select the token.');
+      return;
+    }
+    if (this.swapTab === 'pt') {
+      this.appMintPT.emit({
+        trancheId: this.trancheId,
+        trancheType: 1,
+        utDenom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
+      });
+    }
+    if (this.swapTab === 'yt') {
+      this.appMintYT.emit({
+        trancheId: this.trancheId,
+        trancheType: 2,
+        utDenom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
+        requiredYT: Number(this.inputDesiredYT),
+      });
+    }
+  }
+
+  onSubmitSwapRedeem() {
+    if (!this.trancheId) {
+      alert('Invalid tranche ID.');
+      return;
+    }
+    if (this.swapTab === 'pt') {
+      if (!this.inputPT) {
+        alert('Please input the PT token amount.');
+        return;
+      }
+      this.appRedeemPT.emit({
+        trancheId: this.trancheId,
+        trancheType: 1,
+        ptDenom: `irs/tranche/${this.trancheId}/pt`,
+        readableAmount: Number(this.inputPT),
+      });
+    }
+    if (this.swapTab === 'yt') {
+      if (!this.inputYT) {
+        alert('Please input the YT token amount.');
+        return;
+      }
+      if (!this.underlyingDenom) {
+        alert('Invalid token to redeem.');
+        return;
+      }
+      this.appRedeemYT.emit({
+        trancheId: this.trancheId,
+        trancheType: 2,
+        ytDenom: `irs/tranche/${this.trancheId}/yt`,
+        readableAmount: Number(this.inputYT),
+        utDenom: this.underlyingDenom,
+        requiredUT: Number(this.inputDesiredUnderlying),
+      });
+    }
+  }
+
+  onSubmitMintMint() {
+    if (!this.trancheId) {
+      alert('Invalid tranche ID.');
+      return;
+    }
     if (!this.inputUnderlying) {
       alert('Please input the token amount.');
       return;
@@ -132,14 +203,18 @@ export class VaultComponent implements OnInit {
       return;
     }
     this.appMintPTYT.emit({
-      trancheId: id,
+      trancheId: this.trancheId,
       trancheType: 0,
       utDenom: this.underlyingDenom,
       readableAmount: Number(this.inputUnderlying),
     });
   }
 
-  onRedeemPTYT(id: string) {
+  onSubmitMintRedeem() {
+    if (!this.trancheId) {
+      alert('Invalid tranche ID.');
+      return;
+    }
     if (!this.inputPT) {
       alert('Please input the PT token amount.');
       return;
@@ -152,94 +227,79 @@ export class VaultComponent implements OnInit {
       alert('Please select the token.');
       return;
     }
-    if (!this.requiredUT) {
+    if (!this.inputDesiredUnderlying) {
       alert('Unable to redeem YT.');
       return;
     }
     this.appRedeemPTYT.emit({
-      trancheId: id,
+      trancheId: this.trancheId,
       trancheType: 0,
       readableAmountMap: {
-        [this.ptDenom]: Number(this.inputPT),
-        [this.ytDenom]: Number(this.inputYT),
+        [`irs/tranche/${this.trancheId}/pt`]: Number(this.inputPT),
+        [`irs/tranche/${this.trancheId}/yt`]: Number(this.inputYT),
       },
       utDenom: this.underlyingDenom,
-      requiredUT: Number(this.requiredUT),
+      requiredUT: Number(this.inputDesiredUnderlying),
     });
   }
 
-  onMintPT(id: string) {
-    if (!this.inputUnderlying) {
-      alert('Please input the token amount.');
-      return;
+  onChangeSwapUnderlyingAmount() {
+    if (this.swapTab === 'pt' && this.trancheId && this.underlyingDenom && this.inputUnderlying) {
+      this.appChangeMintPT.emit({
+        poolId: this.trancheId,
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
+      });
     }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
-      return;
-    }
-    this.appMintPT.emit({
-      trancheId: id,
-      trancheType: 1,
-      utDenom: this.underlyingDenom,
-      readableAmount: Number(this.inputUnderlying),
-    });
   }
 
-  onRedeemPT(id: string) {
-    if (!this.inputPT) {
-      alert('Please input the PT token amount.');
-      return;
+  onChangeSwapRequiredYt() {
+    if (this.swapTab === 'yt' && this.trancheId && this.underlyingDenom && this.inputUnderlying) {
+      this.appChangeMintYT.emit({
+        poolId: this.trancheId,
+        denom: `irs/tranche/${this.trancheId}/yt`,
+        readableAmount: Number(this.inputDesiredYT),
+      });
     }
-    this.appRedeemPT.emit({
-      trancheId: id,
-      trancheType: 1,
-      ptDenom: this.ptDenom,
-      readableAmount: Number(this.inputPT),
-    });
   }
 
-  onMintYT(id: string) {
-    if (!this.inputUnderlying) {
-      alert('Please input the token amount.');
-      return;
+  onChangeSwapPtAmount() {
+    if (this.swapTab === 'pt' && this.trancheId && this.underlyingDenom && this.inputPT) {
+      this.appChangeRedeemPT.emit({
+        poolId: this.trancheId,
+        denom: `irs/tranche/${this.trancheId}/pt`,
+        readableAmount: Number(this.inputPT),
+      });
     }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
-      return;
-    }
-    if (!this.requiredYT) {
-      alert('Unable to mint YT.');
-      return;
-    }
-    this.appMintYT.emit({
-      trancheId: id,
-      trancheType: 2,
-      utDenom: this.underlyingDenom,
-      readableAmount: Number(this.inputUnderlying),
-      requiredYT: Number(this.requiredYT),
-    });
   }
 
-  onRedeemYT(id: string) {
-    if (!this.inputYT) {
-      alert('Please input the YT token amount.');
-      return;
+  onChangeSwapYtAmount() {
+    if (this.swapTab === 'yt' && this.trancheId && this.underlyingDenom && this.inputYT) {
+      this.appChangeRedeemYT.emit({
+        poolId: this.trancheId,
+        denom: `irs/tranche/${this.trancheId}/yt`,
+        readableAmount: Number(this.inputYT),
+      });
     }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
-      return;
+  }
+
+  onChangeMintUnderlyingAmount() {
+    if (this.trancheId && this.underlyingDenom && this.inputUnderlying) {
+      this.appChangeMintPTYT.emit({
+        poolId: this.trancheId,
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
+      });
     }
-    if (!this.requiredUT) {
-      alert('Unable to redeem YT.');
-      return;
+  }
+
+  onChangeRedeemMintUnderlyingAmount() {
+    if (this.trancheId && this.underlyingDenom && this.inputDesiredUnderlying) {
+      this.appChangeRedeemPTYT.emit({
+        poolId: this.trancheId,
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputDesiredUnderlying),
+      });
     }
-    this.appRedeemYT.emit({
-      trancheId: id,
-      trancheType: 2,
-      ytDenom: this.ytDenom,
-      readableAmount: Number(this.inputYT),
-      utDenom: this.underlyingDenom,
-      requiredUT: Number(this.requiredUT),
-    });
   }
 }

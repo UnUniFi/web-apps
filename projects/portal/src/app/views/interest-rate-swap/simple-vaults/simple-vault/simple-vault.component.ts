@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { MintPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
+import { MintPtRequest, RedeemPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
+import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePtAPYs200Response,
@@ -24,16 +25,28 @@ export class SimpleVaultComponent implements OnInit {
   underlyingDenom?: string | null;
   @Input()
   vaultBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  estimateMintPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  estimateRedeemPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
   selectedTranche?: AllTranches200ResponseTranchesInner;
   inputUnderlying?: string;
+  inputPT?: string;
 
   @Output()
   appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();
+  @Output()
+  appChangeMintPT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appRedeemPT: EventEmitter<RedeemPtRequest> = new EventEmitter<RedeemPtRequest>();
+  @Output()
+  appChangeRedeemPT: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
 
   description = 'This Vault provides the fixed yield of stATOM.';
   tab: 'deposit' | 'withdraw' = 'deposit';
-  selectedMaturity?: string;
 
   constructor(private router: Router) {}
 
@@ -54,7 +67,7 @@ export class SimpleVaultComponent implements OnInit {
     this.router.navigate(['interest-rate-swap', 'vaults', '1']);
   }
 
-  onMintPT(id: string) {
+  onMintPT() {
     if (!this.inputUnderlying) {
       alert('Please input the token amount.');
       return;
@@ -63,12 +76,52 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please select the token.');
       return;
     }
+    if (!this.selectedTranche?.id) {
+      alert('Please select the maturity.');
+      return;
+    }
     this.appMintPT.emit({
-      trancheId: id,
+      trancheId: this.selectedTranche.id,
       trancheType: 1,
       utDenom: this.underlyingDenom,
       readableAmount: Number(this.inputUnderlying),
     });
+  }
+
+  onRedeemPT() {
+    if (!this.inputPT) {
+      alert('Please input the token amount.');
+      return;
+    }
+    if (!this.selectedTranche?.id) {
+      alert('Please select the maturity.');
+      return;
+    }
+    this.appRedeemPT.emit({
+      trancheId: this.selectedTranche.id,
+      trancheType: 1,
+      ptDenom: `irs/tranche/${this.selectedTranche.id}/pt`,
+      readableAmount: Number(this.inputPT),
+    });
+  }
+
+  onChangeDeposit() {
+    if (this.selectedTranche?.id && this.underlyingDenom && this.inputUnderlying) {
+      this.appChangeMintPT.emit({
+        poolId: this.selectedTranche.id,
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
+      });
+    }
+  }
+  onChangeWithdraw() {
+    if (this.selectedTranche?.id && this.inputPT) {
+      this.appChangeRedeemPT.emit({
+        poolId: this.selectedTranche.id,
+        denom: `irs/tranche/${this.selectedTranche.id}/pt`,
+        readableAmount: Number(this.inputPT),
+      });
+    }
   }
 
   calcMaturity(pool: AllTranches200ResponseTranchesInner): number {

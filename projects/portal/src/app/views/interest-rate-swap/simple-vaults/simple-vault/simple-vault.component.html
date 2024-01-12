@@ -100,7 +100,7 @@
         </a>
       </div>
 
-      <form *ngIf="tab === 'deposit'">
+      <form #depositFormRef="ngForm" *ngIf="tab === 'deposit'" (submit)="onMintPT()">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -209,7 +209,21 @@
         </div>
 
         <div class="form-control">
-          <input class="join-item input input-bordered input-secondary w-full" />
+          <input
+            #depositAmountNgModelRef="ngModel"
+            class="join-item input input-bordered input-secondary w-full"
+            [class]="{
+              'input-error': depositAmountNgModelRef.errors
+            }"
+            placeholder="0.000000"
+            required
+            type="number"
+            [(ngModel)]="inputUnderlying"
+            [min]="0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            name="depositAmount"
+            (change)="onChangeDeposit()"
+          />
           <span class="label">
             <div class="flex flex-row items-center gap-4">
               <span class="label-text-alt">Available Balance:</span>
@@ -220,14 +234,14 @@
         </div>
 
         <div class="card-actions justify-end mt-8 px-4">
-          <button class="btn btn-primary w-full gap-1">
+          <button class="btn btn-primary w-full gap-1" [disabled]="depositAmountNgModelRef.invalid">
             <span class="material-symbols-outlined"> attach_money </span>
             <span class="hidden md:inline">Deposit</span>
           </button>
         </div>
       </form>
 
-      <form *ngIf="tab === 'withdraw'">
+      <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onRedeemPT()">
         <div class="form-control my-8">
           <input type="range" min="0" max="100" class="range range-accent" name="withdraw-slider" />
           <div class="w-full flex justify-between text-xs px-2">
@@ -346,11 +360,25 @@
         </div>
 
         <div class="form-control">
-          <input class="join-item input input-bordered input-secondary w-full" readonly />
+          <input
+            #withdrawAmountNgModelRef="ngModel"
+            class="join-item input input-bordered input-secondary w-full"
+            [class]="{
+              'input-error': withdrawAmountNgModelRef.errors
+            }"
+            placeholder="0.000000"
+            required
+            type="number"
+            [(ngModel)]="inputPT"
+            [min]="0"
+            pattern="^[0-9]*\.?[0-9]{0,6}$"
+            name="withdrawAmount"
+            (change)="onChangeWithdraw()"
+          />
         </div>
 
         <div class="card-actions justify-end mt-8 px-4">
-          <button class="btn btn-primary w-full gap-1">
+          <button class="btn btn-primary w-full gap-1" [disabled]="withdrawFormRef.invalid">
             <span class="material-symbols-outlined"> money_off </span>
             <span class="hidden md:inline">Withdraw</span>
           </button>

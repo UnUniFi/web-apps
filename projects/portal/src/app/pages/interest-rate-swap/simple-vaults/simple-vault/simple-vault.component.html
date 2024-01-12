@@ -4,5 +4,10 @@
   [trancheFixedAPYs]="trancheFixedAPYs$ | async"
   [underlyingDenom]="underlyingDenom$ | async"
   [vaultBalances]="vaultBalances$ | async"
+  [estimateMintPt]="estimateMintPt$ | async"
+  [estimateRedeemPt]="estimateRedeemPt$ | async"
   (appMintPT)="onMintPT($event)"
+  (appChangeMintPT)="onChangeMintPT($event)"
+  (appRedeemPT)="onRedeemPT($event)"
+  (appChangeRedeemPT)="onChangeRedeemPT($event)"
 ></view-simple-vault>

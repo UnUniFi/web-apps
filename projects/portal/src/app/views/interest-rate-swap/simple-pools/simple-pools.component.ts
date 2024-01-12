@@ -17,7 +17,7 @@ export class SimplePoolsComponent implements OnInit {
   @Input()
   vaults?: VaultByContract200ResponseVault[] | null;
   @Input()
-  poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
+  extendedVaults?: (VaultByContract200ResponseVault & { denom?: string; maxAPY: number })[] | null;
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';
 
@@ -27,10 +27,5 @@ export class SimplePoolsComponent implements OnInit {
 
   changeAdvanced() {
     this.router.navigate(['interest-rate-swap', 'pools']);
-  }
-
-  getTranchePoolVault(contractAddr?: string): VaultByContract200ResponseVault | undefined {
-    const vault = this.vaults?.find((vault) => vault.strategy_contract === contractAddr);
-    return vault;
   }
 }

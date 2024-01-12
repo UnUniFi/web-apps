@@ -26,7 +26,7 @@
         <ng-container *ngFor="let pool of tranches; let i = index">
           <button
             class="btn btn-lg btn-outline btn-primary"
-            [class.btn-active]="selectedTranche === pool"
+            [class.btn-active]="selectedPoolId === pool.id"
             (click)="selectTranche(pool)"
           >
             <div>

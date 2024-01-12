@@ -30,7 +30,7 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   estimateRedeemPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
 
-  selectedTranche?: AllTranches200ResponseTranchesInner;
+  selectedPoolId?: string;
   inputUnderlying?: string;
   inputPT?: string;
 
@@ -53,7 +53,7 @@ export class SimpleVaultComponent implements OnInit {
   ngOnInit(): void {}
 
   selectTranche(tranche: AllTranches200ResponseTranchesInner) {
-    this.selectedTranche = tranche;
+    this.selectedPoolId = tranche.id;
     if (tranche.pool_assets) {
       for (const asset of tranche.pool_assets) {
         if (!asset.denom?.includes('irs/tranche/')) {
@@ -76,12 +76,12 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please select the token.');
       return;
     }
-    if (!this.selectedTranche?.id) {
+    if (!this.selectedPoolId) {
       alert('Please select the maturity.');
       return;
     }
     this.appMintPT.emit({
-      trancheId: this.selectedTranche.id,
+      trancheId: this.selectedPoolId,
       trancheType: 1,
       utDenom: this.underlyingDenom,
       readableAmount: Number(this.inputUnderlying),
@@ -93,32 +93,32 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.selectedTranche?.id) {
+    if (!this.selectedPoolId) {
       alert('Please select the maturity.');
       return;
     }
     this.appRedeemPT.emit({
-      trancheId: this.selectedTranche.id,
+      trancheId: this.selectedPoolId,
       trancheType: 1,
-      ptDenom: `irs/tranche/${this.selectedTranche.id}/pt`,
+      ptDenom: `irs/tranche/${this.selectedPoolId}/pt`,
       readableAmount: Number(this.inputPT),
     });
   }
 
   onChangeDeposit() {
-    if (this.selectedTranche?.id && this.underlyingDenom && this.inputUnderlying) {
+    if (this.selectedPoolId && this.underlyingDenom && this.inputUnderlying) {
       this.appChangeMintPT.emit({
-        poolId: this.selectedTranche.id,
+        poolId: this.selectedPoolId,
         denom: this.underlyingDenom,
         readableAmount: Number(this.inputUnderlying),
       });
     }
   }
   onChangeWithdraw() {
-    if (this.selectedTranche?.id && this.inputPT) {
+    if (this.selectedPoolId && this.inputPT) {
       this.appChangeRedeemPT.emit({
-        poolId: this.selectedTranche.id,
-        denom: `irs/tranche/${this.selectedTranche.id}/pt`,
+        poolId: this.selectedPoolId,
+        denom: `irs/tranche/${this.selectedPoolId}/pt`,
         readableAmount: Number(this.inputPT),
       });
     }

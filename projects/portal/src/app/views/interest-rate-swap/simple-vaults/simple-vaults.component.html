@@ -42,18 +42,20 @@
             <form method="dialog">
               <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
             </form>
-            <h3 class="font-bold text-lg">My Position Summary</h3>
+            <h3 class="font-bold text-lg text-neutral ml-2">My Position Summary</h3>
             <div class="tabs w-full">
               <a
-                class="tab tab-lg tab-bordered text-accent"
+                class="tab tab-lg tab-bordered"
                 [class.border-accent]="positionTab === 'fixed'"
+                [class.text-accent]="positionTab === 'fixed'"
                 (click)="positionTab = 'fixed'"
               >
                 Fixed Yield
               </a>
               <a
-                class="tab tab-lg tab-bordered text-accent"
+                class="tab tab-lg tab-bordered"
                 [class.border-accent]="positionTab === 'liquidity'"
+                [class.text-accent]="positionTab === 'liquidity'"
                 (click)="positionTab = 'liquidity'"
               >
                 Liquidity

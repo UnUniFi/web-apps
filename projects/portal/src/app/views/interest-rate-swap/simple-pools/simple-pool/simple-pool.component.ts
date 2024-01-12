@@ -55,7 +55,7 @@ export class SimplePoolComponent implements OnInit {
   ngOnInit(): void {}
 
   changeAdvanced() {
-    this.router.navigate(['interest-rate-swap', 'pools', '1']);
+    this.router.navigate(['interest-rate-swap', 'pools', this.contractAddress]);
   }
 
   onDepositPool() {

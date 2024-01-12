@@ -16,6 +16,8 @@ import {
 })
 export class SimpleVaultComponent implements OnInit {
   @Input()
+  contractAddress?: string | null;
+  @Input()
   vault?: VaultByContract200ResponseVault | null;
   @Input()
   tranches?: AllTranches200ResponseTranchesInner[] | null;
@@ -45,7 +47,6 @@ export class SimpleVaultComponent implements OnInit {
   appChangeRedeemPT: EventEmitter<ReadableEstimationInfo> =
     new EventEmitter<ReadableEstimationInfo>();
 
-  description = 'This Vault provides the fixed yield of stATOM.';
   tab: 'deposit' | 'withdraw' = 'deposit';
 
   constructor(private router: Router) {}
@@ -64,7 +65,7 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   changeAdvanced() {
-    this.router.navigate(['interest-rate-swap', 'vaults', '1']);
+    this.router.navigate(['interest-rate-swap', 'vaults', this.contractAddress]);
   }
 
   onMintPT() {

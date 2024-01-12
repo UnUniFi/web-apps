@@ -1,4 +1,5 @@
 <view-simple-vault
+  [contractAddress]="contractAddress$ | async"
   [vault]="vault$ | async"
   [tranches]="tranches$ | async"
   [trancheFixedAPYs]="trancheFixedAPYs$ | async"

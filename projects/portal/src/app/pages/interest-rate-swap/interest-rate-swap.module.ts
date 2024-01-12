@@ -1,4 +1,5 @@
 import { InterestRateSwapModule } from '../../views/interest-rate-swap/interest-rate-swap.module';
+import { ContractPoolsModule } from '../../views/interest-rate-swap/pools/contract-pools/contract-pools.module';
 import { PoolModule } from '../../views/interest-rate-swap/pools/pool/pool.module';
 import { PoolsModule } from '../../views/interest-rate-swap/pools/pools.module';
 import { SimplePoolModule } from '../../views/interest-rate-swap/simple-pools/simple-pool/simple-pool.module';
@@ -10,6 +11,7 @@ import { VaultModule } from '../../views/interest-rate-swap/vaults/vault/vault.m
 import { VaultsModule } from '../../views/interest-rate-swap/vaults/vaults.module';
 import { InterestRateSwapRoutingModule } from './interest-rate-swap-routing.module';
 import { InterestRateSwapComponent } from './interest-rate-swap.component';
+import { ContractPoolsComponent } from './pools/contract-pools/contract-pools.component';
 import { PoolComponent } from './pools/pool/pool.component';
 import { PoolsComponent } from './pools/pools.component';
 import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.component';
@@ -34,6 +36,7 @@ import { NgModule } from '@angular/core';
     SimplePoolsComponent,
     SimplePoolComponent,
     ContractVaultsComponent,
+    ContractPoolsComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +51,7 @@ import { NgModule } from '@angular/core';
     SimplePoolsModule,
     SimplePoolModule,
     ContractVaultsModule,
+    ContractPoolsModule,
   ],
 })
 export class AppInterestRateSwapModule {}

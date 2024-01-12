@@ -2,7 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/irs/irs.model';
-import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
+import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
+import {
+  AllTranches200ResponseTranchesInner,
+  TranchePoolAPYs200Response,
+  VaultByContract200ResponseVault,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-pool',
@@ -11,88 +16,99 @@ import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi'
 })
 export class PoolComponent implements OnInit {
   @Input()
+  contractAddress?: string | null;
+  @Input()
   poolId?: string | null;
   @Input()
-  lsDenom?: string | null;
+  pool?: AllTranches200ResponseTranchesInner | null;
   @Input()
-  ptDenom?: string | null;
+  vault?: VaultByContract200ResponseVault | null;
   @Input()
-  tranchePool?: AllTranches200ResponseTranchesInner | null;
+  poolAPYs?: TranchePoolAPYs200Response | null;
   @Input()
-  mintLsAmount?: number | null;
+  underlyingDenom?: string | null;
   @Input()
-  redeemLsAmount?: number | null;
+  poolBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  estimateMintRequiredAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedRequiredAmountForMint$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  estimateRedeemAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedRedeemAmount$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
+  tab: 'deposit' | 'withdraw' = 'deposit';
   inputUnderlying?: string;
-  inputPT?: string;
-  underlyingDenom? = 'uatom';
+  inputLP?: string;
 
-  description = 'This Vault provides the fixed yield of stATOM.';
-  tab: 'mint' | 'redeem' = 'mint';
-  modeTab: 'mint' | 'redeem' = 'mint';
-
-  @Output()
-  appChangeMintAmount: EventEmitter<number> = new EventEmitter<number>();
-  @Output()
-  appChangeRedeemAmount: EventEmitter<number> = new EventEmitter<number>();
   @Output()
   appMintLP: EventEmitter<MintLpRequest> = new EventEmitter<MintLpRequest>();
   @Output()
+  appChangeMintLP: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
+  @Output()
   appRedeemLP: EventEmitter<RedeemLpRequest> = new EventEmitter<RedeemLpRequest>();
+  @Output()
+  appChangeRedeemLP: EventEmitter<ReadableEstimationInfo> =
+    new EventEmitter<ReadableEstimationInfo>();
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   changeSimple() {
-    this.router.navigate(['interest-rate-swap', 'simple-pools', this.poolId]);
+    this.router.navigate(['interest-rate-swap', 'simple-pools', this.contractAddress]);
   }
 
-  onMintLP(id: string) {
-    if (!this.lsDenom) {
-      alert('Invalid LP token.');
-      return;
-    }
-    if (!this.mintLsAmount) {
-      alert('Please input the token amount.');
-      return;
-    }
-    let readableAmountMapInMax: { [denom: string]: number } = {};
-    if (this.inputUnderlying) {
-      if (!this.underlyingDenom) {
-        alert('Please select the token.');
-        return;
-      }
-      readableAmountMapInMax[this.underlyingDenom] = Number(this.inputUnderlying);
-    }
-    if (this.ptDenom && this.inputPT) {
-      readableAmountMapInMax[this.ptDenom] = Number(this.inputPT);
-    }
-    this.appMintLP.emit({
-      trancheId: id,
-      lpReadableAmount: this.mintLsAmount,
-      lpDenom: this.lsDenom,
-      readableAmountMapInMax,
-    });
+  onDepositPool() {
+    alert('Not Supported Yet');
   }
 
-  onRedeemLP(id: string) {
-    if (!this.lsDenom) {
-      alert('Invalid LP token.');
+  onWithdrawPool() {
+    if (!this.inputLP) {
+      alert('Please input the LP amount.');
       return;
     }
-    if (!this.redeemLsAmount) {
-      alert('Please input the LP token amount.');
+    if (!this.poolId) {
+      alert('Please select the maturity.');
       return;
     }
     this.appRedeemLP.emit({
-      trancheId: id,
-      lpReadableAmount: this.redeemLsAmount,
-      lpDenom: this.lsDenom,
+      trancheId: this.poolId,
+      lpReadableAmount: Number(this.inputLP),
+      lpDenom: `irs/tranche/${this.poolId}/ls`,
     });
+  }
+
+  onChangeDeposit() {
+    if (this.poolId && this.inputLP) {
+      this.appChangeMintLP.emit({
+        poolId: this.poolId,
+        denom: `irs/tranche/${this.poolId}/ls`,
+        readableAmount: Number(this.inputLP),
+      });
+    }
+  }
+
+  onChangeWithdraw() {
+    if (this.poolId && this.inputLP) {
+      this.appChangeRedeemLP.emit({
+        poolId: this.poolId,
+        denom: `irs/tranche/${this.poolId}/ls`,
+        readableAmount: Number(this.inputLP),
+      });
+    }
+  }
+
+  calcMaturity(pool: AllTranches200ResponseTranchesInner): number {
+    const maturity = Number(pool.maturity) + Number(pool.start_time);
+    return maturity;
+  }
+
+  calcRestDays(pool: AllTranches200ResponseTranchesInner): number {
+    const maturity = Number(pool.maturity) + Number(pool.start_time);
+    const diff = maturity * 1000 - Date.now();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    return days;
   }
 }

@@ -1,4 +1,5 @@
 import { InterestRateSwapComponent } from './interest-rate-swap.component';
+import { ContractPoolsComponent } from './pools/contract-pools/contract-pools.component';
 import { PoolComponent } from './pools/pool/pool.component';
 import { PoolsComponent } from './pools/pools.component';
 import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.component';
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'pools',
     component: PoolsComponent,
+  },
+  {
+    path: 'pools/:contract',
+    component: ContractPoolsComponent,
   },
   {
     path: 'pools/:contract/:id',

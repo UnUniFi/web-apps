@@ -41,7 +41,7 @@ const routes: Routes = [
     component: PoolsComponent,
   },
   {
-    path: 'pools/:id',
+    path: 'pools/:contract/:id',
     component: PoolComponent,
   },
   {
@@ -49,7 +49,7 @@ const routes: Routes = [
     component: SimplePoolsComponent,
   },
   {
-    path: 'simple-pools/:id',
+    path: 'simple-pools/:contract',
     component: SimplePoolComponent,
   },
 ];

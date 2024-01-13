@@ -33,10 +33,12 @@
       opacity: 0;
       transition: 1s;
     }
+
     .bg-color {
       background-color: rgba(20, 19, 40, 0.88);
       opacity: 1;
     }
+
     body {
       background-color: rgba(20, 19, 40, 0.88);
       background-image: url('./assets/images/bg3.png');
@@ -47,6 +49,7 @@
       color: white;
       word-wrap: break-word;
     }
+
     .bg-purple-to-green {
       background: linear-gradient(to right, #DD7DFF, #48FF7B);
       background-clip: text;
@@ -66,11 +69,11 @@
         }
       }
     }
-    window.addEventListener('load', () => {
+    window.addEventListener('load',() => {
       scrollFadeIn();
     });
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll',() => {
       scrollFadeIn();
     });
   </script>
@@ -153,8 +156,41 @@
 
   <!--1st section-->
   <section class="py-4 bg-cover">
+    <style>
+      .btn-grad-border {
+        position: relative;
+        display: inline-block;
+        background: rgba(179.75, 206.57, 219.19, 0.20);
+        border-radius: 8px;
+        padding: 16px 16px;
+        cursor: pointer;
+      }
+
+      .btn-grad-border::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 8px;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        background: linear-gradient(to right, #DD7DFF, #48FF7B);
+        background-origin: border-box;
+        background-clip: border-box;
+        /* chrome */
+        -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        -webkit-mask-clip: padding-box, border-box;
+        -webkit-mask-composite: destination-out;
+        /**/
+        mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        mask-clip: padding-box, border-box;
+        mask-composite: exclude;
+      }
+    </style>
     <div class="mx-auto max-w-screen-xl">
-      <div class="hero">
+      <div class="hero w-5/6 mx-auto">
         <div class="hero-content w-full">
           <div class="flex flex-row flex-wrap">
             <!--left-side-->
@@ -164,20 +200,20 @@
                 <div class="my-2 "> the Modular Era </div>
               </div>
               <div class="my-6">
-                <span style="font-size: 16px; letter-spacing: 0.48px;">Aggregating the Best-in-Class </span>
-                <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.48px; ">Yield Strategies</span>
-                <span style="font-size: 16px;  letter-spacing: 0.48px; ">for the efficient operation of on-chain assets
+                <span class="text-lg tracking-wide">Aggregating the Best-in-Class</span>
+                <span class="text-lg tracking-wide font-bold">Yield Strategies</span>
+                <span class="text-lg tracking-wide">for the efficient operation of on-chain assets
                   across blockchains.</span>
               </div>
-              <div class="flex flex-row gap-2">
-                <a class="btn btn-secondary" href="/portal" target="_blank">
-                  <span class="font-bold">Launch App</spnt>
+              <div class="flex flex-row gap-6">
+                <a class="btn-grad-border" href="/portal" target="_blank">
+                  <span class="font-bold text-white">Launch App</span>
                 </a>
-                <div class="flex flex-col rounded-lg"
+                <div class="flex flex-col rounded-lg p-2"
                   style="font-size: 14px; background: rgba(179.75, 206.57, 219.19, 0.10); border: 2px rgba(180, 207, 219, 0.60) solid; ">
                   <div class="flex flex-row  justify-center ">
                     <img src="assets/images/M_Atom.svg" width="20%" height="20%" alt="" />
-                    <div class="font-bold">stAtOM</div>
+                    <div class="font-bold">stATOM</div>
                   </div>
                   <div class="text-center">
                     <span
@@ -198,16 +234,14 @@
   </section>
 
   <!--2nd sec. Backed by .... after -->
-  <section>
-    <div class="max-w-screen-xl p-4">
-      <div class="flex mx-auto w-5/6 p-4">
-        <div class="flex-auto"></div>
-        <h3 class="text-3xl font-IBM font-bold my-4">
+  <section class="my-20">
+    <div class="mx-auto max-w-screen-xl">
+      <div class="flex mx-auto w-5/6">
+        <h3 class="mx-auto text-3xl font-bold mb-8">
           <span>Backed by Global Web3 </span>
           <span class="bg-purple-to-green">Investors</span>
           <span>...</span>
         </h3>
-        <div class="flex-auto"></div>
       </div>
     </div>
     <style>
@@ -309,7 +343,7 @@
         </div>
       </div>
     </div>
-    <div class="max-w-screen-xl p-4">
+    <div class="mx-auto max-w-screen-xl p-4">
       <div class="flex flex-col justify-start items-center gap-3">
         <div class="text-3xl font-bold my-4">
           Unlocking Future Yield</div>
@@ -321,74 +355,79 @@
   </section>
 
   <!--3rd sec. Fixed Yield .... -->
-  <section class="scroll-fade-in my-8">
-    <div class="m-auto w-5/6 flex flex-row">
-      <div class="flex-auto"></div>
-      <!--left purple side-->
-      <div class="w-1/3 rounded-xl flex-row" style="background: rgba(255, 255, 255, 0.05);">
-        <div class="flex flex-col justify-start items-center gap-2 my-4">
-          <div class="p-1 rounded-full justify-center items-center inline-flex" style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
-            border-left: 2.50px #DD7DFF solid; border-top: 2.50px #DD7DFF solid; border-bottom: 2.50px #DD7DFF solid;">
-            <img src="assets/images/$.svg">
-          </div>
-          <div class="text-center text-3xl font-IBM">
-            <span class="font-bold">Fixed Yield<br /></span>
-            <span>For Everyone</span>
-          </div>
-          <div class="text-center text-lg">
-            <span style="letter-spacing: 0.48px; ">Find
-              your stability among volatile yields. </span>
-            <span class="font-bold" style="letter-spacing: 0.48px; ">No
-              lock-up periods.</span>
-          </div>
-          <div class="rounded-md justify-center items-center"
-            style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #DD7DFF solid; border-bottom: 4px #DD7DFF solid; ">
-            <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px; ">
-              Launch Ununifi Eard</div>
-          </div>
-        </div>
+  <section style="position: relative;" class="scroll-fade-in my-20">
+    <div class="Fixed-Yield" style="width: 100%; height:100%; position: absolute;">
+      <div style="width: 33vmin; height: 33vmin; left: 50%; top: 50%; position: absolute;
+      transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center;
+      border-radius: 40px; border-left: 1px white solid; border-right: 1px white solid">
       </div>
-      <div class="flex-auto"></div>
-      <!--right green side-->
-      <div class="w-1/3 rounded-xl flex-row" style="background: rgba(255, 255, 255, 0.05);">
-        <div class="flex flex-col justify-start items-center gap-2 my-4">
-          <div class="p-1 rounded-full justify-center items-center inline-flex"
-            style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
-            border-right: 2.50px #48FF7B solid; border-top: 2.50px #48FF7B solid; border-bottom: 2.50px #48FF7B solid;">
-            <img src="assets/images/$.svg">
-          </div>
-          <div class="text-center text-3xl">
-            <span class=" font-bold">Control<br /></span>
-            <span>Your Yield</span>
-          </div>
-          <div class="text-center text-lg">
-            <span style="letter-spacing: 0.48px;">Long yield
-              or hedge your yield exposure.</span>
-            <span class="font-bold" style="letter-spacing: 0.48px;">the choice is
-              yours.</span>
-          </div>
-          <div class="rounded-md justify-center items-center"
-            style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #48FF7B solid; border-bottom: 4px #48FF7B solid; ">
-            <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px;">
-              Launch Ununifi Trade</div>
-          </div>
-        </div>
-      </div>
-      <div class="flex-auto"></div>
-    </div>
-    <div style="background: rgba(255, 255, 255, 0.3);">
-      <div style="width: 33vmin; height: 33vmin; left: 50%; top: -250%; position: relative; transform: translate(-50%, -50%) rotate(-45deg);
-      transform-origin: center; border-radius: 40px; border-left: 1px white solid; border-right: 1px white solid">
-      </div>
-      <div style="width: 17vmin; height: 17vmin; left: 50%; top: 50%; position: relative; transform: translate(-50%, -50%) rotate(-45deg);
-      transform-origin: center; background: linear-gradient(180deg, rgba(221.11, 125.37, 254.75, 0.07) 0%, rgba(71.95, 255, 123.20, 0.07) 100%);
+      <div style="width: 17vmin; height: 17vmin; left: 50%; top: 50%; position: absolute;
+      transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center;
+      background: linear-gradient(180deg, rgba(221.11, 125.37, 254.75, 0.07) 0%, rgba(71.95, 255, 123.20, 0.07) 100%);
       border-radius: 40px; border: 1px rgba(255, 255, 255, 0.20) solid">
       </div>
     </div>
+    <div class="m-auto max-w-screen-xl">
+      <div class="m-auto w-5/6 flex flex-row">
+        <div class="flex-auto"></div>
+        <!--left purple side-->
+        <div class="w-1/3 rounded-xl flex-row p-5" style="background: rgba(255, 255, 255, 0.05);">
+          <div class="flex flex-col justify-start items-center gap-2 my-4">
+            <div class="p-1 rounded-full justify-center items-center inline-flex" style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
+            border-left: 2.50px #DD7DFF solid; border-top: 2.50px #DD7DFF solid; border-bottom: 2.50px #DD7DFF solid;">
+              <img src="assets/images/$.svg">
+            </div>
+            <div class="text-center text-3xl font-IBM">
+              <span class="font-bold">Fixed Yield<br /></span>
+              <span>For Everyone</span>
+            </div>
+            <div class="text-center text-lg">
+              <span style="letter-spacing: 0.48px; ">Find
+                your stability among volatile yields. </span>
+              <span class="font-bold" style="letter-spacing: 0.48px; ">No
+                lock-up periods.</span>
+            </div>
+            <div class="rounded-md justify-center items-center"
+              style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #DD7DFF solid; border-bottom: 4px #DD7DFF solid; ">
+              <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px; ">
+                Launch Ununifi Eard</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-auto"></div>
+        <!--right green side-->
+        <div class="w-1/3 rounded-xl flex-row p-5" style="background: rgba(255, 255, 255, 0.05);">
+          <div class="flex flex-col justify-start items-center gap-2 my-4">
+            <div class="p-1 rounded-full justify-center items-center inline-flex"
+              style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
+            border-right: 2.50px #48FF7B solid; border-top: 2.50px #48FF7B solid; border-bottom: 2.50px #48FF7B solid;">
+              <img src="assets/images/$.svg">
+            </div>
+            <div class="text-center text-3xl">
+              <span class=" font-bold">Control<br /></span>
+              <span>Your Yield</span>
+            </div>
+            <div class="text-center text-lg">
+              <span style="letter-spacing: 0.48px;">Long yield
+                or hedge your yield exposure.</span>
+              <span class="font-bold" style="letter-spacing: 0.48px;">the choice is
+                yours.</span>
+            </div>
+            <div class="rounded-md justify-center items-center"
+              style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #48FF7B solid; border-bottom: 4px #48FF7B solid; ">
+              <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px;">
+                Launch Ununifi Trade</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-auto"></div>
+      </div>
+
+    </div>
   </section>
 
-  <!--3nd sec. Yield ... -->
-  <section class="scroll-fade-in my-8">
+  <!--4th sec. Yield ... -->
+  <section class="scroll-fade-in my-20">
     <div class="m-auto w-5/6 flex flex-row gap-2">
       <!--left-->
       <div class="w-1/3 flex flex-col items-center bg-debug">
@@ -433,8 +472,8 @@
       </div>
   </section>
 
-  <!--4th sec. Introducing the ... -->
-  <section class="scroll-fade-in my-8">
+  <!--5th sec. Introducing the ... -->
+  <section class="scroll-fade-in my-20">
     <div class="text-center mb-10" style="font-size: 40px; font-weight: 700;">
       <span>Introducing the Gluon </span><span class="bg-purple-to-green">Ecosystem</span><span>...</span>
     </div>
@@ -449,13 +488,14 @@
     </div>
   </section>
 
-  <!--4th sec. Introducing the ... -->
-  <section class="scroll-fade-in my-8">
+  <!--6th sec. Introducing the ... -->
+  <section class="scroll-fade-in my-20">
     <style>
       .container-imo {
         padding: 1rem;
         width: 25%;
       }
+
       .bg-imo {
         background-color: rgba(255, 255, 255, 0.1);
         padding: 0.5rem;
@@ -675,12 +715,11 @@
         Policy</a>
     </div>
   </footer>
+
   <footer class="px-4">
-    <div
-      style="width: 100%; height: 100%; padding-top: 24px; border-top: 1px white solid; justify-content: center; align-items: flex-start; gap: 12px; display: inline-flex">
-      <div
-        style="flex: 1 1 0; color: white; font-size: 20px; font-family: IBM Plex Sans; font-weight: 400; line-height: 20px; letter-spacing: 0.40px; word-wrap: break-word">
-        UnUniFi © – All rights reserved. 2023</div>
+    <div class="w-full pt-4 justify-center items-center gap-3 inline-flex" style="border-top: 1px white solid; ">
+      <div style="flex: 1 1 0; font-size: 14px;  line-height: 20px; letter-spacing: 0.40px; ">
+        UnUniFi © - All rights reserved. 2023</div>
       <div style="justify-content: flex-start; align-items: center; gap: 36px; display: flex">
         <div style="width: 24px; height: 24px; position: relative">
           <div style="width: 21px; height: 16px; left: 1.50px; top: 4px; position: absolute; background: white"></div>
@@ -689,9 +728,9 @@
           <div style="width: 13.60px; height: 14px; left: 1.20px; top: 1px; position: absolute; background: white">
           </div>
         </div>
-        <div style="width: 24px; height: 24px; position: relative">
-          <div style="width: 18px; height: 18px; left: 3px; top: 3px; position: absolute; background: white"></div>
-        </div>
+        <!--linked in-->
+        <img src="assets/images/logos/LI-In-Bug_white_self.png" width="24px" height="24px" alt="linkedin" />
+
         <div style="width: 24px; height: 24px; position: relative">
           <div style="width: 20px; height: 14px; left: 2px; top: 5px; position: absolute; background: white"></div>
         </div>
@@ -747,7 +786,7 @@
   </div>
   <!-- popup script -->
   <script>
-    window.onload = function () {
+    window.onload = function() {
       // if not accepted yet
       if (!getCookie('disclaimer_accepted')) {
         document.getElementById('disclaimer-popup').style.display = 'block';
@@ -755,17 +794,17 @@
     };
 
     // after accepted
-    document.getElementById('popup-accept').addEventListener('click', function () {
-      setCookie('disclaimer_accepted', true, 365);
+    document.getElementById('popup-accept').addEventListener('click',function() {
+      setCookie('disclaimer_accepted',true,365);
       document.getElementById('disclaimer-popup').style.display = 'none';
     });
 
     // after rejected
-    document.getElementById('popup-reject').addEventListener('click', function () {
+    document.getElementById('popup-reject').addEventListener('click',function() {
       location.href = 'https://twitter.com/ununifi'; // go to twitter
     });
 
-    function setCookie(name, value, days) {
+    function setCookie(name,value,days) {
       var expires = '';
       if (days) {
         var date = new Date();
@@ -780,8 +819,8 @@
       var ca = document.cookie.split(';');
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
       }
       return null;
     }

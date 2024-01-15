@@ -8,7 +8,7 @@
     <span class="flex-auto"></span>
     <div class="join">
       <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
-      <button class="btn btn-sm btn-primary join-item">Trade</button>
+      <button class="btn btn-sm btn-accent join-item">Trade</button>
     </div>
   </div>
 
@@ -145,10 +145,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let pool of tranchePools; let i = index">
-            <tr
-              class="hover cursor-pointer border-b-2 border-[#adc9ff]"
-              routerLink="{{ pool.strategy_contract }}/{{ pool.id }}"
-            >
+            <tr class="border-b-2 border-[#adc9ff]">
               <th>
                 <div class="avatar">
                   <div class="w-8 rounded-full">
@@ -189,7 +186,11 @@
                 </div>
               </td>
               <td>
-                <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2">
+                <div
+                  class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 hover cursor-pointer"
+                  [routerLink]="[pool.strategy_contract, pool.id]"
+                  [queryParams]="{ view: 'yt' }"
+                >
                   <div class="avatar">
                     <div class="mask mask-squircle w-8 h-8">
                       <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
@@ -204,7 +205,11 @@
                 </div>
               </td>
               <td>
-                <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2">
+                <div
+                  class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2 hover cursor-pointer"
+                  [routerLink]="[pool.strategy_contract, pool.id]"
+                  [queryParams]="{ view: 'pt' }"
+                >
                   <div class="avatar">
                     <div class="mask mask-squircle w-8 h-8">
                       <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />

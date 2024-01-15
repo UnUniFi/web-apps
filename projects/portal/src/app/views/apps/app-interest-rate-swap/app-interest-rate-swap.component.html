@@ -3,8 +3,8 @@
 
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
-    <div class="navbar glass sticky top-0 z-20">
-      <div class="flex-none md:hidden">
+    <div class="navbar bg-base-100 sticky top-0 z-20">
+      <div class="flex-none lg:hidden">
         <label for="drawer-main" class="btn btn-square btn-ghost">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -107,15 +107,18 @@
           </ng-template>
         </ul>
       </div>
-      <button class="align-middle" mat-icon-button routerLink="/interest-rate-swap/vaults">
-        <img class="p-1 w-10 h-10" src="assets/favicon.png" />
-      </button>
-      <div class="flex-1 mx-2 text-2xl">
-        <div class="hidden xl:block pr-2">UnUniFi</div>
-        <div>Interest Rate Swap</div>
+
+      <div class="flex-1 gap-4">
+        <button class="align-middle" routerLink="/">
+          <img class="p-1 h-12 sm:hidden" src="assets/no-logo-horizontal.png" />
+          <img class="p-1 h-12 hidden sm:block" src="assets/logo-horizontal.png" />
+        </button>
+        <app-app-tool
+          class="hidden md:block"
+          [selectedAppName]="'Interest Rate Swap'"
+        ></app-app-tool>
       </div>
       <div class="flex-none">
-        <app-app-tool class="hidden md:block"></app-app-tool>
         <app-node-tool></app-node-tool>
         <app-wallet-tool></app-wallet-tool>
       </div>

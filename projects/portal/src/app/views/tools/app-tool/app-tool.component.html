@@ -1,7 +1,7 @@
 <div class="dropdown dropdown-end">
-  <div tabindex="0" class="btn gap-1 btn-ghost">
-    <span class="material-symbols-outlined">apps</span>
-    <span class="hidden md:inline">Apps</span>
+  <div tabindex="0" class="btn gap-2">
+    <span class="material-symbols-outlined">{{ selectedApp?.icon || 'apps' }}</span>
+    <span class="hidden md:inline">{{ selectedApp?.name || 'Apps' }}</span>
     <span class="material-symbols-outlined hidden md:inline">keyboard_arrow_down</span>
   </div>
   <ul

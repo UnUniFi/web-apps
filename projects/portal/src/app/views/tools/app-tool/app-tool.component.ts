@@ -9,6 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AppToolComponent implements OnInit {
   @Input()
   apps?: AppNavigation[] | null;
+  @Input()
+  selectedApp?: AppNavigation | null;
 
   constructor() {}
 

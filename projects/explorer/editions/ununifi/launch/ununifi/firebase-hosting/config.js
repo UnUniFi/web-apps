@@ -5,8 +5,10 @@ const faucetUguuPort = location.protocol === 'https:' ? 8002 : 7002;
 
 const domainCauchyEA = 'a.lcd.ununifi.cauchye.net';
 const domainCauchyEB = 'b.lcd.ununifi.cauchye.net';
-const domainCauchyEC = 'ununifi.mainnet.lcd-01.kabab.io';
-const domainCauchyED = 'ununifi.mainnet.lcd-02.kabab.io';
+const nameCauchyEA = 'Mainnet-LCD-A';
+const nameCauchyEB = 'Mainnet-LCD-B';
+// const domainCauchyEC = 'ununifi.mainnet.lcd-01.kabab.io';
+// const domainCauchyED = 'ununifi.mainnet.lcd-02.kabab.io';
 
 const chainID = 'ununifi-beta-v1';
 const chainName = 'UnUniFi';
@@ -289,6 +291,7 @@ const configs = [
   // CauchyE A node without Monitor
   {
     id: domainCauchyEA,
+    name: nameCauchyEA,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
@@ -322,6 +325,7 @@ const configs = [
   // CauchyE B node without Monitor
   {
     id: domainCauchyEB,
+    name: nameCauchyEB,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,

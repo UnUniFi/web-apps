@@ -1,3 +1,4 @@
+import { Config } from '../../../models/config.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
@@ -7,9 +8,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class NodeToolComponent implements OnInit {
   @Input()
-  configs?: string[];
+  configs?: Config[];
   @Input()
-  selectedConfig?: string | null;
+  selectedConfig?: Config | null;
   @Output()
   appChangeConfig: EventEmitter<string>;
 

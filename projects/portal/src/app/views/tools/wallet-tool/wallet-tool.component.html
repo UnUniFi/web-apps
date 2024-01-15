@@ -8,7 +8,9 @@
       >
         circle
       </span>
-      <span class="hidden md:inline">{{ currentStoredWallet?.id }}</span>
+      <span style="max-width: 6rem" class="lowercase hidden md:inline">
+        {{ truncateAddress(currentStoredWallet?.address) }}
+      </span>
     </label>
     <div tabindex="0" class="dropdown-content md:p-2 w-screen md:w-auto">
       <div class="card bg-base-100 shadow-xl">

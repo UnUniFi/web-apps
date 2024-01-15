@@ -131,4 +131,16 @@ export class WalletToolComponent implements OnInit, OnChanges {
   onDisconnectWallet($event: {}) {
     this.appDisconnectWallet.emit($event);
   }
+
+  truncateAddress(address?: string) {
+    if (!address) {
+      return;
+    }
+    if (address.length >= 12) {
+      var result = address.substring(0, 7) + '...' + address.substring(address.length - 5);
+      return result;
+    } else {
+      return address;
+    }
+  }
 }

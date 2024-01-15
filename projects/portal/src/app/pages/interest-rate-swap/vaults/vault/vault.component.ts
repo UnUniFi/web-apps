@@ -47,6 +47,7 @@ export class VaultComponent implements OnInit {
   underlyingDenom$?: Observable<string | undefined>;
   trancheYtAPYs$: Observable<TrancheYtAPYs200Response>;
   tranchePtAPYs$: Observable<TranchePtAPYs200Response>;
+  swapTab$: Observable<'pt' | 'yt'>;
   // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo>;
@@ -92,6 +93,7 @@ export class VaultComponent implements OnInit {
     this.tranchePtAPYs$ = this.trancheId$.pipe(
       mergeMap((id) => this.irsQuery.getTranchePtAPYs$(id)),
     );
+    this.swapTab$ = this.route.queryParams.pipe(map((params) => params.view || 'pt'));
     // this.vaultDetails$ = this.tranches$.pipe(
     //   mergeMap((tranches) =>
     //     Promise.all(

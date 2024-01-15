@@ -53,6 +53,8 @@ export class VaultComponent implements OnInit {
   estimateRequiredUtMintYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   estimateRedeemMaturedYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  swapTab?: 'pt' | 'yt' | null;
 
   inputUnderlying?: string;
   inputIrsToken?: string;
@@ -62,7 +64,6 @@ export class VaultComponent implements OnInit {
   inputDesiredYT?: string;
 
   modeTab: 'swap' | 'mint' = 'swap';
-  swapTab: 'pt' | 'yt' = 'pt';
   txTab: 'all' | 'swap' | 'liquidity' = 'all';
   txMode: 'mint' | 'redeem' = 'mint';
 

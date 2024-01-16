@@ -6,7 +6,9 @@ import { map, mergeMap, pluck } from 'rxjs/operators';
 import ununifi from 'ununifi-client';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintLiquidityPoolToken200Response,
   EstimateMintPtYtPair200Response,
+  EstimateRedeemPtYtPair200Response,
   IrsParams200ResponseParams,
   VaultByContract200ResponseVault,
   VaultDetails200Response,
@@ -91,25 +93,27 @@ export class IrsQueryService {
     );
   }
 
-  estimateRedeeemPtYtPair$(
+  estimateRedeemPtYtPair$(
     poolId: string,
-    ytAmount: string,
-  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    denom: string,
+    amount: string,
+  ): Observable<EstimateRedeemPtYtPair200Response> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemPtYtPair(sdk, poolId, ytAmount)),
-      map((res) => res.data.pt_amount!),
+      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemPtYtPair(sdk, poolId, denom, amount)),
+      map((res) => res.data!),
     );
   }
 
   estimateMintLiquidity(
     poolId: string,
-    desiredAmount: string,
-  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
+    denom: string,
+    amount: string,
+  ): Observable<EstimateMintLiquidityPoolToken200Response> {
     return this.restSdk$.pipe(
       mergeMap((sdk) =>
-        ununifi.rest.irs.estimateMintLiquidityPoolToken(sdk, poolId, desiredAmount),
+        ununifi.rest.irs.estimateMintLiquidityPoolToken(sdk, poolId, denom, amount),
       ),
-      map((res) => res.data.required_amount!),
+      map((res) => res.data!),
     );
   }
 

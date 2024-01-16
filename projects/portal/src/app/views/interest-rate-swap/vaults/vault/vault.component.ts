@@ -13,6 +13,7 @@ import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-r
 import {
   AllTranches200ResponseTranchesInner,
   EstimateMintPtYtPair200Response,
+  EstimateRedeemPtYtPair200Response,
   TranchePtAPYs200Response,
   TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
@@ -48,7 +49,7 @@ export class VaultComponent implements OnInit {
   @Input()
   estimateMintPtYt?: EstimateMintPtYtPair200Response | null;
   @Input()
-  estimatePtRedeemPtYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  estimateRedeemPtYt?: EstimateRedeemPtYtPair200Response | null;
   @Input()
   estimateRequiredUtMintYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -62,6 +63,8 @@ export class VaultComponent implements OnInit {
   inputPT?: string;
   inputDesiredUnderlying?: string;
   inputDesiredYT?: string;
+  inputYtPair?: string;
+  inputPtPair?: string;
 
   modeTab: 'swap' | 'mint' = 'swap';
   txTab: 'all' | 'swap' | 'liquidity' = 'all';
@@ -294,12 +297,22 @@ export class VaultComponent implements OnInit {
     }
   }
 
-  onChangeRedeemMintUnderlyingAmount() {
-    if (this.trancheId && this.underlyingDenom && this.inputDesiredUnderlying) {
+  onChangeRedeemMintPtAmount() {
+    if (this.trancheId && this.inputPtPair) {
       this.appChangeRedeemPTYT.emit({
         poolId: this.trancheId,
-        denom: this.underlyingDenom,
-        readableAmount: Number(this.inputDesiredUnderlying),
+        denom: `irs/tranche/${this.trancheId}/pt`,
+        readableAmount: Number(this.inputPtPair),
+      });
+    }
+  }
+
+  onChangeRedeemMintYtAmount() {
+    if (this.trancheId && this.inputPtPair) {
+      this.appChangeRedeemPTYT.emit({
+        poolId: this.trancheId,
+        denom: `irs/tranche/${this.trancheId}/yt`,
+        readableAmount: Number(this.inputYtPair),
       });
     }
   }

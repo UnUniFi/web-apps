@@ -17,6 +17,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
   EstimateMintPtYtPair200Response,
+  EstimateRedeemPtYtPair200Response,
   TranchePtAPYs200Response,
   TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
@@ -56,8 +57,8 @@ export class VaultComponent implements OnInit {
   estimateRedeemPt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   utAmountForMintPtYt$: BehaviorSubject<EstimationInfo>;
   estimateMintPtYt$: Observable<EstimateMintPtYtPair200Response>;
-  ytAmountForRedeemPtYt$: BehaviorSubject<EstimationInfo>;
-  estimatePtRedeemPtYt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  tokenInAmountForRedeemPtYt$: BehaviorSubject<EstimationInfo>;
+  estimateRedeemPtYt$: Observable<EstimateRedeemPtYtPair200Response>;
   desiredYtAmountForMintYt$: BehaviorSubject<EstimationInfo>;
   estimateRequiredUtMintYt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   ytAmountForRedeemYt$: BehaviorSubject<EstimationInfo>;
@@ -116,7 +117,7 @@ export class VaultComponent implements OnInit {
     this.utAmountForMintPt$ = initialEstimationInfo;
     this.ptAmountForRedeemPt$ = initialEstimationInfo;
     this.utAmountForMintPtYt$ = initialEstimationInfo;
-    this.ytAmountForRedeemPtYt$ = initialEstimationInfo;
+    this.tokenInAmountForRedeemPtYt$ = initialEstimationInfo;
     this.desiredYtAmountForMintYt$ = initialEstimationInfo;
     this.ytAmountForRedeemYt$ = initialEstimationInfo;
     this.estimateMintPt$ = this.utAmountForMintPt$
@@ -136,9 +137,13 @@ export class VaultComponent implements OnInit {
           this.irsQuery.estimateMintPtYtPair$(info.poolId, info.denom, info.amount),
         ),
       );
-    this.estimatePtRedeemPtYt$ = this.ytAmountForRedeemPtYt$
+    this.estimateRedeemPtYt$ = this.tokenInAmountForRedeemPtYt$
       .asObservable()
-      .pipe(mergeMap((info) => this.irsQuery.estimateRedeeemPtYtPair$(info.poolId, info.amount)));
+      .pipe(
+        mergeMap((info) =>
+          this.irsQuery.estimateRedeemPtYtPair$(info.poolId, info.denom, info.amount),
+        ),
+      );
     this.estimateRequiredUtMintYt$ = this.ytAmountForRedeemYt$
       .asObservable()
       .pipe(mergeMap((info) => this.irsQuery.estimateRequiredUtMintYt$(info.poolId, info.amount)));
@@ -198,7 +203,7 @@ export class VaultComponent implements OnInit {
     const coin = this.bankService.convertDenomReadableAmountMapToCoins({
       [data.denom]: data.readableAmount,
     })[0];
-    this.ytAmountForRedeemPtYt$.next({
+    this.tokenInAmountForRedeemPtYt$.next({
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',

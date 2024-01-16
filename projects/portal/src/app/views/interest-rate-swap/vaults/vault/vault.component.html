@@ -387,7 +387,21 @@
                 <div>PT</div>
                 <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input class="join-item input input-bordered w-full" readonly />
+              <input
+                #pairPtAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-info w-full"
+                [class]="{
+                  'input-error': pairPtAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputPtPair"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="pairPtAmount"
+                (change)="onChangeRedeemMintPtAmount()"
+              />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -409,7 +423,21 @@
                 <div>YT</div>
                 <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input class="join-item input input-bordered w-full" readonly />
+              <input
+                #pairYtAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-info w-full"
+                [class]="{
+                  'input-error': pairYtAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputYtPair"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="pairYtAmount"
+                (change)="onChangeRedeemMintYtAmount()"
+              />
             </label>
 
             <span class="label">
@@ -439,19 +467,9 @@
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
               <input
-                #desiredAmountNgModelRef="ngModel"
-                class="join-item input input-bordered input-info w-full"
-                [class]="{
-                  'input-error': desiredAmountNgModelRef.errors
-                }"
-                placeholder="0.000000"
-                required
-                type="number"
-                [(ngModel)]="inputDesiredUnderlying"
-                [min]="0"
-                pattern="^[0-9]*\.?[0-9]{0,6}$"
-                name="desiredAmount"
-                (change)="onChangeRedeemMintUnderlyingAmount()"
+                *ngIf="swapTab === 'pt'"
+                class="join-item input input-bordered w-full"
+                readonly
               />
             </label>
             <span class="label">

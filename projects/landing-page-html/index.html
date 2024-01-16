@@ -119,7 +119,7 @@
           </a>
         </li>
       </ul>
-      <ul class="menu menu-horizontal px-1 md:hidden bg-color">
+      <ul class="menu menu-horizontal px-1 md:hidden">
         <li>
           <details>
             <summary>Links</summary>
@@ -518,6 +518,12 @@
         flex-shrink: 0;
       }
 
+      @media not all and (min-width: 768px) {
+        .scroll-item {
+          width: 45%;
+        }
+      }
+
       .scroll-item img {
         padding: 0.5rem;
         background-color: rgba(255, 255, 255, 0.1);
@@ -583,62 +589,93 @@
     </div>
   </section>
 
-  <footer class="footer px-4 py-8 mt-8">
-    <div class="max-w-xs flex">
-      <img src="assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
-      <span class="my-auto" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
-    </div>
+  <footer>
+    <style>
+      .footer-grid {
+        display: grid;
+        width: 100%;
+        grid-auto-flow: column;
+        place-items: start;
+        row-gap: 1.5rem;
+        column-gap: 1rem;
+      }
 
-    <div>
-      <span class="footer-title opacity-100">Developers</span>
-      <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
-      <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
-    </div>
-    <div>
-      <span class="footer-title  opacity-100">Services</span>
-      <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
-      <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
-      <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
-    </div>
-    <div>
-      <span class="footer-title  opacity-100">Information</span>
-      <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
-      <!-- <a class="link link-hover" href="https://ununifi.io/assets/download/UnUniFi-OnePage.pdf" target="_blank">One
-        Pager</a> -->
-      <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
-      <a class="link link-hover" href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
-        target="_blank">Jobs</a>
-      <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
-    </div>
-    <div>
-      <span class="footer-title  opacity-100">Social</span>
-      <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">Discord</a>
-      <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">X (Twitter)</a>
-      <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">LinkedIn</a>
-      <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">YouTube</a>
-      <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">Linktree</a>
-    </div>
-    <div>
-      <span class="footer-title  opacity-100">legal</span>
-      <a class="link link-hover" href="./assets/download/UnUniFi-TermsOfService.pdf" target="_blank">Terms of
-        Service</a>
-      <a class="link link-hover" href="./assets/download/UnUniFi-PrivacyPolicy.pdf" target="_blank">Privacy
-        Policy</a>
+      .footer-grid-item {
+        display: grid;
+      }
+
+      .footer-grid-item-title {
+        display: grid;
+
+      }
+
+      @media not all and (min-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 40px 1fr 1fr;
+        }
+
+        .footer-grid-item-title {
+          grid-column: 1 / 3;
+        }
+      }
+    </style>
+
+    <div class="footer-grid text-sm px-4 py-8 mt-8">
+      <div class="footer-grid-item-title">
+        <div class="max-w-xs flex items-center">
+          <img src="assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
+          <span class="mx-2" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
+        </div>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Developers</span>
+        <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Services</span>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
+        <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Information</span>
+        <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
+        <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
+        <a class="link link-hover"
+          href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
+          target="_blank">Jobs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">legal</span>
+        <a class="link link-hover" href="./assets/download/UnUniFi-TermsOfService.pdf" target="_blank">Terms of
+          Service</a>
+        <a class="link link-hover" href="./assets/download/UnUniFi-PrivacyPolicy.pdf" target="_blank">Privacy
+          Policy</a>
+      </div>
     </div>
   </footer>
 
   <footer class="px-4">
-    <div class="w-full pt-4 justify-center items-center gap-3 inline-flex" style="border-top: 1px white solid; ">
-      <div style="flex: 1 1 0; font-size: 14px;  line-height: 20px; letter-spacing: 0.40px; ">
+    <div class="w-full pt-4 md:inline-flex" style="border-top: 1px white solid; ">
+      <div class="flex-1 text-sm max-md:text-center" style="letter-spacing: 0.40px;">
         UnUniFi © - All rights reserved. 2023</div>
-      <div class="justify-start items-center gap-9 flex">
-        <img src="assets/images/logos/ic_baseline-discord.svg" alt="discord" />
-        <img src="assets/images/logos/pajamas_twitter.svg" alt="x" />
-        <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin" />
-        <img src="assets/images/logos/mdi_youtube.png" alt="youtube" />
-        <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" />
+      <div class="flex justify-around md:gap-9 max-md:mt-4 ">
+        <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">
+          <img src="assets/images/logos/ic_baseline-discord.svg" alt="discord" /></a>
+        <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">
+          <img src="assets/images/logos/pajamas_twitter.svg" alt="x" /></a>
+        <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
+          <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin" /></a>
+        <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
+          <img src="assets/images/logos/mdi_youtube.png" alt="youtube" /></a>
+        <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
+          <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a>
       </div>
     </div>
+    <div class="h-4"></div>
   </footer>
 
   <div id="disclaimer-popup" class="bg-base-300 overflow-y-auto sticky bottom-0 z-40"

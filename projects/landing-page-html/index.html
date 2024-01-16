@@ -162,7 +162,7 @@
         display: inline-block;
         background: rgba(179.75, 206.57, 219.19, 0.20);
         border-radius: 8px;
-        padding: 16px 16px;
+        padding: 16px 24px;
         cursor: pointer;
       }
 
@@ -491,193 +491,104 @@
   <!--6th sec. Introducing the ... -->
   <section class="scroll-fade-in my-20">
     <style>
-      .container-imo {
-        padding: 1rem;
-        width: 25%;
+      .side-scroll-container {
+        margin: auto;
+        width: 83.33333%;
+        display: flex;
+        overflow-x: scroll;
       }
 
-      .bg-imo {
-        background-color: rgba(255, 255, 255, 0.1);
+      .side-scroll-container::-webkit-scrollbar {
+        height: 10px;
+      }
+
+      .side-scroll-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+
+      .side-scroll-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+
+      .scroll-item {
+        width: 22.5%;
+        margin-right: 2%;
+        flex-shrink: 0;
+      }
+
+      .scroll-item img {
         padding: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-bottom: 10%;
       }
     </style>
-    <div class="m-auto w-5/6">
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <img class="bg-imo" src="assets/images/partners/comdex.png" loading="lazy" width="100%" alt="Comdex" />
-        </div>
-        <div class="container-imo">
-          <img class="bg-imo" src="assets/images/partners/ntt-docomo.png" loading="lazy" width="100%"
-            alt="NTT Docomo" />
-        </div>
-        <div class="container-imo">
-          <img class="bg-imo" src="assets/images/partners/microsoft.png" loading="lazy" width="100%" alt="Microsoft" />
-        </div>
-        <div class="container-imo">
-          <img class="bg-imo" src="assets/images/partners/crescent.png" loading="lazy" width="100%" alt="Crescent" />
-        </div>
+    <div class="side-scroll-container">
+      <div class="scroll-item">
+        <img src="assets/images/partners/comdex.png" loading="lazy" width="100%" alt="Comdex" />
+        <img src="assets/images/partners/assetmantle.png" loading="lazy" width="100%" alt="AssetMantle" />
+        <img src="assets/images/partners/cosmwasm.png" loading="lazy" width="100%" alt="CosmWasm" />
+        <img src="assets/images/validators/mercury.png" loading="lazy" width="100%" alt="Mercury" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--asset mantlo-->
-          <img class="bg-imo" src="assets/images/partners/assetmantle.png" loading="lazy" width="100%"
-            alt="AssetMantle" />
-        </div>
-        <div class="container-imo">
-          <!--bodylon-->
-          <img class="bg-imo" src="assets/images/partners/babylon.png" loading="lazy" width="100%" alt="Babylon" />
-        </div>
-        <div class="container-imo">
-          <!--stargate-->
-          <img class="bg-imo" src="assets/images/partners/stargaze.png" loading="lazy" width="100%" alt="Stargaze" />
-        </div>
-        <div class="container-imo">
-          <!--polygon-->
-          <img class="bg-imo" src="assets/images/partners/polygon.png" loading="lazy" width="100%" alt="Polygon" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/ntt-docomo.png" loading="lazy" width="100%" alt="NTT Docomo" />
+        <img src="assets/images/partners/babylon.png" loading="lazy" width="100%" alt="Babylon" />
+        <img src="assets/images/partners/omniflix.png" loading="lazy" width="100%" alt="OmniFlix" />
+        <img src="assets/images/validators/valador.png" loading="lazy" width="100%" alt="Valador" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--comswasm-->
-          <img class="bg-imo" src="assets/images/partners/cosmwasm.png" loading="lazy" width="100%" alt="CosmWasm" />
-        </div>
-        <div class="container-imo">
-          <!--omuniflex-->
-          <img class="bg-imo" src="assets/images/partners/omniflix.png" loading="lazy" width="100%" alt="OmniFlix" />
-        </div>
-        <div class="container-imo">
-          <!--saga-->
-          <img class="bg-imo" src="assets/images/partners/saga.png" loading="lazy" width="100%" alt="Saga" />
-        </div>
-        <div class="container-imo">
-          <!--quaster-->
-          <img class="bg-imo" src="assets/images/partners/quasar.png" loading="lazy" width="100%" alt="Quasar" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/microsoft.png" loading="lazy" width="100%" alt="Microsoft" />
+        <img src="assets/images/partners/stargaze.png" loading="lazy" width="100%" alt="Stargaze" />
+        <img src="assets/images/partners/saga.png" loading="lazy" width="100%" alt="Saga" />
+        <img src="assets/images/validators/zumak.png" loading="lazy" width="100%" alt="Zumak" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--mercury-->
-          <img class="bg-imo" src="assets/images/validators/mercury.png" loading="lazy" width="100%" alt="Mercury" />
-        </div>
-        <div class="container-imo">
-          <!--valador-->
-          <img class="bg-imo" src="assets/images/validators/valador.png" loading="lazy" width="100%" alt="Valador" />
-        </div>
-        <div class="container-imo">
-          <!--zumak-->
-          <img class="bg-imo" src="assets/images/validators/zumak.png" loading="lazy" width="100%" alt="Zumak" />
-        </div>
-        <div class="container-imo">
-          <!--notional-->
-          <img class="bg-imo" src="assets/images/validators/notional.png" loading="lazy" width="100%" alt="Notional" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/crescent.png" loading="lazy" width="100%" alt="Crescent" />
+        <img src="assets/images/partners/polygon.png" loading="lazy" width="100%" alt="Polygon" />
+        <img src="assets/images/partners/quasar.png" loading="lazy" width="100%" alt="Quasar" />
+        <img src="assets/images/validators/notional.png" loading="lazy" width="100%" alt="Notional" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--lithium-->
-          <img class="bg-imo" src="assets/images/partners/lithium.png" loading="lazy" width="100%"
-            alt="Lithium Finance" />
-        </div>
-        <div class="container-imo">
-          <!--sei-->
-          <img class="bg-imo" src="assets/images/partners/sei.png" loading="lazy" width="100%" alt="Sei" />
-        </div>
-        <div class="container-imo">
-          <!--axelar-->
-          <img class="bg-imo" src="assets/images/partners/axelar.png" loading="lazy" width="100%" alt="Axelar" />
-        </div>
-        <div class="container-imo">
-          <!--dorahack-->
-          <img class="bg-imo" src="assets/images/partners/dorahacks.png" loading="lazy" width="100%" alt="DoraHacks" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/lithium.png" loading="lazy" width="100%" alt="Lithium Finance" />
+        <img src="assets/images/partners/ntt-digital.png" loading="lazy" width="100%" alt="NTT Digital" />
+        <img src="assets/images/validators/asguard.png" loading="lazy" width="100%" alt="AsGuard" />
+        <img src="assets/images/validators/stakingcabin.png" loading="lazy" width="100%" alt="StakingCabin" />
       </div>
-
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--digital-->
-          <img class="bg-imo" src="assets/images/partners/ntt-digital.png" loading="lazy" width="100%"
-            alt="NTT Digital" />
-        </div>
-        <div class="container-imo">
-          <!--tfm-->
-          <img class="bg-imo" src="assets/images/partners/tfm.png" loading="lazy" width="100%" alt="TFM" />
-        </div>
-        <div class="container-imo">
-          <!--inter chain-->
-          <img class="bg-imo" src="assets/images/partners/interchain-builders-program.png" loading="lazy" width="100%"
-            alt="Interchain Builders Program" />
-        </div>
-        <div class="container-imo">
-          <!--sommelier-->
-          <img class="bg-imo" src="assets/images/partners/sommelier.png" loading="lazy" width="100%" alt="Sommelier" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/sei.png" loading="lazy" width="100%" alt="Sei" />
+        <img src="assets/images/partners/tfm.png" loading="lazy" width="100%" alt="TFM" />
+        <img src="assets/images/validators/daic.png" loading="lazy" width="100%" alt="DAIC" />
+        <img src="assets/images/validators/gmo-coin.png" loading="lazy" width="100%" alt="GMO Coin" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--as guard-->
-          <img class="bg-imo" src="assets/images/validators/asguard.png" loading="lazy" width="100%" alt="AsGuard" />
-        </div>
-        <div class="container-imo">
-          <!--daic-->
-          <img class="bg-imo" src="assets/images/validators/daic.png" loading="lazy" width="100%" alt="DAIC" />
-        </div>
-        <div class="container-imo">
-          <!--forbore-->
-          <img class="bg-imo" src="assets/images/validators/forbole.png" loading="lazy" width="100%" alt="Forbole" />
-        </div>
-        <div class="container-imo">
-          <!--01node-->
-          <img class="bg-imo" src="assets/images/validators/01node.png" loading="lazy" width="100%" alt="01node" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/axelar.png" loading="lazy" width="100%" alt="Axelar" />
+        <img src="assets/images/partners/interchain-builders-program.png" loading="lazy" width="100%"
+          alt="Interchain Builders Program" />
+        <img src="assets/images/validators/forbole.png" loading="lazy" width="100%" alt="Forbole" />
+        <img src="assets/images/validators/hashquark.png" loading="lazy" width="100%" alt="HashQuark" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--staking cabin-->
-          <img class="bg-imo" src="assets/images/validators/stakingcabin.png" loading="lazy" width="100%"
-            alt="StakingCabin" />
-        </div>
-        <div class="container-imo">
-          <!--gmo coin-->
-          <img class="bg-imo" src="assets/images/validators/gmo-coin.png" loading="lazy" width="100%" alt="GMO Coin" />
-        </div>
-        <div class="container-imo">
-          <!--hash quark-->
-          <img class="bg-imo" src="assets/images/validators/hashquark.png" loading="lazy" width="100%"
-            alt="HashQuark" />
-        </div>
-        <div class="container-imo">
-          <!--fox-->
-          <img class="bg-imo" src="assets/images/validators/nodejumper.png" loading="lazy" width="100%"
-            alt="Nodejumper" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/dorahacks.png" loading="lazy" width="100%" alt="DoraHacks" />
+        <img src="assets/images/partners/sommelier.png" loading="lazy" width="100%" alt="Sommelier" />
+        <img src="assets/images/validators/01node.png" loading="lazy" width="100%" alt="01node" />
+        <img src="assets/images/validators/nodejumper.png" loading="lazy" width="100%" alt="Nodejumper" />
       </div>
-      <div class="flex flex-row">
-        <div class="container-imo">
-          <!--stir-->
-          <img class="bg-imo" src="assets/images/validators/stir.png" loading="lazy" width="100%" alt="Stir" />
-        </div>
-        <div class="container-imo">
-          <!--node stake-->
-          <img class="bg-imo" src="assets/images/validators/nodestake.png" loading="lazy" width="100%"
-            alt="NodeStake" />
-        </div>
-        <div class="container-imo">
-          <!--kysen pool-->
-          <img class="bg-imo" src="assets/images/validators/kysenpool.png" loading="lazy" width="100%"
-            alt="KysenPool" />
-        </div>
-        <div class="container-imo">
-          <!--nodeist-->
-          <img class="bg-imo" src="assets/images/validators/nodeist.png" loading="lazy" width="100%" alt="Nodeist" />
-        </div>
+      <div class="scroll-item">
+        <img src="assets/images/validators/stir.png" loading="lazy" width="100%" alt="Stir" />
+        <img src="assets/images/validators/nodestake.png" loading="lazy" width="100%" alt="NodeStake" />
+        <img src="assets/images/validators/kysenpool.png" loading="lazy" width="100%" alt="KysenPool" />
+        <img src="assets/images/validators/nodeist.png" loading="lazy" width="100%" alt="Nodeist" />
       </div>
     </div>
   </section>
 
   <footer class="footer px-4 py-8 mt-8">
-    <div class="max-w-xs">
-      <img src="assets/images/logo-horizontal.png" loading="lazy" width="100%" alt="logo-horizontal" />
+    <div class="max-w-xs flex">
+      <img src="assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
+      <span class="my-auto" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
     </div>
+
     <div>
       <span class="footer-title opacity-100">Developers</span>
       <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>

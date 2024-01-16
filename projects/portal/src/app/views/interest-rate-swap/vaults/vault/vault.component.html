@@ -114,10 +114,7 @@
               <input
                 *ngIf="swapTab === 'yt'"
                 #desiredYtNgModelRef="ngModel"
-                class="join-item input input-bordered input-info w-full"
-                [class]="{
-                  'input-error': desiredYtNgModelRef.errors
-                }"
+                class="join-item input input-bordered w-full"
                 placeholder="0.000000"
                 required
                 type="number"
@@ -125,7 +122,6 @@
                 [min]="0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="desiredYt"
-                (change)="onChangeSwapRequiredYt()"
               />
             </label>
             <span class="label">
@@ -186,10 +182,11 @@
                 placeholder="0.000000"
                 required
                 type="number"
-                [(ngModel)]="inputPT"
+                [(ngModel)]="inputYT"
                 [min]="0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="swapYtAmount"
+                (change)="onChangeSwapYtAmount()"
               />
             </label>
             <span class="label">
@@ -227,18 +224,15 @@
               />
               <input
                 *ngIf="swapTab === 'yt'"
-                #desiredAmountNgModelRef="ngModel"
-                class="join-item input input-bordered input-info w-full"
-                [class]="{
-                  'input-error': desiredAmountNgModelRef.errors
-                }"
+                #desiredUtNgModelRef="ngModel"
+                class="join-item input input-bordered w-full"
                 placeholder="0.000000"
                 required
                 type="number"
                 [(ngModel)]="inputDesiredUnderlying"
                 [min]="0"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
-                name="desiredAmount"
+                name="desiredUt"
               />
             </label>
             <span class="label">
@@ -466,11 +460,7 @@
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
-              <input
-                *ngIf="swapTab === 'pt'"
-                class="join-item input input-bordered w-full"
-                readonly
-              />
+              <input class="join-item input input-bordered w-full" readonly />
             </label>
             <span class="label">
               <span class="label-text"></span>

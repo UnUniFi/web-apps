@@ -51,7 +51,7 @@ export class VaultComponent implements OnInit {
   @Input()
   estimateRedeemPtYt?: EstimateRedeemPtYtPair200Response | null;
   @Input()
-  estimateRequiredUtMintYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  estimateMintYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   estimateRedeemMaturedYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
@@ -255,14 +255,11 @@ export class VaultComponent implements OnInit {
         readableAmount: Number(this.inputUnderlying),
       });
     }
-  }
-
-  onChangeSwapRequiredYt() {
     if (this.swapTab === 'yt' && this.trancheId && this.underlyingDenom && this.inputUnderlying) {
       this.appChangeMintYT.emit({
         poolId: this.trancheId,
-        denom: `irs/tranche/${this.trancheId}/yt`,
-        readableAmount: Number(this.inputDesiredYT),
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputUnderlying),
       });
     }
   }

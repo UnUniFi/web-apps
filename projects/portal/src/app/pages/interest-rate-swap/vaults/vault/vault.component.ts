@@ -59,8 +59,8 @@ export class VaultComponent implements OnInit {
   estimateMintPtYt$: Observable<EstimateMintPtYtPair200Response>;
   tokenInAmountForRedeemPtYt$: BehaviorSubject<EstimationInfo>;
   estimateRedeemPtYt$: Observable<EstimateRedeemPtYtPair200Response>;
-  desiredYtAmountForMintYt$: BehaviorSubject<EstimationInfo>;
-  estimateRequiredUtMintYt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
+  utAmountForMintYt$: BehaviorSubject<EstimationInfo>;
+  estimateMintYt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
   ytAmountForRedeemYt$: BehaviorSubject<EstimationInfo>;
   estimateRedeemMaturedYt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
 
@@ -118,7 +118,7 @@ export class VaultComponent implements OnInit {
     this.ptAmountForRedeemPt$ = initialEstimationInfo;
     this.utAmountForMintPtYt$ = initialEstimationInfo;
     this.tokenInAmountForRedeemPtYt$ = initialEstimationInfo;
-    this.desiredYtAmountForMintYt$ = initialEstimationInfo;
+    this.utAmountForMintYt$ = initialEstimationInfo;
     this.ytAmountForRedeemYt$ = initialEstimationInfo;
     this.estimateMintPt$ = this.utAmountForMintPt$
       .asObservable()
@@ -144,9 +144,11 @@ export class VaultComponent implements OnInit {
           this.irsQuery.estimateRedeemPtYtPair$(info.poolId, info.denom, info.amount),
         ),
       );
-    this.estimateRequiredUtMintYt$ = this.ytAmountForRedeemYt$
+    this.estimateMintYt$ = this.ytAmountForRedeemYt$
       .asObservable()
-      .pipe(mergeMap((info) => this.irsQuery.estimateRequiredUtMintYt$(info.poolId, info.amount)));
+      .pipe(
+        mergeMap((info) => this.irsQuery.estimateSwapUtToYt$(info.poolId, info.denom, info.amount)),
+      );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$
       .asObservable()
       .pipe(mergeMap((info) => this.irsQuery.estimateRedeemMaturedYt$(info.poolId, info.amount)));
@@ -216,7 +218,7 @@ export class VaultComponent implements OnInit {
     const coin = this.bankService.convertDenomReadableAmountMapToCoins({
       [data.denom]: data.readableAmount,
     })[0];
-    this.desiredYtAmountForMintYt$.next({
+    this.utAmountForMintYt$.next({
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',

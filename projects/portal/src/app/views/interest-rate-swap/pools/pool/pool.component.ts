@@ -5,6 +5,7 @@ import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/i
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -30,12 +31,14 @@ export class PoolComponent implements OnInit {
   @Input()
   poolBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
-  estimatedRequiredAmountForMint$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedMintAmount?: EstimateMintLiquidityPoolToken200Response | null;
   @Input()
-  estimatedRedeemAmount$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedRedeemAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 
   tab: 'deposit' | 'withdraw' = 'deposit';
   inputUnderlying?: string;
+  inputUT?: string;
+  inputPT?: string;
   inputLP?: string;
 
   @Output()
@@ -77,12 +80,22 @@ export class PoolComponent implements OnInit {
     });
   }
 
-  onChangeDeposit() {
-    if (this.poolId && this.inputLP) {
+  onChangeDepositUt() {
+    if (this.poolId && this.inputUT && this.underlyingDenom) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
-        denom: `irs/tranche/${this.poolId}/ls`,
-        readableAmount: Number(this.inputLP),
+        denom: this.underlyingDenom,
+        readableAmount: Number(this.inputUT),
+      });
+    }
+  }
+
+  onChangeDepositPt() {
+    if (this.poolId && this.inputUT) {
+      this.appChangeMintLP.emit({
+        poolId: this.poolId,
+        denom: `irs/tranche/${this.poolId}/pt`,
+        readableAmount: Number(this.inputPT),
       });
     }
   }

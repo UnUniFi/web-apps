@@ -13,6 +13,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -32,7 +33,7 @@ export class SimplePoolComponent implements OnInit {
   poolBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
   lpAmountForMint$: BehaviorSubject<EstimationInfo>;
-  estimatedRequiredAmountForMint$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response>;
   lpAmountForRedeem$: BehaviorSubject<EstimationInfo>;
   estimatedRedeemAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
@@ -91,8 +92,8 @@ export class SimplePoolComponent implements OnInit {
     });
     this.lpAmountForMint$ = initialEstimationInfo;
     this.lpAmountForRedeem$ = initialEstimationInfo;
-    this.estimatedRequiredAmountForMint$ = this.lpAmountForMint$.pipe(
-      mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.amount)),
+    this.estimatedMintAmount$ = this.lpAmountForMint$.pipe(
+      mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.denom, info.amount)),
     );
     this.estimatedRedeemAmount$ = this.lpAmountForRedeem$.pipe(
       mergeMap((info) => this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount)),

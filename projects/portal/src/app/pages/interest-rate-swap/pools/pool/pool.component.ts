@@ -13,6 +13,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -32,8 +33,8 @@ export class PoolComponent implements OnInit {
   underlyingDenom$?: Observable<string | undefined>;
   poolBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
 
-  lpAmountForMint$: BehaviorSubject<EstimationInfo>;
-  estimatedRequiredAmountForMint$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  tokenInAmountForMint$: BehaviorSubject<EstimationInfo>;
+  estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response>;
   lpAmountForRedeem$: BehaviorSubject<EstimationInfo>;
   estimatedRedeemAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
 
@@ -82,10 +83,10 @@ export class PoolComponent implements OnInit {
       denom: '',
       amount: '0',
     });
-    this.lpAmountForMint$ = initialEstimationInfo;
+    this.tokenInAmountForMint$ = initialEstimationInfo;
     this.lpAmountForRedeem$ = initialEstimationInfo;
-    this.estimatedRequiredAmountForMint$ = this.lpAmountForMint$.pipe(
-      mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.amount)),
+    this.estimatedMintAmount$ = this.tokenInAmountForMint$.pipe(
+      mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.denom, info.amount)),
     );
     this.estimatedRedeemAmount$ = this.lpAmountForRedeem$.pipe(
       mergeMap((info) => this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount)),
@@ -102,7 +103,7 @@ export class PoolComponent implements OnInit {
     const coin = this.bankService.convertDenomReadableAmountMapToCoins({
       [data.denom]: data.readableAmount,
     })[0];
-    this.lpAmountForMint$.next({
+    this.tokenInAmountForMint$.next({
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',

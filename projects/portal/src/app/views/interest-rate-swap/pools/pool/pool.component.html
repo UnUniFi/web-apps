@@ -80,7 +80,21 @@
                 <div class="flex-auto"></div>
                 <div class="material-symbols-outlined">keyboard_arrow_down</div>
               </button>
-              <input class="join-item input input-bordered w-full" />
+              <input
+                #depositUtAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-secondary w-full"
+                [class]="{
+                  'input-error': depositUtAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputUT"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="depositUtAmount"
+                (change)="onChangeDepositUt()"
+              />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -101,7 +115,21 @@
                 <div>PT</div>
                 <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input class="join-item input input-bordered w-full" />
+              <input
+                #depositPtAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-secondary w-full"
+                [class]="{
+                  'input-error': depositPtAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputPT"
+                [min]="0"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="depositPtAmount"
+                (change)="onChangeDepositPt()"
+              />
             </label>
             <span class="label">
               <span class="label-text-alt">Available Balance:</span>
@@ -128,21 +156,7 @@
                 <div>LP</div>
                 <div>{{ underlyingDenom | coinDenom | async }}</div>
               </span>
-              <input
-                #depositAmountNgModelRef="ngModel"
-                class="join-item input input-bordered input-secondary w-full"
-                [class]="{
-                  'input-error': depositAmountNgModelRef.errors
-                }"
-                placeholder="0.000000"
-                required
-                type="number"
-                [(ngModel)]="inputLP"
-                [min]="0"
-                pattern="^[0-9]*\.?[0-9]{0,6}$"
-                name="depositAmount"
-                (change)="onChangeDeposit()"
-              />
+              <input class="join-item input input-bordered w-full" readonly />
             </label>
             <span class="label">
               <span class="label-text"></span>

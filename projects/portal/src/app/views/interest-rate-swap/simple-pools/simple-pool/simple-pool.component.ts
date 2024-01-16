@@ -5,6 +5,7 @@ import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/i
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
+  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -30,7 +31,7 @@ export class SimplePoolComponent implements OnInit {
   @Input()
   poolBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
   @Input()
-  estimatedRequiredAmountForMint$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedRequiredAmountForMint$?: EstimateMintLiquidityPoolToken200Response | null;
   @Input()
   estimatedRedeemAmount$?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
 

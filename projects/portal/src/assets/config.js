@@ -129,6 +129,62 @@ const denomMetadata = [
     symbol: 'DLP',
   },
   {
+    description: 'ATOM',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uatom',
+    name: 'ATOM native',
+    display: 'ATOM',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'OSMO',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uosmo',
+    name: 'OSMO native',
+    display: 'OSMO',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'Ethereum',
+    denom_units: [
+      {
+        denom: 'ueth',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ueth',
+    name: 'ETH native',
+    display: 'ETH',
+    symbol: 'ETH',
+  },
+  {
+    description: 'USDT',
+    denom_units: [
+      {
+        denom: 'uusdt',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uusdt',
+    name: 'USDT native',
+    display: 'USDT',
+    symbol: 'USDT',
+  },
+  {
     description: 'ATOM from Osmosis',
     denom_units: [
       {

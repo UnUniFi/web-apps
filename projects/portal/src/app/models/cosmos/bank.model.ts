@@ -18,12 +18,13 @@ export const symbolExponent: { [symbol: string]: number } = {};
 
 const ibcPattern = /^ibc\//;
 const iyaPattern = /^yieldaggregator\/vaults\//;
+const irsPattern = /^irs\//;
 
 export function getDenomExponent(denom?: string): number {
   if (!denom) {
     return 6;
   }
-  if (ibcPattern.test(denom) || iyaPattern.test(denom)) {
+  if (ibcPattern.test(denom) || iyaPattern.test(denom) || irsPattern.test(denom)) {
     return 6;
   }
   return denomExponentMap[denom];

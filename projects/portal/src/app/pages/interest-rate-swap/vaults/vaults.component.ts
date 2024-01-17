@@ -1,6 +1,12 @@
+import {
+  dummyFixedAPYs,
+  dummyLongAPYs,
+  dummyTranchePools,
+  dummyVaults,
+} from '../../../models/irs/irs.dummy';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { TranchePtAPYs200Response, TrancheYtAPYs200Response } from 'ununifi-client/esm/openapi';
 
@@ -34,6 +40,10 @@ export class VaultsComponent implements OnInit {
         ),
       ),
     );
+    this.vaults$ = of(dummyVaults);
+    this.tranchePools$ = of(dummyTranchePools);
+    this.trancheFixedAPYs$ = of(dummyFixedAPYs);
+    this.trancheLongAPYs$ = of(dummyLongAPYs);
   }
 
   ngOnInit(): void {}

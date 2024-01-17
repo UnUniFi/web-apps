@@ -1,6 +1,7 @@
+import { dummyPoolAPYs, dummyTranchePools, dummyVaults } from '../../../models/irs/irs.dummy';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { TranchePoolAPYs200Response } from 'ununifi-client/esm/openapi';
 
@@ -26,6 +27,9 @@ export class PoolsComponent implements OnInit {
         ),
       ),
     );
+    this.tranchePools$ = of(dummyTranchePools);
+    this.vaults$ = of(dummyVaults);
+    this.poolsAPYs$ = of(dummyPoolAPYs);
   }
 
   ngOnInit(): void {}

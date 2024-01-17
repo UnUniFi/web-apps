@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {
+  dummyVaults,
+  dummyTranchePools,
+  dummyPoolAPYs,
+} from 'projects/portal/src/app/models/irs/irs.dummy';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   VaultByContract200ResponseVault,
@@ -39,6 +44,9 @@ export class ContractPoolsComponent implements OnInit {
         ),
       ),
     );
+    this.vault$ = of(dummyVaults[0]);
+    this.tranchePools$ = of(dummyTranchePools.slice(0, 3));
+    this.poolsAPYs$ = of(dummyPoolAPYs.slice(0, 3));
   }
 
   ngOnInit(): void {}

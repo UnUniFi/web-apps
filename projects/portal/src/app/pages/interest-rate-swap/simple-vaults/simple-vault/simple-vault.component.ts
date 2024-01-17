@@ -5,11 +5,16 @@ import cosmosclient from '@cosmos-client/core';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
+import {
+  dummyFixedAPYs,
+  dummyTranchePools,
+  dummyVaults,
+} from 'projects/portal/src/app/models/irs/irs.dummy';
 import { MintPtRequest, RedeemPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
@@ -117,6 +122,11 @@ export class SimpleVaultComponent implements OnInit {
       .pipe(
         mergeMap((info) => this.irsQuery.estimateSwapInPool$(info.poolId, info.denom, info.amount)),
       );
+
+    this.vault$ = of(dummyVaults[0]);
+    this.underlyingDenom$ = of('uatom');
+    this.tranches$ = of(dummyTranchePools.slice(0, 3));
+    this.trancheFixedAPYs$ = of(dummyFixedAPYs.slice(0, 3));
   }
 
   ngOnInit(): void {}

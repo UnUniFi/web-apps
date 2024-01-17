@@ -255,7 +255,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let vault of vaults">
+          <ng-container *ngFor="let vault of vaults; let i = index">
             <tr
               class="hover cursor-pointer border-b-2 border-[#adc9ff]"
               routerLink="{{ vault.strategy_contract }}"
@@ -286,7 +286,9 @@
               </td>
               <td>
                 <div>
-                  <div class="text-xl font-bold text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+                  <div class="text-xl font-bold text-accent">
+                    {{ vaultsMaxFixedAPYs?.[i] | percent : '1.0-2' }}
+                  </div>
                 </div>
               </td>
             </tr>
@@ -296,7 +298,7 @@
     </div>
 
     <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-      <ng-container *ngFor="let vault of vaults">
+      <ng-container *ngFor="let vault of vaults; let i = index">
         <div
           style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
           class="card shadow-xl"
@@ -322,7 +324,9 @@
 
             <div class="stat">
               <div class="stat-title">FIxed APY Up To</div>
-              <div class="stat-value text-accent">{{ '1.217' | percent : '1.0-2' }}</div>
+              <div class="stat-value text-accent">
+                {{ vaultsMaxFixedAPYs?.[i] | percent : '1.0-2' }}
+              </div>
               <div class="stat-desc"></div>
             </div>
 

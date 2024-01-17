@@ -4,7 +4,7 @@ import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -17,6 +17,7 @@ export class SimpleVaultsComponent implements OnInit {
   vaults$ = this.irsQuery.listVaults$();
   tranchePools$ = this.irsQuery.listAllTranches$();
   vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  vaultsMaxFixedAPYs$: Observable<number[]>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -30,6 +31,32 @@ export class SimpleVaultsComponent implements OnInit {
     const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
     this.vaultBalances$ = balances$.pipe(
       map((balance) => balance.filter((balance) => balance.denom?.includes('irs/tranche/'))),
+    );
+    const trancheFixedAPYs$ = this.tranchePools$.pipe(
+      mergeMap((tranches) =>
+        Promise.all(
+          tranches.map(async (tranche) =>
+            tranche.id
+              ? await this.irsQuery
+                  .getTranchePtAPYs$(tranche.id)
+                  .toPromise()
+                  .then((apy) => {
+                    return { ...apy, strategy_contract: tranche.strategy_contract };
+                  })
+              : undefined,
+          ),
+        ),
+      ),
+    );
+    this.vaultsMaxFixedAPYs$ = combineLatest([this.vaults$, trancheFixedAPYs$]).pipe(
+      map(([vaults, apys]) =>
+        vaults.map((vault) => {
+          const fixedAPYs = apys.filter(
+            (apy) => apy?.strategy_contract === vault.strategy_contract,
+          );
+          return fixedAPYs.reduce((prev, curr) => Math.max(Number(curr?.pt_apy), prev), 0);
+        }),
+      ),
     );
   }
 

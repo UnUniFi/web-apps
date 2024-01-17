@@ -10,6 +10,8 @@ import { VaultByContract200ResponseVault } from 'ununifi-client/esm/openapi';
 export class SimpleVaultsComponent implements OnInit {
   @Input()
   vaults?: VaultByContract200ResponseVault[] | null;
+  @Input()
+  vaultsMaxFixedAPYs?: number[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

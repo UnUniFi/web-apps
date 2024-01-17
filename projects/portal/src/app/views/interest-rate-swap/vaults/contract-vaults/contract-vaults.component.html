@@ -1,153 +1,249 @@
-<div class="mx-auto max-w-screen-xl">
-  <div class="flex flex-row flex-wrap mb-8">
-    <div class="text-2xl font-bold breadcrumbs">
-      <ul>
-        <li><a routerLink="..">Markets</a></li>
-        <li>{{ vault?.name }}</li>
-      </ul>
-    </div>
-    <span class="flex-auto"></span>
-    <div class="join">
-      <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">Earn</button>
-      <button class="btn btn-sm btn-accent join-item">Trade</button>
-    </div>
-  </div>
-
-  <p class="font-bold">Exit anytime at market price.</p>
-  <p class="font-light">
-    Looking to find more vaults? Check
-    <a class="link link-info font-semibold" routerLink="/yield-aggregator/vaults">
-      UnUniFi Yield Aggregator Vaults</a
-    >.
-  </p>
-
-  <div class="flex my-8 gap-4">
-    <form>
-      <div class="form-control w-full">
-        <div class="join">
-          <input
-            type="text"
-            placeholder="Search"
-            class="join-item input input-bordered w-full max-w-xs"
-          />
-          <button class="btn btn-square">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-        </div>
+<div class="bg-[#39465d]">
+  <div class="mx-auto max-w-screen-xl w-full p-8">
+    <div class="flex flex-row flex-wrap mb-8">
+      <div class="text-2xl font-bold breadcrumbs">
+        <ul>
+          <li><a routerLink="..">Markets</a></li>
+          <li>{{ vault?.name }}</li>
+        </ul>
       </div>
-    </form>
-    <span class="flex-auto"></span>
-    <!-- <div class="join">
+      <span class="flex-auto"></span>
+      <div class="join">
+        <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">
+          Earn
+        </button>
+        <button class="btn btn-sm btn-accent join-item">Trade</button>
+      </div>
+    </div>
+
+    <p class="font-bold">Exit anytime at market price.</p>
+    <p class="font-light">
+      Looking to find more vaults? Check
+      <a class="link link-info font-semibold" routerLink="/yield-aggregator/vaults">
+        UnUniFi Yield Aggregator Vaults</a
+      >.
+    </p>
+
+    <div class="flex my-8 gap-4">
+      <form>
+        <div class="form-control w-full">
+          <div class="join">
+            <input
+              type="text"
+              placeholder="Search"
+              class="join-item input input-bordered w-full max-w-xs"
+            />
+            <button class="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+      <span class="flex-auto"></span>
+      <!-- <div class="join">
       <button class="btn btn-sm btn-neutral join-item">Active</button>
       <button class="btn btn-sm join-item">Inactive</button>
     </div> -->
-    <button
-      class="btn btn-sm btn-square"
-      [class]="{ 'btn-neutral': viewMode === 'table' }"
-      (click)="viewMode = 'table'"
-    >
-      <span class="material-symbols-outlined">menu</span>
-    </button>
-    <button
-      class="btn btn-sm btn-square"
-      [class]="{ 'btn-neutral': viewMode === 'grid' }"
-      (click)="viewMode = 'grid'"
-    >
-      <span class="material-symbols-outlined">grid_view</span>
-    </button>
-  </div>
+      <button
+        class="btn btn-sm btn-square"
+        [class]="{ 'btn-neutral': viewMode === 'table' }"
+        (click)="viewMode = 'table'"
+      >
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <button
+        class="btn btn-sm btn-square"
+        [class]="{ 'btn-neutral': viewMode === 'grid' }"
+        (click)="viewMode = 'grid'"
+      >
+        <span class="material-symbols-outlined">grid_view</span>
+      </button>
+    </div>
 
-  <ng-container *ngIf="tranchePools; else empty">
-    <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
-      <table class="table">
-        <thead>
-          <tr class="border-b-2 border-[#adc9ff]">
-            <th></th>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Name</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'name' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Maturity</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'maturity' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Underlying APY</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'underlying' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Implied APY</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'implied' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Long Yield APY</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'long' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-ghost btn-xs flex-nowrap">
-                <span>Fixed APY</span>
-                <span
-                  class="material-symbols-outlined"
-                  [class]="{ 'text-info': sortType === 'fixed' }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </button>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let pool of tranchePools; let i = index">
-            <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="{{ pool.id }}">
-              <th>
+    <ng-container *ngIf="tranchePools; else empty">
+      <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
+        <table class="table">
+          <thead>
+            <tr class="border-b-2 border-[#adc9ff]">
+              <th></th>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Name</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'name' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Maturity</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'maturity' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Underlying APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'underlying' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Implied APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'implied' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Long Yield APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'long' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Fixed APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'fixed' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let pool of tranchePools; let i = index">
+              <tr
+                class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+                routerLink="{{ pool.id }}"
+              >
+                <th>
+                  <div class="avatar">
+                    <div class="w-8 rounded-full">
+                      <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4">
+                      <div class="w-4 rounded-full">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  <div>
+                    <div class="text-xl font-bold">
+                      {{ vault?.name }}
+                    </div>
+                    <div class="text-sm opacity-50"></div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="text-xl font-bold">
+                      {{ calcMaturity(pool) | date : 'mediumDate' }}
+                    </div>
+                    <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
+                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="text-xl font-bold">
+                    {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2">
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8 h-8">
+                        <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
+                      </div>
+                    </div>
+                    <div>
+                      <div class="text-xl font-bold">
+                        {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                      </div>
+                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2">
+                    <div class="avatar">
+                      <div class="mask mask-squircle w-8 h-8">
+                        <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
+                      </div>
+                    </div>
+                    <div>
+                      <div class="text-xl font-bold">
+                        {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                      </div>
+                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+        <ng-container *ngFor="let pool of tranchePools; let i = index">
+          <div
+            style="
+              background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
+            "
+            class="card shadow-xl"
+            routerLink="{{ pool.id }}"
+          >
+            <div class="card-body">
+              <div class="flex items-center gap-3">
+                <div>
+                  <h2 class="card-title">{{ vault?.name }}</h2>
+                  <div class="text-sm opacity-50"></div>
+                </div>
+                <span class="flex-auto"></span>
                 <div class="avatar">
                   <div class="w-8 rounded-full">
                     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
@@ -158,172 +254,85 @@
                     </div>
                   </div>
                 </div>
-              </th>
-              <td>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="text-lg opacity-75">Maturity</div>
+                      </td>
+                      <td>
+                        <div class="text-xl font-bold">
+                          {{ calcMaturity(pool) | date : 'mediumDate' }}
+                        </div>
+                        <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="text-lg opacity-75">Underlying APY</div>
+                      </td>
+                      <td>
+                        <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
+                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="text-lg opacity-75">Implied APY</div>
+                      </td>
+                      <td>
+                        <div class="text-xl font-bold">
+                          {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-8 h-8">
+                    <img src="assets/UnUniFi-logo.png" alt="YT Image" />
+                  </div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold">Long Yield APY</div>
+                  <div class="text-sm opacity-50">Price</div>
+                </div>
                 <div>
                   <div class="text-xl font-bold">
-                    {{ vault?.name }}
+                    {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
                   </div>
-                  <div class="text-sm opacity-50"></div>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <div class="text-xl font-bold">
-                    {{ calcMaturity(pool) | date : 'mediumDate' }}
-                  </div>
-                  <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
                   <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                 </div>
-              </td>
-              <td>
-                <div class="text-xl font-bold">
-                  {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                </div>
-              </td>
-              <td>
-                <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2">
-                  <div class="avatar">
-                    <div class="mask mask-squircle w-8 h-8">
-                      <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
-                    </div>
-                  </div>
-                  <div>
-                    <div class="text-xl font-bold">
-                      {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
-                    </div>
-                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+              </div>
+              <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2 cursor-pointer hover">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-8 h-8">
+                    <img src="assets/UnUniFi-logo.png" alt="PT Image" />
                   </div>
                 </div>
-              </td>
-              <td>
-                <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2">
-                  <div class="avatar">
-                    <div class="mask mask-squircle w-8 h-8">
-                      <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
-                    </div>
+                <div>
+                  <div class="text-xl font-bold">Fixed Yield APY</div>
+                  <div class="text-sm opacity-50">Price</div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold">
+                    {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
                   </div>
-                  <div>
-                    <div class="text-xl font-bold">
-                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                    </div>
-                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-                  </div>
+                  <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                 </div>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-      <ng-container *ngFor="let pool of tranchePools; let i = index">
-        <div
-          style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
-          class="card shadow-xl"
-          routerLink="{{ pool.id }}"
-        >
-          <div class="card-body">
-            <div class="flex items-center gap-3">
-              <div>
-                <h2 class="card-title">{{ vault?.name }}</h2>
-                <div class="text-sm opacity-50"></div>
-              </div>
-              <span class="flex-auto"></span>
-              <div class="avatar">
-                <div class="w-8 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
-                </div>
-                <div class="avatar -ml-2 mt-4">
-                  <div class="w-4 rounded-full">
-                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="text-lg opacity-75">Maturity</div>
-                    </td>
-                    <td>
-                      <div class="text-xl font-bold">
-                        {{ calcMaturity(pool) | date : 'mediumDate' }}
-                      </div>
-                      <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="text-lg opacity-75">Underlying APY</div>
-                    </td>
-                    <td>
-                      <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
-                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="text-lg opacity-75">Implied APY</div>
-                    </td>
-                    <td>
-                      <div class="text-xl font-bold">
-                        {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
-              <div class="avatar">
-                <div class="mask mask-squircle w-8 h-8">
-                  <img src="assets/UnUniFi-logo.png" alt="YT Image" />
-                </div>
-              </div>
-              <div>
-                <div class="text-xl font-bold">Long Yield APY</div>
-                <div class="text-sm opacity-50">Price</div>
-              </div>
-              <div>
-                <div class="text-xl font-bold">
-                  {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
-                </div>
-                <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2 cursor-pointer hover">
-              <div class="avatar">
-                <div class="mask mask-squircle w-8 h-8">
-                  <img src="assets/UnUniFi-logo.png" alt="PT Image" />
-                </div>
-              </div>
-              <div>
-                <div class="text-xl font-bold">Fixed Yield APY</div>
-                <div class="text-sm opacity-50">Price</div>
-              </div>
-              <div>
-                <div class="text-xl font-bold">
-                  {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                </div>
-                <div class="text-sm opacity-50">{{ '0' | currency }}</div>
               </div>
             </div>
           </div>
-        </div>
-      </ng-container>
-    </div>
-  </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
 
-  <ng-template #empty>
-    <p class="font-bold text-lg text-error">* No vault</p>
-  </ng-template>
+    <ng-template #empty>
+      <p class="font-bold text-lg text-error">* No vault</p>
+    </ng-template>
+  </div>
 </div>

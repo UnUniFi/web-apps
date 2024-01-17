@@ -5,7 +5,7 @@
         <ul>
           <li><a routerLink="../..">Liquidity Pools</a></li>
           <li>
-            <a routerLink="..">{{ vault }}</a>
+            <a routerLink="..">{{ vault?.name }}</a>
           </li>
           <li>Pool #{{ poolId }}</li>
         </ul>
@@ -116,7 +116,7 @@
                     </div>
                   </div>
                   <div>PT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   #depositPtAmountNgModelRef="ngModel"
@@ -157,7 +157,7 @@
                     </div>
                   </div>
                   <div>LP</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input class="join-item input input-bordered w-full" readonly />
               </label>
@@ -187,7 +187,7 @@
                     </div>
                   </div>
                   <div>LP</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   #withdrawAmountNgModelRef="ngModel"
@@ -246,7 +246,7 @@
                     </div>
                   </div>
                   <div>PT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input class="join-item input input-bordered w-full" readonly />
               </label>

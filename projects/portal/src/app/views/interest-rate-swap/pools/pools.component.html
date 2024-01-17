@@ -127,7 +127,7 @@
             <ng-container *ngFor="let pool of tranchePools; let i = index">
               <tr
                 class="hover cursor-pointer border-b-2 border-[#adc9ff]"
-                routerLink="{{ pool.id }}"
+                [routerLink]="[pool.strategy_contract, pool.id]"
               >
                 <th>
                   <div class="avatar">
@@ -177,7 +177,7 @@
               background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
             "
             class="card shadow-xl hover cursor-pointer"
-            routerLink="{{ pool.id }}"
+            [routerLink]="[pool.strategy_contract, pool.id]"
           >
             <div class="card-body">
               <div class="flex items-center gap-3">

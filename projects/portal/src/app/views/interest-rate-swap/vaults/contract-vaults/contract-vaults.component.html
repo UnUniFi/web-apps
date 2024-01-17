@@ -193,7 +193,11 @@
                   </div>
                 </td>
                 <td>
-                  <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2">
+                  <div
+                    class="flex items-center gap-3 btn btn-primary"
+                    [routerLink]="[pool.id]"
+                    [queryParams]="{ view: 'yt' }"
+                  >
                     <div class="avatar">
                       <div class="mask mask-squircle w-8 h-8">
                         <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
@@ -208,7 +212,11 @@
                   </div>
                 </td>
                 <td>
-                  <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2">
+                  <div
+                    class="flex items-center gap-3 rounded-lg btn btn-accent"
+                    [routerLink]="[pool.id]"
+                    [queryParams]="{ view: 'pt' }"
+                  >
                     <div class="avatar">
                       <div class="mask mask-squircle w-8 h-8">
                         <img src="assets/UnUniFi-logo.png" alt="Avatar Tailwind CSS Component" />
@@ -235,7 +243,6 @@
               background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
             "
             class="card shadow-xl"
-            routerLink="{{ pool.id }}"
           >
             <div class="card-body">
               <div class="flex items-center gap-3">
@@ -291,7 +298,12 @@
                   </tbody>
                 </table>
               </div>
-              <div class="flex items-center gap-3 rounded-lg bg-[#39465d] p-2 cursor-pointer hover">
+              <div
+                class="flex items-center gap-3 btn btn-primary"
+                class="flex items-center gap-3 btn btn-primary"
+                [routerLink]="[pool.id]"
+                [queryParams]="{ view: 'yt' }"
+              >
                 <div class="avatar">
                   <div class="mask mask-squircle w-8 h-8">
                     <img src="assets/UnUniFi-logo.png" alt="YT Image" />
@@ -308,7 +320,11 @@
                   <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                 </div>
               </div>
-              <div class="flex items-center gap-3 rounded-lg bg-[#1b393c] p-2 cursor-pointer hover">
+              <div
+                class="flex items-center gap-3 btn btn-accent"
+                [routerLink]="[pool.id]"
+                [queryParams]="{ view: 'pt' }"
+              >
                 <div class="avatar">
                   <div class="mask mask-squircle w-8 h-8">
                     <img src="assets/UnUniFi-logo.png" alt="PT Image" />

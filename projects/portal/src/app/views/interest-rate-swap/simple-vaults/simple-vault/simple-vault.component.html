@@ -104,18 +104,40 @@
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
+            <div>
+              <span class="label-text-alt mr-2">Available Balance: 0.0000</span>
+              <button type="button" class="btn btn-xs btn-info">Max</button>
+            </div>
           </span>
 
-          <button type="button" class="btn btn-outline btn-secondary w-full items-center">
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+          <label class="input-group">
+            <button type="button" class="btn btn-outline btn-secondary items-center">
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                </div>
               </div>
-            </div>
-            {{ underlyingDenom | coinDenom | async }}
-            <div class="flex-auto"></div>
-            <div class="material-symbols-outlined">keyboard_arrow_down</div>
-          </button>
+              {{ underlyingDenom | coinDenom | async }}
+              <div class="flex-auto"></div>
+              <div class="material-symbols-outlined">keyboard_arrow_down</div>
+            </button>
+
+            <input
+              #depositAmountNgModelRef="ngModel"
+              class="join-item input input-bordered input-secondary w-full"
+              [class]="{
+                'input-error': depositAmountNgModelRef.errors
+              }"
+              placeholder="0.000000"
+              required
+              type="number"
+              [(ngModel)]="inputUnderlying"
+              [min]="0"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
+              name="depositAmount"
+              (change)="onChangeDeposit()"
+            />
+          </label>
         </div>
 
         <div class="flex flex-row items-center gap-4">
@@ -190,15 +212,6 @@
                 stroke="#ADC9FF"
               />
             </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2"
-              height="17"
-              viewBox="0 0 2 17"
-              fill="none"
-            >
-              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
-            </svg>
           </div>
           <div class="text-xl text-secondary">Fee</div>
           <div class="flex-auto"></div>
@@ -206,31 +219,6 @@
             <span class="material-symbols-outlined"> keyboard_arrow_left </span>
             <span>{{ 0 | currency }}</span>
           </div>
-        </div>
-
-        <div class="form-control">
-          <input
-            #depositAmountNgModelRef="ngModel"
-            class="join-item input input-bordered input-secondary w-full"
-            [class]="{
-              'input-error': depositAmountNgModelRef.errors
-            }"
-            placeholder="0.000000"
-            required
-            type="number"
-            [(ngModel)]="inputUnderlying"
-            [min]="0"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
-            name="depositAmount"
-            (change)="onChangeDeposit()"
-          />
-          <span class="label">
-            <div class="flex flex-row items-center gap-4">
-              <span class="label-text-alt">Available Balance:</span>
-              <span class="label-text-alt">0.0000</span>
-            </div>
-            <button type="button" class="btn btn-xs btn-info">Max</button>
-          </span>
         </div>
 
         <div class="card-actions justify-end mt-8 px-4">
@@ -257,16 +245,33 @@
             <span class="label-text">Output</span>
           </span>
 
-          <button type="button" class="btn btn-outline btn-secondary w-full items-center">
-            <div class="avatar">
-              <div class="w-8 rounded-full">
-                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+          <label class="input-group">
+            <button type="button" class="btn btn-outline btn-secondary items-center">
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                </div>
               </div>
-            </div>
-            {{ underlyingDenom | coinDenom | async }}
-            <div class="flex-auto"></div>
-            <div class="material-symbols-outlined">keyboard_arrow_down</div>
-          </button>
+              {{ underlyingDenom | coinDenom | async }}
+              <div class="flex-auto"></div>
+              <div class="material-symbols-outlined">keyboard_arrow_down</div>
+            </button>
+            <input
+              #withdrawAmountNgModelRef="ngModel"
+              class="join-item input input-bordered input-secondary w-full"
+              [class]="{
+                'input-error': withdrawAmountNgModelRef.errors
+              }"
+              placeholder="0.000000"
+              required
+              type="number"
+              [(ngModel)]="inputPT"
+              [min]="0"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
+              name="withdrawAmount"
+              (change)="onChangeWithdraw()"
+            />
+          </label>
         </div>
 
         <div class="flex flex-row items-center gap-4">
@@ -341,15 +346,6 @@
                 stroke="#ADC9FF"
               />
             </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2"
-              height="17"
-              viewBox="0 0 2 17"
-              fill="none"
-            >
-              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
-            </svg>
           </div>
           <div class="text-xl text-secondary">Fee</div>
           <div class="flex-auto"></div>
@@ -357,24 +353,6 @@
             <span class="material-symbols-outlined"> keyboard_arrow_left </span>
             <span>{{ 0 | currency }}</span>
           </div>
-        </div>
-
-        <div class="form-control">
-          <input
-            #withdrawAmountNgModelRef="ngModel"
-            class="join-item input input-bordered input-secondary w-full"
-            [class]="{
-              'input-error': withdrawAmountNgModelRef.errors
-            }"
-            placeholder="0.000000"
-            required
-            type="number"
-            [(ngModel)]="inputPT"
-            [min]="0"
-            pattern="^[0-9]*\.?[0-9]{0,6}$"
-            name="withdrawAmount"
-            (change)="onChangeWithdraw()"
-          />
         </div>
 
         <div class="card-actions justify-end mt-8 px-4">

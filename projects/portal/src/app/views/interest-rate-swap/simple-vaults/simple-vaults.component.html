@@ -256,7 +256,10 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let vault of vaults">
-            <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]" routerLink="1">
+            <tr
+              class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+              routerLink="{{ vault.strategy_contract }}"
+            >
               <th>
                 <div class="avatar">
                   <div class="w-8 rounded-full">
@@ -335,7 +338,10 @@
             </div>
 
             <div class="card-actions mt-4">
-              <button class="btn btn-primary w-full gap-1" routerLink="1">
+              <button
+                class="btn btn-primary w-full gap-1"
+                routerLink="{{ vault.strategy_contract }}"
+              >
                 <span>Deposit</span>
               </button>
             </div>

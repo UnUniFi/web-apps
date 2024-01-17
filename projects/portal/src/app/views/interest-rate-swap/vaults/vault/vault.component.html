@@ -107,7 +107,7 @@
                     </div>
                   </div>
                   <div>{{ swapTab | uppercase }}</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -323,7 +323,7 @@
                     </div>
                   </div>
                   <div>PT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input class="join-item input input-bordered w-full" readonly />
               </label>
@@ -335,7 +335,7 @@
                     </div>
                   </div>
                   <div>YT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input class="join-item input input-bordered w-full" readonly />
               </label>
@@ -382,7 +382,7 @@
                     </div>
                   </div>
                   <div>PT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   #pairPtAmountNgModelRef="ngModel"
@@ -418,7 +418,7 @@
                     </div>
                   </div>
                   <div>YT</div>
-                  <div>{{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   #pairYtAmountNgModelRef="ngModel"
@@ -516,7 +516,7 @@
               </div>
               <div class="mr-4">
                 <div class="text-xl font-bold">
-                  {{ swapTab | uppercase }} {{ underlyingDenom | coinDenom | async }}
+                  {{ swapTab | uppercase }} {{ vault?.name }}#{{ trancheId }}
                 </div>
                 <div class="text-sm opacity-50"></div>
               </div>

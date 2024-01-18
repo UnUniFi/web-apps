@@ -55,8 +55,8 @@ export class ContractVaultsComponent implements OnInit {
       ),
     );
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
-    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
-      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
+    this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
+      map(([contract, images]) => images.find((image) => image.contract === contract)),
     );
   }
 

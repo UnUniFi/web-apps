@@ -99,8 +99,8 @@ export class VaultComponent implements OnInit {
     );
     this.swapTab$ = this.route.queryParams.pipe(map((params) => params.view || 'pt'));
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
-    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
-      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
+    this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
+      map(([contract, images]) => images.find((image) => image.contract === contract)),
     );
     // this.vaultDetails$ = this.tranches$.pipe(
     //   mergeMap((tranches) =>

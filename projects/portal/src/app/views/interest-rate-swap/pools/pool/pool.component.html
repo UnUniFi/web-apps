@@ -29,7 +29,7 @@
             <div class="w-12 rounded-full">
               <img src="{{ vaultImage?.image }}" />
             </div>
-            <div class="avatar -ml-3 mt-6">
+            <div class="avatar -ml-3 mt-6" *ngIf="vaultImage?.subImage">
               <div class="w-6 rounded-full">
                 <img src="{{ vaultImage?.subImage }}" />
               </div>

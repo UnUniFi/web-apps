@@ -33,7 +33,7 @@ export const dummyVaults: VaultByContract200ResponseVault[] = [
   // },
   {
     strategy_contract: 'ununifi1nckr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk95tatafv6eyq7ll',
-    name: 'stUSDC',
+    name: 'USDC',
     description: 'USDC is a stablecoin pegged to the value of USD.',
     max_maturity: '31535000',
     cycle: '86400',
@@ -41,8 +41,8 @@ export const dummyVaults: VaultByContract200ResponseVault[] = [
   },
   {
     strategy_contract: 'ununifi1nckr2gv50ff9e22mjq9q4sdrtlrl6yk95tatafv6eyq7leswrqhp8g9lrm',
-    name: 'stUSDT',
-    description: 'stUSDT is a stablecoin pegged to the value of USD.',
+    name: 'USDT',
+    description: 'USDT is a stablecoin pegged to the value of USD.',
     max_maturity: '31535000',
     cycle: '86400',
     last_tranche_time: '1628582400',
@@ -85,7 +85,7 @@ export const dummyExtendedVaults: (VaultByContract200ResponseVault & {
   // },
   {
     strategy_contract: 'ununifi1nckr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk95tatafv6eyq7ll',
-    name: 'stUSDC',
+    name: 'USDC',
     description: 'USDC is a stablecoin pegged to the value of USD.',
     max_maturity: '31535000',
     cycle: '86400',
@@ -95,8 +95,8 @@ export const dummyExtendedVaults: (VaultByContract200ResponseVault & {
   },
   {
     strategy_contract: 'ununifi1nckr2gv50ff9e22mjq9q4sdrtlrl6yk95tatafv6eyq7leswrqhp8g9lrm',
-    name: 'stUSDT',
-    description: 'stUSDT is a stablecoin pegged to the value of USD.',
+    name: 'USDT',
+    description: 'USDT is a stablecoin pegged to the value of USD.',
     max_maturity: '31535000',
     cycle: '86400',
     last_tranche_time: '1628582400',

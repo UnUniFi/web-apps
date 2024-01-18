@@ -130,7 +130,7 @@ export type ChainInfo = {
 export type IRSVaultImage = {
   contract: string;
   image: string;
-  subImage: string;
+  subImage?: string;
 };
 
 declare const configs: Config[];

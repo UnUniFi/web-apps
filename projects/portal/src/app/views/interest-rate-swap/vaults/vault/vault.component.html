@@ -525,7 +525,7 @@
                   >
                     <img src="{{ vaultImage?.image }}" />
                   </div>
-                  <div class="avatar -ml-2 mt-4">
+                  <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
                     <div class="w-4 rounded-full">
                       <img src="{{ vaultImage?.subImage }}" />
                     </div>

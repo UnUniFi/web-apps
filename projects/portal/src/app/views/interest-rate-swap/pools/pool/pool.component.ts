@@ -115,7 +115,7 @@ export class PoolComponent implements OnInit {
 
   calcMaturity(pool: AllTranches200ResponseTranchesInner): number {
     const maturity = Number(pool.maturity) + Number(pool.start_time);
-    return maturity;
+    return maturity * 1000;
   }
 
   calcRestDays(pool: AllTranches200ResponseTranchesInner): number {

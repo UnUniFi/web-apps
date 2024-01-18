@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import {
   MintPtRequest,
   MintPtYtRequest,
@@ -56,6 +57,8 @@ export class VaultComponent implements OnInit {
   estimateRedeemMaturedYt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()
   swapTab?: 'pt' | 'yt' | null;
+  @Input()
+  vaultImage?: IRSVaultImage | null;
 
   inputUnderlying?: string;
   inputIrsToken?: string;

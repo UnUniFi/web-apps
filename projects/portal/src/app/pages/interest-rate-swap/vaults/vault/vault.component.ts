@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
 import {
@@ -12,7 +13,7 @@ import {
   RedeemYtRequest,
 } from 'projects/portal/src/app/models/irs/irs.model';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
@@ -49,6 +50,7 @@ export class VaultComponent implements OnInit {
   trancheYtAPYs$: Observable<TrancheYtAPYs200Response>;
   tranchePtAPYs$: Observable<TranchePtAPYs200Response>;
   swapTab$: Observable<'pt' | 'yt'>;
+  vaultImage$?: Observable<IRSVaultImage | undefined>;
   // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo>;
@@ -69,6 +71,7 @@ export class VaultComponent implements OnInit {
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
+    private readonly configS: ConfigService,
   ) {
     this.contractAddress$ = this.route.params.pipe(map((params) => params.contract));
     this.vault$ = this.contractAddress$.pipe(
@@ -95,6 +98,10 @@ export class VaultComponent implements OnInit {
       mergeMap((id) => this.irsQuery.getTranchePtAPYs$(id)),
     );
     this.swapTab$ = this.route.queryParams.pipe(map((params) => params.view || 'pt'));
+    const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
+      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
+    );
     // this.vaultDetails$ = this.tranches$.pipe(
     //   mergeMap((tranches) =>
     //     Promise.all(

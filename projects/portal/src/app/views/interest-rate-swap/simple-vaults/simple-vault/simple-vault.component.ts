@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { MintPtRequest, RedeemPtRequest } from 'projects/portal/src/app/models/irs/irs.model';
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
@@ -27,6 +28,8 @@ export class SimpleVaultComponent implements OnInit {
   underlyingDenom?: string | null;
   @Input()
   vaultBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  @Input()
+  vaultImage?: IRSVaultImage | null;
   @Input()
   estimateMintPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
   @Input()

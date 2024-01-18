@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/irs/irs.model';
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
@@ -30,6 +31,8 @@ export class PoolComponent implements OnInit {
   underlyingDenom?: string | null;
   @Input()
   poolBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  vaultImage?: IRSVaultImage | null;
   @Input()
   estimatedMintAmount?: EstimateMintLiquidityPoolToken200Response | null;
   @Input()

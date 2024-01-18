@@ -1,3 +1,4 @@
+import { IRSVaultImage, ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { dummyExtendedVaults, dummyTranchePools, dummyVaults } from '../../../models/irs/irs.dummy';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
@@ -7,10 +8,7 @@ import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import {
-  TranchePoolAPYs200Response,
-  VaultByContract200ResponseVault,
-} from 'ununifi-client/esm/openapi';
+import { VaultByContract200ResponseVault } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-simple-pools',
@@ -25,11 +23,13 @@ export class SimplePoolsComponent implements OnInit {
     (VaultByContract200ResponseVault & { denom?: string; maxAPY: number })[]
   >;
   lpBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  vaultsImages$: Observable<IRSVaultImage[]>;
 
   constructor(
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
+    private readonly configS: ConfigService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -73,6 +73,7 @@ export class SimplePoolsComponent implements OnInit {
     this.lpBalances$ = balances$.pipe(
       map((balance) => balance.filter((balance) => balance.denom?.includes('/ls'))),
     );
+    this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaults$ = of(dummyVaults);
     this.tranchePools$ = of(dummyTranchePools);
     this.extendedVaults$ = of(dummyExtendedVaults);

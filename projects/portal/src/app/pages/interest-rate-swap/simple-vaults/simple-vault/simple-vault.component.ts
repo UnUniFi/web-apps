@@ -2,6 +2,7 @@ import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
@@ -36,6 +37,7 @@ export class SimpleVaultComponent implements OnInit {
   underlyingDenom$?: Observable<string | undefined>;
   // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
   vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo>;
   estimateMintPt$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin>;
@@ -49,6 +51,7 @@ export class SimpleVaultComponent implements OnInit {
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
+    private readonly configS: ConfigService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -103,6 +106,10 @@ export class SimpleVaultComponent implements OnInit {
           tranches.some((tranche) => balance.denom?.includes(`irs/tranche/${tranche.id}/pt`)),
         ),
       ),
+    );
+    const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
+      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
     );
 
     const initialEstimationInfo = new BehaviorSubject({

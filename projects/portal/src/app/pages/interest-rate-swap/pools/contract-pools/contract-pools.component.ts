@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
 import {
   dummyVaults,
   dummyTranchePools,
   dummyPoolAPYs,
 } from 'projects/portal/src/app/models/irs/irs.dummy';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
-import { Observable, of } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   VaultByContract200ResponseVault,
@@ -24,8 +25,13 @@ export class ContractPoolsComponent implements OnInit {
   vault$: Observable<VaultByContract200ResponseVault>;
   tranchePools$: Observable<AllTranches200ResponseTranchesInner[]>;
   poolsAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
+  vaultImage$?: Observable<IRSVaultImage | undefined>;
 
-  constructor(private route: ActivatedRoute, private readonly irsQuery: IrsQueryService) {
+  constructor(
+    private route: ActivatedRoute,
+    private readonly irsQuery: IrsQueryService,
+    private readonly configS: ConfigService,
+  ) {
     this.contractAddress$ = this.route.params.pipe(map((params) => params.contract));
     this.vault$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.getVaultByContract$(contract)),
@@ -43,6 +49,10 @@ export class ContractPoolsComponent implements OnInit {
           ),
         ),
       ),
+    );
+    const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
+      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
     );
     this.vault$ = of(dummyVaults[0]);
     this.tranchePools$ = of(dummyTranchePools.slice(0, 3));

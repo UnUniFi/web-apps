@@ -1,3 +1,4 @@
+import { IRSVaultImage } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -18,6 +19,9 @@ export class SimplePoolsComponent implements OnInit {
   vaults?: VaultByContract200ResponseVault[] | null;
   @Input()
   extendedVaults?: (VaultByContract200ResponseVault & { denom?: string; maxAPY: number })[] | null;
+  @Input()
+  vaultsImages?: IRSVaultImage[] | null;
+
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';
 
@@ -27,5 +31,9 @@ export class SimplePoolsComponent implements OnInit {
 
   changeAdvanced() {
     this.router.navigate(['interest-rate-swap', 'pools']);
+  }
+
+  getVaultImage(contract?: string): IRSVaultImage | undefined {
+    return this.vaultsImages?.find((vault) => vault.contract === contract);
   }
 }

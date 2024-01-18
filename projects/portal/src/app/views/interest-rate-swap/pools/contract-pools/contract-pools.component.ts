@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
@@ -20,6 +21,8 @@ export class ContractPoolsComponent implements OnInit {
   vault?: VaultByContract200ResponseVault | null;
   @Input()
   poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
+  @Input()
+  vaultImage?: IRSVaultImage | null;
 
   sortType?: string;
   viewMode?: string = 'table';

@@ -114,7 +114,7 @@
             <button type="button" class="btn btn-outline btn-secondary items-center">
               <div class="avatar">
                 <div class="w-8 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  <img src="{{ vaultImage?.image }}" />
                 </div>
               </div>
               {{ underlyingDenom | coinDenom | async }}
@@ -249,7 +249,7 @@
             <button type="button" class="btn btn-outline btn-secondary items-center">
               <div class="avatar">
                 <div class="w-8 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  <img src="{{ vaultImage?.image }}" />
                 </div>
               </div>
               {{ underlyingDenom | coinDenom | async }}

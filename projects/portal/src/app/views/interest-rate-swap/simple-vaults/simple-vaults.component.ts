@@ -1,3 +1,4 @@
+import { IRSVaultImage } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VaultByContract200ResponseVault } from 'ununifi-client/esm/openapi';
@@ -12,6 +13,8 @@ export class SimpleVaultsComponent implements OnInit {
   vaults?: VaultByContract200ResponseVault[] | null;
   @Input()
   vaultsMaxFixedAPYs?: number[] | null;
+  @Input()
+  vaultsImages?: IRSVaultImage[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';
@@ -23,5 +26,9 @@ export class SimpleVaultsComponent implements OnInit {
 
   changeAdvanced() {
     this.router.navigate(['interest-rate-swap', 'vaults']);
+  }
+
+  getVaultImage(contract?: string): IRSVaultImage | undefined {
+    return this.vaultsImages?.find((vault) => vault.contract === contract);
   }
 }

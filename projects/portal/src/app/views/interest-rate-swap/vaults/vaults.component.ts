@@ -1,3 +1,4 @@
+import { IRSVaultImage } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -21,6 +22,8 @@ export class VaultsComponent implements OnInit {
   trancheFixedAPYs?: (TranchePtAPYs200Response | undefined)[] | null;
   @Input()
   trancheLongAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
+  @Input()
+  vaultsImages?: IRSVaultImage[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';
@@ -51,5 +54,9 @@ export class VaultsComponent implements OnInit {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     return days;
+  }
+
+  getVaultImage(contract?: string): IRSVaultImage | undefined {
+    return this.vaultsImages?.find((vault) => vault.contract === contract);
   }
 }

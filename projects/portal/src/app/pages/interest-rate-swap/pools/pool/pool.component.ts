@@ -2,6 +2,7 @@ import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
@@ -37,6 +38,7 @@ export class PoolComponent implements OnInit {
   poolAPYs$: Observable<TranchePoolAPYs200Response>;
   underlyingDenom$?: Observable<string | undefined>;
   poolBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   tokenInAmountForMint$: BehaviorSubject<EstimationInfo>;
   estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response>;
@@ -50,6 +52,7 @@ export class PoolComponent implements OnInit {
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
+    private readonly configS: ConfigService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -81,6 +84,10 @@ export class PoolComponent implements OnInit {
       map(([balance, pool]) =>
         balance.find((balance) => balance.denom === `irs/tranche/${pool.id}/ls`),
       ),
+    );
+    const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultImage$ = combineLatest([this.vault$, images$]).pipe(
+      map(([vault, images]) => images.find((image) => image.contract === vault.strategy_contract)),
     );
 
     const initialEstimationInfo = new BehaviorSubject({

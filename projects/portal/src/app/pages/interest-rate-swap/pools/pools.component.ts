@@ -1,8 +1,9 @@
+import { ConfigService, IRSVaultImage } from '../../../models/config.service';
 import { dummyPoolAPYs, dummyTranchePools, dummyVaults } from '../../../models/irs/irs.dummy';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { TranchePoolAPYs200Response } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -14,8 +15,9 @@ export class PoolsComponent implements OnInit {
   tranchePools$ = this.irsQuery.listAllTranches$();
   vaults$ = this.irsQuery.listVaults$();
   poolsAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
+  vaultsImages$: Observable<IRSVaultImage[]>;
 
-  constructor(private readonly irsQuery: IrsQueryService) {
+  constructor(private readonly irsQuery: IrsQueryService, private readonly configS: ConfigService) {
     this.poolsAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
@@ -27,6 +29,7 @@ export class PoolsComponent implements OnInit {
         ),
       ),
     );
+    this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.tranchePools$ = of(dummyTranchePools);
     this.vaults$ = of(dummyVaults);
     this.poolsAPYs$ = of(dummyPoolAPYs);

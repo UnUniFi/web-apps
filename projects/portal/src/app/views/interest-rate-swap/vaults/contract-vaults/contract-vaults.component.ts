@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePtAPYs200Response,
@@ -23,6 +24,8 @@ export class ContractVaultsComponent implements OnInit {
   trancheFixedAPYs?: (TranchePtAPYs200Response | undefined)[] | null;
   @Input()
   trancheLongAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
+  @Input()
+  vaultImage?: IRSVaultImage | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

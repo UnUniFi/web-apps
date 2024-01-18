@@ -293,6 +293,34 @@ const externalChains = [
   },
 ];
 
+const irsVaultsImages=[
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk9',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkrmjq9q4eswrqhp8g9lrmsdrtrl6yk92gv50ff9e22',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nckr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk95tatafv6eyq7ll',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nckr2gv50ff9e22mjq9q4sdrtlrl6yk95tatafv6eyq7leswrqhp8g9lrm',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+]
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -313,6 +341,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    irsVaultsImages,
     extension: {
       faucet: [
         {

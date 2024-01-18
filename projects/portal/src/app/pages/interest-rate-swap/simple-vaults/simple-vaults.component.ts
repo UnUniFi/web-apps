@@ -63,6 +63,7 @@ export class SimpleVaultsComponent implements OnInit {
       ),
     );
     this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultsImages$.subscribe((images) => console.log(images));
     this.vaults$ = of(dummyVaults);
     this.vaultsMaxFixedAPYs$ = of(dummyVaultsMaxAPYs);
   }

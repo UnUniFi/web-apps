@@ -1,3 +1,4 @@
+import { IRSVaultImage, ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
@@ -18,11 +19,13 @@ export class SimpleVaultsComponent implements OnInit {
   tranchePools$ = this.irsQuery.listAllTranches$();
   vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   vaultsMaxFixedAPYs$: Observable<number[]>;
+  vaultsImages$: Observable<IRSVaultImage[]>;
 
   constructor(
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
+    private readonly configS: ConfigService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -58,6 +61,7 @@ export class SimpleVaultsComponent implements OnInit {
         }),
       ),
     );
+    this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
   }
 
   ngOnInit(): void {}

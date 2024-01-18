@@ -1,3 +1,4 @@
+import { IRSVaultImage } from '../../../models/config.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -18,6 +19,8 @@ export class PoolsComponent implements OnInit {
   vaults?: VaultByContract200ResponseVault[] | null;
   @Input()
   poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
+  @Input()
+  vaultsImages?: IRSVaultImage[] | null;
 
   sortType?: string;
   viewMode?: string = 'table';
@@ -33,5 +36,9 @@ export class PoolsComponent implements OnInit {
   getTranchePoolVault(contractAddr?: string): VaultByContract200ResponseVault | undefined {
     const vault = this.vaults?.find((vault) => vault.strategy_contract === contractAddr);
     return vault;
+  }
+
+  getVaultImage(contract?: string): IRSVaultImage | undefined {
+    return this.vaultsImages?.find((vault) => vault.contract === contract);
   }
 }

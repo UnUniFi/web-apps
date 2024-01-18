@@ -1,7 +1,8 @@
+import { ConfigService, IRSVaultImage } from '../../../models/config.service';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { TranchePtAPYs200Response, TrancheYtAPYs200Response } from 'ununifi-client/esm/openapi';
 
 @Component({
@@ -14,8 +15,9 @@ export class VaultsComponent implements OnInit {
   tranchePools$ = this.irsQuery.listAllTranches$();
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   trancheLongAPYs$: Observable<(TrancheYtAPYs200Response | undefined)[]>;
+  vaultsImages$: Observable<IRSVaultImage[]>;
 
-  constructor(private readonly irsQuery: IrsQueryService) {
+  constructor(private readonly irsQuery: IrsQueryService, private readonly configS: ConfigService) {
     this.trancheFixedAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
@@ -34,6 +36,7 @@ export class VaultsComponent implements OnInit {
         ),
       ),
     );
+    this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
   }
 
   ngOnInit(): void {}

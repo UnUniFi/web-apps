@@ -102,7 +102,13 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div
+                      class="w-8 rounded-full border-2"
+                      [class]="{
+                        'border-accent': swapTab === 'pt',
+                        'border-primary': swapTab === 'yt'
+                      }"
+                    >
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -152,7 +158,13 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div
+                      class="w-8 rounded-full border-2"
+                      [class]="{
+                        'border-accent': swapTab === 'pt',
+                        'border-primary': swapTab === 'yt'
+                      }"
+                    >
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -318,7 +330,7 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -330,7 +342,7 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -377,7 +389,7 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -413,7 +425,7 @@
               <label class="input-group join">
                 <span class="gap-2">
                   <div class="avatar">
-                    <div class="w-8 rounded-full">
+                    <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
                   </div>
@@ -504,7 +516,13 @@
             <div class="card bg-base-100 flex-row flex-wrap px-4 gap-3 items-center">
               <div class="avatar">
                 <div class="gap-2">
-                  <div class="w-8 rounded-full">
+                  <div
+                    class="w-8 rounded-full border-2"
+                    [class]="{
+                      'border-accent': swapTab === 'pt',
+                      'border-primary': swapTab === 'yt'
+                    }"
+                  >
                     <img src="{{ vaultImage?.image }}" />
                   </div>
                   <div class="avatar -ml-2 mt-4">
@@ -598,16 +616,7 @@
               <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
                 <td>Redeem</td>
                 <td>{{ '1885.86' | currency }}</td>
-                <td>
-                  <div class="flex flex-row items-center gap-2">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                    </div>
-                    0.8957
-                  </div>
-                </td>
+                <td></td>
                 <td>
                   <div class="flex flex-row items-center gap-2">
                     <div class="avatar">

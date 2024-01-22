@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
+import {
+  dummyVaults,
+  dummyTranchePools,
+  dummyPoolAPYs,
+} from 'projects/portal/src/app/models/irs/irs.dummy';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   VaultByContract200ResponseVault,
@@ -49,6 +54,9 @@ export class ContractPoolsComponent implements OnInit {
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
       map(([contract, images]) => images.find((image) => image.contract === contract)),
     );
+    this.vault$ = of(dummyVaults[0]);
+    this.tranchePools$ = of(dummyTranchePools.slice(0, 3));
+    this.poolsAPYs$ = of(dummyPoolAPYs.slice(0, 3));
   }
 
   ngOnInit(): void {}

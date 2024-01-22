@@ -29,7 +29,13 @@ export class ContractPoolsComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const top = document.getElementById('page-top');
+    if (top)
+      top.scrollIntoView({
+        block: 'start',
+      });
+  }
 
   changeSimple() {
     this.router.navigate(['interest-rate-swap', 'simple-pools', this.contractAddress]);

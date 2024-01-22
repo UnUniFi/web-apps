@@ -54,7 +54,13 @@ export class SimpleVaultComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const top = document.getElementById('page-top');
+    if (top)
+      top.scrollIntoView({
+        block: 'start',
+      });
+  }
 
   selectTranche(tranche: AllTranches200ResponseTranchesInner) {
     this.selectedPoolId = tranche.id;

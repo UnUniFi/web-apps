@@ -1,5 +1,5 @@
 <div class="bg-[#39465d]">
-  <div class="mx-auto max-w-screen-xl w-full p-8">
+  <div class="mx-auto max-w-screen-xl w-full p-8" id="page-top">
     <div class="flex flex-row flex-wrap mb-8">
       <div class="text-xl breadcrumbs">
         <ul>
@@ -29,7 +29,7 @@
             <div class="w-12 rounded-full">
               <img src="{{ vaultImage?.image }}" />
             </div>
-            <div class="avatar -ml-3 mt-6">
+            <div class="avatar -ml-3 mt-6" *ngIf="vaultImage?.subImage">
               <div class="w-6 rounded-full">
                 <img src="{{ vaultImage?.subImage }}" />
               </div>

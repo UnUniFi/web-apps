@@ -41,10 +41,10 @@ const messageModules = [
 
 const apps = [
   { name: 'Utilities', link: '/', icon: 'assistant' },
-  { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
+  // { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
   { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
   { name: 'Interest Rate Swap', link: '/interest-rate-swap/simple-vaults', icon: 'table_chart' },
-  { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+  // { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
 ];
 
 const denomMetadata = [
@@ -121,6 +121,76 @@ const denomMetadata = [
     name: 'Liquidity Provider',
     display: 'DLP',
     symbol: 'DLP',
+  },
+  {
+    description: 'ATOM',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uatom',
+    name: 'ATOM native',
+    display: 'ATOM',
+    symbol: 'ATOM',
+  },
+  {
+    description: 'stATOM',
+    denom_units: [
+      {
+        denom: 'ustatom',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ustatom',
+    name: 'stATOM native',
+    display: 'stATOM',
+    symbol: 'stATOM',
+  },
+  {
+    description: 'OSMO',
+    denom_units: [
+      {
+        denom: 'uosmo',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uosmo',
+    name: 'OSMO native',
+    display: 'OSMO',
+    symbol: 'OSMO',
+  },
+  {
+    description: 'Ethereum',
+    denom_units: [
+      {
+        denom: 'ueth',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ueth',
+    name: 'ETH native',
+    display: 'ETH',
+    symbol: 'ETH',
+  },
+  {
+    description: 'USDT',
+    denom_units: [
+      {
+        denom: 'uusdt',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'uusdt',
+    name: 'USDT native',
+    display: 'USDT',
+    symbol: 'USDT',
   },
 ];
 
@@ -237,6 +307,32 @@ const externalChains = [
   },
 ];
 
+const irsVaultsImages=[
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk9',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/12220.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkrmjq9q4eswrqhp8g9lrmsdrtrl6yk92gv50ff9e22',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+  {
+    contract:'ununifi1nckr2gv50ff9e22mjq9q4eswrqhp8g9lrmsdrtrl6yk95tatafv6eyq7ll',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
+  },
+  {
+    contract:'ununifi1nckr2gv50ff9e22mjq9q4sdrtlrl6yk95tatafv6eyq7leswrqhp8g9lrm',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+  },
+]
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -257,6 +353,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    irsVaultsImages,
     extension: {
       faucet: [
         {

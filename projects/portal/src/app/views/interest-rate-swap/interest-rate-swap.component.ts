@@ -8,5 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class InterestRateSwapComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const top = document.getElementById('page-top');
+    if (top)
+      top.scrollIntoView({
+        block: 'start',
+      });
+  }
 }

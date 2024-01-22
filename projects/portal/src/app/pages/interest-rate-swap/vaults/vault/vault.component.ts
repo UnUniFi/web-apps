@@ -5,6 +5,11 @@ import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/con
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
 import {
+  dummyFixedAPYs,
+  dummyLongAPYs,
+  dummyVaults,
+} from 'projects/portal/src/app/models/irs/irs.dummy';
+import {
   MintPtRequest,
   MintPtYtRequest,
   MintYtRequest,
@@ -13,7 +18,7 @@ import {
   RedeemYtRequest,
 } from 'projects/portal/src/app/models/irs/irs.model';
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
@@ -159,6 +164,10 @@ export class VaultComponent implements OnInit {
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$
       .asObservable()
       .pipe(mergeMap((info) => this.irsQuery.estimateRedeemMaturedYt$(info.poolId, info.amount)));
+    this.vault$ = of(dummyVaults[0]);
+    this.underlyingDenom$ = of('ustatom');
+    this.tranchePtAPYs$ = of(dummyFixedAPYs[0]);
+    this.trancheYtAPYs$ = of(dummyLongAPYs[0]);
   }
 
   ngOnInit(): void {}

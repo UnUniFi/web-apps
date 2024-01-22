@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-screen-xl w-full p-8">
+<div class="mx-auto max-w-screen-xl w-full p-8" id="page-top">
   <div class="flex flex-row flex-wrap mb-8">
     <div class="text-xl breadcrumbs">
       <ul>
@@ -147,7 +147,10 @@
                   <div class="w-8 rounded-full">
                     <img src="{{ getVaultImage(vault.strategy_contract)?.image }}" />
                   </div>
-                  <div class="avatar -ml-2 mt-4">
+                  <div
+                    class="avatar -ml-2 mt-4"
+                    *ngIf="getVaultImage(vault.strategy_contract)?.subImage"
+                  >
                     <div class="w-4 rounded-full">
                       <img src="{{ getVaultImage(vault.strategy_contract)?.subImage }}" />
                     </div>
@@ -200,7 +203,10 @@
                 <div class="w-12 rounded-full">
                   <img src="{{ getVaultImage(vault.strategy_contract)?.image }}" />
                 </div>
-                <div class="avatar -ml-3 mt-6">
+                <div
+                  class="avatar -ml-3 mt-6"
+                  *ngIf="getVaultImage(vault.strategy_contract)?.subImage"
+                >
                   <div class="w-6 rounded-full">
                     <img src="{{ getVaultImage(vault.strategy_contract)?.subImage }}" />
                   </div>

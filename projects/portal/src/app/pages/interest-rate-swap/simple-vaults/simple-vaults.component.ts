@@ -1,11 +1,12 @@
 import { IRSVaultImage, ConfigService } from '../../../models/config.service';
 import { BankQueryService } from '../../../models/cosmos/bank.query.service';
+import { dummyVaults, dummyVaultsMaxAPYs } from '../../../models/irs/irs.dummy';
 import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { StoredWallet } from '../../../models/wallets/wallet.model';
 import { WalletService } from '../../../models/wallets/wallet.service';
 import { Component, OnInit } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -62,6 +63,9 @@ export class SimpleVaultsComponent implements OnInit {
       ),
     );
     this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.vaultsImages$.subscribe((images) => console.log(images));
+    this.vaults$ = of(dummyVaults);
+    this.vaultsMaxFixedAPYs$ = of(dummyVaultsMaxAPYs);
   }
 
   ngOnInit(): void {}

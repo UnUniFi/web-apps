@@ -113,7 +113,7 @@ export class SimplePoolComponent implements OnInit {
 
     this.pools$ = of(dummyTranchePools.slice(0, 3));
     this.vault$ = of(dummyVaults[0]);
-    this.underlyingDenom$ = of('uatom');
+    this.underlyingDenom$ = of('ustatom');
     this.poolAPYs$ = of(dummyPoolAPYs.slice(0, 3));
   }
 

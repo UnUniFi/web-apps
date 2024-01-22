@@ -165,7 +165,7 @@ export class VaultComponent implements OnInit {
       .asObservable()
       .pipe(mergeMap((info) => this.irsQuery.estimateRedeemMaturedYt$(info.poolId, info.amount)));
     this.vault$ = of(dummyVaults[0]);
-    this.underlyingDenom$ = of('uatom');
+    this.underlyingDenom$ = of('ustatom');
     this.tranchePtAPYs$ = of(dummyFixedAPYs[0]);
     this.trancheYtAPYs$ = of(dummyLongAPYs[0]);
   }

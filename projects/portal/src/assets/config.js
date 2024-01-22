@@ -143,6 +143,20 @@ const denomMetadata = [
     symbol: 'ATOM',
   },
   {
+    description: 'stATOM',
+    denom_units: [
+      {
+        denom: 'ustatom',
+        exponent: 0,
+        aliases: [],
+      },
+    ],
+    base: 'ustatom',
+    name: 'stATOM native',
+    display: 'stATOM',
+    symbol: 'stATOM',
+  },
+  {
     description: 'OSMO',
     denom_units: [
       {

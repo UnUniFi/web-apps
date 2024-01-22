@@ -105,7 +105,7 @@ export class PoolComponent implements OnInit {
     );
     this.pool$ = of(dummyTranchePools[0]);
     this.vault$ = of(dummyVaults[0]);
-    this.underlyingDenom$ = of('uatom');
+    this.underlyingDenom$ = of('ustatom');
     this.poolAPYs$ = of(dummyPoolAPYs[0]);
   }
 

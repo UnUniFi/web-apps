@@ -131,7 +131,7 @@ export class SimpleVaultComponent implements OnInit {
       );
 
     this.vault$ = of(dummyVaults[0]);
-    this.underlyingDenom$ = of('uatom');
+    this.underlyingDenom$ = of('ustatom');
     this.tranches$ = of(dummyTranchePools.slice(0, 3));
     this.trancheFixedAPYs$ = of(dummyFixedAPYs.slice(0, 3));
   }

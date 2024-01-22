@@ -137,7 +137,7 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let vault of extendedVaults">
+          <ng-container *ngFor="let vault of vaults; let i = index">
             <tr
               class="hover cursor-pointer border-b-2 border-[#adc9ff]"
               routerLink="{{ vault.strategy_contract }}"
@@ -165,7 +165,7 @@
               <td>
                 <div>
                   <div class="text-xl font-bold">
-                    {{ 0 | number }} {{ vault.denom | coinDenom | async }}
+                    {{ 0 | number }} {{ extendedVaults?.[i]?.denom | coinDenom | async }}
                   </div>
                   <div class="text-sm opacity-50">{{ 0 | currency }}</div>
                 </div>
@@ -178,7 +178,7 @@
               <td>
                 <div>
                   <div class="text-xl font-bold text-accent">
-                    {{ vault.maxAPY | percent : '1.0-2' }}
+                    {{ extendedVaults?.[i]?.maxAPY | percent : '1.0-2' }}
                   </div>
                 </div>
               </td>
@@ -189,7 +189,7 @@
     </div>
 
     <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-      <ng-container *ngFor="let vault of extendedVaults">
+      <ng-container *ngFor="let vault of vaults; let i = index">
         <div
           style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
           class="card shadow-xl"
@@ -216,7 +216,7 @@
             <div class="stat">
               <div class="stat-title">Up To</div>
               <div class="stat-value text-accent">
-                {{ vault.maxAPY | percent : '1.0-2' }}
+                {{ extendedVaults?.[i]?.maxAPY | percent : '1.0-2' }}
               </div>
               <div class="stat-value">{{ 0 | currency }} TVL</div>
             </div>
@@ -229,7 +229,7 @@
               </div>
               <div>
                 <div class="text-xl font-bold">
-                  {{ '0' | number }} {{ vault.denom | coinDenom | async }}
+                  {{ '0' | number }} {{ extendedVaults?.[i]?.denom | coinDenom | async }}
                 </div>
               </div>
             </div>

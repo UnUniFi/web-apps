@@ -56,10 +56,15 @@
                 <button class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
-                <button class="btn">
+                <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   {{ underlyingDenom | coinDenom | async }}
@@ -110,6 +115,11 @@
                       }"
                     >
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   <div>{{ swapTab | uppercase }}</div>
@@ -167,6 +177,11 @@
                     >
                       <img src="{{ vaultImage?.image }}" />
                     </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
                   </div>
                   <div>{{ swapTab | uppercase }}</div>
                   <div>{{ underlyingDenom | coinDenom | async }}</div>
@@ -222,10 +237,15 @@
                 <span class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <button class="btn">
+                <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   {{ underlyingDenom | coinDenom | async }}
@@ -286,10 +306,15 @@
                 <button class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
-                <button class="btn">
+                <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   {{ underlyingDenom | coinDenom | async }}
@@ -333,6 +358,11 @@
                     <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
                   </div>
                   <div>PT</div>
                   <div>{{ vault?.name }}#{{ trancheId }}</div>
@@ -344,6 +374,11 @@
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   <div>YT</div>
@@ -392,6 +427,11 @@
                     <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
                   </div>
                   <div>PT</div>
                   <div>{{ vault?.name }}#{{ trancheId }}</div>
@@ -427,6 +467,11 @@
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   <div>YT</div>
@@ -465,10 +510,15 @@
                 <span class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <button class="btn">
+                <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
                     </div>
                   </div>
                   {{ underlyingDenom | coinDenom | async }}
@@ -515,20 +565,18 @@
             <div class="flex-auto"></div>
             <div class="card bg-base-100 flex-row flex-wrap px-4 gap-3 items-center">
               <div class="avatar">
-                <div class="gap-2">
-                  <div
-                    class="w-8 rounded-full border-2"
-                    [class]="{
-                      'border-accent': swapTab === 'pt',
-                      'border-primary': swapTab === 'yt'
-                    }"
-                  >
-                    <img src="{{ vaultImage?.image }}" />
-                  </div>
-                  <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                    <div class="w-4 rounded-full">
-                      <img src="{{ vaultImage?.subImage }}" />
-                    </div>
+                <div
+                  class="w-8 rounded-full border-2"
+                  [class]="{
+                    'border-accent': swapTab === 'pt',
+                    'border-primary': swapTab === 'yt'
+                  }"
+                >
+                  <img src="{{ vaultImage?.image }}" />
+                </div>
+                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                  <div class="w-4 rounded-full">
+                    <img src="{{ vaultImage?.subImage }}" />
                   </div>
                 </div>
               </div>
@@ -622,6 +670,11 @@
                     <div class="avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
                       </div>
                     </div>
                     0.8957

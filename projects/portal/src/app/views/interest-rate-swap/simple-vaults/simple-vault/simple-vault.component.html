@@ -109,10 +109,15 @@
           </span>
 
           <label class="input-group">
-            <button type="button" class="btn btn-outline btn-secondary items-center">
+            <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
               <div class="avatar">
                 <div class="w-8 rounded-full">
                   <img src="{{ vaultImage?.image }}" />
+                </div>
+                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                  <div class="w-4 rounded-full">
+                    <img src="{{ vaultImage?.subImage }}" />
+                  </div>
                 </div>
               </div>
               {{ underlyingDenom | coinDenom | async }}
@@ -244,10 +249,15 @@
           </span>
 
           <label class="input-group">
-            <button type="button" class="btn btn-outline btn-secondary items-center">
+            <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
               <div class="avatar">
                 <div class="w-8 rounded-full">
                   <img src="{{ vaultImage?.image }}" />
+                </div>
+                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                  <div class="w-4 rounded-full">
+                    <img src="{{ vaultImage?.subImage }}" />
+                  </div>
                 </div>
               </div>
               {{ underlyingDenom | coinDenom | async }}

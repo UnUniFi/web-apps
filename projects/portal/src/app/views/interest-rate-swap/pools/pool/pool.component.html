@@ -84,7 +84,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ underlyingDenom | coinDenom | async }}
+                  {{ vault?.denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button>
@@ -106,7 +106,10 @@
               </label>
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
-                <span class="label-text-alt">0.0000</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
+                  {{ vault?.denom | coinDenom | async }}
+                </span>
               </span>
 
               <span class="label">
@@ -146,7 +149,9 @@
               </label>
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
-                <span class="label-text-alt">0.0000</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[ptDenom || '']?.amount | coinAmount:ptDenom }}
+                </span>
               </span>
             </div>
 
@@ -228,7 +233,9 @@
 
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
-                <span class="label-text-alt">0.0000</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[lpDenom || '']?.amount | coinAmount:lpDenom }}
+                </span>
               </span>
             </div>
 
@@ -253,7 +260,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ underlyingDenom | coinDenom | async }}
+                  {{ vault?.denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button>

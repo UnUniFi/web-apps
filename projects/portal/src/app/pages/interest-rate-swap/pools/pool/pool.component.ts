@@ -31,8 +31,9 @@ export class PoolComponent implements OnInit {
   pool$: Observable<AllTranches200ResponseTranchesInner>;
   vault$: Observable<VaultByContract200ResponseVault>;
   poolAPYs$: Observable<TranchePoolAPYs200Response>;
-  underlyingDenom$?: Observable<string | undefined>;
-  poolBalance$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  ptDenom$: Observable<string>;
+  lpDenom$: Observable<string>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   tokenInAmountForMint$: BehaviorSubject<EstimationInfo>;
@@ -62,24 +63,11 @@ export class PoolComponent implements OnInit {
     this.poolAPYs$ = this.pool$.pipe(
       mergeMap((pool) => this.irsQuery.getTranchePoolAPYs$(pool.id!)),
     );
-    this.underlyingDenom$ = this.pool$.pipe(
-      map((pool) => {
-        if (pool.pool_assets) {
-          for (const asset of pool.pool_assets) {
-            if (!asset.denom?.includes('irs/tranche/')) {
-              return asset.denom;
-            }
-          }
-        }
-        return undefined;
-      }),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
-    this.poolBalance$ = combineLatest([balances$, this.pool$]).pipe(
-      map(([balance, pool]) =>
-        balance.find((balance) => balance.denom === `irs/tranche/${pool.id}/ls`),
-      ),
-    );
+    this.ptDenom$ = this.poolId$.pipe(map((id) => `irs/tranche/${id}/pt`));
+    this.lpDenom$ = this.poolId$.pipe(map((id) => `irs/tranche/${id}/ls`));
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
       map(([contract, images]) => images.find((image) => image.contract === contract)),

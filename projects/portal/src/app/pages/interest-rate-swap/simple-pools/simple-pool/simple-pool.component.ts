@@ -30,8 +30,7 @@ export class SimplePoolComponent implements OnInit {
   pools$: Observable<AllTranches200ResponseTranchesInner[]>;
   vault$: Observable<VaultByContract200ResponseVault>;
   poolAPYs$: Observable<TranchePoolAPYs200Response[]>;
-  underlyingDenom$?: Observable<string | undefined>;
-  poolBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   lpAmountForMint$: BehaviorSubject<EstimationInfo>;
@@ -66,26 +65,8 @@ export class SimplePoolComponent implements OnInit {
         ),
       ),
     );
-    this.underlyingDenom$ = this.pools$.pipe(
-      map((pools) => {
-        const tranche = pools[0];
-        if (tranche.pool_assets) {
-          for (const asset of tranche.pool_assets) {
-            if (!asset.denom?.includes('irs/tranche/')) {
-              return asset.denom;
-            }
-          }
-        }
-        return undefined;
-      }),
-    );
-    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
-    this.poolBalances$ = combineLatest([balances$, this.pools$]).pipe(
-      map(([balance, pools]) =>
-        balance.filter((balance) =>
-          pools.some((tranche) => balance.denom?.includes(`irs/tranche/${tranche.id}/ls`)),
-        ),
-      ),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(

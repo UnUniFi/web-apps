@@ -29,9 +29,8 @@ export class SimpleVaultComponent implements OnInit {
   vault$: Observable<VaultByContract200ResponseVault>;
   tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
-  underlyingDenom$?: Observable<string | undefined>;
   // vaultDetails$: Observable<(VaultDetails200Response | undefined)[]>;
-  vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo>;
@@ -68,19 +67,6 @@ export class SimpleVaultComponent implements OnInit {
         ),
       ),
     );
-    this.underlyingDenom$ = this.tranches$.pipe(
-      map((tranches) => {
-        const tranche = tranches[0];
-        if (tranche.pool_assets) {
-          for (const asset of tranche.pool_assets) {
-            if (!asset.denom?.includes('irs/tranche/')) {
-              return asset.denom;
-            }
-          }
-        }
-        return undefined;
-      }),
-    );
     // this.vaultDetails$ = this.tranches$.pipe(
     //   mergeMap((tranches) =>
     //     Promise.all(
@@ -94,13 +80,8 @@ export class SimpleVaultComponent implements OnInit {
     //     ),
     //   ),
     // );
-    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
-    this.vaultBalances$ = combineLatest([balances$, this.tranches$]).pipe(
-      map(([balance, tranches]) =>
-        balance.filter((balance) =>
-          tranches.some((tranche) => balance.denom?.includes(`irs/tranche/${tranche.id}/pt`)),
-        ),
-      ),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(

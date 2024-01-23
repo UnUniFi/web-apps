@@ -52,17 +52,17 @@
               <tr>
                 <th class="text-xl">My Position Value</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
+                  <div class="text-primary">{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
                 </td>
               </tr>
               <tr>
                 <th class="text-xl">Redeem at Maturity</th>
                 <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
+                  <div>{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ underlyingDenom | coinDenom | async }}</div>
+                  <div class="text-primary">{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
                 </td>
               </tr>
             </tbody>
@@ -103,7 +103,11 @@
           <span class="label">
             <span class="label-text">Input</span>
             <div>
-              <span class="label-text-alt mr-2">Available Balance: 0.0000</span>
+              <span class="label-text-alt mr-2">
+                Available Balance:
+                {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
+                {{ vault?.denom | coinDenom | async }}
+              </span>
               <button type="button" class="btn btn-xs btn-info">Max</button>
             </div>
           </span>
@@ -120,7 +124,7 @@
                   </div>
                 </div>
               </div>
-              {{ underlyingDenom | coinDenom | async }}
+              {{ vault?.denom | coinDenom | async }}
               <div class="flex-auto"></div>
               <div class="material-symbols-outlined">keyboard_arrow_down</div>
             </button>
@@ -260,7 +264,7 @@
                   </div>
                 </div>
               </div>
-              {{ underlyingDenom | coinDenom | async }}
+              {{ vault?.denom | coinDenom | async }}
               <div class="flex-auto"></div>
               <div class="material-symbols-outlined">keyboard_arrow_down</div>
             </button>

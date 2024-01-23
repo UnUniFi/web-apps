@@ -28,9 +28,11 @@ export class PoolComponent implements OnInit {
   @Input()
   poolAPYs?: TranchePoolAPYs200Response | null;
   @Input()
-  underlyingDenom?: string | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  poolBalance?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  ptDenom?: string | null;
+  @Input()
+  lpDenom?: string | null;
   @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
@@ -84,10 +86,10 @@ export class PoolComponent implements OnInit {
   }
 
   onChangeDepositUt() {
-    if (this.poolId && this.inputUT && this.underlyingDenom) {
+    if (this.poolId && this.inputUT && this.vault?.denom) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
-        denom: this.underlyingDenom,
+        denom: this.vault.denom,
         readableAmount: Number(this.inputUT),
       });
     }

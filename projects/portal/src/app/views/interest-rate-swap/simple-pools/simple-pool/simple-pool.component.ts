@@ -28,9 +28,7 @@ export class SimplePoolComponent implements OnInit {
   @Input()
   poolAPYs?: TranchePoolAPYs200Response[] | null;
   @Input()
-  underlyingDenom?: string | null;
-  @Input()
-  poolBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()

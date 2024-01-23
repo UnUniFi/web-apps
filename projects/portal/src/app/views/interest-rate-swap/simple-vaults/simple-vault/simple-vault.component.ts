@@ -25,9 +25,7 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   trancheFixedAPYs?: (TranchePtAPYs200Response | undefined)[] | null;
   @Input()
-  underlyingDenom?: string | null;
-  @Input()
-  vaultBalances?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
@@ -58,13 +56,6 @@ export class SimpleVaultComponent implements OnInit {
 
   selectTranche(tranche: AllTranches200ResponseTranchesInner) {
     this.selectedPoolId = tranche.id;
-    if (tranche.pool_assets) {
-      for (const asset of tranche.pool_assets) {
-        if (!asset.denom?.includes('irs/tranche/')) {
-          this.underlyingDenom = asset.denom;
-        }
-      }
-    }
   }
 
   changeAdvanced() {
@@ -76,8 +67,8 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.underlyingDenom) {
-      alert('Please select the token.');
+    if (!this.vault?.denom) {
+      alert('Invalid vault denom.');
       return;
     }
     if (!this.selectedPoolId) {
@@ -87,7 +78,7 @@ export class SimpleVaultComponent implements OnInit {
     this.appMintPT.emit({
       trancheId: this.selectedPoolId,
       trancheType: 1,
-      utDenom: this.underlyingDenom,
+      utDenom: this.vault.denom,
       readableAmount: Number(this.inputUnderlying),
     });
   }
@@ -110,10 +101,10 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onChangeDeposit() {
-    if (this.selectedPoolId && this.underlyingDenom && this.inputUnderlying) {
+    if (this.selectedPoolId && this.vault?.denom && this.inputUnderlying) {
       this.appChangeMintPT.emit({
         poolId: this.selectedPoolId,
-        denom: this.underlyingDenom,
+        denom: this.vault.denom,
         readableAmount: Number(this.inputUnderlying),
       });
     }

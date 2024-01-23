@@ -7,7 +7,7 @@ import ununificlient from 'ununifi-client';
   providedIn: 'root',
 })
 export class IrsService {
-  constructor(private readonly bankService: BankService) { }
+  constructor(private readonly bankService: BankService) {}
 
   buildMsgDepositLiquidity(
     senderAddress: string,
@@ -16,7 +16,9 @@ export class IrsService {
     shareOutDenom: string,
     readableAmountMapInMax?: { [denom: string]: number },
   ): ununificlient.proto.ununifi.irs.MsgDepositLiquidity {
-    const coins = readableAmountMapInMax ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapInMax) : undefined;
+    const coins = readableAmountMapInMax
+      ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapInMax)
+      : undefined;
     const shareOut = this.bankService.convertDenomReadableAmountMapToCoins({
       [shareOutDenom]: shareOutReadableAmount,
     })[0];
@@ -36,7 +38,9 @@ export class IrsService {
     shareInReadableAmount: number,
     readableAmountMapOutMin?: { [denom: string]: number },
   ): ununificlient.proto.ununifi.irs.MsgWithdrawLiquidity {
-    const coins = readableAmountMapOutMin ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapOutMin) : undefined;
+    const coins = readableAmountMapOutMin
+      ? this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMapOutMin)
+      : undefined;
     const share = this.bankService.convertDenomReadableAmountMapToCoins({
       [shareInDenom]: shareInReadableAmount,
     })[0];
@@ -63,9 +67,9 @@ export class IrsService {
     const ytDenom = 'irs/tranche/' + trancheId + '/yt';
     const requiredYTAmount = requiredYT
       ? this.bankService.convertDenomReadableAmountMapToCoins({
-        [ytDenom]: requiredYT,
-      })[0].amount
-      : undefined;
+          [ytDenom]: requiredYT,
+        })[0].amount
+      : '0';
     const msg = new ununificlient.proto.ununifi.irs.MsgDepositToTranche({
       sender: senderAddress,
       tranche_id: Long.fromString(trancheId),
@@ -88,9 +92,9 @@ export class IrsService {
     const requiredUTAmount =
       requiredUT && denom
         ? this.bankService.convertDenomReadableAmountMapToCoins({
-          [denom]: requiredUT,
-        })[0].amount
-        : undefined;
+            [denom]: requiredUT,
+          })[0].amount
+        : '0';
     const msg = new ununificlient.proto.ununifi.irs.MsgWithdrawFromTranche({
       sender: senderAddress,
       tranche_id: Long.fromString(trancheId),

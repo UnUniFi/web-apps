@@ -47,8 +47,8 @@
     </div>
 
     <div class="flex flex-row flex-wrap gap-4 mb-8">
-      <div class="flex-auto"></div>
-      <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+      <div class="lg:flex-auto"></div>
+      <div class="card bg-base-200 shadow-xl w-full lg:w-auto">
         <div class="tabs w-full">
           <a
             class="tab tab-lg tab-bordered w-1/2"
@@ -179,7 +179,11 @@
                   <div>LP</div>
                   <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
-                <input class="join-item input input-bordered w-full" readonly />
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedMintAmount?.mintAmount }}"
+                  readonly
+                />
               </label>
               <span class="label">
                 <span class="label-text"></span>
@@ -264,7 +268,11 @@
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button>
-                <input class="join-item input input-bordered w-full" readonly />
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.utAmount }}"
+                  readonly
+                />
               </label>
 
               <span class="label">
@@ -285,7 +293,11 @@
                   <div>PT</div>
                   <div>{{ vault?.name }}#{{ poolId }}</div>
                 </span>
-                <input class="join-item input input-bordered w-full" readonly />
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.ptAmount }}"
+                  readonly
+                />
               </label>
               <span class="label">
                 <span class="label-text"></span>
@@ -301,10 +313,10 @@
         </div>
       </div>
 
-      <div class="flex-auto"></div>
+      <div class="lg:flex-auto"></div>
 
-      <div class="w-full md:w-1/2">
-        <div class="card bg-base-200 shadow-xl w-full md:w-auto mb-4">
+      <div class="w-full lg:w-1/2">
+        <div class="card bg-base-200 shadow-xl w-full lg:w-auto mb-4">
           <div class="card-body">
             <h2 class="card-title">
               <span>My APY</span>
@@ -340,7 +352,7 @@
             </div>
           </div>
         </div>
-        <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+        <div class="card bg-base-200 shadow-xl w-full lg:w-auto">
           <div class="card-body">
             <h2 class="card-title">
               <span>Total Liquidity</span>
@@ -381,7 +393,7 @@
           </div>
         </div>
       </div>
-      <div class="flex-auto"></div>
+      <div class="lg:flex-auto"></div>
     </div>
   </div>
 </div>

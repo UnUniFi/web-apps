@@ -20,8 +20,8 @@
     </div>
 
     <div class="flex flex-row flex-wrap gap-4 mb-8">
-      <div class="flex-auto"></div>
-      <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+      <div class="2xl:flex-auto"></div>
+      <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
         <div class="tabs w-full">
           <a
             class="tab tab-lg tab-bordered w-1/2"
@@ -53,7 +53,7 @@
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
-                <button class="btn btn-xs btn-primary">Max</button>
+                <button type="button" class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
                 <button type="button" class="btn normal-case">
@@ -167,7 +167,7 @@
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
-                <button class="btn btn-xs btn-primary">Max</button>
+                <button type="button" class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
@@ -188,7 +188,7 @@
                     </div>
                   </div>
                   <div>{{ swapTab | uppercase }}</div>
-                  <div>{{ vault?.denom | coinDenom | async }}</div>
+                  <div>{{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -225,8 +225,11 @@
               </label>
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
-                <span class="label-text-alt">
+                <span class="label-text-alt" *ngIf="swapTab === 'pt'">
                   {{ denomBalancesMap?.[ptDenom || '']?.amount | coinAmount:ptDenom }}
+                </span>
+                <span class="label-text-alt" *ngIf="swapTab === 'yt'">
+                  {{ denomBalancesMap?.[ytDenom || '']?.amount | coinAmount:ytDenom }}
                 </span>
               </span>
             </div>
@@ -317,7 +320,7 @@
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
-                <button class="btn btn-xs btn-primary">Max</button>
+                <button type="button" class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
                 <button type="button" class="btn normal-case">
@@ -444,7 +447,7 @@
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
-                <button class="btn btn-xs btn-primary">Max</button>
+                <button type="button" class="btn btn-xs btn-primary">Max</button>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
@@ -486,7 +489,7 @@
 
               <span class="label">
                 <span class="label-text"></span>
-                <button class="btn btn-xs btn-primary">Max</button>
+                <button type="button" class="btn btn-xs btn-primary">Max</button>
               </span>
 
               <label class="input-group join">
@@ -574,9 +577,9 @@
         </div>
       </div>
 
-      <div class="flex-auto"></div>
+      <div class="2xl:flex-auto"></div>
 
-      <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+      <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
         <div class="card-body">
           <div class="flex flex-wrap gap-2 items-center mb-4">
             <div class="join">
@@ -653,10 +656,10 @@
         </div>
       </div>
 
-      <div class="flex-auto"></div>
+      <div class="2xl:flex-auto"></div>
     </div>
 
-    <div class="card bg-base-200 shadow-xl w-full md:w-auto">
+    <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
       <div class="card-body">
         <h2 class="card-title">Transactions</h2>
         <div class="tabs w-full">

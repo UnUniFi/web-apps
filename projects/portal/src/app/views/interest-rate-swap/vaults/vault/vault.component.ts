@@ -21,8 +21,6 @@ import {
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
-  EstimateMintPtYtPair200Response,
-  EstimateRedeemPtYtPair200Response,
   TranchePtAPYs200Response,
   TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,

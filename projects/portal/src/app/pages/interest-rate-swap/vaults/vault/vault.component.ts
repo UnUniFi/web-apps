@@ -21,7 +21,6 @@ import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
-  EstimateRedeemPtYtPair200Response,
   TranchePtAPYs200Response,
   TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
@@ -182,18 +181,19 @@ export class VaultComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           redeemAmount:
-            Number(coins.redeem_amount?.amount) /
-            Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || '')),
-          ytAmount: coins.additional_required_amount?.denom?.includes('yt')
+            (Number(coins.redeem_amount?.amount) /
+              Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || ''))) *
+            0.99,
+          ytAmount: coins.additional_required_amount?.denom?.includes('/yt')
             ? additionalAmount
             : undefined,
-          ptAmount: coins.additional_required_amount?.denom?.includes('pt')
+          ptAmount: coins.additional_required_amount?.denom?.includes('/pt')
             ? additionalAmount
             : undefined,
         };
       }),
     );
-    this.estimateMintYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(
+    this.estimateMintYt$ = this.utAmountForMintYt$.asObservable().pipe(
       mergeMap((info) => {
         if (!info) {
           return of(undefined);
@@ -205,7 +205,7 @@ export class VaultComponent implements OnInit {
           return undefined;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return Number(coin.amount) / Math.pow(10, exponent);
+        return (Number(coin.amount) / Math.pow(10, exponent)) * 0.99;
       }),
     );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(

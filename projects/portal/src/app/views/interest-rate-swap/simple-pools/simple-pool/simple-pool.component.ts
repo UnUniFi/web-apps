@@ -54,7 +54,9 @@ export class SimplePoolComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    alert('Earn Liquidity Pool is not supported yet. Please use Trade Liquidity Pool.');
+  }
 
   changeAdvanced() {
     this.router.navigate(['interest-rate-swap', 'pools', this.contractAddress]);
@@ -65,19 +67,20 @@ export class SimplePoolComponent implements OnInit {
   }
 
   onWithdrawPool() {
-    if (!this.inputLP) {
-      alert('Please input the LP amount.');
-      return;
-    }
-    if (!this.selectedPoolId) {
-      alert('Please select the maturity.');
-      return;
-    }
-    this.appRedeemLP.emit({
-      trancheId: this.selectedPoolId,
-      lpReadableAmount: Number(this.inputLP),
-      lpDenom: `irs/tranche/${this.selectedPoolId}/ls`,
-    });
+    alert('Not Supported Yet');
+    // if (!this.inputLP) {
+    //   alert('Please input the LP amount.');
+    //   return;
+    // }
+    // if (!this.selectedPoolId) {
+    //   alert('Please select the maturity.');
+    //   return;
+    // }
+    // this.appRedeemLP.emit({
+    //   trancheId: this.selectedPoolId,
+    //   lpReadableAmount: Number(this.inputLP),
+    //   lpDenom: `irs/tranche/${this.selectedPoolId}/ls`,
+    // });
   }
 
   onChangeDeposit() {

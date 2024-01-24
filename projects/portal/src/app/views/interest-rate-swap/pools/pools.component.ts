@@ -23,11 +23,16 @@ export class PoolsComponent implements OnInit {
   vaultsImages?: IRSVaultImage[] | null;
 
   sortType?: string;
-  viewMode?: string = 'table';
+  viewMode?: 'table' | 'grid' = 'table';
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const width = window.innerWidth;
+    if (width <= 640) {
+      this.viewMode = 'grid';
+    }
+  }
 
   changeSimple() {
     this.router.navigate(['interest-rate-swap', 'simple-pools']);

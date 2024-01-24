@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
@@ -6,7 +14,6 @@ import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/i
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
   AllTranches200ResponseTranchesInner,
-  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -16,7 +23,7 @@ import {
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.css'],
 })
-export class PoolComponent implements OnInit {
+export class PoolComponent implements OnInit, OnChanges {
   @Input()
   contractAddress?: string | null;
   @Input()
@@ -36,12 +43,11 @@ export class PoolComponent implements OnInit {
   @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
-  estimatedMintAmount?: EstimateMintLiquidityPoolToken200Response | null;
+  estimatedMintAmount?: { mintAmount: number; utAmount?: number; ptAmount?: number } | null;
   @Input()
-  estimatedRedeemAmount?: cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | null;
+  estimatedRedeemAmount?: { utAmount: number; ptAmount: number } | null;
 
   tab: 'deposit' | 'withdraw' = 'deposit';
-  inputUnderlying?: string;
   inputUT?: string;
   inputPT?: string;
   inputLP?: string;
@@ -61,12 +67,54 @@ export class PoolComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.estimatedMintAmount) {
+      if (this.estimatedMintAmount?.utAmount) {
+        this.inputUT = this.estimatedMintAmount?.utAmount.toString();
+      } else if (this.estimatedMintAmount?.ptAmount) {
+        this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
+      } else if (this.inputPT) {
+        this.inputUT = this.inputPT;
+      } else if (this.inputUT) {
+        this.inputPT = this.inputUT;
+      }
+    }
+  }
+
   changeSimple() {
     this.router.navigate(['interest-rate-swap', 'simple-pools', this.contractAddress]);
   }
 
   onDepositPool() {
-    alert('Not Supported Yet');
+    if (!this.inputUT) {
+      alert('Please input the UT amount.');
+      return;
+    }
+    if (!this.inputPT) {
+      alert('Please input the PT amount.');
+      return;
+    }
+    if (!this.poolId) {
+      alert('Please select the maturity.');
+      return;
+    }
+    if (!this.estimatedMintAmount?.mintAmount) {
+      alert('Invalid mint amount.');
+      return;
+    }
+    if (!this.vault?.denom) {
+      alert('Invalid vault denom.');
+      return;
+    }
+    this.appMintLP.emit({
+      trancheId: this.poolId,
+      lpReadableAmount: this.estimatedMintAmount.mintAmount,
+      lpDenom: `irs/tranche/${this.poolId}/ls`,
+      readableAmountMapInMax: {
+        [`irs/tranche/${this.poolId}/pt`]: Number(this.inputPT),
+        [this.vault.denom]: Number(this.inputUT),
+      },
+    });
   }
 
   onWithdrawPool() {

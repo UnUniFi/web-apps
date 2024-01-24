@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
@@ -10,11 +11,10 @@ import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/i
 import { IrsQueryService } from 'projects/portal/src/app/models/irs/irs.query.service';
 import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
 import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
-  EstimateMintLiquidityPoolToken200Response,
   TranchePoolAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
@@ -36,10 +36,12 @@ export class PoolComponent implements OnInit {
   lpDenom$: Observable<string>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
-  tokenInAmountForMint$: BehaviorSubject<EstimationInfo>;
-  estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response>;
-  lpAmountForRedeem$: BehaviorSubject<EstimationInfo>;
-  estimatedRedeemAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  tokenInAmountForMint$: BehaviorSubject<EstimationInfo | undefined>;
+  estimatedMintAmount$: Observable<
+    { mintAmount: number; utAmount?: number; ptAmount?: number } | undefined
+  >;
+  lpAmountForRedeem$: BehaviorSubject<EstimationInfo | undefined>;
+  estimatedRedeemAmount$: Observable<{ utAmount: number; ptAmount: number } | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,18 +75,60 @@ export class PoolComponent implements OnInit {
       map(([contract, images]) => images.find((image) => image.contract === contract)),
     );
 
-    const initialEstimationInfo = new BehaviorSubject({
-      poolId: '',
-      denom: '',
-      amount: '0',
-    });
-    this.tokenInAmountForMint$ = initialEstimationInfo;
-    this.lpAmountForRedeem$ = initialEstimationInfo;
+    this.tokenInAmountForMint$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
+    this.lpAmountForRedeem$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.estimatedMintAmount$ = this.tokenInAmountForMint$.pipe(
-      mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.denom, info.amount)),
+      mergeMap((info) => {
+        if (!info) {
+          return of(undefined);
+        }
+        return this.irsQuery.estimateMintLiquidity(info.poolId, info.denom, info.amount);
+      }),
+      map((coins) => {
+        if (!coins) {
+          return undefined;
+        }
+        const additionalAmount =
+          Number(coins.additional_required_amount?.amount) /
+          Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
+        return {
+          mintAmount:
+            (Number(coins.mint_amount?.amount) /
+              Math.pow(10, getDenomExponent(coins.mint_amount?.denom || ''))) *
+            0.99,
+          utAmount: !coins.additional_required_amount?.denom?.includes('/pt')
+            ? additionalAmount
+            : undefined,
+          ptAmount: coins.additional_required_amount?.denom?.includes('/pt')
+            ? additionalAmount
+            : undefined,
+        };
+      }),
     );
-    this.estimatedRedeemAmount$ = this.lpAmountForRedeem$.pipe(
-      mergeMap((info) => this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount)),
+    const redeemLiquidity$ = this.lpAmountForRedeem$.pipe(
+      mergeMap((info) => {
+        if (!info) {
+          return of(undefined);
+        }
+        return this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount);
+      }),
+    );
+    this.estimatedRedeemAmount$ = combineLatest([this.vault$, redeemLiquidity$]).pipe(
+      map(([vault, coins]) => {
+        if (!vault || !coins) {
+          return undefined;
+        }
+        const utCoin = coins.find((coin) => coin.denom === vault.denom);
+        const ptCoin = coins.find((coin) => coin.denom?.includes('/pt'));
+        return {
+          utAmount: utCoin
+            ? (Number(utCoin.amount) / Math.pow(10, getDenomExponent(utCoin.denom!))) * 0.99
+            : 0,
+          ptAmount: ptCoin
+            ? (Number(ptCoin.amount) / Math.pow(10, getDenomExponent(ptCoin.denom!))) * 0.99
+            : 0,
+        };
+      }),
     );
   }
 
@@ -105,7 +149,7 @@ export class PoolComponent implements OnInit {
     });
   }
 
-  onRedeemLP(data: MintLpRequest) {
+  onRedeemLP(data: RedeemLpRequest) {
     this.irsAppService.redeemLP(data);
   }
 

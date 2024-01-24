@@ -30,7 +30,12 @@ export class VaultsComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const width = window.innerWidth;
+    if (width <= 640) {
+      this.viewMode = 'grid';
+    }
+  }
 
   changeSimple() {
     this.router.navigate(['interest-rate-swap', 'simple-vaults']);

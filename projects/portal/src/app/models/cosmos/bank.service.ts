@@ -28,8 +28,8 @@ export class BankService {
         amount: parseInt(amount).toString(),
       } as cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     });
-
-    return coins;
+    const filteredCoins = coins.filter((coin) => coin.amount !== '0');
+    return filteredCoins;
   }
 
   convertCoinsToDenomAmount(coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[]): {

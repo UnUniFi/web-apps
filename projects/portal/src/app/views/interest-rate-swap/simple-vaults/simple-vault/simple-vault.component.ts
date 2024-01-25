@@ -29,11 +29,21 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
-  estimateMintPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  estimateMintPt?: number | null;
   @Input()
-  estimateRedeemPt?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  estimateRedeemPt?: number | null;
+  @Input()
+  selectedPoolId?: string | null;
+  @Input()
+  ptAmount?: number | null;
+  @Input()
+  ptValue?: number | null;
 
-  selectedPoolId?: string;
+  @Input()
+  afterPtAmount?: number | null;
+  @Input()
+  afterPtValue?: number | null;
+
   inputUnderlying?: string;
   inputPT?: string;
 
@@ -47,6 +57,10 @@ export class SimpleVaultComponent implements OnInit {
   @Output()
   appChangeRedeemPT: EventEmitter<ReadableEstimationInfo> =
     new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appDeleteDeposit: EventEmitter<{}> = new EventEmitter<{}>();
+  @Output()
+  appDeleteWithdraw: EventEmitter<{}> = new EventEmitter<{}>();
 
   tab: 'deposit' | 'withdraw' = 'deposit';
 
@@ -101,7 +115,7 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onChangeDeposit() {
-    if (this.selectedPoolId && this.vault?.denom && this.inputUnderlying) {
+    if (this.selectedPoolId && this.vault?.denom && this.inputUnderlying !== undefined) {
       this.appChangeMintPT.emit({
         poolId: this.selectedPoolId,
         denom: this.vault.denom,
@@ -110,13 +124,25 @@ export class SimpleVaultComponent implements OnInit {
     }
   }
   onChangeWithdraw() {
-    if (this.selectedPoolId && this.inputPT) {
+    if (this.selectedPoolId && this.inputPT !== undefined) {
       this.appChangeRedeemPT.emit({
         poolId: this.selectedPoolId,
         denom: `irs/tranche/${this.selectedPoolId}/pt`,
         readableAmount: Number(this.inputPT),
       });
     }
+  }
+
+  onSwitchDepositTab() {
+    this.tab = 'deposit';
+    this.inputPT = undefined;
+    this.appDeleteWithdraw.emit({});
+  }
+
+  onSwitchWithdrawTab() {
+    this.tab = 'withdraw';
+    this.inputUnderlying = undefined;
+    this.appDeleteDeposit.emit({});
   }
 
   calcMaturity(pool: AllTranches200ResponseTranchesInner): number {

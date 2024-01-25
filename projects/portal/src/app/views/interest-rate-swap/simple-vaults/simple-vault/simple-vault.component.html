@@ -41,6 +41,7 @@
             </div>
           </button>
         </ng-container>
+        <button class="btn btn-lg btn-disabled normal-case">More maturities coming...</button>
       </div>
 
       <div
@@ -50,19 +51,27 @@
           <table class="table">
             <tbody>
               <tr>
-                <th class="text-xl">My Position Value</th>
-                <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
+                <th class="text-xs">My Position Value</th>
+                <td class="font-bold flex flex-row items-center gap-2">
+                  <div>
+                    {{ ptValue | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                  </div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
+                  <div class="text-primary text-base">
+                    {{ afterPtValue | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                  </div>
                 </td>
               </tr>
               <tr>
-                <th class="text-xl">Redeem at Maturity</th>
-                <td class="text-xl font-bold flex flex-row items-center gap-2">
-                  <div>{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
+                <th class="text-xs">Redeem at Maturity</th>
+                <td class="font-bold flex flex-row items-center gap-2">
+                  <div>
+                    {{ ptAmount | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                  </div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary">{{ 0 }} {{ vault?.denom | coinDenom | async }}</div>
+                  <div class="text-primary text-base">
+                    {{ afterPtAmount | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -84,7 +93,7 @@
           class="tab tab-lg tab-bordered w-1/2 text-accent"
           [class.border-accent]="tab === 'deposit'"
           [class.text-accent]="tab === 'deposit'"
-          (click)="tab = 'deposit'"
+          (click)="onSwitchDepositTab()"
         >
           Deposit
         </a>
@@ -92,7 +101,7 @@
           class="tab tab-lg tab-bordered w-1/2 text-accent"
           [class.border-accent]="tab === 'withdraw'"
           [class.text-accent]="tab === 'withdraw'"
-          (click)="tab = 'withdraw'"
+          (click)="onSwitchWithdrawTab()"
         >
           Withdraw
         </a>

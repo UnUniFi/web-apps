@@ -2,8 +2,8 @@ import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
-import { af } from 'date-fns/locale';
 import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { BankService } from 'projects/portal/src/app/models/cosmos/bank.service';
 import { IrsApplicationService } from 'projects/portal/src/app/models/irs/irs.application.service';
@@ -31,8 +31,10 @@ export class SimpleVaultComponent implements OnInit {
   tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
+  selectPoolId$?: BehaviorSubject<string | undefined>;
   ptAmount$: Observable<number>;
   ptValue$: Observable<number>;
 
@@ -63,7 +65,17 @@ export class SimpleVaultComponent implements OnInit {
     this.tranches$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
     );
-    this.selectedPoolId$ = this.tranches$.pipe(map((tranches) => tranches[0].id));
+    this.selectPoolId$ = new BehaviorSubject<string | undefined>(undefined);
+    this.selectedPoolId$ = combineLatest([this.tranches$, this.selectPoolId$.asObservable()]).pipe(
+      map(([tranches, selected]) => {
+        if (selected) {
+          console.log(selected);
+          return selected;
+        }
+        return tranches[0]?.id;
+      }),
+    );
+
     this.trancheFixedAPYs$ = this.tranches$.pipe(
       mergeMap((tranches) =>
         Promise.all(
@@ -75,6 +87,14 @@ export class SimpleVaultComponent implements OnInit {
     );
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
+    );
+    this.tranchePtBalance$ = combineLatest([this.selectedPoolId$, this.denomBalancesMap$]).pipe(
+      map(([poolId, denomBalancesMap]) => {
+        const denom = `irs/tranche/${poolId}/pt`;
+        const balance = denomBalancesMap[denom];
+        const exponent = getDenomExponent(denom);
+        return Number(balance?.amount || 0) / Math.pow(10, exponent);
+      }),
     );
     const ptBalances$ = combineLatest([this.tranches$, this.denomBalancesMap$]).pipe(
       map(([tranches, denomBalancesMap]) =>
@@ -143,13 +163,17 @@ export class SimpleVaultComponent implements OnInit {
     this.afterPtAmount$.subscribe((amount) => console.log(amount));
     this.afterPtValue$ = combineLatest([
       this.ptValue$,
-      this.utAmountForMintPt$.asObservable(),
-      this.estimateRedeemPt$,
+      this.tranches$,
+      this.selectedPoolId$,
+      this.trancheFixedAPYs$,
+      this.ptAmountForRedeemPt$.asObservable(),
+      this.estimateMintPt$,
     ]).pipe(
-      map(
-        ([ptValue, mintPt, redeemPt]) =>
-          (ptValue || 0) - (redeemPt || 0) + Number(mintPt?.amount || 0),
-      ),
+      map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
+        const index = tranches.findIndex((tranche) => tranche?.id === id);
+        const rate = Number(fixedAPYs[index]?.pt_rate_per_ut || 0);
+        return (ptValue || 0) + (mintPt || 0) / rate - Number(redeemPt?.amount || 0) / rate;
+      }),
     );
   }
 
@@ -188,5 +212,8 @@ export class SimpleVaultComponent implements OnInit {
   }
   onDeleteWithdraw(data: {}) {
     this.ptAmountForRedeemPt$.next(undefined);
+  }
+  onSelectTranche(id: string) {
+    this.selectPoolId$?.next(id);
   }
 }

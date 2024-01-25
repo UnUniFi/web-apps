@@ -25,7 +25,7 @@
           <button
             class="btn btn-lg btn-outline btn-primary"
             [class.btn-active]="selectedPoolId === pool.id"
-            (click)="selectTranche(pool)"
+            (click)="selectTranche(pool.id)"
           >
             <div>
               <div class="text-xl flex flex-row">
@@ -41,7 +41,9 @@
             </div>
           </button>
         </ng-container>
-        <button class="btn btn-lg btn-disabled normal-case">More maturities coming...</button>
+        <button class="btn btn-lg btn-outline normal-case" disabled>
+          More maturities coming...
+        </button>
       </div>
 
       <div
@@ -250,13 +252,34 @@
 
       <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onRedeemPT()">
         <div class="form-control my-8">
-          <input type="range" min="0" max="100" class="range range-accent" name="withdraw-slider" />
+          <input
+            #withdrawAmountNgModelRef="ngModel"
+            class="range range-accent"
+            [class]="{
+              'range-error': withdrawAmountNgModelRef.errors
+            }"
+            required
+            type="range"
+            [(ngModel)]="inputPT"
+            [min]="0"
+            [max]="tranchePtBalance!"
+            name="withdrawAmount"
+            (change)="onChangeWithdraw()"
+          />
+          <!-- <input type="range" min="0" max="100" class="range range-accent" name="withdraw-slider" /> -->
           <div class="w-full flex justify-between text-xs px-2">
             <span>|</span>
             <span>|</span>
             <span>|</span>
             <span>|</span>
             <span>|</span>
+          </div>
+          <div class="w-full flex justify-between text-xs px-2">
+            <span>0%</span>
+            <span>25%</span>
+            <span>50%</span>
+            <span>75%</span>
+            <span>100%</span>
           </div>
         </div>
         <div class="form-control">
@@ -280,7 +303,7 @@
               <div class="flex-auto"></div>
               <div class="material-symbols-outlined">keyboard_arrow_down</div>
             </button>
-            <input
+            <!-- <input
               #withdrawAmountNgModelRef="ngModel"
               class="join-item input input-bordered input-secondary w-full"
               [class]="{
@@ -294,6 +317,11 @@
               pattern="^[0-9]*\.?[0-9]{0,6}$"
               name="withdrawAmount"
               (change)="onChangeWithdraw()"
+            /> -->
+            <input
+              class="join-item input input-bordered input-secondary w-full"
+              value="{{ estimateRedeemPt | coinAmount }}"
+              readonly
             />
           </label>
         </div>

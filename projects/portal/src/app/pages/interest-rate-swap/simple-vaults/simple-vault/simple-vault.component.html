@@ -4,6 +4,7 @@
   [tranches]="tranches$ | async"
   [trancheFixedAPYs]="trancheFixedAPYs$ | async"
   [denomBalancesMap]="denomBalancesMap$ | async"
+  [tranchePtBalance]="tranchePtBalance$ | async"
   [vaultImage]="vaultImage$ | async"
   [selectedPoolId]="selectedPoolId$ | async"
   [ptAmount]="ptAmount$ | async"
@@ -18,4 +19,5 @@
   (appChangeRedeemPT)="onChangeRedeemPT($event)"
   (appDeleteDeposit)="onDeleteDeposit($event)"
   (appDeleteWithdraw)="onDeleteWithdraw($event)"
+  (appSelectTranche)="onSelectTranche($event)"
 ></view-simple-vault>

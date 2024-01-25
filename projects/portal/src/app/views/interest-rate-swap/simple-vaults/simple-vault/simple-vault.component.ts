@@ -27,6 +27,8 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
+  tranchePtBalance?: number | null;
+  @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
   estimateMintPt?: number | null;
@@ -61,6 +63,8 @@ export class SimpleVaultComponent implements OnInit {
   appDeleteDeposit: EventEmitter<{}> = new EventEmitter<{}>();
   @Output()
   appDeleteWithdraw: EventEmitter<{}> = new EventEmitter<{}>();
+  @Output()
+  appSelectTranche: EventEmitter<string> = new EventEmitter<string>();
 
   tab: 'deposit' | 'withdraw' = 'deposit';
 
@@ -68,8 +72,9 @@ export class SimpleVaultComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  selectTranche(tranche: AllTranches200ResponseTranchesInner) {
-    this.selectedPoolId = tranche.id;
+  selectTranche(id?: string) {
+    this.selectedPoolId = id;
+    this.appSelectTranche.emit(id);
   }
 
   changeAdvanced() {

@@ -78,7 +78,12 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   changeAdvanced() {
-    this.router.navigate(['interest-rate-swap', 'vaults', this.contractAddress]);
+    this.router.navigate([
+      'interest-rate-swap',
+      'vaults',
+      this.contractAddress,
+      this.selectedPoolId,
+    ]);
   }
 
   onMintPT() {

@@ -40,7 +40,7 @@ export class ContractVaultsComponent implements OnInit {
       mergeMap((tranches) =>
         Promise.all(
           tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePtAPYs$(tranche.id).toPromise() : undefined,
+            tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
           ),
         ),
       ),
@@ -49,7 +49,7 @@ export class ContractVaultsComponent implements OnInit {
       mergeMap((tranches) =>
         Promise.all(
           tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTrancheYtAPYs$(tranche.id).toPromise() : undefined,
+            tranche.id ? await this.irsQuery.getTrancheYtAPYs(tranche.id) : undefined,
           ),
         ),
       ),

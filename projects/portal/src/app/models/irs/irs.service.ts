@@ -28,6 +28,7 @@ export class IrsService {
       share_out_amount: shareOut.amount,
       token_in_maxs: coins,
     });
+    console.log(msg);
     return msg;
   }
 

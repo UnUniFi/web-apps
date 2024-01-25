@@ -73,9 +73,9 @@ export class PoolComponent implements OnInit, OnChanges {
         this.inputUT = this.estimatedMintAmount?.utAmount.toString();
       } else if (this.estimatedMintAmount?.ptAmount) {
         this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
-      } else if (this.inputPT) {
+      } else if (this.inputPT && !this.inputUT) {
         this.inputUT = this.inputPT;
-      } else if (this.inputUT) {
+      } else if (this.inputUT && !this.inputPT) {
         this.inputPT = this.inputUT;
       }
     }

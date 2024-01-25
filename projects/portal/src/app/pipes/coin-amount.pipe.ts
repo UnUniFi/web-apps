@@ -11,7 +11,7 @@ export class CoinAmountPipe implements PipeTransform {
       const amount = Number(value) / Math.pow(10, exponent);
       return amount.toString();
     }
-    if (value) {
+    if (value || value === 0) {
       // if no denom, assume micro
       const amount = Number(value) / Math.pow(10, 6);
       return amount.toString();

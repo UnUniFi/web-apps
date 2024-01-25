@@ -604,15 +604,16 @@
           <div class="flex flex-wrap gap-2 items-center mb-4">
             <div class="join">
               <button
-                class="btn btn-sm join-item"
-                [class.btn-accent]="swapTab === 'pt'"
+                class="btn btn-sm join-item btn-accent"
+                [class.glass]="swapTab === 'yt'"
+                [class.text-neutral]="swapTab === 'yt'"
                 (click)="swapTab = 'pt'"
               >
                 PT
               </button>
               <button
-                class="btn btn-sm join-item"
-                [class.btn-primary]="swapTab === 'yt'"
+                class="btn btn-sm join-item btn-primary"
+                [class.glass]="swapTab === 'pt'"
                 (click)="swapTab = 'yt'"
               >
                 YT

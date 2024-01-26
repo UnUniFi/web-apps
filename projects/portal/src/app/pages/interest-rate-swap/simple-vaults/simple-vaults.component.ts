@@ -17,9 +17,10 @@ export class SimpleVaultsComponent implements OnInit {
   address$: Observable<string>;
   vaults$ = this.irsQuery.listVaults$();
   tranchePools$ = this.irsQuery.listAllTranches$();
-  vaultBalances$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
   vaultsMaxFixedAPYs$: Observable<number[]>;
   vaultsImages$: Observable<IRSVaultImage[]>;
+  denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
+  ptValues$: Observable<number[]>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -31,21 +32,17 @@ export class SimpleVaultsComponent implements OnInit {
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
     );
-    const balances$ = this.address$.pipe(mergeMap((addr) => this.bankQuery.getBalance$(addr)));
-    this.vaultBalances$ = balances$.pipe(
-      map((balance) => balance.filter((balance) => balance.denom?.includes('irs/tranche/'))),
+    this.denomBalancesMap$ = this.address$.pipe(
+      mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
     const trancheFixedAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
           tranches.map(async (tranche) =>
             tranche.id
-              ? await this.irsQuery
-                  .getTranchePtAPYs$(tranche.id)
-                  .toPromise()
-                  .then((apy) => {
-                    return { ...apy, strategy_contract: tranche.strategy_contract };
-                  })
+              ? await this.irsQuery.getTranchePtAPYs(tranche.id).then((apy) => {
+                  return { ...apy, strategy_contract: tranche.strategy_contract };
+                })
               : undefined,
           ),
         ),
@@ -62,6 +59,33 @@ export class SimpleVaultsComponent implements OnInit {
       ),
     );
     this.vaultsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.ptValues$ = combineLatest([
+      this.vaults$,
+      this.tranchePools$,
+      trancheFixedAPYs$,
+      this.denomBalancesMap$,
+    ]).pipe(
+      map(([vaults, tranches, apys, denomBalancesMap]) =>
+        vaults.map((vault) => {
+          const fixedAPYs = apys.filter(
+            (apy) => apy?.strategy_contract === vault.strategy_contract,
+          );
+          const vaultTranches = tranches.filter(
+            (tranche) => tranche.strategy_contract === vault.strategy_contract,
+          );
+          const trancheBalances = vaultTranches.map(
+            (tranche) => denomBalancesMap[`irs/tranche/${tranche.id}/pt`],
+          );
+          let value = 0;
+          for (let i = 0; i < trancheBalances.length; i++) {
+            if (trancheBalances[i] && fixedAPYs[i]) {
+              value += Number(trancheBalances[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+            }
+          }
+          return Math.floor(value);
+        }),
+      ),
+    );
   }
 
   ngOnInit(): void {}

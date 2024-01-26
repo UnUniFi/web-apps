@@ -15,6 +15,8 @@ export class SimpleVaultsComponent implements OnInit {
   vaultsMaxFixedAPYs?: number[] | null;
   @Input()
   vaultsImages?: IRSVaultImage[] | null;
+  @Input()
+  ptValues?: number[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

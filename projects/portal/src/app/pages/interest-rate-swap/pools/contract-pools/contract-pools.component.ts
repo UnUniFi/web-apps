@@ -38,9 +38,7 @@ export class ContractPoolsComponent implements OnInit {
       mergeMap((tranches) =>
         Promise.all(
           tranches.map(async (tranche) =>
-            tranche.id
-              ? await this.irsQuery.getTranchePoolAPYs$(tranche.id).toPromise()
-              : undefined,
+            tranche.id ? await this.irsQuery.getTranchePoolAPYs(tranche.id) : undefined,
           ),
         ),
       ),

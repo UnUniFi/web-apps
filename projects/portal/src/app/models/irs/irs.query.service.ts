@@ -10,6 +10,7 @@ import {
   EstimateMintPtYtPair200Response,
   EstimateRedeemPtYtPair200Response,
   IrsParams200ResponseParams,
+  TranchePoolAPYs200Response,
   TranchePtAPYs200Response,
   TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
@@ -174,6 +175,12 @@ export class IrsQueryService {
       mergeMap((sdk) => ununifi.rest.irs.trancheYtAPYs(sdk, poolId)),
       map((res) => res.data),
     );
+  }
+
+  async getTranchePoolAPYs(poolId: string): Promise<TranchePoolAPYs200Response> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId);
+    return res.data;
   }
 
   getTranchePoolAPYs$(poolId: string) {

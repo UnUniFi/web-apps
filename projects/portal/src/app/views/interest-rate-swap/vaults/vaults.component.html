@@ -11,7 +11,7 @@
         <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">
           Earn
         </button>
-        <button class="btn btn-sm btn-accent join-item">Trade</button>
+        <button class="btn btn-sm btn-accent text-neutral join-item">Trade</button>
       </div>
     </div>
 
@@ -217,7 +217,7 @@
                   </td>
                   <td>
                     <div
-                      class="flex items-center gap-3 rounded-lg btn btn-accent"
+                      class="flex items-center gap-3 rounded-lg btn btn-accent text-neutral"
                       [routerLink]="[pool.strategy_contract, pool.id]"
                       [queryParams]="{ view: 'pt' }"
                     >
@@ -318,7 +318,7 @@
                   </div>
                 </div>
                 <div
-                  class="flex gap-3 btn btn-accent justify-start"
+                  class="flex gap-3 btn btn-accent text-neutral justify-start"
                   [routerLink]="[pool.strategy_contract, pool.id]"
                   [queryParams]="{ view: 'pt' }"
                 >

@@ -74,12 +74,18 @@ export class SimpleVaultsComponent implements OnInit {
             (tranche) => tranche.strategy_contract === vault.strategy_contract,
           );
           const trancheBalances = vaultTranches.map(
-            (tranche) => denomBalancesMap[`irs/tranche/${tranche.id}/pt`],
+            (tranche) =>
+              denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
+                amount: '0',
+                denom: `irs/tranche/${tranche.id}/pt`,
+              },
           );
           let value = 0;
           for (let i = 0; i < trancheBalances.length; i++) {
             if (trancheBalances[i] && fixedAPYs[i]) {
-              value += Number(trancheBalances[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+              if (fixedAPYs[i]?.pt_rate_per_ut) {
+                value += Number(trancheBalances[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+              }
             }
           }
           return Math.floor(value);

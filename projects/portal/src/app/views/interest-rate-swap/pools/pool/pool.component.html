@@ -330,9 +330,9 @@
         <div class="card bg-base-200 shadow-xl w-full lg:w-auto mb-4">
           <div class="card-body">
             <h2 class="card-title">
-              <span>My APY</span>
+              <span>APY</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{ 0 | percent : '1.2-2' }}</span>
+              <span class="text-accent">{{ calcTotalPoolAPY(poolAPYs) | percent : '1.2-2' }}</span>
             </h2>
 
             <div class="overflow-x-auto">

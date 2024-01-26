@@ -46,4 +46,19 @@ export class PoolsComponent implements OnInit {
   getVaultImage(contract?: string): IRSVaultImage | undefined {
     return this.vaultsImages?.find((vault) => vault.contract === contract);
   }
+
+  calcMaturity(pool: AllTranches200ResponseTranchesInner): number {
+    const maturity = Number(pool.maturity) + Number(pool.start_time);
+    return maturity * 1000;
+  }
+
+  calcRestDays(pool: AllTranches200ResponseTranchesInner): number {
+    const maturity = Number(pool.maturity) + Number(pool.start_time);
+    const diff = maturity * 1000 - Date.now();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    return days;
+  }
 }

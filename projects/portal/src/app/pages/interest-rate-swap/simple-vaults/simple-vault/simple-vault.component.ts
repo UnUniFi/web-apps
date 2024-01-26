@@ -92,13 +92,22 @@ export class SimpleVaultComponent implements OnInit {
       map(([poolId, denomBalancesMap]) => {
         const denom = `irs/tranche/${poolId}/pt`;
         const balance = denomBalancesMap[denom];
+        if (!balance) {
+          return 0;
+        }
         const exponent = getDenomExponent(denom);
         return Number(balance?.amount || 0) / Math.pow(10, exponent);
       }),
     );
     const ptBalances$ = combineLatest([this.tranches$, this.denomBalancesMap$]).pipe(
       map(([tranches, denomBalancesMap]) =>
-        tranches.map((tranche) => denomBalancesMap[`irs/tranche/${tranche.id}/pt`]),
+        tranches.map(
+          (tranche) =>
+            denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
+              amount: '0',
+              denom: `irs/tranche/${tranche.id}/pt`,
+            },
+        ),
       ),
     );
     this.ptAmount$ = ptBalances$.pipe(
@@ -109,7 +118,9 @@ export class SimpleVaultComponent implements OnInit {
         let value = 0;
         for (let i = 0; i < ptBalance.length; i++) {
           if (ptBalance[i] && fixedAPYs[i]) {
-            value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+            if (fixedAPYs[i]?.pt_rate_per_ut) {
+              value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+            }
           }
         }
         return Math.floor(value);
@@ -160,7 +171,6 @@ export class SimpleVaultComponent implements OnInit {
           (ptAmount || 0) - Number(redeemPt?.amount || 0) + (mintPt || 0),
       ),
     );
-    this.afterPtAmount$.subscribe((amount) => console.log(amount));
     this.afterPtValue$ = combineLatest([
       this.ptValue$,
       this.tranches$,
@@ -171,7 +181,10 @@ export class SimpleVaultComponent implements OnInit {
     ]).pipe(
       map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
         const index = tranches.findIndex((tranche) => tranche?.id === id);
-        const rate = Number(fixedAPYs[index]?.pt_rate_per_ut || 0);
+        if (!fixedAPYs[index]?.pt_rate_per_ut) {
+          return ptValue || 0;
+        }
+        const rate = Number(fixedAPYs[index]?.pt_rate_per_ut);
         return (ptValue || 0) + (mintPt || 0) / rate - Number(redeemPt?.amount || 0) / rate;
       }),
     );

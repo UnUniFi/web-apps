@@ -58,11 +58,12 @@
                 <th class="text-xs">My Position Value</th>
                 <td class="font-bold flex flex-row items-center gap-2">
                   <div>
-                    {{ ptValue | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                    {{ ptValue || 0 | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
                   </div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
                   <div class="text-primary text-base">
-                    {{ afterPtValue | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                    {{ afterPtValue || 0 | coinAmount | number }}
+                    {{ vault?.denom | coinDenom | async }}
                   </div>
                 </td>
               </tr>

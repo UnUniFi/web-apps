@@ -160,17 +160,18 @@
                   </td>
                   <td>
                     <div>
-                      <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
-                      <div class="text-sm opacity-50">317 Days</div>
+                      <div class="text-xl font-bold">
+                        {{ calcMaturity(pool) | date : 'mediumDate' }}
+                      </div>
+                      <div class="text-sm opacity-50">{{ calcRestDays(pool) }} Days</div>
                     </div>
                   </td>
                   <td>
-                    <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+                    <div class="text-xl font-bold">{{ 0 | currency }}</div>
                   </td>
                   <td>
                     <div class="text-xl font-bold text-accent">
-                      {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }} -
-                      {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                      {{ poolsAPYs?.[i]?.liquidity_apy || 0 | percent : '1.0-2' }}
                     </div>
                   </td>
                 </tr>
@@ -212,7 +213,7 @@
                       <tr>
                         <td class="flex flex-row flex-wrap gap-2 items-end">
                           <div class="text-xl text-accent">
-                            {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                            {{ poolsAPYs?.[i]?.liquidity_apy || 0 | percent : '1.0-2' }}
                           </div>
                           <div class="text-sm">p.a.</div>
                           <span class="material-symbols-outlined text-accent"> bolt </span>
@@ -220,7 +221,7 @@
                       </tr>
                       <tr>
                         <td class="flex flex-row flex-wrap gap-2 items-end">
-                          <div class="text-xl font-bold">{{ '2216590.58' | currency }}</div>
+                          <div class="text-xl font-bold">{{ 0 | currency }}</div>
                           <div class="text-lg">TVL</div>
                         </td>
                       </tr>
@@ -230,9 +231,9 @@
                         </td>
                         <td>
                           <div class="text-xl font-bold">
-                            {{ '2024-10-1' | date : 'mediumDate' }}
+                            {{ calcMaturity(pool) | date : 'mediumDate' }}
                           </div>
-                          <div class="text-sm opacity-50">317 Days</div>
+                          <div class="text-sm opacity-50">{{ calcRestDays(pool) }}</div>
                         </td>
                       </tr>
                     </tbody>

@@ -71,11 +71,12 @@
                 <th class="text-xs">Redeem at Maturity</th>
                 <td class="font-bold flex flex-row items-center gap-2">
                   <div>
-                    {{ ptAmount | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                    {{ ptAmount || 0 | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
                   </div>
                   <span class="material-symbols-outlined"> arrow_forward </span>
                   <div class="text-primary text-base">
-                    {{ afterPtAmount | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
+                    {{ afterPtAmount || 0 | coinAmount | number }}
+                    {{ vault?.denom | coinDenom | async }}
                   </div>
                 </td>
               </tr>

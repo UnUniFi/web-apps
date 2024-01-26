@@ -11,6 +11,7 @@ export const denomExponentMap: { [denom: string]: number } = {
   uusd: 6,
   uusdc: 6,
   udlp: 6,
+  ustatom: 6,
   '': 6,
 };
 

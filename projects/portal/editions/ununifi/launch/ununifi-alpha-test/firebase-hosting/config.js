@@ -93,7 +93,7 @@ const denomMetadata = [
         aliases: [],
       },
       {
-        denom: 'uusdc',
+        denom: 'usdc',
         exponent: 6,
         aliases: [],
       },
@@ -102,6 +102,21 @@ const denomMetadata = [
     display: 'USDC',
     name: 'USD Coin',
     symbol: 'USDC',
+  },
+  {
+    description: 'Stablecoin pegged to ATOM',
+    denom_units: [
+      {
+        denom: 'ustatom',
+        exponent: 0,
+        aliases: [],
+      },
+
+    ],
+    base: 'ustatom',
+    display: 'stATOM',
+    name: 'stATOM',
+    symbol: 'stATOM',
   },
   {
     description: 'Derivatives Liquidity Provider Token',
@@ -237,6 +252,14 @@ const externalChains = [
   },
 ];
 
+const irsVaultsImages=[
+  {
+    contract:'ununifi14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sm5z28e',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+]
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -257,6 +280,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    irsVaultsImages,
     extension: {
       faucet: [
         {

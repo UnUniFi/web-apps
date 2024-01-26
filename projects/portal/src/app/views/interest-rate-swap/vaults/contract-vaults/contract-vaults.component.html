@@ -1,4 +1,4 @@
-<div class="bg-[#39465d]">
+<div class="bg-[#39465d] min-h-screen">
   <div class="mx-auto max-w-screen-xl w-full p-8">
     <div class="flex flex-row flex-wrap mb-8">
       <div class="text-2xl font-bold breadcrumbs">
@@ -73,87 +73,185 @@
       </button>
     </div>
 
-    <ng-container *ngIf="tranchePools; else empty">
-      <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
-        <table class="table">
-          <thead>
-            <tr class="border-b-2 border-[#adc9ff]">
-              <th></th>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Name</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'name' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Maturity</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'maturity' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Underlying APY</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'underlying' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Implied APY</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'implied' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Long Yield APY</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'long' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-              <td>
-                <button class="btn btn-ghost btn-xs flex-nowrap">
-                  <span>Fixed APY</span>
-                  <span
-                    class="material-symbols-outlined"
-                    [class]="{ 'text-info': sortType === 'fixed' }"
-                  >
-                    keyboard_arrow_down
-                  </span>
-                </button>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let pool of tranchePools; let i = index">
-              <tr
-                class="hover cursor-pointer border-b-2 border-[#adc9ff]"
-                routerLink="{{ pool.id }}"
-              >
-                <th>
+    <ng-container *ngIf="tranchePools === null; then loading; else loaded"> </ng-container>
+    <ng-template #loading>
+      <p class="text-center">
+        <span class="loading loading-ring loading-lg"></span>
+      </p>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="(tranchePools?.length || 0) > 0; then exist; else empty"> </ng-container>
+
+      <ng-template #exist>
+        <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
+          <table class="table">
+            <thead>
+              <tr class="border-b-2 border-[#adc9ff]">
+                <th></th>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Name</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'name' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Maturity</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'maturity' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Underlying APY</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'underlying' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Implied APY</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'implied' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Long Yield APY</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'long' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Fixed APY</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'fixed' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let pool of tranchePools; let i = index">
+                <tr
+                  class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+                  routerLink="{{ pool.id }}"
+                >
+                  <th>
+                    <div class="avatar">
+                      <div class="w-8 rounded-full">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    <div>
+                      <div class="text-xl font-bold">
+                        {{ vault?.name }}
+                      </div>
+                      <div class="text-sm opacity-50"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="text-xl font-bold">
+                        {{ calcMaturity(pool) | date : 'mediumDate' }}
+                      </div>
+                      <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
+                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-xl font-bold">
+                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="flex items-center gap-3 btn btn-primary"
+                      [routerLink]="[pool.id]"
+                      [queryParams]="{ view: 'yt' }"
+                    >
+                      <div class="text-blue-200 text-xl mr-2">YT</div>
+                      <div>
+                        <div class="text-xl font-bold">
+                          {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                        </div>
+                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="flex items-center gap-3 rounded-lg btn btn-accent"
+                      [routerLink]="[pool.id]"
+                      [queryParams]="{ view: 'pt' }"
+                    >
+                      <div class="text-green-100 text-xl mr-2">PT</div>
+                      <div>
+                        <div class="text-xl font-bold">
+                          {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                        </div>
+                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+          <ng-container *ngFor="let pool of tranchePools; let i = index">
+            <div
+              style="
+                background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
+              "
+              class="card shadow-xl"
+            >
+              <div class="card-body">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <h2 class="card-title">{{ vault?.name }}</h2>
+                    <div class="text-sm opacity-50"></div>
+                  </div>
+                  <span class="flex-auto"></span>
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -164,174 +262,86 @@
                       </div>
                     </div>
                   </div>
-                </th>
-                <td>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="text-lg opacity-75">Maturity</div>
+                        </td>
+                        <td>
+                          <div class="text-xl font-bold">
+                            {{ calcMaturity(pool) | date : 'mediumDate' }}
+                          </div>
+                          <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="text-lg opacity-75">Underlying APY</div>
+                        </td>
+                        <td>
+                          <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
+                          <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="text-lg opacity-75">Implied APY</div>
+                        </td>
+                        <td>
+                          <div class="text-xl font-bold">
+                            {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="flex gap-3 btn btn-primary justify-start"
+                  [routerLink]="[pool.id]"
+                  [queryParams]="{ view: 'yt' }"
+                >
+                  <div class="text-blue-200 text-xl mr-2">YT</div>
+                  <div>
+                    <div class="text-xl font-bold">Long Yield APY</div>
+                    <div class="text-sm opacity-50">Price</div>
+                  </div>
                   <div>
                     <div class="text-xl font-bold">
-                      {{ vault?.name }}
+                      {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
                     </div>
-                    <div class="text-sm opacity-50"></div>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <div class="text-xl font-bold">
-                      {{ calcMaturity(pool) | date : 'mediumDate' }}
-                    </div>
-                    <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
                     <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                   </div>
-                </td>
-                <td>
-                  <div class="text-xl font-bold">
-                    {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                </div>
+                <div
+                  class="flex gap-3 btn btn-accent justify-start"
+                  [routerLink]="[pool.id]"
+                  [queryParams]="{ view: 'pt' }"
+                >
+                  <div class="text-green-100 text-xl mr-2">PT</div>
+                  <div>
+                    <div class="text-xl font-bold">Fixed Yield APY</div>
+                    <div class="text-sm opacity-50">Price</div>
                   </div>
-                </td>
-                <td>
-                  <div
-                    class="flex items-center gap-3 btn btn-primary"
-                    [routerLink]="[pool.id]"
-                    [queryParams]="{ view: 'yt' }"
-                  >
-                    <div class="text-blue-200 text-xl mr-2">YT</div>
-                    <div>
-                      <div class="text-xl font-bold">
-                        {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
-                      </div>
-                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                  <div>
+                    <div class="text-xl font-bold">
+                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
                     </div>
+                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                   </div>
-                </td>
-                <td>
-                  <div
-                    class="flex items-center gap-3 rounded-lg btn btn-accent"
-                    [routerLink]="[pool.id]"
-                    [queryParams]="{ view: 'pt' }"
-                  >
-                    <div class="text-green-100 text-xl mr-2">PT</div>
-                    <div>
-                      <div class="text-xl font-bold">
-                        {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                      </div>
-                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
-        <ng-container *ngFor="let pool of tranchePools; let i = index">
-          <div
-            style="
-              background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
-            "
-            class="card shadow-xl"
-          >
-            <div class="card-body">
-              <div class="flex items-center gap-3">
-                <div>
-                  <h2 class="card-title">{{ vault?.name }}</h2>
-                  <div class="text-sm opacity-50"></div>
-                </div>
-                <span class="flex-auto"></span>
-                <div class="avatar">
-                  <div class="w-8 rounded-full">
-                    <img src="{{ vaultImage?.image }}" />
-                  </div>
-                  <div class="avatar -ml-2 mt-4">
-                    <div class="w-4 rounded-full">
-                      <img src="{{ vaultImage?.subImage }}" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="text-lg opacity-75">Maturity</div>
-                      </td>
-                      <td>
-                        <div class="text-xl font-bold">
-                          {{ calcMaturity(pool) | date : 'mediumDate' }}
-                        </div>
-                        <div class="text-sm opacity-50">{{ calcRestDays(pool) }} days</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="text-lg opacity-75">Underlying APY</div>
-                      </td>
-                      <td>
-                        <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
-                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="text-lg opacity-75">Implied APY</div>
-                      </td>
-                      <td>
-                        <div class="text-xl font-bold">
-                          {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div
-                class="flex gap-3 btn btn-primary justify-start"
-                [routerLink]="[pool.id]"
-                [queryParams]="{ view: 'yt' }"
-              >
-                <div class="text-blue-200 text-xl mr-2">YT</div>
-                <div>
-                  <div class="text-xl font-bold">Long Yield APY</div>
-                  <div class="text-sm opacity-50">Price</div>
-                </div>
-                <div>
-                  <div class="text-xl font-bold">
-                    {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
-                  </div>
-                  <div class="text-sm opacity-50">{{ '0' | currency }}</div>
-                </div>
-              </div>
-              <div
-                class="flex gap-3 btn btn-accent justify-start"
-                [routerLink]="[pool.id]"
-                [queryParams]="{ view: 'pt' }"
-              >
-                <div class="text-green-100 text-xl mr-2">PT</div>
-                <div>
-                  <div class="text-xl font-bold">Fixed Yield APY</div>
-                  <div class="text-sm opacity-50">Price</div>
-                </div>
-                <div>
-                  <div class="text-xl font-bold">
-                    {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
-                  </div>
-                  <div class="text-sm opacity-50">{{ '0' | currency }}</div>
                 </div>
               </div>
             </div>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
+          </ng-container>
+        </div>
+      </ng-template>
 
-    <ng-template #empty>
-      <p class="font-bold text-lg text-error">* No vault</p>
+      <ng-template #empty>
+        <p class="font-bold text-lg text-error">* No vault</p>
+      </ng-template>
     </ng-template>
   </div>
 </div>

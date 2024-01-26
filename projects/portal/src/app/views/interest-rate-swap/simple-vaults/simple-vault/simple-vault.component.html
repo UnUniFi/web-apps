@@ -266,7 +266,7 @@
             type="range"
             [(ngModel)]="inputPT"
             [min]="0"
-            [max]="tranchePtBalance!"
+            [max]="tranchePtBalance || 0"
             name="withdrawAmount"
             (change)="onChangeWithdraw()"
           />

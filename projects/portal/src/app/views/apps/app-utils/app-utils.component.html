@@ -92,7 +92,7 @@
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
-        <li *ngIf="app.name !== 'Utilities'">
+        <li>
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
               <span class="material-symbols-outlined">{{ app.icon }}</span>

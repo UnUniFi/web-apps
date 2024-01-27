@@ -61,4 +61,11 @@ export class PoolsComponent implements OnInit {
     const days = Math.floor(hours / 24);
     return days;
   }
+
+  calcTotalPoolAPY(apy: TranchePoolAPYs200Response | null | undefined) {
+    if (!apy) {
+      return 0;
+    }
+    return Number(apy.liquidity_apy) + Number(apy.discount_pt_apy);
+  }
 }

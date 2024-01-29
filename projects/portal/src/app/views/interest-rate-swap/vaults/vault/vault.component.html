@@ -55,7 +55,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <button type="button" class="btn normal-case">
+                  <!-- <button type="button" class="btn normal-case">
                     <div class="avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -69,7 +69,20 @@
                     {{ vault?.denom | coinDenom | async }}
                     <div class="flex-auto"></div>
                     <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button>
+                  </button> -->
+                  <span>
+                    <div class="avatar">
+                      <div class="w-8 rounded-full">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                    {{ vault?.denom | coinDenom | async }}
+                  </span>
                   <input
                     #swapUnderlyingAmountNgModelRef="ngModel"
                     class="join-item input input-bordered input-info w-full"
@@ -253,7 +266,7 @@
                 <span class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <button type="button" class="btn normal-case">
+                <!-- <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -267,7 +280,20 @@
                   {{ vault?.denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button>
+                </button> -->
+                <span>
+                  <div class="avatar">
+                    <div class="w-8 rounded-full">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                  {{ vault?.denom | coinDenom | async }}
+                </span>
                 <input
                   *ngIf="swapTab === 'pt'"
                   class="join-item input input-bordered w-full"
@@ -330,7 +356,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <button type="button" class="btn normal-case">
+                  <!-- <button type="button" class="btn normal-case">
                     <div class="avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -344,7 +370,20 @@
                     {{ vault?.denom | coinDenom | async }}
                     <div class="flex-auto"></div>
                     <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button>
+                  </button> -->
+                  <span>
+                    <div class="avatar">
+                      <div class="w-8 rounded-full">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                    {{ vault?.denom | coinDenom | async }}
+                  </span>
                   <input
                     class="join-item input input-bordered input-info w-full"
                     #mintUnderlyingAmountNgModelRef="ngModel"
@@ -561,7 +600,7 @@
                 <span class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <button type="button" class="btn normal-case">
+                <!-- <button type="button" class="btn normal-case">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -575,7 +614,20 @@
                   {{ vault?.denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button>
+                </button> -->
+                <span>
+                  <div class="avatar">
+                    <div class="w-8 rounded-full">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                  {{ vault?.denom | coinDenom | async }}
+                </span>
                 <input
                   class="join-item input input-bordered w-full"
                   value="{{ estimateRedeemPtYt?.redeemAmount }}"
@@ -671,7 +723,7 @@
               <div class="stat-value">{{ tranchePtAPYs?.pt_apy | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
-            <div class="stat"  *ngIf="swapTab === 'yt'">
+            <div class="stat" *ngIf="swapTab === 'yt'">
               <div class="stat-title">Long Yield APY</div>
               <div class="stat-value">{{ trancheYtAPYs?.yt_apy | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>

@@ -111,12 +111,17 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount: vault?.denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositUtAmount"
                     (change)="onChangeDepositUt()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxUT()"
+                >
                   Max
                 </button>
               </div>
@@ -158,12 +163,17 @@
                     type="number"
                     [(ngModel)]="inputPT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositPtAmount"
                     (change)="onChangeDepositPt()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxPT()"
+                >
                   Max
                 </button>
               </div>
@@ -249,12 +259,17 @@
                     type="number"
                     [(ngModel)]="inputLP"
                     [min]="0"
+                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="withdrawAmount"
                     (change)="onChangeWithdraw()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxLP()"
+                >
                   Max
                 </button>
               </div>

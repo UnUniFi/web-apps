@@ -171,12 +171,17 @@
                 type="number"
                 [(ngModel)]="inputUnderlying"
                 [min]="0"
+                [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount: vault?.denom"
                 pattern="^[0-9]*\.?[0-9]{0,6}$"
                 name="depositAmount"
                 (change)="onChangeDeposit()"
               />
             </label>
-            <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+            <button
+              type="button"
+              class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+              (click)="inputMaxUT()"
+            >
               Max
             </button>
           </div>

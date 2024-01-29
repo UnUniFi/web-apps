@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { MintLpRequest, RedeemLpRequest } from 'projects/portal/src/app/models/irs/irs.model';
 import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-rate-swap/vaults/vault/vault.component';
 import {
@@ -116,5 +117,17 @@ export class SimplePoolComponent implements OnInit {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     return days;
+  }
+
+  inputMaxUT() {
+    if (this.denomBalancesMap && this.vault?.denom) {
+      const balance = this.denomBalancesMap[this.vault.denom];
+      if (balance) {
+        const exponent = getDenomExponent(this.vault.denom);
+        const amount = Number(balance.amount) / Math.pow(10, exponent);
+        this.inputUnderlying = amount.toString();
+        this.onChangeDeposit();
+      }
+    }
   }
 }

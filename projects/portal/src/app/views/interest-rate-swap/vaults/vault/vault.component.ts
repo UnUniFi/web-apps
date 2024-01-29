@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { IRSVaultImage } from 'projects/portal/src/app/models/config.service';
+import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import {
   MintPtRequest,
   MintPtYtRequest,
@@ -219,7 +220,7 @@ export class VaultComponent implements OnInit, OnChanges {
     }
   }
 
-  onSubmitMintMint() {
+  onSubmitMint() {
     if (!this.trancheId) {
       alert('Invalid tranche ID.');
       return;
@@ -240,7 +241,7 @@ export class VaultComponent implements OnInit, OnChanges {
     });
   }
 
-  onSubmitMintRedeem() {
+  onSubmitRedeem() {
     if (!this.trancheId) {
       alert('Invalid tranche ID.');
       return;
@@ -314,7 +315,7 @@ export class VaultComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeRedeemMintPtAmount() {
+  onChangeRedeemPtAmount() {
     if (this.trancheId && this.inputPtPair) {
       this.appChangeRedeemPTYT.emit({
         poolId: this.trancheId,
@@ -324,13 +325,81 @@ export class VaultComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeRedeemMintYtAmount() {
+  onChangeRedeemYtAmount() {
     if (this.trancheId && this.inputPtPair) {
       this.appChangeRedeemPTYT.emit({
         poolId: this.trancheId,
         denom: `irs/tranche/${this.trancheId}/yt`,
         readableAmount: Number(this.inputYtPair),
       });
+    }
+  }
+
+  inputSwapMaxUT() {
+    if (this.denomBalancesMap && this.vault?.denom) {
+      const balance = this.denomBalancesMap[this.vault.denom];
+      if (balance) {
+        const exponent = getDenomExponent(this.vault.denom);
+        const amount = Number(balance.amount) / Math.pow(10, exponent);
+        this.inputUT = amount.toString();
+        this.onChangeSwapUnderlyingAmount();
+      }
+    }
+  }
+
+  inputMintMaxUT() {
+    if (this.denomBalancesMap && this.vault?.denom) {
+      const balance = this.denomBalancesMap[this.vault.denom];
+      if (balance) {
+        const exponent = getDenomExponent(this.vault.denom);
+        const amount = Number(balance.amount) / Math.pow(10, exponent);
+        this.inputUT = amount.toString();
+        this.onChangeMintUnderlyingAmount();
+      }
+    }
+  }
+
+  inputSwapMaxYT() {
+    if (this.denomBalancesMap && this.ytDenom) {
+      const balance = this.denomBalancesMap[this.ytDenom];
+      if (balance) {
+        const amount = Number(balance.amount) / Math.pow(10, 6);
+        this.inputYT = amount.toString();
+        this.onChangeSwapYtAmount();
+      }
+    }
+  }
+
+  inputRedeemMaxYT() {
+    if (this.denomBalancesMap && this.ytDenom) {
+      const balance = this.denomBalancesMap[this.ytDenom];
+      if (balance) {
+        const amount = Number(balance.amount) / Math.pow(10, 6);
+        this.inputYT = amount.toString();
+        this.onChangeRedeemYtAmount();
+      }
+    }
+  }
+
+  inputSwapMaxPT() {
+    if (this.denomBalancesMap && this.ptDenom) {
+      const balance = this.denomBalancesMap[this.ptDenom];
+      if (balance) {
+        const amount = Number(balance.amount) / Math.pow(10, 6);
+        this.inputPT = amount.toString();
+        this.onChangeSwapPtAmount();
+      }
+    }
+  }
+
+  inputRedeemMaxPT() {
+    if (this.denomBalancesMap && this.ptDenom) {
+      const balance = this.denomBalancesMap[this.ptDenom];
+      if (balance) {
+        const amount = Number(balance.amount) / Math.pow(10, 6);
+        this.inputPT = amount.toString();
+        this.onChangeRedeemPtAmount();
+      }
     }
   }
 }

@@ -94,12 +94,17 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapUnderlyingAmount"
                     (input)="onChangeSwapUnderlyingAmount()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputSwapMaxUT()"
+                >
                   Max
                 </button>
               </div>
@@ -218,6 +223,7 @@
                     type="number"
                     [(ngModel)]="inputPT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount:ptDenom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapPtAmount"
                     (input)="onChangeSwapPtAmount()"
@@ -234,12 +240,26 @@
                     type="number"
                     [(ngModel)]="inputYT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[ytDenom || '']?.amount | coinAmount:ytDenom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapYtAmount"
                     (input)="onChangeSwapYtAmount()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  *ngIf="swapTab === 'pt'"
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputSwapMaxPT()"
+                >
+                  Max
+                </button>
+                <button
+                  *ngIf="swapTab === 'yt'"
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputSwapMaxYT()"
+                >
                   Max
                 </button>
               </div>
@@ -335,7 +355,7 @@
           <form
             #mintMintFormRef="ngForm"
             *ngIf="modeTab === 'mint' && txMode === 'mint'"
-            (submit)="onSubmitMintMint()"
+            (submit)="onSubmitMint()"
           >
             <div class="join mb-4">
               <button
@@ -395,12 +415,17 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
+                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="mintUnderlyingAmount"
                     (input)="onChangeMintUnderlyingAmount()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMintMaxUT()"
+                >
                   Max
                 </button>
               </div>
@@ -479,7 +504,7 @@
           <form
             *ngIf="modeTab === 'mint' && txMode === 'redeem'"
             #mintRedeemFormRef="ngForm"
-            (submit)="onSubmitMintRedeem()"
+            (submit)="onSubmitRedeem()"
           >
             <div class="join mb-4">
               <button type="button" class="btn btn-sm join-item" (click)="txMode = 'mint'">
@@ -525,12 +550,17 @@
                     type="number"
                     [(ngModel)]="inputPtPair"
                     [min]="0"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount:ptDenom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="pairPtAmount"
-                    (input)="onChangeRedeemMintPtAmount()"
+                    (input)="onChangeRedeemPtAmount()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputRedeemMaxPT()"
+                >
                   Max
                 </button>
               </div>
@@ -572,12 +602,17 @@
                     type="number"
                     [(ngModel)]="inputYtPair"
                     [min]="0"
+                    [max]="denomBalancesMap?.[ytDenom || '']?.amount | coinAmount:ytDenom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="pairYtAmount"
-                    (input)="onChangeRedeemMintYtAmount()"
+                    (input)="onChangeRedeemYtAmount()"
                   />
                 </label>
-                <button type="button" class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0">
+                <button
+                  type="button"
+                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputRedeemMaxYT()"
+                >
                   Max
                 </button>
               </div>

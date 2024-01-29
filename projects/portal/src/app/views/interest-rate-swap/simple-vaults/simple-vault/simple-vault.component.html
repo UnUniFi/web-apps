@@ -60,11 +60,13 @@
                   <div>
                     {{ ptValue || 0 | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
                   </div>
-                  <span class="material-symbols-outlined"> arrow_forward </span>
-                  <div class="text-primary text-base">
-                    {{ afterPtValue || 0 | coinAmount | number }}
-                    {{ vault?.denom | coinDenom | async }}
-                  </div>
+                  <ng-container *ngIf="inputUnderlying || inputPT">
+                    <span class="material-symbols-outlined"> arrow_forward </span>
+                    <div class="text-primary text-base">
+                      {{ afterPtValue || 0 | coinAmount | number }}
+                      {{ vault?.denom | coinDenom | async }}
+                    </div>
+                  </ng-container>
                 </td>
               </tr>
               <tr>
@@ -73,11 +75,13 @@
                   <div>
                     {{ ptAmount || 0 | coinAmount | number }} {{ vault?.denom | coinDenom | async }}
                   </div>
+                  <ng-container *ngIf="inputUnderlying || inputPT">
                   <span class="material-symbols-outlined"> arrow_forward </span>
                   <div class="text-primary text-base">
                     {{ afterPtAmount || 0 | coinAmount | number }}
                     {{ vault?.denom | coinDenom | async }}
                   </div>
+                </ng-container>
                 </td>
               </tr>
             </tbody>

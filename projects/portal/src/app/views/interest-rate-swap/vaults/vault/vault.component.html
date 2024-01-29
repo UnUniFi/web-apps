@@ -666,9 +666,14 @@
               <div class="stat-value">{{ '0' | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
-            <div class="stat">
+            <div class="stat" *ngIf="swapTab === 'pt'">
               <div class="stat-title">Fixed APY</div>
               <div class="stat-value">{{ tranchePtAPYs?.pt_apy | percent : '1.2-2' }}</div>
+              <div class="stat-desc"></div>
+            </div>
+            <div class="stat"  *ngIf="swapTab === 'yt'">
+              <div class="stat-title">Long Yield APY</div>
+              <div class="stat-value">{{ trancheYtAPYs?.yt_apy | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
           </div>

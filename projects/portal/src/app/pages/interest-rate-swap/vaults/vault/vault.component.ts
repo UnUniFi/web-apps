@@ -198,7 +198,7 @@ export class VaultComponent implements OnInit {
         if (!info) {
           return of(undefined);
         }
-        return this.irsQuery.estimateSwapUtToYt$(info.poolId, info.denom, info.amount);
+        return this.irsQuery.estimateSwapToYt$(info.poolId, info.denom, info.amount);
       }),
       map((coin) => {
         if (!coin) {
@@ -228,7 +228,7 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onMintPT(data: MintPtRequest) {
-    // swap UT -> PT
+    // swap DepositToken -> PT
     this.irsAppService.mintPT(data);
   }
   onChangeMintPT(data: ReadableEstimationInfo) {
@@ -242,7 +242,7 @@ export class VaultComponent implements OnInit {
     });
   }
   onRedeemPT(data: RedeemPtRequest) {
-    // swap PT -> UT
+    // swap PT -> DepositToken
     this.irsAppService.redeemPT(data);
   }
   onChangeRedeemPT(data: ReadableEstimationInfo) {
@@ -256,7 +256,7 @@ export class VaultComponent implements OnInit {
     });
   }
   onMintPTYT(data: MintPtYtRequest) {
-    // mint UT -> PT + YT
+    // mint DepositToken -> PT + YT
     this.irsAppService.mintPTYT(data);
   }
   onChangeMintPTYT(data: ReadableEstimationInfo) {

@@ -103,7 +103,7 @@ export class SimpleVaultComponent implements OnInit {
     this.appMintPT.emit({
       trancheId: this.selectedPoolId,
       trancheType: 1,
-      utDenom: this.vault.denom,
+      depositDenom: this.vault.denom,
       readableAmount: Number(this.inputUnderlying),
     });
   }

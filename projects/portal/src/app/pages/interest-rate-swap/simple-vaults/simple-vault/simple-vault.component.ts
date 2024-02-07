@@ -118,8 +118,8 @@ export class SimpleVaultComponent implements OnInit {
         let value = 0;
         for (let i = 0; i < ptBalance.length; i++) {
           if (ptBalance[i] && fixedAPYs[i]) {
-            if (fixedAPYs[i]?.pt_rate_per_ut) {
-              value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+            if (fixedAPYs[i]?.pt_rate_per_deposit) {
+              value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_deposit);
             }
           }
         }
@@ -181,10 +181,10 @@ export class SimpleVaultComponent implements OnInit {
     ]).pipe(
       map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
         const index = tranches.findIndex((tranche) => tranche?.id === id);
-        if (!fixedAPYs[index]?.pt_rate_per_ut) {
+        if (!fixedAPYs[index]?.pt_rate_per_deposit) {
           return ptValue || 0;
         }
-        const rate = Number(fixedAPYs[index]?.pt_rate_per_ut);
+        const rate = Number(fixedAPYs[index]?.pt_rate_per_deposit);
         return (ptValue || 0) + (mintPt || 0) / rate - Number(redeemPt?.amount || 0) / rate;
       }),
     );
@@ -193,7 +193,7 @@ export class SimpleVaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onMintPT(data: MintPtRequest) {
-    // swap UT -> PT
+    // swap DepositToken -> PT
     this.irsAppService.mintPT(data);
   }
   onChangeMintPT(data: ReadableEstimationInfo) {
@@ -207,7 +207,7 @@ export class SimpleVaultComponent implements OnInit {
     });
   }
   onRedeemPT(data: RedeemPtRequest) {
-    // swap PT -> UT
+    // swap PT -> DepositToken
     this.irsAppService.redeemPT(data);
   }
   onChangeRedeemPT(data: ReadableEstimationInfo) {

@@ -164,7 +164,7 @@ export class VaultComponent implements OnInit, OnChanges {
       this.appMintPT.emit({
         trancheId: this.trancheId,
         trancheType: 1,
-        utDenom: this.vault.denom,
+        depositDenom: this.vault.denom,
         readableAmount: Number(this.inputUT),
       });
     }
@@ -176,7 +176,7 @@ export class VaultComponent implements OnInit, OnChanges {
       this.appMintYT.emit({
         trancheId: this.trancheId,
         trancheType: 2,
-        utDenom: this.vault.denom,
+        depositDenom: this.vault.denom,
         readableAmount: Number(this.inputUT),
         requiredYT: Number(this.estimateMintYt),
       });
@@ -214,8 +214,8 @@ export class VaultComponent implements OnInit, OnChanges {
         trancheType: 2,
         ytDenom: `irs/tranche/${this.trancheId}/yt`,
         readableAmount: Number(this.inputYT),
-        utDenom: this.vault.denom,
-        requiredUT: Number(this.estimateRedeemMaturedYt),
+        depositDenom: this.vault.denom,
+        requiredRedeemDeposit: Number(this.estimateRedeemMaturedYt),
       });
     }
   }
@@ -236,7 +236,7 @@ export class VaultComponent implements OnInit, OnChanges {
     this.appMintPTYT.emit({
       trancheId: this.trancheId,
       trancheType: 0,
-      utDenom: this.vault.denom,
+      depositDenom: this.vault.denom,
       readableAmount: Number(this.inputUT),
     });
   }
@@ -263,8 +263,8 @@ export class VaultComponent implements OnInit, OnChanges {
         [`irs/tranche/${this.trancheId}/pt`]: ptAmount,
         [`irs/tranche/${this.trancheId}/yt`]: ytAmount,
       },
-      utDenom: this.vault.denom,
-      requiredUT: this.estimateRedeemPtYt.redeemAmount,
+      depositDenom: this.vault.denom,
+      requiredRedeemDeposit: this.estimateRedeemPtYt.redeemAmount,
     });
   }
 

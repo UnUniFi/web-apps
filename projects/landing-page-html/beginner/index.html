@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>UnUniFi</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <meta name="description" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
+  <meta property="og:title" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://ununifi.io" />
+  <meta property="og:image" content="https://ununifi.io/assets/images/ogp.png" />
+  <meta property="og:site_name" content="UnUniFi website" />
+  <meta property="og:description"
+    content="UnUniFi is a Cross-Chain Asset Management Platform with Combined DeFi + CeFi Yield Aggregation, RWAs, Collateralized Assets, and more" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Tomorrow:wght@700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    .scroll-fade-in {
+      opacity: 0;
+      transition: 1s;
+    }
+
+    .bg-color {
+      background-color: rgba(20, 19, 40, 0.88);
+      opacity: 1;
+    }
+
+    body {
+      background: #111B34;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: white;
+      text-align: center;
+      word-wrap: break-word;
+    }
+
+    .circle-rgb-grad-border {
+      position: relative;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.20);
+      border-radius: 9999px;
+      cursor: pointer;
+    }
+
+    .circle-rgb-grad-border::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 9999px;
+      border-top: 2.5px solid transparent;
+      border-bottom: 2.5px solid transparent;
+      border-left: 2.5px solid transparent;
+      background: linear-gradient(to right, #FF364D, #375CFF 25%, #48FF7BD4 70%);
+      background-origin: border-box;
+      background-clip: border-box;
+      /* chrome */
+      -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      -webkit-mask-clip: padding-box, border-box;
+      -webkit-mask-composite: destination-out;
+      /**/
+      mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      mask-clip: padding-box, border-box;
+      mask-composite: exclude;
+    }
+
+    .sq-btn-rgb-grad-border {
+      position: relative;
+      display: inline-block;
+      background: rgba(179.75, 206.57, 219.19, 0.20);
+      border-radius: 8px;
+      padding: 16px 24px;
+      cursor: pointer;
+    }
+
+    .sq-btn-rgb-grad-border::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 8px;
+      border-bottom: 4px solid transparent;
+      border-left: 4px solid transparent;
+      background: linear-gradient(to right, #FF364D, #375CFF 25%, #48FF7BD4 70%);
+      background-origin: border-box;
+      background-clip: border-box;
+      /* chrome */
+      -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      -webkit-mask-clip: padding-box, border-box;
+      -webkit-mask-composite: destination-out;
+      /**/
+      mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      mask-clip: padding-box, border-box;
+      mask-composite: exclude;
+    }
+
+
+    input[name="btn_item"],
+    input[name="tab_item"],
+    input[name="tab_item_lq"] {
+      display: none;
+    }
+
+    .btn-next {
+      background: #58D6A9;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .btn-item {
+      padding: 16px 19px;
+      /* line-height: 70px; */
+      background: rgba(180, 207, 219, 0.20);
+      border-radius: 8px;
+      font-size: 24px;
+      font-weight: 500;
+      display: block;
+    }
+
+    .step-item {
+      width: 70px;
+      height: 70px;
+      line-height: 70px;
+      background: rgba(180, 207, 219, 0.20);
+      border-radius: 100px;
+      font-size: 24px;
+      font-weight: 700;
+      display: block;
+    }
+
+    .step-item:hover,
+    .btn-item:hover {
+      opacity: 0.75;
+      cursor: pointer;
+    }
+
+    #btn-fixed-yield:checked~.btn-wrap #lb-fixed-yield,
+    #btn-liquidity:checked~.btn-wrap #lb-liquidity {
+      background-color: #387CFF;
+      opacity: 1;
+      cursor: default;
+    }
+
+    #s01:checked~.step-wrap #l01,
+    #s02:checked~.step-wrap #l02,
+    #s03:checked~.step-wrap #l03,
+    #s04:checked~.step-wrap #l04,
+    #s05:checked~.step-wrap #l05,
+    #s06:checked~.step-wrap #l06,
+    #lq-s01:checked~.step-wrap #lq-l01,
+    #lq-s02:checked~.step-wrap #lq-l02,
+    #lq-s03:checked~.step-wrap #lq-l03,
+    #lq-s04:checked~.step-wrap #lq-l04,
+    #lq-s05:checked~.step-wrap #lq-l05,
+    #lq-s06:checked~.step-wrap #lq-l06 {
+      background-color: #58D6A9;
+      opacity: 1;
+      cursor: default;
+    }
+
+    .step-content,
+    .btn-content {
+      display: none;
+    }
+
+    #btn-fixed-yield:checked~.btn-content-wrap #content-fy,
+    #btn-liquidity:checked~.btn-content-wrap #content-lq,
+    #s01:checked~.step-content-wrap #content01,
+    #s02:checked~.step-content-wrap #content02,
+    #s03:checked~.step-content-wrap #content03,
+    #s04:checked~.step-content-wrap #content04,
+    #s05:checked~.step-content-wrap #content05,
+    #s06:checked~.step-content-wrap #content06,
+    #lq-s01:checked~.step-content-wrap #lq-content01,
+    #lq-s02:checked~.step-content-wrap #lq-content02,
+    #lq-s03:checked~.step-content-wrap #lq-content03,
+    #lq-s04:checked~.step-content-wrap #lq-content04,
+    #lq-s05:checked~.step-content-wrap #lq-content05,
+    #lq-s06:checked~.step-content-wrap #lq-content06 {
+      display: block;
+    }
+  </style>
+
+  <script>
+    function scrollFadeIn() {
+      const elements = document.getElementsByClassName('scroll-fade-in');
+
+      for (const element of elements) {
+        const rect = element.getBoundingClientRect();
+        const y = rect.top + rect.height / 2;
+        const visible = y < window.innerHeight;
+        if (visible) {
+          element.classList.add('opacity-100');
+        }
+      }
+    }
+
+    window.addEventListener('load',() => {
+      scrollFadeIn();
+    });
+
+    window.addEventListener('scroll',() => {
+      scrollFadeIn();
+    });
+
+    function nextStep(idList) {
+      let elementList = []
+
+      for (i = 0; i < idList.length; i++) {
+        elementList.push(document.getElementById(idList[i]))
+      }
+      for (i = 0; i < elementList.length; i++) {
+        if (elementList[i].checked == true) {
+          elementList[i].checked = false;
+          // if (i == elementList.length - 1) {
+          //   elementList[0].checked = true;
+          //   return;
+          // }
+          if (i < elementList.length - 1) {
+            elementList[i + 1].checked = true;
+            return;
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="navbar px-4 sticky top-0 z-50 shadow-xl bg-color">
+    <h1 style="max-width: 200px;">
+      <a href="index.html">
+        <img src="../assets/images/gluon.svg" width="80%" height="80%" alt="gluon" class="object-contain" />
+      </a>
+      <span style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
+    </h1>
+    <div class="flex-auto"></div>
+    <div>
+      <ul class="menu menu-horizontal px-1 max-md:hidden">
+        <li>
+          <details>
+            <summary>Developers</summary>
+            <ul>
+              <li><a href="https://docs.ununifi.io" target="_blank">Docs</a></li>
+              <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Individuals</summary>
+            <ul>
+              <li><a href="/portal" target="_blank">Portal</a></li>
+              <li><a href="/explorer" target="_blank">Explorer</a></li>
+              <li><a href="https://lab-testnet.ununifi.io/portal" target="_blank">Labs Testnet</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="../assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
+        <!-- <li><a href="../assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li> -->
+        <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+        <li>
+          <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+            target="_blank">
+            Jobs
+          </a>
+        </li>
+      </ul>
+      <ul class="menu menu-horizontal px-1 md:hidden">
+        <li>
+          <details>
+            <summary>Links</summary>
+            <ul class="p-2 right-0">
+              <li>
+                <a>Developers</a>
+                <ul>
+                  <li><a href="https://docs.ununifi.io" target="_blank">Docs</a></li>
+                  <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
+                </ul>
+              </li>
+              <li>
+                <a>Individuals</a>
+                <ul>
+                  <li><a href="/portal" target="_blank">Portal</a></li>
+                  <li><a href="/explorer" target="_blank">Explorer</a></li>
+                  <li><a href="https://lab-testnet.ununifi.io/portal" target="_blank">Labs Testnet</a></li>
+                </ul>
+              </li>
+              <li><a href="../assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
+              <!-- <li><a href="../assets/download/UnUniFi-OnePage.pdf" target="_blank">One Page</a></li> -->
+              <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+              <li>
+                <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+                  target="_blank">
+                  Jobs
+                </a>
+              </li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!--1st section-->
+  <section class="mb-20">
+    <div class="py-20" style="background-color: rgba(255, 255, 255, 0.05);">
+      <div class="mx-auto p-1 mb-10 flex justify-center items-center circle-rgb-grad-border"
+        style="width: 80px; height: 80px;">
+        <img src="../assets/images/$.svg">
+      </div>
+      <div class="text-5xl font-bold mb-10" style="line-height: 72px;">About Gluon Earn</div>
+      <div class="text-xl tracking-wide mb-10">
+        <span>As the name suggests, the </span>
+        <span class="font-bold">“Fixed Yield” page allows you to obtain fixed yield from various<br />assets </span>
+        <span>and the </span>
+        <span class="font-bold">“Liquidity” page shows the different pools for you to provide liquidity</span>
+      </div>
+      <div class="text-5xl mb-10">
+        <div class="text-3xl font-bold mb-2" style=" letter-spacing: 0.80px;">Learn how to Earn Fixed Yield!</div>
+        <div class="text-xl tracking-wide">Start today! quick and easy intro to Fixed Yield.</div>
+      </div>
+    </div>
+  </section>
+
+  <!--2nd section -->
+  <section class="scroll-fade-in my-20">
+    <div class="mx-auto max-w-screen-xl">
+      <div class="mx-auto w-5/6">
+
+        <input id="btn-fixed-yield" type="radio" name="btn_item" checked>
+        <input id="btn-liquidity" type="radio" name="btn_item">
+
+        <ul class="flex justify-center btn-wrap gap-8 mb-10">
+          <li><label id="lb-fixed-yield" class="btn-item" for="btn-fixed-yield">Fixed yield</label></li>
+          <li><label id="lb-liquidity" class="btn-item" for="btn-liquidity">Liquidity</label></li>
+        </ul>
+
+        <div class="btn-content-wrap">
+          <!-- fixed-yield -->
+          <div id="content-fy" class="btn-content w-full">
+            <div class="flex flex-col gap-12">
+              <!--step..-->
+              <div class="flex flex-col gap-8 items-center">
+                <div class="text-5xl font-bold">Step-by-Step Fixed Yield Guide</div>
+                <div class="text-3xl" style="font-weight: 600; letter-spacing: 0.72px; ">
+                  Gluon enables you to obtain fixed yield on various assets. </div>
+                <div class="text-xl tracking-wide">
+                  The fixed yield will be redeemable on maturity. Note that your position is not locked and you can exit
+                  anytime prior to maturity, however the yield is not guaranteed and fluctuates based on market
+                  sentiment if you choose to exit prior to maturity.</div>
+              </div>
+
+              <input id="s01" type="radio" name="tab_item" checked>
+              <input id="s02" type="radio" name="tab_item">
+              <input id="s03" type="radio" name="tab_item">
+              <input id="s04" type="radio" name="tab_item">
+              <input id="s05" type="radio" name="tab_item">
+              <input id="s06" type="radio" name="tab_item">
+
+              <ul class="w-4/5 mx-auto flex justify-between step-wrap">
+                <li><label id="l01" class="step-item" for="s01">01</label></li>
+                <li><label id="l02" class="step-item" for="s02">02</label></li>
+                <li><label id="l03" class="step-item" for="s03">03</label></li>
+                <li><label id="l04" class="step-item" for="s04">04</label></li>
+                <li><label id="l05" class="step-item" for="s05">05</label></li>
+                <li><label id="l06" class="step-item" for="s06">06</label></li>
+              </ul>
+
+              <!-- content -->
+              <div class="w-4/5 mx-auto step-content-wrap">
+                <!-- step1-fixed-yield-->
+                <div id="content01" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">1</span></div>
+                      <div class="text-xl tracking-wide"> Go to the Fixed Yield page</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['s01','s02','s03','s04','s05','s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step2-fixed-yield -->
+                <div id="content02" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">2</span></div>
+                      <div class="text-xl tracking-wide">Select your desired asset</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['s01','s02','s03','s04','s05','s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step3-fixed-yield -->
+                <div id="content03" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step3.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">3</span></div>
+                      <div class="text-xl tracking-wide">Select your <br />desired maturity</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['s01','s02','s03','s04','s05','s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step4-fixed-yield -->
+                <div id="content04" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step4.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">4</span></div>
+                      <div class="text-xl tracking-wide">Select your input<br />asset and amount</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['s01','s02','s03','s04','s05','s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step5-fixed-yield -->
+                <div id="content05" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step5.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">5</span></div>
+                      <div class="text-xl tracking-wide">Your input asset will be <br />automatically routed to
+                        <br />the
+                        required asset for the <br />fixed-yield position when <br />you submit the transaction
+                      </div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['s01','s02','s03','s04','s05','s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step6-fixed-yield -->
+                <div id="content06" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">6</span></div>
+                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <a class="btn-next w-full px-4 py-2 rounded-md text-center" href="/advanced" target="_blank">
+                        <span class="text-2xl tracking-wide">Open App</span>
+                      </a>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- liquidity -->
+          <div id="content-lq" class="btn-content w-full">
+            <div class="flex flex-col gap-12">
+              <!--step..-->
+              <div class="flex flex-col gap-8  items-center">
+                <div class="text-5xl font-bold">Step-by-Step Liquidity Guide</div>
+                <div class="text-3xl" style="font-weight: 600; letter-spacing: 0.72px; ">
+                  You can earn yield by providing liquidity to facilitate trades on Gluon. </div>
+                <div class="text-xl tracking-wide">
+                  Unlike the “Fixed Yield” section, yields from liquidity provision fluctuates. Note that your position
+                  is not locked and you can withdraw anytime prior to maturity. Liquidity provision on UnUniFi Earn also
+                  comes with <span class="font-bold">zero impermanent loss.</span></div>
+              </div>
+
+              <input id="lq-s01" type="radio" name="tab_item_lq" checked>
+              <input id="lq-s02" type="radio" name="tab_item_lq">
+              <input id="lq-s03" type="radio" name="tab_item_lq">
+              <input id="lq-s04" type="radio" name="tab_item_lq">
+              <input id="lq-s05" type="radio" name="tab_item_lq">
+              <input id="lq-s06" type="radio" name="tab_item_lq">
+
+              <ul class="w-4/5 mx-auto flex justify-between step-wrap">
+                <li><label id="lq-l01" class="step-item" for="lq-s01">01</label></li>
+                <li><label id="lq-l02" class="step-item" for="lq-s02">02</label></li>
+                <li><label id="lq-l03" class="step-item" for="lq-s03">03</label></li>
+                <li><label id="lq-l04" class="step-item" for="lq-s04">04</label></li>
+                <li><label id="lq-l05" class="step-item" for="lq-s05">05</label></li>
+                <li><label id="lq-l06" class="step-item" for="lq-s06">06</label></li>
+              </ul>
+
+              <!-- content -->
+              <div class="w-4/5 mx-auto step-content-wrap">
+                <!-- step1-liquidity -->
+                <div id="lq-content01" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">1</span></div>
+                      <div class="text-xl tracking-wide"> Go to the Fixed Yield page</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['lq-s01','lq-s02','lq-s03','lq-s04','lq-s05','lq-s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step2-liquidity -->
+                <div id="lq-content02" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">2</span></div>
+                      <div class="text-xl tracking-wide">Select your desired asset</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['lq-s01','lq-s02','lq-s03','lq-s04','lq-s05','lq-s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step3-liquidity -->
+                <div id="lq-content03" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step3.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">3</span></div>
+                      <div class="text-xl tracking-wide">Select your <br />desired maturity</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['lq-s01','lq-s02','lq-s03','lq-s04','lq-s05','lq-s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step4-liquidity -->
+                <div id="lq-content04" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step4.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">4</span></div>
+                      <div class="text-xl tracking-wide">Select your input<br />asset and amount</div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['lq-s01','lq-s02','lq-s03','lq-s04','lq-s05','lq-s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step5-liquidity -->
+                <div id="lq-content05" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step5.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">5</span></div>
+                      <div class="text-xl tracking-wide">Your input asset will be <br />automatically routed to
+                        <br />the
+                        required asset for the <br />fixed-yield position when <br />you submit the transaction
+                      </div>
+                      <div class="btn-next w-full px-4 py-2 rounded-md text-center"
+                        onclick="nextStep(['lq-s01','lq-s02','lq-s03','lq-s04','lq-s05','lq-s06'])">
+                        <span class="text-2xl tracking-wide"> Next</span>
+                      </div>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- step6-liquidity -->
+                <div id="lq-content06" class="step-content w-full">
+                  <div class="flex items-start flex-row w-full">
+                    <div class="w-4/12 px-4 py-8 rounded-lg flex flex-col text-start gap-5"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
+                      <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
+                        Step <span class="font-bold">6</span></div>
+                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <a class="btn-next w-full px-4 py-2 rounded-md text-center" href="/advanced" target="_blank">
+                        <span class="text-2xl tracking-wide">Open App</span>
+                      </a>
+                    </div>
+                    <div class="w-1/12"></div>
+                    <div class="w-7/12 h-80 rounded-lg flex items-center justify-center"
+                      style="background: rgba(180, 207, 219, 0.20);">
+                      <div class="flex justify-center gap-3">
+                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
+                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!--3rd sec. Fixed Yield .... -->
+  <section class="scroll-fade-in my-20">
+    <div class="mx-auto max-w-screen-xl my-8">
+      <div class="mx-auto w-5/6">
+        <div class="text-5xl font-bold mb-9"> Learn more by visiting our Advanced Tutorial</div>
+        <a class="sq-btn-rgb-grad-border" href="/advanced" target="_blank">
+          <div class="text-2xl tracking-wide" style="font-weight: 500;"> Advanced Tutorial</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <style>
+      .footer-grid {
+        display: grid;
+        width: 100%;
+        grid-auto-flow: column;
+        place-items: start;
+        row-gap: 1.5rem;
+        column-gap: 1rem;
+      }
+
+      .footer-grid-item {
+        display: grid;
+      }
+
+      .footer-grid-item-title {
+        display: grid;
+
+      }
+
+      @media not all and (min-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 40px 1fr 1fr;
+        }
+
+        .footer-grid-item-title {
+          grid-column: 1 / 3;
+        }
+      }
+    </style>
+
+    <div class="footer-grid text-sm px-4 py-8 mt-8">
+      <div class="footer-grid-item-title">
+        <div class="max-w-xs flex items-center">
+          <img src="../assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
+          <span class="mx-2" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
+        </div>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Developers</span>
+        <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Services</span>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
+        <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Information</span>
+        <a class="link link-hover" href="../assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
+        <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
+        <a class="link link-hover"
+          href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
+          target="_blank">Jobs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">legal</span>
+        <a class="link link-hover" href="../assets/download/UnUniFi-TermsOfService.pdf" target="_blank">Terms of
+          Service</a>
+        <a class="link link-hover" href="../assets/download/UnUniFi-PrivacyPolicy.pdf" target="_blank">Privacy
+          Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <footer class="px-4">
+    <div class="w-full pt-4 md:inline-flex" style="border-top: 1px white solid; ">
+      <div class="flex-1 text-sm text-start max-md:text-center" style="letter-spacing: 0.40px;">
+        UnUniFi © - All rights reserved. 2023</div>
+      <div class="flex justify-around md:gap-9 max-md:mt-4 ">
+        <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">
+          <img src="../assets/images/logos/ic_baseline-discord.svg" alt="discord" /></a>
+        <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">
+          <img src="../assets/images/logos/pajamas_twitter.svg" alt="x" /></a>
+        <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
+          <img src="../assets/images/logos/mdi_linkedin.svg" alt="linkedin" /></a>
+        <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
+          <img src="../assets/images/logos/mdi_youtube.png" alt="youtube" /></a>
+        <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
+          <img src="../assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a>
+      </div>
+    </div>
+    <div class="h-4"></div>
+  </footer>
+
+
+</body>
+
+</html>

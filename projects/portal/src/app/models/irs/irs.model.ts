@@ -17,21 +17,21 @@ export type RedeemLpRequest = {
 export type MintPtYtRequest = {
   trancheId: string;
   trancheType: ununificlient.proto.ununifi.irs.TrancheType.NORMAL_YIELD;
-  utDenom: string;
+  depositDenom: string;
   readableAmount: number;
 };
 
 export type MintPtRequest = {
   trancheId: string;
   trancheType: ununificlient.proto.ununifi.irs.TrancheType.FIXED_YIELD;
-  utDenom: string;
+  depositDenom: string;
   readableAmount: number;
 };
 
 export type MintYtRequest = {
   trancheId: string;
   trancheType: ununificlient.proto.ununifi.irs.TrancheType.LEVERAGED_VARIABLE_YIELD;
-  utDenom: string;
+  depositDenom: string;
   readableAmount: number;
   requiredYT: number;
 };
@@ -40,8 +40,8 @@ export type RedeemPtYtRequest = {
   trancheId: string;
   trancheType: ununificlient.proto.ununifi.irs.TrancheType.NORMAL_YIELD;
   readableAmountMap: { [denom: string]: number };
-  utDenom: string;
-  requiredUT: number;
+  depositDenom: string;
+  requiredRedeemDeposit: number;
 };
 
 export type RedeemPtRequest = {
@@ -56,6 +56,6 @@ export type RedeemYtRequest = {
   trancheType: ununificlient.proto.ununifi.irs.TrancheType.LEVERAGED_VARIABLE_YIELD;
   ytDenom: string;
   readableAmount: number;
-  utDenom?: string;
-  requiredUT?: number;
+  depositDenom?: string;
+  requiredRedeemDeposit?: number;
 };

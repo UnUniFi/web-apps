@@ -139,7 +139,7 @@ export class IrsApplicationService {
       address,
       data.trancheId,
       data.trancheType,
-      data.utDenom,
+      data.depositDenom,
       data.readableAmount,
     );
     const simulationResult = await this.txCommonApplication.simulate(
@@ -188,7 +188,7 @@ export class IrsApplicationService {
       address,
       data.trancheId,
       data.trancheType,
-      data.utDenom,
+      data.depositDenom,
       data.readableAmount,
     );
     const simulationResult = await this.txCommonApplication.simulate(
@@ -237,7 +237,7 @@ export class IrsApplicationService {
       address,
       data.trancheId,
       data.trancheType,
-      data.utDenom,
+      data.depositDenom,
       data.readableAmount,
       data.requiredYT,
     );
@@ -289,8 +289,8 @@ export class IrsApplicationService {
       data.trancheId,
       data.trancheType,
       data.readableAmountMap,
-      data.utDenom,
-      data.requiredUT,
+      data.depositDenom,
+      data.requiredRedeemDeposit,
     );
 
     const simulationResult = await this.txCommonApplication.simulate(
@@ -389,8 +389,8 @@ export class IrsApplicationService {
       data.trancheId,
       data.trancheType,
       { [data.ytDenom]: data.readableAmount },
-      data.utDenom,
-      data.requiredUT,
+      data.depositDenom,
+      data.requiredRedeemDeposit,
     );
     const simulationResult = await this.txCommonApplication.simulate(
       msg,

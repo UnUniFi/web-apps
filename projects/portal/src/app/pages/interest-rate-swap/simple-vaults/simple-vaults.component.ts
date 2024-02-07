@@ -83,8 +83,9 @@ export class SimpleVaultsComponent implements OnInit {
           let value = 0;
           for (let i = 0; i < trancheBalances.length; i++) {
             if (trancheBalances[i] && fixedAPYs[i]) {
-              if (fixedAPYs[i]?.pt_rate_per_ut) {
-                value += Number(trancheBalances[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
+              if (fixedAPYs[i]?.pt_rate_per_deposit) {
+                value +=
+                  Number(trancheBalances[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_deposit);
               }
             }
           }

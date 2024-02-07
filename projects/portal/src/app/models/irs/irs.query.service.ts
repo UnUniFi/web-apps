@@ -130,13 +130,13 @@ export class IrsQueryService {
     );
   }
 
-  estimateSwapUtToYt$(
+  estimateSwapToYt$(
     poolId: string,
     denom: string,
     amount: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.irs.estimateSwapUtToYt(sdk, poolId, denom, amount)),
+      mergeMap((sdk) => ununifi.rest.irs.estimateSwapToYt(sdk, poolId, denom, amount)),
       map((res) => res.data.yt_amount!),
     );
   }
@@ -146,8 +146,8 @@ export class IrsQueryService {
     ytAmount: string,
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
     return this.restSdk$.pipe(
-      mergeMap((sdk) => ununifi.rest.irs.estimateSwapMaturedYtToUt(sdk, poolId, ytAmount)),
-      map((res) => res.data.ut_amount!),
+      mergeMap((sdk) => ununifi.rest.irs.estimateRedeemMaturedYt(sdk, poolId, ytAmount)),
+      map((res) => res.data.redeem_amount!),
     );
   }
 

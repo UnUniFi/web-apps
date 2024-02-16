@@ -6,7 +6,8 @@ const faucetJpuPort = location.protocol === 'https:' ? 8005 : 8004;
 const faucetUethPort = location.protocol === 'https:' ? 8007 : 8006;
 const faucetEuuPort = location.protocol === 'https:' ? 8009 : 8008;
 
-const domainCauchyEA = 'a.ununifi-test-v1.cauchye.net';
+// const domainCauchyEA = 'a.ununifi-test-v1.cauchye.net';
+const domainCauchyEA = 'localhost';
 const domainCauchyEB = 'b.ununifi-test-v1.cauchye.net';
 const domainCauchyEC = 'c.ununifi-test-v1.cauchye.net';
 const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
@@ -15,8 +16,10 @@ const nameCauchyEB = 'Testnet-B';
 const nameCauchyEC = 'Testnet-C';
 const nameCauchyED = 'Testnet-D';
 
-const chainID = 'ununifi-test-v1';
-const chainName = 'UnUniFi (test)';
+// const chainID = 'ununifi-test-v1';
+// const chainName = 'UnUniFi (test)';
+const chainID = 'test';
+const chainName = 'UnUniFi (local-test)';
 
 const bech32Prefix = {
   accAddr: 'ununifi',
@@ -89,6 +92,25 @@ const denomMetadata = [
     display: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
+  },
+  {
+    description: 'Stablecoin pegged to the ATOM',
+    denom_units: [
+      {
+        denom: 'ustatom',
+        exponent: 0,
+        aliases: [],
+      },
+      {
+        denom: 'statom',
+        exponent: 6,
+        aliases: [],
+      },
+    ],
+    base: 'ustatom',
+    display: 'stATOM',
+    name: 'stATOM',
+    symbol: 'stATOM',
   },
   {
     description: 'Stablecoin pegged to the USD',
@@ -330,6 +352,14 @@ const externalChains = [
   },
 ];
 
+const irsVaultsImages=[
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  },
+]
+
 const configs = [
   // CauchyE A node without Monitor
   {
@@ -351,6 +381,7 @@ const configs = [
     strategiesInfo,
     certifiedVaults,
     externalChains,
+    irsVaultsImages,
     extension: {
       faucet: [
         {
@@ -366,109 +397,109 @@ const configs = [
       messageModules,
     },
   },
-  // CauchyE B node without Monitor
-  {
-    id: domainCauchyEB,
-    name: nameCauchyEB,
-    restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    externalChains,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-      ],
-      monitor: undefined,
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE C node without Monitor
-  {
-    id: domainCauchyEC,
-    name: nameCauchyEC,
-    restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    externalChains,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-      ],
-      monitor: undefined,
-      navigations: [],
-      messageModules,
-    },
-  },
-  // CauchyE D node without Monitor
-  {
-    id: domainCauchyED,
-    name: nameCauchyED,
-    restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    externalChains,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000000000,
-          maxCredit: 2000000000,
-        },
-      ],
-      monitor: undefined,
-      navigations: [],
-      messageModules,
-    },
-  },
+  // // CauchyE B node without Monitor
+  // {
+  //   id: domainCauchyEB,
+  //   name: nameCauchyEB,
+  //   restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   externalChains,
+  //   extension: {
+  //     faucet: [
+  //       {
+  //         hasFaucet: true,
+  //         faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
+  //         denom: 'uguu',
+  //         creditAmount: 2000000000,
+  //         maxCredit: 2000000000,
+  //       },
+  //     ],
+  //     monitor: undefined,
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
+  // // CauchyE C node without Monitor
+  // {
+  //   id: domainCauchyEC,
+  //   name: nameCauchyEC,
+  //   restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   externalChains,
+  //   extension: {
+  //     faucet: [
+  //       {
+  //         hasFaucet: true,
+  //         faucetURL: `${location.protocol}//${domainCauchyEC}:${faucetUguuPort}`,
+  //         denom: 'uguu',
+  //         creditAmount: 2000000000,
+  //         maxCredit: 2000000000,
+  //       },
+  //     ],
+  //     monitor: undefined,
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
+  // // CauchyE D node without Monitor
+  // {
+  //   id: domainCauchyED,
+  //   name: nameCauchyED,
+  //   restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
+  //   websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
+  //   chainID,
+  //   chainName,
+  //   bech32Prefix,
+  //   minimumGasPrices: [
+  //     {
+  //       denom: 'uguu',
+  //       amount: 0.015,
+  //     },
+  //   ],
+  //   apps,
+  //   denomMetadata,
+  //   strategiesInfo,
+  //   certifiedVaults,
+  //   externalChains,
+  //   extension: {
+  //     faucet: [
+  //       {
+  //         hasFaucet: true,
+  //         faucetURL: `${location.protocol}//${domainCauchyED}:${faucetUguuPort}`,
+  //         denom: 'uguu',
+  //         creditAmount: 2000000000,
+  //         maxCredit: 2000000000,
+  //       },
+  //     ],
+  //     monitor: undefined,
+  //     navigations: [],
+  //     messageModules,
+  //   },
+  // },
 ];

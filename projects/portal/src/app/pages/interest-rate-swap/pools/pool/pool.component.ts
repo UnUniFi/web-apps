@@ -122,10 +122,12 @@ export class PoolComponent implements OnInit {
         const ptCoin = coins.find((coin) => coin.denom?.includes('/pt'));
         return {
           utAmount: utCoin
-            ? (Number(utCoin.amount) / Math.pow(10, getDenomExponent(utCoin.denom!))) * 0.99
+            ? Math.floor(Number(utCoin.amount) * 0.99) /
+              Math.pow(10, getDenomExponent(utCoin.denom!))
             : 0,
           ptAmount: ptCoin
-            ? (Number(ptCoin.amount) / Math.pow(10, getDenomExponent(ptCoin.denom!))) * 0.99
+            ? Math.floor(Number(ptCoin.amount) * 0.99) /
+              Math.pow(10, getDenomExponent(ptCoin.denom!))
             : 0,
         };
       }),

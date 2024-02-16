@@ -293,7 +293,7 @@
                   <div>
                     <div class="text-xl font-bold">
                       {{ ptValues?.[i] | coinAmount | number }}
-                      {{ vault.denom | coinDenom | async }}
+                      {{ vault.deposit_denom | coinDenom | async }}
                     </div>
                     <div class="text-sm opacity-50">{{ 0 | currency }}</div>
                   </div>
@@ -355,7 +355,7 @@
                 <div>
                   <div class="text-xl font-bold">
                     {{ (ptValues?.[i] || 0) | coinAmount | number }}
-                    {{ vault.denom | coinDenom | async }}
+                    {{ vault.deposit_denom | coinDenom | async }}
                   </div>
                 </div>
               </div>

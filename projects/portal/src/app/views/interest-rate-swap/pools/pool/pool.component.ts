@@ -69,16 +69,14 @@ export class PoolComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.estimatedMintAmount) {
-      if (this.estimatedMintAmount?.utAmount) {
-        this.inputUT = this.estimatedMintAmount?.utAmount.toString();
-      } else if (this.estimatedMintAmount?.ptAmount) {
-        this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
-      } else if (this.inputPT && !this.inputUT) {
-        this.inputUT = this.inputPT;
-      } else if (this.inputUT && !this.inputPT) {
-        this.inputPT = this.inputUT;
-      }
+    if (this.estimatedMintAmount?.utAmount) {
+      this.inputUT = this.estimatedMintAmount?.utAmount.toString();
+    } else if (this.estimatedMintAmount?.ptAmount) {
+      this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
+    } else if (this.inputPT && !this.inputUT) {
+      this.inputUT = this.inputPT;
+    } else if (this.inputUT && !this.inputPT) {
+      this.inputPT = this.inputUT;
     }
   }
 
@@ -103,7 +101,7 @@ export class PoolComponent implements OnInit, OnChanges {
       alert('Invalid mint amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -113,7 +111,7 @@ export class PoolComponent implements OnInit, OnChanges {
       lpDenom: `irs/tranche/${this.poolId}/ls`,
       readableAmountMapInMax: {
         [`irs/tranche/${this.poolId}/pt`]: Number(this.inputPT),
-        [this.vault.denom]: Number(this.inputUT),
+        [this.vault.deposit_denom]: Number(this.inputUT),
       },
     });
   }
@@ -135,17 +133,17 @@ export class PoolComponent implements OnInit, OnChanges {
   }
 
   onChangeDepositUt() {
-    if (this.poolId && this.inputUT && this.vault?.denom) {
+    if (this.poolId && this.inputUT && this.vault?.deposit_denom) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
   }
 
   onChangeDepositPt() {
-    if (this.poolId && this.inputUT) {
+    if (this.poolId && this.inputPT) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
         denom: `irs/tranche/${this.poolId}/pt`,
@@ -187,10 +185,10 @@ export class PoolComponent implements OnInit, OnChanges {
   }
 
   inputMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUT = amount.toString();
         this.onChangeDepositUt();

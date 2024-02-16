@@ -83,7 +83,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                     <div class="flex-auto"></div>
                     <div class="material-symbols-outlined">keyboard_arrow_down</div>
                   </button> -->
@@ -98,7 +98,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
                     #depositUtAmountNgModelRef="ngModel"
@@ -111,7 +111,7 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositUtAmount"
                     (change)="onChangeDepositUt()"
@@ -128,8 +128,8 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
 
@@ -163,7 +163,7 @@
                     type="number"
                     [(ngModel)]="inputPT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositPtAmount"
                     (change)="onChangeDepositPt()"
@@ -259,7 +259,7 @@
                     type="number"
                     [(ngModel)]="inputLP"
                     [min]="0"
-                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="withdrawAmount"
                     (change)="onChangeWithdraw()"
@@ -303,7 +303,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button> -->
@@ -318,7 +318,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   class="join-item input input-bordered w-full"

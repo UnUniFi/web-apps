@@ -66,7 +66,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                     <div class="flex-auto"></div>
                     <div class="material-symbols-outlined">keyboard_arrow_down</div>
                   </button> -->
@@ -81,7 +81,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
                     #swapUnderlyingAmountNgModelRef="ngModel"
@@ -94,7 +94,7 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapUnderlyingAmount"
                     (input)="onChangeSwapUnderlyingAmount()"
@@ -111,8 +111,8 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
             </div>
@@ -297,7 +297,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button> -->
@@ -312,7 +312,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -387,7 +387,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                     <div class="flex-auto"></div>
                     <div class="material-symbols-outlined">keyboard_arrow_down</div>
                   </button> -->
@@ -402,7 +402,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
                     class="join-item input input-bordered input-info w-full"
@@ -415,7 +415,7 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="mintUnderlyingAmount"
                     (input)="onChangeMintUnderlyingAmount()"
@@ -432,8 +432,8 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
             </div>
@@ -646,7 +646,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                   <div class="flex-auto"></div>
                   <div class="material-symbols-outlined">keyboard_arrow_down</div>
                 </button> -->
@@ -661,7 +661,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   class="join-item input input-bordered w-full"

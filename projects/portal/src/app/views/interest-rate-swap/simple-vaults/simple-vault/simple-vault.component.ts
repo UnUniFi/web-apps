@@ -92,7 +92,7 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -103,7 +103,7 @@ export class SimpleVaultComponent implements OnInit {
     this.appMintPT.emit({
       trancheId: this.selectedPoolId,
       trancheType: 1,
-      depositDenom: this.vault.denom,
+      depositDenom: this.vault.deposit_denom,
       readableAmount: Number(this.inputUnderlying),
     });
   }
@@ -126,10 +126,10 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onChangeDeposit() {
-    if (this.selectedPoolId && this.vault?.denom && this.inputUnderlying !== undefined) {
+    if (this.selectedPoolId && this.vault?.deposit_denom && this.inputUnderlying !== undefined) {
       this.appChangeMintPT.emit({
         poolId: this.selectedPoolId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUnderlying),
       });
     }
@@ -172,10 +172,10 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   inputMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUnderlying = amount.toString();
         this.onChangeDeposit();

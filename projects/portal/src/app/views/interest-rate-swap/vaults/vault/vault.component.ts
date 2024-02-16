@@ -156,7 +156,7 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -164,7 +164,7 @@ export class VaultComponent implements OnInit, OnChanges {
       this.appMintPT.emit({
         trancheId: this.trancheId,
         trancheType: 1,
-        depositDenom: this.vault.denom,
+        depositDenom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
@@ -176,7 +176,7 @@ export class VaultComponent implements OnInit, OnChanges {
       this.appMintYT.emit({
         trancheId: this.trancheId,
         trancheType: 2,
-        depositDenom: this.vault.denom,
+        depositDenom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
         requiredYT: Number(this.estimateMintYt),
       });
@@ -205,7 +205,7 @@ export class VaultComponent implements OnInit, OnChanges {
         alert('Please input the YT token amount.');
         return;
       }
-      if (!this.vault?.denom) {
+      if (!this.vault?.deposit_denom) {
         alert('Invalid vault denom.');
         return;
       }
@@ -214,7 +214,7 @@ export class VaultComponent implements OnInit, OnChanges {
         trancheType: 2,
         ytDenom: `irs/tranche/${this.trancheId}/yt`,
         readableAmount: Number(this.inputYT),
-        depositDenom: this.vault.denom,
+        depositDenom: this.vault.deposit_denom,
         requiredRedeemDeposit: Number(this.estimateRedeemMaturedYt),
       });
     }
@@ -229,14 +229,14 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
     this.appMintPTYT.emit({
       trancheId: this.trancheId,
       trancheType: 0,
-      depositDenom: this.vault.denom,
+      depositDenom: this.vault.deposit_denom,
       readableAmount: Number(this.inputUT),
     });
   }
@@ -246,7 +246,7 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Invalid tranche ID.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -263,30 +263,30 @@ export class VaultComponent implements OnInit, OnChanges {
         [`irs/tranche/${this.trancheId}/pt`]: ptAmount,
         [`irs/tranche/${this.trancheId}/yt`]: ytAmount,
       },
-      depositDenom: this.vault.denom,
+      depositDenom: this.vault.deposit_denom,
       requiredRedeemDeposit: this.estimateRedeemPtYt.redeemAmount,
     });
   }
 
   onChangeSwapUnderlyingAmount() {
-    if (this.swapTab === 'pt' && this.trancheId && this.vault?.denom && this.inputUT) {
+    if (this.swapTab === 'pt' && this.trancheId && this.vault?.deposit_denom && this.inputUT) {
       this.appChangeMintPT.emit({
         poolId: this.trancheId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
-    if (this.swapTab === 'yt' && this.trancheId && this.vault?.denom && this.inputUT) {
+    if (this.swapTab === 'yt' && this.trancheId && this.vault?.deposit_denom && this.inputUT) {
       this.appChangeMintYT.emit({
         poolId: this.trancheId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
   }
 
   onChangeSwapPtAmount() {
-    if (this.swapTab === 'pt' && this.trancheId && this.vault?.denom && this.inputPT) {
+    if (this.swapTab === 'pt' && this.trancheId && this.vault?.deposit_denom && this.inputPT) {
       this.appChangeRedeemPT.emit({
         poolId: this.trancheId,
         denom: `irs/tranche/${this.trancheId}/pt`,
@@ -296,7 +296,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onChangeSwapYtAmount() {
-    if (this.swapTab === 'yt' && this.trancheId && this.vault?.denom && this.inputYT) {
+    if (this.swapTab === 'yt' && this.trancheId && this.vault?.deposit_denom && this.inputYT) {
       this.appChangeRedeemYT.emit({
         poolId: this.trancheId,
         denom: `irs/tranche/${this.trancheId}/yt`,
@@ -306,10 +306,10 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onChangeMintUnderlyingAmount() {
-    if (this.trancheId && this.vault?.denom && this.inputUT) {
+    if (this.trancheId && this.vault?.deposit_denom && this.inputUT) {
       this.appChangeMintPTYT.emit({
         poolId: this.trancheId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
@@ -336,10 +336,10 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   inputSwapMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUT = amount.toString();
         this.onChangeSwapUnderlyingAmount();
@@ -348,10 +348,10 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   inputMintMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUT = amount.toString();
         this.onChangeMintUnderlyingAmount();

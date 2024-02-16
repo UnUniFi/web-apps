@@ -120,8 +120,8 @@ export class SimplePoolComponent implements OnInit {
   }
 
   inputMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
         const exponent = getDenomExponent(this.vault.denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);

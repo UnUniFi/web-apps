@@ -1,9 +1,11 @@
+import { IRSVaultImage } from '../../models/config.service';
 import { WalletType } from '../../models/wallets/wallet.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit, EventEmitter, Output, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
+import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-balance',
@@ -24,6 +26,7 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   @Input() denomMetadataMap?: {
     [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   } | null;
+  @Input() irsImages?: (AllTranches200ResponseTranchesInner & IRSVaultImage)[] | null;
 
   @Input() faucetSymbols?: string[] | null;
   @Input() faucets?:
@@ -79,5 +82,27 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
 
   onClickWithdrawAllDelegatorRewardButton() {
     this.appWithdrawAllDelegatorReward.emit();
+  }
+
+  getIRSImage(denom: string) {
+    const denomParts = denom.split('/');
+    const vaultNum = denomParts[2];
+    const tranche = this.irsImages?.find((image) => image.id === vaultNum);
+    const type = denomParts[3];
+    console.log(type);
+    let color = '#FFFFFF';
+    if (type === 'pt') {
+      color = '#387CFF';
+    } else if (type === 'yt') {
+      color = '#58D6A9';
+    } else if (type === 'ls') {
+      color = '#ADC9FF';
+    }
+    console.log(color);
+    return {
+      image: tranche?.image,
+      subImage: tranche?.subImage,
+      color,
+    };
   }
 }

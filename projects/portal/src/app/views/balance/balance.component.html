@@ -154,7 +154,7 @@
                   <tr *ngFor="let balance of denomBalancesMap | keyvalue">
                     <th>
                       <div class="flex items-center space-x-3">
-                        <div class="avatar mr-2">
+                        <div class="avatar mr-2" *ngIf="!balance.key.includes('irs/')">
                           <div
                             class="mask mask-circle w-6 h-6"
                             *ngIf="symbolImageMap &&symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || '']"
@@ -168,6 +168,27 @@
                           <span
                             class="material-symbols-outlined"
                             *ngIf="!symbolImageMap ||!symbolImageMap[denomMetadataMap?.[balance.key]?.symbol || '']"
+                          >
+                            question_mark
+                          </span>
+                        </div>
+                        <div class="avatar mr-2" *ngIf="balance.key.includes('irs/')">
+                          <div
+                            class="w-8 rounded-full border-2 border-[{{
+                              getIRSImage(balance.key).color
+                            }}]"
+                          >
+                            <img src="{{ getIRSImage(balance.key).image }}" />
+                          </div>
+                          <div class="avatar -ml-2 mt-4" *ngIf="getIRSImage(balance.key).subImage">
+                            <div class="w-4 rounded-full">
+                              <img src="{{ getIRSImage(balance.key).subImage }}" />
+                            </div>
+                          </div>
+
+                          <span
+                            class="material-symbols-outlined"
+                            *ngIf="!getIRSImage(balance.key).image"
                           >
                             question_mark
                           </span>

@@ -329,6 +329,7 @@ const configs = [
   // CauchyE A node without Monitor
   {
     id: domainCauchyEA,
+    rpc: `${location.protocol}//${domainCauchyEA}`,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
@@ -363,6 +364,7 @@ const configs = [
   // CauchyE B node without Monitor
   {
     id: domainCauchyEB,
+    rpc: `${location.protocol}//${domainCauchyEB}`,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,
@@ -397,6 +399,7 @@ const configs = [
   // CauchyE C node without Monitor
   {
     id: domainCauchyEC,
+    rpc: `${location.protocol}//${domainCauchyEC}`,
     restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
     chainID,
@@ -431,6 +434,7 @@ const configs = [
   // CauchyE D node without Monitor
   {
     id: domainCauchyED,
+    rpc: `${location.protocol}//${domainCauchyED}`,
     restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
     chainID,

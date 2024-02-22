@@ -4,24 +4,24 @@
   <div class="card bg-base-100 shadow-xl mb-4">
     <div class="card-body">
       <span class="badge badge-info"> {{ txSignature.type }} </span>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <tbody>
-          <tr>
-            <th>Public Key</th>
-            <td class="font-mono">
-              {{ txSignature.publicKey }}
-            </td>
-          </tr>
-          <tr>
-            <th>Address</th>
-            <td class="font-mono">
-              {{ txSignature.accAddress }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="table w-full">
+          <tbody>
+            <tr>
+              <th>Public Key</th>
+              <td class="font-mono">
+                {{ txSignature.publicKey }}
+              </td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td class="font-mono">
+                {{ txSignature.accAddress }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </ng-container>

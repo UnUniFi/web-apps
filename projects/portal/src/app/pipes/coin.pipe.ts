@@ -15,7 +15,7 @@ export class CoinPipe implements PipeTransform {
       const metadata = await this.bankQueryService.getDenomMetadata([value.denom]);
       const exponent = getDenomExponent(value.denom);
       const amount = Number(value.amount) / Math.pow(10, exponent);
-      const symbol = metadata[0].symbol;
+      const symbol = metadata[0].display;
       if (!symbol) {
         return value.amount + ' ' + value.denom;
       }

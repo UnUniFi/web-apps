@@ -99,14 +99,14 @@ export class VaultComponent implements OnInit, OnChanges {
   withdrawOptions: WithdrawOption[] = [
     {
       id: 0,
-      name: 'Unbonding (Under Maintenance)',
+      name: 'Unbonding',
       description: 'Withdrawal will be received after unbonding time ',
       icon: 'pending_actions',
       disabled: true,
     },
     {
       id: 1,
-      name: 'Immediate (Under Maintenance)',
+      name: 'Immediate',
       description: 'Withdrawal will be received instantly',
       icon: 'bolt',
       disabled: true,
@@ -208,7 +208,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onSubmitDeposit() {
-    alert('Sorry, currently under maintenance');
+    alert('Sorry, UnUniFi Yield Aggregator is currently suspending deposits.');
     return;
     // if (!this.mintAmount) {
     //   alert('Please input amount');
@@ -235,25 +235,21 @@ export class VaultComponent implements OnInit, OnChanges {
       return;
     }
     if (this.selectedWithdrawOption?.id === 0) {
-      alert('Sorry, currently under maintenance');
-      return;
-      // this.appWithdrawWithUnbonding.emit({
-      //   vaultId: this.vault?.vault?.id!,
-      //   readableAmount: this.burnAmount,
-      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-      // });
+      this.appWithdrawWithUnbonding.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.burnAmount,
+        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+      });
     }
     if (this.selectedWithdrawOption?.id === 1) {
-      alert('Sorry, currently under maintenance');
-      return;
-      // this.appWithdraw.emit({
-      //   vaultId: this.vault?.vault?.id!,
-      //   readableAmount: this.burnAmount,
-      //   lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
-      //   redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
-      //   feeAmount: Number(this.estimatedRedeemAmount?.fee),
-      //   symbol: this.vault?.vault?.symbol!,
-      // });
+      this.appWithdraw.emit({
+        vaultId: this.vault?.vault?.id!,
+        readableAmount: this.burnAmount,
+        lp_denom: 'yieldaggregator/vaults/' + this.vault?.vault?.id,
+        redeemAmount: Number(this.estimatedRedeemAmount?.redeem_amount),
+        feeAmount: Number(this.estimatedRedeemAmount?.fee),
+        symbol: this.vault?.vault?.symbol!,
+      });
     }
   }
 

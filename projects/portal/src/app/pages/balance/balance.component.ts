@@ -1,8 +1,11 @@
+import { BandProtocolService } from '../../models/band-protocols/band-protocol.service';
 import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { BankQueryService } from '../../models/cosmos/bank.query.service';
 import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
+import { CosmwasmQueryService } from '../../models/cosmwasm/cosmwasm.query.service';
 import { StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
+import { YieldAggregatorQueryService } from '../../models/yield-aggregators/yield-aggregator.query.service';
 import { throughMap } from '../../utils/pipes';
 import { BalanceUsecaseService } from './balance.usecase.service';
 import { Component, OnInit } from '@angular/core';
@@ -10,6 +13,7 @@ import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
+import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-balance',
@@ -48,12 +52,26 @@ export class BalanceComponent implements OnInit {
     | undefined
   >;
 
+  // UYA unbonding
+  strategies$: Observable<
+    {
+      strategy: StrategyAll200ResponseStrategiesInner;
+      unbonding?: string;
+    }[]
+  >;
+  strategySymbols$: Observable<{ symbol: string; display: string; img: string }[]>;
+  usdUnbondingAmount$: Observable<number[]>;
+  usdTotalUnbondingAmount$: Observable<number>;
+
   constructor(
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly rest: CosmosRestService,
     private usecase: BalanceUsecaseService,
     private readonly distributionAppService: DistributionApplicationService,
+    private readonly wasmQuery: CosmwasmQueryService,
+    private readonly iyaQuery: YieldAggregatorQueryService,
+    private readonly bandProtocolService: BandProtocolService,
   ) {
     const wallet$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -96,6 +114,49 @@ export class BalanceComponent implements OnInit {
         const { protoJSONToInstance, castProtoJSONOfProtoAny } = cosmosclient.codec;
         return account && protoJSONToInstance(castProtoJSONOfProtoAny(account));
       }),
+    );
+
+    const allStrategies$ = this.iyaQuery.listStrategies$();
+    this.strategies$ = combineLatest([allStrategies$, this.accAddress$]).pipe(
+      mergeMap(([strategies, address]) =>
+        Promise.all(
+          strategies.map(async (strategy) => {
+            if (!strategy.strategy?.contract_address || !address) {
+              return { strategy };
+            }
+            const unbonding = await this.wasmQuery.getUnbonding(
+              strategy.strategy?.contract_address,
+              address,
+            );
+            return { strategy, unbonding };
+          }),
+        ),
+      ),
+    );
+    this.strategySymbols$ = combineLatest([this.strategies$, this.denomMetadataMap$]).pipe(
+      map(([strategies, denomMetadataMap]) =>
+        strategies.map((strategy) => {
+          const symbol = strategy.strategy?.symbol || '';
+          const display = denomMetadataMap?.[symbol]?.display || symbol;
+          const img = this.bankQuery.getSymbolImageMap()[symbol];
+          return { symbol: symbol, display: display, img: img };
+        }),
+      ),
+    );
+    this.usdUnbondingAmount$ = this.strategies$.pipe(
+      mergeMap((strategies) =>
+        Promise.all(
+          strategies.map(async (strategy) =>
+            this.bandProtocolService.convertToUSDAmount(
+              strategy.strategy?.symbol || '',
+              strategy.unbonding || '',
+            ),
+          ),
+        ),
+      ),
+    );
+    this.usdTotalUnbondingAmount$ = this.usdUnbondingAmount$.pipe(
+      map((usdUnbondingAmount) => usdUnbondingAmount.reduce((a, b) => a + b, 0)),
     );
   }
 

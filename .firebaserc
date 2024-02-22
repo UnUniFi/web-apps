@@ -19,6 +19,9 @@
         ],
         "ununifi-stable": [
           "ununifi-stable"
+        ],
+        "ununifi-internal": [
+          "ununifi-internal"
         ]
       }
     }

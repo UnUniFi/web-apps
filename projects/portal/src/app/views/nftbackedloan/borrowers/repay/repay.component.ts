@@ -14,7 +14,7 @@ import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.mod
 import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.chart.service';
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
   NftBids200ResponseBidsInner,

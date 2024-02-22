@@ -1,11 +1,11 @@
 import { CosmosSDKService } from '../cosmos-sdk.service';
 import { BankService } from '../cosmos/bank.service';
 import { TxCommonService } from '../cosmos/tx-common.service';
+import { Metadata } from '../nft/nft.model';
 import { Nfts } from './nft-pawnshop.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import cosmosclient from '@cosmos-client/core';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
 import ununificlient from 'ununifi-client';
 import {
   NftBids200ResponseBidsInner,

@@ -1,7 +1,7 @@
 import {
   TxFeeConfirmDialogData,
   TxFeeConfirmDialogComponent,
-} from '../../views/cosmos/tx-fee-confirm-dialog/tx-fee-confirm-dialog.component';
+} from '../../views/dialogs/tx-fee-confirm/tx-fee-confirm-dialog.component';
 import { ConfigService } from '../config.service';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';

@@ -8,7 +8,7 @@ import { NftPawnshopChartService } from 'projects/portal/src/app/models/nft-pawn
 import { RepayRequest } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.model';
 import { NftPawnshopQueryService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.query.service';
 import { NftPawnshopService } from 'projects/portal/src/app/models/nft-pawnshops/nft-pawnshop.service';
-import { Metadata } from 'projects/shared/src/lib/models/ununifi/query/nft/nft.model';
+import { Metadata } from 'projects/portal/src/app/models/nft/nft.model';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {

@@ -337,6 +337,9 @@
               <input
                 disabled
                 class="input input-bordered w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors
+                }"
                 value="{{ estimatedMintAmount?.mint_amount?.amount | coinAmount }}"
               />
               <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
@@ -491,6 +494,9 @@
                 <input
                   disabled
                   class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': withdrawAmountNgModelRef.errors
+                  }"
                   value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
                 />
                 <span>{{ vault?.vault?.symbol }}</span>

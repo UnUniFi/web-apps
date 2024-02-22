@@ -21,51 +21,137 @@
           </div>
         </div>
         <div class="overflow-x-auto">
-          <table class="table w-full">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Asset</th>
-                <th>Amount</th>
-                <th>Value</th>
-                <th>Value (USD)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor="let balance of vaultBalances; let i = index">
-                <tr
-                  class="hover cursor-pointer"
-                  routerLink="/yield-aggregator/vaults/{{ balance.vaultId }}"
-                >
-                  <th>#{{ balance.vaultId }}</th>
-                  <td>
-                    <div class="flex items-center space-x-3 gap-2" *ngIf="symbols">
-                      <ng-container *ngIf="symbols[i]?.img">
-                        <div class="avatar">
-                          <div class="mask mask-circle w-6 h-6">
-                            <img src="{{ symbols[i].img }}" alt="Asset Symbol" />
-                          </div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="!symbols[i]?.img">
-                        <span class="material-symbols-outlined">question_mark</span>
-                      </ng-container>
-                      <span>
-                        {{ symbols[i].display }}
-                      </span>
-                    </div>
-                  </td>
-                  <td>{{ balance.amount | coinAmount }}</td>
-                  <td>
-                    {{ estimatedRedeemAmounts?.[i]?.total_amount | coinAmount: estimatedRedeemAmounts?.[i]?.share_amount?.denom }}
-                    {{ symbols?.[i]?.display }}
-                  </td>
-                  <td>{{ usdDepositAmount?.[i] | currency }}</td>
+          <ng-container *ngIf="vaultBalances === null; then loading; else loaded"></ng-container>
+          <ng-template #loading>
+            <p class="text-center">
+              <span class="loading loading-ring loading-lg"></span>
+            </p>
+          </ng-template>
+          <ng-template #loaded>
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Asset</th>
+                  <th>Amount</th>
+                  <th>Value</th>
+                  <th>Value (USD)</th>
                 </tr>
-              </ng-container>
-            </tbody>
-          </table>
-          <p *ngIf="!vaultBalances?.length" class="text-center">There is no deposited vault.</p>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let balance of vaultBalances; let i = index">
+                  <tr
+                    class="hover cursor-pointer"
+                    routerLink="/yield-aggregator/vaults/{{ balance.vaultId }}"
+                  >
+                    <th>#{{ balance.vaultId }}</th>
+                    <td>
+                      <div class="flex items-center space-x-3 gap-2" *ngIf="vaultSymbols">
+                        <ng-container *ngIf="vaultSymbols[i]?.img">
+                          <div class="avatar">
+                            <div class="mask mask-circle w-6 h-6">
+                              <img src="{{ vaultSymbols[i].img }}" alt="Asset Symbol" />
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="!vaultSymbols[i]?.img">
+                          <span class="material-symbols-outlined">question_mark</span>
+                        </ng-container>
+                        <span>
+                          {{ vaultSymbols[i].display }}
+                        </span>
+                      </div>
+                    </td>
+                    <td>{{ balance.amount | coinAmount }}</td>
+                    <td>
+                      {{ estimatedRedeemAmounts?.[i]?.total_amount | coinAmount: estimatedRedeemAmounts?.[i]?.share_amount?.denom }}
+                      {{ vaultSymbols?.[i]?.display }}
+                    </td>
+                    <td>{{ usdDepositAmount?.[i] | currency }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <p *ngIf="!vaultBalances?.length" class="text-center">There is no deposited vault.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full md:w-auto my-4">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <h2 class="card-title">Unbonding Amount</h2>
+        <P>
+          Your unbonding withdrawal amounts are shown for each strategy. The remaining unbonding
+          time can be calculated from the unbonding time of each strategy and
+          <a class="link link-info font-semibold" (click)="onClickOpenAddressTxs()">
+            Transactions history in Explorer.
+          </a>
+        </P>
+        <div class="stats shadow">
+          <div class="stat">
+            <div class="stat-title">Total Unbonding Amount</div>
+            <div class="stat-value" *ngIf="usdTotalUnbondingAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value">{{ usdTotalUnbondingAmount | currency }}</div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <ng-container
+            *ngIf="strategies === null; then loading; else loadedStrategies"
+          ></ng-container>
+          <ng-template #loadedStrategies>
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>Asset</th>
+                  <th>Strategy #</th>
+                  <th>Unbonding Amount</th>
+                  <th>Value (USD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let s of strategies; let i = index">
+                  <tr
+                    class="hover cursor-pointer"
+                    [routerLink]="[
+                      '/yield-aggregator/strategies',
+                      s.strategy.strategy?.denom,
+                      s.strategy.strategy?.id
+                    ]"
+                    *ngIf="s.unbonding && s.unbonding !== '0'"
+                  >
+                    <td>
+                      <div class="flex items-center space-x-3 gap-2" *ngIf="strategySymbols">
+                        <ng-container *ngIf="strategySymbols[i]?.img">
+                          <div class="avatar">
+                            <div class="mask mask-circle w-6 h-6">
+                              <img src="{{ strategySymbols[i].img }}" alt="Asset Symbol" />
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="!strategySymbols[i]?.img">
+                          <span class="material-symbols-outlined">question_mark</span>
+                        </ng-container>
+                        <span>
+                          {{ strategySymbols[i].display }}
+                        </span>
+                      </div>
+                    </td>
+                    <td>#{{ s.strategy.strategy?.id }}</td>
+                    <td>{{ s.unbonding | coinAmount }}</td>
+                    <td>{{ usdUnbondingAmount?.[i] | currency }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <p *ngIf="!usdTotalUnbondingAmount" class="text-center">
+              There is no unbonding amount.
+            </p>
+          </ng-template>
         </div>
       </div>
     </div>

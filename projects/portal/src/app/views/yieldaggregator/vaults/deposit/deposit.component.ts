@@ -34,4 +34,9 @@ export class DepositComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClickOpenAddressTxs() {
+    const rootPath = window.location.origin;
+    window.open(rootPath + '/explorer/accounts/' + this.address, '_blank');
+  }
 }

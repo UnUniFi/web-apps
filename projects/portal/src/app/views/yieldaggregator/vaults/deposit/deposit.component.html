@@ -83,6 +83,13 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="card-body">
         <h2 class="card-title">Unbonding Amount</h2>
+        <P>
+          Your unbonding withdrawal amounts are shown for each strategy. The remaining unbonding
+          time can be calculated from the unbonding time of each strategy and
+          <a class="link link-info font-semibold" (click)="onClickOpenAddressTxs()">
+            Transactions history in Explorer.
+          </a>
+        </P>
         <div class="stats shadow">
           <div class="stat">
             <div class="stat-title">Total Unbonding Amount</div>

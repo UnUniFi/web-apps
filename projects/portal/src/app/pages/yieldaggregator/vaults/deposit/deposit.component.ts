@@ -157,9 +157,6 @@ export class DepositComponent implements OnInit {
     this.usdTotalUnbondingAmount$ = this.usdUnbondingAmount$.pipe(
       map((usdUnbondingAmount) => usdUnbondingAmount.reduce((a, b) => a + b, 0)),
     );
-    this.usdTotalUnbondingAmount$.subscribe((usdTotalUnbondingAmount) =>
-      console.log(usdTotalUnbondingAmount),
-    );
   }
 
   ngOnInit(): void {}

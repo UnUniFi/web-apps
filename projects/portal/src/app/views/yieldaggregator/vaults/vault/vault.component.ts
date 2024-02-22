@@ -208,19 +208,21 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onSubmitDeposit() {
-    if (!this.mintAmount) {
-      alert('Please input amount');
-      return;
-    }
-    if (!this.denom) {
-      alert('Please select denom');
-      return;
-    }
-    this.appDeposit.emit({
-      vaultId: this.vault?.vault?.id!,
-      readableAmount: this.mintAmount,
-      denom: this.denom,
-    });
+    alert('Sorry, UnUniFi Yield Aggregator is currently suspending deposits.');
+    return;
+    // if (!this.mintAmount) {
+    //   alert('Please input amount');
+    //   return;
+    // }
+    // if (!this.denom) {
+    //   alert('Please select denom');
+    //   return;
+    // }
+    // this.appDeposit.emit({
+    //   vaultId: this.vault?.vault?.id!,
+    //   readableAmount: this.mintAmount,
+    //   denom: this.denom,
+    // });
   }
 
   onWithdrawAmountChange() {

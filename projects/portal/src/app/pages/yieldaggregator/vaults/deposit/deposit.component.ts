@@ -3,11 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
 import { CosmwasmQueryService } from 'projects/portal/src/app/models/cosmwasm/cosmwasm.query.service';
-import { StoredWallet } from 'projects/portal/src/app/models/wallets/wallet.model';
-import { WalletService } from 'projects/portal/src/app/models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from 'projects/portal/src/app/models/yield-aggregators/yield-aggregator.query.service';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import {
   EstimateRedeemAmount200Response,
   StrategyAll200ResponseStrategiesInner,
@@ -25,7 +23,6 @@ export type VaultBalance = {
   styleUrls: ['./deposit.component.css'],
 })
 export class DepositComponent implements OnInit {
-  address$: Observable<string>;
   owner$: Observable<string>;
   vaultBalances$: Observable<VaultBalance[]>;
   vaults$: Observable<VaultAll200ResponseVaultsInner[]>;
@@ -45,16 +42,11 @@ export class DepositComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
     private readonly wasmQuery: CosmwasmQueryService,
   ) {
-    this.address$ = this.walletService.currentStoredWallet$.pipe(
-      filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
-      map((wallet) => 'ununifi1r5uqj45nj6789tt9p7umtvqwqr3k9qe5rra3h8'),
-    );
     this.owner$ = this.route.params.pipe(map((params) => params.address));
     const balances$ = this.owner$.pipe(mergeMap((owner) => this.bankQuery.getBalance$(owner)));
     this.vaultBalances$ = balances$.pipe(
@@ -116,8 +108,8 @@ export class DepositComponent implements OnInit {
     );
 
     const allStrategies$ = this.iyaQuery.listStrategies$();
-    this.strategies$ = combineLatest([allStrategies$, this.address$]).pipe(
-      mergeMap(([strategies, address]) =>
+    this.strategies$ = combineLatest([allStrategies$, this.owner$]).pipe(
+      mergeMap(([strategies, owner]) =>
         Promise.all(
           strategies.map(async (strategy) => {
             if (!strategy.strategy?.contract_address) {
@@ -125,7 +117,7 @@ export class DepositComponent implements OnInit {
             }
             const unbonding = await this.wasmQuery.getUnbonding(
               strategy.strategy?.contract_address,
-              address,
+              owner,
             );
             return { strategy, unbonding };
           }),

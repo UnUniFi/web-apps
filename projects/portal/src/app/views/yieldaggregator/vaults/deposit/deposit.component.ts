@@ -12,7 +12,6 @@ import {
   styleUrls: ['./deposit.component.css'],
 })
 export class DepositComponent implements OnInit {
-  @Input() address?: string | null;
   @Input() owner?: string | null;
   @Input() vaultBalances?: VaultBalance[] | null;
   @Input() vaults?: VaultAll200ResponseVaultsInner[] | null;
@@ -37,6 +36,6 @@ export class DepositComponent implements OnInit {
 
   onClickOpenAddressTxs() {
     const rootPath = window.location.origin;
-    window.open(rootPath + '/explorer/accounts/' + this.address, '_blank');
+    window.open(rootPath + '/explorer/accounts/' + this.owner, '_blank');
   }
 }

@@ -22,7 +22,7 @@
       <h2 class="card-title">Step.1 Select a Maturity</h2>
       <p class="opacity-50">Withdraw anytime at market prices</p>
 
-      <div class="flex flex-row flex-wrap gap-2 mb-4">
+      <div class="flex flex-row flex-wrap gap-2">
         <ng-container *ngFor="let pool of tranches; let i = index">
           <button
             class="btn btn-lg btn-outline btn-primary"
@@ -47,6 +47,11 @@
           More maturities coming...
         </button>
       </div>
+
+      <P class="opacity-50 text-warning">
+        Note: Fixed APY is the value of 1 {{ vault?.deposit_denom | coinDenom | async }} deposited.
+        It will be lower if you deposit more {{ vault?.deposit_denom | coinDenom | async }}s.
+      </P>
 
       <div
         class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
@@ -124,30 +129,14 @@
           <span class="label">
             <span class="label-text">Input</span>
 
-            <span class="label-text-alt mr-2">
-              Available Balance:
+            <span class="label-text-alt mr-2 flex-row">
+              Available:
               {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
-              {{ vault?.deposit_denom | coinDenom | async }}
             </span>
           </span>
 
           <div>
             <label class="input-group join">
-              <!-- <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
-                <div class="avatar">
-                  <div class="w-8 rounded-full">
-                    <img src="{{ vaultImage?.image }}" />
-                  </div>
-                  <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                    <div class="w-4 rounded-full">
-                      <img src="{{ vaultImage?.subImage }}" />
-                    </div>
-                  </div>
-                </div>
-                {{ vault?.deposit_denom | coinDenom | async }}
-                <div class="flex-auto"></div>
-                <div class="material-symbols-outlined">keyboard_arrow_down</div>
-              </button> -->
               <span>
                 <div class="avatar">
                   <div class="w-8 rounded-full">
@@ -190,7 +179,7 @@
         </div>
 
         <div class="flex flex-row items-center gap-4">
-          <div class="flex flex-col justify-center items-center ml-8">
+          <div class="flex flex-col justify-center items-center sm:ml-8">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="2"
@@ -235,7 +224,7 @@
         </div>
 
         <div class="flex flex-row items-center gap-4">
-          <div class="flex flex-col justify-center items-center ml-8">
+          <div class="flex flex-col justify-center items-center sm:ml-8">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="2"
@@ -272,8 +261,8 @@
 
         <div class="card-actions justify-end mt-8 px-4">
           <button class="btn btn-primary w-full gap-1" [disabled]="depositAmountNgModelRef.invalid">
-            <span class="material-symbols-outlined"> attach_money </span>
-            <span class="hidden md:inline">Deposit</span>
+            <span class="material-symbols-outlined hidden md:inline"> monetization_on </span>
+            <span>Deposit</span>
           </button>
         </div>
       </form>
@@ -294,7 +283,6 @@
             name="withdrawAmount"
             (change)="onChangeWithdraw()"
           />
-          <!-- <input type="range" min="0" max="100" class="range range-accent" name="withdraw-slider" /> -->
           <div class="w-full flex justify-between text-xs px-2">
             <span>|</span>
             <span>|</span>
@@ -312,25 +300,10 @@
         </div>
         <div class="form-control">
           <span class="label">
-            <span class="label-text">Output</span>
+            <span class="label-text">Output (Estimated)</span>
           </span>
 
           <label class="input-group">
-            <!-- <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
-              <div class="avatar">
-                <div class="w-8 rounded-full">
-                  <img src="{{ vaultImage?.image }}" />
-                </div>
-                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                  <div class="w-4 rounded-full">
-                    <img src="{{ vaultImage?.subImage }}" />
-                  </div>
-                </div>
-              </div>
-              {{ vault?.deposit_denom | coinDenom | async }}
-              <div class="flex-auto"></div>
-              <div class="material-symbols-outlined">keyboard_arrow_down</div>
-            </button> -->
             <span>
               <div class="avatar">
                 <div class="w-8 rounded-full">
@@ -344,21 +317,6 @@
               </div>
               {{ vault?.deposit_denom | coinDenom | async }}
             </span>
-            <!-- <input
-              #withdrawAmountNgModelRef="ngModel"
-              class="join-item input input-bordered input-secondary w-full"
-              [class]="{
-                'input-error': withdrawAmountNgModelRef.errors
-              }"
-              placeholder="0.000000"
-              required
-              type="number"
-              [(ngModel)]="inputPT"
-              [min]="0"
-              pattern="^[0-9]*\.?[0-9]{0,6}$"
-              name="withdrawAmount"
-              (change)="onChangeWithdraw()"
-            /> -->
             <input
               class="join-item input input-bordered input-secondary w-full"
               value="{{ estimateRedeemPt | coinAmount }}"
@@ -450,8 +408,8 @@
 
         <div class="card-actions justify-end mt-8 px-4">
           <button class="btn btn-primary w-full gap-1" [disabled]="withdrawFormRef.invalid">
-            <span class="material-symbols-outlined"> money_off </span>
-            <span class="hidden md:inline">Withdraw</span>
+            <span class="material-symbols-outlined hidden md:inline"> redeem </span>
+            <span>Withdraw</span>
           </button>
         </div>
       </form>

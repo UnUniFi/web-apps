@@ -55,21 +55,6 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
                     <div class="avatar">
                       <div class="w-8 rounded-full">
@@ -102,7 +87,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxUT()"
                 >
                   Max
@@ -126,7 +111,7 @@
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
@@ -249,7 +234,7 @@
                 <button
                   *ngIf="swapTab === 'pt'"
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxPT()"
                 >
                   Max
@@ -257,7 +242,7 @@
                 <button
                   *ngIf="swapTab === 'yt'"
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxYT()"
                 >
                   Max
@@ -283,24 +268,9 @@
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
                   <div class="avatar">
                     <div class="w-8 rounded-full">
@@ -333,8 +303,13 @@
                   name="desiredUt"
                 />
               </label>
-              <span class="label">
-                <span class="label-text"></span>
+              <span
+                class="label"
+                *ngIf="swapTab === 'yt' && tranchePool && !isMatured(tranchePool)"
+              >
+                <span class="label-text font-bold text-lg text-error">
+                  YT cannot swap until maturity!
+                </span>
               </span>
             </div>
             <div class="card-actions mt-4">
@@ -376,21 +351,6 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
                     <div class="avatar">
                       <div class="w-8 rounded-full">
@@ -423,7 +383,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMintMaxUT()"
                 >
                   Max
@@ -445,7 +405,7 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
@@ -558,7 +518,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputRedeemMaxPT()"
                 >
                   Max
@@ -610,7 +570,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputRedeemMaxYT()"
                 >
                   Max
@@ -632,24 +592,9 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
                   <div class="avatar">
                     <div class="w-8 rounded-full">
@@ -687,8 +632,8 @@
 
       <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
         <div class="card-body">
-          <div class="flex flex-wrap gap-2 items-center mb-4">
-            <div class="join">
+          <div class="flex flex-wrap gap-2 items-center">
+            <div class="join mb-4">
               <button
                 class="btn btn-sm join-item btn-accent text-neutral"
                 [class.glass]="swapTab === 'yt'"
@@ -705,7 +650,7 @@
               </button>
             </div>
             <div class="flex-auto"></div>
-            <div class="card bg-base-100 flex-row flex-wrap px-4 gap-3 items-center">
+            <div class="card bg-base-100 flex-row flex-wrap px-4 py-2 gap-3 items-center mb-4">
               <div class="avatar">
                 <div
                   class="w-8 rounded-full border-2"
@@ -737,7 +682,7 @@
             </div>
           </div>
 
-          <div class="stats stats-vertical md:stats-horizontal shadow">
+          <div class="stats stats-vertical md:stats-horizontal shadow mb-4">
             <div class="stat">
               <div class="stat-title">Liquidity</div>
               <div class="stat-value">{{ '0' | currency }}</div>
@@ -764,73 +709,10 @@
               <div class="stat-desc"></div>
             </div>
           </div>
+
+          <P></P>
         </div>
       </div>
     </div>
-
-    <!-- <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
-      <div class="card-body">
-        <h2 class="card-title">Transactions</h2>
-        <div class="tabs w-full">
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'all'"
-            (click)="txTab = 'all'"
-          >
-            All
-          </a>
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'swap'"
-            (click)="txTab = 'swap'"
-          >
-            Swaps
-          </a>
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'liquidity'"
-            (click)="txTab = 'liquidity'"
-          >
-            Liquidity
-          </a>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="table">
-            <thead>
-              <tr class="border-b-2 border-[#adc9ff]">
-                <td>Action</td>
-                <td>Value</td>
-                <td>Token In</td>
-                <td>Token Out</td>
-                <td>Time</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
-                <td>Redeem</td>
-                <td>{{ '1885.86' | currency }}</td>
-                <td></td>
-                <td>
-                  <div class="flex flex-row items-center gap-2">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    0.8957
-                  </div>
-                </td>
-                <td>4d 0h 40 min</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div> -->
   </div>
 </div>

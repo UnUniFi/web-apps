@@ -54,14 +54,16 @@
             [class.tab-active]="tab === 'deposit'"
             (click)="tab = 'deposit'"
           >
-            Add Liquidity
+            Add
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
           <a
             class="tab tab-lg tab-bordered w-1/2"
             [class.tab-active]="tab === 'withdraw'"
             (click)="tab = 'withdraw'"
           >
-            Remove Liquidity
+            Remove
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
         </div>
         <div class="card-body">
@@ -72,23 +74,8 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
-                    <div class="avatar">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -119,7 +106,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxUT()"
                 >
                   Max
@@ -139,7 +126,7 @@
               <div>
                 <label class="input-group join">
                   <span class="gap-2">
-                    <div class="avatar">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-primary">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -171,7 +158,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxPT()"
                 >
                   Max
@@ -192,11 +179,11 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
-                  <div class="avatar">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-secondary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
@@ -235,7 +222,7 @@
               <div>
                 <label class="input-group join">
                   <span class="gap-2">
-                    <div class="avatar">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-secondary">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -267,7 +254,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxLP()"
                 >
                   Max
@@ -289,26 +276,11 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
-                  <div class="avatar">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
@@ -332,7 +304,7 @@
               </span>
               <label class="input-group join">
                 <span class="gap-2">
-                  <div class="avatar">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>

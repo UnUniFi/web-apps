@@ -5,6 +5,7 @@ import { StoredWallet, WalletType } from '../wallet.model';
 import { IKeplrInfrastructureService } from './keplr.service';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BroadcastMode } from '@cosmjs/launchpad';
 import cosmosclient from '@cosmos-client/core';
 import { ChainInfo, Key } from '@keplr-wallet/types';
 import { LoadingDialogService } from 'projects/shared/src/lib/components/loading-dialog';
@@ -269,5 +270,19 @@ export class KeplrInfrastructureService implements IKeplrInfrastructureService {
     txBuilder.addSignature(signKeplr.signature);
 
     return txBuilder;
+  }
+
+  async sendTx(txBuilder: cosmosclient.TxBuilder): Promise<string | undefined> {
+    if (!window.keplr) {
+      alert('Please install Keplr extension');
+      return;
+    }
+    const chainId = this.configService.configs[0].chainID;
+    await window.keplr.enable(chainId);
+    const txByteArray = Uint8Array.from(Buffer.from(txBuilder.txBytes(), 'base64'));
+    const res = await window.keplr.sendTx(chainId, txByteArray, BroadcastMode.Sync);
+    console.log(res);
+    const txHash = Buffer.from(res).toString('hex').toUpperCase();
+    return txHash;
   }
 }

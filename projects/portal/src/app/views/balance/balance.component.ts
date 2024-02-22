@@ -89,7 +89,6 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
     const vaultNum = denomParts[2];
     const tranche = this.irsImages?.find((image) => image.id === vaultNum);
     const type = denomParts[3];
-    console.log(type);
     let color = '#FFFFFF';
     if (type === 'pt') {
       color = '#387CFF';
@@ -98,7 +97,6 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
     } else if (type === 'ls') {
       color = '#ADC9FF';
     }
-    console.log(color);
     return {
       image: tranche?.image,
       subImage: tranche?.subImage,

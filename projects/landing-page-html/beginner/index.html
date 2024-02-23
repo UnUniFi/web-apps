@@ -142,6 +142,7 @@
       text-align: center;
       font-size: 24px;
       font-weight: 700;
+      user-select: none;
       display: block;
     }
 
@@ -161,7 +162,7 @@
 
       .btn-next {
         position: absolute;
-        top: 20%;
+        top: 50px;
         right: 10%
       }
     }
@@ -397,7 +398,7 @@
                       style="background: rgba(180, 207, 219, 0.20); position:relative;">
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
-                        Step <span class="font-bold">1</span></div>
+                        Step <strong>1</strong></div>
                       <div class="text-xl tracking-wide">Go to the Fixed Yield page</div>
                       <div class="btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s02')">
@@ -526,8 +527,8 @@
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
                       <div class="text-xl tracking-wide">Submit transaction</div>
-                      <a style="position: relative; right: 0%;" class="btn-next w-full px-4 py-2 rounded-md text-center"
-                        href="/advanced" target="_blank">
+                      <a class="btn-next sm:self-stretch px-4 py-2 rounded-md text-center" href="/advanced"
+                        target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>
                       </a>
                     </div>
@@ -713,8 +714,8 @@
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
                       <div class="text-xl tracking-wide">Submit transaction</div>
-                      <a style="position: relative; right: 0%;" class="btn-next w-full px-4 py-2 rounded-md text-center"
-                        href="/advanced" target="_blank">
+                      <a class="btn-next sm:self-stretch px-4 py-2 rounded-md text-center" href="/advanced"
+                        target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>
                       </a>
                     </div>

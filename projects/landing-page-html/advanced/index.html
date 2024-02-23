@@ -29,6 +29,32 @@
     rel="stylesheet">
 
   <style>
+    .only-pc {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .only-pc {
+        display: block;
+      }
+    }
+
+    .only-mobile {
+      display: block;
+    }
+
+    .only-mobile-flex {
+      display: flex;
+    }
+
+    @media (min-width: 640px) {
+
+      .only-mobile,
+      .only-mobile-flex {
+        display: none;
+      }
+    }
+
     :root {
       --color-gray-170-207-219: rgba(170, 207, 219, 0.20);
       --color-white-255-255-255: rgba(255, 255, 255, 0.10);
@@ -280,8 +306,8 @@
     window.addEventListener('scroll',() => {
       scrollFadeIn();
     });
-    function deleteAllSectionContent() {
-      const elements = document.getElementsByClassName("section-content")
+    function deleteAllSectionContent(className) {
+      const elements = document.getElementsByClassName(className)
       for (const el of elements) {
         el.style.display = "none";
       }
@@ -385,24 +411,23 @@
   </div>
 
   <!--1st section-->
-  <section class="mb-20">
-    <div class="py-20" style="background-color: rgba(255, 255, 255, 0.05);">
-      <div class="mx-auto p-1 mb-10 flex justify-center items-center circle-rgb-grad-border"
-        style="width: 80px; height: 80px;">
-        <img src="../assets/images/$.svg">
+  <section class="mb-6 sm:mb-20">
+    <div class="py-6 sm:py-20 flex flex-col gap-3 sm:gap-7" style="background-color: rgba(255, 255, 255, 0.05);">
+      <div class="mx-auto p-1 flex justify-center items-center circle-rgb-grad-border w-10 h-10 sm:w-20 sm:h-20">
+        <img src="../assets/images/$.svg" class="w-3 sm:w-6">
       </div>
-      <div class="text-5xl font-bold mb-10" style="line-height: 72px;">About Gluon Trade</div>
-      <div class="text-xl tracking-wide mb-10">
-        <div class="text-xl tracking-wide mb-10">
-          <span>Gluon Trade is a function within Gluon Yield Aggregator App that enables <br /></span>
-          <span class="font-bold">Interest Rate Swaps for Fixed Yield</span>
-          <span> Tranche with auto-compounding yield.</span>
-        </div>
-        <div class="text-5xl mb-10">
-          <div class="text-3xl font-bold mb-2" style=" letter-spacing: 0.80px;">Learn how to Trade Yield!</div>
-          <div class="text-xl tracking-wide">
-            If you are simply looking for Gluon Trade app functions, please skip to our guide below.
-          </div>
+      <div class="text-base sm:text-5xl font-bold my-1 sm:my-3">About Gluon Trade</div>
+      <div class="text-sm sm:text-xl tracking-wide">
+        Gluon Trade is a function within Gluon Yield<br class="only-mobile">
+        Aggregator App that enables<br class="only-pc">
+        <strong>Interest Rate Swaps for <br class="only-mobile">Fixed Yield</strong>
+        Tranche with auto-compounding yield.
+      </div>
+      <div class="tracking-wide">
+        <div class="text-sm sm:text-3xl font-bold mb-3">Learn how to Trade Yield!</div>
+        <div class="text-sm sm:text-xl">
+          If you are simply looking for Gluon Trade app<br class="only-mobile">
+          functions, please skip to our guide below.
         </div>
       </div>
   </section>
@@ -410,24 +435,29 @@
   <!--2nd section-->
   <section class="mb-40">
     <div class="mx-auto max-w-screen-xl">
-      <div class="mx-auto w-5/6 flex gap-12">
-        <div class="w-1/2 flex flex-col gap-10 ">
-          <div class="text-5xl font-bold" style="color: #1E565F;">What is Gluon Trade?</div>
-          <div class="text-5xl font-bold"><span class="txt-green-to-white">What is Gluon Trade?</span></div>
-          <div class="text-xl text-left">
-            In DeFi, you put your assets into a yield farming pool, and get an APY that fluctuates over time. With Yield
-            Stripping (or Yield Splitting) Protocols, you can do some DeFi magic and potentially get a much higher APY
-            (by multiples) if you do it right. This DeFi magic is called yield trading, and this guide is all you need
-            to become a master at it, broken down into 4 easy sections. Please continue reading our guide below!
+      <div class="mx-auto w-11/12 sm:w-5/6 flex flex-col sm:flex-row gap-8 sm:gap-12">
+        <div class="w-full sm:w-1/2 flex flex-col gap-6">
+          <div class="text-2xl sm:text-4xl font-bold text-left">
+            <img src="../assets/images/icons/icon_about.svg" loading="lazy" class="inline w-8 sm:w-12" alt="about" />
+            <span class="txt-green-to-white">What is Gluon Trade?</span>
           </div>
-          <ul class="text-xl text-left pl-8" style="list-style: disc;">
-            <li> Section 1: Yield TokenizationSection </li>
-            <li> 2: Yield Tokenization in Further DetailSection </li>
-            <li> 3: Interest Rate Swaps & Fixed Yield TrancheSection </li>
-            <li> 4: Yield Trading</li>
-          </ul>
+          <div class="text-sm sm:text-xl text-left">
+            Gluon Trade is a function within Gluon Yield Aggregator App that enables Interest Rate Swaps for Fixed Yield
+            Tranche with auto-compounding yield. If that sounds confusing no worries; a simplified comparison can be
+            made to Yield Stripping Protocols such as Pendle Finance or Delv Tech (formerly Element Finance).
+          </div>
+          <div class="text-sm sm:text-xl text-left">
+            Our first Gluon Trade product will offer
+            <strong>Fixed Yield and Yield Trading for assets such stATOM</strong>
+            (Stride liquid staked ATOM). At first, Gluon Trade will be focused towards the Cosmos
+            Ecosystem, eventually supporting many cross-chain yield-bearing assets.
+          </div>
+          <div class="text-2xl sm:text-4xl font-bold text-left" style="color: #1E565F;">
+            <img src="../assets/images/icons/icon_trend.svg" loading="lazy" class="inline w-8 sm:w-12" alt="trend" />
+            What is Gluon Trade?
+          </div>
         </div>
-        <div class="w-1/2 c-gray rounded-3xl flex gap-2 justify-center">
+        <div class="w-full sm:w-1/2 h-80 sm:h-auto c-gray rounded-3xl flex gap-2 justify-center">
           <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
           <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
         </div>
@@ -458,8 +488,9 @@
       .section-item {
         padding: 8px;
         display: block;
-        margin-bottom: 22px;
         user-select: none;
+        flex-shrink: 0;
+        flex-basis: 100%;
       }
 
       .level-item:hover,
@@ -482,7 +513,7 @@
       #btn-level2:checked~.l-wrap #content-level2,
       #btn-level3:checked~.l-wrap #content-level3,
       #btn-level4:checked~.l-wrap #content-level4 {
-        display: block;
+        display: flex;
       }
 
       #s1-0:checked~.l-wrap #content-level1 #lb-s1-0,
@@ -516,7 +547,7 @@
         document.getElementById(idAfter).checked = true
       }
       function changeContent(id) {
-        deleteAllSectionContent()
+        deleteAllSectionContent("section-content")
 
         const sectionId = "section-content-" + id
         const element = document.getElementById(sectionId);
@@ -538,9 +569,13 @@
             break;
         }
       }
+      function nextSectionFromPopup(id) {
+        document.getElementById("pop-up").checked = false
+        changeContent(id)
+      }
     </script>
 
-    <div class="w-5/6 inline-flex gap-10 justify-start items-start ">
+    <div class="w-11/12 sm:w-5/6 mx-auto flex flex-col sm:flex-row gap-10 justify-start items-start ">
 
       <input id="btn-level1" type="radio" name="level-radio" onclick="continueTo('s1-0')" checked>
       <input id="btn-level2" type="radio" name="level-radio" onclick="continueTo('s2-0')">
@@ -562,38 +597,215 @@
       <input id="s4-2" type="radio" name="level4-radio" onclick="changeContent('s4-2')">
       <input id="s4-3" type="radio" name="level4-radio" onclick="changeContent('s4-3')">
 
+      <!--****************************************************************-->
+      <input id="pop-up" type="checkbox">
+
       <!-- Level / Section -->
-      <div class="w-4/12 justify-start items-start flex gap-5 flex-col text-left l-wrap">
-        <div>
+      <div class="w-full sm:w-4/12 justify-start items-start flex gap-5 flex-col text-left l-wrap">
+        <div class="">
           <span class="text-2xl font-bold">Gluon Trade Ultimate Guide<br /></span>
           <span class="text-xl">Learn how to Trade Yield!</span>
         </div>
 
-        <div class="self-stretch inline-flex text-center font-bold text-xl level-wrap">
+        <div class="self-stretch inline-flex items-center text-center font-bold text-lg sm:text-xl level-wrap">
           <label id="lb-level1" class="level-item" for="btn-level1">Level 1</label>
           <label id="lb-level2" class="level-item" for="btn-level2">Level 2</label>
           <label id="lb-level3" class="level-item" for="btn-level3">Level 3</label>
           <label id="lb-level4" class="level-item" for="btn-level4">Level 4</label>
+          <label class="only-mobile m-1" for="pop-up">
+            <img src="../assets/images/icons/pop_up.svg" loading="lazy" alt="popup" />
+          </label>
         </div>
 
-        <div class="w-full h-20 rounded-lg flex gap-2 justify-center c-gray">
+        <div class="w-full h-20 rounded-lg gap-2 only-pc sm:flex justify-center c-gray ">
           <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
           <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
         </div>
 
+        <style>
+          #pop-up {
+            display: none;
+          }
+
+          .popup-overlay {
+            display: none;
+          }
+
+          #pop-up:checked+.l-wrap .popup-overlay {
+            display: block;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.6);
+          }
+
+          .popup-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            max-width: 370px;
+            padding: 20px;
+            height: 580px;
+            background-color: #fff;
+            border-radius: 20px;
+            transform: translate(-50%, -50%);
+          }
+
+          .popup-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+          }
+
+          .popup-title {
+            color: #181818;
+            font-size: 18px;
+            line-height: 30px;
+            align-self: stretch;
+          }
+
+          .popup-level {
+            width: 100%;
+            padding: 4px;
+            background: #3C4D50;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            line-height: 30px;
+          }
+
+          .popup-section-bg {
+            background: rgba(180, 207, 219, 0.20);
+          }
+        </style>
+
+        <!-- pop-up -->
+        <div class="popup-overlay">
+          <div class="popup-window mx-4 flex flex-col gap-3 font-bold text-left overflow-scroll">
+            <label class="popup-close" for="pop-up">
+              <img src="../assets/images/icons/icon_close.svg" loading="lazy" alt="X" />
+            </label>
+            <div class="popup-title">All Levels Menu</div>
+            <div class="popup-level">Level1</div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s1-0')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">1.0 Section</strong></br>
+                <span class="text-sm font-normal">Yield Tokenization and Bond Stripping</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s1-1')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">1.1 Section</strong></br>
+                <span class="text-sm font-normal">How does Yield Tokenization Work?</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="popup-level">Level2</div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s2-0')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">2.0 Section</strong></br>
+                <span class="text-sm font-normal">Yield Tokenization in Detail</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s2-1')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">2.1 Section</strong></br>
+                <span class="text-sm font-normal">How YT values change over time</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s2-2')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">2.2 Section</strong></br>
+                <span class="text-sm font-normal">How PT values change over time</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="popup-level">Level3</div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s3-0')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">3.0 Section</strong></br>
+                <span class="text-sm font-normal">Interest Rate Swaps and Fixed Yield Tranche</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s3-1')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">3.1 Section</strong></br>
+                <span class="text-sm font-normal">Where does Fixed Yield come from? <br>How is it Calculated?</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="popup-level">Level4</div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s4-0')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">4.0 Section</strong></br>
+                <span class="text-sm font-normal">Yield Trading</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s4-1')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">4.1 Section</strong></br>
+                <span class="text-sm font-normal">Earning Fixed Yield (with PT)</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s4-2')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">4.2 Section</strong></br>
+                <span class="text-sm font-normal">Long yield (YT) </span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+            <div class="self-stretch inline-flex items-center gap-2 text-black" onclick="nextSectionFromPopup('s4-3')">
+              <div class="flex-auto popup-section-bg px-3 py-2 rounded">
+                <strong class="text-xl">4.3 Section</strong></br>
+                <span class="text-sm font-normal">Provide Liquidity (LP) to earn extra yield with zero impermanent
+                  loss</span>
+              </div>
+              <div class="text-3xl">&gt;</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="only-pc"> -->
         <!-- level 1 -->
-        <div id="content-level1" class="self-stretch text-xl level-content">
-          <label id="lb-s1-0" class="section-item" for="s1-0">
-            <span class=" font-bold">1.0 Section<br /></span>
-            <span>Yield Tokenization and Bond Stripping</span>
-          </label>
-          <label id="lb-s1-1" class="section-item" for="s1-1">
-            <span class=" font-bold">1.1 Section<br /></span>
-            <span>How does Yield Tokenization Work?</span>
-          </label>
-          <div class="btn-cursor c-green self-stretch p-2 rounded-md text-center" onclick="radioCheck('btn-level2')">
+        <div id="content-level1" class="self-stretch level-content sm:flex-col gap-2 sm:gap-5">
+
+
+
+          <div class="text-3xl only-mobile" onclick=" trans('trans1')">&lt;
+          </div>
+          <div class="flex-auto flex sm:flex-col sm:gap-5 overflow-hidden" id="trans1">
+            <label id="lb-s1-0" class="section-item" for="s1-0">
+              <div class="flex items-center justify-between">
+                <strong class="text-xl">1.0 Section</strong>
+                <div class="text-gray-500 only-mobile text-sm">1 of 2</div>
+              </div>
+              <span class="text-sm sm:text-xl">Yield Tokenization and Bond Stripping</span>
+            </label>
+
+            <label id="lb-s1-1" class="section-item" for="s1-1">
+              <div class="flex items-center justify-between">
+                <strong class="text-xl">1.0 Section</strong>
+                <div class="text-gray-500 only-mobile text-sm">2 of 2</div>
+              </div>
+              <span class="text-sm sm:text-xl">How does Yield Tokenization Work?</span>
+            </label>
+          </div>
+          <div class="btn-cursor c-green self-stretch p-2 rounded-md text-center only-pc"
+            onclick="radioCheck('btn-level2')">
             <span class="text-2xl tracking-wide">Next Level</span>
           </div>
+          <div class="text-3xl only-mobile" onclick=" trans('trans1')">
+            &gt;</div>
         </div>
         <!-- level 2 -->
         <div id="content-level2" class="self-stretch text-xl level-content">
@@ -612,7 +824,6 @@
           <div class="btn-cursor c-green self-stretch p-2 rounded-md text-center" onclick="radioCheck('btn-level3')">
             <span class="text-2xl tracking-wide">Next Level</span>
           </div>
-
         </div>
         <!-- level 3 -->
         <div id="content-level3" class="self-stretch text-xl level-content">
@@ -650,10 +861,65 @@
             <span class="text-2xl tracking-wide">Next Level</span>
           </div>
         </div>
+        <!-- </div> -->
+
+
+        <div class="only-mobile-flex flex-auto">
+
+          <script>
+            let position = 0
+            function moveSection(id) {
+              deleteAllSectionContent("section-item")
+              document.getElementById(id).style.display = "block"
+            }
+            function trans(id) {
+              const bbb = document.getElementById(id)
+
+              document.getElementById(id).style.transform = "translateX(50%);"
+              var aaa = "aaa"
+              console.log(aaa,bbb,position)
+
+            }
+          </script>
+
+          <div class="self-stretch inline-flex items-center gap-2">
+            <div class="text-3xl" onclick="moveSection('ms1-0')">&lt;</div>
+            <div class="flex-auto px-3 py-2 rounded bg-white text-black">
+
+
+              <div id="ms1-0" class="m-s" onclick="changeContent('s1-0')">
+                <div class="flex-auto flex items-center justify-between">
+                  <strong class="text-xl">1.0 Section</strong><br />
+                  <div class="text-gray-500">1 of 2</div>
+                </div>
+                <span class="text-sm">Yield Tokenization and Bond Stripping</span>
+              </div>
+
+
+              <div id="ms1-1" class="m-s" onclick="changeContent('s1-1')" style="display: none;">
+                <div class="flex items-center justify-between">
+                  <strong class="text-xl">1.1 Section</strong><br />
+                  <div class="text-gray-500">2 of 2</div>
+                </div>
+                <span class="text-sm">Yield Tokenization and Bond Stripping</span>
+              </div>
+
+
+            </div>
+            <div class="text-3xl" onclick="moveSection('ms1-1')">&gt;</div>
+          </div>
+
+
+
+
+        </div>
+
+
       </div>
 
+
       <!-- content -->
-      <div class="w-2/3 flex flex-col gap-5 section-content-wrap">
+      <div class="w-full sm:w-2/3 flex flex-col gap-5 section-content-wrap">
         <!-- 1-0 -->
         <div id="section-content-s1-0" class="section-content">
           <div class="flex flex-col gap-5">
@@ -661,9 +927,8 @@
             <div class="text-3xl font-bold"> Yield Tokenization and Bond Stripping</div>
             <div class="text-xl tracking-wide">
               In traditional finance, bond stripping is the practice of separating the principle and coupon payments
-              of a debt obligation and selling the two components separately. The principle represents the bond itself,
-              while the coupon represents the interest rate of the bond.
-            </div>
+              of a debt obligation and selling the two components separately. The principle represents the bond
+              itself, while the coupon represents the interest rate of the bond. </div>
             <div class="text-2xl">
               Yield Tokenization emulates this process on-chain by stripping a yield-bearing asset into two
               components:
@@ -789,13 +1054,13 @@
             <div class="inline-flex gap-5">
               <div class="flex-1 px-9 py-4 rounded-2xl c-white01">
                 <div class="text-3xl font-bold mb-2">By holding PT</div>
-                <div class="text-xl tracking-wide text-left">a user can redeem the principle amount (token value) after
-                  maturity. In this case, after 3 months.</div>
+                <div class="text-xl tracking-wide text-left">a user can redeem the principle amount (token value)
+                  after maturity. In this case, after 3 months.</div>
               </div>
               <div class="flex-1 px-9 py-4 rounded-2xl c-white01">
                 <div class="text-3xl font-bold mb-2">By holding YT</div>
-                <div class="text-xl tracking-wide text-left">a user can receive the yield of the staked token(s) after
-                  maturity. In this case, after 3 months.</div>
+                <div class="text-xl tracking-wide text-left">a user can receive the yield of the staked token(s)
+                  after maturity. In this case, after 3 months.</div>
               </div>
             </div>
             <div class="px-5 py-4 rounded-md inline-flex gap-1 items-center justify-between text-xs"
@@ -872,9 +1137,9 @@
             <div class="text-xl tracking-wide text-left">
               For every yield-bearing position, there is the underlying asset. In this example, we will use ATOM.
               Maturity in this context is defined as the length of time the underlying asset is staked. The Fixed
-              Yield vault will allow users to deposit stATOM (Stride liquid staked ATOM) which will then be separated
-              into its components. Since the underlying asset for stATOM is ATOM, it can be inferred that manipulating
-              an stATOM position is the same as manipulating an ATOM position.
+              Yield vault will allow users to deposit stATOM (Stride liquid staked ATOM) which will then be
+              separated into its components. Since the underlying asset for stATOM is ATOM, it can be inferred that
+              manipulating an stATOM position is the same as manipulating an ATOM position.
             </div>
             <div class="py-2 rounded-lg flex flex-col gap-3 text-left" style="border: 1px #A6B0C3 dotted;">
               <div class="p-1 items-center inline-flex gap-1 c-white01">
@@ -947,8 +1212,8 @@
               </div>
             </div>
             <div class="text-2xl">
-              Additionally, PT and YT can be bought and sold openly on the secondary market, Introducing the opportunity
-              for Yield Trading.
+              Additionally, PT and YT can be bought and sold openly on the secondary market, Introducing the
+              opportunity for Yield Trading.
             </div>
 
             <div class="grid grid-cols-2 gap-2">
@@ -1052,7 +1317,10 @@
                   </div>
                   <div class="flex-auto text-left">
                     <div class="font-bold text-sm">After Maturity </div>
-                    <div> <span class="font-bold">YT holders</span>can redeem any yield accrued after maturity. </div>
+                    <div>
+                      <span class="font-bold">YT holders</span>
+                      can redeem any yield accrued after maturity.
+                    </div>
                   </div>
                 </div>
                 <div class="inline-flex items-center p-2">
@@ -1146,8 +1414,9 @@
                 <div class="font-bold text-sm"> Before Maturity </div>
                 <div>
                   You can buy and sell PT and YT on the open market using Gluon AMM. (This is Yield Trading)
-                  As such, PT and YT will always have a market price. <span class="font-bold">NOTE: YOU CAN NOT CLAIM
-                    YIELD AFTER MATURITY</span>
+                  As such, PT and YT will always have a market price.
+                  <span class="font-bold">NOTE: YOU CAN NOT
+                    CLAIM YIELD AFTER MATURITY</span>
                 </div>
               </div>
             </div>
@@ -1170,7 +1439,8 @@
             <div class="text-xl tracking-wide">
               In Yield Tokenization protocols without auto-compounding yield, a user can redeem yield at any time
               prior to maturity. In auto-compounding yield tokenization protocols such as Gluon Trade, the yield
-              auto-compounds and is reflected as a steady increase in the value of YT, proportional to the yield earned.
+              auto-compounds and is reflected as a steady increase in the value of YT, proportional to the yield
+              earned.
             </div>
             <div class="text-xl tracking-wide">
               As a result of this continuous increase in the value of YT, the protocol must offset this value by
@@ -1321,9 +1591,9 @@
               How is it Calculated?</div>
             <div class="text-xl tracking-wide text-left">
               Remember that with Yield Tokenization, a yield-bearing asset is split into its underlying
-              components, PT & YT. As a staked position approaches Maturity, a YT continues to increase in value, with
-              all yield earned also being redeemable at Maturity. Meanwhile, PT grows in value until it is equal 1:1
-              with the underlying asset (at Maturity). </div>
+              components, PT & YT. As a staked position approaches Maturity, a YT continues to increase in value,
+              with all yield earned also being redeemable at Maturity. Meanwhile, PT grows in value until it is equal
+              1:1 with the underlying asset (at Maturity). </div>
             <div class="text-xl tracking-wide text-left">
               FY represents this change in value for PT. Since PT and YT can be traded on the open secondary
               market, users can simply purchase PT without YT. </div>
@@ -1354,13 +1624,13 @@
             </div>
             <div class="text-xl tracking-wide text-left">
               <span class="font-bold">Example:</span> a user is buying PT for ATOM liquid staked in Stride
-              (stATOM), also known as PT stATOM. Since PT stATOM does not include the yield component, PT stATOM will
-              always be cheaper than 1 stATOM. <span class="font-bold">This is true for all PT.</span>
+              (stATOM), also known as PT stATOM. Since PT stATOM does not include the yield component, PT stATOM
+              will always be cheaper than 1 stATOM. <span class="font-bold">This is true for all PT.</span>
             </div>
             <div class="text-xl tracking-wide text-left">
               After buying 1 PT stATOM at a discounted price (0.9 stATOM), User can redeem 1 stATOM for his PT
-              upon maturity. This is a fixed return (fixed yield) since the amount of stATOM redeemable at maturity is
-              fixed. </div>
+              upon maturity. This is a fixed return (fixed yield) since the amount of stATOM redeemable at maturity
+              is fixed. </div>
             <div class=" p-5 rounded-lg inline-flex items-center text-xs" style="border: 1px #A6B0C3 dotted;">
               <div>
                 <div class="mx-auto w-10 h-10 rounded-full flex items-center justify-center mb-2 c-white01">
@@ -1408,8 +1678,7 @@
             <div class="text-3xl font-bold">Yield Trading</div>
             <div class="text-xl tracking-wide text-left">
               Active Yield Trading can be enabled by taking advantage of the following trading types withing the
-              IRS
-              module:
+              IRS module:
             </div>
             <div class="p-8 rounded-2xl" style=" background: rgba(255, 255, 255, 0.10);">
               <div class="text-3xl font-bold tracking-wide"> Earning Fixed Yield (with PT)</div>
@@ -1438,10 +1707,8 @@
             <div class="text-3xl font-bold">Earning Fixed Yield (with PT)</div>
             <div class="text-xl tracking-wide text-left">
               Since the value of FY is determined directly based on the price difference between PT and the
-              underlying
-              asset, FY is a long PT position. When buying PT directly, the user will always be able to buy PT at
-              a
-              discount, since they will not be acquiring the PT component.
+              underlying asset, FY is a long PT position. When buying PT directly, the user will always be able to
+              buy PT at a discount, since they will not be acquiring the PT component.
             </div>
             <div class="px-5 inline-flex gap-1 items-center text-xs">
               <div class="p-2 rounded-md items-center inline-flex gap-1" style="background: rgba(88, 214, 169, 0.20);">
@@ -1480,8 +1747,8 @@
               <div class="text-3xl font-bold tracking-wide mb-5"> Example:</div>
               <ul class="text-xl tracking-wide text-left pl-8" style="list-style: disc;">
                 <li class="mb-5">if a user holds a long PT position, and the yield for the underlying asset
-                  decreases below the value of the APY guaranteed by the PT position, the user will net an additional
-                  profit on their position. </li>
+                  decreases below the value of the APY guaranteed by the PT position, the user will net an
+                  additional profit on their position. </li>
                 <li>The user can then sell their PT prior to Maturity to secure their profit, which is known as
                   Active Yield Trading.</li>
               </ul>
@@ -1539,8 +1806,9 @@
               <div class="text-3xl font-bold tracking-wide mb-4"> Leverage Yield with YT?</div>
               <div class="text-xl  tracking-wide text-left mb-4">
                 Leverage Yield positions occur when a user decides to acquire YT alone instead of simply holding
-                the underlying asset. If the user believes that APY will increase over time, they can use the capital
-                gained by not acquiring the underlying asset to instead increase (leverage) their yield exposure.
+                the underlying asset. If the user believes that APY will increase over time, they can use the
+                capital gained by not acquiring the underlying asset to instead increase (leverage) their yield
+                exposure.
               </div>
               <ul class="text-xl tracking-wide text-left pl-8" style="list-style: disc;">
                 <li class="mb-2">In example, let's say YT is trading at 1/10 the value of the underlying asset.
@@ -1579,8 +1847,8 @@
             </div>
             <div class="text-xl tracking-wide text-left">
               Of course, APY is not guaranteed but capital is guaranteed when held to Maturity. Users can exit at
-              any time without penalties. Since there is PT in the pool, this strategy can be seen as slightly bearish
-              (remember long PT = short YT), therefore providing liquidity can provide some protection against
+              any time without penalties. Since there is PT in the pool, this strategy can be seen as slightly
+              bearish (remember long PT = short YT), therefore providing liquidity can provide some protection against
               falling yields in the underlying asset.
             </div>
             <div class="text-xl tracking-wide text-left">
@@ -1598,6 +1866,8 @@
           </div>
         </div>
       </div>
+
+    </div>
   </section>
 
   <!--4th section Enabling Gluon Trade -->

@@ -174,9 +174,11 @@
                         </div>
                         <div class="avatar mr-2" *ngIf="balance.key.includes('irs/')">
                           <div
-                            class="w-8 rounded-full border-2 border-[{{
-                              getIRSImage(balance.key).color
-                            }}]"
+                            class="w-8 rounded-full border-2"
+                            [class.border-[#387CFF]]="getIRSImage(balance.key).color ==='#387CFF'"
+                            [class.border-[#58D6A9]]="getIRSImage(balance.key).color ==='#58D6A9'"
+                            [class.border-[#ADC9FF]]="getIRSImage(balance.key).color ==='#ADC9FF'"
+                            [class.border-[#FFFFFF]]="getIRSImage(balance.key).color ==='#FFFFFF'"
                           >
                             <img src="{{ getIRSImage(balance.key).image }}" />
                           </div>

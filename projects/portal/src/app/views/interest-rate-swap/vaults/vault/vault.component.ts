@@ -67,6 +67,8 @@ export class VaultComponent implements OnInit, OnChanges {
   swapTab?: 'pt' | 'yt' | null;
   @Input()
   vaultImage?: IRSVaultImage | null;
+  @Input()
+  totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
 
   inputUT?: string;
   inputYT?: string;

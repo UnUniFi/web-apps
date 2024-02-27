@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
@@ -71,6 +72,9 @@ export class VaultComponent implements OnInit {
   estimateMintYt$: Observable<number | undefined>;
   ytAmountForRedeemYt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateRedeemMaturedYt$: Observable<number | undefined>;
+  totalLiquidityUSD$: Observable<
+    { total: number; assets: { [denom: string]: number } } | undefined
+  >;
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +84,7 @@ export class VaultComponent implements OnInit {
     private readonly bankService: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly configS: ConfigService,
+    private readonly bandProtocolService: BandProtocolService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -221,6 +226,58 @@ export class VaultComponent implements OnInit {
         }
         const exponent = getDenomExponent(coin.denom || '');
         return Number(coin.amount) / Math.pow(10, exponent);
+      }),
+    );
+
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const symbol$ = combineLatest([this.tranchePool$, denomMetadataMap$]).pipe(
+      map(([pool, metadata]) => {
+        return metadata[pool.deposit_denom || '']?.symbol;
+      }),
+    );
+    const price$ = symbol$.pipe(
+      mergeMap((symbol) => {
+        if (!symbol) {
+          return of(0);
+        }
+        if (symbol.includes('st')) {
+          symbol = symbol.replace('st', '');
+        }
+        return this.bandProtocolService.getPrice(symbol);
+      }),
+    );
+    const tranchePtAPYs$ = this.tranchePool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
+    );
+    this.totalLiquidityUSD$ = combineLatest([
+      this.tranchePool$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([pool, price, apy, ptDenom]) => {
+        let value = 0;
+        let assets: { [denom: string]: number } = {};
+        if (!pool.pool_assets || !price) {
+          return;
+        }
+        for (const asset of pool.pool_assets) {
+          const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            assets[asset.denom] = ptValue;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            assets[asset.denom!] = depositValue;
+            value += depositValue;
+          }
+        }
+        return { total: value, assets };
       }),
     );
   }

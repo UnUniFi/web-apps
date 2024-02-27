@@ -36,18 +36,19 @@ export class BankQueryService {
       );
     }
 
-    return this.restSdk$.pipe(
+    const balances = this.restSdk$.pipe(
       mergeMap((sdk) =>
         Promise.all(
           denoms.map(
-            (denom) =>
-              new QueryApi(undefined, sdk.url)
-                .balance(address, denom)
-                .then((res: any) => res.data.balance!), // TODO: remove any
+            async (denom) =>
+              await cosmosclient.rest.bank
+                .balance(sdk, address, denom)
+                .then((res) => res.data.balance!),
           ),
         ),
       ),
     );
+    return balances;
   }
 
   getDenomBalanceMap$(

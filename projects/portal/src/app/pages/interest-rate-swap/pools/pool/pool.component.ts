@@ -161,25 +161,44 @@ export class PoolComponent implements OnInit {
       mergeMap(([denom, address]) => this.bankQuery.getBalance$(address, [denom])),
       map((coins) => coins[0]),
     );
-    this.lpBalanceUSD$ = combineLatest([lpBalance$, price$, this.poolAPYs$]).pipe(
-      map(([lpBalance, price, apy]) => {
-        if (!lpBalance || !price) {
+    const fullRedeemLiquidity$ = combineLatest([this.pool$, lpBalance$]).pipe(
+      mergeMap(([pool, lpBalance]) =>
+        this.irsQuery.estimateRedeemLiquidity(pool.id!, lpBalance.amount!),
+      ),
+    );
+    const tranchePtAPYs$ = this.pool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
+    );
+    this.lpBalanceUSD$ = combineLatest([
+      fullRedeemLiquidity$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([redeem, price, apy, ptDenom]) => {
+        let value = 0;
+        if (!price) {
           return 0;
         }
-        const lpAmount =
-          Number(lpBalance.amount) / Math.pow(10, getDenomExponent(lpBalance.denom || undefined));
-        const rate = Number(apy.liquidity_rate_per_deposit);
-        if (!rate) {
-          return 0;
+        for (const asset of redeem) {
+          const amount =
+            Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom || undefined));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            value += depositValue;
+          }
         }
-        const value = (lpAmount * price) / rate;
         return value;
       }),
     );
 
-    const tranchePtAPYs$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
-    );
     this.totalLiquidityUSD$ = combineLatest([
       this.pool$,
       price$,

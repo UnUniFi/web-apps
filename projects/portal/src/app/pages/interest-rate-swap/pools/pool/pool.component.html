@@ -10,6 +10,8 @@
   [vaultImage]="vaultImage$ | async"
   [estimatedMintAmount]="estimatedMintAmount$ | async"
   [estimatedRedeemAmount]="estimatedRedeemAmount$ | async"
+  [lpBalanceUSD]="lpBalanceUSD$ | async"
+  [totalLiquidityUSD]="totalLiquidityUSD$ | async"
   (appMintLP)="onMintLP($event)"
   (appChangeMintLP)="onChangeMintLP($event)"
   (appRedeemLP)="onRedeemLP($event)"

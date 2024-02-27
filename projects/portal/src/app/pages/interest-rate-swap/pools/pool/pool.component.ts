@@ -2,6 +2,7 @@ import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
@@ -43,6 +44,11 @@ export class PoolComponent implements OnInit {
   lpAmountForRedeem$: BehaviorSubject<EstimationInfo | undefined>;
   estimatedRedeemAmount$: Observable<{ utAmount: number; ptAmount: number } | undefined>;
 
+  lpBalanceUSD$: Observable<number>;
+  totalLiquidityUSD$: Observable<
+    { total: number; assets: { [denom: string]: number } } | undefined
+  >;
+
   constructor(
     private route: ActivatedRoute,
     private readonly walletService: WalletService,
@@ -51,6 +57,7 @@ export class PoolComponent implements OnInit {
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
     private readonly configS: ConfigService,
+    private readonly bandProtocolService: BandProtocolService,
   ) {
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -130,6 +137,78 @@ export class PoolComponent implements OnInit {
               Math.pow(10, getDenomExponent(ptCoin.denom!))
             : 0,
         };
+      }),
+    );
+
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const symbol$ = combineLatest([this.pool$, denomMetadataMap$]).pipe(
+      map(([pool, metadata]) => {
+        return metadata[pool.deposit_denom || '']?.symbol;
+      }),
+    );
+    const price$ = symbol$.pipe(
+      mergeMap((symbol) => {
+        if (!symbol) {
+          return of(0);
+        }
+        if (symbol.includes('st')) {
+          symbol = symbol.replace('st', '');
+        }
+        return this.bandProtocolService.getPrice(symbol);
+      }),
+    );
+    const lpBalance$ = combineLatest([this.lpDenom$, this.address$]).pipe(
+      mergeMap(([denom, address]) => this.bankQuery.getBalance$(address, [denom])),
+      map((coins) => coins[0]),
+    );
+    this.lpBalanceUSD$ = combineLatest([lpBalance$, price$, this.poolAPYs$]).pipe(
+      map(([lpBalance, price, apy]) => {
+        if (!lpBalance || !price) {
+          return 0;
+        }
+        const lpAmount =
+          Number(lpBalance.amount) / Math.pow(10, getDenomExponent(lpBalance.denom || undefined));
+        const rate = Number(apy.liquidity_rate_per_deposit);
+        if (!rate) {
+          return 0;
+        }
+        const value = (lpAmount * price) / rate;
+        return value;
+      }),
+    );
+
+    const tranchePtAPYs$ = this.pool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
+    );
+    this.totalLiquidityUSD$ = combineLatest([
+      this.pool$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([pool, price, apy, ptDenom]) => {
+        let value = 0;
+        let assets: { [denom: string]: number } = {};
+        if (!pool.pool_assets || !price) {
+          return;
+        }
+        for (const asset of pool.pool_assets) {
+          const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            assets[asset.denom] = ptValue;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            assets[asset.denom!] = depositValue;
+            value += depositValue;
+          }
+        }
+        return { total: value, assets };
       }),
     );
   }

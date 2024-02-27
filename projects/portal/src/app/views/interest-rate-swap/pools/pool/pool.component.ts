@@ -47,6 +47,10 @@ export class PoolComponent implements OnInit, OnChanges {
   estimatedMintAmount?: { mintAmount: number; utAmount?: number; ptAmount?: number } | null;
   @Input()
   estimatedRedeemAmount?: { utAmount: number; ptAmount: number } | null;
+  @Input()
+  lpBalanceUSD?: number | null;
+  @Input()
+  totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
 
   tab: 'deposit' | 'withdraw' = 'deposit';
   inputUT?: string;

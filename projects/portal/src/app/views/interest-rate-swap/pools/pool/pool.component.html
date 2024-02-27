@@ -365,11 +365,7 @@
                   </tr>
                   <tr>
                     <th>My Liquidity</th>
-                    <td>{{ 0 | currency }}</td>
-                  </tr>
-                  <tr>
-                    <th>Claimable Rewards</th>
-                    <td>{{ 0 | currency }}</td>
+                    <td>{{ lpBalanceUSD | currency }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -381,7 +377,7 @@
             <h2 class="card-title">
               <span>Total Liquidity</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{ 0 | currency }}</span>
+              <span class="text-accent">{{ totalLiquidityUSD?.total | currency }}</span>
             </h2>
             <div class="overflow-x-auto">
               <table class="table">
@@ -407,7 +403,9 @@
                         <div class="text-xl font-bold">
                           {{ asset.amount | coinAmount : asset.denom }}
                         </div>
-                        <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ totalLiquidityUSD?.assets?.[asset.denom!]| currency }}
+                        </div>
                       </td>
                     </tr>
                   </ng-container>

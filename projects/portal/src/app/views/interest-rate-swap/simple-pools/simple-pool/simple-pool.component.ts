@@ -123,7 +123,7 @@ export class SimplePoolComponent implements OnInit {
     if (this.denomBalancesMap && this.vault?.deposit_denom) {
       const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUnderlying = amount.toString();
         this.onChangeDeposit();

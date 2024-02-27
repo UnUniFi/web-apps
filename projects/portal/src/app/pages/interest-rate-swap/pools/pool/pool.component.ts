@@ -125,7 +125,7 @@ export class PoolComponent implements OnInit {
         if (!vault || !coins) {
           return undefined;
         }
-        const utCoin = coins.find((coin) => coin.denom === vault.denom);
+        const utCoin = coins.find((coin) => coin.denom === vault.deposit_denom);
         const ptCoin = coins.find((coin) => coin.denom?.includes('/pt'));
         return {
           utAmount: utCoin

@@ -54,7 +54,7 @@ export class SimpleVaultsComponent implements OnInit {
           const fixedAPYs = apys.filter(
             (apy) => apy?.strategy_contract === vault.strategy_contract,
           );
-          return fixedAPYs.reduce((prev, curr) => Math.max(Number(curr?.pt_apy), prev), 0);
+          return fixedAPYs.reduce((prev, curr) => Math.max(Number(curr?.pt_apy || 0), prev), 0);
         }),
       ),
     );

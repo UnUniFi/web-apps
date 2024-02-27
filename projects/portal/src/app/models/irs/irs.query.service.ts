@@ -151,10 +151,14 @@ export class IrsQueryService {
     );
   }
 
-  async getTranchePtAPYs(poolId: string): Promise<TranchePtAPYs200Response> {
+  async getTranchePtAPYs(poolId: string): Promise<TranchePtAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId);
-    return res.data;
+    try {
+      const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId);
+      return res.data;
+    } catch (error) {
+      return undefined;
+    }
   }
 
   getTranchePtAPYs$(poolId: string) {
@@ -164,10 +168,14 @@ export class IrsQueryService {
     );
   }
 
-  async getTrancheYtAPYs(poolId: string): Promise<TrancheYtAPYs200Response> {
+  async getTrancheYtAPYs(poolId: string): Promise<TrancheYtAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId);
-    return res.data;
+    try {
+      const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId);
+      return res.data;
+    } catch (error) {
+      return undefined;
+    }
   }
 
   getTrancheYtAPYs$(poolId: string) {
@@ -177,10 +185,14 @@ export class IrsQueryService {
     );
   }
 
-  async getTranchePoolAPYs(poolId: string): Promise<TranchePoolAPYs200Response> {
+  async getTranchePoolAPYs(poolId: string): Promise<TranchePoolAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
-    const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId);
-    return res.data;
+    try {
+      const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId);
+      return res.data;
+    } catch (error) {
+      return undefined;
+    }
   }
 
   getTranchePoolAPYs$(poolId: string) {

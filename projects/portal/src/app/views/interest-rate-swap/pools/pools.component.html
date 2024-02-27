@@ -167,7 +167,9 @@
                     </div>
                   </td>
                   <td>
-                    <div class="text-xl font-bold">{{ 0 | currency }}</div>
+                    <div class="text-xl font-bold">
+                      {{ totalLiquiditiesUSD?.[i] || 0 | currency }}
+                    </div>
                   </td>
                   <td>
                     <div class="text-xl font-bold text-accent">

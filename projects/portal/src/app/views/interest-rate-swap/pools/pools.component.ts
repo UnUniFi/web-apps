@@ -21,6 +21,8 @@ export class PoolsComponent implements OnInit {
   poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
   @Input()
   vaultsImages?: IRSVaultImage[] | null;
+  @Input()
+  totalLiquiditiesUSD?: number[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';

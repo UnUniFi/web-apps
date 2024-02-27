@@ -142,9 +142,7 @@ export class PoolComponent implements OnInit {
 
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbol$ = combineLatest([this.pool$, denomMetadataMap$]).pipe(
-      map(([pool, metadata]) => {
-        return metadata[pool.deposit_denom || '']?.symbol;
-      }),
+      map(([pool, metadata]) => metadata[pool.deposit_denom || '']?.symbol),
     );
     const price$ = symbol$.pipe(
       mergeMap((symbol) => {

@@ -24,6 +24,8 @@ export class VaultsComponent implements OnInit {
   trancheLongAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
   @Input()
   vaultsImages?: IRSVaultImage[] | null;
+  @Input()
+  trancheTokenPrices?: { ptPrice: number; ytPrice: number }[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';

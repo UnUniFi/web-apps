@@ -211,7 +211,9 @@
                         <div class="text-lg font-bold">
                           {{ trancheLongAPYs?.[i]?.yt_apy || 0 | percent : '1.0-2' }}
                         </div>
-                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ trancheTokenPrices?.[i]?.ytPrice || 0 | currency }}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -226,7 +228,9 @@
                         <div class="text-xl font-bold">
                           {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                         </div>
-                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ trancheTokenPrices?.[i]?.ptPrice || 0 | currency }}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -314,7 +318,9 @@
                     <div class="text-xl font-bold">
                       {{ trancheLongAPYs?.[i]?.yt_apy || 0 | percent : '1.0-2' }}
                     </div>
-                    <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+                    <div class="text-sm opacity-50">
+                      {{ trancheTokenPrices?.[i]?.ytPrice || 0 | currency }}
+                    </div>
                   </div>
                 </div>
                 <div
@@ -331,7 +337,9 @@
                     <div class="text-xl font-bold">
                       {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                     </div>
-                    <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+                    <div class="text-sm opacity-50">
+                      {{ trancheTokenPrices?.[i]?.ptPrice || 0 | currency }}
+                    </div>
                   </div>
                 </div>
               </div>

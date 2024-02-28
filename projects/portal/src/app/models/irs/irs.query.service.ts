@@ -141,6 +141,16 @@ export class IrsQueryService {
     );
   }
 
+  estimateRequiredDepositSwapToYt$(
+    poolId: string,
+    amount: string,
+  ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin> {
+    return this.restSdk$.pipe(
+      mergeMap((sdk) => ununifi.rest.irs.estimateRequiredDepositSwapToYt(sdk, poolId, amount)),
+      map((res) => res.data.required_deposit_amount!),
+    );
+  }
+
   estimateRedeemMaturedYt$(
     poolId: string,
     ytAmount: string,

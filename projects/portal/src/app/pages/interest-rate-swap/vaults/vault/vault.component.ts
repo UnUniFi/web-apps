@@ -68,8 +68,10 @@ export class VaultComponent implements OnInit {
   estimateRedeemPtYt$: Observable<
     { redeemAmount: number; ytAmount?: number; ptAmount?: number } | undefined
   >;
-  utAmountForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
-  estimateMintYt$: Observable<number | undefined>;
+  // utAmountForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
+  // estimateMintYt$: Observable<number | undefined>;
+  ytAmountDesiredForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
+  estimateRequiredUtForYt$: Observable<number | undefined>;
   ytAmountForRedeemYt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateRedeemMaturedYt$: Observable<number | undefined>;
   totalLiquidityUSD$: Observable<
@@ -114,7 +116,8 @@ export class VaultComponent implements OnInit {
     this.ytDenom$ = this.trancheId$.pipe(map((id) => `irs/tranche/${id}/yt`));
 
     this.utAmountForMintPt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
-    this.utAmountForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
+    // this.utAmountForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
+    this.ytAmountDesiredForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.ptAmountForRedeemPt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.utAmountForMintPtYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.tokenInAmountForRedeemPtYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
@@ -198,20 +201,35 @@ export class VaultComponent implements OnInit {
         };
       }),
     );
-    this.estimateMintYt$ = this.utAmountForMintYt$.asObservable().pipe(
+    // this.estimateMintYt$ = this.utAmountForMintYt$.asObservable().pipe(
+    //   mergeMap((info) => {
+    //     if (!info) {
+    //       return of(undefined);
+    //     }
+    //     return this.irsQuery.estimateSwapToYt$(info.poolId, info.denom, info.amount);
+    //   }),
+    //   map((coin) => {
+    //     if (!coin) {
+    //       return undefined;
+    //     }
+    //     const exponent = getDenomExponent(coin.denom || '');
+    //     // return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent);
+    //     return Number(coin.amount) / Math.pow(10, exponent);
+    //   }),
+    // );
+    this.estimateRequiredUtForYt$ = this.ytAmountDesiredForMintYt$.asObservable().pipe(
       mergeMap((info) => {
         if (!info) {
           return of(undefined);
         }
-        return this.irsQuery.estimateSwapToYt$(info.poolId, info.denom, info.amount);
+        return this.irsQuery.estimateRequiredDepositSwapToYt$(info.poolId, info.amount);
       }),
       map((coin) => {
         if (!coin) {
-          return undefined;
+          return 0;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        // return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent);
-        return Number(coin.amount) / Math.pow(10, exponent);
+        return (Number(coin.amount) + 1) / Math.pow(10, exponent);
       }),
     );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(
@@ -347,7 +365,12 @@ export class VaultComponent implements OnInit {
     const coin = this.bankService.convertDenomReadableAmountMapToCoins({
       [data.denom]: data.readableAmount,
     })[0];
-    this.utAmountForMintYt$.next({
+    // this.utAmountForMintYt$.next({
+    //   poolId: data.poolId,
+    //   denom: data.denom,
+    //   amount: coin.amount || '0',
+    // });
+    this.ytAmountDesiredForMintYt$.next({
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',

@@ -47,11 +47,12 @@
           <form
             #swapMintFormRef="ngForm"
             *ngIf="modeTab === 'swap' && txMode === 'mint'"
-            (submit)="onSubmitSwapMint()"
+            (submit)="onSubmitSwap()"
           >
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Input</span>
+                <span *ngIf="swapTab === 'pt'" class="label-text">Input</span>
+                <span *ngIf="swapTab === 'yt'" class="label-text">Input (Max Limit)</span>
               </span>
               <div>
                 <label class="input-group join">
@@ -69,6 +70,7 @@
                     {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
+                    *ngIf="swapTab === 'pt'"
                     #swapUnderlyingAmountNgModelRef="ngModel"
                     class="join-item input input-bordered input-info w-full"
                     [class]="{
@@ -77,15 +79,33 @@
                     placeholder="0.000000"
                     required
                     type="number"
-                    [(ngModel)]="inputUT"
+                    [(ngModel)]="inputSwapUT"
                     [min]="0"
                     [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapUnderlyingAmount"
                     (input)="onChangeSwapUnderlyingAmount()"
                   />
+                  <input
+                    *ngIf="swapTab === 'yt'"
+                    #requiredUnderlyingAmountNgModelRef="ngModel"
+                    class="join-item input input-bordered w-full"
+                    [class]="{
+                      'input-error': requiredUnderlyingAmountNgModelRef.errors
+                    }"
+                    [disabled]="!inputDesiredYT"
+                    placeholder="0.000000"
+                    required
+                    type="number"
+                    [(ngModel)]="estimateRequiredUtForYt"
+                    [min]="0"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    name="requiredUnderlyingAmount"
+                  />
                 </label>
                 <button
+                  *ngIf="swapTab === 'pt'"
                   type="button"
                   class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxUT()"
@@ -111,7 +131,8 @@
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Output (Estimated)</span>
+                <span *ngIf="swapTab === 'pt'" class="label-text">Output (Estimated)</span>
+                <span *ngIf="swapTab === 'yt'" class="label-text">Output</span>
               </span>
               <label class="input-group join">
                 <span class="gap-2">
@@ -143,14 +164,18 @@
                 <input
                   *ngIf="swapTab === 'yt'"
                   #desiredYtNgModelRef="ngModel"
-                  class="join-item input input-bordered w-full"
+                  class="join-item input input-bordered input-info w-full"
+                  [class]="{
+                    'input-error': desiredYtNgModelRef.errors
+                  }"
                   placeholder="0.000000"
                   required
                   type="number"
-                  [(ngModel)]="estimateMintYt"
+                  [(ngModel)]="inputDesiredYT"
                   [min]="0"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                   name="desiredYt"
+                  (input)="onChangeSwapDesiredYtAmount()"
                 />
               </label>
               <span class="label">
@@ -373,7 +398,7 @@
                     placeholder="0.000000"
                     required
                     type="number"
-                    [(ngModel)]="inputUT"
+                    [(ngModel)]="inputMintUT"
                     [min]="0"
                     [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
@@ -707,8 +732,6 @@
               <div class="stat-desc"></div>
             </div>
           </div>
-
-          <P></P>
         </div>
       </div>
     </div>

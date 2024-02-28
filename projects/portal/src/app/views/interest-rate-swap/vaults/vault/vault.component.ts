@@ -59,8 +59,10 @@ export class VaultComponent implements OnInit, OnChanges {
   estimateMintPtYt?: { ptAmount: number; ytAmount: number } | null;
   @Input()
   estimateRedeemPtYt?: { redeemAmount: number; ytAmount?: number; ptAmount?: number } | null;
+  // @Input()
+  // estimateMintYt?: number | null;
   @Input()
-  estimateMintYt?: number | null;
+  estimateRequiredUtForYt?: number | null;
   @Input()
   estimateRedeemMaturedYt?: number | null;
   @Input()
@@ -70,9 +72,11 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
 
-  inputUT?: string;
+  inputSwapUT?: string;
+  inputMintUT?: string;
   inputYT?: string;
   inputPT?: string;
+  inputDesiredYT?: string;
   inputYtPair?: string;
   inputPtPair?: string;
 
@@ -149,13 +153,9 @@ export class VaultComponent implements OnInit, OnChanges {
     return days;
   }
 
-  onSubmitSwapMint() {
+  onSubmitSwap() {
     if (!this.trancheId) {
       alert('Invalid tranche ID.');
-      return;
-    }
-    if (!this.inputUT) {
-      alert('Please input the token amount.');
       return;
     }
     if (!this.vault?.deposit_denom) {
@@ -163,24 +163,36 @@ export class VaultComponent implements OnInit, OnChanges {
       return;
     }
     if (this.swapTab === 'pt') {
+      if (!this.inputSwapUT) {
+        alert('Please input the token amount.');
+        return;
+      }
       this.appMintPT.emit({
         trancheId: this.trancheId,
         trancheType: 1,
         depositDenom: this.vault.deposit_denom,
-        readableAmount: Number(this.inputUT),
+        readableAmount: Number(this.inputSwapUT),
       });
     }
     if (this.swapTab === 'yt') {
-      if (!this.estimateMintYt) {
-        alert('Invalid required YT amount.');
+      if (!this.estimateRequiredUtForYt) {
+        alert('Invalid input amount to swap to YT.');
         return;
       }
+      if (!this.inputDesiredYT) {
+        alert('Please input the desired YT amount.');
+        return;
+      }
+      // if (!this.estimateMintYt) {
+      //   alert('Invalid required YT amount.');
+      //   return;
+      // }
       this.appMintYT.emit({
         trancheId: this.trancheId,
         trancheType: 2,
         depositDenom: this.vault.deposit_denom,
-        readableAmount: Number(this.inputUT),
-        requiredYT: Number(this.estimateMintYt),
+        readableAmount: Number(this.estimateRequiredUtForYt),
+        requiredYT: Number(this.inputDesiredYT),
       });
     }
   }
@@ -227,7 +239,7 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Invalid tranche ID.');
       return;
     }
-    if (!this.inputUT) {
+    if (!this.inputMintUT) {
       alert('Please input the token amount.');
       return;
     }
@@ -239,7 +251,7 @@ export class VaultComponent implements OnInit, OnChanges {
       trancheId: this.trancheId,
       trancheType: 0,
       depositDenom: this.vault.deposit_denom,
-      readableAmount: Number(this.inputUT),
+      readableAmount: Number(this.inputMintUT),
     });
   }
 
@@ -271,24 +283,34 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onChangeSwapUnderlyingAmount() {
-    if (this.swapTab === 'pt' && this.trancheId && this.vault?.deposit_denom && this.inputUT) {
+    if (this.swapTab === 'pt' && this.trancheId && this.vault?.deposit_denom && this.inputSwapUT) {
       this.appChangeMintPT.emit({
         poolId: this.trancheId,
         denom: this.vault.deposit_denom,
-        readableAmount: Number(this.inputUT),
+        readableAmount: Number(this.inputSwapUT),
       });
     }
-    if (this.swapTab === 'yt' && this.trancheId && this.vault?.deposit_denom && this.inputUT) {
+    // if (this.swapTab === 'yt' && this.trancheId && this.vault?.deposit_denom && this.inputUT) {
+    //   this.appChangeMintYT.emit({
+    //     poolId: this.trancheId,
+    //     denom: this.vault.deposit_denom,
+    //     readableAmount: Number(this.inputUT),
+    //   });
+    // }
+  }
+
+  onChangeSwapDesiredYtAmount() {
+    if (this.swapTab === 'yt' && this.trancheId && this.inputDesiredYT) {
       this.appChangeMintYT.emit({
         poolId: this.trancheId,
-        denom: this.vault.deposit_denom,
-        readableAmount: Number(this.inputUT),
+        denom: `irs/tranche/${this.trancheId}/yt`,
+        readableAmount: Number(this.inputDesiredYT),
       });
     }
   }
 
   onChangeSwapPtAmount() {
-    if (this.swapTab === 'pt' && this.trancheId && this.vault?.deposit_denom && this.inputPT) {
+    if (this.swapTab === 'pt' && this.trancheId && this.inputPT) {
       this.appChangeRedeemPT.emit({
         poolId: this.trancheId,
         denom: `irs/tranche/${this.trancheId}/pt`,
@@ -298,7 +320,7 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onChangeSwapYtAmount() {
-    if (this.swapTab === 'yt' && this.trancheId && this.vault?.deposit_denom && this.inputYT) {
+    if (this.swapTab === 'yt' && this.trancheId && this.inputYT) {
       this.appChangeRedeemYT.emit({
         poolId: this.trancheId,
         denom: `irs/tranche/${this.trancheId}/yt`,
@@ -308,11 +330,11 @@ export class VaultComponent implements OnInit, OnChanges {
   }
 
   onChangeMintUnderlyingAmount() {
-    if (this.trancheId && this.vault?.deposit_denom && this.inputUT) {
+    if (this.trancheId && this.vault?.deposit_denom && this.inputMintUT) {
       this.appChangeMintPTYT.emit({
         poolId: this.trancheId,
         denom: this.vault.deposit_denom,
-        readableAmount: Number(this.inputUT),
+        readableAmount: Number(this.inputMintUT),
       });
     }
   }
@@ -343,7 +365,7 @@ export class VaultComponent implements OnInit, OnChanges {
       if (balance) {
         const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
-        this.inputUT = amount.toString();
+        this.inputSwapUT = amount.toString();
         this.onChangeSwapUnderlyingAmount();
       }
     }
@@ -355,7 +377,7 @@ export class VaultComponent implements OnInit, OnChanges {
       if (balance) {
         const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
-        this.inputUT = amount.toString();
+        this.inputMintUT = amount.toString();
         this.onChangeMintUnderlyingAmount();
       }
     }

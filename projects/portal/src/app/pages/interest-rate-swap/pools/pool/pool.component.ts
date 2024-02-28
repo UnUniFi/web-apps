@@ -100,9 +100,9 @@ export class PoolComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           mintAmount:
-            (Number(coins.mint_amount?.amount) /
-              Math.pow(10, getDenomExponent(coins.mint_amount?.denom || ''))) *
-            0.99,
+            Number(coins.mint_amount?.amount) /
+            Math.pow(10, getDenomExponent(coins.mint_amount?.denom || '')),
+          // * 0.99,
           utAmount: !coins.additional_required_amount?.denom?.includes('/pt')
             ? additionalAmount
             : undefined,
@@ -129,12 +129,12 @@ export class PoolComponent implements OnInit {
         const ptCoin = coins.find((coin) => coin.denom?.includes('/pt'));
         return {
           utAmount: utCoin
-            ? Math.floor(Number(utCoin.amount) * 0.99) /
-              Math.pow(10, getDenomExponent(utCoin.denom!))
+            ? // Math.floor(Number(utCoin.amount) * 0.99) /
+              Number(utCoin.amount) / Math.pow(10, getDenomExponent(utCoin.denom!))
             : 0,
           ptAmount: ptCoin
-            ? Math.floor(Number(ptCoin.amount) * 0.99) /
-              Math.pow(10, getDenomExponent(ptCoin.denom!))
+            ? // Math.floor(Number(ptCoin.amount) * 0.99) /
+              Number(ptCoin.amount) / Math.pow(10, getDenomExponent(ptCoin.denom!))
             : 0,
         };
       }),

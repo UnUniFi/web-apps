@@ -186,9 +186,9 @@ export class VaultComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           redeemAmount:
-            (Number(coins.redeem_amount?.amount) /
-              Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || ''))) *
-            0.99,
+            Number(coins.redeem_amount?.amount) /
+            Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || '')),
+          // * 0.99,
           ytAmount: coins.additional_required_amount?.denom?.includes('/yt')
             ? additionalAmount
             : undefined,
@@ -210,7 +210,8 @@ export class VaultComponent implements OnInit {
           return undefined;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent);
+        // return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent);
+        return Number(coin.amount) / Math.pow(10, exponent);
       }),
     );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(

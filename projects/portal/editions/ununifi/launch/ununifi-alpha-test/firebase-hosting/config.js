@@ -258,6 +258,11 @@ const irsVaultsImages=[
     image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
     subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
   },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  }
 ]
 
 const configs = [

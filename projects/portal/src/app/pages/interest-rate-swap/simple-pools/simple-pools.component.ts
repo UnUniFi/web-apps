@@ -38,33 +38,35 @@ export class SimplePoolsComponent implements OnInit {
     this.extendedVaults$ = combineLatest([this.vaults$, this.tranchePools$]).pipe(
       mergeMap(([vaults, pools]) =>
         Promise.all(
-          vaults.map(async (vault) => {
-            const contractPools = pools.filter(
-              (pool) => pool.strategy_contract === vault.strategy_contract,
-            );
-            let maxAPY = 0;
-            let denom: string | undefined;
-            for (const pool of contractPools) {
-              if (pool.id) {
-                const apys = await this.irsQuery.getTranchePoolAPYs$(pool.id).toPromise();
-                if (Number(apys.liquidity_apy) > maxAPY) {
-                  maxAPY = Number(apys.liquidity_apy);
-                }
-              }
-              if (pool.pool_assets) {
-                for (const asset of pool.pool_assets) {
-                  if (!asset.denom?.includes('irs/tranche/')) {
-                    denom = asset.denom;
+          vaults && pools
+            ? vaults.map(async (vault) => {
+                const contractPools = pools.filter(
+                  (pool) => pool.strategy_contract === vault.strategy_contract,
+                );
+                let maxAPY = 0;
+                let denom: string | undefined;
+                for (const pool of contractPools) {
+                  if (pool.id) {
+                    const apys = await this.irsQuery.getTranchePoolAPYs$(pool.id).toPromise();
+                    if (Number(apys?.liquidity_apy) > maxAPY) {
+                      maxAPY = Number(apys?.liquidity_apy);
+                    }
+                  }
+                  if (pool.pool_assets) {
+                    for (const asset of pool.pool_assets) {
+                      if (!asset.denom?.includes('irs/tranche/')) {
+                        denom = asset.denom;
+                      }
+                    }
                   }
                 }
-              }
-            }
-            return {
-              ...vault,
-              denom,
-              maxAPY,
-            };
-          }),
+                return {
+                  ...vault,
+                  denom,
+                  maxAPY,
+                };
+              })
+            : [],
         ),
       ),
     );

@@ -27,16 +27,16 @@ import {
 export class SimpleVaultComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  tranches$: Observable<AllTranches200ResponseTranchesInner[] | undefined>;
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
   selectPoolId$?: BehaviorSubject<string | undefined>;
-  ptAmount$: Observable<number>;
-  ptValue$: Observable<number>;
+  ptAmount$: Observable<number | undefined>;
+  ptValue$: Observable<number | undefined>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateMintPt$: Observable<number | undefined>;
@@ -72,16 +72,18 @@ export class SimpleVaultComponent implements OnInit {
           console.log(selected);
           return selected;
         }
-        return tranches[0]?.id;
+        return tranches ? tranches[0].id : undefined;
       }),
     );
 
     this.trancheFixedAPYs$ = this.tranches$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
+              )
+            : [],
         ),
       ),
     );
@@ -101,7 +103,7 @@ export class SimpleVaultComponent implements OnInit {
     );
     const ptBalances$ = combineLatest([this.tranches$, this.denomBalancesMap$]).pipe(
       map(([tranches, denomBalancesMap]) =>
-        tranches.map(
+        tranches?.map(
           (tranche) =>
             denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
               amount: '0',
@@ -111,11 +113,14 @@ export class SimpleVaultComponent implements OnInit {
       ),
     );
     this.ptAmount$ = ptBalances$.pipe(
-      map((ptBalances) => ptBalances.reduce((a, b) => a + Number(b.amount), 0)),
+      map((ptBalances) => ptBalances?.reduce((a, b) => a + Number(b.amount), 0)),
     );
     this.ptValue$ = combineLatest([ptBalances$, this.trancheFixedAPYs$]).pipe(
       map(([ptBalance, fixedAPYs]) => {
         let value = 0;
+        if (!ptBalance?.length) {
+          return value;
+        }
         for (let i = 0; i < ptBalance.length; i++) {
           if (ptBalance[i] && fixedAPYs[i]) {
             if (fixedAPYs[i]?.pt_rate_per_deposit) {
@@ -180,8 +185,8 @@ export class SimpleVaultComponent implements OnInit {
       this.estimateMintPt$,
     ]).pipe(
       map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
-        const index = tranches.findIndex((tranche) => tranche?.id === id);
-        if (!fixedAPYs[index]?.pt_rate_per_deposit) {
+        const index = tranches?.findIndex((tranche) => tranche?.id === id);
+        if (!index || !fixedAPYs[index]?.pt_rate_per_deposit) {
           return ptValue || 0;
         }
         const rate = Number(fixedAPYs[index]?.pt_rate_per_deposit);

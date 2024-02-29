@@ -27,7 +27,7 @@ export class SimplePoolComponent implements OnInit {
   @Input()
   vault?: VaultByContract200ResponseVault | null;
   @Input()
-  poolAPYs?: TranchePoolAPYs200Response[] | null;
+  poolAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()

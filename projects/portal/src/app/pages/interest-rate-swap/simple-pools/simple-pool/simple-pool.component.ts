@@ -27,16 +27,16 @@ import {
 export class SimplePoolComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
-  pools$: Observable<AllTranches200ResponseTranchesInner[]>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  poolAPYs$: Observable<TranchePoolAPYs200Response[]>;
+  pools$: Observable<AllTranches200ResponseTranchesInner[] | undefined>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  poolAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
   lpAmountForMint$: BehaviorSubject<EstimationInfo>;
-  estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response>;
+  estimatedMintAmount$: Observable<EstimateMintLiquidityPoolToken200Response | undefined>;
   lpAmountForRedeem$: BehaviorSubject<EstimationInfo>;
-  estimatedRedeemAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]>;
+  estimatedRedeemAmount$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[] | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,7 +61,11 @@ export class SimplePoolComponent implements OnInit {
     this.poolAPYs$ = this.pools$.pipe(
       mergeMap((pools) =>
         Promise.all(
-          pools.map(async (pool) => await this.irsQuery.getTranchePoolAPYs$(pool.id!).toPromise()),
+          pools
+            ? pools.map(
+                async (pool) => await this.irsQuery.getTranchePoolAPYs$(pool.id!).toPromise(),
+              )
+            : [],
         ),
       ),
     );
@@ -84,7 +88,7 @@ export class SimplePoolComponent implements OnInit {
       mergeMap((info) => this.irsQuery.estimateMintLiquidity(info.poolId, info.denom, info.amount)),
     );
     this.estimatedRedeemAmount$ = this.lpAmountForRedeem$.pipe(
-      mergeMap((info) => this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount)),
+      mergeMap((info) => this.irsQuery.estimateRedeemLiquidity$(info.poolId, info.amount)),
     );
   }
 

@@ -47,11 +47,11 @@ export interface ReadableEstimationInfo {
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
-  vault$: Observable<VaultByContract200ResponseVault>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
   trancheId$: Observable<string>;
-  tranchePool$: Observable<AllTranches200ResponseTranchesInner>;
-  trancheYtAPYs$: Observable<TrancheYtAPYs200Response>;
-  tranchePtAPYs$: Observable<TranchePtAPYs200Response>;
+  tranchePool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
+  trancheYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
+  tranchePtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
   swapTab$: Observable<'pt' | 'yt'>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
@@ -251,7 +251,7 @@ export class VaultComponent implements OnInit {
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbol$ = combineLatest([this.tranchePool$, denomMetadataMap$]).pipe(
       map(([pool, metadata]) => {
-        return metadata[pool.deposit_denom || '']?.symbol;
+        return metadata[pool?.deposit_denom || '']?.symbol;
       }),
     );
     const price$ = symbol$.pipe(
@@ -266,7 +266,7 @@ export class VaultComponent implements OnInit {
       }),
     );
     const tranchePtAPYs$ = this.tranchePool$.pipe(
-      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool?.id!)),
     );
     this.totalLiquidityUSD$ = combineLatest([
       this.tranchePool$,
@@ -277,13 +277,13 @@ export class VaultComponent implements OnInit {
       map(([pool, price, apy, ptDenom]) => {
         let value = 0;
         let assets: { [denom: string]: number } = {};
-        if (!pool.pool_assets || !price) {
+        if (!pool?.pool_assets || !price) {
           return;
         }
         for (const asset of pool.pool_assets) {
           const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
           if (asset.denom === ptDenom) {
-            const rate = Number(apy.pt_rate_per_deposit);
+            const rate = Number(apy?.pt_rate_per_deposit);
             if (!rate) {
               continue;
             }

@@ -18,7 +18,7 @@ export class PoolsComponent implements OnInit {
   vaults$ = this.irsQuery.listVaults$();
   poolsAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
   vaultsImages$: Observable<IRSVaultImage[]>;
-  totalLiquiditiesUSD$: Observable<number[]>;
+  totalLiquiditiesUSD$: Observable<number[] | undefined>;
 
   constructor(
     private readonly irsQuery: IrsQueryService,
@@ -29,9 +29,11 @@ export class PoolsComponent implements OnInit {
     this.poolsAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePoolAPYs(tranche.id) : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTranchePoolAPYs(tranche.id) : undefined,
+              )
+            : [],
         ),
       ),
     );
@@ -39,35 +41,39 @@ export class PoolsComponent implements OnInit {
 
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbols$ = combineLatest([this.tranchePools$, denomMetadataMap$]).pipe(
-      map(([pools, metadata]) => pools.map((pool) => metadata[pool.deposit_denom || '']?.symbol)),
+      map(([pools, metadata]) => pools?.map((pool) => metadata[pool.deposit_denom || '']?.symbol)),
     );
     const prices$ = symbols$.pipe(
       mergeMap((symbols) =>
         Promise.all(
-          symbols.map(async (symbol) => {
-            if (!symbol) {
-              return 0;
-            }
-            if (symbol.includes('st')) {
-              symbol = symbol.replace('st', '');
-            }
-            return await this.bandProtocolService.getPrice(symbol);
-          }),
+          symbols
+            ? symbols.map(async (symbol) => {
+                if (!symbol) {
+                  return 0;
+                }
+                if (symbol.includes('st')) {
+                  symbol = symbol.replace('st', '');
+                }
+                return await this.bandProtocolService.getPrice(symbol);
+              })
+            : [],
         ),
       ),
     );
     const poolsPtAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
+              )
+            : [],
         ),
       ),
     );
     this.totalLiquiditiesUSD$ = combineLatest([this.tranchePools$, prices$, poolsPtAPYs$]).pipe(
       map(([pools, prices, apys]) =>
-        pools.map((pool, i) => {
+        pools?.map((pool, i) => {
           let value = 0;
           const price = prices[i];
           const apy = apys[i];

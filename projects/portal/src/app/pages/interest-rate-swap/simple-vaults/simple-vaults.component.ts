@@ -17,10 +17,10 @@ export class SimpleVaultsComponent implements OnInit {
   address$: Observable<string>;
   vaults$ = this.irsQuery.listVaults$();
   tranchePools$ = this.irsQuery.listAllTranches$();
-  vaultsMaxFixedAPYs$: Observable<number[]>;
+  vaultsMaxFixedAPYs$: Observable<number[] | undefined>;
   vaultsImages$: Observable<IRSVaultImage[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
-  ptValues$: Observable<number[]>;
+  ptValues$: Observable<number[] | undefined>;
 
   constructor(
     private readonly walletService: WalletService,
@@ -38,19 +38,21 @@ export class SimpleVaultsComponent implements OnInit {
     const trancheFixedAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id
-              ? await this.irsQuery.getTranchePtAPYs(tranche.id).then((apy) => {
-                  return { ...apy, strategy_contract: tranche.strategy_contract };
-                })
-              : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id
+                  ? await this.irsQuery.getTranchePtAPYs(tranche.id).then((apy) => {
+                      return { ...apy, strategy_contract: tranche.strategy_contract };
+                    })
+                  : undefined,
+              )
+            : [],
         ),
       ),
     );
     this.vaultsMaxFixedAPYs$ = combineLatest([this.vaults$, trancheFixedAPYs$]).pipe(
       map(([vaults, apys]) =>
-        vaults.map((vault) => {
+        vaults?.map((vault) => {
           const fixedAPYs = apys.filter(
             (apy) => apy?.strategy_contract === vault.strategy_contract,
           );
@@ -66,14 +68,14 @@ export class SimpleVaultsComponent implements OnInit {
       this.denomBalancesMap$,
     ]).pipe(
       map(([vaults, tranches, apys, denomBalancesMap]) =>
-        vaults.map((vault) => {
+        vaults?.map((vault) => {
           const fixedAPYs = apys.filter(
             (apy) => apy?.strategy_contract === vault.strategy_contract,
           );
-          const vaultTranches = tranches.filter(
+          const vaultTranches = tranches?.filter(
             (tranche) => tranche.strategy_contract === vault.strategy_contract,
           );
-          const trancheBalances = vaultTranches.map(
+          const trancheBalances = vaultTranches?.map(
             (tranche) =>
               denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
                 amount: '0',
@@ -81,6 +83,9 @@ export class SimpleVaultsComponent implements OnInit {
               },
           );
           let value = 0;
+          if (!trancheBalances?.length) {
+            return value;
+          }
           for (let i = 0; i < trancheBalances.length; i++) {
             if (trancheBalances[i] && fixedAPYs[i]) {
               if (fixedAPYs[i]?.pt_rate_per_deposit) {

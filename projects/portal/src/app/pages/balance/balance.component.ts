@@ -31,7 +31,7 @@ export class BalanceComponent implements OnInit {
   denomMetadataMap$: Observable<{
     [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
-  irsImages$: Observable<(AllTranches200ResponseTranchesInner & IRSVaultImage)[]>;
+  irsImages$: Observable<(AllTranches200ResponseTranchesInner & IRSVaultImage)[] | undefined>;
 
   faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
@@ -108,7 +108,7 @@ export class BalanceComponent implements OnInit {
     const irsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.irsImages$ = combineLatest([irsTranche$, irsImages$]).pipe(
       map(([tranches, images]) =>
-        tranches.map((tranche) => {
+        tranches?.map((tranche) => {
           const image = images.find((i) => i.contract === tranche.strategy_contract) || {
             contract: tranche.strategy_contract || '',
             image: '',

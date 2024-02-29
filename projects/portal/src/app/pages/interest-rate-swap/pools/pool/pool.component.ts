@@ -29,9 +29,9 @@ export class PoolComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
   poolId$: Observable<string>;
-  pool$: Observable<AllTranches200ResponseTranchesInner>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  poolAPYs$: Observable<TranchePoolAPYs200Response>;
+  pool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  poolAPYs$: Observable<TranchePoolAPYs200Response | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   ptDenom$: Observable<string>;
   lpDenom$: Observable<string>;
@@ -67,10 +67,10 @@ export class PoolComponent implements OnInit {
     this.poolId$ = this.route.params.pipe(map((params) => params.id));
     this.pool$ = this.poolId$.pipe(mergeMap((id) => this.irsQuery.getTranche$(id)));
     this.vault$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getVaultByContract$(pool.strategy_contract!)),
+      mergeMap((pool) => this.irsQuery.getVaultByContract$(pool?.strategy_contract!)),
     );
     this.poolAPYs$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getTranchePoolAPYs$(pool.id!)),
+      mergeMap((pool) => this.irsQuery.getTranchePoolAPYs$(pool?.id!)),
     );
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
@@ -117,7 +117,7 @@ export class PoolComponent implements OnInit {
         if (!info) {
           return of(undefined);
         }
-        return this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount);
+        return this.irsQuery.estimateRedeemLiquidity$(info.poolId, info.amount);
       }),
     );
     this.estimatedRedeemAmount$ = combineLatest([this.vault$, redeemLiquidity$]).pipe(
@@ -142,7 +142,7 @@ export class PoolComponent implements OnInit {
 
     const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
     const symbol$ = combineLatest([this.pool$, denomMetadataMap$]).pipe(
-      map(([pool, metadata]) => metadata[pool.deposit_denom || '']?.symbol),
+      map(([pool, metadata]) => metadata[pool?.deposit_denom || '']?.symbol),
     );
     const price$ = symbol$.pipe(
       mergeMap((symbol) => {
@@ -161,11 +161,11 @@ export class PoolComponent implements OnInit {
     );
     const fullRedeemLiquidity$ = combineLatest([this.pool$, lpBalance$]).pipe(
       mergeMap(([pool, lpBalance]) =>
-        this.irsQuery.estimateRedeemLiquidity(pool.id!, lpBalance.amount!),
+        this.irsQuery.estimateRedeemLiquidity$(pool?.id!, lpBalance.amount!),
       ),
     );
     const tranchePtAPYs$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool.id!)),
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool?.id!)),
     );
     this.lpBalanceUSD$ = combineLatest([
       fullRedeemLiquidity$,
@@ -175,14 +175,14 @@ export class PoolComponent implements OnInit {
     ]).pipe(
       map(([redeem, price, apy, ptDenom]) => {
         let value = 0;
-        if (!price) {
+        if (!price || !redeem) {
           return 0;
         }
         for (const asset of redeem) {
           const amount =
             Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom || undefined));
           if (asset.denom === ptDenom) {
-            const rate = Number(apy.pt_rate_per_deposit);
+            const rate = Number(apy?.pt_rate_per_deposit);
             if (!rate) {
               continue;
             }
@@ -206,13 +206,13 @@ export class PoolComponent implements OnInit {
       map(([pool, price, apy, ptDenom]) => {
         let value = 0;
         let assets: { [denom: string]: number } = {};
-        if (!pool.pool_assets || !price) {
+        if (!pool?.pool_assets || !price) {
           return;
         }
         for (const asset of pool.pool_assets) {
           const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
           if (asset.denom === ptDenom) {
-            const rate = Number(apy.pt_rate_per_deposit);
+            const rate = Number(apy?.pt_rate_per_deposit);
             if (!rate) {
               continue;
             }

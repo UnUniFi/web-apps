@@ -17,8 +17,8 @@ import {
 })
 export class ContractPoolsComponent implements OnInit {
   contractAddress$: Observable<string>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  tranchePools$: Observable<AllTranches200ResponseTranchesInner[]>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  tranchePools$: Observable<AllTranches200ResponseTranchesInner[] | undefined>;
   poolsAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
 
@@ -37,9 +37,11 @@ export class ContractPoolsComponent implements OnInit {
     this.poolsAPYs$ = this.tranchePools$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePoolAPYs(tranche.id) : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTranchePoolAPYs(tranche.id) : undefined,
+              )
+            : [],
         ),
       ),
     );

@@ -54,6 +54,7 @@
     "@cosmjs/cosmwasm-stargate": "^0.32.0",
     "@cosmos-client/core": "0.47.4",
     "@metamask/detect-provider": "^1.2.0",
+    "@web3modal/html": "^2.7.1",
     "angular-google-charts": "^2.2.3",
     "apollo-angular": "^4.2.0",
     "assert": "^2.0.0",

@@ -399,7 +399,7 @@ export class VaultComponent implements OnInit, OnChanges {
       const balance = this.denomBalancesMap[this.ytDenom];
       if (balance) {
         const amount = Number(balance.amount) / Math.pow(10, 6);
-        this.inputYT = amount.toString();
+        this.inputYtPair = amount.toString();
         this.onChangeRedeemYtAmount();
       }
     }
@@ -421,7 +421,7 @@ export class VaultComponent implements OnInit, OnChanges {
       const balance = this.denomBalancesMap[this.ptDenom];
       if (balance) {
         const amount = Number(balance.amount) / Math.pow(10, 6);
-        this.inputPT = amount.toString();
+        this.inputPtPair = amount.toString();
         this.onChangeRedeemPtAmount();
       }
     }

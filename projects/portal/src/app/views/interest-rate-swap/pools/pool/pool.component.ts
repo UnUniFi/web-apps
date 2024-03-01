@@ -16,6 +16,7 @@ import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-r
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -35,6 +36,8 @@ export class PoolComponent implements OnInit, OnChanges {
   vault?: VaultByContract200ResponseVault | null;
   @Input()
   poolAPYs?: TranchePoolAPYs200Response | null;
+  @Input()
+  trancheYtAPYs?: TrancheYtAPYs200Response | null;
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
@@ -181,11 +184,29 @@ export class PoolComponent implements OnInit, OnChanges {
     return days;
   }
 
-  calcTotalPoolAPY(apy: TranchePoolAPYs200Response | null | undefined) {
-    if (!apy) {
-      return 0;
+  calcUnderlyingAPY(
+    poolApy: TranchePoolAPYs200Response | null | undefined,
+    ytApy: TrancheYtAPYs200Response | null | undefined,
+  ): number {
+    let apy = 0;
+    if (poolApy && ytApy) {
+      apy += Number(ytApy.ls_apy) * Number(poolApy.pt_percentage_in_pool);
     }
-    return Number(apy.liquidity_apy) + Number(apy.discount_pt_apy);
+    return apy;
+  }
+
+  calcTotalPoolAPY(
+    poolApy: TranchePoolAPYs200Response | null | undefined,
+    ytApy: TrancheYtAPYs200Response | null | undefined,
+  ): number {
+    let apy = 0;
+    if (poolApy) {
+      apy += Number(poolApy.liquidity_apy) + Number(poolApy.discount_pt_apy);
+      if (ytApy) {
+        apy += Number(ytApy.ls_apy) * Number(poolApy.pt_percentage_in_pool);
+      }
+    }
+    return apy;
   }
 
   inputMaxUT() {

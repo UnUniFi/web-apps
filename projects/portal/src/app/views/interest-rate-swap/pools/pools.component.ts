@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -19,6 +20,8 @@ export class PoolsComponent implements OnInit {
   vaults?: VaultByContract200ResponseVault[] | null;
   @Input()
   poolsAPYs?: (TranchePoolAPYs200Response | undefined)[] | null;
+  @Input()
+  poolsYtAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
   @Input()
   vaultsImages?: IRSVaultImage[] | null;
   @Input()
@@ -64,10 +67,17 @@ export class PoolsComponent implements OnInit {
     return days;
   }
 
-  calcTotalPoolAPY(apy: TranchePoolAPYs200Response | null | undefined) {
-    if (!apy) {
-      return 0;
+  calcTotalPoolAPY(
+    poolApy: TranchePoolAPYs200Response | null | undefined,
+    ytApy: TrancheYtAPYs200Response | null | undefined,
+  ): number {
+    let apy = 0;
+    if (poolApy) {
+      apy += Number(poolApy.liquidity_apy) + Number(poolApy.discount_pt_apy);
+      if (ytApy) {
+        apy += Number(ytApy.ls_apy) * Number(poolApy.pt_percentage_in_pool);
+      }
     }
-    return Number(apy.liquidity_apy) + Number(apy.discount_pt_apy);
+    return apy;
   }
 }

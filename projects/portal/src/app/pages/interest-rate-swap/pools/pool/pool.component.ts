@@ -17,6 +17,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -32,6 +33,7 @@ export class PoolComponent implements OnInit {
   pool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
   vault$: Observable<VaultByContract200ResponseVault | undefined>;
   poolAPYs$: Observable<TranchePoolAPYs200Response | undefined>;
+  trancheYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   ptDenom$: Observable<string>;
   lpDenom$: Observable<string>;
@@ -166,6 +168,9 @@ export class PoolComponent implements OnInit {
     );
     const tranchePtAPYs$ = this.pool$.pipe(
       mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool?.id!)),
+    );
+    this.trancheYtAPYs$ = this.pool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTrancheYtAPYs$(pool?.id!)),
     );
     this.lpBalanceUSD$ = combineLatest([
       fullRedeemLiquidity$,

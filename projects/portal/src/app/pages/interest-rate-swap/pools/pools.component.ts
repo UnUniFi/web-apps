@@ -6,7 +6,7 @@ import { IrsQueryService } from '../../../models/irs/irs.query.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { TranchePoolAPYs200Response } from 'ununifi-client/esm/openapi';
+import { TranchePoolAPYs200Response, TrancheYtAPYs200Response } from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-pools',
@@ -17,6 +17,7 @@ export class PoolsComponent implements OnInit {
   tranchePools$ = this.irsQuery.listAllTranches$();
   vaults$ = this.irsQuery.listVaults$();
   poolsAPYs$: Observable<(TranchePoolAPYs200Response | undefined)[]>;
+  poolsYtAPYs$: Observable<(TrancheYtAPYs200Response | undefined)[]>;
   vaultsImages$: Observable<IRSVaultImage[]>;
   totalLiquiditiesUSD$: Observable<number[] | undefined>;
 
@@ -66,6 +67,17 @@ export class PoolsComponent implements OnInit {
           tranches
             ? tranches.map(async (tranche) =>
                 tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
+              )
+            : [],
+        ),
+      ),
+    );
+    this.poolsYtAPYs$ = this.tranchePools$.pipe(
+      mergeMap((tranches) =>
+        Promise.all(
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTrancheYtAPYs(tranche.id) : undefined,
               )
             : [],
         ),

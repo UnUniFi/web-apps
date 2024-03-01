@@ -173,7 +173,7 @@
                   </td>
                   <td>
                     <div class="text-xl font-bold text-accent">
-                      {{ calcTotalPoolAPY(poolsAPYs?.[i]) || 0 | percent : '1.0-2' }}
+                      {{ calcTotalPoolAPY(poolsAPYs?.[i], poolsYtAPYs?.[i]) || 0 | percent : '1.0-2' }}
                     </div>
                   </td>
                 </tr>
@@ -215,7 +215,7 @@
                       <tr>
                         <td class="flex flex-row flex-wrap gap-2 items-end">
                           <div class="text-xl text-accent">
-                            {{ calcTotalPoolAPY(poolsAPYs?.[i]) || 0 | percent : '1.0-2' }}
+                            {{ calcTotalPoolAPY(poolsAPYs?.[i], poolsYtAPYs?.[i]) || 0 | percent : '1.0-2' }}
                           </div>
                           <div class="text-sm">p.a.</div>
                           <span class="material-symbols-outlined text-accent"> bolt </span>

@@ -345,7 +345,9 @@
             <h2 class="card-title">
               <span>APY</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{ calcTotalPoolAPY(poolAPYs) | percent : '1.2-2' }}</span>
+              <span class="text-accent">{{
+                calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2'
+              }}</span>
             </h2>
 
             <div class="overflow-x-auto">
@@ -353,7 +355,7 @@
                 <tbody>
                   <tr class="bg-base-100">
                     <th>Underlying Yield</th>
-                    <td>{{ 0 | percent : '1.2-2' }}</td>
+                    <td>{{ calcUnderlyingAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2' }}</td>
                   </tr>
                   <tr class="bg-base-100">
                     <th>PT Yield</th>

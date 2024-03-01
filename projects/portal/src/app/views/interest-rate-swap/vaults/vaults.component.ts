@@ -25,7 +25,7 @@ export class VaultsComponent implements OnInit {
   @Input()
   vaultsImages?: IRSVaultImage[] | null;
   @Input()
-  trancheTokenPrices?: { ptPrice: number; ytPrice: number }[] | null;
+  trancheTokenPrices?: { depositPrice: number; ptPrice: number; ytPrice: number }[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'table';

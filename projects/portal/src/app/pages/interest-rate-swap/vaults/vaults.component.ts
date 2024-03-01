@@ -18,7 +18,7 @@ export class VaultsComponent implements OnInit {
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   trancheLongAPYs$: Observable<(TrancheYtAPYs200Response | undefined)[]>;
   vaultsImages$: Observable<IRSVaultImage[]>;
-  trancheTokenPrices$: Observable<{ ptPrice: number; ytPrice: number }[]>;
+  trancheTokenPrices$: Observable<{ depositPrice: number; ptPrice: number; ytPrice: number }[]>;
 
   constructor(
     private readonly irsQuery: IrsQueryService,
@@ -97,17 +97,16 @@ export class VaultsComponent implements OnInit {
       map(([prices, ptAPYs, ytAPYs]) =>
         prices.map((price, i) => {
           if (!price) {
-            return { ptPrice: 0, ytPrice: 0 };
+            return { depositPrice: 0, ptPrice: 0, ytPrice: 0 };
           }
           const ptRate = Number(ptAPYs[i]?.pt_rate_per_deposit);
           const ytRate = Number(ytAPYs[i]?.yt_rate_per_deposit);
           const ptPrice = ptRate ? price / ptRate : 0;
           const ytPrice = ytRate ? price / ytRate : 0;
-          return { ptPrice, ytPrice };
+          return { depositPrice: price, ptPrice, ytPrice };
         }),
       ),
     );
-    this.trancheTokenPrices$.subscribe((prices) => console.log(prices));
   }
 
   ngOnInit(): void {}

@@ -186,7 +186,7 @@ export class SimpleVaultComponent implements OnInit {
     ]).pipe(
       map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
         const index = tranches?.findIndex((tranche) => tranche?.id === id);
-        if (!index || !fixedAPYs[index]?.pt_rate_per_deposit) {
+        if (index == undefined || !fixedAPYs[index]?.pt_rate_per_deposit) {
           return ptValue || 0;
         }
         const rate = Number(fixedAPYs[index]?.pt_rate_per_deposit);

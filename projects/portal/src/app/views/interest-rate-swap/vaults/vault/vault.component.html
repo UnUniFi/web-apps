@@ -718,19 +718,19 @@
             </div> -->
             <div class="stat">
               <div class="stat-title">Underlying APY</div>
-              <div class="stat-value">{{ trancheYtAPYs?.ls_apy | percent : '1.2-2' }}</div>
+              <div class="stat-value">{{ trancheYtAPYs?.ls_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat" *ngIf="swapTab === 'pt'">
               <div class="stat-title">
                 Fixed APY (with 1{{ vault?.deposit_denom | coinDenom | async }})
               </div>
-              <div class="stat-value">{{ tranchePtAPYs?.pt_apy | percent : '1.2-2' }}</div>
+              <div class="stat-value">{{ tranchePtAPYs?.pt_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat" *ngIf="swapTab === 'yt'">
               <div class="stat-title">Long Yield APY (with 10YT)</div>
-              <div class="stat-value">{{ trancheYtAPYs?.yt_apy | percent : '1.2-2' }}</div>
+              <div class="stat-value">{{ trancheYtAPYs?.yt_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
           </div>

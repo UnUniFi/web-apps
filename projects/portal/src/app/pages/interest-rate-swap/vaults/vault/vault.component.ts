@@ -231,7 +231,7 @@ export class VaultComponent implements OnInit {
           return 0;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return (Number(coin.amount) + 1) / Math.pow(10, exponent);
+        return Math.floor(Number(coin.amount) * 1.01) / Math.pow(10, exponent);
       }),
     );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(

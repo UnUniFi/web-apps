@@ -198,11 +198,11 @@ export class SimpleVaultComponent implements OnInit {
       this.selectedPoolId$,
       this.utAmountForMintPt$.asObservable(),
     ]).pipe(
-      mergeMap(([poolId, mintAmount]) => {
-        if (!poolId || !mintAmount) {
+      mergeMap(([poolId, depositAmount]) => {
+        if (!poolId || !depositAmount) {
           return of(undefined);
         }
-        return this.irsQuery.getTranchePtAPYs$(poolId, mintAmount.amount);
+        return this.irsQuery.getTranchePtAPYs$(poolId, depositAmount.amount);
       }),
     );
   }

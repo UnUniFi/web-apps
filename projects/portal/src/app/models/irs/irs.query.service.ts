@@ -309,21 +309,27 @@ export class IrsQueryService {
     );
   }
 
-  async getTranchePtAPYs(poolId: string): Promise<TranchePtAPYs200Response | undefined> {
+  async getTranchePtAPYs(
+    poolId: string,
+    depositAmount?: string,
+  ): Promise<TranchePtAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     try {
-      const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId);
+      const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId, depositAmount);
       return res.data;
     } catch (error) {
       return undefined;
     }
   }
 
-  getTranchePtAPYs$(poolId: string): Observable<TranchePtAPYs200Response | undefined> {
+  getTranchePtAPYs$(
+    poolId: string,
+    depositAmount?: string,
+  ): Observable<TranchePtAPYs200Response | undefined> {
     return this.restSdk$.pipe(
       mergeMap(async (sdk) => {
         try {
-          const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId);
+          const res = await ununifi.rest.irs.tranchePtAPYs(sdk, poolId, depositAmount);
           return res.data;
         } catch (e) {
           console.error('Failed to get PT APY', e);
@@ -333,21 +339,27 @@ export class IrsQueryService {
     );
   }
 
-  async getTrancheYtAPYs(poolId: string): Promise<TrancheYtAPYs200Response | undefined> {
+  async getTrancheYtAPYs(
+    poolId: string,
+    desiredYtAmount?: string,
+  ): Promise<TrancheYtAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     try {
-      const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId);
+      const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId, desiredYtAmount);
       return res.data;
     } catch (error) {
       return undefined;
     }
   }
 
-  getTrancheYtAPYs$(poolId: string): Observable<TrancheYtAPYs200Response | undefined> {
+  getTrancheYtAPYs$(
+    poolId: string,
+    desiredYtAmount?: string,
+  ): Observable<TrancheYtAPYs200Response | undefined> {
     return this.restSdk$.pipe(
       mergeMap(async (sdk) => {
         try {
-          const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId);
+          const res = await ununifi.rest.irs.trancheYtAPYs(sdk, poolId, desiredYtAmount);
           return res.data;
         } catch (e) {
           console.error('Failed to get YT APY', e);
@@ -357,21 +369,27 @@ export class IrsQueryService {
     );
   }
 
-  async getTranchePoolAPYs(poolId: string): Promise<TranchePoolAPYs200Response | undefined> {
+  async getTranchePoolAPYs(
+    poolId: string,
+    depositAmount?: string,
+  ): Promise<TranchePoolAPYs200Response | undefined> {
     const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
     try {
-      const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId);
+      const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId, depositAmount);
       return res.data;
     } catch (error) {
       return undefined;
     }
   }
 
-  getTranchePoolAPYs$(poolId: string): Observable<TranchePoolAPYs200Response | undefined> {
+  getTranchePoolAPYs$(
+    poolId: string,
+    depositAmount?: string,
+  ): Observable<TranchePoolAPYs200Response | undefined> {
     return this.restSdk$.pipe(
       mergeMap(async (sdk) => {
         try {
-          const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId);
+          const res = await ununifi.rest.irs.tranchePoolAPYs(sdk, poolId, depositAmount);
           return res.data;
         } catch (e) {
           console.error('Failed to get pool APY', e);

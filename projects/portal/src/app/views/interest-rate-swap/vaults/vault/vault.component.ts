@@ -272,8 +272,8 @@ export class VaultComponent implements OnInit, OnChanges {
       alert('Unable to redeem YT.');
       return;
     }
-    const ptAmount = this.estimateRedeemPtYt.ptAmount ?? Number(this.inputPT);
-    const ytAmount = this.estimateRedeemPtYt.ytAmount ?? Number(this.inputYT);
+    const ptAmount = this.estimateRedeemPtYt.ptAmount ?? Number(this.inputPtPair);
+    const ytAmount = this.estimateRedeemPtYt.ytAmount ?? Number(this.inputYtPair);
     this.appRedeemPTYT.emit({
       trancheId: this.trancheId,
       trancheType: 0,

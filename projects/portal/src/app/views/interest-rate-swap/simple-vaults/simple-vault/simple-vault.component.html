@@ -221,12 +221,12 @@
             class="text-xl flex flex-row items-center text-accent"
             [class]="{ 'text-error': isNegativeValue(actualFixedAPYs?.pt_apy) }"
           >
-            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+            <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
             <span> {{ actualFixedAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
           </div>
         </div>
 
-        <div class="flex flex-row items-center gap-4">
+        <div class="flex flex-row items-center gap-4 -mt-2">
           <div class="flex flex-col justify-center items-center sm:ml-8">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -254,10 +254,10 @@
               />
             </svg>
           </div>
-          <div class="text-xl text-secondary">Fee</div>
+          <div class="text-xl text-secondary mt-4">Fee</div>
           <div class="flex-auto"></div>
-          <div class="text-xl text-accent flex flex-row items-center">
-            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+          <div class="text-xl text-accent flex flex-row items-center mt-4">
+            <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
             <span>{{ 0 | currency }}</span>
           </div>
         </div>
@@ -373,7 +373,7 @@
           </div>
         </div> -->
 
-        <div class="flex flex-row items-center gap-4">
+        <div class="flex flex-row items-center gap-4 -mt-2">
           <div class="flex flex-col justify-center items-center ml-8">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -401,10 +401,10 @@
               />
             </svg>
           </div>
-          <div class="text-xl text-secondary">Fee</div>
+          <div class="text-xl text-secondary mt-4">Fee</div>
           <div class="flex-auto"></div>
-          <div class="text-xl text-accent flex flex-row items-center">
-            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+          <div class="text-xl text-accent flex flex-row items-center mt-4">
+            <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
             <span>{{ 0 | currency }}</span>
           </div>
         </div>

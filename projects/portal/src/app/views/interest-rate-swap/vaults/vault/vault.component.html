@@ -182,6 +182,57 @@
                 <span class="label-text"></span>
               </span>
             </div>
+            <div class="flex flex-row items-center gap-4 -mt-4">
+              <div class="flex flex-col justify-center items-center ml-8">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="17"
+                  viewBox="0 0 2 17"
+                  fill="none"
+                >
+                  <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8.00586"
+                    r="7.5"
+                    fill="#ADC9FF"
+                    fill-opacity="0.2"
+                    stroke="#ADC9FF"
+                  />
+                </svg>
+              </div>
+              <ng-container *ngIf="swapTab === 'pt'">
+                <div class="text-xl text-secondary mt-4">Fixed APY</div>
+                <div class="flex-auto"></div>
+                <div
+                  class="text-xl flex flex-row items-center text-accent mt-4"
+                  [class]="{ 'text-error': isNegativeValue(actualPtAPYs?.pt_apy) }"
+                >
+                  <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
+                  <span> {{ actualPtAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="swapTab === 'yt'">
+                <div class="text-xl text-secondary mt-4">Long Yield APY</div>
+                <div class="flex-auto"></div>
+                <div
+                  class="text-xl flex flex-row items-center text-accent mt-4"
+                  [class]="{ 'text-error': isNegativeValue(actualYtAPYs?.yt_apy) }"
+                >
+                  <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
+                  <span> {{ actualYtAPYs?.yt_apy || 0 | percent : '1.2-2' }} </span>
+                </div>
+              </ng-container>
+            </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="swapMintFormRef.invalid">
                 <span class="material-symbols-outlined"> currency_exchange </span>
@@ -477,6 +528,44 @@
               <span class="label">
                 <span class="label-text"></span>
               </span>
+            </div>
+            <div class="flex flex-row items-center gap-4 -mt-6">
+              <div class="flex flex-col justify-center items-center ml-8">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="17"
+                  viewBox="0 0 2 17"
+                  fill="none"
+                >
+                  <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8.00586"
+                    r="7.5"
+                    fill="#ADC9FF"
+                    fill-opacity="0.2"
+                    stroke="#ADC9FF"
+                  />
+                </svg>
+              </div>
+              <div class="text-xl text-secondary mt-4">Underlying APY</div>
+              <div class="flex-auto"></div>
+              <div
+                class="text-xl flex flex-row items-center text-accent mt-4"
+                [class]="{ 'text-error': false }"
+              >
+                <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
+                <span> {{ trancheYtAPYs?.ls_apy || 0 | percent : '1.2-2' }} </span>
+              </div>
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="mintMintFormRef.invalid">

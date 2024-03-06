@@ -52,6 +52,8 @@ export class VaultComponent implements OnInit {
   tranchePool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
   trancheYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
   tranchePtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
+  actualYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
+  actualPtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
   swapTab$: Observable<'pt' | 'yt'>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
@@ -297,6 +299,28 @@ export class VaultComponent implements OnInit {
           }
         }
         return { total: value, assets };
+      }),
+    );
+    this.actualPtAPYs$ = combineLatest([
+      this.trancheId$,
+      this.utAmountForMintPt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, depositAmount]) => {
+        if (!poolId || !depositAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTranchePtAPYs$(poolId, depositAmount.amount);
+      }),
+    );
+    this.actualYtAPYs$ = combineLatest([
+      this.trancheId$,
+      this.ytAmountDesiredForMintYt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, desiredAmount]) => {
+        if (!poolId || !desiredAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTrancheYtAPYs$(poolId, desiredAmount.amount);
       }),
     );
   }

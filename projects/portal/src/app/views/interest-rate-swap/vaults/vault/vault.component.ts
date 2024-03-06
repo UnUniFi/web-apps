@@ -46,6 +46,10 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   tranchePtAPYs?: TranchePtAPYs200Response | null;
   @Input()
+  actualYtAPYs?: TrancheYtAPYs200Response | null;
+  @Input()
+  actualPtAPYs?: TranchePtAPYs200Response | null;
+  @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
   ptDenom?: string | null;
@@ -425,5 +429,12 @@ export class VaultComponent implements OnInit, OnChanges {
         this.onChangeRedeemPtAmount();
       }
     }
+  }
+
+  isNegativeValue(value: string | undefined): boolean {
+    if (value === undefined) {
+      return false;
+    }
+    return Number(value) < 0;
   }
 }

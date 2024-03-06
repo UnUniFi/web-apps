@@ -44,6 +44,7 @@ export class SimpleVaultComponent implements OnInit {
   estimateRedeemPt$: Observable<number | undefined>;
   afterPtAmount$: Observable<number>;
   afterPtValue$: Observable<number>;
+  actualFixedAPYs$: Observable<TranchePtAPYs200Response | undefined>;
 
   constructor(
     private route: ActivatedRoute,
@@ -191,6 +192,17 @@ export class SimpleVaultComponent implements OnInit {
         }
         const rate = Number(fixedAPYs[index]?.pt_rate_per_deposit);
         return (ptValue || 0) + (mintPt || 0) / rate - Number(redeemPt?.amount || 0) / rate;
+      }),
+    );
+    this.actualFixedAPYs$ = combineLatest([
+      this.selectedPoolId$,
+      this.utAmountForMintPt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, mintAmount]) => {
+        if (!poolId || !mintAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTranchePtAPYs$(poolId, mintAmount.amount);
       }),
     );
   }

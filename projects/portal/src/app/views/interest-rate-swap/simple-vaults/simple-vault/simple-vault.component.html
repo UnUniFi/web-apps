@@ -215,11 +215,14 @@
               <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
             </svg>
           </div>
-          <div class="text-xl text-secondary">Price Impact</div>
+          <div class="text-xl text-secondary">Fixed APY</div>
           <div class="flex-auto"></div>
-          <div class="text-xl text-accent flex flex-row items-center">
+          <div
+            class="text-xl flex flex-row items-center text-accent"
+            [class]="{ 'text-error': isNegativeValue(actualFixedAPYs?.pt_apy) }"
+          >
             <span class="material-symbols-outlined"> keyboard_arrow_left </span>
-            <span>{{ 0 | percent : '1.6-6' }}</span>
+            <span> {{ actualFixedAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
           </div>
         </div>
 
@@ -325,7 +328,7 @@
           </label>
         </div>
 
-        <div class="flex flex-row items-center gap-4">
+        <!-- <div class="flex flex-row items-center gap-4">
           <div class="flex flex-col justify-center items-center ml-8">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -368,7 +371,7 @@
             <span class="material-symbols-outlined"> keyboard_arrow_left </span>
             <span>{{ 0 | percent : '1.6-6' }}</span>
           </div>
-        </div>
+        </div> -->
 
         <div class="flex flex-row items-center gap-4">
           <div class="flex flex-col justify-center items-center ml-8">

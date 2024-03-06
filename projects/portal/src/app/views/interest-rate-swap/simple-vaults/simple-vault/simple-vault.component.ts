@@ -46,6 +46,8 @@ export class SimpleVaultComponent implements OnInit {
   afterPtAmount?: number | null;
   @Input()
   afterPtValue?: number | null;
+  @Input()
+  actualFixedAPYs?: TranchePtAPYs200Response | null;
 
   inputUnderlying?: string;
   inputPT?: string;
@@ -181,5 +183,12 @@ export class SimpleVaultComponent implements OnInit {
         this.onChangeDeposit();
       }
     }
+  }
+
+  isNegativeValue(value: string | undefined): boolean {
+    if (value === undefined) {
+      return false;
+    }
+    return Number(value) < 0;
   }
 }

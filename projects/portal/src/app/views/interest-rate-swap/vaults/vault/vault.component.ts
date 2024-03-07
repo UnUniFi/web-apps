@@ -72,6 +72,10 @@ export class VaultComponent implements OnInit, OnChanges {
   @Input()
   swapTab?: 'pt' | 'yt' | null;
   @Input()
+  modeTab?: 'swap' | 'mint' | null;
+  @Input()
+  txMode?: 'deposit' | 'redeem' | null;
+  @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
   totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
@@ -84,9 +88,7 @@ export class VaultComponent implements OnInit, OnChanges {
   inputYtPair?: string;
   inputPtPair?: string;
 
-  modeTab: 'swap' | 'mint' = 'swap';
   txTab: 'all' | 'swap' | 'liquidity' = 'all';
-  txMode: 'mint' | 'redeem' = 'mint';
 
   @Output()
   appMintPT: EventEmitter<MintPtRequest> = new EventEmitter<MintPtRequest>();
@@ -118,6 +120,12 @@ export class VaultComponent implements OnInit, OnChanges {
   @Output()
   appChangeRedeemYT: EventEmitter<ReadableEstimationInfo> =
     new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appChangeSwapTab: EventEmitter<'pt' | 'yt'> = new EventEmitter<'pt' | 'yt'>();
+  @Output()
+  appChangeModeTab: EventEmitter<'swap' | 'mint'> = new EventEmitter<'swap' | 'mint'>();
+  @Output()
+  appChangeTxMode: EventEmitter<'deposit' | 'redeem'> = new EventEmitter<'deposit' | 'redeem'>();
 
   constructor(private router: Router) {}
 
@@ -436,5 +444,18 @@ export class VaultComponent implements OnInit, OnChanges {
       return false;
     }
     return Number(value) < 0;
+  }
+
+  onChangeSwapTab(mode: 'pt' | 'yt') {
+    this.swapTab = mode;
+    this.appChangeSwapTab.emit(mode);
+  }
+  onChangeModeTab(mode: 'swap' | 'mint') {
+    this.modeTab = mode;
+    this.appChangeModeTab.emit(mode);
+  }
+  onChangeTxMode(mode: 'deposit' | 'redeem') {
+    this.txMode = mode;
+    this.appChangeTxMode.emit(mode);
   }
 }

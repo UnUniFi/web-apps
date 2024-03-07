@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
@@ -55,6 +55,8 @@ export class VaultComponent implements OnInit {
   actualYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
   actualPtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
   swapTab$: Observable<'pt' | 'yt'>;
+  modeTab$: Observable<'mint' | 'swap'>;
+  txMode$: Observable<'deposit' | 'redeem'>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   ptDenom$: Observable<string>;
@@ -82,6 +84,7 @@ export class VaultComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
@@ -90,6 +93,9 @@ export class VaultComponent implements OnInit {
     private readonly configS: ConfigService,
     private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.swapTab$ = this.route.queryParams.pipe(map((params) => params.swap || 'pt'));
+    this.modeTab$ = this.route.queryParams.pipe(map((params) => params.mode || 'mint'));
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -106,7 +112,6 @@ export class VaultComponent implements OnInit {
     this.tranchePtAPYs$ = this.trancheId$.pipe(
       mergeMap((id) => this.irsQuery.getTranchePtAPYs$(id)),
     );
-    this.swapTab$ = this.route.queryParams.pipe(map((params) => params.view || 'pt'));
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
       map(([contract, images]) => images.find((image) => image.contract === contract)),
@@ -411,6 +416,33 @@ export class VaultComponent implements OnInit {
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',
+    });
+  }
+  onChangeSwapTab(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        swap: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeModeTab(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        mode: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeTxMode(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
     });
   }
 }

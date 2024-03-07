@@ -28,7 +28,7 @@
             [class.text-accent]="swapTab === 'pt' && modeTab === 'swap'"
             [class.border-primary]="swapTab === 'yt' && modeTab === 'swap'"
             [class.text-primary]="swapTab === 'yt' && modeTab === 'swap'"
-            (click)="modeTab = 'swap'"
+            (click)="onChangeModeTab('swap')"
           >
             Swap
           </a>
@@ -38,7 +38,7 @@
             [class.text-accent]="swapTab === 'pt' && modeTab === 'mint'"
             [class.border-primary]="swapTab === 'yt' && modeTab === 'mint'"
             [class.text-primary]="swapTab === 'yt' && modeTab === 'mint'"
-            (click)="modeTab = 'mint'"
+            (click)="onChangeModeTab('mint')"
           >
             Mint
           </a>
@@ -46,7 +46,7 @@
         <div class="card-body">
           <form
             #swapMintFormRef="ngForm"
-            *ngIf="modeTab === 'swap' && txMode === 'mint'"
+            *ngIf="modeTab === 'swap' && txMode === 'deposit'"
             (submit)="onSubmitSwap()"
           >
             <div class="form-control">
@@ -123,7 +123,7 @@
             </div>
 
             <div class="flex flex-row justify-center">
-              <button type="button" class="btn btn-circle" (click)="txMode = 'redeem'">
+              <button type="button" class="btn btn-circle" (click)="onChangeTxMode('redeem')">
                 <span class="material-symbols-outlined"> swap_vert </span>
               </button>
             </div>
@@ -336,7 +336,7 @@
             </div>
 
             <div class="flex flex-row justify-center">
-              <button type="button" class="btn btn-circle" (click)="txMode = 'mint'">
+              <button type="button" class="btn btn-circle" (click)="onChangeTxMode('deposit')">
                 <span class="material-symbols-outlined"> swap_vert </span>
               </button>
             </div>
@@ -405,19 +405,19 @@
 
           <form
             #mintMintFormRef="ngForm"
-            *ngIf="modeTab === 'mint' && txMode === 'mint'"
+            *ngIf="modeTab === 'mint' && txMode === 'deposit'"
             (submit)="onSubmitMint()"
           >
             <div class="join mb-4">
               <button
                 type="button"
                 class="btn btn-sm join-item"
-                [class.btn-neutral]="txMode === 'mint'"
-                (click)="txMode = 'mint'"
+                [class.btn-neutral]="txMode === 'deposit'"
+                (click)="onChangeTxMode('deposit')"
               >
                 Mint
               </button>
-              <button type="button" class="btn btn-sm join-item" (click)="txMode = 'redeem'">
+              <button type="button" class="btn btn-sm join-item" (click)="onChangeTxMode('redeem')">
                 Redeem
               </button>
             </div>
@@ -581,14 +581,18 @@
             (submit)="onSubmitRedeem()"
           >
             <div class="join mb-4">
-              <button type="button" class="btn btn-sm join-item" (click)="txMode = 'mint'">
+              <button
+                type="button"
+                class="btn btn-sm join-item"
+                (click)="onChangeTxMode('deposit')"
+              >
                 Mint
               </button>
               <button
                 type="button"
                 class="btn btn-sm join-item"
                 [class.btn-neutral]="txMode === 'redeem'"
-                (click)="txMode = 'redeem'"
+                (click)="onChangeTxMode('redeem')"
               >
                 Redeem
               </button>
@@ -749,14 +753,14 @@
               <button
                 class="btn btn-sm join-item btn-accent text-neutral"
                 [class.glass]="swapTab === 'yt'"
-                (click)="swapTab = 'pt'"
+                (click)="onChangeSwapTab('pt')"
               >
                 PT
               </button>
               <button
                 class="btn btn-sm join-item btn-primary"
                 [class.glass]="swapTab === 'pt'"
-                (click)="swapTab = 'yt'"
+                (click)="onChangeSwapTab('yt')"
               >
                 YT
               </button>

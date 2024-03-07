@@ -11,6 +11,8 @@
   [ptDenom]="ptDenom$ | async"
   [ytDenom]="ytDenom$ | async"
   [swapTab]="swapTab$ | async"
+  [modeTab]="modeTab$ | async"
+  [txMode]="txMode$ | async"
   [vaultImage]="vaultImage$ | async"
   [estimateMintPt]="estimateMintPt$ | async"
   [estimateRedeemPt]="estimateRedeemPt$ | async"
@@ -31,4 +33,7 @@
   (appChangeMintYT)="onChangeMintYT($event)"
   (appRedeemYT)="onRedeemYT($event)"
   (appChangeRedeemYT)="onChangeRedeemYT($event)"
+  (appChangeSwapTab)="onChangeSwapTab($event)"
+  (appChangeModeTab)="onChangeModeTab($event)"
+  (appChangeTxMode)="onChangeTxMode($event)"
 ></view-vault>

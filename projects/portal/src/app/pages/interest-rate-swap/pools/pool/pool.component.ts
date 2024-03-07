@@ -1,6 +1,6 @@
 import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
@@ -38,6 +38,7 @@ export class PoolComponent implements OnInit {
   ptDenom$: Observable<string>;
   lpDenom$: Observable<string>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
+  txMode$: Observable<'deposit' | 'redeem'>;
 
   tokenInAmountForMint$: BehaviorSubject<EstimationInfo | undefined>;
   estimatedMintAmount$: Observable<
@@ -53,6 +54,7 @@ export class PoolComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
@@ -61,6 +63,7 @@ export class PoolComponent implements OnInit {
     private readonly configS: ConfigService,
     private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -264,6 +267,16 @@ export class PoolComponent implements OnInit {
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',
+    });
+  }
+
+  onChangeTxMode(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
     });
   }
 }

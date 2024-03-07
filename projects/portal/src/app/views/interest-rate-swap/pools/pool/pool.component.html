@@ -51,23 +51,23 @@
         <div class="tabs w-full">
           <a
             class="tab tab-lg tab-bordered w-1/2"
-            [class.tab-active]="tab === 'deposit'"
-            (click)="tab = 'deposit'"
+            [class.tab-active]="txMode === 'deposit'"
+            (click)="onChangeTxMode('deposit')"
           >
             Add
             <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
           <a
             class="tab tab-lg tab-bordered w-1/2"
-            [class.tab-active]="tab === 'withdraw'"
-            (click)="tab = 'withdraw'"
+            [class.tab-active]="txMode === 'redeem'"
+            (click)="onChangeTxMode('redeem')"
           >
             Remove
             <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
         </div>
         <div class="card-body">
-          <form #depositFormRef="ngForm" *ngIf="tab === 'deposit'" (submit)="onDepositPool()">
+          <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="onDepositPool()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
@@ -125,7 +125,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-primary">
                         <img src="{{ vaultImage?.image }}" />
@@ -136,8 +136,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT</div>
-                    <div>{{ vault?.name }}#{{ poolId }}</div>
+                    <div>PT {{ vault?.name }}#{{ poolId }}</div>
                   </span>
                   <input
                     #depositPtAmountNgModelRef="ngModel"
@@ -182,7 +181,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-secondary">
                       <img src="{{ vaultImage?.image }}" />
@@ -193,8 +192,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>LP</div>
-                  <div>{{ vault?.name }}#{{ poolId }}</div>
+                  <div>LP {{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -208,12 +206,12 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="depositFormRef.invalid">
-                <span>Add Liquidity</span>
+                <span>Deposit</span>
               </button>
             </div>
           </form>
 
-          <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onWithdrawPool()">
+          <form #withdrawFormRef="ngForm" *ngIf="txMode === 'redeem'" (submit)="onWithdrawPool()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
@@ -221,7 +219,7 @@
 
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-secondary">
                         <img src="{{ vaultImage?.image }}" />
@@ -232,8 +230,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>LP</div>
-                    <div>{{ vault?.name }}#{{ poolId }}</div>
+                    <div>LP {{ vault?.name }}#{{ poolId }}</div>
                   </span>
                   <input
                     #withdrawAmountNgModelRef="ngModel"
@@ -303,7 +300,7 @@
                 <span class="label-text"></span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
@@ -314,8 +311,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT</div>
-                  <div>{{ vault?.name }}#{{ poolId }}</div>
+                  <div>PT {{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -329,8 +325,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="withdrawFormRef.invalid">
-                <span class="material-symbols-outlined"> attach_money </span>
-                <span>Swap</span>
+                <span>Redeem</span>
               </button>
             </div>
           </form>

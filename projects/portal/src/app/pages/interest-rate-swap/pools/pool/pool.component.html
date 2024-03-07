@@ -13,8 +13,10 @@
   [estimatedRedeemAmount]="estimatedRedeemAmount$ | async"
   [lpBalanceUSD]="lpBalanceUSD$ | async"
   [totalLiquidityUSD]="totalLiquidityUSD$ | async"
+  [txMode]="txMode$ | async"
   (appMintLP)="onMintLP($event)"
   (appChangeMintLP)="onChangeMintLP($event)"
   (appRedeemLP)="onRedeemLP($event)"
   (appChangeRedeemLP)="onChangeRedeemLP($event)"
+  (appChangeTxMode)="onChangeTxMode($event)"
 ></view-pool>

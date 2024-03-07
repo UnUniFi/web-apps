@@ -54,8 +54,8 @@ export class PoolComponent implements OnInit, OnChanges {
   lpBalanceUSD?: number | null;
   @Input()
   totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
-
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  @Input()
+  txMode?: 'deposit' | 'redeem' | null;
   inputUT?: string;
   inputPT?: string;
   inputLP?: string;
@@ -70,6 +70,8 @@ export class PoolComponent implements OnInit, OnChanges {
   @Output()
   appChangeRedeemLP: EventEmitter<ReadableEstimationInfo> =
     new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appChangeTxMode: EventEmitter<'deposit' | 'redeem'> = new EventEmitter<'deposit' | 'redeem'>();
 
   constructor(private router: Router) {}
 
@@ -241,5 +243,10 @@ export class PoolComponent implements OnInit, OnChanges {
         this.onChangeWithdraw();
       }
     }
+  }
+
+  onChangeTxMode(mode: 'deposit' | 'redeem') {
+    this.txMode = mode;
+    this.appChangeTxMode.emit(mode);
   }
 }

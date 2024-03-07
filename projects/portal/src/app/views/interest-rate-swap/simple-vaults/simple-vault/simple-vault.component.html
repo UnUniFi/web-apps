@@ -102,29 +102,29 @@
     <div class="card-body">
       <h2 class="card-title">
         Step.2
-        <div *ngIf="tab === 'deposit'">Deposit to Earn</div>
-        <div *ngIf="tab === 'withdraw'">Withdraw your position</div>
+        <div *ngIf="txMode === 'deposit'">Deposit to Earn</div>
+        <div *ngIf="txMode === 'redeem'">Withdraw your position</div>
       </h2>
       <div class="tabs w-full">
         <a
           class="tab tab-lg tab-bordered w-1/2 text-accent"
-          [class.border-accent]="tab === 'deposit'"
-          [class.text-accent]="tab === 'deposit'"
+          [class.border-accent]="txMode === 'deposit'"
+          [class.text-accent]="txMode === 'deposit'"
           (click)="onSwitchDepositTab()"
         >
           Deposit
         </a>
         <a
           class="tab tab-lg tab-bordered w-1/2 text-accent"
-          [class.border-accent]="tab === 'withdraw'"
-          [class.text-accent]="tab === 'withdraw'"
+          [class.border-accent]="txMode === 'redeem'"
+          [class.text-accent]="txMode === 'redeem'"
           (click)="onSwitchWithdrawTab()"
         >
           Withdraw
         </a>
       </div>
 
-      <form #depositFormRef="ngForm" *ngIf="tab === 'deposit'" (submit)="onMintPT()">
+      <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="onMintPT()">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -270,7 +270,7 @@
         </div>
       </form>
 
-      <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onRedeemPT()">
+      <form #withdrawFormRef="ngForm" *ngIf="txMode === 'redeem'" (submit)="onRedeemPT()">
         <div class="form-control my-8">
           <input
             #withdrawAmountNgModelRef="ngModel"

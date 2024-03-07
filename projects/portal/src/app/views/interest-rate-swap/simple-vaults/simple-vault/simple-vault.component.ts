@@ -48,6 +48,8 @@ export class SimpleVaultComponent implements OnInit {
   afterPtValue?: number | null;
   @Input()
   actualFixedAPYs?: TranchePtAPYs200Response | null;
+  @Input()
+  txMode?: 'deposit' | 'redeem' | null;
 
   inputUnderlying?: string;
   inputPT?: string;
@@ -68,8 +70,8 @@ export class SimpleVaultComponent implements OnInit {
   appDeleteWithdraw: EventEmitter<{}> = new EventEmitter<{}>();
   @Output()
   appSelectTranche: EventEmitter<string> = new EventEmitter<string>();
-
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  @Output()
+  appChangeTxMode: EventEmitter<'deposit' | 'redeem'> = new EventEmitter<'deposit' | 'redeem'>();
 
   constructor(private router: Router) {}
 
@@ -147,15 +149,17 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onSwitchDepositTab() {
-    this.tab = 'deposit';
+    this.txMode = 'deposit';
     this.inputPT = undefined;
     this.appDeleteWithdraw.emit({});
+    this.appChangeTxMode.emit('deposit');
   }
 
   onSwitchWithdrawTab() {
-    this.tab = 'withdraw';
+    this.txMode = 'redeem';
     this.inputUnderlying = undefined;
     this.appDeleteDeposit.emit({});
+    this.appChangeTxMode.emit('redeem');
   }
 
   calcMaturity(pool: AllTranches200ResponseTranchesInner): number {

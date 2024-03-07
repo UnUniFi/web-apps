@@ -1,6 +1,6 @@
 import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
@@ -34,9 +34,10 @@ export class SimpleVaultComponent implements OnInit {
   tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
-  selectPoolId$?: BehaviorSubject<string | undefined>;
+  selectPoolId$?: Observable<string | undefined>;
   ptAmount$: Observable<number | undefined>;
   ptValue$: Observable<number | undefined>;
+  txMode$: Observable<'deposit' | 'redeem'>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateMintPt$: Observable<number | undefined>;
@@ -48,6 +49,7 @@ export class SimpleVaultComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
@@ -55,6 +57,8 @@ export class SimpleVaultComponent implements OnInit {
     private readonly bankService: BankService,
     private readonly configS: ConfigService,
   ) {
+    this.selectPoolId$ = this.route.queryParams.pipe(map((params) => params.tranche));
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -66,11 +70,9 @@ export class SimpleVaultComponent implements OnInit {
     this.tranches$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
     );
-    this.selectPoolId$ = new BehaviorSubject<string | undefined>(undefined);
-    this.selectedPoolId$ = combineLatest([this.tranches$, this.selectPoolId$.asObservable()]).pipe(
+    this.selectedPoolId$ = combineLatest([this.tranches$, this.selectPoolId$]).pipe(
       map(([tranches, selected]) => {
         if (selected) {
-          console.log(selected);
           return selected;
         }
         return tranches ? tranches[0].id : undefined;
@@ -244,6 +246,21 @@ export class SimpleVaultComponent implements OnInit {
     this.ptAmountForRedeemPt$.next(undefined);
   }
   onSelectTranche(id: string) {
-    this.selectPoolId$?.next(id);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tranche: id,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeTxMode(mode: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

@@ -14,6 +14,7 @@
   [estimateMintPt]="estimateMintPt$ | async"
   [estimateRedeemPt]="estimateRedeemPt$ | async"
   [actualFixedAPYs]="actualFixedAPYs$ | async"
+  [txMode]="txMode$ | async"
   (appMintPT)="onMintPT($event)"
   (appChangeMintPT)="onChangeMintPT($event)"
   (appRedeemPT)="onRedeemPT($event)"
@@ -21,4 +22,5 @@
   (appDeleteDeposit)="onDeleteDeposit($event)"
   (appDeleteWithdraw)="onDeleteWithdraw($event)"
   (appSelectTranche)="onSelectTranche($event)"
+  (appChangeTxMode)="onChangeTxMode($event)"
 ></view-simple-vault>

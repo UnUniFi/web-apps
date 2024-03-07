@@ -135,7 +135,7 @@
                 <span *ngIf="swapTab === 'yt'" class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div
                       class="w-8 rounded-full border-2"
@@ -152,8 +152,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>{{ swapTab | uppercase }}</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>{{ swapTab | uppercase }} {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -235,7 +234,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="swapMintFormRef.invalid">
-                <span class="material-symbols-outlined"> currency_exchange </span>
+                <!-- <span class="material-symbols-outlined"> currency_exchange </span> -->
                 <span>Swap</span>
               </button>
             </div>
@@ -252,7 +251,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div
                         class="w-8 rounded-full border-2"
@@ -269,8 +268,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>{{ swapTab | uppercase }}</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>{{ swapTab | uppercase }} {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     *ngIf="swapTab === 'pt'"
@@ -397,7 +395,7 @@
                   (swapTab === 'yt' && !isMatured(tranchePool))
                 "
               >
-                <span class="material-symbols-outlined"> currency_exchange </span>
+                <!-- <span class="material-symbols-outlined"> currency_exchange </span> -->
                 <span>Swap</span>
               </button>
             </div>
@@ -484,7 +482,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
@@ -495,8 +493,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>PT {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -505,7 +502,7 @@
                 />
               </label>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
@@ -516,8 +513,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>YT</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>YT {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -569,7 +565,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="mintMintFormRef.invalid">
-                <span class="material-symbols-outlined"> monetization_on </span>
+                <!-- <span class="material-symbols-outlined"> monetization_on </span> -->
                 <span>Mint</span>
               </button>
             </div>
@@ -603,7 +599,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full border-2 border-accent">
                         <img src="{{ vaultImage?.image }}" />
@@ -614,8 +610,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>PT {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     #pairPtAmountNgModelRef="ngModel"
@@ -655,7 +650,7 @@
 
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full border-2 border-primary">
                         <img src="{{ vaultImage?.image }}" />
@@ -666,8 +661,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>YT</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>YT {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     #pairYtAmountNgModelRef="ngModel"
@@ -738,7 +732,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="mintRedeemFormRef.invalid">
-                <span class="material-symbols-outlined"> redeem </span>
+                <!-- <span class="material-symbols-outlined"> redeem </span> -->
                 <span>Redeem</span>
               </button>
             </div>

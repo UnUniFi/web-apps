@@ -105,9 +105,8 @@ export class PoolComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           mintAmount:
-            Number(coins.mint_amount?.amount) /
+            Math.floor(Number(coins.mint_amount?.amount) * 0.99) / // 99%
             Math.pow(10, getDenomExponent(coins.mint_amount?.denom || '')),
-          // * 0.99,
           utAmount: !coins.additional_required_amount?.denom?.includes('/pt')
             ? additionalAmount
             : undefined,

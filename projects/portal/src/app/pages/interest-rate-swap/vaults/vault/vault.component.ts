@@ -251,7 +251,7 @@ export class VaultComponent implements OnInit {
           return undefined;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return Number(coin.amount) / Math.pow(10, exponent);
+        return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent); // 99%
       }),
     );
 

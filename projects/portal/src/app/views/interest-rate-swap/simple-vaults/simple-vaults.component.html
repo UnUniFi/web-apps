@@ -354,7 +354,7 @@
                 </div>
                 <div>
                   <div class="text-xl font-bold">
-                    {{ (ptValues?.[i] || 0) | coinAmount | number }}
+                    {{ (ptValues?.[i] || 0) | coinAmount | number : '1.0-2' }}
                     {{ vault.deposit_denom | coinDenom | async }}
                   </div>
                 </div>

@@ -20,6 +20,10 @@ export class SimpleVaultsComponent implements OnInit {
   vaultsImages?: IRSVaultImage[] | null;
   @Input()
   ptValues?: number[] | null;
+  @Input()
+  totalPositionValue?: number | null;
+  @Input()
+  maturedPtValue?: number | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

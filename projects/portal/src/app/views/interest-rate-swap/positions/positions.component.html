@@ -1,0 +1,163 @@
+<div class="mx-auto max-w-screen-xl w-full p-8">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li><a routerLink="../simple-vaults">Earn Fixed Yield</a></li>
+        <li>Positions</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-sm btn-primary join-item">Earn</button>
+      <button class="btn btn-sm btn-accent text-neutral glass join-item" (click)="changeAdvanced()">
+        Trade
+      </button>
+    </div>
+  </div>
+
+  <div style="background: linear-gradient(180deg, #1f2736 50%, #354b74 100%)" class="card mb-8">
+    <div class="card-body flex-row flex-wrap">
+      <div>
+        <h2 class="card-title text-4xl font-bold">UnUniFi Earn</h2>
+        <p class="card-text text-secondary opacity-50">
+          Over {{ 0 | currency }} deposited in UnUniFi
+        </p>
+        <p class="card-text text-secondary opacity-50">Simple & Secure</p>
+      </div>
+      <div class="flex-auto"></div>
+      <div>
+        <div class="stat">
+          <div class="stat-title">My Total Position Value</div>
+          <div class="stat-value">{{ totalPositionValue | currency }}</div>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline mt-4"
+            routerLink="../positions"
+            [disabled]="!totalPositionValue"
+          >
+            See Detail
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="stat">
+          <div class="stat-title">Claimable Rewards</div>
+          <div class="stat-value">{{ maturedPtValue | currency }}</div>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary mt-4"
+            routerLink="../rewards"
+            [disabled]="!maturedPtValue"
+          >
+            Claim
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="font-bold text-2xl text-neutral mb-4">My Position Summary</h2>
+  <div class="tabs w-full">
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-accent]="positionTab === 'fixed'"
+      [class.text-accent]="positionTab === 'fixed'"
+      (click)="positionTab = 'fixed'"
+    >
+      Fixed Yield
+    </a>
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-accent]="positionTab === 'liquidity'"
+      [class.text-accent]="positionTab === 'liquidity'"
+      (click)="positionTab = 'liquidity'"
+    >
+      Liquidity
+    </a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr class="border-b-2 border-[#adc9ff]">
+          <th></th>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Maturity</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'maturity' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Position</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'position' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Fixed APY</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'fixed' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
+          <th></th>
+          <td>
+            <div>
+              <div class="text-xl font-bold">stATOM</div>
+              <div class="text-sm opacity-50">Stride</div>
+            </div>
+          </td>
+          <td>
+            <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+            <div class="text-sm opacity-50">317 Days</div>
+          </td>
+          <td>
+            <div class="flex flex-row items-center gap-2">
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                </div>
+              </div>
+              <div class="text-xl font-bold">0.8957</div>
+            </div>
+            <div class="text-sm opacity-50">{{ '0.778' | currency }}</div>
+          </td>
+
+          <td>
+            <div class="text-xl font-bold text-accent">
+              {{ '0.1863' | percent : '1.2-2' }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

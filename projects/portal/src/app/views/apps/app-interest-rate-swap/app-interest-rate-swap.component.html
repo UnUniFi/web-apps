@@ -72,12 +72,20 @@
               <span class="flex-1">Pools</span>
             </label>
           </li>
+          <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap/positions">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">payments</span>
+              </span>
+              <span class="flex-1">Positions</span>
+            </label>
+          </li>
 
           <li class="menu-title">
             <span>Apps</span>
           </li>
           <ng-container *ngFor="let app of apps">
-            <li >
+            <li>
               <label class="flex gap-4" routerLink="{{ app.link }}">
                 <span class="flex-none">
                   <span class="material-symbols-outlined">{{ app.icon }}</span>
@@ -166,12 +174,20 @@
           <span class="flex-1">Pools</span>
         </label>
       </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/positions">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">payments</span>
+          </span>
+          <span class="flex-1">Positions</span>
+        </label>
+      </li>
 
       <li class="menu-title">
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
-        <li >
+        <li>
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
               <span class="material-symbols-outlined">{{ app.icon }}</span>

@@ -128,7 +128,7 @@
           <tr
             class="hover cursor-pointer border-b-2 border-[#adc9ff]"
             routerLink="../simple-vaults/{{ p.tranche?.strategy_contract }}"
-            [queryParams]="{ tranche: p.id }"
+            [queryParams]="{ tranche: p.id, tx: 'redeem' }"
           >
             <th>#{{ p.id }}</th>
             <td>

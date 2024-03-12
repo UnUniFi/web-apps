@@ -3,6 +3,7 @@ import { ContractPoolsComponent } from './pools/contract-pools/contract-pools.co
 import { PoolComponent } from './pools/pool/pool.component';
 import { PoolsComponent } from './pools/pools.component';
 import { PositionsComponent } from './positions/positions.component';
+import { RewardsComponent } from './rewards/rewards.component';
 import { SimplePoolComponent } from './simple-pools/simple-pool/simple-pool.component';
 import { SimplePoolsComponent } from './simple-pools/simple-pools.component';
 import { SimpleVaultComponent } from './simple-vaults/simple-vault/simple-vault.component';
@@ -61,6 +62,10 @@ const routes: Routes = [
   {
     path: 'positions',
     component: PositionsComponent,
+  },
+  {
+    path: 'rewards',
+    component: RewardsComponent,
   },
 ];
 

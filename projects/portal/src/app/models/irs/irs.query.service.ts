@@ -148,6 +148,20 @@ export class IrsQueryService {
     );
   }
 
+  async estimateSwapInPool(
+    poolId: string,
+    denom: string,
+    amount: string,
+  ): Promise<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined> {
+    const sdk = await this.cosmosSDK.sdk().then((sdk) => sdk.rest);
+    try {
+      const res = await ununifi.rest.irs.estimateSwapInPool(sdk, poolId, denom, amount);
+      return res.data.amount;
+    } catch (error) {
+      return undefined;
+    }
+  }
+
   estimateSwapInPool$(
     poolId: string,
     denom: string,

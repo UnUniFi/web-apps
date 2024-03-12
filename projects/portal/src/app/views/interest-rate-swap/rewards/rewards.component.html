@@ -1,1 +1,146 @@
-<p>rewards works!</p>
+<div class="mx-auto max-w-screen-xl w-full p-8">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li><a routerLink="../simple-vaults">Earn Fixed Yield</a></li>
+        <li>Rewards</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-sm btn-primary join-item">Earn</button>
+      <button class="btn btn-sm btn-accent text-neutral glass join-item" (click)="changeAdvanced()">
+        Trade
+      </button>
+    </div>
+  </div>
+
+  <div style="background: linear-gradient(180deg, #1f2736 50%, #354b74 100%)" class="card mb-8">
+    <div class="card-body flex-row flex-wrap">
+      <div>
+        <h2 class="card-title text-4xl font-bold">UnUniFi Earn</h2>
+        <p class="card-text text-secondary opacity-50">
+          Over {{ 0 | currency }} deposited in UnUniFi
+        </p>
+        <p class="card-text text-secondary opacity-50">Simple & Secure</p>
+      </div>
+      <div class="flex-auto"></div>
+      <div>
+        <div class="stat">
+          <div class="stat-title">Claimable Rewards</div>
+          <div class="stat-value">{{ maturedPtValue | currency }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="font-bold text-2xl text-neutral mb-4">My matured Position Summary</h2>
+  <!-- <div class="tabs w-full mb-4">
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-accent]="positionTab === 'fixed'"
+      [class.text-accent]="positionTab === 'fixed'"
+      (click)="positionTab = 'fixed'"
+    >
+      Fixed Yield
+    </a>
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-primary]="positionTab === 'long'"
+      [class.text-primary]="positionTab === 'long'"
+      (click)="positionTab = 'long'"
+    >
+      Long Yield
+    </a>
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-secondary]="positionTab === 'liquidity'"
+      [class.text-secondary]="positionTab === 'liquidity'"
+      (click)="positionTab = 'liquidity'"
+    >
+      Liquidity
+    </a>
+  </div> -->
+  <div class="overflow-x-auto" *ngIf="positionTab === 'fixed'">
+    <table class="table w-full">
+      <thead>
+        <tr class="border-b-2 border-[#adc9ff]">
+          <th></th>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Maturity</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'maturity' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Claimable Amount</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'position' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let p of maturedPtPositions">
+          <tr
+            class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+            routerLink="../simple-vaults/{{ p.tranche?.strategy_contract }}"
+            [queryParams]="{ tranche: p.id, tx: 'redeem' }"
+          >
+            <th>#{{ p.id }}</th>
+            <td>
+              <div>
+                <div class="text-xl font-bold">{{ p.name }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="text-xl font-bold">
+                {{ calcMaturity(p.tranche) | date : 'mediumDate' }}
+              </div>
+              <div class="text-sm opacity-50">{{ calcRestDays(p.tranche) }} Days</div>
+            </td>
+            <td>
+              <div class="flex flex-row items-center gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xl font-bold">
+                  {{ p.positionAmount | number : '1.0-2' }}
+                </div>
+              </div>
+              <div class="text-sm opacity-50">{{ p.positionValue | currency }}</div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

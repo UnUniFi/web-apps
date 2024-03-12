@@ -1,1 +1,5 @@
-<view-rewards></view-rewards>
+<view-rewards
+  [maturedPtPositions]="maturedPtPositions$ | async"
+  [vaultsImages]="vaultsImages$ | async"
+  [maturedPtValue]="maturedPtValue$ | async"
+></view-rewards>

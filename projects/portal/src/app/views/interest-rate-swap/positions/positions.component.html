@@ -28,15 +28,7 @@
       <div>
         <div class="stat">
           <div class="stat-title">My Total Position Value</div>
-          <div class="stat-value">{{ totalPositionValue | currency }}</div>
-          <button
-            type="button"
-            class="btn btn-sm btn-outline mt-4"
-            routerLink="../positions"
-            [disabled]="!totalPositionValue"
-          >
-            See Detail
-          </button>
+          <div class="stat-value">{{ ptPositionValue | currency }}</div>
         </div>
       </div>
       <div>
@@ -47,7 +39,7 @@
             type="button"
             class="btn btn-sm btn-primary mt-4"
             routerLink="../rewards"
-            [disabled]="!maturedPtValue"
+            *ngIf="maturedPtValue"
           >
             Claim
           </button>
@@ -57,7 +49,7 @@
   </div>
 
   <h2 class="font-bold text-2xl text-neutral mb-4">My Position Summary</h2>
-  <div class="tabs w-full">
+  <div class="tabs w-full mb-4">
     <a
       class="tab tab-lg tab-bordered"
       [class.border-accent]="positionTab === 'fixed'"
@@ -68,14 +60,22 @@
     </a>
     <a
       class="tab tab-lg tab-bordered"
-      [class.border-accent]="positionTab === 'liquidity'"
-      [class.text-accent]="positionTab === 'liquidity'"
+      [class.border-primary]="positionTab === 'long'"
+      [class.text-primary]="positionTab === 'long'"
+      (click)="positionTab = 'long'"
+    >
+      Long Yield
+    </a>
+    <a
+      class="tab tab-lg tab-bordered"
+      [class.border-secondary]="positionTab === 'liquidity'"
+      [class.text-secondary]="positionTab === 'liquidity'"
       (click)="positionTab = 'liquidity'"
     >
       Liquidity
     </a>
   </div>
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto" *ngIf="positionTab === 'fixed'">
     <table class="table w-full">
       <thead>
         <tr class="border-b-2 border-[#adc9ff]">
@@ -116,10 +116,7 @@
           <td>
             <button class="btn btn-ghost btn-xs flex-nowrap">
               <span>Fixed APY</span>
-              <span
-                class="material-symbols-outlined"
-                [class]="{ 'text-info': sortType === 'fixed' }"
-              >
+              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
                 keyboard_arrow_down
               </span>
             </button>
@@ -127,36 +124,244 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
-          <th></th>
-          <td>
-            <div>
-              <div class="text-xl font-bold">stATOM</div>
-              <div class="text-sm opacity-50">Stride</div>
-            </div>
-          </td>
-          <td>
-            <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
-            <div class="text-sm opacity-50">317 Days</div>
-          </td>
-          <td>
-            <div class="flex flex-row items-center gap-2">
-              <div class="avatar">
-                <div class="w-8 rounded-full">
-                  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+        <ng-container *ngFor="let p of ptPositions">
+          <tr
+            class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+            routerLink="../simple-vaults/{{ p.tranche?.strategy_contract }}"
+            [queryParams]="{ tranche: p.id }"
+          >
+            <th>#{{ p.id }}</th>
+            <td>
+              <div>
+                <div class="text-xl font-bold">{{ p.name }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="text-xl font-bold">
+                {{ calcMaturity(p.tranche) | date : 'mediumDate' }}
+              </div>
+              <div class="text-sm opacity-50">{{ calcRestDays(p.tranche) }} Days</div>
+            </td>
+            <td>
+              <div class="flex flex-row items-center gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xl font-bold">
+                  {{ p.positionAmount | number : '1.0-2' }}
                 </div>
               </div>
-              <div class="text-xl font-bold">0.8957</div>
-            </div>
-            <div class="text-sm opacity-50">{{ '0.778' | currency }}</div>
-          </td>
+              <div class="text-sm opacity-50">{{ p.positionValue | currency }}</div>
+            </td>
 
+            <td>
+              <div class="text-xl font-bold text-accent">
+                {{ p.apy?.pt_apy || 0 | percent : '1.2-2' }}
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="overflow-x-auto" *ngIf="positionTab === 'long'">
+    <table class="table w-full">
+      <thead>
+        <tr class="border-b-2 border-[#adc9ff]">
+          <th></th>
           <td>
-            <div class="text-xl font-bold text-accent">
-              {{ '0.1863' | percent : '1.2-2' }}
-            </div>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Maturity</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'maturity' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Position</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'position' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Long Yield APY</span>
+              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
+                keyboard_arrow_down
+              </span>
+            </button>
           </td>
         </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let p of ytPositions">
+          <tr
+            class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+            routerLink="../vaults/{{ p.tranche?.strategy_contract }}/{{ p.id }}"
+            [queryParams]="{ swap: 'yt', mode: 'swap', tx: 'redeem' }"
+          >
+            <th>#{{ p.id }}</th>
+            <td>
+              <div>
+                <div class="text-xl font-bold">{{ p.name }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="text-xl font-bold">
+                {{ calcMaturity(p.tranche) | date : 'mediumDate' }}
+              </div>
+              <div class="text-sm opacity-50">{{ calcRestDays(p.tranche) }} Days</div>
+            </td>
+            <td>
+              <div class="flex flex-row items-center gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xl font-bold">
+                  {{ p.positionAmount | number : '1.0-2' }}
+                </div>
+              </div>
+              <div class="text-sm opacity-50">{{ p.positionValue | currency }}</div>
+            </td>
+
+            <td>
+              <div class="text-xl font-bold text-primary">
+                {{ p.apy?.yt_apy || 0 | percent : '1.2-2' }}
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="overflow-x-auto" *ngIf="positionTab === 'liquidity'">
+    <table class="table w-full">
+      <thead>
+        <tr class="border-b-2 border-[#adc9ff]">
+          <th></th>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Name</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'name' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Maturity</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'maturity' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Position</span>
+              <span
+                class="material-symbols-outlined"
+                [class]="{ 'text-info': sortType === 'position' }"
+              >
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-xs flex-nowrap">
+              <span>Pool APY</span>
+              <span class="material-symbols-outlined" [class]="{ 'text-info': sortType === 'apy' }">
+                keyboard_arrow_down
+              </span>
+            </button>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let p of lpPositions">
+          <tr
+            class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+            routerLink="../pools/{{ p.tranche?.strategy_contract }}/{{ p.id }}"
+            [queryParams]="{ tx: 'redeem' }"
+          >
+            <th>#{{ p.id }}</th>
+            <td>
+              <div>
+                <div class="text-xl font-bold">{{ p.name }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="text-xl font-bold">
+                {{ calcMaturity(p.tranche) | date : 'mediumDate' }}
+              </div>
+              <div class="text-sm opacity-50">{{ calcRestDays(p.tranche) }} Days</div>
+            </td>
+            <td>
+              <div class="flex flex-row items-center gap-2">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ getVaultImage(p.tranche?.strategy_contract)?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="text-xl font-bold">
+                  {{ p.positionAmount | number : '1.0-2' }}
+                </div>
+              </div>
+              <div class="text-sm opacity-50">{{ p.positionValue | currency }}</div>
+            </td>
+
+            <td>
+              <div class="text-xl font-bold text-secondary">
+                {{ calcTotalPoolAPY(p.apy, p.ytApy) || 0 | percent : '1.2-2' }}
+              </div>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>

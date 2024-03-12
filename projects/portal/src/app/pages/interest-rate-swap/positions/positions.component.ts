@@ -147,7 +147,6 @@ export class PositionsComponent implements OnInit {
         ),
       ),
     );
-    this.ytPositions$.subscribe((balances) => console.log(balances));
     this.lpPositions$ = combineLatest([
       this.lpBalances$,
       this.tranchePools$,

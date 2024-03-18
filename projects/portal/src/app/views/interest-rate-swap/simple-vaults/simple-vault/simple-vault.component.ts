@@ -28,8 +28,6 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  tranchePtBalance?: number | null;
-  @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
   estimateMintPt?: number | null;
@@ -40,7 +38,9 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   selectedFixedAPYs?: TranchePtAPYs200Response | null;
   @Input()
-  ptAmount?: number | null;
+  ptCoin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  tranchePtAmount?: number | null;
   @Input()
   ptValue?: number | null;
 

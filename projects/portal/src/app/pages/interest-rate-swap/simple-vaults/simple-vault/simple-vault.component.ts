@@ -31,11 +31,11 @@ export class SimpleVaultComponent implements OnInit {
   tranches$: Observable<AllTranches200ResponseTranchesInner[] | undefined>;
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
-  tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
   selectedFixedAPYs$?: Observable<TranchePtAPYs200Response | undefined>;
-  ptAmount$: Observable<number | undefined>;
+  ptCoin$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  tranchePtAmount$: Observable<number>;
   ptValue$: Observable<number | undefined>;
   txMode$: Observable<'deposit' | 'redeem'>;
 
@@ -96,45 +96,31 @@ export class SimpleVaultComponent implements OnInit {
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    this.tranchePtBalance$ = combineLatest([this.selectedPoolId$, this.denomBalancesMap$]).pipe(
+    this.ptCoin$ = combineLatest([this.selectedPoolId$, this.denomBalancesMap$]).pipe(
       map(([poolId, denomBalancesMap]) => {
         const denom = `irs/tranche/${poolId}/pt`;
-        const balance = denomBalancesMap[denom];
-        if (!balance) {
-          return 0;
+        const coin = denomBalancesMap[denom];
+        if (!coin) {
+          return undefined;
         }
-        const exponent = getDenomExponent(denom);
-        return Number(balance?.amount || 0) / Math.pow(10, exponent);
+        return coin;
       }),
     );
-    const ptBalances$ = combineLatest([this.tranches$, this.denomBalancesMap$]).pipe(
-      map(([tranches, denomBalancesMap]) =>
-        tranches?.map(
-          (tranche) =>
-            denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
-              amount: '0',
-              denom: `irs/tranche/${tranche.id}/pt`,
-            },
-        ),
-      ),
-    );
-    this.ptAmount$ = ptBalances$.pipe(
-      map((ptBalances) => ptBalances?.reduce((a, b) => a + Number(b.amount), 0)),
-    );
-    this.ptValue$ = combineLatest([ptBalances$, this.trancheFixedAPYs$]).pipe(
-      map(([ptBalance, fixedAPYs]) => {
-        let value = 0;
-        if (!ptBalance?.length) {
-          return value;
+    this.tranchePtAmount$ = this.ptCoin$.pipe(
+      map((coin) => {
+        if (!coin?.denom) {
+          return 0;
         }
-        for (let i = 0; i < ptBalance.length; i++) {
-          if (ptBalance[i] && fixedAPYs[i]) {
-            if (fixedAPYs[i]?.pt_rate_per_deposit) {
-              value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_deposit);
-            }
-          }
+        const exponent = getDenomExponent(coin.denom);
+        return Number(coin.amount) / Math.pow(10, exponent);
+      }),
+    );
+    this.ptValue$ = combineLatest([this.ptCoin$, this.selectedFixedAPYs$]).pipe(
+      map(([ptCoin, fixedAPYs]) => {
+        if (!ptCoin?.amount || !fixedAPYs?.pt_rate_per_deposit) {
+          return 0;
         }
-        return Math.floor(value);
+        return Number(ptCoin.amount) / Number(fixedAPYs.pt_rate_per_deposit);
       }),
     );
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
@@ -173,13 +159,13 @@ export class SimpleVaultComponent implements OnInit {
       }),
     );
     this.afterPtAmount$ = combineLatest([
-      this.ptAmount$,
+      this.ptCoin$,
       this.ptAmountForRedeemPt$.asObservable(),
       this.estimateMintPt$,
     ]).pipe(
       map(
-        ([ptAmount, redeemPt, mintPt]) =>
-          (ptAmount || 0) - Number(redeemPt?.amount || 0) + (mintPt || 0),
+        ([ptCoin, redeemPt, mintPt]) =>
+          Number(ptCoin?.amount || 0) - Number(redeemPt?.amount || 0) + (mintPt || 0),
       ),
     );
     this.afterPtValue$ = combineLatest([

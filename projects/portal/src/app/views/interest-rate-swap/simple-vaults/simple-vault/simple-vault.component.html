@@ -79,7 +79,7 @@
                 <th class="text-xs">Redeem at Maturity</th>
                 <td class="font-bold flex flex-row items-center gap-2">
                   <div>
-                    {{ ptAmount || 0 | coinAmount | number }}
+                    {{ ptCoin?.amount | coinAmount | number }}
                     {{ vault?.deposit_denom | coinDenom | async }}
                   </div>
                   <ng-container *ngIf="inputUnderlying || inputPT">
@@ -285,7 +285,7 @@
             type="range"
             [(ngModel)]="inputPT"
             [min]="0"
-            [max]="tranchePtBalance || 0"
+            [max]="tranchePtAmount || 0"
             name="withdrawAmount"
             (change)="onChangeWithdraw()"
           />

@@ -198,10 +198,18 @@ export class SimpleVaultComponent implements OnInit {
     return Number(value) < 0;
   }
 
-  priceImpact(): number {
+  depositPriceImpact(): number {
     if (!this.actualFixedAPYs || !this.selectedFixedAPYs) {
       return 0;
     }
     return Number(this.actualFixedAPYs.pt_apy) - Number(this.selectedFixedAPYs.pt_apy);
+  }
+
+  withdrawPriceImpact(): number {
+    if (!this.inputPT || !this.estimateRedeemPt) {
+      return 0;
+    }
+    const usedPt = Number(this.inputPT) * Math.pow(10, 6);
+    return Number(this.estimateRedeemPt) / usedPt - 1;
   }
 }

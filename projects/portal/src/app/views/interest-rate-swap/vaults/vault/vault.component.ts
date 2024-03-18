@@ -458,4 +458,20 @@ export class VaultComponent implements OnInit, OnChanges {
     this.txMode = mode;
     this.appChangeTxMode.emit(mode);
   }
+
+  depositPriceImpact(): number {
+    if (this.swapTab === 'pt') {
+      if (!this.actualPtAPYs || !this.tranchePtAPYs) {
+        return 0;
+      }
+      return Number(this.actualPtAPYs.pt_apy) - Number(this.tranchePtAPYs.pt_apy);
+    }
+    if (this.swapTab === 'yt') {
+      if (!this.actualYtAPYs || !this.trancheYtAPYs) {
+        return 0;
+      }
+      return Number(this.actualYtAPYs.yt_apy) - Number(this.trancheYtAPYs.yt_apy);
+    }
+    return 0;
+  }
 }

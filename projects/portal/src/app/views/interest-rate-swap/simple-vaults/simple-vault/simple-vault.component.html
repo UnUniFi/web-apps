@@ -222,7 +222,7 @@
             [class]="{ 'text-error': isNegativeValue(actualFixedAPYs?.pt_apy) }"
           >
             <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
-            <span> {{ actualFixedAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
+            <span> {{ selectedFixedAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
           </div>
         </div>
 
@@ -254,11 +254,14 @@
               />
             </svg>
           </div>
-          <div class="text-xl text-secondary mt-4">Fee</div>
+          <div class="text-xl text-secondary mt-4">Price Impact</div>
           <div class="flex-auto"></div>
-          <div class="text-xl text-accent flex flex-row items-center mt-4">
-            <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span>
-            <span>{{ 0 | currency }}</span>
+          <div
+            class="text-xl flex flex-row items-center text-accent"
+            [class]="{ 'text-error': priceImpact() < 0 }"
+          >
+            <span class="material-symbols-outlined mt-1" *ngIf="priceImpact() >= 0"> add </span>
+            <span> {{ priceImpact() | percent : '1.2-2' }} </span>
           </div>
         </div>
 

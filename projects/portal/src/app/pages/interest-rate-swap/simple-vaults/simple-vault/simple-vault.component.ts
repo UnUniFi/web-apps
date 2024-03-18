@@ -34,7 +34,7 @@ export class SimpleVaultComponent implements OnInit {
   tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
-  selectPoolId$?: Observable<string | undefined>;
+  selectedFixedAPYs$?: Observable<TranchePtAPYs200Response | undefined>;
   ptAmount$: Observable<number | undefined>;
   ptValue$: Observable<number | undefined>;
   txMode$: Observable<'deposit' | 'redeem'>;
@@ -57,7 +57,7 @@ export class SimpleVaultComponent implements OnInit {
     private readonly bankService: BankService,
     private readonly configS: ConfigService,
   ) {
-    this.selectPoolId$ = this.route.queryParams.pipe(map((params) => params.tranche));
+    const selectPoolId$ = this.route.queryParams.pipe(map((params) => params.tranche));
     this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
@@ -70,13 +70,16 @@ export class SimpleVaultComponent implements OnInit {
     this.tranches$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
     );
-    this.selectedPoolId$ = combineLatest([this.tranches$, this.selectPoolId$]).pipe(
+    this.selectedPoolId$ = combineLatest([this.tranches$, selectPoolId$]).pipe(
       map(([tranches, selected]) => {
         if (selected) {
           return selected;
         }
         return tranches ? tranches[0].id : undefined;
       }),
+    );
+    this.selectedFixedAPYs$ = this.selectedPoolId$.pipe(
+      mergeMap((poolId) => (poolId ? this.irsQuery.getTranchePtAPYs$(poolId) : of(undefined))),
     );
 
     this.trancheFixedAPYs$ = this.tranches$.pipe(

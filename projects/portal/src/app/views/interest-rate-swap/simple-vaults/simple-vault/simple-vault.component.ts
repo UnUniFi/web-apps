@@ -38,6 +38,8 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   selectedPoolId?: string | null;
   @Input()
+  selectedFixedAPYs?: TranchePtAPYs200Response | null;
+  @Input()
   ptAmount?: number | null;
   @Input()
   ptValue?: number | null;
@@ -194,5 +196,12 @@ export class SimpleVaultComponent implements OnInit {
       return false;
     }
     return Number(value) < 0;
+  }
+
+  priceImpact(): number {
+    if (!this.actualFixedAPYs || !this.selectedFixedAPYs) {
+      return 0;
+    }
+    return Number(this.actualFixedAPYs.pt_apy) - Number(this.selectedFixedAPYs.pt_apy);
   }
 }

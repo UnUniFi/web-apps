@@ -22,6 +22,12 @@
         ],
         "ununifi-internal": [
           "ununifi-internal"
+        ],
+        "gluon": [
+          "gluon-mainnet"
+        ],
+        "gluon-beta": [
+          "gluon-beta"
         ]
       }
     }

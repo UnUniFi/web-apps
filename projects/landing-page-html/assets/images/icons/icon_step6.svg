@@ -1,0 +1,15 @@
+<svg width="40" height="41" viewBox="0 0 40 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask group">
+<mask id="mask0_145_269" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="41">
+<g id="Group">
+<g id="Group_2">
+<path id="Vector" d="M35 2.65625H5C4.20435 2.65625 3.44129 2.97232 2.87868 3.53493C2.31607 4.09754 2 4.8606 2 5.65625V35.6562C2 36.4519 2.31607 37.215 2.87868 37.7776C3.44129 38.3402 4.20435 38.6562 5 38.6562H35C35.7957 38.6562 36.5587 38.3402 37.1213 37.7776C37.6839 37.215 38 36.4519 38 35.6562V5.65625C38 4.8606 37.6839 4.09754 37.1213 3.53493C36.5587 2.97232 35.7957 2.65625 35 2.65625Z" fill="white" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M17 27.6562L22 31.6562L30 21.6562M10 11.6562H30M10 19.6562H18" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</mask>
+<g mask="url(#mask0_145_269)">
+<path id="Vector_3" d="M-4 -3.34375H44V44.6562H-4V-3.34375Z" fill="white"/>
+</g>
+</g>
+</svg>

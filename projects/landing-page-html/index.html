@@ -12,14 +12,14 @@
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <meta name="description" content="Gluon | Strategic Yield Hub" />
-  <meta property="og:title" content="Gluon | Strategic Yield Hub" />
+  <meta name="description" content="Gluon | Strategic Yield Hub for the Modular Era" />
+  <meta property="og:title" content="Gluon | Strategic Yield Hub for the Modular Era" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://gluon.zone" />
   <meta property="og:image" content="https://gluon.zone/assets/images/gluon.png" />
   <meta property="og:site_name" content="gluon website" />
   <meta property="og:description"
-    content="Gluon is Aggregating the Best-in-Class Yield Strategies for the efficient operation of on-chain assets across blockchains." />
+    content="Gluon aggregates the best-in-class yield strategies for the efficient operation of on-chain assets across blockchains." />
   <meta name="twitter:card" content="summary" />
 
   <link rel="stylesheet"
@@ -70,11 +70,11 @@
         }
       }
     }
-    window.addEventListener('load',() => {
+    window.addEventListener('load', () => {
       scrollFadeIn();
     });
 
-    window.addEventListener('scroll',() => {
+    window.addEventListener('scroll', () => {
       scrollFadeIn();
     });
   </script>
@@ -199,7 +199,7 @@
             <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4 bg-debug">
               <div class="text-5xl">
                 <div class="my-2 font-bold">Strategic Yield Hub <br /></div>
-                <div class="my-2 "> the Modular Era </div>
+                <div class="my-2 ">for the Modular Era </div>
               </div>
               <div class="my-6">
                 <span class="text-lg tracking-wide">Aggregating the Best-in-Class</span>
@@ -392,11 +392,9 @@
               <span class="font-bold" style="letter-spacing: 0.48px; ">No
                 lock-up periods.</span>
             </div>
-            <div class="rounded-md justify-center items-center"
-              style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #DD7DFF solid; border-bottom: 4px #DD7DFF solid; ">
-              <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px; ">
-                Launch Gluon Earn</div>
-            </div>
+            <a class="btn-grad-border" href="/portal/interest-rate-swap/simple-vaults" target="_blank">
+              <span class="text-xl font-bold text-white">Launch Gluon Earn</span>
+            </a>
           </div>
         </div>
         <div class="md:flex-auto"></div>
@@ -418,11 +416,9 @@
               <span class="font-bold" style="letter-spacing: 0.48px;">the choice is
                 yours.</span>
             </div>
-            <div class="rounded-md justify-center items-center"
-              style="background: rgba(179.75, 206.57, 219.19, 0.20); border-left: 4px #48FF7B solid; border-bottom: 4px #48FF7B solid; ">
-              <div class="text-center text-xl mx-4 my-5" style="letter-spacing: 0.60px;">
-                Launch Gluon Trade</div>
-            </div>
+            <a class="btn-grad-border" href="/portal/interest-rate-swap/vaults" target="_blank">
+              <span class="text-xl font-bold text-white">Launch Gluon Trade</span>
+            </a>
           </div>
         </div>
         <div class="md:flex-auto"></div>
@@ -455,7 +451,7 @@
           <img src="assets/images/ununifi_amm.svg" alt="" width="100%" />
         </div>
         <div class="text-center mb-6 bg-debug" style="font-size: 30px; ">
-          <span style="font-weight: 700;">UnUniFi </span>
+          <span style="font-weight: 700;">Gluon </span>
           <span>AMM</span>
         </div>
         <div class="text-center bg-debug" style="width: 100%; font-size: 16px; letter-spacing: 0.48px;">
@@ -637,7 +633,7 @@
       </div>
       <div class="footer-grid-item">
         <span class="mb-2 font-bold uppercase">Developers</span>
-        <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
+        <a class="link link-hover" href="https://docs.sunriselayer.io" target="_blank">Docs</a>
         <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
       </div>
       <div class="footer-grid-item">
@@ -676,10 +672,10 @@
           <img src="assets/images/logos/pajamas_twitter.svg" alt="x" /></a>
         <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
           <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin" /></a>
-        <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
+        <!-- <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
           <img src="assets/images/logos/mdi_youtube.png" alt="youtube" /></a>
         <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
-          <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a>
+          <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a> -->
       </div>
     </div>
     <div class="h-4"></div>
@@ -729,7 +725,7 @@
   </div>
   <!-- popup script -->
   <script>
-    window.onload = function() {
+    window.onload = function () {
       // if not accepted yet
       if (!getCookie('disclaimer_accepted')) {
         document.getElementById('disclaimer-popup').style.display = 'block';
@@ -737,17 +733,17 @@
     };
 
     // after accepted
-    document.getElementById('popup-accept').addEventListener('click',function() {
-      setCookie('disclaimer_accepted',true,365);
+    document.getElementById('popup-accept').addEventListener('click', function () {
+      setCookie('disclaimer_accepted', true, 365);
       document.getElementById('disclaimer-popup').style.display = 'none';
     });
 
     // after rejected
-    document.getElementById('popup-reject').addEventListener('click',function() {
+    document.getElementById('popup-reject').addEventListener('click', function () {
       location.href = 'https://twitter.com/ununifi'; // go to twitter
     });
 
-    function setCookie(name,value,days) {
+    function setCookie(name, value, days) {
       var expires = '';
       if (days) {
         var date = new Date();
@@ -762,8 +758,8 @@
       var ca = document.cookie.split(';');
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
       }
       return null;
     }

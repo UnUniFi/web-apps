@@ -1,0 +1,543 @@
+<div class="mx-auto max-w-screen-xl">
+  <div class="text-xl breadcrumbs">
+    <ul>
+      <li routerLink=".."><a>Vaults</a></li>
+      <li>Vault #{{ vault?.vault?.id }}</li>
+    </ul>
+  </div>
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="card-body">
+        <div class="flex flex-row flex-wrap items-center gap-4">
+          <h2 class="card-title">
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span *ngIf="vault?.vault?.name">{{ vault?.vault?.name }}</span>
+            <span *ngIf="!vault?.vault?.name">Vault #{{ vault?.vault?.id }}</span>
+          </h2>
+          <div class="flex flex-row items-center gap-2">
+            <div class="badge badge-primary">{{ denom | coinDenom | async }}</div>
+            <div class="badge badge-info">NO KYC</div>
+          </div>
+        </div>
+
+        <p *ngIf="vault?.vault?.description" class="m-8" style="white-space: pre-wrap">
+          {{ vault?.vault?.description }}
+        </p>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <tbody>
+              <tr>
+                <td>Vault ID</td>
+                <td>{{ vault?.vault?.id }}</td>
+              </tr>
+              <tr>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Withdrawal Commission Rate</span>
+                  <!-- The button to open modal -->
+                  <label for="modal-commission" class="label-text cursor-pointer">
+                    <span class="material-symbols-outlined">help</span>
+                  </label>
+
+                  <!-- Put this part before </body> tag -->
+                  <input type="checkbox" id="modal-commission" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the withdrawal commission rate?</h3>
+                      <p class="py-4">
+                        This is the commission charged for withdrawals from the vault. Additionally,
+                        sometimes an additional commission may be imposed based on the strategy.
+                      </p>
+                      <p>
+                        For more information on commissions visit
+                        <a
+                          href="https://docs.ununifi.io/overview/interchain-yield-aggregator/commission"
+                          target="_blank"
+                        >
+                          <u class="text-info">the UnUniFi Documentation</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-commission" class="btn">Okay</label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ vault?.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td>
+              </tr>
+              <tr>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Withdrawal Reserve Rate</span>
+                  <!-- The button to open modal -->
+                  <label for="modal-reserve" class="label-text cursor-pointer">
+                    <span class="material-symbols-outlined">help</span>
+                  </label>
+
+                  <!-- Put this part before </body> tag -->
+                  <input type="checkbox" id="modal-reserve" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the withdrawal reserve rate?</h3>
+                      <p class="py-4">
+                        This is the percentage of withdrawal reserves available for all deposits.
+                        The withdrawal reserves will be used for withdrawing with zero unbonding
+                        time. Additionally, the Withdrawal Reserve Rate is used to calculate
+                        withdrawal fees.
+                      </p>
+                      <p>
+                        For more information about the Withdrawal Reserve Rate, visit
+                        <a
+                          href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                          target="_blank"
+                        >
+                          <u class="text-info">the UnUniFi Documentation</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-reserve" class="btn">Okay</label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ vault?.vault?.withdraw_reserve_rate | percent : '1.0-2' }}</td>
+              </tr>
+              <!-- <tr>
+                <td class="flex flex-row items-center gap-2">
+                  <span>Bonus APY</span>
+                  <label for="modal-bonus" class="label-text cursor-pointer">
+                    <span class="material-symbols-outlined">help</span>
+                  </label>
+
+                  <input type="checkbox" id="modal-bonus" class="modal-toggle" />
+                  <div class="modal modal-bottom sm:modal-middle">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">What is the bonus APY?</h3>
+                      <p class="my-4">You can receive additional APYs for the campaign period.</p>
+                      <p>
+                        For more information on the bonus APY, visit
+                        <a href="https://docs.ununifi.io" target="_blank">
+                          <u class="text-info">the UnUniFi Campaign Website</u> </a
+                        >.
+                      </p>
+                      <div class="modal-action">
+                        <label for="modal-bonus" class="btn">Okay</label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ 'Coming soon' }}</td>
+              </tr> -->
+            </tbody>
+          </table>
+        </div>
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title" *ngIf="!vaultInfo?.certainty">Estimated APY</div>
+            <div class="stat-title" *ngIf="vaultInfo?.certainty">
+              APY
+              <div class="badge badge-info">Secure</div>
+            </div>
+            <div class="stat-value text-accent">
+              {{ vaultInfo?.minApy | percent : '1.2-2' }}
+            </div>
+            <div class="stat-desc" *ngIf="vaultInfo?.maxApy !== vaultInfo?.minApy">
+              - {{ vaultInfo?.maxApy | percent : '1.2-2' }}
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Deposit Amount</div>
+            <div class="stat-value" *ngIf="totalDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info">
+              {{ totalDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="totalDepositAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ totalDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Your Deposit Amount</div>
+            <div class="stat-value" *ngIf="usdDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info">
+              {{ usdDepositAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="usdDepositAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ usdDepositAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
+            </div>
+          </div>
+        </div>
+        <div class="stats stats-vertical md:stats-horizontal">
+          <div class="stat">
+            <div class="stat-title">Total Bonded Amount</div>
+            <div class="stat-value" *ngIf="totalBondedAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount">
+              {{ totalBondedAmount?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-primary" *ngIf="totalBondedAmount?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ totalBondedAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Total Unbonding Amount</div>
+            <div class="stat-value" *ngIf="totalUnbondingAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-secondary" *ngIf="totalUnbondingAmount?.usdAmount">
+              {{ totalUnbondingAmount?.usdAmount | currency }}
+            </div>
+            <div
+              class="stat-value text-secondary"
+              *ngIf="totalUnbondingAmount?.usdAmount === undefined"
+            >
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ totalUnbondingAmount?.symbolAmount | number : '1.0-2' }}
+              {{ denom | coinDenom | async }}
+            </div>
+          </div>
+          <div class="stat">
+            <div class="stat-title">Withdrawal Reserve Amount</div>
+            <div class="stat-value" *ngIf="withdrawReserve === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info">
+              {{ withdrawReserve?.usdAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="withdrawReserve?.usdAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ withdrawReserve?.symbolAmount | number : '1.0-2' }} {{ denom | coinDenom | async }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full md:w-auto mb-8">
+    <div class="card bg-base-100 shadow-xl w-full">
+      <div class="tabs tabs-boxed w-full">
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
+          Deposit
+        </a>
+        <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
+          Withdrawal
+        </a>
+      </div>
+      <div class="card-body" *ngIf="tab === 'mint'">
+        <form #depositFormRef="ngForm" (submit)="onSubmitDeposit()">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Chain that you deposit from</span>
+              <span class="label-text-alt"></span>
+            </label>
+            <button type="button" class="btn btn-block" onclick="chain_select_modal.showModal()">
+              {{ selectedChain.display }}
+            </button>
+
+            <dialog id="chain_select_modal" class="modal">
+              <form method="dialog" class="modal-box">
+                <h3 class="font-bold text-lg">Chain that you deposit from</h3>
+
+                <div class="flex flex-row flex-wrap gap-2 mt-2">
+                  <ng-container *ngFor="let chain of chains">
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      [disabled]="chain.disabled"
+                      (click)="onClickChain(chain.id)"
+                    >
+                      {{ chain.display }}
+                    </button>
+                  </ng-container>
+                </div>
+              </form>
+              <form method="dialog" class="modal-backdrop">
+                <button type="button" onclick="chain_select_modal.close()">close</button>
+              </form>
+            </dialog>
+          </div>
+          <div class="form-control" *ngIf="selectedChain.external">
+            <label class="label">
+              <span class="label-text">{{ selectedChain.display }} Address</span>
+            </label>
+
+            <label class="input-group">
+              <span>{{ selectedChain.display }}</span>
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ externalWalletAddress }}"
+              />
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span class="cursor-pointer" (click)="setMintAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setMintAmount(1)"> 100% </span>
+              </span>
+            </label>
+            <label class="input-group">
+              <input
+                #depositAmountRef
+                #depositAmountNgModelRef="ngModel"
+                required
+                type="number"
+                placeholder="0.000000"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors && depositAmountNgModelRef.touched
+                }"
+                [min]="0"
+                [max]="denomBalancesMap?.[vault?.vault?.denom || '']?.amount | coinAmount: vault?.vault?.denom"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="mintAmount"
+                name="mintAmount"
+                (input)="onDepositAmountChange()"
+              />
+              <span *ngIf="selectedChain.cosmos">{{ denom | coinDenom | async }}</span>
+              <span *ngIf="!selectedChain.cosmos"
+                >{{ denomMetadataMap?.[vault?.vault?.denom || '']?.symbol }}.{{
+                  selectedChain.id
+                }}</span
+              >
+            </label>
+            <span class="label" *ngIf="selectedChain.id === 'ununifi'">
+              <span class="label-text-alt">Available balance:</span>
+              <label class="label-text-alt">
+                {{ denomBalancesMap?.[denom || '']?.amount | coinAmount: vault?.vault?.denom }}
+                {{ denom | coinDenom | async }}
+              </label>
+            </span>
+          </div>
+
+          <div class="form-control" *ngIf="!selectedChain.cosmos">
+            <label class="label">
+              <span class="label-text">Converted to</span>
+            </label>
+            <label class="input-group">
+              <input disabled class="input input-bordered w-full" value="{{ mintAmount }}" />
+              <span>{{ denom | coinDenom | async }}</span>
+            </label>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">You will receive</span>
+            </label>
+            <label class="input-group">
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ estimatedMintAmount?.mint_amount?.amount | coinAmount }}"
+              />
+              <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
+            </label>
+          </div>
+
+          <div class="card-actions justify-end mt-8">
+            <button class="btn btn-primary px-8" [disabled]="depositFormRef.invalid">
+              Deposit
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="card-body" *ngIf="tab === 'burn'">
+        <form #withdrawFormRef="ngForm" (submit)="onSubmitWithdraw()">
+          <div class="form-control">
+            <label class="label">
+              <div class="flex flex-row items-center gap-2">
+                <span class="label-text">Withdrawal Option</span>
+                <!-- The button to open modal -->
+                <label for="modal-unbonding" class="label-text cursor-pointer">
+                  <span class="material-symbols-outlined">help</span>
+                </label>
+              </div>
+
+              <!-- Put this part before </body> tag -->
+              <input type="checkbox" id="modal-unbonding" class="modal-toggle" />
+              <div class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">What is the unbonding period?</h3>
+                  <p class="py-4">
+                    The unbonding period is the time required for the asset to be returned after the
+                    request. The unbonding period is set by the chain parameter. You can withdraw
+                    your funds immediately, but a specified fee will be charged.
+                  </p>
+                  <p>
+                    For more information on this fee, visit
+                    <a
+                      href="https://docs.ununifi.io/overview/interchain-yield-aggregator/withdraw-reserve-rate"
+                      target="_blank"
+                    >
+                      <u class="text-info">the UnUniFi Documentation</u> </a
+                    >.
+                  </p>
+                  <div class="modal-action">
+                    <label for="modal-unbonding" class="btn">Okay</label>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <label class="input-group">
+              <select
+                class="select select-bordered w-full"
+                name="withdrawOption"
+                [(ngModel)]="withdrawOption.id"
+              >
+                <ng-container *ngFor="let option of withdrawOptions">
+                  <option [value]="option.id" [disabled]="option.disabled">
+                    {{ option.display }}
+                  </option>
+                </ng-container>
+              </select>
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Enter amount</span>
+              <span class="label-text-alt flex flex-row gap-2">
+                <span class="cursor-pointer" (click)="setBurnAmount(0.25)"> 25% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(0.5)"> 50% </span>
+                <span class="cursor-pointer" (click)="setBurnAmount(1)"> 100% </span>
+              </span>
+            </label>
+            <label class="input-group">
+              <input
+                #withdrawAmountRef
+                #withdrawAmountNgModelRef="ngModel"
+                placeholder="0.000000"
+                required
+                type="number"
+                class="input input-bordered w-full"
+                [class]="{
+                  'input-error': withdrawAmountNgModelRef.errors && withdrawAmountNgModelRef.touched
+                }"
+                [min]="0"
+                [max]="denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id || '']?.amount | coinAmount: vault?.vault?.denom"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                [(ngModel)]="burnAmount"
+                name="burnAmount"
+                (input)="onWithdrawAmountChange()"
+              />
+              <span class="whitespace-nowrap">YA-VAULT-{{ vault?.vault?.id }}</span>
+            </label>
+            <span class="label">
+              <span class="label-text-alt">Available balance:</span>
+              <label class="label-text-alt">
+                {{ denomBalancesMap?.['yieldaggregator/vaults/'+ vault?.vault?.id]?.amount | coinAmount }}
+                {{ 'YA-VAULT-' + vault?.vault?.id }}
+              </label>
+            </span>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">You will receive</span>
+            </label>
+
+            <label class="input-group">
+              <input
+                disabled
+                class="input input-bordered w-full"
+                value="{{ estimatedRedeemAmount?.redeem_amount?.amount | coinAmount }}"
+              />
+              <span>{{ denom | coinDenom | async }}</span>
+            </label>
+            <span class="label" *ngIf="estimatedRedeemAmount?.total_amount">
+              <span class="label-text-alt">
+                Total {{ estimatedRedeemAmount?.total_amount?.amount | coinAmount }} - Fee
+                {{ estimatedRedeemAmount?.fee?.amount | coinAmount }}
+              </span>
+            </span>
+          </div>
+
+          <div class="card-actions justify-end mt-8">
+            <button
+              class="btn btn-secondary px-8"
+              [disabled]="
+                withdrawFormRef.invalid || estimatedRedeemAmount?.redeem_amount?.amount === '0'
+              "
+            >
+              Withdrawal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <h2>Strategies Contained in this Vault</h2>
+  <div class="flex flex-row flex-wrap -mr-12 -mb-12">
+    <div
+      *ngFor="let strategy of vault?.vault?.strategy_weights; let i = index"
+      class="pr-12 pb-12 w-full md:w-1/2 xl:w-1/3"
+    >
+      <div class="card bg-base-100 shadow-xl w-full">
+        <div class="card-body">
+          <h2 class="card-title break-all">
+            <ng-container *ngIf="symbolImage">
+              <div class="avatar">
+                <div class="mask mask-circle w-6 h-6">
+                  <img src="{{ symbolImage }}" alt="Asset Symbol" />
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!symbolImage">
+              <span class="material-symbols-outlined">question_mark</span>
+            </ng-container>
+            <span>
+              {{ getStrategyInfo(strategy.strategy_id)?.name }}
+            </span>
+          </h2>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-title">Allocation Weight</div>
+              <div class="stat-value">{{ strategy.weight | percent : '1.0-2' }}</div>
+              <div class="stat-desc"></div>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-outline btn-info"
+            [routerLink]="[
+              '/yield-aggregator/strategies',
+              vault?.vault?.denom,
+              strategy.strategy_id
+            ]"
+          >
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

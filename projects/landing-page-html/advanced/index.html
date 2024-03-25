@@ -308,14 +308,16 @@
             (Stride liquid staked ATOM). At first, Gluon Trade will be focused towards the Cosmos
             Ecosystem, eventually supporting many cross-chain yield-bearing assets.
           </div>
-          <div class="text-2xl sm:text-4xl font-bold text-left" style="color: #1E565F;">
-            <img src="../assets/images/icons/icon_trend.svg" loading="lazy" class="inline w-8 sm:w-12" alt="trend" />
-            What is Gluon Trade?
-          </div>
         </div>
         <div class="w-full sm:w-1/2 h-80 sm:h-auto c-gray rounded-3xl flex gap-2 justify-center">
-          <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-          <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+          <div class="flex justify-center gap-3">
+            <img
+              src="../assets/images/advenced/top.png"
+              class="w-full max-h-80"
+              loading="lazy"
+              alt="pic"
+          />
+          </div>
         </div>
       </div>
   </section>
@@ -436,6 +438,10 @@
       }
     </script>
 
+    <div class="w-11/12 sm:w-5/6 mx-auto text-2xl sm:text-4xl font-bold text-left mb-6" style="color: #1E565F;">
+      <img src="../assets/images/icons/icon_trend.svg" loading="lazy" class="inline w-8 sm:w-12" alt="trend" />
+        What is Yield Trading?
+    </div>
     <div class="w-11/12 sm:w-5/6 mx-auto flex flex-col sm:flex-row gap-10 justify-start items-start ">
 
       <input id="btn-level1" type="radio" name="level-radio" onclick="continueTo('s1-0')" checked>
@@ -478,10 +484,10 @@
           </label>
         </div>
 
-        <div class="w-full h-20 rounded-lg gap-2 only-pc sm:flex justify-center c-gray ">
+        <!-- <div class="w-full h-20 rounded-lg gap-2 only-pc sm:flex justify-center c-gray ">
           <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
           <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
-        </div>
+        </div> -->
 
         <style>
           #pop-up {
@@ -1031,7 +1037,7 @@
                 <div class="font-bold text-sm">Through yield tokenization:</div>
               </div>
             </div>
-            <div class="text-lg sm:text-2xl">let's say a user stakes their tokens for 3 months:</div>
+            <div class="text-lg sm:text-2xl">Let's say a user stakes their tokens for 3 months:</div>
             <div class="flex flex-col sm:flex-row gap-5">
               <div class="flex-1 px-5 sm:px-9 py-4 rounded-2xl c-white01">
                 <div class="text-xl sm:text-3xl font-bold mb-5">Before Maturity</div>
@@ -1961,18 +1967,17 @@
     </script>
     <div class="mx-auto max-w-screen-xl">
       <div class="mx-auto w-11/12 sm:w-5/6">
+          <input id="btn-mint" type="radio" name="guide-radio" checked>
+          <input id="btn-swap" type="radio" name="guide-radio">
+          <input id="btn-liquidity" type="radio" name="guide-radio">
+          <!-- <input id="btn-claim" type="radio" name="guide-radio"> -->
 
-        <input id="btn-mint" type="radio" name="guide-radio" checked>
-        <input id="btn-swap" type="radio" name="guide-radio">
-        <input id="btn-liquidity" type="radio" name="guide-radio">
-        <input id="btn-claim" type="radio" name="guide-radio">
-
-        <ul class="whitespace-nowrap flex btn-wrap gap-3 sm:gap-8 mb-12 sm:mb-10 overflow-x-auto">
-          <li><label id="lb-mint" class="btn-guide c-gray" for="btn-mint">Mint Guide</label></li>
-          <li><label id="lb-swap" class="btn-guide c-gray" for="btn-swap">Swap Guide</label></li>
-          <li><label id="lb-liquidity" class="btn-guide c-gray" for="btn-liquidity">Liquidity Guide</label></li>
-          <li><label id="lb-claim" class="btn-guide c-gray" for="btn-claim">Claiming Guide</label></li>
-        </ul>
+          <ul class="whitespace-nowrap w-full sm:w-4/5 mx-auto flex btn-wrap justify-between overflow-x-auto mb-12 sm:mb-10">
+            <li><label id="lb-mint" class="btn-guide c-gray" for="btn-mint">Mint Guide</label></li>
+            <li><label id="lb-swap" class="btn-guide c-gray" for="btn-swap">Swap Guide</label></li>
+            <li><label id="lb-liquidity" class="btn-guide c-gray" for="btn-liquidity">Liquidity Guide</label></li>
+            <!-- <li><label id="lb-claim" class="btn-guide c-gray" for="btn-claim">Claiming Guide</label></li> -->
+          </ul>
 
         <div class="btn-content-wrap">
           <!-- mint guide -->
@@ -1984,7 +1989,7 @@
               <input id="m03" type="radio" name="mint-radio">
               <input id="m04" type="radio" name="mint-radio">
               <input id="m05" type="radio" name="mint-radio">
-              <input id="m06" type="radio" name="mint-radio">
+              <!-- <input id="m06" type="radio" name="mint-radio"> -->
 
               <ul class="w-full sm:w-4/5 mx-auto flex justify-between step-wrap overflow-x-auto">
                 <li><label id="lb-m01" class="step-item" for="m01">01</label></li>
@@ -1992,7 +1997,7 @@
                 <li><label id="lb-m03" class="step-item" for="m03">03</label></li>
                 <li><label id="lb-m04" class="step-item" for="m04">04</label></li>
                 <li><label id="lb-m05" class="step-item" for="m05">05</label></li>
-                <li><label id="lb-m06" class="step-item" for="m06">06</label></li>
+                <!-- <li><label id="lb-m06" class="step-item" for="m06">06</label></li> -->
               </ul>
 
               <!-- content -->
@@ -2005,7 +2010,7 @@
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>1</strong></div>
-                      <div class="text-xl tracking-wide">Go to markets</div>
+                      <div class="text-xl tracking-wide">Go to Vaults & switch to TRADE</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('m02')"> <span class="text-2xl tracking-wide">Next</span>
@@ -2014,8 +2019,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/advenced/mint-step1.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2026,10 +2035,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step3.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>2</strong></div>
-                      <div class="text-xl tracking-wide">Select your desired asset</div>
+                      <div class="text-xl tracking-wide">Select your desired vault & maturity</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('m03')"> <span class="text-2xl tracking-wide">Next</span>
@@ -2038,8 +2047,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/advenced/mint-step2.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2053,7 +2066,8 @@
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>3</strong></div>
-                      <div class="text-xl tracking-wide">Select your <br />desired maturity</div>
+                      <div class="text-xl tracking-wide">Select the Mint tab</div>
+                      <div class="text-xl tracking-wide text-warning">Select the Mint tab</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('m04')"> <span class="text-2xl tracking-wide">Next</span>
@@ -2062,8 +2076,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/mint-step3.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
@@ -2074,10 +2092,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>4</strong></div>
-                      <div class="text-xl tracking-wide">Select your input<br />asset and amount</div>
+                      <div class="text-xl tracking-wide">Set your Input amount & check the Output amount</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('m05')"> <span class="text-2xl tracking-wide">Next</span>
@@ -2086,8 +2104,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/mint-step4.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
@@ -2098,12 +2120,12 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>5</strong></div>
-                      <div class="text-xl tracking-wide">Your input asset will be <br />
-                        automatically routed to <br />the required asset for the <br />
-                        fixed-yield position when <br />you submit the transaction</div>
+                      <div class="text-xl tracking-wide">
+                        Submit the transaction
+                      </div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('m06')"> <span class="text-2xl tracking-wide">Next</span>
@@ -2112,22 +2134,26 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/mint-step5.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- step6-mint -->
-                <div id="content-m06" class="step-content w-full">
+                <!-- <div id="content-m06" class="step-content w-full">
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
-                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <div class="text-xl tracking-wide">Submit the transaction</div>
                       <a class="btn-cursor c-green  btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         href="../portal/interest-rate-swap/vaults" target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>
@@ -2141,7 +2167,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -2176,7 +2202,7 @@
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>1</strong></div>
-                      <div class="text-xl tracking-wide">Go to markets</div>
+                      <div class="text-xl tracking-wide">Go to Vaults & switch to TRADE</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s02')">
@@ -2186,8 +2212,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/mint-step1.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
@@ -2198,10 +2228,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step3.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>2</strong></div>
-                      <div class="text-xl tracking-wide">Select your desired asset</div>
+                        <div class="text-xl tracking-wide">Select your desired vault & maturity</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s03')">
@@ -2211,8 +2241,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/mint-step2.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
@@ -2226,7 +2260,7 @@
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>3</strong></div>
-                      <div class="text-xl tracking-wide">Select your <br />desired maturity</div>
+                      <div class="text-xl tracking-wide">Select the Swap tab</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s04')">
@@ -2236,8 +2270,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/advenced/swap-step3.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2248,10 +2286,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step5.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>4</strong></div>
-                      <div class="text-xl tracking-wide">Select your input<br />asset and amount</div>
+                      <div class="text-xl tracking-wide">Select token type & swap direction</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s05')">
@@ -2261,8 +2299,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                        src="../assets/images/advenced/swap-step4.png"
+                        class="w-full max-h-80"
+                        loading="lazy"
+                        alt="pic"
+                      />
                       </div>
                     </div>
                   </div>
@@ -2273,12 +2315,15 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>5</strong></div>
-                      <div class="text-xl tracking-wide">Your input asset will be <br />
-                        automatically routed to <br />the required asset for the <br />
-                        fixed-yield position when <br />you submit the transaction</div>
+                      <div class="text-xl tracking-wide">
+                        Set your input amount (For swap to YT, set the output amount)
+                      </div>
+                      <div class="text-xl tracking-wide text-error">
+                        If swapping to more PT or YT, APY will decrease, if less, it will increase. (Price Impact).
+                      </div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('s06')">
@@ -2288,8 +2333,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/advenced/swap-step5.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2300,10 +2349,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
-                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <div class="text-xl tracking-wide">Submit the transaction</div>
                       <a class="btn-cursor c-green  btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         href="../portal/interest-rate-swap/vaults" target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>
@@ -2312,8 +2361,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/advenced/swap-step6.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2331,7 +2384,7 @@
               <input id="l03" type="radio" name="liquidity-radio">
               <input id="l04" type="radio" name="liquidity-radio">
               <input id="l05" type="radio" name="liquidity-radio">
-              <input id="l06" type="radio" name="liquidity-radio">
+              <!-- <input id="l06" type="radio" name="liquidity-radio"> -->
 
               <ul class="w-full sm:w-4/5 mx-auto flex justify-between step-wrap overflow-x-auto">
                 <li><label id="lb-l01" class="step-item" for="l01">01</label></li>
@@ -2339,7 +2392,7 @@
                 <li><label id="lb-l03" class="step-item" for="l03">03</label></li>
                 <li><label id="lb-l04" class="step-item" for="l04">04</label></li>
                 <li><label id="lb-l05" class="step-item" for="l05">05</label></li>
-                <li><label id="lb-l06" class="step-item" for="l06">06</label></li>
+                <!-- <li><label id="lb-l06" class="step-item" for="l06">06</label></li> -->
               </ul>
 
               <!-- content -->
@@ -2352,7 +2405,7 @@
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>1</strong></div>
-                      <div class="text-xl tracking-wide">Go to markets</div>
+                      <div class="text-xl tracking-wide">Go to Pools</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('l02')">
@@ -2362,8 +2415,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/beginners/lp-step1.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2374,10 +2431,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step3.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>2</strong></div>
-                      <div class="text-xl tracking-wide">Select your desired asset</div>
+                      <div class="text-xl tracking-wide">Select your desired vault & maturity</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('l03')">
@@ -2387,8 +2444,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/beginners/lp-step2.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2399,10 +2460,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step2.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>3</strong></div>
-                      <div class="text-xl tracking-wide">Select your <br />desired maturity</div>
+                      <div class="text-xl tracking-wide">Set your input amount (vault's token or PT token)</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('l04')">
@@ -2412,8 +2473,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/beginners/lp-step3.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2424,10 +2489,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step4.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>4</strong></div>
-                      <div class="text-xl tracking-wide">Select your input<br />asset and amount</div>
+                      <div class="text-xl tracking-wide">The amount of the other and the amount of LP tokens to be issued are automatically calculated</div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('l05')">
@@ -2437,8 +2502,12 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/beginners/lp-step4.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
@@ -2449,12 +2518,12 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>5</strong></div>
-                      <div class="text-xl tracking-wide">Your input asset will be <br />
-                        automatically routed to <br />the required asset for the <br />
-                        fixed-yield position when <br />you submit the transaction</div>
+                      <div class="text-xl tracking-wide">
+                        Submit the transaction
+                      </div>
                       <div
                         class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         onclick="nextStep('l06')">
@@ -2464,22 +2533,26 @@
                     <div class="w-1/12"></div>
                     <div class="w-full sm:w-7/12 h-80 rounded-lg flex items-center justify-center c-gray">
                       <div class="flex justify-center gap-3">
-                        <img src="../assets/images/icons/icon_pic.svg" loading="lazy" width="40px" alt="pic" />
-                        <img src="../assets/images/icons/icon_mov.svg" loading="lazy" width="40px" alt="mov" />
+                        <img
+                          src="../assets/images/beginners/lp-step5.png"
+                          class="w-full max-h-80"
+                          loading="lazy"
+                          alt="pic"
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- step6-liquidity -->
-                <div id="content-l06" class="step-content w-full">
+                <!-- <div id="content-l06" class="step-content w-full">
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
                       <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
-                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <div class="text-xl tracking-wide">Submit the transaction</div>
                       <a class="btn-cursor c-green  btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         href="../portal/interest-rate-swap/vaultsd" target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>
@@ -2493,7 +2566,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -2652,10 +2725,10 @@
                   <div class="w-full flex flex-col-reverse sm:flex-row items-start gap-5 sm:gap-0">
                     <div class="w-full sm:w-4/12 c-gray px-4 py-8 rounded-lg flex flex-col text-start gap-5"
                       style="position:relative;">
-                      <img src="../assets/images/icons/icon_step1.svg" loading="lazy" width="30px" alt="step1" />
+                      <img src="../assets/images/icons/icon_step6.svg" loading="lazy" width="30px" alt="step1" />
                       <div class="text-3xl h-8" style="letter-spacing: 0.80px;">
                         Step <strong>6</strong></div>
-                      <div class="text-xl tracking-wide">Submit transaction</div>
+                      <div class="text-xl tracking-wide">Submit the transaction</div>
                       <a class="btn-cursor c-green  btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                         href="../portal/interest-rate-swap/vaults" target="_blank">
                         <span class="text-2xl tracking-wide">Open App</span>

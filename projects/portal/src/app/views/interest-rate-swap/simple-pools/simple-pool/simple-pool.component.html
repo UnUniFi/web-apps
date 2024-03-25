@@ -1,0 +1,413 @@
+<div class="mx-auto max-w-screen-xl xl:w-1/2 w-full p-8">
+  <div class="flex flex-row flex-wrap mb-8">
+    <div class="text-xl breadcrumbs">
+      <ul>
+        <li><a routerLink="..">Liquidity Pools</a></li>
+        <li>{{ vault?.name }}</li>
+      </ul>
+    </div>
+    <span class="flex-auto"></span>
+    <div class="join">
+      <button class="btn btn-sm btn-primary join-item">Earn</button>
+      <button class="btn btn-sm btn-accent text-neutral glass join-item" (click)="changeAdvanced()">
+        Trade
+      </button>
+    </div>
+  </div>
+
+  <h1 class="text-2xl mb-8">Earn LP Yield on {{ vault?.name }}</h1>
+
+  <div class="card bg-base-200 shadow-xl mb-4">
+    <div class="card-body">
+      <h2 class="card-title">Step 1. Select a pool to provide liquidity</h2>
+      <p class="opacity-50">Withdraw anytime at market prices</p>
+
+      <div class="flex flex-row flex-wrap gap-2 mb-4">
+        <ng-container *ngFor="let pool of pools; let i = index">
+          <button
+            class="btn btn-lg btn-outline btn-primary"
+            [class.btn-active]="selectedPoolId === pool.id"
+            (click)="selectedPoolId = pool.id"
+          >
+            <div>
+              <div class="text-xl flex flex-row">
+                <p class="font-bold">{{ calcMaturity(pool) | date : 'mediumDate' }}</p>
+                <p class="lowercase ml-2">({{ calcRestDays(pool) }}d)</p>
+              </div>
+              <div class="text-xl flex flex-row">
+                <p class="text-accent font-bold">
+                  {{ poolAPYs?.[i]?.liquidity_apy | percent : '1.2-2' }}
+                </p>
+                Pool APY
+              </div>
+            </div>
+          </button>
+        </ng-container>
+      </div>
+
+      <div
+        class="flex items-center gap-3 rounded-lg border-2 border-[#adc9ff] p-2 cursor-pointer hover"
+      >
+        <div class="overflow-x-auto">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th class="text-xl">My Deposit</th>
+                <td class="text-xl font-bold flex flex-row items-center gap-2">
+                  <div>{{ 0 }} {{ vault?.deposit_denom | coinDenom | async }}</div>
+                  <span class="material-symbols-outlined"> arrow_forward </span>
+                  <div class="text-primary">{{ 0 }} {{ vault?.deposit_denom | coinDenom | async }}</div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-xl">Claimable Yield</th>
+                <td class="text-xl font-bold flex flex-row items-center gap-2">
+                  <div>{{ 0 }} {{ vault?.deposit_denom | coinDenom | async }}</div>
+                  <span class="material-symbols-outlined"> arrow_forward </span>
+                  <div class="text-primary">{{ 0 }} {{ vault?.deposit_denom | coinDenom | async }}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">
+        Step 2.
+        <div *ngIf="tab === 'deposit'">Provide liquidity to earn fees and rewards</div>
+        <div *ngIf="tab === 'withdraw'">Withdraw your deposited liquidity</div>
+      </h2>
+      <div class="tabs w-full">
+        <a
+          class="tab tab-lg tab-bordered w-1/2 text-accent"
+          [class.border-accent]="tab === 'deposit'"
+          [class.text-accent]="tab === 'deposit'"
+          (click)="tab = 'deposit'"
+        >
+          Deposit
+        </a>
+        <a
+          class="tab tab-lg tab-bordered w-1/2 text-accent"
+          [class.border-accent]="tab === 'withdraw'"
+          [class.text-accent]="tab === 'withdraw'"
+          (click)="tab = 'withdraw'"
+        >
+          Withdraw
+        </a>
+      </div>
+
+      <form #depositFormRef="ngForm" *ngIf="tab === 'deposit'" (submit)="onDepositPool()">
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Input</span>
+            <span class="label-text-alt mr-2">
+              Available Balance:
+              {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+              {{ vault?.deposit_denom | coinDenom | async }}
+            </span>
+          </span>
+
+          <div>
+            <label class="input-group join">
+              <!-- <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ vaultImage?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ vaultImage?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                {{ vault?.deposit_denom | coinDenom | async }}
+                <div class="flex-auto"></div>
+                <div class="material-symbols-outlined">keyboard_arrow_down</div>
+              </button> -->
+              <span>
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="{{ vaultImage?.image }}" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                    <div class="w-4 rounded-full">
+                      <img src="{{ vaultImage?.subImage }}" />
+                    </div>
+                  </div>
+                </div>
+                {{ vault?.deposit_denom | coinDenom | async }}
+              </span>
+              <input
+                #depositAmountNgModelRef="ngModel"
+                class="join-item input input-bordered input-secondary w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors
+                }"
+                placeholder="0.000000"
+                required
+                type="number"
+                [(ngModel)]="inputUnderlying"
+                [min]="0"
+                [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount: vault?.deposit_denom"
+                pattern="^[0-9]*\.?[0-9]{0,6}$"
+                name="depositAmount"
+                (change)="onChangeDeposit()"
+              />
+            </label>
+            <button
+              type="button"
+              class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+              (click)="inputMaxUT()"
+            >
+              Max
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex flex-col justify-center items-center ml-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <circle
+                cx="8"
+                cy="8.00586"
+                r="7.5"
+                fill="#ADC9FF"
+                fill-opacity="0.2"
+                stroke="#ADC9FF"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+          </div>
+          <div class="text-xl text-secondary">Price Impact</div>
+          <div class="flex-auto"></div>
+          <div class="text-xl text-accent flex flex-row items-center">
+            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+            <span>{{ 0 | percent : '1.6-6' }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex flex-col justify-center items-center ml-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <circle
+                cx="8"
+                cy="8.00586"
+                r="7.5"
+                fill="#ADC9FF"
+                fill-opacity="0.2"
+                stroke="#ADC9FF"
+              />
+            </svg>
+          </div>
+          <div class="text-xl text-secondary">Fee</div>
+          <div class="flex-auto"></div>
+          <div class="text-xl text-accent flex flex-row items-center">
+            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+            <span>{{ 0 | currency }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions justify-end mt-8 px-4">
+          <button class="btn btn-primary w-full gap-1">
+            <span class="material-symbols-outlined"> attach_money </span>
+            <span class="hidden md:inline">Add Liquidity</span>
+          </button>
+        </div>
+      </form>
+
+      <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onWithdrawPool()">
+        <div class="form-control my-8">
+          <input type="range" min="0" max="100" class="range range-accent" name="withdraw-slider" />
+          <div class="w-full flex justify-between text-xs px-2">
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+          </div>
+        </div>
+        <div class="form-control">
+          <span class="label">
+            <span class="label-text">Output</span>
+          </span>
+
+          <label class="input-group">
+            <!-- <button type="button" class="btn btn-outline btn-secondary normal-case items-center">
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="{{ vaultImage?.image }}" />
+                </div>
+                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                  <div class="w-4 rounded-full">
+                    <img src="{{ vaultImage?.subImage }}" />
+                  </div>
+                </div>
+              </div>
+              {{ vault?.deposit_denom | coinDenom | async }}
+              <div class="flex-auto"></div>
+              <div class="material-symbols-outlined">keyboard_arrow_down</div>
+            </button> -->
+            <span>
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="{{ vaultImage?.image }}" />
+                </div>
+                <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                  <div class="w-4 rounded-full">
+                    <img src="{{ vaultImage?.subImage }}" />
+                  </div>
+                </div>
+              </div>
+              {{ vault?.deposit_denom | coinDenom | async }}
+            </span>
+            <input
+              #withdrawAmountNgModelRef="ngModel"
+              class="join-item input input-bordered input-secondary w-full"
+              [class]="{
+                'input-error': withdrawAmountNgModelRef.errors
+              }"
+              placeholder="0.000000"
+              required
+              type="number"
+              [(ngModel)]="inputLP"
+              [min]="0"
+              pattern="^[0-9]*\.?[0-9]{0,6}$"
+              name="withdrawAmount"
+              (change)="onChangeWithdraw()"
+            />
+          </label>
+        </div>
+
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex flex-col justify-center items-center ml-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <circle
+                cx="8"
+                cy="8.00586"
+                r="7.5"
+                fill="#ADC9FF"
+                fill-opacity="0.2"
+                stroke="#ADC9FF"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+          </div>
+          <div class="text-xl text-secondary">Price Impact</div>
+          <div class="flex-auto"></div>
+          <div class="text-xl text-accent flex flex-row items-center">
+            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+            <span>{{ 0 | percent : '1.6-6' }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex flex-col justify-center items-center ml-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2"
+              height="17"
+              viewBox="0 0 2 17"
+              fill="none"
+            >
+              <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <circle
+                cx="8"
+                cy="8.00586"
+                r="7.5"
+                fill="#ADC9FF"
+                fill-opacity="0.2"
+                stroke="#ADC9FF"
+              />
+            </svg>
+          </div>
+          <div class="text-xl text-secondary">Fee</div>
+          <div class="flex-auto"></div>
+          <div class="text-xl text-accent flex flex-row items-center">
+            <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+            <span>{{ 0 | currency }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions justify-end mt-8 px-4">
+          <button class="btn btn-primary w-full gap-1">
+            <span class="material-symbols-outlined"> money_off </span>
+            <span class="hidden md:inline">Withdraw Liquidity</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

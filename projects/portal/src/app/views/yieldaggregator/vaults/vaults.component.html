@@ -51,10 +51,26 @@
     </form>
   </div>
 
+  <!-- <div class="tabs tabs-boxed w-full">
+    <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'normal'" (click)="tab = 'normal'">
+      Variable
+    </a>
+    <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'fixed'" (click)="tab = 'fixed'">
+      Fixed
+    </a>
+  </div> -->
+
   <div class="card bg-base-100 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">Available Vaults</h2>
-      <P>Select a vault to deposit funds based on your preferences, and earn yield.</P>
+    <div class="card-body" *ngIf="tab === 'normal'">
+      <h2 class="card-title">Yield Aggregator Vaults</h2>
+      <P>
+        Select a vault to deposit funds based on your preferences, and earn yield. These interest
+        rates are variable.
+      </P>
+      <!-- <p>
+        Looking for a fixed rate? Check
+        <a class="link link-info" (click)="tab = 'fixed'">Fixed-rate vaults.</a>
+      </p> -->
       <div class="flex gap-2" *ngIf="certified !== null">
         <span class="flex-auto"></span>
         <input
@@ -78,17 +94,7 @@
             <!-- head -->
             <thead>
               <tr>
-                <!-- <th>
-                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('id')">
-                    <span>ID</span>
-                    <span
-                      class="material-symbols-outlined"
-                      [class]="{ 'text-info': sortType === 'id' }"
-                    >
-                      keyboard_arrow_down
-                    </span>
-                  </button>
-                </th> -->
+                <th></th>
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('name')">
                     <span>Name</span>
@@ -100,7 +106,6 @@
                     </span>
                   </button>
                 </td>
-                <td>description</td>
                 <td>Asset</td>
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('apy')">
@@ -113,17 +118,6 @@
                     </span>
                   </button>
                 </td>
-                <!-- <td>
-                  <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('commission')">
-                    <span>Commission Rate</span>
-                    <span
-                      class="material-symbols-outlined"
-                      [class]="{ 'text-info': sortType === 'commission' }"
-                    >
-                      keyboard_arrow_down
-                    </span>
-                  </button>
-                </td> -->
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('deposit')">
                     <span>TVL</span>
@@ -140,14 +134,15 @@
             <tbody>
               <ng-container *ngFor="let vault of vaults; let i = index">
                 <tr class="hover cursor-pointer" routerLink="{{ vault.vault?.id }}">
-                  <!-- <th>#{{ vault.vault?.id }}</th> -->
-                  <div class="dropdown dropdown-hover items-center">
+                  <th></th>
+                  <td>{{ vault.vault?.name }}</td>
+                  <!--  <div class="dropdown dropdown-hover items-center">
                     <label tabindex="0">
                       <td style="max-width: 15rem" class="truncate">
-                        {{ vault.vault?.name }}
+
                       </td>
                     </label>
-                    <div
+                  <div
                       tabindex="0"
                       class="dropdown-content z-[1] card card-compact w-96 max-h-48 p-2 shadow bg-base-200 text-primary-content"
                     >
@@ -158,10 +153,7 @@
                         <p class="truncate">{{ vault.vault?.description || 'No description' }}</p>
                       </div>
                     </div>
-                  </div>
-                  <td style="max-width: 10rem" class="truncate">
-                    {{ vault.vault?.description }}
-                  </td>
+                  </div> -->
                   <td>
                     <div class="flex items-center space-x-3 gap-2">
                       <ng-container *ngIf="symbols && symbols[i]?.img">
@@ -193,7 +185,6 @@
                       ~{{vaultsInfo?.[i]?.maxApy | percent : '1.0-2'}}
                     </span>
                   </td>
-                  <!-- <td>{{ vault.vault?.withdraw_commission_rate | percent : '1.0-2' }}</td> -->
                   <td>
                     <div
                       class="animate-pulse bg-slate-700 w-12 h-6 rounded-full"
@@ -207,6 +198,106 @@
           </table>
           <p *ngIf="!vaults?.length" class="text-center">There is no vault.</p>
         </ng-template>
+      </div>
+    </div>
+
+    <div class="card-body" *ngIf="tab === 'fixed'">
+      <h2 class="card-title">Fixed-rate Vaults</h2>
+      <p>
+        UnUniFi offers fixed-rate asset management. You can get more yield by investing at long-term
+        or variable interest rates.
+      </p>
+      <p>
+        Looking to find more vaults? Check
+        <a class="link link-info" (click)="tab = 'normal'">Yield Aggregator vaults.</a>
+      </p>
+      <div class="overflow-x-auto mt-4">
+        <table class="table w-full">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th></th>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap" (click)="onSort('name')">
+                  <span>Name</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'name' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>Asset</td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Long Yield APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'apy' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Variable Yield APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'apy' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-ghost btn-xs flex-nowrap">
+                  <span>Fixed Yield APY</span>
+                  <span
+                    class="material-symbols-outlined"
+                    [class]="{ 'text-info': sortType === 'apy' }"
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hover cursor-pointer">
+              <th>
+                <div class="avatar">
+                  <div class="w-8 rounded-full">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" />
+                  </div>
+                  <div class="avatar -ml-2 mt-4">
+                    <div class="w-4 rounded-full">
+                      <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png" />
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <td>Stride stATOM</td>
+              <td>
+                <div class="flex items-center space-x-3 gap-2">
+                  <div class="avatar">
+                    <div class="mask mask-circle w-6 h-6">
+                      <img
+                        src="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530be6e374711a8554f31b17e4cb92c25fa5/svg/color/atom.svg"
+                        alt="Asset Symbol"
+                      />
+                    </div>
+                  </div>
+                  <span> ATOM </span>
+                </div>
+              </td>
+              <td>56%</td>
+              <td>20%</td>
+              <td>18%</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

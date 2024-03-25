@@ -1,0 +1,253 @@
+<div class="bg-[#39465d] min-h-screen">
+  <div class="mx-auto max-w-screen-xl w-full p-8">
+    <div class="flex flex-row flex-wrap mb-8">
+      <div class="text-2xl font-bold breadcrumbs">
+        <ul>
+          <li><a routerLink="..">Liquidity Pools</a></li>
+          <li>{{ vault?.name }}</li>
+        </ul>
+      </div>
+      <span class="flex-auto"></span>
+      <!-- <div class="join">
+        <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">
+          Earn
+        </button>
+        <button class="btn btn-sm btn-accent text-neutral join-item">Trade</button>
+      </div> -->
+    </div>
+
+    <p class="font-bold">Exit anytime at market price.</p>
+    <p class="font-light">
+      Check
+      <a class="link link-info font-semibold" routerLink="/interest-rate-swap/vaults">here</a> for
+      more information on fixed-rate vaults.
+    </p>
+
+    <div class="flex my-8 gap-4">
+      <form>
+        <div class="form-control w-full">
+          <div class="join">
+            <input
+              type="text"
+              placeholder="Search"
+              class="join-item input input-bordered w-full max-w-xs"
+            />
+            <button class="btn btn-square">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+      <span class="flex-auto"></span>
+      <!-- <div class="join">
+      <button class="btn btn-sm btn-neutral join-item">Active</button>
+      <button class="btn btn-sm join-item">Inactive</button>
+    </div> -->
+      <button
+        class="btn btn-sm btn-square"
+        [class]="{ 'btn-neutral': viewMode === 'table' }"
+        (click)="viewMode = 'table'"
+      >
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <button
+        class="btn btn-sm btn-square"
+        [class]="{ 'btn-neutral': viewMode === 'grid' }"
+        (click)="viewMode = 'grid'"
+      >
+        <span class="material-symbols-outlined">grid_view</span>
+      </button>
+    </div>
+
+    <ng-container *ngIf="tranchePools === null; then loading; else loaded"> </ng-container>
+    <ng-template #loading>
+      <p class="text-center">
+        <span class="loading loading-ring loading-lg"></span>
+      </p>
+    </ng-template>
+    <ng-template #loaded>
+      <ng-container *ngIf="(tranchePools?.length || 0) > 0; then exist; else empty"> </ng-container>
+
+      <ng-template #exist>
+        <div class="overflow-x-auto" *ngIf="viewMode === 'table'">
+          <table class="table">
+            <thead>
+              <tr class="border-b-2 border-[#adc9ff]">
+                <th></th>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Name</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'name' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>Maturity</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'maturity' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>TVL</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'tvl' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-ghost btn-xs flex-nowrap">
+                    <span>APY</span>
+                    <span
+                      class="material-symbols-outlined"
+                      [class]="{ 'text-info': sortType === 'apy' }"
+                    >
+                      keyboard_arrow_down
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let pool of tranchePools; let i = index">
+                <tr
+                  class="hover cursor-pointer border-b-2 border-[#adc9ff]"
+                  routerLink="{{ pool.id }}"
+                >
+                  <th>
+                    <div class="avatar">
+                      <div class="w-8 rounded-full">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    <div>
+                      <div class="text-xl font-bold">
+                        {{ vault?.name }}
+                      </div>
+                      <div class="text-sm opacity-50"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="text-xl font-bold">{{ '2024-10-1' | date : 'mediumDate' }}</div>
+                      <div class="text-sm opacity-50">317 Days</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-xl font-bold">{{ 0 | currency }}</div>
+                  </td>
+                  <td>
+                    <div class="text-xl font-bold text-accent">
+                      {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }} -
+                      {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex flex-row flex-wrap gap-12" *ngIf="viewMode === 'grid'">
+          <ng-container *ngFor="let pool of tranchePools; let i = index">
+            <div
+              style="
+                background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%);
+              "
+              class="card shadow-xl hover cursor-pointer"
+              routerLink="{{ pool.id }}"
+            >
+              <div class="card-body">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <h2 class="card-title">stATOM</h2>
+                    <div class="text-sm opacity-50">Stride</div>
+                  </div>
+                  <span class="flex-auto"></span>
+                  <div class="avatar">
+                    <div class="w-12 rounded-full">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-3 mt-6">
+                      <div class="w-6 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td class="flex flex-row flex-wrap gap-2 items-end">
+                          <div class="text-xl text-accent">
+                            {{ poolsAPYs?.[i]?.liquidity_apy | percent : '1.0-2' }}
+                          </div>
+                          <div class="text-sm">p.a.</div>
+                          <span class="material-symbols-outlined text-accent"> bolt </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="flex flex-row flex-wrap gap-2 items-end">
+                          <div class="text-xl font-bold">{{ 0 | currency }}</div>
+                          <div class="text-lg">TVL</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="text-lg opacity-75">Maturity</div>
+                        </td>
+                        <td>
+                          <div class="text-xl font-bold">
+                            {{ '2024-10-1' | date : 'mediumDate' }}
+                          </div>
+                          <div class="text-sm opacity-50">317 Days</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-template>
+
+      <ng-template #empty>
+        <p class="font-bold text-lg text-error">* No pool</p>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

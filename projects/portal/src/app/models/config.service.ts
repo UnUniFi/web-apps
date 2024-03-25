@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Config = {
   id: string;
+  name: string;
   rpc: string;
   restURL: string;
   websocketURL: string;
@@ -26,6 +27,7 @@ export type Config = {
   strategiesInfo: StrategyInfo[];
   certifiedVaults: string[];
   externalChains: ChainInfo[];
+  irsVaultsImages: IRSVaultImage[];
   extension?: {
     faucet?: {
       hasFaucet: boolean;
@@ -124,6 +126,12 @@ export type ChainInfo = {
     high: number;
   };
   features?: string[];
+};
+
+export type IRSVaultImage = {
+  contract: string;
+  image: string;
+  subImage: string;
 };
 
 declare const configs: Config[];

@@ -1,10 +1,10 @@
-<div class="drawer w-screen h-screen bg-base-300" data-theme="night">
+<div class="drawer lg:drawer-open w-screen h-screen bg-base-300" data-theme="night">
   <input id="drawer-main" type="checkbox" class="drawer-toggle" />
 
   <div class="drawer-content flex flex-col min-h-full overflow-auto">
     <!-- Navbar -->
-    <div class="navbar glass sticky top-0 z-20">
-      <div class="flex-none md:hidden">
+    <div class="navbar bg-base-100 sticky top-0 z-20">
+      <div class="flex-none lg:hidden">
         <label for="drawer-main" class="btn btn-square btn-ghost">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@
           </svg>
         </label>
       </div>
-      <div class="dropdown hidden md:block">
+      <div class="dropdown hidden">
         <label tabindex="0" class="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@
             <span>Apps</span>
           </li>
           <ng-container *ngFor="let app of apps">
-            <li *ngIf="app.name !== 'NFT Backed Loan'">
+            <li >
               <label class="flex gap-4" routerLink="{{ app.link }}">
                 <span class="flex-none">
                   <span class="material-symbols-outlined">{{ app.icon }}</span>
@@ -107,15 +107,15 @@
           </ng-template>
         </ul>
       </div>
-      <button class="align-middle" mat-icon-button routerLink="/nft-backed-loan">
-        <img class="p-1 w-10 h-10" src="assets/favicon.png" />
-      </button>
-      <div class="flex-1 mx-2 text-2xl">
-        <div class="block lg:hidden">NFT-Fi</div>
-        <div class="hidden lg:block">UnUniFi NFT Backed Loan</div>
+
+      <div class="flex-1 gap-4">
+        <button class="align-middle" routerLink="/">
+          <img class="p-1 h-12 sm:hidden" src="assets/no-logo-horizontal.png" />
+          <img class="p-1 h-12 hidden sm:block" src="assets/logo-horizontal.png" />
+        </button>
+        <app-app-tool class="hidden md:block" [selectedAppName]="'NFT Backed Loan'"></app-app-tool>
       </div>
-      <div class="flex-none">
-        <app-app-tool class="hidden md:block"></app-app-tool>
+      <div class="flex-none gap-4">
         <app-node-tool></app-node-tool>
         <app-wallet-tool></app-wallet-tool>
       </div>
@@ -126,10 +126,11 @@
     </div>
   </div>
 
-  <div class="drawer-side pt-16 overflow-auto">
+  <div class="drawer-side overflow-auto">
     <label for="drawer-main" class="drawer-overlay"></label>
     <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full h-full bg-base-200">
       <!-- Sidebar content here -->
+      <app-search-tool class="w-full"></app-search-tool>
       <li>
         <label for="drawer-main" class="flex gap-4" routerLink="/nft-backed-loan">
           <span class="flex-none">
@@ -171,7 +172,7 @@
         <span>Apps</span>
       </li>
       <ng-container *ngFor="let app of apps">
-        <li *ngIf="app.name !== 'NFT Backed Loan'">
+        <li>
           <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
             <span class="flex-none">
               <span class="material-symbols-outlined">{{ app.icon }}</span>

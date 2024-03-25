@@ -10,6 +10,10 @@ const domainCauchyEA = 'a.ununifi-test-v1.cauchye.net';
 const domainCauchyEB = 'b.ununifi-test-v1.cauchye.net';
 const domainCauchyEC = 'c.ununifi-test-v1.cauchye.net';
 const domainCauchyED = 'd.ununifi-test-v1.cauchye.net';
+const nameCauchyEA = 'Testnet-A';
+const nameCauchyEB = 'Testnet-B';
+const nameCauchyEC = 'Testnet-C';
+const nameCauchyED = 'Testnet-D';
 
 const chainID = 'ununifi-test-v1';
 const chainName = 'UnUniFi (test)';
@@ -329,6 +333,7 @@ const configs = [
   // CauchyE A node without Monitor
   {
     id: domainCauchyEA,
+    name: nameCauchyEA,
     rpc: `${location.protocol}//${domainCauchyEA}`,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
@@ -364,6 +369,7 @@ const configs = [
   // CauchyE B node without Monitor
   {
     id: domainCauchyEB,
+    name: nameCauchyEB,
     rpc: `${location.protocol}//${domainCauchyEB}`,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
@@ -399,6 +405,7 @@ const configs = [
   // CauchyE C node without Monitor
   {
     id: domainCauchyEC,
+    name: nameCauchyEC,
     rpc: `${location.protocol}//${domainCauchyEC}`,
     restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
@@ -434,6 +441,7 @@ const configs = [
   // CauchyE D node without Monitor
   {
     id: domainCauchyED,
+    name: nameCauchyED,
     rpc: `${location.protocol}//${domainCauchyED}`,
     restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,

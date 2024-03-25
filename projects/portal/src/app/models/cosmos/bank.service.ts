@@ -28,8 +28,23 @@ export class BankService {
         amount: parseInt(amount).toString(),
       } as cosmosclient.proto.cosmos.base.v1beta1.ICoin;
     });
-
     return coins;
+  }
+
+  convertCoinsToDenomAmount(coins: cosmosclient.proto.cosmos.base.v1beta1.ICoin[]): {
+    [denom: string]: number;
+  } {
+    const map: { [symbol: string]: number } = {};
+    coins.map((b) => {
+      if (!b.denom || !b.amount) {
+        return;
+      }
+      const denomExponent = getDenomExponent(b.denom);
+
+      const amount = new Decimal(b.amount);
+      map[b.denom] = Number(amount.dividedBy(new Decimal(10 ** denomExponent)).toFixed(6));
+    });
+    return map;
   }
 
   /**

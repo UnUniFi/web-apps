@@ -31,25 +31,24 @@ export class BankQueryService {
   ): Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin[]> {
     if (!denoms) {
       return this.restSdk$.pipe(
-        mergeMap((sdk) =>
-          cosmosclient.rest.bank.allBalances(sdk, address),
-        ),
+        mergeMap((sdk) => cosmosclient.rest.bank.allBalances(sdk, address)),
         map((res) => res.data.balances || []),
       );
     }
 
-    return this.restSdk$.pipe(
+    const balances = this.restSdk$.pipe(
       mergeMap((sdk) =>
         Promise.all(
           denoms.map(
-            (denom) =>
-              new QueryApi(undefined, sdk.url)
-                .balance(address, denom)
-                .then((res: any) => res.data.balance!), // TODO: remove any
+            async (denom) =>
+              await cosmosclient.rest.bank
+                .balance(sdk, address, denom)
+                .then((res) => res.data.balance!),
           ),
         ),
       ),
     );
+    return balances;
   }
 
   getDenomBalanceMap$(
@@ -147,6 +146,48 @@ export class BankQueryService {
         display: 'YA-Vault-' + i,
         name: 'YA Vault #' + i,
         symbol: 'YA-VAULT-' + i,
+      });
+      metadata?.push({
+        description: 'IRS PT #' + i + 'Token',
+        denom_units: [
+          {
+            denom: 'irs/tranche/' + i + '/pt',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'irs/tranche/' + i + '/pt',
+        display: 'PT #' + i,
+        name: 'PT #' + i,
+        symbol: 'IRS-PT-' + i,
+      });
+      metadata?.push({
+        description: 'IRS YT #' + i + 'Token',
+        denom_units: [
+          {
+            denom: 'irs/tranche/' + i + '/yt',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'irs/tranche/' + i + '/yt',
+        display: 'YT #' + i,
+        name: 'YT #' + i,
+        symbol: 'IRS-YT-' + i,
+      });
+      metadata?.push({
+        description: 'IRS LP #' + i + 'Token',
+        denom_units: [
+          {
+            denom: 'irs/tranche/' + i + '/ls',
+            exponent: 6,
+            aliases: [],
+          },
+        ],
+        base: 'irs/tranche/' + i + '/ls',
+        display: 'LP #' + i,
+        name: 'LP #' + i,
+        symbol: 'IRS-LP-' + i,
       });
     }
     return {

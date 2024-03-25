@@ -1,0 +1,15 @@
+<view-simple-pool
+  [address]="address$ | async"
+  [contractAddress]="contractAddress$ | async"
+  [pools]="pools$ | async"
+  [vault]="vault$ | async"
+  [poolAPYs]="poolAPYs$ | async"
+  [denomBalancesMap]="denomBalancesMap$ | async"
+  [vaultImage]="vaultImage$ | async"
+  [estimatedRequiredAmountForMint$]="estimatedMintAmount$ | async"
+  [estimatedRedeemAmount$]="estimatedRedeemAmount$ | async"
+  (appMintLP)="onMintLP($event)"
+  (appChangeMintLP)="onChangeMintLP($event)"
+  (appRedeemLP)="onRedeemLP($event)"
+  (appChangeRedeemLP)="onChangeRedeemLP($event)"
+></view-simple-pool>

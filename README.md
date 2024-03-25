@@ -19,13 +19,13 @@ npm i
 npm run [command]
 ```
 
-| Command            | Description                  |
-| :----------------- | :--------------------------- |
-| start:portal       | Run Portal via http          |
-| start:portal:ssl   | Run Portal via https (SSL)   |
-| start:explorer     | Run Explorer via http        |
-| start:explorer:ssl | Run Explorer via https (SSL) |
-| start:landing-page | Run Landing Page             |
+| Command              | Description                  |
+| :------------------- | :--------------------------- |
+| start:portal         | Run Portal via http          |
+| start:portal:https   | Run Portal via https (SSL)   |
+| start:explorer       | Run Explorer via http        |
+| start:explorer:https | Run Explorer via https (SSL) |
+| start:landing-page   | Run Landing Page             |
 
 other options are available in package.json
 

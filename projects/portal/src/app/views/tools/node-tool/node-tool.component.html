@@ -1,7 +1,7 @@
 <div class="dropdown dropdown-end">
-  <div tabindex="0" class="btn gap-2 btn-ghost">
+  <div tabindex="0" class="btn gap-2 btn-outline">
     <span class="material-symbols-outlined">cloud</span>
-    <span class="hidden lg:block">{{ selectedConfig }}</span>
+    <span class="hidden xl:block">{{ selectedConfig?.name || selectedConfig?.id }}</span>
     <span class="material-symbols-outlined hidden sm:block">keyboard_arrow_down</span>
   </div>
   <ul
@@ -9,7 +9,7 @@
     class="dropdown-content menu sm:p-2 shadow bg-base-100 text-base-content rounded-box w-52"
   >
     <li *ngFor="let conf of configs">
-      <a (click)="onChangeConfig(conf)">{{ conf }}</a>
+      <a (click)="onChangeConfig(conf.id)">{{ conf.name || conf.id }}</a>
     </li>
   </ul>
 </div>

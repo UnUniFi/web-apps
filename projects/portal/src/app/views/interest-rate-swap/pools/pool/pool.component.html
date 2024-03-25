@@ -1,0 +1,417 @@
+<div class="bg-[#39465d] min-h-screen">
+  <div class="mx-auto max-w-screen-xl w-full p-8">
+    <div class="flex flex-row flex-wrap mb-8">
+      <div class="text-xl breadcrumbs">
+        <ul>
+          <li><a routerLink="../..">Liquidity Pools</a></li>
+          <li>
+            <a routerLink="..">{{ vault?.name }}</a>
+          </li>
+          <li>Pool #{{ poolId }}</li>
+        </ul>
+      </div>
+      <span class="flex-auto"></span>
+      <!-- <div class="join">
+        <button class="btn btn-sm btn-primary glass join-item" (click)="changeSimple()">
+          Earn
+        </button>
+        <button class="btn btn-sm btn-accent text-neutral join-item">Trade</button>
+      </div> -->
+    </div>
+
+    <div
+      style="background: linear-gradient(180deg, rgba(53, 75, 116, 0.94) 0.07%, #1f2736 59.52%)"
+      class="card mb-8"
+    >
+      <div class="card-body">
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          <div class="avatar">
+            <div class="w-12 rounded-full">
+              <img src="{{ vaultImage?.image }}" />
+            </div>
+            <div class="avatar -ml-3 mt-6">
+              <div class="w-6 rounded-full">
+                <img src="{{ vaultImage?.subImage }}" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xl font-bold">{{ vault?.name }} Pool #{{ poolId }}</div>
+            <div class="text-sm opacity-50"></div>
+          </div>
+          <div *ngIf="pool" class="text-sm opacity-50 ml-4">
+            {{ calcMaturity(pool) | date : 'mediumDate' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-row flex-wrap gap-4 mb-8">
+      <div class="card bg-base-200 shadow-xl w-full lg:w-1/2">
+        <div class="tabs w-full">
+          <a
+            class="tab tab-lg tab-bordered w-1/2"
+            [class.tab-active]="txMode === 'deposit'"
+            (click)="onChangeTxMode('deposit')"
+          >
+            Add
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
+          </a>
+          <a
+            class="tab tab-lg tab-bordered w-1/2"
+            [class.tab-active]="txMode === 'redeem'"
+            (click)="onChangeTxMode('redeem')"
+          >
+            Remove
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
+          </a>
+        </div>
+        <div class="card-body">
+          <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="onDepositPool()">
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Input</span>
+              </span>
+              <div>
+                <label class="input-group join">
+                  <span>
+                    <div class="hidden sm:avatar">
+                      <div class="w-8 rounded-full">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                    {{ vault?.deposit_denom | coinDenom | async }}
+                  </span>
+                  <input
+                    #depositUtAmountNgModelRef="ngModel"
+                    class="join-item input input-bordered input-secondary w-full"
+                    [class]="{
+                      'input-error': depositUtAmountNgModelRef.errors
+                    }"
+                    placeholder="0.000000"
+                    required
+                    type="number"
+                    [(ngModel)]="inputUT"
+                    [min]="0"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount: vault?.deposit_denom"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    name="depositUtAmount"
+                    (change)="onChangeDepositUt()"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxUT()"
+                >
+                  Max
+                </button>
+              </div>
+              <span class="label">
+                <span class="label-text-alt">Available Balance:</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
+                </span>
+              </span>
+
+              <span class="label">
+                <span class="label-text"></span>
+              </span>
+              <div>
+                <label class="input-group join">
+                  <span class="gap-2 w-full">
+                    <div class="hidden sm:avatar">
+                      <div class="w-8 rounded-full border-2 border-primary">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                    <div>PT {{ vault?.name }}#{{ poolId }}</div>
+                  </span>
+                  <input
+                    #depositPtAmountNgModelRef="ngModel"
+                    class="join-item input input-bordered input-secondary w-full"
+                    [class]="{
+                      'input-error': depositPtAmountNgModelRef.errors
+                    }"
+                    placeholder="0.000000"
+                    required
+                    type="number"
+                    [(ngModel)]="inputPT"
+                    [min]="0"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.deposit_denom"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    name="depositPtAmount"
+                    (change)="onChangeDepositPt()"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxPT()"
+                >
+                  Max
+                </button>
+              </div>
+              <span class="label">
+                <span class="label-text-alt">Available Balance:</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[ptDenom || '']?.amount | coinAmount:ptDenom }}
+                </span>
+              </span>
+            </div>
+
+            <div class="flex flex-row justify-center">
+              <span class="material-symbols-outlined"> arrow_downward </span>
+            </div>
+            <div class="divider"></div>
+
+            <div class="form-control gap-2">
+              <span class="label">
+                <span class="label-text">Output (Estimated)</span>
+              </span>
+              <label class="input-group join">
+                <span class="gap-2 w-full">
+                  <div class="hidden sm:avatar">
+                    <div class="w-8 rounded-full border-2 border-secondary">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div>LP {{ vault?.name }}#{{ poolId }}</div>
+                </span>
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedMintAmount?.mintAmount }}"
+                  readonly
+                />
+              </label>
+              <span class="label">
+                <span class="label-text"></span>
+              </span>
+            </div>
+            <div class="card-actions mt-4">
+              <button class="btn btn-primary w-full gap-1" [disabled]="depositFormRef.invalid">
+                <span>Deposit</span>
+              </button>
+            </div>
+          </form>
+
+          <form #withdrawFormRef="ngForm" *ngIf="txMode === 'redeem'" (submit)="onWithdrawPool()">
+            <div class="form-control">
+              <span class="label">
+                <span class="label-text">Input</span>
+              </span>
+
+              <div>
+                <label class="input-group join">
+                  <span class="gap-2 w-full">
+                    <div class="hidden sm:avatar">
+                      <div class="w-8 rounded-full border-2 border-secondary">
+                        <img src="{{ vaultImage?.image }}" />
+                      </div>
+                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                        <div class="w-4 rounded-full">
+                          <img src="{{ vaultImage?.subImage }}" />
+                        </div>
+                      </div>
+                    </div>
+                    <div>LP {{ vault?.name }}#{{ poolId }}</div>
+                  </span>
+                  <input
+                    #withdrawAmountNgModelRef="ngModel"
+                    class="join-item input input-bordered input-secondary w-full"
+                    [class]="{
+                      'input-error': withdrawAmountNgModelRef.errors
+                    }"
+                    placeholder="0.000000"
+                    required
+                    type="number"
+                    [(ngModel)]="inputLP"
+                    [min]="0"
+                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.deposit_denom"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    name="withdrawAmount"
+                    (change)="onChangeWithdraw()"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  (click)="inputMaxLP()"
+                >
+                  Max
+                </button>
+              </div>
+
+              <span class="label">
+                <span class="label-text-alt">Available Balance:</span>
+                <span class="label-text-alt">
+                  {{ denomBalancesMap?.[lpDenom || '']?.amount | coinAmount:lpDenom }}
+                </span>
+              </span>
+            </div>
+
+            <div class="flex flex-row justify-center">
+              <span class="material-symbols-outlined"> arrow_downward </span>
+            </div>
+            <div class="divider"></div>
+
+            <div class="form-control gap-2">
+              <span class="label">
+                <span class="label-text">Output (Estimated)</span>
+              </span>
+              <label class="input-group join">
+                <span>
+                  <div class="hidden sm:avatar">
+                    <div class="w-8 rounded-full">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                  {{ vault?.deposit_denom | coinDenom | async }}
+                </span>
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.utAmount }}"
+                  readonly
+                />
+              </label>
+
+              <span class="label">
+                <span class="label-text"></span>
+              </span>
+              <label class="input-group join">
+                <span class="gap-2 w-full">
+                  <div class="hidden sm:avatar">
+                    <div class="w-8 rounded-full border-2 border-primary">
+                      <img src="{{ vaultImage?.image }}" />
+                    </div>
+                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                      <div class="w-4 rounded-full">
+                        <img src="{{ vaultImage?.subImage }}" />
+                      </div>
+                    </div>
+                  </div>
+                  <div>PT {{ vault?.name }}#{{ poolId }}</div>
+                </span>
+                <input
+                  class="join-item input input-bordered w-full"
+                  value="{{ estimatedRedeemAmount?.ptAmount }}"
+                  readonly
+                />
+              </label>
+              <span class="label">
+                <span class="label-text"></span>
+              </span>
+            </div>
+            <div class="card-actions mt-4">
+              <button class="btn btn-primary w-full gap-1" [disabled]="withdrawFormRef.invalid">
+                <span>Redeem</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="lg:flex-auto"></div>
+
+      <div class="w-full lg:w-5/12">
+        <div class="card bg-base-200 shadow-xl w-full lg:w-auto mb-4">
+          <div class="card-body">
+            <h2 class="card-title">
+              <span>APY</span>
+              <span class="flex-auto"></span>
+              <span class="text-accent">{{
+                calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2'
+              }}</span>
+            </h2>
+
+            <div class="overflow-x-auto">
+              <table class="table">
+                <tbody>
+                  <tr class="bg-base-100">
+                    <th>Underlying Yield</th>
+                    <td>{{ calcUnderlyingAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2' }}</td>
+                  </tr>
+                  <tr class="bg-base-100">
+                    <th>PT Yield</th>
+                    <td>{{ poolAPYs?.discount_pt_apy | percent : '1.2-2' }}</td>
+                  </tr>
+                  <tr class="bg-base-100">
+                    <th>LP Yield</th>
+                    <td>{{ poolAPYs?.liquidity_apy | percent : '1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <th>My Liquidity</th>
+                    <td>{{ lpBalanceUSD | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-200 shadow-xl w-full lg:w-auto">
+          <div class="card-body">
+            <h2 class="card-title">
+              <span>Total Liquidity</span>
+              <span class="flex-auto"></span>
+              <span class="text-accent">{{ totalLiquidityUSD?.total | currency }}</span>
+            </h2>
+            <div class="overflow-x-auto">
+              <table class="table">
+                <tbody>
+                  <ng-container *ngFor="let asset of pool?.pool_assets">
+                    <tr>
+                      <th>
+                        <div class="flex flex-row items-center gap-2">
+                          <div class="avatar">
+                            <div class="w-8 rounded-full">
+                              <img src="{{ vaultImage?.image }}" />
+                            </div>
+                            <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
+                              <div class="w-4 rounded-full">
+                                <img src="{{ vaultImage?.subImage }}" />
+                              </div>
+                            </div>
+                          </div>
+                          {{ asset.denom | coinDenom | async }}
+                        </div>
+                      </th>
+                      <td>
+                        <div class="text-xl font-bold">
+                          {{ asset.amount | coinAmount : asset.denom }}
+                        </div>
+                        <div class="text-sm opacity-50">
+                          {{ totalLiquidityUSD?.assets?.[asset.denom!]| currency }}
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

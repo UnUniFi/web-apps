@@ -1,0 +1,221 @@
+<div class="drawer lg:drawer-open w-screen h-screen bg-base-300" data-theme="irs">
+  <input id="drawer-main" type="checkbox" class="drawer-toggle" />
+
+  <div class="drawer-content flex flex-col min-h-full overflow-auto">
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 sticky top-0 z-20">
+      <div class="flex-none lg:hidden">
+        <label for="drawer-main" class="btn btn-square btn-ghost">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-6 h-6 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </label>
+      </div>
+      <div class="dropdown hidden">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h7"
+            />
+          </svg>
+        </label>
+        <ul tabindex="0" class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <!-- Sidebar content here -->
+          <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">info</span>
+              </span>
+              <span class="flex-1">About</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap/simple-vaults">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">folder</span>
+              </span>
+              <span class="flex-1">Vaults</span>
+            </label>
+          </li>
+          <!-- <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap/vaults">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">topic</span>
+              </span>
+              <span class="flex-1">Vaults (Advanced)</span>
+            </label>
+          </li> -->
+          <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap/pools">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">pool</span>
+              </span>
+              <span class="flex-1">Pools</span>
+            </label>
+          </li>
+          <li>
+            <label class="flex gap-4" routerLink="/interest-rate-swap/positions">
+              <span class="flex-none">
+                <span class="material-symbols-outlined">payments</span>
+              </span>
+              <span class="flex-1">Positions</span>
+            </label>
+          </li>
+
+          <li class="menu-title">
+            <span>Apps</span>
+          </li>
+          <ng-container *ngFor="let app of apps">
+            <li>
+              <label class="flex gap-4" routerLink="{{ app.link }}">
+                <span class="flex-none">
+                  <span class="material-symbols-outlined">{{ app.icon }}</span>
+                </span>
+                <span class="flex-1">{{ app.name }}</span>
+              </label>
+            </li>
+          </ng-container>
+
+          <li class="menu-title">
+            <span>For Test</span>
+          </li>
+          <ng-template ngFor let-navigation [ngForOf]="navigations">
+            <ng-container *ngIf="navigation?.name && navigation?.link">
+              <li>
+                <label
+                  class="flex gap-4"
+                  routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+                >
+                  <span class="flex-none">
+                    <span class="material-symbols-outlined">{{ navigation.icon }}</span>
+                  </span>
+                  <span class="flex-1">{{ navigation.name }}</span>
+                </label>
+              </li>
+            </ng-container>
+          </ng-template>
+        </ul>
+      </div>
+
+      <div class="flex-1 gap-4">
+        <button class="align-middle" routerLink="/">
+          <img class="p-1 h-12 sm:hidden" src="assets/no-logo-horizontal.png" />
+          <img class="p-1 h-12 hidden sm:block" src="assets/logo-horizontal.png" />
+        </button>
+        <app-app-tool
+          class="hidden md:block"
+          [selectedAppName]="'Interest Rate Swap'"
+        ></app-app-tool>
+      </div>
+      <div class="flex-none gap-4">
+        <app-node-tool></app-node-tool>
+        <app-wallet-tool></app-wallet-tool>
+      </div>
+    </div>
+    <!-- Page content here -->
+    <ng-content></ng-content>
+  </div>
+
+  <div class="drawer-side overflow-auto">
+    <ul class="menu p-4 w-11/12 sm:w-3/4 md:2/3 lg:w-full h-full bg-base-200">
+      <!-- Sidebar content here -->
+      <app-search-tool class="w-full"></app-search-tool>
+      <li class="menu-title">
+        <span>Interest Rate Swap</span>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">info</span>
+          </span>
+          <span class="flex-1">About</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/simple-vaults">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">folder</span>
+          </span>
+          <span class="flex-1">Vaults</span>
+        </label>
+      </li>
+      <!-- <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/vaults">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">topic</span>
+          </span>
+          <span class="flex-1">Vaults (Advanced)</span>
+        </label>
+      </li> -->
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/pools">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">pool</span>
+          </span>
+          <span class="flex-1">Pools</span>
+        </label>
+      </li>
+      <li>
+        <label for="drawer-main" class="flex gap-4" routerLink="/interest-rate-swap/positions">
+          <span class="flex-none">
+            <span class="material-symbols-outlined">payments</span>
+          </span>
+          <span class="flex-1">Positions</span>
+        </label>
+      </li>
+
+      <li class="menu-title">
+        <span>Apps</span>
+      </li>
+      <ng-container *ngFor="let app of apps">
+        <li>
+          <label for="drawer-main" class="flex gap-4" routerLink="{{ app.link }}">
+            <span class="flex-none">
+              <span class="material-symbols-outlined">{{ app.icon }}</span>
+            </span>
+            <span class="flex-1">{{ app.name }}</span>
+          </label>
+        </li>
+      </ng-container>
+
+      <li class="menu-title">
+        <span>For Test</span>
+      </li>
+      <ng-template ngFor let-navigation [ngForOf]="navigations">
+        <ng-container *ngIf="navigation?.name && navigation?.link">
+          <li>
+            <label
+              for="drawer-main"
+              class="flex gap-4"
+              routerLink="/utilities{{ navigation.link.replace('/portal', '') }}"
+            >
+              <span class="flex-none">
+                <span class="material-symbols-outlined">{{ navigation.icon }}</span>
+              </span>
+              <span class="flex-1">{{ navigation.name }}</span>
+            </label>
+          </li>
+        </ng-container>
+      </ng-template>
+    </ul>
+  </div>
+</div>

@@ -1,8 +1,10 @@
 import { BandProtocolService } from '../../models/band-protocols/band-protocol.service';
+import { ConfigService, IRSVaultImage } from '../../models/config.service';
 import { CosmosRestService } from '../../models/cosmos-rest.service';
 import { BankQueryService } from '../../models/cosmos/bank.query.service';
 import { DistributionApplicationService } from '../../models/cosmos/distribution.application.service';
 import { CosmwasmQueryService } from '../../models/cosmwasm/cosmwasm.query.service';
+import { IrsQueryService } from '../../models/irs/irs.query.service';
 import { StoredWallet, WalletType } from '../../models/wallets/wallet.model';
 import { WalletService } from '../../models/wallets/wallet.service';
 import { YieldAggregatorQueryService } from '../../models/yield-aggregators/yield-aggregator.query.service';
@@ -13,7 +15,10 @@ import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
 import { Observable, combineLatest, of } from 'rxjs';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { StrategyAll200ResponseStrategiesInner } from 'ununifi-client/esm/openapi';
+import {
+  AllTranches200ResponseTranchesInner,
+  StrategyAll200ResponseStrategiesInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'app-balance',
@@ -32,6 +37,7 @@ export class BalanceComponent implements OnInit {
   denomMetadataMap$: Observable<{
     [denom: string]: cosmosclient.proto.cosmos.bank.v1beta1.IMetadata;
   }>;
+  irsImages$: Observable<(AllTranches200ResponseTranchesInner & IRSVaultImage)[] | undefined>;
 
   faucetSymbols$: Observable<string[] | undefined>;
   faucets$: Observable<
@@ -69,6 +75,8 @@ export class BalanceComponent implements OnInit {
     private readonly rest: CosmosRestService,
     private usecase: BalanceUsecaseService,
     private readonly distributionAppService: DistributionApplicationService,
+    private readonly configS: ConfigService,
+    private readonly irsQuery: IrsQueryService,
     private readonly wasmQuery: CosmwasmQueryService,
     private readonly iyaQuery: YieldAggregatorQueryService,
     private readonly bandProtocolService: BandProtocolService,
@@ -116,6 +124,23 @@ export class BalanceComponent implements OnInit {
       }),
     );
 
+    const irsTranche$ = this.irsQuery.listAllTranches$();
+    const irsImages$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
+    this.irsImages$ = combineLatest([irsTranche$, irsImages$]).pipe(
+      map(([tranches, images]) =>
+        tranches?.map((tranche) => {
+          const image = images.find((i) => i.contract === tranche.strategy_contract) || {
+            contract: tranche.strategy_contract || '',
+            image: '',
+            subImage: '',
+          };
+          return {
+            ...tranche,
+            ...image,
+          };
+        }),
+      ),
+    );
     const allStrategies$ = this.iyaQuery.listStrategies$();
     this.strategies$ = combineLatest([allStrategies$, this.accAddress$]).pipe(
       mergeMap(([strategies, address]) =>

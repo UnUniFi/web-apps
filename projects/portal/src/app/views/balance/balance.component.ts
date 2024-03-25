@@ -5,7 +5,10 @@ import { Component, Input, OnInit, EventEmitter, Output, OnChanges } from '@angu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import cosmosclient from '@cosmos-client/core';
 import { GetNodeInfo200Response } from '@cosmos-client/core/esm/openapi';
-import { AllTranches200ResponseTranchesInner } from 'ununifi-client/esm/openapi';
+import {
+  AllTranches200ResponseTranchesInner,
+  StrategyAll200ResponseStrategiesInner,
+} from 'ununifi-client/esm/openapi';
 
 @Component({
   selector: 'view-balance',
@@ -43,6 +46,18 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
   account?: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount | unknown | null;
   baseAccount?: cosmosclient.proto.cosmos.auth.v1beta1.BaseAccount;
   vestingAccount?: cosmosclient.proto.cosmos.vesting.v1beta1.ContinuousVestingAccount;
+
+  // UYA unbonding
+  @Input()
+  strategies?:
+    | {
+        strategy: StrategyAll200ResponseStrategiesInner;
+        unbonding?: string;
+      }[]
+    | null;
+  @Input() strategySymbols?: { symbol: string; display: string; img: string }[] | null;
+  @Input() usdUnbondingAmount?: number[] | null;
+  @Input() usdTotalUnbondingAmount?: number | null;
 
   @Output() appWithdrawAllDelegatorReward: EventEmitter<{}>;
 
@@ -102,5 +117,10 @@ export class ViewBalanceComponent implements OnInit, OnChanges {
       subImage: tranche?.subImage,
       color,
     };
+  }
+
+  onClickOpenAddressTxs() {
+    const rootPath = window.location.origin;
+    window.open(rootPath + '/explorer/accounts/' + this.accAddress, '_blank');
   }
 }

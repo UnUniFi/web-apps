@@ -289,6 +289,7 @@ const configs = [
   // CauchyE A node without Monitor
   {
     id: domainCauchyEA,
+    rpc: `${location.protocol}//${domainCauchyEA}`,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
@@ -322,6 +323,7 @@ const configs = [
   // CauchyE B node without Monitor
   {
     id: domainCauchyEB,
+    rpc: `${location.protocol}//${domainCauchyEB}`,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,

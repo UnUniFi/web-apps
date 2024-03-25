@@ -113,7 +113,6 @@ export class ProposalComponent implements OnInit {
     this.quorum$ = combineLatest([this.tallyTotalCount$, pool$]).pipe(
       map(([tallyTotalCount, pool]) => tallyTotalCount / Number(pool?.bonded_tokens)),
     );
-    this.quorum$.subscribe((quorum) => console.log(quorum));
 
     this.threshold$ = this.tally$.pipe(
       map(

@@ -13,5 +13,9 @@
   [faucetSymbols]="faucetSymbols$ | async"
   [nodeInfo]="nodeInfo$ | async"
   [account]="account$ | async"
+  [strategies]="strategies$ | async"
+  [strategySymbols]="strategySymbols$ | async"
+  [usdUnbondingAmount]="usdUnbondingAmount$ | async"
+  [usdTotalUnbondingAmount]="usdTotalUnbondingAmount$ | async"
   (appWithdrawAllDelegatorReward)="onSubmitWithdrawAllDelegatorReward()"
 ></view-balance>

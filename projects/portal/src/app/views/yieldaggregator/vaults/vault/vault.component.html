@@ -127,22 +127,6 @@
             </div>
           </div>
           <div class="stat">
-            <div class="stat-title">Total Deposit Amount</div>
-            <div class="stat-value" *ngIf="totalDepositAmount === null">
-              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
-            </div>
-            <div class="stat-value text-info">
-              {{ totalDepositAmount | currency }}
-            </div>
-            <div class="stat-value text-info" *ngIf="totalDepositAmount === undefined">
-              $ Unknown
-            </div>
-            <div class="stat-desc">
-              {{ calcVaultAmount(vault) | coinAmount : denom }}
-              {{ vault?.vault?.symbol }}
-            </div>
-          </div>
-          <div class="stat">
             <div class="stat-title">Your Deposit Amount</div>
             <div class="stat-value" *ngIf="usdDepositAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
@@ -159,14 +143,30 @@
         </div>
         <div class="stats stats-vertical md:stats-horizontal">
           <div class="stat">
+            <div class="stat-title">Total Deposit Amount</div>
+            <div class="stat-value" *ngIf="totalDepositAmount === null">
+              <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
+            </div>
+            <div class="stat-value text-info">
+              {{ totalDepositAmount | currency }}
+            </div>
+            <div class="stat-value text-info" *ngIf="totalDepositAmount === undefined">
+              $ Unknown
+            </div>
+            <div class="stat-desc">
+              {{ calcVaultAmount(vault) | coinAmount : denom }}
+              {{ vault?.vault?.symbol }}
+            </div>
+          </div>
+          <div class="stat">
             <div class="stat-title">Total Bonded Amount</div>
             <div class="stat-value" *ngIf="totalBondedAmount === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-primary">
+            <div class="stat-value text-secondary">
               {{ totalBondedAmount | currency }}
             </div>
-            <div class="stat-value text-primary" *ngIf="totalBondedAmount === undefined">
+            <div class="stat-value text-secondary" *ngIf="totalBondedAmount === undefined">
               $ Unknown
             </div>
             <div class="stat-desc">
@@ -195,10 +195,12 @@
             <div class="stat-value" *ngIf="withdrawReserve === null">
               <div class="animate-pulse bg-slate-700 w-32 h-12 rounded-full"></div>
             </div>
-            <div class="stat-value text-info">
+            <div class="stat-value text-secondary">
               {{ withdrawReserve | currency }}
             </div>
-            <div class="stat-value text-info" *ngIf="withdrawReserve === undefined">$ Unknown</div>
+            <div class="stat-value text-secondary" *ngIf="withdrawReserve === undefined">
+              $ Unknown
+            </div>
             <div class="stat-desc">
               {{ vault?.withdraw_reserve | coinAmount : denom }} {{ vault?.vault?.symbol }}
             </div>
@@ -212,10 +214,10 @@
     <div class="card bg-base-100 shadow-xl w-full">
       <div class="tabs tabs-boxed w-full">
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'mint'" (click)="tab = 'mint'">
-          Deposit (Under Maintenance)
+          Deposit (Discontinued)
         </a>
         <a class="tab tab-lg w-1/2" [class.tab-active]="tab === 'burn'" (click)="tab = 'burn'">
-          Withdrawal (Under Maintenance)
+          Withdrawal
         </a>
       </div>
       <div class="card-body" *ngIf="tab === 'mint'">
@@ -337,6 +339,9 @@
               <input
                 disabled
                 class="input input-bordered w-full"
+                [class]="{
+                  'input-error': depositAmountNgModelRef.errors
+                }"
                 value="{{ estimatedMintAmount?.mint_amount?.amount | coinAmount }}"
               />
               <span class="whitespace-nowrap">{{ 'YA-VAULT-' + vault?.vault?.id }}</span>
@@ -491,6 +496,9 @@
                 <input
                   disabled
                   class="input input-bordered w-full"
+                  [class]="{
+                    'input-error': withdrawAmountNgModelRef.errors
+                  }"
                   value="{{ estimatedRedeemAmount?.redeem_amount | coinAmount }}"
                 />
                 <span>{{ vault?.vault?.symbol }}</span>

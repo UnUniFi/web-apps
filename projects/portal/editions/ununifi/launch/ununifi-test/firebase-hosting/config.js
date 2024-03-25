@@ -334,6 +334,7 @@ const configs = [
   {
     id: domainCauchyEA,
     name: nameCauchyEA,
+    rpc: `${location.protocol}//${domainCauchyEA}`,
     restURL: `${location.protocol}//${domainCauchyEA}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEA}:${websocketPort}`,
     chainID,
@@ -369,6 +370,7 @@ const configs = [
   {
     id: domainCauchyEB,
     name: nameCauchyEB,
+    rpc: `${location.protocol}//${domainCauchyEB}`,
     restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
     chainID,
@@ -404,6 +406,7 @@ const configs = [
   {
     id: domainCauchyEC,
     name: nameCauchyEC,
+    rpc: `${location.protocol}//${domainCauchyEC}`,
     restURL: `${location.protocol}//${domainCauchyEC}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEC}:${websocketPort}`,
     chainID,
@@ -439,6 +442,7 @@ const configs = [
   {
     id: domainCauchyED,
     name: nameCauchyED,
+    rpc: `${location.protocol}//${domainCauchyED}`,
     restURL: `${location.protocol}//${domainCauchyED}:${restPort}`,
     websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyED}:${websocketPort}`,
     chainID,

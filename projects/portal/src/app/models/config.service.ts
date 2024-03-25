@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export type Config = {
   id: string;
   name: string;
+  rpc: string;
   restURL: string;
   websocketURL: string;
   chainID: string;

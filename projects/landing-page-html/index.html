@@ -3,31 +3,58 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>UnUniFi</title>
+  <title>Gluon</title>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.png" />
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <meta name="description" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
-  <meta property="og:title" content="UnUniFi Protocol | Asset Management with DeFi + CeFi Yield Aggregation" />
+  <meta name="description" content="Gluon | Strategic Yield Hub for the Modular Era" />
+  <meta property="og:title" content="Gluon | Strategic Yield Hub for the Modular Era" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://ununifi.io" />
-  <meta property="og:image" content="https://ununifi.io/assets/images/ogp.png" />
-  <meta property="og:site_name" content="UnUniFi website" />
+  <meta property="og:url" content="https://gluon.zone" />
+  <meta property="og:image" content="https://gluon.zone/assets/images/gluon.png" />
+  <meta property="og:site_name" content="gluon website" />
   <meta property="og:description"
-    content="UnUniFi is a Cross-Chain Asset Management Platform with Combined DeFi + CeFi Yield Aggregation, RWAs, Collateralized Assets, and more" />
+    content="Gluon aggregates the best-in-class yield strategies for the efficient operation of on-chain assets across blockchains." />
   <meta name="twitter:card" content="summary" />
 
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Tomorrow:wght@700&display=swap"
+    rel="stylesheet">
 
   <style>
     .scroll-fade-in {
       opacity: 0;
       transition: 1s;
+    }
+
+    .bg-color {
+      background-color: rgba(20, 19, 40, 0.88);
+      opacity: 1;
+    }
+
+    body {
+      background-color: rgba(20, 19, 40, 0.88);
+      background-image: url('./assets/images/bg3.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: white;
+      word-wrap: break-word;
+    }
+
+    .bg-purple-to-green {
+      background: linear-gradient(to right, #DD7DFF, #48FF7B);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
   <script>
@@ -53,16 +80,16 @@
   </script>
 </head>
 
-<body data-theme="light">
-  <div class="navbar bg-base-100 px-4 sticky top-0 z-50 shadow-xl">
+<body>
+  <div class="navbar px-4 sticky top-0 z-50 shadow-xl bg-color">
     <h1 style="max-width: 200px;">
       <a href="index.html">
-        <img src="assets/images/logo-horizontal.png" width="100%" height="100%" alt="logo-horizontal"
-          class="object-contain" />
+        <img src="assets/images/gluon.svg" width="80%" height="80%" alt="gluon" class="object-contain" />
       </a>
+      <span style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
     </h1>
     <div class="flex-auto"></div>
-    <div>
+    <div data-theme="dark" class="text-white">
       <ul class="menu menu-horizontal px-1 max-md:hidden">
         <li>
           <details>
@@ -82,7 +109,6 @@
               <li><a href="https://lab-testnet.ununifi.io/portal" target="_blank">Labs Testnet</a></li>
             </ul>
           </details>
-
         </li>
         <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
         <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li> -->
@@ -98,7 +124,7 @@
         <li>
           <details>
             <summary>Links</summary>
-            <ul class="p-2 bg-base-100 right-0">
+            <ul class="p-2 right-0">
               <li>
                 <a>Developers</a>
                 <ul>
@@ -124,48 +150,104 @@
                 </a>
               </li>
             </ul>
+          </details>
         </li>
       </ul>
     </div>
   </div>
 
-  <section style="background-color: rgba(20, 19, 40, 0.88); background-image: url('./assets/images/bg1.png');"
-    class="py-4 bg-cover text-white">
+  <!--1st section-->
+  <section class="py-4 bg-cover">
+    <style>
+      .btn-grad-border {
+        position: relative;
+        display: inline-block;
+        background: rgba(179.75, 206.57, 219.19, 0.20);
+        border-radius: 8px;
+        padding: 16px 24px;
+        cursor: pointer;
+      }
+
+      .btn-grad-border::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 8px;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        background: linear-gradient(to right, #DD7DFF, #48FF7B);
+        background-origin: border-box;
+        background-clip: border-box;
+        /* chrome */
+        -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        -webkit-mask-clip: padding-box, border-box;
+        -webkit-mask-composite: destination-out;
+        /**/
+        mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        mask-clip: padding-box, border-box;
+        mask-composite: exclude;
+      }
+    </style>
     <div class="mx-auto max-w-screen-xl">
-      <div class="hero">
+      <div class="hero w-5/6 mx-auto">
         <div class="hero-content w-full">
           <div class="flex flex-row flex-wrap">
-            <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-              <h2 class="text-5xl font-bold">
-                Asset Management <br />with DeFi + CeFi Yield <br />Aggregation
-              </h2>
-              <p class="my-6">
-                Aggregating the Best-in-Class yield strategies for the efficient operation of on-chain assets across
-                blockchains
-              </p>
-              <div class="flex flex-row">
-                <a class="btn btn-secondary" href="/portal" target="_blank">
-                  Launch App
+            <!--left-side-->
+            <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4 bg-debug">
+              <div class="text-5xl">
+                <div class="my-2 font-bold">Strategic Yield Hub <br /></div>
+                <div class="my-2 ">for the Modular Era </div>
+              </div>
+              <div class="my-6">
+                <span class="text-lg tracking-wide">Aggregating the Best-in-Class</span>
+                <span class="text-lg tracking-wide font-bold">Yield Strategies</span>
+                <span class="text-lg tracking-wide">for the efficient operation of on-chain assets
+                  across blockchains.</span>
+              </div>
+              <div class="flex flex-row gap-6">
+                <a class="btn-grad-border" href="/portal" target="_blank">
+                  <span class="font-bold text-white">Launch App</span>
                 </a>
-                <a class="btn btn-secondary btn-outline ml-2" href="https://docs.ununifi.io" target="_blank">
-                  Learn More
+                <a class="btn-grad-border" href="/education" target="_blank">
+                  <span class="font-bold text-white">Education</span>
                 </a>
+                <div class="flex flex-col rounded-lg p-2"
+                  style="font-size: 14px; background: rgba(179.75, 206.57, 219.19, 0.10); border: 2px rgba(180, 207, 219, 0.60) solid; ">
+                  <div class="flex flex-row  justify-center ">
+                    <img src="assets/images/M_Atom.svg" width="20%" height="20%" alt="" />
+                    <div class="font-bold">stATOM</div>
+                  </div>
+                  <div class="text-center">
+                    <span
+                      style="color: #48FF7B; font-size: 14px; font-weight: 700; letter-spacing: 0.44px; ">4.45%</span>
+                    <span style=" font-size: 14px;  letter-spacing: 0.44px; ">
+                      Fixed yield</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="w-full md:w-1/2 md:pl-4">
-              <img src="assets/images/screenshots/portal.png" loading="eager" width="100%" alt=""
-                class="rounded-lg scroll-fade-in" />
+            <!--right-side-->
+            <div class="w-full md:w-1/2 md:pl-4 flex justify-center items-center bg-debug">
+              <img src="assets/images/strategic_yield_hub.svg" loading="eager" width="80%" alt="" />
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
-  <section class="bg-base-200">
-    <div class="mx-auto max-w-screen-xl p-4">
-      <h3 class="text-3xl">
-        Backed by Global Web3 Investors...
-      </h3>
+
+  <!--2nd sec. Backed by .... after -->
+  <section class="my-20">
+    <div class="mx-auto max-w-screen-xl">
+      <div class="flex mx-auto w-5/6">
+        <h3 class="mx-auto text-3xl font-bold mb-8">
+          <span>Backed by Global Web3 </span>
+          <span class="bg-purple-to-green">Investors</span>
+          <span>...</span>
+        </h3>
+      </div>
     </div>
     <style>
       @keyframes infinity-scroll-left {
@@ -186,7 +268,8 @@
         animation: infinity-scroll-left 15s linear infinite;
       }
     </style>
-    <div class="flex flex-row overflow-hidden scroll-left-container py-4">
+    <div class="flex flex-row w-5/6 mx-auto rounded-lg overflow-hidden scroll-left-container py-4"
+      style="border-bottom: 2px white solid; background: rgba(255, 255, 255, 0.10);">
       <div class="flex flex-row flex-shrink-0 scroll-left">
         <div class="p-4" style="width: 25vw;">
           <div style="max-width: 160px;">
@@ -265,510 +348,351 @@
         </div>
       </div>
     </div>
+    <div class="mx-auto max-w-screen-xl p-4">
+      <div class="flex flex-col justify-start items-center gap-3">
+        <div class="text-3xl font-bold my-4">
+          Unlocking Future Yield</div>
+        <div class="text-lg text-center tracking-wide" style=" letter-spacing: 0.52px; ">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. <br />Lorem Ipsum has been the
+          industry's standard dummy text ever since the 1500s,</div>
+      </div>
+    </div>
   </section>
 
-  <section class="scroll-fade-in my-8">
-    <section>
-      <style>
-        .tab-item-fade-in {
-          display: none;
-        }
-
-        .tab-item-fade-in.active {
-          display: initial;
-          animation: appear 1s;
-        }
-
-        @keyframes appear {
-          0% {
-            opacity: 0;
-          }
-
-          100% {
-            opacity: 1;
-          }
-        }
-      </style>
-      <script>
-        const tabDeFi = 'tab-defi';
-        const tabCeFi = 'tab-cefi';
-        const tabCollateral = 'tab-collateral';
-
-        const tabItemDeFi = 'tab-item-defi';
-        const tabItemCeFi = 'tab-item-cefi';
-        const tabItemCollateral = 'tab-item-collateral';
-
-        function switchTab(activeTabId) {
-          document.getElementById(tabDeFi).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
-          document.getElementById(tabCeFi).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
-          document.getElementById(tabCollateral).classList.remove('bg-base-300', 'hover:bg-base-200', 'hover:bg-base-300');
-
-          document.getElementById(tabItemDeFi).classList.remove('active');
-          document.getElementById(tabItemCeFi).classList.remove('active');
-          document.getElementById(tabItemCollateral).classList.remove('active');
-
-          switch (activeTabId) {
-            case tabDeFi:
-              document.getElementById(tabDeFi).classList.add('bg-base-300', 'hover:bg-base-300');
-              document.getElementById(tabCeFi).classList.add('hover:bg-base-200');
-              document.getElementById(tabCollateral).classList.add('hover:bg-base-200');
-
-              document.getElementById(tabItemDeFi).classList.add('active');
-              break;
-            case tabCeFi:
-              document.getElementById(tabDeFi).classList.add('hover:bg-base-200');
-              document.getElementById(tabCeFi).classList.add('bg-base-300', 'hover:bg-base-300');
-              document.getElementById(tabCollateral).classList.add('hover:bg-base-200');
-
-              document.getElementById(tabItemCeFi).classList.add('active');
-              break;
-            case tabCollateral:
-              document.getElementById(tabDeFi).classList.add('hover:bg-base-200');
-              document.getElementById(tabCeFi).classList.add('hover:bg-base-200');
-              document.getElementById(tabCollateral).classList.add('bg-base-300', 'hover:bg-base-300');
-
-              document.getElementById(tabItemCollateral).classList.add('active');
-              break;
-          }
-        }
-
-        window.addEventListener('load', () => {
-          switchTab(tabDeFi);
-        });
-      </script>
-
-      <section class="scroll-fade-in my-8">
-        <div class="mx-auto max-w-screen-xl p-4">
-          <h3 class="text-3xl font-bold my-4">
-            UnUniFi's Asset Management Platform
-          </h3>
-          <div class="w-full">
-            <div class="text-lg font-bold rounded-lg bg-base-300 p-4">
-              <p>
-                Powering the UnUniFi (<i>pronounced un-unify</i>) Asset Management Platform is the UnUniFi Yield
-                Aggregator or UYA. The UYA app functions as a cross-chain hub, enabling users to explore the true
-                possibilities of cross-chain asset operation.
-              </p>
-              <p class="my-8">
-                The unlimited creation of Yield Strategies and Vaults fosters competitive and diverse opportunities.
-                Manage all on-chain assets, across all blockchains, regardless of whether they are DeFi or NFT-based.
-              </p>
-              <div class="flex flex-row">
-                <span class="flex-auto"></span>
-                <a class="btn btn-secondary" href="/portal" target="_blank">
-                  Get Started
-                </a>
-                <a class="btn btn-secondary btn-outline ml-2" href="https://docs.ununifi.io/" target="_blank">
-                  Learn more
-                </a>
-              </div>
+  <!--3rd sec. Fixed Yield .... -->
+  <section style="position: relative;" class="scroll-fade-in my-20">
+    <div class="Fixed-Yield" style="width: 100%; height:100%; position: absolute;">
+      <div style="width: 33vmin; height: 33vmin; left: 50%; top: 50%; position: absolute;
+      transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center;
+      border-radius: 40px; border-left: 1px white solid; border-right: 1px white solid">
+      </div>
+      <div style="width: 17vmin; height: 17vmin; left: 50%; top: 50%; position: absolute;
+      transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center;
+      background: linear-gradient(180deg, rgba(221.11, 125.37, 254.75, 0.07) 0%, rgba(71.95, 255, 123.20, 0.07) 100%);
+      border-radius: 40px; border: 1px rgba(255, 255, 255, 0.20) solid">
+      </div>
+    </div>
+    <div class="m-auto max-w-screen-xl">
+      <div class="m-auto w-5/6 flex flex-col md:flex-row ">
+        <div class="md:flex-auto"></div>
+        <!--left purple side-->
+        <div class="w-full md:w-1/3 rounded-xl flex-row p-5" style="background: rgba(255, 255, 255, 0.05);">
+          <div class="flex flex-col justify-start items-center gap-2 my-4">
+            <div class="p-1 rounded-full justify-center items-center inline-flex" style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
+            border-left: 2.50px #DD7DFF solid; border-top: 2.50px #DD7DFF solid; border-bottom: 2.50px #DD7DFF solid;">
+              <img src="assets/images/$.svg">
             </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="mx-auto max-w-screen-xl p-4">
-        <h3 class="text-3xl font-bold">
-          UnUniFi Yield Aggregator (UYA)
-        </h3>
-        <p class="text-xl font-bold ml-4 my-4">Unlimited Strategies, Unlimited Customization, Unlimited Potential</p>
-        <div class="flex flex-row flex-wrap justify-between rounded-full md:border border-solid">
-          <div
-            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-defi" onclick="switchTab('tab-defi')">
-            <h3 class="text-xl font-extrabold inline-flex items-center gap-2">
-              <span class="material-symbols-outlined">currency_bitcoin</span>
-              <span>DeFi Strategies</span>
-            </h3>
-          </div>
-          <div
-            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-cefi" onclick="switchTab('tab-cefi')">
-            <h3 class="text-xl font-extrabold inline-flex items-center gap-2">
-              <span class="material-symbols-outlined">local_atm</span>
-              <span>CeFi Strategies</span>
-            </h3>
-          </div>
-          <div
-            class="w-full md:w-1/4 rounded-full p-4 cursor-pointer flex justify-center items-center hover:bg-base-200"
-            id="tab-collateral" onclick="switchTab('tab-collateral')">
-            <h3 class="text-xl font-extrabold inline-flex items-center gap-2">
-              <span class="material-symbols-outlined">credit_card</span>
-              <span>Collateralized Assets</span>
-            </h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-item-defi" class="tab-item-fade-in">
-      <div class="mx-auto max-w-screen-xl p-4">
-        <div class="flex flex-row flex-wrap">
-          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-4xl font-bold">
-              Unlimited DeFi Yield Strategies Aggregated into One Platform
-            </h3>
-            <ul class="text-lg list-disc ml-6 mt-8">
-              <li>
-                The UnUniFi Yield Aggregator directly integrates the best DeFi Strategies across chains from external
-                DeFi protocols
-              </li>
-              <li>
-                Strategy creators can deploy their own contracts, providing limitless potential and competitive
-                development
-              </li>
-              <li>
-                Cross-chain integrations foster interoperability and minimize liquidity fragmentation
-              </li>
-              <li>
-                Support for DeFi protocols, AMM, DeFi RWA, and more
-              </li>
-            </ul>
-          </div>
-          <div class="w-full md:w-1/2 md:pl-4">
-            <img loading="lazy" src="assets/images/screenshots/portal-yield-aggregator-vaults.png" alt="" width="100%"
-              class="rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-item-cefi" class="tab-item-fade-in">
-      <div class="mx-auto max-w-screen-xl p-4">
-        <div class="flex flex-row flex-wrap">
-          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-4xl font-bold">
-              Integrations with major CeFi services to cover all risk profiles
-            </h3>
-            <ul class="text-lg list-disc ml-6 mt-8">
-              <li>
-                Access centralized strategies to diversify and build a rounded portfolio
-              </li>
-              <li>
-                Direct access to DeFi + CeFi strategies in the same vault
-              </li>
-              <li>
-                Support for centralized lending, CeFi RWA, and more
-              </li>
-              <li>
-                KYC Required
-              </li>
-            </ul>
-          </div>
-          <div class="w-full md:w-1/2 md:pl-4">
-            <img loading="lazy" src="assets/images/screenshots/portal-yield-aggregator.png" alt="" width="100%"
-              class="rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-item-collateral" class="tab-item-fade-in">
-      <div class="mx-auto max-w-screen-xl p-4">
-        <div class="flex flex-row flex-wrap">
-          <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-            <h3 class="text-4xl font-bold">
-              Earn Yield Against Any Collateralized On-Chain Asset
-            </h3>
-            <ul class="text-lg list-disc ml-6 mt-8">
-              <li>
-                Lend against listed assets (NFT-based) to earn yield, or borrow by listing your own asset to extract
-                liquidity from it and use borrowed funds in the UnUniFi Yield Aggregator
-              </li>
-              <li>
-                Oracle-Free valuations based on a unique, algorithmically governed valuation mechanism
-              </li>
-              <li>
-                Support for any NFT-based asset on any blockchain, enabling cross-chain liquidity aggregation
-              </li>
-              <li>
-                Extending NFT-Fi beyond PFPs, with support for RWAs, GameFi, Tokenized DeFi positions, and more
-              </li>
-            </ul>
-          </div>
-          <div class="w-full md:w-1/2 md:pl-4">
-            <img loading="lazy" src="assets/images/screenshots/portal-nft-backed-loan-nfts.png" alt="" width="100%"
-              class="rounded-lg" />
-          </div>
-        </div>
-      </div>
-    </section>
-  </section>
-
-  <section class="scroll-fade-in my-8">
-    <div class="mx-auto max-w-screen-xl p-4">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            DeFi + CeFi Aggregation for an Unprecedented Level of Customizability
-          </h3>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <div class="text-lg rounded-lg bg-base-300 p-4">
-            <P>
-              Create your own <b>Vaults</b> or choose from a selection of pre-created vaults
-            </P>
-            <P class="my-8">
-              Create your own <b>Strategies</b> or choose from the highest performing strategies on chain
-            </P>
-            <P>
-              Create your own mix of <b>DeFi</b> + <b>CeFi</b> portfolio exposure
-            </P>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="scroll-fade-in my-8">
-    <div class="mx-auto max-w-screen-xl p-4">
-      <div class="flex flex-row flex-wrap">
-        <div class="w-full md:w-1/2 max-md:mb-8 md:pr-4">
-          <h3 class="text-3xl font-bold">
-            Become a Strategy Provider Today
-          </h3>
-        </div>
-        <div class="w-full md:w-1/2 md:pl-4">
-          <div class="text-lg rounded-lg bg-base-300 p-4">
-            <P class="mb-4">
-              DeFi Protocols and Institutional Borrowers can partner with UnUniFi and deploy their smart contracts on
-              the UYA App. By launching your pool on UnUniFi, you can tap into global liquidity, sourcing liquidity
-              providers from any blockchain.
-            </P>
-            <p>
-              Eliminate the overhead traditionally required for multi-chain interoperability and minimize liquidity
-              fragmentation by launching on UnUniFi today.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="scroll-fade-in my-8">
-    <div class="mx-auto max-w-screen-xl p-4">
-      <h3 class="text-3xl font-bold my-4">
-        Request to Partner with UnUniFi
-      </h3>
-      <div class="w-full">
-        <div class="text-xl rounded-lg bg-base-300 p-4">
-          <p class="mb-8">
-            UnUniFi works with DeFi protocols, trusted custodians, institutional lenders, and borrowers
-          </p>
-          <div class="flex flex-row">
-            <span class="flex-auto"></span>
-            <a class="btn btn-secondary"
-              href="https://docs.google.com/forms/d/e/1FAIpQLScYwc5ZjVNv-6lN39dUFQaAqIOw75lcLbeXqL0xkpYiW3F9-g/viewform"
-              target="_blank">
-              Partnership Request
+            <div class="text-center text-3xl font-IBM">
+              <span class="font-bold">Fixed Yield<br /></span>
+              <span>For Everyone</span>
+            </div>
+            <div class="text-center text-lg">
+              <span style="letter-spacing: 0.48px; ">Find
+                your stability among volatile yields. </span>
+              <span class="font-bold" style="letter-spacing: 0.48px; ">No
+                lock-up periods.</span>
+            </div>
+            <a class="btn-grad-border" href="/portal/interest-rate-swap/simple-vaults" target="_blank">
+              <span class="text-xl font-bold text-white">Launch Gluon Earn</span>
             </a>
           </div>
         </div>
+        <div class="md:flex-auto"></div>
+        <!--right green side-->
+        <div class="w-full md:w-1/3 rounded-xl flex-row p-5" style="background: rgba(255, 255, 255, 0.05);">
+          <div class="flex flex-col justify-start items-center gap-2 my-4">
+            <div class="p-1 rounded-full justify-center items-center inline-flex"
+              style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.20);
+            border-right: 2.50px #48FF7B solid; border-top: 2.50px #48FF7B solid; border-bottom: 2.50px #48FF7B solid;">
+              <img src="assets/images/$.svg">
+            </div>
+            <div class="text-center text-3xl">
+              <span class=" font-bold">Control<br /></span>
+              <span>Your Yield</span>
+            </div>
+            <div class="text-center text-lg">
+              <span style="letter-spacing: 0.48px;">Long yield
+                or hedge your yield exposure.</span>
+              <span class="font-bold" style="letter-spacing: 0.48px;">the choice is
+                yours.</span>
+            </div>
+            <a class="btn-grad-border" href="/portal/interest-rate-swap/vaults" target="_blank">
+              <span class="text-xl font-bold text-white">Launch Gluon Trade</span>
+            </a>
+          </div>
+        </div>
+        <div class="md:flex-auto"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--4th sec. Yield ... -->
+  <section class="scroll-fade-in my-20">
+    <div class="m-auto w-5/6 flex flex-col md:flex-row gap-2">
+      <!--left-->
+      <div class="md:w-1/3 flex flex-col items-center bg-debug p-5">
+        <div class="text-center mb-10 bg-debug">
+          <img src="assets/images/yield_tokenization.svg" alt="" width="100%" />
+        </div>
+        <div class="text-center mb-6 bg-debug" style="font-size: 30px;">
+          <span>Yield </span>
+          <span style="font-weight: 700;">Tokenization</span>
+        </div>
+        <div class="text-center bg-debug"
+          style="width: 100%; font-size: 16px; font-weight: 400; letter-spacing: 0.48px; ">
+          Split any yield-bearing asset into <br />separate yield and principal <br />components for maximum control
+        </div>
+      </div>
+      <div class="flex-auto"></div>
+      <!--center-->
+      <div class="md:w-1/3 flex flex-col items-center bg-debug p-5">
+        <div class="text-center mb-10 bg-debug">
+          <img src="assets/images/ununifi_amm.svg" alt="" width="100%" />
+        </div>
+        <div class="text-center mb-6 bg-debug" style="font-size: 30px; ">
+          <span style="font-weight: 700;">Gluon </span>
+          <span>AMM</span>
+        </div>
+        <div class="text-center bg-debug" style="width: 100%; font-size: 16px; letter-spacing: 0.48px;">
+          Designed for yield trading with <br />concentrated liquidity, dual <br />fee-structure, and negligible
+          <br />IL concerns
+        </div>
+      </div>
+      <div class="flex-auto"></div>
+      <!--right-->
+      <div class="md:w-1/3 flex flex-col items-center bg-debug p-5">
+        <div class="text-center mb-10 bg-debug">
+          <img src="assets/images/mainchain_support.svg" alt="" width="100%" />
+        </div>
+        <div class="text-center mb-6 bg-debug" style="font-size: 30px; ">
+          <span style="font-weight: 700;">Multichain</span>
+          <span>Support</span>
+        </div>
+        <div class="text-center bg-debug" style="width: 100%; font-size: 16px;  letter-spacing: 0.48px; ">
+          With the Inter-Blockchain Communication (IBC) technology, we can accept tokens on any chains.
+        </div>
+      </div>
+  </section>
+
+  <!--5th sec. Introducing the ... -->
+  <section class="scroll-fade-in my-20">
+    <div class="text-center mb-10" style="font-size: 40px; font-weight: 700;">
+      <span>Introducing the Gluon </span><span class="bg-purple-to-green">Ecosystem</span><span>...</span>
+    </div>
+    <div class="text-center mb-10" style="font-size: 16px; letter-spacing: 0.52px;">
+      <span>Very proud to introduce the various </span>
+      <span style="font-weight: 700;">Partners</span>
+      <span>,</span>
+      <span style="font-weight: 700;">Integrations</span>
+      <span>,<br />and </span>
+      <span style="font-weight: 700;">Validators</span>
+      <span>that make Gluon possible:</span>
+    </div>
+  </section>
+
+  <!--6th sec. Introducing the ... -->
+  <section class="scroll-fade-in my-20">
+    <style>
+      .side-scroll-container {
+        margin: auto;
+        width: 83.33333%;
+        display: flex;
+        overflow-x: scroll;
+      }
+
+      .side-scroll-container::-webkit-scrollbar {
+        height: 10px;
+      }
+
+      .side-scroll-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+
+      .side-scroll-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+
+      .scroll-item {
+        width: 22.5%;
+        margin-right: 2%;
+        flex-shrink: 0;
+      }
+
+      @media not all and (min-width: 768px) {
+        .scroll-item {
+          width: 45%;
+        }
+      }
+
+      .scroll-item img {
+        padding: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-bottom: 10%;
+      }
+    </style>
+    <div class="side-scroll-container">
+      <div class="scroll-item">
+        <img src="assets/images/partners/comdex.png" loading="lazy" width="100%" alt="Comdex" />
+        <img src="assets/images/partners/assetmantle.png" loading="lazy" width="100%" alt="AssetMantle" />
+        <img src="assets/images/partners/cosmwasm.png" loading="lazy" width="100%" alt="CosmWasm" />
+        <img src="assets/images/validators/mercury.png" loading="lazy" width="100%" alt="Mercury" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/ntt-docomo.png" loading="lazy" width="100%" alt="NTT Docomo" />
+        <img src="assets/images/partners/babylon.png" loading="lazy" width="100%" alt="Babylon" />
+        <img src="assets/images/partners/omniflix.png" loading="lazy" width="100%" alt="OmniFlix" />
+        <img src="assets/images/validators/valador.png" loading="lazy" width="100%" alt="Valador" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/microsoft.png" loading="lazy" width="100%" alt="Microsoft" />
+        <img src="assets/images/partners/stargaze.png" loading="lazy" width="100%" alt="Stargaze" />
+        <img src="assets/images/partners/saga.png" loading="lazy" width="100%" alt="Saga" />
+        <img src="assets/images/validators/zumak.png" loading="lazy" width="100%" alt="Zumak" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/crescent.png" loading="lazy" width="100%" alt="Crescent" />
+        <img src="assets/images/partners/polygon.png" loading="lazy" width="100%" alt="Polygon" />
+        <img src="assets/images/partners/quasar.png" loading="lazy" width="100%" alt="Quasar" />
+        <img src="assets/images/validators/notional.png" loading="lazy" width="100%" alt="Notional" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/lithium.png" loading="lazy" width="100%" alt="Lithium Finance" />
+        <img src="assets/images/partners/ntt-digital.png" loading="lazy" width="100%" alt="NTT Digital" />
+        <img src="assets/images/validators/asguard.png" loading="lazy" width="100%" alt="AsGuard" />
+        <img src="assets/images/validators/stakingcabin.png" loading="lazy" width="100%" alt="StakingCabin" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/sei.png" loading="lazy" width="100%" alt="Sei" />
+        <img src="assets/images/partners/tfm.png" loading="lazy" width="100%" alt="TFM" />
+        <img src="assets/images/validators/daic.png" loading="lazy" width="100%" alt="DAIC" />
+        <img src="assets/images/validators/gmo-coin.png" loading="lazy" width="100%" alt="GMO Coin" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/axelar.png" loading="lazy" width="100%" alt="Axelar" />
+        <img src="assets/images/partners/interchain-builders-program.png" loading="lazy" width="100%"
+          alt="Interchain Builders Program" />
+        <img src="assets/images/validators/forbole.png" loading="lazy" width="100%" alt="Forbole" />
+        <img src="assets/images/validators/hashquark.png" loading="lazy" width="100%" alt="HashQuark" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/partners/dorahacks.png" loading="lazy" width="100%" alt="DoraHacks" />
+        <img src="assets/images/partners/sommelier.png" loading="lazy" width="100%" alt="Sommelier" />
+        <img src="assets/images/validators/01node.png" loading="lazy" width="100%" alt="01node" />
+        <img src="assets/images/validators/nodejumper.png" loading="lazy" width="100%" alt="Nodejumper" />
+      </div>
+      <div class="scroll-item">
+        <img src="assets/images/validators/stir.png" loading="lazy" width="100%" alt="Stir" />
+        <img src="assets/images/validators/nodestake.png" loading="lazy" width="100%" alt="NodeStake" />
+        <img src="assets/images/validators/kysenpool.png" loading="lazy" width="100%" alt="KysenPool" />
+        <img src="assets/images/validators/nodeist.png" loading="lazy" width="100%" alt="Nodeist" />
       </div>
     </div>
   </section>
 
-  <section class="my-8">
-    <div style="background-color: #141328; background-image: url('./assets/images/bg1.png');"
-      class="py-8 bg-cover text-white" data-theme="dark">
-      <div class="mx-auto max-w-screen-xl px-4">
-        <h3 class="text-5xl text-center">
-          Introducing the UnUniFi Ecosystem
-        </h3>
-        <p class="text-xl text-center mt-8">
-          Very proud to introduce the various partners, integrations, and validators that make UnUniFi possible:
-        </p>
-      </div>
-    </div>
+  <footer>
+    <style>
+      .footer-grid {
+        display: grid;
+        width: 100%;
+        grid-auto-flow: column;
+        place-items: start;
+        row-gap: 1.5rem;
+        column-gap: 1rem;
+      }
 
-    <div class="mx-auto max-w-screen-xl p-4">
-      <div class="scroll-fade-in">
-        <div class="flex flex-row flex-wrap -mx-4">
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/polygon.png" loading="lazy" width="100%" alt="Polygon" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/microsoft.png" loading="lazy" width="100%" alt="Microsoft" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/ntt-docomo.png" loading="lazy" width="100%" alt="NTT Docomo" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/ntt-digital.png" loading="lazy" width="100%" alt="NTT Digital" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/cosmwasm.png" loading="lazy" width="100%" alt="CosmWasm" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/axelar.png" loading="lazy" width="100%" alt="Axelar" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/interchain-builders-program.png" loading="lazy" width="100%"
-              alt="Interchain Builders Program" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/sei.png" loading="lazy" width="100%" alt="Sei" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/stargaze.png" loading="lazy" width="100%" alt="Stargaze" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/omniflix.png" loading="lazy" width="100%" alt="OmniFlix" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/crescent.png" loading="lazy" width="100%" alt="Crescent" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/dorahacks.png" loading="lazy" width="100%" alt="DoraHacks" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/quasar.png" loading="lazy" width="100%" alt="Quasar" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/assetmantle.png" loading="lazy" width="100%" alt="AssetMantle" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/lithium.png" loading="lazy" width="100%" alt="Lithium Finance" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/saga.png" loading="lazy" width="100%" alt="Saga" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/sommelier.png" loading="lazy" width="100%" alt="Sommelier" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/babylon.png" loading="lazy" width="100%" alt="Babylon" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/comdex.png" loading="lazy" width="100%" alt="Comdex" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/partners/tfm.png" loading="lazy" width="100%" alt="TFM" />
-          </div>
+      .footer-grid-item {
+        display: grid;
+      }
+
+      .footer-grid-item-title {
+        display: grid;
+
+      }
+
+      @media not all and (min-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 40px 1fr 1fr;
+        }
+
+        .footer-grid-item-title {
+          grid-column: 1 / 3;
+        }
+      }
+    </style>
+
+    <div class="footer-grid text-sm px-4 py-8 mt-8">
+      <div class="footer-grid-item-title">
+        <div class="max-w-xs flex items-center">
+          <img src="assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
+          <span class="mx-2" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
         </div>
       </div>
-
-
-      <h4 class="text-3xl font-bold text-center my-4">Validators</h4>
-
-      <div class="scroll-fade-in">
-        <div class="flex flex-row flex-wrap -mx-4">
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/kysenpool.png" loading="lazy" width="100%" alt="KysenPool" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/forbole.png" loading="lazy" width="100%" alt="Forbole" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/01node.png" loading="lazy" width="100%" alt="01node" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/hashquark.png" loading="lazy" width="100%" alt="HashQuark" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/daic.png" loading="lazy" width="100%" alt="DAIC" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/mercury.png" loading="lazy" width="100%" alt="Mercury" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/stakingcabin.png" loading="lazy" width="100%" alt="StakingCabin" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/gmo-coin.png" loading="lazy" width="100%" alt="GMO Coin" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/nodestake.png" loading="lazy" width="100%" alt="NodeStake" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/notional.png" loading="lazy" width="100%" alt="Notional" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/polkachu.png" loading="lazy" width="100%" alt="Polkachu" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/stir.png" loading="lazy" width="100%" alt="Stir" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/nodeist.png" loading="lazy" width="100%" alt="Nodeist" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/zumak.png" loading="lazy" width="100%" alt="Zumak" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/valador.png" loading="lazy" width="100%" alt="Valador" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/asguard.png" loading="lazy" width="100%" alt="AsGuard" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/testnetrun.png" loading="lazy" width="100%" alt="TestNetRun" />
-          </div>
-          <div class="w-1/4 p-4">
-            <img src="assets/images/validators/nodejumper.png" loading="lazy" width="100%" alt="Nodejumper" />
-          </div>
-        </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Developers</span>
+        <a class="link link-hover" href="https://docs.sunriselayer.io" target="_blank">Docs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Services</span>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
+        <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
+        <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">Information</span>
+        <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
+        <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
+        <a class="link link-hover"
+          href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
+          target="_blank">Jobs</a>
+        <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
+      </div>
+      <div class="footer-grid-item">
+        <span class="mb-2 font-bold uppercase">legal</span>
+        <a class="link link-hover" href="./assets/download/Gluon-Terms-of-Service(240327).pdf" target="_blank">Terms of
+          Service</a>
+        <a class="link link-hover" href="./assets/download/Gluon-Privacy-Policy(240327).pdf" target="_blank">Privacy
+          Policy</a>
       </div>
     </div>
-  </section>
+  </footer>
 
-  <footer class="footer px-4 py-8 bg-base-200 text-base-content mt-8">
-    <div class="max-w-xs">
-      <img src="assets/images/logo-horizontal.png" loading="lazy" width="100%" alt="logo-horizontal" />
+  <footer class="px-4">
+    <div class="w-full pt-4 md:inline-flex" style="border-top: 1px white solid; ">
+      <div class="flex-1 text-sm max-md:text-center" style="letter-spacing: 0.40px;">
+        Gluon © - All rights reserved. 2024</div>
+      <div class="flex justify-around md:gap-9 max-md:mt-4 ">
+        <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">
+          <img src="assets/images/logos/ic_baseline-discord.svg" alt="discord" /></a>
+        <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">
+          <img src="assets/images/logos/pajamas_twitter.svg" alt="x" /></a>
+        <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
+          <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin" /></a>
+        <!-- <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
+          <img src="assets/images/logos/mdi_youtube.png" alt="youtube" /></a>
+        <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
+          <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a> -->
+      </div>
     </div>
-    <div>
-      <span class="footer-title">Developers</span>
-      <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
-      <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
-    </div>
-    <div>
-      <span class="footer-title">Services</span>
-      <a class="link link-hover" href="https://lab-testnet.ununifi.io/portal" target="_blank">Portal</a>
-      <a class="link link-hover" href="https://lab-testnet.ununifi.io/explorer" target="_blank">Explorer</a>
-      <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
-    </div>
-    <div>
-      <span class="footer-title">Information</span>
-      <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
-      <!-- <a class="link link-hover" href="https://ununifi.io/assets/download/UnUniFi-OnePage.pdf" target="_blank">One
-        Pager</a> -->
-      <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
-      <a class="link link-hover" href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
-        target="_blank">Jobs</a>
-      <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
-    </div>
-    <div>
-      <span class="footer-title">Social</span>
-      <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">Discord</a>
-      <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">X (Twitter)</a>
-      <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">LinkedIn</a>
-      <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">YouTube</a>
-      <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">Linktree</a>
-    </div>
-    <div>
-      <span class="footer-title">legal</span>
-      <a class="link link-hover" href="./assets/download/UnUniFi-TermsOfService.pdf" target="_blank">Terms of
-        Service</a>
-      <a class="link link-hover" href="./assets/download/UnUniFi-PrivacyPolicy.pdf" target="_blank">Privacy Policy</a>
-    </div>
+    <div class="h-4"></div>
   </footer>
 
   <div id="disclaimer-popup" class="bg-base-300 overflow-y-auto sticky bottom-0 z-40"
     style="display: none; max-height: 50vh;" data-theme="dark">
     <div class="p-4">
       <h2 class="font-bold text-lg">Disclaimer</h2>
-      <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
-        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site.
-        Please
-        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions
-        in
+      <p>This website (the "Site") is an information aggregator relating to the Gluon blockchain. By viewing,
+        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site. Please
+        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions in
         their entirety.</p>
       <p class="mt-2">The application, the underlying smart contracts, or the services described herein (as defined
         below) are strictly NOT offered to persons or entities who reside in, are citizens of, are incorporated in, or
-        have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then
-        do
-        not attempt to access or use the application, the underlying smart contracts, or the services. Use of a
-        virtual
+        have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then do
+        not attempt to access or use the application, the underlying smart contracts, or the services. Use of a virtual
         private network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly prohibited.
       </p>
       <p class="mt-2">For the purpose of these Terms, Restricted Territory shall mean the United States of America, the
@@ -779,15 +703,14 @@
         Herzegovina, Iran, Iraq, Kosovo, Japan, Laos, Lebanon, Liberia, Libya, Madagascar, Mali, Macedonia, Mozambique,
         Myanmar, Nicaragua, Northern Mariana Islands, Pakistan, Moldova, Palestine, Puerto Rico, Russia, Serbia,
         Somalia, Sri Lanka, Sudan, South Sudan, Syrian Arab Republic, Tajikistan, Trinidad and Tobago, Turkmenistan,
-        Uganda, Venezuela, Virgin Islands (U.S.), Yemen, or Zimbabwe,
-        or any other state, country or region that is subject to sanctions enforced by the United States, the United
-        Kingdom or the European Union.
+        Uganda, Venezuela, Virgin Islands (U.S.), Yemen, or Zimbabwe, or any other state, country or region that is
+        subject to sanctions enforced by the United States, the United Kingdom or the European Union.
       </p>
 
       <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
-      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
-        cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
-        your non-essential cookies using the Cookie Settings on your browser.</p>
+      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics cookies
+        to improve your user experience. Non-essential cookies will be set only if you accept. You can manage your
+        non-essential cookies using the Cookie Settings on your browser.</p>
     </div>
     <div class="flex flex-row mt-4 px-4 py-2 bg-base-300 sticky bottom-0 z-50">
       <span class="flex-auto"></span>

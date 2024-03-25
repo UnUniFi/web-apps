@@ -19,6 +19,15 @@
         ],
         "ununifi-stable": [
           "ununifi-stable"
+        ],
+        "ununifi-internal": [
+          "ununifi-internal"
+        ],
+        "gluon": [
+          "gluon-mainnet"
+        ],
+        "gluon-beta": [
+          "gluon-beta"
         ]
       }
     }

@@ -36,7 +36,7 @@
               </div>
               <div class="text-xl flex flex-row">
                 <p class="text-accent font-bold">
-                  {{ trancheFixedAPYs?.[i]?.pt_apy | percent : '1.2-2' }}
+                  {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.2-2' }}
                 </p>
                 Fixed APY
               </div>

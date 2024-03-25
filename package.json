@@ -27,6 +27,7 @@
     "build:all:prod:ununifi-alpha-test": "npm run build:all:prod && node copy-config ununifi-alpha-test",
     "build:all:prod:ununifi-beta-test": "npm run build:all:prod && node copy-config ununifi-beta-test",
     "build:all:prod:ununifi-test": "npm run build:all:prod && node copy-config ununifi-test",
+    "build:all:prod:gluon-beta": "npm run build:all:prod && node copy-config gluon-beta",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:explorer": "ng test --project explorer",

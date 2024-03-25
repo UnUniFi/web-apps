@@ -1,408 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Gluon</title>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Gluon</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.png" />
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.7/dist/full.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Gluon | Strategic Yield Hub for the Modular Era" />
+    <meta property="og:title" content="Gluon | Strategic Yield Hub for the Modular Era" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://gluon.zone" />
+    <meta property="og:image" content="https://gluon.zone/assets/images/gluon.png" />
+    <meta property="og:site_name" content="gluon website" />
+    <meta
+      property="og:description"
+      content="Gluon aggregates the best-in-class yield strategies for the efficient operation of on-chain assets across blockchains."
+    />
 
-  <meta name="description" content="Gluon | Strategic Yield Hub for the Modular Era" />
-  <meta property="og:title" content="Gluon | Strategic Yield Hub for the Modular Era" />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://gluon.zone" />
-  <meta property="og:image" content="https://gluon.zone/assets/images/gluon.png" />
-  <meta property="og:site_name" content="gluon website" />
-  <meta property="og:description"
-    content="Gluon aggregates the best-in-class yield strategies for the efficient operation of on-chain assets across blockchains." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Tomorrow:wght@700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=Tomorrow:wght@700&display=swap"
-    rel="stylesheet">
-
-  <style>
-    body {
-      background-color: rgba(20, 19, 40, 0.88);
-      background-image: url('./assets/images/bg3.png');
-      background-size: 100%;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      font-family: 'IBM Plex Sans', sans-serif;
-      color: white;
-      word-wrap: break-word;
-    }
-
-    .bg-color {
-      background-color: rgba(20, 19, 40, 0.88);
-      opacity: 1;
-    }
-
-    .circle-rgb-grad-border {
-      position: relative;
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.20);
-      border-radius: 9999px;
-      cursor: pointer;
-    }
-
-    .circle-rgb-grad-border::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 9999px;
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
-      border-left: 4px solid transparent;
-      background: linear-gradient(to right, #FF364D, #375CFF 25%, #48FF7BD4 70%);
-      background-origin: border-box;
-      background-clip: border-box;
-      /* chrome */
-      -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
-      -webkit-mask-clip: padding-box, border-box;
-      -webkit-mask-composite: destination-out;
-      /**/
-      mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
-      mask-clip: padding-box, border-box;
-      mask-composite: exclude;
-    }
-
-    .sq-btn-rgb-grad-border {
-      position: relative;
-      display: inline-block;
-      background: rgba(179.75, 206.57, 219.19, 0.20);
-      border-radius: 8px;
-      padding: 16px 24px;
-      cursor: pointer;
-    }
-
-    .sq-btn-rgb-grad-border::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 8px;
-      border-bottom: 4px solid transparent;
-      border-left: 4px solid transparent;
-      background: linear-gradient(to right, #FF364D, #375CFF 25%, #48FF7BD4 70%);
-      background-origin: border-box;
-      background-clip: border-box;
-      /* chrome */
-      -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
-      -webkit-mask-clip: padding-box, border-box;
-      -webkit-mask-composite: destination-out;
-      /**/
-      mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
-      mask-clip: padding-box, border-box;
-      mask-composite: exclude;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="navbar px-4 sticky top-0 z-50 shadow-xl bg-color">
-    <h1 style="max-width: 200px;">
-      <a href="..">
-        <img src="../assets/images/gluon.svg" width="80%" height="80%" alt="gluon" class="object-contain" />
-      </a>
-      <span style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
-    </h1>
-    <div class="flex-auto"></div>
-    <div data-theme="dark" class="text-white">
-      <ul class="menu menu-horizontal px-1 max-md:hidden">
-        <li>
-          <details>
-            <summary>Developers</summary>
-            <ul>
-              <li><a href="https://docs.ununifi.io" target="_blank">Docs</a></li>
-              <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>Individuals</summary>
-            <ul>
-              <li><a href="../portal" target="_blank">Portal</a></li>
-              <li><a href="../explorer" target="_blank">Explorer</a></li>
-            </ul>
-          </details>
-        </li>
-        <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
-        <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li> -->
-        <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
-        <li>
-          <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
-            target="_blank">
-            Jobs
-          </a>
-        </li>
-      </ul>
-      <ul class="menu menu-horizontal px-1 md:hidden">
-        <li>
-          <details>
-            <summary>Links</summary>
-            <ul class="p-2 right-0">
-              <li>
-                <a>Developers</a>
-                <ul>
-                  <li><a href="https://docs.ununifi.io" target="_blank">Docs</a></li>
-                  <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
-                </ul>
-              </li>
-              <li>
-                <a>Individuals</a>
-                <ul>
-                  <li><a href="../portal" target="_blank">Portal</a></li>
-                  <li><a href="../explorer" target="_blank">Explorer</a></li>
-                </ul>
-              </li>
-              <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li>
-              <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Page</a></li> -->
-              <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
-              <li>
-                <a href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
-                  target="_blank">
-                  Jobs
-                </a>
-              </li>
-            </ul>
-          </details>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!--1st section-->
-  <section class="py-4 bg-cover">
-    <div class="mx-auto max-w-screen-xl my-8">
-      <div class="mx-auto w-5/6">
-        <div class="text-center text-6xl font-bold" style="line-height: 72px;">
-          Gluon Educational Guide to Fixed Yield
-        </div>
-        <div class="text-center text-6xl mb-16" style="line-height: 72px;">
-          Educational Guide to Fixed Yield</div>
-        <div class="flex md:flex-row gap-4 mb-10">
-          <div class="px-5 py-10 rounded-2xl w-full md:w-1/2 text-center"
-            style="background: rgba(255, 255, 255, 0.05);">
-            <div class="mx-auto p-1 mb-7 flex justify-center items-center circle-rgb-grad-border"
-              style="width: 80px; height: 80px;">
-              <img src="../assets/images/$.svg">
-            </div>
-            <div class="text-5xl font-bold mb-7" style="line-height: 60px;">Gluon Earn</div>
-            <div class="mb-7">
-              <span class="text-xl font-bold tracking-wide">Learn how to Earn Fixed Yield!<br /></span>
-              <span class="text-xl tracking-wide">Start today! quick and easy intro to Fixed Yield.</span>
-            </div>
-            <a class="sq-btn-rgb-grad-border" href="/beginner">
-              <div class="text-2xl tracking-wide" style="font-weight: 500;">
-                Beginner Tutorial</div>
-            </a>
-          </div>
-          <div class="px-5 py-10 rounded-2xl w-full md:w-1/2 text-center"
-            style="background: rgba(255, 255, 255, 0.05);">
-            <div class="mx-auto p-1 mb-7 flex justify-center items-center circle-rgb-grad-border"
-              style="width: 80px; height: 80px;">
-              <img src="../assets/images/$.svg">
-            </div>
-            <div class="text-5xl font-bold mb-7" style="line-height: 60px;">Gluon Trade</div>
-            <div class="mb-7">
-              <span class="text-xl font-bold tracking-wide">Learn how to Trade Yield!<br /></span>
-              <span class="text-xl tracking-wide">Recommended after watching our Beginner Tutorial</span>
-            </div>
-            <a class="sq-btn-rgb-grad-border" href="/advanced">
-              <div class="text-2xl tracking-wide" style="font-weight: 500;">
-                Advanced Tutorial</div>
-            </a>
-          </div>
-        </div>
-        <div class="text-center text-6xl font-bold mb-10" style="line-height: 72px;">
-          Gluon Asset Management Platform</div>
-      </div>
-  </section>
-
-  <footer>
     <style>
-      .footer-grid {
-        display: grid;
-        width: 100%;
-        grid-auto-flow: column;
-        place-items: start;
-        row-gap: 1.5rem;
-        column-gap: 1rem;
+      body {
+        background-color: rgba(20, 19, 40, 0.88);
+        background-image: url('./assets/images/bg3.png');
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: 'IBM Plex Sans', sans-serif;
+        color: white;
+        word-wrap: break-word;
       }
 
-      .footer-grid-item {
-        display: grid;
+      .bg-color {
+        background-color: rgba(20, 19, 40, 0.88);
+        opacity: 1;
       }
 
-      .footer-grid-item-title {
-        display: grid;
-
+      .circle-rgb-grad-border {
+        position: relative;
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 9999px;
+        cursor: pointer;
       }
 
-      @media not all and (min-width: 768px) {
+      .circle-rgb-grad-border::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 9999px;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        background: linear-gradient(to right, #ff364d, #375cff 25%, #48ff7bd4 70%);
+        background-origin: border-box;
+        background-clip: border-box;
+        /* chrome */
+        -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        -webkit-mask-clip: padding-box, border-box;
+        -webkit-mask-composite: destination-out;
+        /**/
+        mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        mask-clip: padding-box, border-box;
+        mask-composite: exclude;
+      }
+
+      .sq-btn-rgb-grad-border {
+        position: relative;
+        display: inline-block;
+        background: rgba(179.75, 206.57, 219.19, 0.2);
+        border-radius: 8px;
+        padding: 16px 24px;
+        cursor: pointer;
+      }
+
+      .sq-btn-rgb-grad-border::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 8px;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid transparent;
+        background: linear-gradient(to right, #ff364d, #375cff 25%, #48ff7bd4 70%);
+        background-origin: border-box;
+        background-clip: border-box;
+        /* chrome */
+        -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        -webkit-mask-clip: padding-box, border-box;
+        -webkit-mask-composite: destination-out;
+        /**/
+        mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+        mask-clip: padding-box, border-box;
+        mask-composite: exclude;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="navbar px-4 sticky top-0 z-50 shadow-xl bg-color">
+      <h1 style="max-width: 200px">
+        <a href="..">
+          <img
+            src="../assets/images/gluon.svg"
+            width="80%"
+            height="80%"
+            alt="gluon"
+            class="object-contain"
+          />
+        </a>
+        <span style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px">GLUON</span>
+      </h1>
+      <div class="flex-auto"></div>
+      <div data-theme="dark" class="text-white">
+        <ul class="menu menu-horizontal px-1 max-md:hidden">
+          <li>
+            <details>
+              <summary>Developers</summary>
+              <ul>
+                <li><a href="https://docs.sunriselayer.io/learn/gluon" target="_blank">Docs</a></li>
+                <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Individuals</summary>
+              <ul>
+                <li><a href="../portal" target="_blank">Portal</a></li>
+                <li><a href="../explorer" target="_blank">Explorer</a></li>
+              </ul>
+            </details>
+          </li>
+          <!-- <li><a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a></li> -->
+          <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Pager</a></li> -->
+          <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+          <li>
+            <a
+              href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+              target="_blank"
+            >
+              Jobs
+            </a>
+          </li>
+        </ul>
+        <ul class="menu menu-horizontal px-1 md:hidden">
+          <li>
+            <details>
+              <summary>Links</summary>
+              <ul class="p-2 right-0">
+                <li>
+                  <a>Developers</a>
+                  <ul>
+                    <li>
+                      <a href="https://docs.sunriselayer.io/learn/gluon" target="_blank">Docs</a>
+                    </li>
+                    <li><a href="https://github.com/UnUniFi" target="_blank">GitHub</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Individuals</a>
+                  <ul>
+                    <li><a href="../portal" target="_blank">Portal</a></li>
+                    <li><a href="../explorer" target="_blank">Explorer</a></li>
+                  </ul>
+                </li>
+                <!-- <li>
+                  <a href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
+                </li> -->
+                <!-- <li><a href="./assets/download/UnUniFi-OnePage.pdf" target="_blank">One Page</a></li> -->
+                <li><a href="https://medium.com/@ununifi" target="_blank">Blog</a></li>
+                <li>
+                  <a
+                    href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f?pvs=4"
+                    target="_blank"
+                  >
+                    Jobs
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!--1st section-->
+    <section class="py-4 bg-cover">
+      <div class="mx-auto max-w-screen-xl my-8">
+        <div class="mx-auto w-5/6">
+          <div class="text-center text-6xl font-bold" style="line-height: 72px">
+            Gluon Educational Guide to Fixed Yield
+          </div>
+          <div class="text-center text-6xl mb-16" style="line-height: 72px">
+            Educational Guide to Fixed Yield
+          </div>
+          <div class="flex md:flex-row gap-4 mb-10">
+            <div
+              class="px-5 py-10 rounded-2xl w-full md:w-1/2 text-center"
+              style="background: rgba(255, 255, 255, 0.05)"
+            >
+              <div
+                class="mx-auto p-1 mb-7 flex justify-center items-center circle-rgb-grad-border"
+                style="width: 80px; height: 80px"
+              >
+                <img src="../assets/images/$.svg" />
+              </div>
+              <div class="text-5xl font-bold mb-7" style="line-height: 60px">Gluon Earn</div>
+              <div class="mb-7">
+                <span class="text-xl font-bold tracking-wide"
+                  >Learn how to Earn Fixed Yield<br
+                /></span>
+                <span class="text-xl tracking-wide"
+                  >Start today! quick and easy intro to Fixed Yield.</span
+                >
+              </div>
+              <a class="sq-btn-rgb-grad-border" href="/beginner">
+                <div class="text-2xl tracking-wide" style="font-weight: 500">Beginner Tutorial</div>
+              </a>
+            </div>
+            <div
+              class="px-5 py-10 rounded-2xl w-full md:w-1/2 text-center"
+              style="background: rgba(255, 255, 255, 0.05)"
+            >
+              <div
+                class="mx-auto p-1 mb-7 flex justify-center items-center circle-rgb-grad-border"
+                style="width: 80px; height: 80px"
+              >
+                <img src="../assets/images/$.svg" />
+              </div>
+              <div class="text-5xl font-bold mb-7" style="line-height: 60px">Gluon Trade</div>
+              <div class="mb-7">
+                <span class="text-xl font-bold tracking-wide">Learn how to Trade Yield<br /></span>
+                <span class="text-xl tracking-wide"
+                  >Recommended after watching our Beginner Tutorial</span
+                >
+              </div>
+              <a class="sq-btn-rgb-grad-border" href="/advanced">
+                <div class="text-2xl tracking-wide" style="font-weight: 500">Advanced Tutorial</div>
+              </a>
+            </div>
+          </div>
+          <!-- <div class="text-center text-6xl font-bold mb-10" style="line-height: 72px">
+            Gluon Asset Management Platform
+          </div> -->
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <style>
         .footer-grid {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 40px 1fr 1fr;
+          display: grid;
+          width: 100%;
+          grid-auto-flow: column;
+          place-items: start;
+          row-gap: 1.5rem;
+          column-gap: 1rem;
+        }
+
+        .footer-grid-item {
+          display: grid;
         }
 
         .footer-grid-item-title {
-          grid-column: 1 / 3;
+          display: grid;
         }
-      }
-    </style>
 
-    <div class="footer-grid text-sm px-4 py-8 mt-8">
-      <div class="footer-grid-item-title">
-        <div class="max-w-xs flex items-center">
-          <img src="../assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
-          <span class="mx-2" style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px;">GLUON</span>
+        @media not all and (min-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 40px 1fr 1fr;
+          }
+
+          .footer-grid-item-title {
+            grid-column: 1 / 3;
+          }
+        }
+      </style>
+
+      <div class="footer-grid text-sm px-4 py-8 mt-8">
+        <div class="footer-grid-item-title">
+          <div class="max-w-xs flex items-center">
+            <img src="../assets/images/gluon.svg" width="40px" height="40px" alt="gluon" />
+            <span
+              class="mx-2"
+              style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px"
+              >GLUON</span
+            >
+          </div>
+        </div>
+        <div class="footer-grid-item">
+          <span class="mb-2 font-bold uppercase">Developers</span>
+          <a class="link link-hover" href="https://docs.sunriselayer.io/learn/gluon" target="_blank"
+            >Docs</a
+          >
+          <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
+        </div>
+        <div class="footer-grid-item">
+          <span class="mb-2 font-bold uppercase">Services</span>
+          <a class="link link-hover" href="../portal" target="_blank">Portal</a>
+          <a class="link link-hover" href="../explorer" target="_blank">Explorer</a>
+          <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank"
+            >Community</a
+          >
+        </div>
+        <div class="footer-grid-item">
+          <span class="mb-2 font-bold uppercase">Information</span>
+          <!-- <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank"
+            >Whitepaper</a
+          > -->
+          <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
+          <a
+            class="link link-hover"
+            href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
+            target="_blank"
+            >Jobs</a
+          >
+          <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
+        </div>
+        <div class="footer-grid-item">
+          <span class="mb-2 font-bold uppercase">legal</span>
+          <a
+            class="link link-hover"
+            href="./assets/download/UnUniFi-TermsOfService.pdf"
+            target="_blank"
+            >Terms of Service</a
+          >
+          <a
+            class="link link-hover"
+            href="./assets/download/UnUniFi-PrivacyPolicy.pdf"
+            target="_blank"
+            >Privacy Policy</a
+          >
         </div>
       </div>
-      <div class="footer-grid-item">
-        <span class="mb-2 font-bold uppercase">Developers</span>
-        <a class="link link-hover" href="https://docs.ununifi.io/" target="_blank">Docs</a>
-        <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>
-      </div>
-      <div class="footer-grid-item">
-        <span class="mb-2 font-bold uppercase">Services</span>
-        <a class="link link-hover" href="../portal" target="_blank">Portal</a>
-        <a class="link link-hover" href="../explorer" target="_blank">Explorer</a>
-        <a class="link link-hover" href="https://discord.com/invite/ununifi" target="_blank">Community</a>
-      </div>
-      <div class="footer-grid-item">
-        <span class="mb-2 font-bold uppercase">Information</span>
-        <a class="link link-hover" href="./assets/download/UnUniFi-Whitepaper.pdf" target="_blank">Whitepaper</a>
-        <a class="link link-hover" href="https://medium.com/@ununifi" target="_blank">Blog</a>
-        <a class="link link-hover"
-          href="https://cauchye.notion.site/Careers-at-UnUniFi-bfb73b38da2c4a15970812c07da9926f"
-          target="_blank">Jobs</a>
-        <a class="link link-hover" href="https://github.com/UnUniFi/media">Press kit</a>
-      </div>
-      <div class="footer-grid-item">
-        <span class="mb-2 font-bold uppercase">legal</span>
-        <a class="link link-hover" href="./assets/download/UnUniFi-TermsOfService.pdf" target="_blank">Terms of
-          Service</a>
-        <a class="link link-hover" href="./assets/download/UnUniFi-PrivacyPolicy.pdf" target="_blank">Privacy
-          Policy</a>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <footer class="px-4">
-    <div class="w-full pt-4 md:inline-flex" style="border-top: 1px white solid; ">
-      <div class="flex-1 text-sm max-md:text-center" style="letter-spacing: 0.40px;">
-        UnUniFi © - All rights reserved. 2023</div>
-      <div class="flex justify-around md:gap-9 max-md:mt-4 ">
-        <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">
-          <img src="assets/images/logos/ic_baseline-discord.svg" alt="discord" /></a>
-        <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">
-          <img src="assets/images/logos/pajamas_twitter.svg" alt="x" /></a>
-        <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
-          <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin" /></a>
-        <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
-          <img src="assets/images/logos/mdi_youtube.png" alt="youtube" /></a>
-        <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
-          <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree" /></a>
+    <footer class="px-4">
+      <div class="w-full pt-4 md:inline-flex" style="border-top: 1px white solid">
+        <div class="flex-1 text-sm max-md:text-center" style="letter-spacing: 0.4px">
+          UnUniFi © - All rights reserved. 2023
+        </div>
+        <div class="flex justify-around md:gap-9 max-md:mt-4">
+          <a class="link link-hover" href="https://discord.gg/ununifi" target="_blank">
+            <img src="assets/images/logos/ic_baseline-discord.svg" alt="discord"
+          /></a>
+          <a class="link link-hover" href="https://twitter.com/ununifi" target="_blank">
+            <img src="assets/images/logos/pajamas_twitter.svg" alt="x"
+          /></a>
+          <a class="link link-hover" href="https://linkedin.com/company/ununifi" target="_blank">
+            <img src="assets/images/logos/mdi_linkedin.svg" alt="linkedin"
+          /></a>
+          <a class="link link-hover" href="https://youtube.com/ununifi" target="_blank">
+            <img src="assets/images/logos/mdi_youtube.png" alt="youtube"
+          /></a>
+          <a class="link link-hover" href="https://linktr.ee/ununifi" target="_blank">
+            <img src="assets/images/logos/simple-icons_linktree.svg" alt="linktree"
+          /></a>
+        </div>
+      </div>
+      <div class="h-4"></div>
+    </footer>
+
+    <div
+      id="disclaimer-popup"
+      class="bg-base-300 overflow-y-auto sticky bottom-0 z-40"
+      style="display: none; max-height: 50vh"
+      data-theme="dark"
+    >
+      <div class="p-4">
+        <h2 class="font-bold text-lg">Disclaimer</h2>
+        <p>
+          This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain.
+          By viewing, interacting with or otherwise using the Site, you are agreeing to the Terms
+          and Conditions for the Site. Please check below to certify you have read and understood
+          and are agreeing to be bound by the Terms and Conditions in their entirety.
+        </p>
+        <p class="mt-2">
+          The application, the underlying smart contracts, or the services described herein (as
+          defined below) are strictly NOT offered to persons or entities who reside in, are citizens
+          of, are incorporated in, or have a registered office in any Restricted Territory, as
+          defined below. If you are a Restricted Person, then do not attempt to access or use the
+          application, the underlying smart contracts, or the services. Use of a virtual private
+          network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly
+          prohibited.
+        </p>
+        <p class="mt-2">
+          For the purpose of these Terms, Restricted Territory shall mean the United States of
+          America, the People's Republic of China, the United Kingdom, Panama, Afghanistan, Albania,
+          American Samoa, Angola, Armenia, Azerbaijan, Belarus, Bosnia, region of Balkans, Botswana,
+          Burundi, Bosnia, Burma, Cambodia, Cameroon, Canada, Central African Republic, Chad, China,
+          Côte D'Ivoire, Croatia, Crimea of Ukraine, Cuba, Democratic Republic of Congo, Democratic
+          People's Republic of Korea, Eritrea, Ethiopia, Ghana, Guam, Guinea, Guinea-Bissau, Haiti,
+          Herzegovina, Iran, Iraq, Kosovo, Japan, Laos, Lebanon, Liberia, Libya, Madagascar, Mali,
+          Macedonia, Mozambique, Myanmar, Nicaragua, Northern Mariana Islands, Pakistan, Moldova,
+          Palestine, Puerto Rico, Russia, Serbia, Somalia, Sri Lanka, Sudan, South Sudan, Syrian
+          Arab Republic, Tajikistan, Trinidad and Tobago, Turkmenistan, Uganda, Venezuela, Virgin
+          Islands (U.S.), Yemen, or Zimbabwe, or any other state, country or region that is subject
+          to sanctions enforced by the United States, the United Kingdom or the European Union.
+        </p>
+
+        <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
+        <p>
+          We use technical cookies to make the Site work. We would also like to use from time to
+          time analytics cookies to improve your user experience. Non-essential cookies will be set
+          only if you accept. You can manage your non-essential cookies using the Cookie Settings on
+          your browser.
+        </p>
+      </div>
+      <div class="flex flex-row mt-4 px-4 py-2 bg-base-300 sticky bottom-0 z-50">
+        <span class="flex-auto"></span>
+        <button id="popup-reject" class="btn btn-error btn-outline">Reject</button>
+        <button id="popup-accept" class="btn btn-primary ml-2">Accept</button>
       </div>
     </div>
-    <div class="h-4"></div>
-  </footer>
+    <!-- popup script -->
+    <script>
+      window.onload = function () {
+        // if not accepted yet
+        if (!getCookie('disclaimer_accepted')) {
+          document.getElementById('disclaimer-popup').style.display = 'block';
+        }
+      };
 
-  <div id="disclaimer-popup" class="bg-base-300 overflow-y-auto sticky bottom-0 z-40"
-    style="display: none; max-height: 50vh;" data-theme="dark">
-    <div class="p-4">
-      <h2 class="font-bold text-lg">Disclaimer</h2>
-      <p>This website (the “Site”) is an information aggregator relating to the UnUniFi blockchain. By viewing,
-        interacting with or otherwise using the Site, you are agreeing to the Terms and Conditions for the Site.
-        Please
-        check below to certify you have read and understood and are agreeing to be bound by the Terms and Conditions
-        in
-        their entirety.</p>
-      <p class="mt-2">The application, the underlying smart contracts, or the services described herein (as defined
-        below) are strictly NOT offered to persons or entities who reside in, are citizens of, are incorporated in, or
-        have a registered office in any Restricted Territory, as defined below. If you are a Restricted Person, then
-        do
-        not attempt to access or use the application, the underlying smart contracts, or the services. Use of a
-        virtual
-        private network (e.g., a VPN) or other means by Restricted Persons to access the same is strictly prohibited.
-      </p>
-      <p class="mt-2">For the purpose of these Terms, Restricted Territory shall mean the United States of America, the
-        People's Republic of China, the United Kingdom, Panama, Afghanistan, Albania, American Samoa, Angola, Armenia,
-        Azerbaijan, Belarus, Bosnia, region of Balkans, Botswana, Burundi, Bosnia, Burma, Cambodia, Cameroon, Canada,
-        Central African Republic, Chad, China, Côte D'Ivoire, Croatia, Crimea of Ukraine, Cuba, Democratic Republic of
-        Congo, Democratic People's Republic of Korea, Eritrea, Ethiopia, Ghana, Guam, Guinea, Guinea-Bissau, Haiti,
-        Herzegovina, Iran, Iraq, Kosovo, Japan, Laos, Lebanon, Liberia, Libya, Madagascar, Mali, Macedonia, Mozambique,
-        Myanmar, Nicaragua, Northern Mariana Islands, Pakistan, Moldova, Palestine, Puerto Rico, Russia, Serbia,
-        Somalia, Sri Lanka, Sudan, South Sudan, Syrian Arab Republic, Tajikistan, Trinidad and Tobago, Turkmenistan,
-        Uganda, Venezuela, Virgin Islands (U.S.), Yemen, or Zimbabwe,
-        or any other state, country or region that is subject to sanctions enforced by the United States, the United
-        Kingdom or the European Union.
-      </p>
+      // after accepted
+      document.getElementById('popup-accept').addEventListener('click', function () {
+        setCookie('disclaimer_accepted', true, 365);
+        document.getElementById('disclaimer-popup').style.display = 'none';
+      });
 
-      <h2 class="mt-4 font-bold text-lg">Use of Cookies</h2>
-      <p>We use technical cookies to make the Site work. We would also like to use from time to time analytics
-        cookies to improve your user experience. Non-essential cookies will be set only if you accept. You can manage
-        your non-essential cookies using the Cookie Settings on your browser.</p>
-    </div>
-    <div class="flex flex-row mt-4 px-4 py-2 bg-base-300 sticky bottom-0 z-50">
-      <span class="flex-auto"></span>
-      <button id="popup-reject" class="btn btn-error btn-outline">Reject</button>
-      <button id="popup-accept" class="btn btn-primary ml-2">Accept</button>
-    </div>
-  </div>
-  <!-- popup script -->
-  <script>
-    window.onload = function() {
-      // if not accepted yet
-      if (!getCookie('disclaimer_accepted')) {
-        document.getElementById('disclaimer-popup').style.display = 'block';
+      // after rejected
+      document.getElementById('popup-reject').addEventListener('click', function () {
+        location.href = 'https://twitter.com/ununifi'; // go to twitter
+      });
+
+      function setCookie(name, value, days) {
+        var expires = '';
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + (value || '') + expires + '; path=/';
       }
-    };
 
-    // after accepted
-    document.getElementById('popup-accept').addEventListener('click',function() {
-      setCookie('disclaimer_accepted',true,365);
-      document.getElementById('disclaimer-popup').style.display = 'none';
-    });
-
-    // after rejected
-    document.getElementById('popup-reject').addEventListener('click',function() {
-      location.href = 'https://twitter.com/ununifi'; // go to twitter
-    });
-
-    function setCookie(name,value,days) {
-      var expires = '';
-      if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = '; expires=' + date.toUTCString();
+      function getCookie(name) {
+        var nameEQ = name + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
       }
-      document.cookie = name + '=' + (value || '') + expires + '; path=/';
-    }
-
-    function getCookie(name) {
-      var nameEQ = name + '=';
-      var ca = document.cookie.split(';');
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-      }
-      return null;
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

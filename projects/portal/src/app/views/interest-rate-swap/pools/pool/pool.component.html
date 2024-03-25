@@ -51,44 +51,31 @@
         <div class="tabs w-full">
           <a
             class="tab tab-lg tab-bordered w-1/2"
-            [class.tab-active]="tab === 'deposit'"
-            (click)="tab = 'deposit'"
+            [class.tab-active]="txMode === 'deposit'"
+            (click)="onChangeTxMode('deposit')"
           >
-            Add Liquidity
+            Add
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
           <a
             class="tab tab-lg tab-bordered w-1/2"
-            [class.tab-active]="tab === 'withdraw'"
-            (click)="tab = 'withdraw'"
+            [class.tab-active]="txMode === 'redeem'"
+            (click)="onChangeTxMode('redeem')"
           >
-            Remove Liquidity
+            Remove
+            <p class="hidden sm:inline">&nbsp;Liquidity</p>
           </a>
         </div>
         <div class="card-body">
-          <form #depositFormRef="ngForm" *ngIf="tab === 'deposit'" (submit)="onDepositPool()">
+          <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="onDepositPool()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
-                    <div class="avatar">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -98,7 +85,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
                     #depositUtAmountNgModelRef="ngModel"
@@ -111,7 +98,7 @@
                     type="number"
                     [(ngModel)]="inputUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositUtAmount"
                     (change)="onChangeDepositUt()"
@@ -119,7 +106,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxUT()"
                 >
                   Max
@@ -128,8 +115,8 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
 
@@ -138,8 +125,8 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
-                    <div class="avatar">
+                  <span class="gap-2 w-full">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-primary">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -149,8 +136,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT</div>
-                    <div>{{ vault?.name }}#{{ poolId }}</div>
+                    <div>PT {{ vault?.name }}#{{ poolId }}</div>
                   </span>
                   <input
                     #depositPtAmountNgModelRef="ngModel"
@@ -163,7 +149,7 @@
                     type="number"
                     [(ngModel)]="inputPT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[ptDenom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="depositPtAmount"
                     (change)="onChangeDepositPt()"
@@ -171,7 +157,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxPT()"
                 >
                   Max
@@ -192,11 +178,11 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
-                  <div class="avatar">
+                <span class="gap-2 w-full">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-secondary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
@@ -206,8 +192,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>LP</div>
-                  <div>{{ vault?.name }}#{{ poolId }}</div>
+                  <div>LP {{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -221,12 +206,12 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="depositFormRef.invalid">
-                <span>Add Liquidity</span>
+                <span>Deposit</span>
               </button>
             </div>
           </form>
 
-          <form #withdrawFormRef="ngForm" *ngIf="tab === 'withdraw'" (submit)="onWithdrawPool()">
+          <form #withdrawFormRef="ngForm" *ngIf="txMode === 'redeem'" (submit)="onWithdrawPool()">
             <div class="form-control">
               <span class="label">
                 <span class="label-text">Input</span>
@@ -234,8 +219,8 @@
 
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
-                    <div class="avatar">
+                  <span class="gap-2 w-full">
+                    <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full border-2 border-secondary">
                         <img src="{{ vaultImage?.image }}" />
                       </div>
@@ -245,8 +230,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>LP</div>
-                    <div>{{ vault?.name }}#{{ poolId }}</div>
+                    <div>LP {{ vault?.name }}#{{ poolId }}</div>
                   </span>
                   <input
                     #withdrawAmountNgModelRef="ngModel"
@@ -259,7 +243,7 @@
                     type="number"
                     [(ngModel)]="inputLP"
                     [min]="0"
-                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.denom"
+                    [max]="denomBalancesMap?.[lpDenom || '']?.amount | coinAmount: vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="withdrawAmount"
                     (change)="onChangeWithdraw()"
@@ -267,7 +251,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMaxLP()"
                 >
                   Max
@@ -289,26 +273,11 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
-                  <div class="avatar">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
@@ -318,7 +287,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -331,8 +300,8 @@
                 <span class="label-text"></span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
-                  <div class="avatar">
+                <span class="gap-2 w-full">
+                  <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
                     </div>
@@ -342,8 +311,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT</div>
-                  <div>{{ vault?.name }}#{{ poolId }}</div>
+                  <div>PT {{ vault?.name }}#{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -357,8 +325,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="withdrawFormRef.invalid">
-                <span class="material-symbols-outlined"> attach_money </span>
-                <span>Swap</span>
+                <span>Redeem</span>
               </button>
             </div>
           </form>
@@ -373,7 +340,9 @@
             <h2 class="card-title">
               <span>APY</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{ calcTotalPoolAPY(poolAPYs) | percent : '1.2-2' }}</span>
+              <span class="text-accent">{{
+                calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2'
+              }}</span>
             </h2>
 
             <div class="overflow-x-auto">
@@ -381,7 +350,7 @@
                 <tbody>
                   <tr class="bg-base-100">
                     <th>Underlying Yield</th>
-                    <td>{{ 0 | percent : '1.2-2' }}</td>
+                    <td>{{ calcUnderlyingAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2' }}</td>
                   </tr>
                   <tr class="bg-base-100">
                     <th>PT Yield</th>
@@ -393,11 +362,7 @@
                   </tr>
                   <tr>
                     <th>My Liquidity</th>
-                    <td>{{ 0 | currency }}</td>
-                  </tr>
-                  <tr>
-                    <th>Claimable Rewards</th>
-                    <td>{{ 0 | currency }}</td>
+                    <td>{{ lpBalanceUSD | currency }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -409,7 +374,7 @@
             <h2 class="card-title">
               <span>Total Liquidity</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{ 0 | currency }}</span>
+              <span class="text-accent">{{ totalLiquidityUSD?.total | currency }}</span>
             </h2>
             <div class="overflow-x-auto">
               <table class="table">
@@ -435,7 +400,9 @@
                         <div class="text-xl font-bold">
                           {{ asset.amount | coinAmount : asset.denom }}
                         </div>
-                        <div class="text-sm opacity-50">{{ 0 | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ totalLiquidityUSD?.assets?.[asset.denom!]| currency }}
+                        </div>
                       </td>
                     </tr>
                   </ng-container>

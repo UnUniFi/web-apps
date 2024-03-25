@@ -121,7 +121,7 @@
                     </span>
                   </button>
                 </td>
-                <td>
+                <!-- <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap">
                     <span>Implied APY</span>
                     <span
@@ -131,7 +131,7 @@
                       keyboard_arrow_down
                     </span>
                   </button>
-                </td>
+                </td> -->
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap">
                     <span>Long Yield APY</span>
@@ -145,7 +145,7 @@
                 </td>
                 <td>
                   <button class="btn btn-ghost btn-xs flex-nowrap">
-                    <span>Fixed APY</span>
+                    <span>Fixed Yield APY</span>
                     <span
                       class="material-symbols-outlined"
                       [class]="{ 'text-info': sortType === 'fixed' }"
@@ -160,7 +160,7 @@
               <ng-container *ngFor="let pool of tranchePools; let i = index">
                 <tr
                   class="hover cursor-pointer border-b-2 border-[#adc9ff]"
-                  routerLink="{{ pool.id }}"
+                  [routerLink]="[pool.id]"
                 >
                   <th>
                     <div class="avatar">
@@ -192,42 +192,50 @@
                   </td>
                   <td>
                     <div>
-                      <div class="text-xl font-bold">{{ '0' | percent : '1.0-2' }}</div>
-                      <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                      <div class="text-xl font-bold">
+                        {{  trancheLongAPYs?.[i]?.ls_apy || 0 | percent : '1.0-2' }}
+                      </div>
+                      <div class="text-sm opacity-50">
+                        {{ trancheTokenPrices?.[i]?.depositPrice || 0 | currency }}
+                      </div>
                     </div>
                   </td>
-                  <td>
+                  <!-- <td>
                     <div class="text-xl font-bold">
-                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                      {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                     </div>
-                  </td>
+                  </td> -->
                   <td>
                     <div
-                      class="flex items-center gap-3 btn btn-primary"
+                      class="flex flex-col items-center gap-3 btn btn-primary"
                       [routerLink]="[pool.id]"
                       [queryParams]="{ view: 'yt' }"
                     >
                       <div class="text-blue-200 text-xl mr-2">YT</div>
                       <div>
-                        <div class="text-xl font-bold">
-                          {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                        <div class="text-lg font-bold">
+                          {{ trancheLongAPYs?.[i]?.yt_apy || 0 | percent : '1.0-2' }}
                         </div>
-                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ trancheTokenPrices?.[i]?.ytPrice || 0 | currency }}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td>
                     <div
-                      class="flex items-center gap-3 rounded-lg btn btn-accent text-neutral"
+                      class="flex flex-col items-center gap-3 btn btn-accent text-neutral"
                       [routerLink]="[pool.id]"
                       [queryParams]="{ view: 'pt' }"
                     >
                       <div class="text-green-100 text-xl mr-2">PT</div>
                       <div>
-                        <div class="text-xl font-bold">
-                          {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                        <div class="text-lg font-bold">
+                          {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                         </div>
-                        <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ trancheTokenPrices?.[i]?.ptPrice || 0 | currency }}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -282,55 +290,63 @@
                           <div class="text-lg opacity-75">Underlying APY</div>
                         </td>
                         <td>
-                          <div class="text-xl font-bold">{{ '0' | percent : '1.2-2' }}</div>
-                          <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                          <div class="text-xl font-bold">
+                            {{  trancheLongAPYs?.[i]?.ls_apy || 0 | percent : '1.0-2' }}
+                          </div>
+                          <div class="text-sm opacity-50">
+                            {{ trancheTokenPrices?.[i]?.depositPrice || 0 | currency }}
+                          </div>
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td>
                           <div class="text-lg opacity-75">Implied APY</div>
                         </td>
                         <td>
                           <div class="text-xl font-bold">
-                            {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                            {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                           </div>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
                 </div>
                 <div
-                  class="flex gap-3 btn btn-primary justify-start"
+                  class="flex gap-3 btn btn-primary justify-start items-center"
                   [routerLink]="[pool.id]"
                   [queryParams]="{ view: 'yt' }"
                 >
                   <div class="text-blue-200 text-xl mr-2">YT</div>
                   <div>
-                    <div class="text-xl font-bold">Long Yield APY</div>
+                    <div class="sm:text-xl font-bold">Long Yield APY</div>
                     <div class="text-sm opacity-50">Price</div>
                   </div>
                   <div>
-                    <div class="text-xl font-bold">
-                      {{ trancheLongAPYs?.[i]?.yt_apy| percent : '1.0-2' }}
+                    <div class="sm:text-xl font-bold">
+                      {{ trancheLongAPYs?.[i]?.yt_apy || 0 | percent : '1.0-2' }}
                     </div>
-                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                    <div class="text-sm opacity-50">
+                      {{ trancheTokenPrices?.[i]?.ytPrice || 0 | currency }}
+                    </div>
                   </div>
                 </div>
                 <div
-                  class="flex gap-3 btn btn-accent text-neutral justify-start"
+                  class="flex gap-3 btn btn-accent text-neutral justify-start items-center"
                   [routerLink]="[pool.id]"
                   [queryParams]="{ view: 'pt' }"
                 >
                   <div class="text-green-100 text-xl mr-2">PT</div>
                   <div>
-                    <div class="text-xl font-bold">Fixed Yield APY</div>
+                    <div class="sm:text-xl font-bold">Fixed Yield APY</div>
                     <div class="text-sm opacity-50">Price</div>
                   </div>
                   <div>
-                    <div class="text-xl font-bold">
-                      {{ trancheFixedAPYs?.[i]?.pt_apy| percent : '1.0-2' }}
+                    <div class="sm:text-xl font-bold">
+                      {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.0-2' }}
                     </div>
-                    <div class="text-sm opacity-50">{{ '0' | currency }}</div>
+                    <div class="text-sm opacity-50">
+                      {{ trancheTokenPrices?.[i]?.ptPrice || 0 | currency }}
+                    </div>
                   </div>
                 </div>
               </div>

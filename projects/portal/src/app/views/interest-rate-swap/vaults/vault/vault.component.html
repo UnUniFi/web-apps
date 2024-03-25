@@ -28,7 +28,7 @@
             [class.text-accent]="swapTab === 'pt' && modeTab === 'swap'"
             [class.border-primary]="swapTab === 'yt' && modeTab === 'swap'"
             [class.text-primary]="swapTab === 'yt' && modeTab === 'swap'"
-            (click)="modeTab = 'swap'"
+            (click)="onChangeModeTab('swap')"
           >
             Swap
           </a>
@@ -38,7 +38,7 @@
             [class.text-accent]="swapTab === 'pt' && modeTab === 'mint'"
             [class.border-primary]="swapTab === 'yt' && modeTab === 'mint'"
             [class.text-primary]="swapTab === 'yt' && modeTab === 'mint'"
-            (click)="modeTab = 'mint'"
+            (click)="onChangeModeTab('mint')"
           >
             Mint
           </a>
@@ -46,30 +46,16 @@
         <div class="card-body">
           <form
             #swapMintFormRef="ngForm"
-            *ngIf="modeTab === 'swap' && txMode === 'mint'"
-            (submit)="onSubmitSwapMint()"
+            *ngIf="modeTab === 'swap' && txMode === 'deposit'"
+            (submit)="onSubmitSwap()"
           >
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Input</span>
+                <span *ngIf="swapTab === 'pt'" class="label-text">Input</span>
+                <span *ngIf="swapTab === 'yt'" class="label-text">Input (Max Limit)</span>
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
                     <div class="avatar">
                       <div class="w-8 rounded-full">
@@ -81,9 +67,10 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
+                    *ngIf="swapTab === 'pt'"
                     #swapUnderlyingAmountNgModelRef="ngModel"
                     class="join-item input input-bordered input-info w-full"
                     [class]="{
@@ -92,17 +79,35 @@
                     placeholder="0.000000"
                     required
                     type="number"
-                    [(ngModel)]="inputUT"
+                    [(ngModel)]="inputSwapUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="swapUnderlyingAmount"
                     (input)="onChangeSwapUnderlyingAmount()"
                   />
+                  <input
+                    *ngIf="swapTab === 'yt'"
+                    #requiredUnderlyingAmountNgModelRef="ngModel"
+                    class="join-item input input-bordered w-full"
+                    [class]="{
+                      'input-error': requiredUnderlyingAmountNgModelRef.errors
+                    }"
+                    [disabled]="!inputDesiredYT"
+                    placeholder="0.000000"
+                    required
+                    type="number"
+                    [(ngModel)]="estimateRequiredUtForYt"
+                    [min]="0"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
+                    pattern="^[0-9]*\.?[0-9]{0,6}$"
+                    name="requiredUnderlyingAmount"
+                  />
                 </label>
                 <button
+                  *ngIf="swapTab === 'pt'"
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxUT()"
                 >
                   Max
@@ -111,14 +116,14 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
             </div>
 
             <div class="flex flex-row justify-center">
-              <button type="button" class="btn btn-circle" (click)="txMode = 'redeem'">
+              <button type="button" class="btn btn-circle" (click)="onChangeTxMode('redeem')">
                 <span class="material-symbols-outlined"> swap_vert </span>
               </button>
             </div>
@@ -126,10 +131,11 @@
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span *ngIf="swapTab === 'pt'" class="label-text">Output (Estimated)</span>
+                <span *ngIf="swapTab === 'yt'" class="label-text">Output</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div
                       class="w-8 rounded-full border-2"
@@ -146,8 +152,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>{{ swapTab | uppercase }}</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>{{ swapTab | uppercase }} {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -158,23 +163,122 @@
                 <input
                   *ngIf="swapTab === 'yt'"
                   #desiredYtNgModelRef="ngModel"
-                  class="join-item input input-bordered w-full"
+                  class="join-item input input-bordered input-info w-full"
+                  [class]="{
+                    'input-error': desiredYtNgModelRef.errors
+                  }"
                   placeholder="0.000000"
                   required
                   type="number"
-                  [(ngModel)]="estimateMintYt"
+                  [(ngModel)]="inputDesiredYT"
                   [min]="0"
                   pattern="^[0-9]*\.?[0-9]{0,6}$"
                   name="desiredYt"
+                  (input)="onChangeSwapDesiredYtAmount()"
                 />
               </label>
               <span class="label">
                 <span class="label-text"></span>
               </span>
             </div>
+            <div class="flex flex-row items-center gap-4 -mt-4">
+              <div class="flex flex-col justify-center items-center ml-8">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="17"
+                  viewBox="0 0 2 17"
+                  fill="none"
+                >
+                  <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8.00586"
+                    r="7.5"
+                    fill="#ADC9FF"
+                    fill-opacity="0.2"
+                    stroke="#ADC9FF"
+                  />
+                </svg>
+              </div>
+              <ng-container *ngIf="swapTab === 'pt'">
+                <div class="text-xl text-secondary mt-4">Fixed APY</div>
+                <div class="flex-auto"></div>
+                <div
+                  class="text-xl flex flex-row items-center text-accent mt-4"
+                  [class]="{ 'text-error': isNegativeValue(tranchePtAPYs?.pt_apy) }"
+                >
+                  <!-- <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span> -->
+                  <span> {{ tranchePtAPYs?.pt_apy || 0 | percent : '1.2-2' }} </span>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="swapTab === 'yt'">
+                <div class="text-xl text-secondary mt-4">Long Yield APY</div>
+                <div class="flex-auto"></div>
+                <div
+                  class="text-xl flex flex-row items-center text-accent mt-4"
+                  [class]="{ 'text-error': isNegativeValue(trancheYtAPYs?.yt_apy) }"
+                >
+                  <!-- <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span> -->
+                  <span> {{ trancheYtAPYs?.yt_apy || 0 | percent : '1.2-2' }} </span>
+                </div>
+              </ng-container>
+            </div>
+
+            <div class="flex flex-row items-center gap-4 -mt-2">
+              <div class="flex flex-col justify-center items-center sm:ml-8">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="17"
+                  viewBox="0 0 2 17"
+                  fill="none"
+                >
+                  <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8.00586"
+                    r="7.5"
+                    fill="#ADC9FF"
+                    fill-opacity="0.2"
+                    stroke="#ADC9FF"
+                  />
+                </svg>
+              </div>
+              <div class="text-xl text-secondary mt-4">Price Impact</div>
+              <div class="flex-auto"></div>
+              <div
+                class="text-xl flex flex-row items-center text-accent mt-4"
+                [class]="{ 'text-error': depositPriceImpact() < 0 }"
+              >
+                <span class="material-symbols-outlined mt-1" *ngIf="depositPriceImpact() >= 0">
+                  add
+                </span>
+                <span> {{ depositPriceImpact() | percent : '1.2-2' }} </span>
+              </div>
+            </div>
             <div class="card-actions mt-4">
-              <button class="btn btn-primary w-full gap-1" [disabled]="swapMintFormRef.invalid">
-                <span class="material-symbols-outlined"> currency_exchange </span>
+              <button
+                class="btn btn-primary w-full gap-1"
+                [disabled]="swapMintFormRef.invalid || !estimateRequiredUtForYt"
+              >
+                <!-- <span class="material-symbols-outlined"> currency_exchange </span> -->
                 <span>Swap</span>
               </button>
             </div>
@@ -191,7 +295,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div
                         class="w-8 rounded-full border-2"
@@ -208,8 +312,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>{{ swapTab | uppercase }}</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>{{ swapTab | uppercase }} {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     *ngIf="swapTab === 'pt'"
@@ -249,7 +352,7 @@
                 <button
                   *ngIf="swapTab === 'pt'"
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxPT()"
                 >
                   Max
@@ -257,7 +360,7 @@
                 <button
                   *ngIf="swapTab === 'yt'"
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputSwapMaxYT()"
                 >
                   Max
@@ -275,7 +378,7 @@
             </div>
 
             <div class="flex flex-row justify-center">
-              <button type="button" class="btn btn-circle" (click)="txMode = 'mint'">
+              <button type="button" class="btn btn-circle" (click)="onChangeTxMode('deposit')">
                 <span class="material-symbols-outlined"> swap_vert </span>
               </button>
             </div>
@@ -283,24 +386,9 @@
 
             <div class="form-control">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
                   <div class="avatar">
                     <div class="w-8 rounded-full">
@@ -312,7 +400,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -333,8 +421,13 @@
                   name="desiredUt"
                 />
               </label>
-              <span class="label">
-                <span class="label-text"></span>
+              <span
+                class="label"
+                *ngIf="swapTab === 'yt' && tranchePool && !isMatured(tranchePool)"
+              >
+                <span class="label-text font-bold text-lg text-error">
+                  YT cannot swap until maturity!
+                </span>
               </span>
             </div>
             <div class="card-actions mt-4">
@@ -346,7 +439,7 @@
                   (swapTab === 'yt' && !isMatured(tranchePool))
                 "
               >
-                <span class="material-symbols-outlined"> currency_exchange </span>
+                <!-- <span class="material-symbols-outlined"> currency_exchange </span> -->
                 <span>Swap</span>
               </button>
             </div>
@@ -354,19 +447,19 @@
 
           <form
             #mintMintFormRef="ngForm"
-            *ngIf="modeTab === 'mint' && txMode === 'mint'"
+            *ngIf="modeTab === 'mint' && txMode === 'deposit'"
             (submit)="onSubmitMint()"
           >
             <div class="join mb-4">
               <button
                 type="button"
                 class="btn btn-sm join-item"
-                [class.btn-neutral]="txMode === 'mint'"
-                (click)="txMode = 'mint'"
+                [class.btn-neutral]="txMode === 'deposit'"
+                (click)="onChangeTxMode('deposit')"
               >
                 Mint
               </button>
-              <button type="button" class="btn btn-sm join-item" (click)="txMode = 'redeem'">
+              <button type="button" class="btn btn-sm join-item" (click)="onChangeTxMode('redeem')">
                 Redeem
               </button>
             </div>
@@ -376,21 +469,6 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <!-- <button type="button" class="btn normal-case">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    {{ vault?.denom | coinDenom | async }}
-                    <div class="flex-auto"></div>
-                    <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                  </button> -->
                   <span>
                     <div class="avatar">
                       <div class="w-8 rounded-full">
@@ -402,7 +480,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.denom | coinDenom | async }}
+                    {{ vault?.deposit_denom | coinDenom | async }}
                   </span>
                   <input
                     class="join-item input input-bordered input-info w-full"
@@ -413,9 +491,9 @@
                     placeholder="0.000000"
                     required
                     type="number"
-                    [(ngModel)]="inputUT"
+                    [(ngModel)]="inputMintUT"
                     [min]="0"
-                    [max]="denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom"
+                    [max]="denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom"
                     pattern="^[0-9]*\.?[0-9]{0,6}$"
                     name="mintUnderlyingAmount"
                     (input)="onChangeMintUnderlyingAmount()"
@@ -423,7 +501,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputMintMaxUT()"
                 >
                   Max
@@ -432,8 +510,8 @@
               <span class="label">
                 <span class="label-text-alt">Available Balance:</span>
                 <span class="label-text-alt">
-                  {{ denomBalancesMap?.[vault?.denom || '']?.amount | coinAmount:vault?.denom }}
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ denomBalancesMap?.[vault?.deposit_denom || '']?.amount | coinAmount:vault?.deposit_denom }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
               </span>
             </div>
@@ -445,10 +523,10 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-accent">
                       <img src="{{ vaultImage?.image }}" />
@@ -459,8 +537,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>PT {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -469,7 +546,7 @@
                 />
               </label>
               <label class="input-group join">
-                <span class="gap-2">
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full border-2 border-primary">
                       <img src="{{ vaultImage?.image }}" />
@@ -480,8 +557,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>YT</div>
-                  <div>{{ vault?.name }}#{{ trancheId }}</div>
+                  <div>YT {{ vault?.name }}#{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -493,9 +569,47 @@
                 <span class="label-text"></span>
               </span>
             </div>
+            <div class="flex flex-row items-center gap-4 -mt-6">
+              <div class="flex flex-col justify-center items-center ml-8">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2"
+                  height="17"
+                  viewBox="0 0 2 17"
+                  fill="none"
+                >
+                  <path d="M1 0.00585938V17.0059" stroke="#ADC9FF" />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8.00586"
+                    r="7.5"
+                    fill="#ADC9FF"
+                    fill-opacity="0.2"
+                    stroke="#ADC9FF"
+                  />
+                </svg>
+              </div>
+              <div class="text-xl text-secondary mt-4">Underlying APY</div>
+              <div class="flex-auto"></div>
+              <div
+                class="text-xl flex flex-row items-center text-accent mt-4"
+                [class]="{ 'text-error': false }"
+              >
+                <!-- <span class="material-symbols-outlined mt-1"> keyboard_arrow_left </span> -->
+                <span> {{ trancheYtAPYs?.ls_apy || 0 | percent : '1.2-2' }} </span>
+              </div>
+            </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="mintMintFormRef.invalid">
-                <span class="material-symbols-outlined"> monetization_on </span>
+                <!-- <span class="material-symbols-outlined"> monetization_on </span> -->
                 <span>Mint</span>
               </button>
             </div>
@@ -507,14 +621,18 @@
             (submit)="onSubmitRedeem()"
           >
             <div class="join mb-4">
-              <button type="button" class="btn btn-sm join-item" (click)="txMode = 'mint'">
+              <button
+                type="button"
+                class="btn btn-sm join-item"
+                (click)="onChangeTxMode('deposit')"
+              >
                 Mint
               </button>
               <button
                 type="button"
                 class="btn btn-sm join-item"
                 [class.btn-neutral]="txMode === 'redeem'"
-                (click)="txMode = 'redeem'"
+                (click)="onChangeTxMode('redeem')"
               >
                 Redeem
               </button>
@@ -525,7 +643,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full border-2 border-accent">
                         <img src="{{ vaultImage?.image }}" />
@@ -536,8 +654,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>PT {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     #pairPtAmountNgModelRef="ngModel"
@@ -558,7 +675,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputRedeemMaxPT()"
                 >
                   Max
@@ -577,7 +694,7 @@
 
               <div>
                 <label class="input-group join">
-                  <span class="gap-2">
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full border-2 border-primary">
                         <img src="{{ vaultImage?.image }}" />
@@ -588,8 +705,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>YT</div>
-                    <div>{{ vault?.name }}#{{ trancheId }}</div>
+                    <div>YT {{ vault?.name }}#{{ trancheId }}</div>
                   </span>
                   <input
                     #pairYtAmountNgModelRef="ngModel"
@@ -610,7 +726,7 @@
                 </label>
                 <button
                   type="button"
-                  class="btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
+                  class="hidden sm:inline-flex btn btn-xs btn-primary mt-3 mr-9 absolute right-0"
                   (click)="inputRedeemMaxYT()"
                 >
                   Max
@@ -632,24 +748,9 @@
 
             <div class="form-control gap-2">
               <span class="label">
-                <span class="label-text">Output</span>
+                <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <!-- <button type="button" class="btn normal-case">
-                  <div class="avatar">
-                    <div class="w-8 rounded-full">
-                      <img src="{{ vaultImage?.image }}" />
-                    </div>
-                    <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                      <div class="w-4 rounded-full">
-                        <img src="{{ vaultImage?.subImage }}" />
-                      </div>
-                    </div>
-                  </div>
-                  {{ vault?.denom | coinDenom | async }}
-                  <div class="flex-auto"></div>
-                  <div class="material-symbols-outlined">keyboard_arrow_down</div>
-                </button> -->
                 <span>
                   <div class="avatar">
                     <div class="w-8 rounded-full">
@@ -661,7 +762,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.denom | coinDenom | async }}
+                  {{ vault?.deposit_denom | coinDenom | async }}
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -675,7 +776,7 @@
             </div>
             <div class="card-actions mt-4">
               <button class="btn btn-primary w-full gap-1" [disabled]="mintRedeemFormRef.invalid">
-                <span class="material-symbols-outlined"> redeem </span>
+                <!-- <span class="material-symbols-outlined"> redeem </span> -->
                 <span>Redeem</span>
               </button>
             </div>
@@ -685,27 +786,27 @@
 
       <div class="2xl:flex-auto"></div>
 
-      <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
+      <div class="card bg-base-200 shadow-xl w-full 2xl:w-9/20">
         <div class="card-body">
-          <div class="flex flex-wrap gap-2 items-center mb-4">
-            <div class="join">
+          <div class="flex flex-wrap gap-2 items-center">
+            <div class="join mb-4">
               <button
                 class="btn btn-sm join-item btn-accent text-neutral"
                 [class.glass]="swapTab === 'yt'"
-                (click)="swapTab = 'pt'"
+                (click)="onChangeSwapTab('pt')"
               >
                 PT
               </button>
               <button
                 class="btn btn-sm join-item btn-primary"
                 [class.glass]="swapTab === 'pt'"
-                (click)="swapTab = 'yt'"
+                (click)="onChangeSwapTab('yt')"
               >
                 YT
               </button>
             </div>
             <div class="flex-auto"></div>
-            <div class="card bg-base-100 flex-row flex-wrap px-4 gap-3 items-center">
+            <div class="card bg-base-100 flex-row flex-wrap px-4 py-2 gap-3 items-center mb-4">
               <div class="avatar">
                 <div
                   class="w-8 rounded-full border-2"
@@ -737,10 +838,10 @@
             </div>
           </div>
 
-          <div class="stats stats-vertical md:stats-horizontal shadow">
+          <div class="stats stats-vertical shadow mb-4">
             <div class="stat">
               <div class="stat-title">Liquidity</div>
-              <div class="stat-value">{{ '0' | currency }}</div>
+              <div class="stat-value">{{ totalLiquidityUSD?.total | currency }}</div>
               <div class="stat-desc"></div>
             </div>
             <!-- <div class="stat">
@@ -750,87 +851,24 @@
             </div> -->
             <div class="stat">
               <div class="stat-title">Underlying APY</div>
-              <div class="stat-value">{{ '0' | percent : '1.2-2' }}</div>
+              <div class="stat-value">{{ trancheYtAPYs?.ls_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat" *ngIf="swapTab === 'pt'">
-              <div class="stat-title">Fixed APY</div>
-              <div class="stat-value">{{ tranchePtAPYs?.pt_apy | percent : '1.2-2' }}</div>
+              <div class="stat-title">
+                Fixed APY (with 1{{ vault?.deposit_denom | coinDenom | async }})
+              </div>
+              <div class="stat-value">{{ tranchePtAPYs?.pt_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
             <div class="stat" *ngIf="swapTab === 'yt'">
-              <div class="stat-title">Long Yield APY</div>
-              <div class="stat-value">{{ trancheYtAPYs?.yt_apy | percent : '1.2-2' }}</div>
+              <div class="stat-title">Long Yield APY (with 10YT)</div>
+              <div class="stat-value">{{ trancheYtAPYs?.yt_apy || 0 | percent : '1.2-2' }}</div>
               <div class="stat-desc"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div class="card bg-base-200 shadow-xl w-full 2xl:w-auto">
-      <div class="card-body">
-        <h2 class="card-title">Transactions</h2>
-        <div class="tabs w-full">
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'all'"
-            (click)="txTab = 'all'"
-          >
-            All
-          </a>
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'swap'"
-            (click)="txTab = 'swap'"
-          >
-            Swaps
-          </a>
-          <a
-            class="tab tab-lg tab-bordered text-accent"
-            [class.border-accent]="txTab === 'liquidity'"
-            (click)="txTab = 'liquidity'"
-          >
-            Liquidity
-          </a>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="table">
-            <thead>
-              <tr class="border-b-2 border-[#adc9ff]">
-                <td>Action</td>
-                <td>Value</td>
-                <td>Token In</td>
-                <td>Token Out</td>
-                <td>Time</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="hover cursor-pointer border-b-2 border-[#adc9ff]">
-                <td>Redeem</td>
-                <td>{{ '1885.86' | currency }}</td>
-                <td></td>
-                <td>
-                  <div class="flex flex-row items-center gap-2">
-                    <div class="avatar">
-                      <div class="w-8 rounded-full">
-                        <img src="{{ vaultImage?.image }}" />
-                      </div>
-                      <div class="avatar -ml-2 mt-4" *ngIf="vaultImage?.subImage">
-                        <div class="w-4 rounded-full">
-                          <img src="{{ vaultImage?.subImage }}" />
-                        </div>
-                      </div>
-                    </div>
-                    0.8957
-                  </div>
-                </td>
-                <td>4d 0h 40 min</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div> -->
   </div>
 </div>

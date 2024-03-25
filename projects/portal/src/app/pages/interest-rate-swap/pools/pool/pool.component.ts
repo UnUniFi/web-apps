@@ -1,7 +1,8 @@
 import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
@@ -16,6 +17,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -28,13 +30,15 @@ export class PoolComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
   poolId$: Observable<string>;
-  pool$: Observable<AllTranches200ResponseTranchesInner>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  poolAPYs$: Observable<TranchePoolAPYs200Response>;
+  pool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  poolAPYs$: Observable<TranchePoolAPYs200Response | undefined>;
+  trancheYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   ptDenom$: Observable<string>;
   lpDenom$: Observable<string>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
+  txMode$: Observable<'deposit' | 'redeem'>;
 
   tokenInAmountForMint$: BehaviorSubject<EstimationInfo | undefined>;
   estimatedMintAmount$: Observable<
@@ -43,15 +47,23 @@ export class PoolComponent implements OnInit {
   lpAmountForRedeem$: BehaviorSubject<EstimationInfo | undefined>;
   estimatedRedeemAmount$: Observable<{ utAmount: number; ptAmount: number } | undefined>;
 
+  lpBalanceUSD$: Observable<number>;
+  totalLiquidityUSD$: Observable<
+    { total: number; assets: { [denom: string]: number } } | undefined
+  >;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
     private readonly configS: ConfigService,
+    private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -60,10 +72,10 @@ export class PoolComponent implements OnInit {
     this.poolId$ = this.route.params.pipe(map((params) => params.id));
     this.pool$ = this.poolId$.pipe(mergeMap((id) => this.irsQuery.getTranche$(id)));
     this.vault$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getVaultByContract$(pool.strategy_contract!)),
+      mergeMap((pool) => this.irsQuery.getVaultByContract$(pool?.strategy_contract!)),
     );
     this.poolAPYs$ = this.pool$.pipe(
-      mergeMap((pool) => this.irsQuery.getTranchePoolAPYs$(pool.id!)),
+      mergeMap((pool) => this.irsQuery.getTranchePoolAPYs$(pool?.id!)),
     );
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
@@ -93,9 +105,8 @@ export class PoolComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           mintAmount:
-            (Number(coins.mint_amount?.amount) /
-              Math.pow(10, getDenomExponent(coins.mint_amount?.denom || ''))) *
-            0.99,
+            Math.floor(Number(coins.mint_amount?.amount) * 0.99) / // 99%
+            Math.pow(10, getDenomExponent(coins.mint_amount?.denom || '')),
           utAmount: !coins.additional_required_amount?.denom?.includes('/pt')
             ? additionalAmount
             : undefined,
@@ -110,7 +121,7 @@ export class PoolComponent implements OnInit {
         if (!info) {
           return of(undefined);
         }
-        return this.irsQuery.estimateRedeemLiquidity(info.poolId, info.amount);
+        return this.irsQuery.estimateRedeemLiquidity$(info.poolId, info.amount);
       }),
     );
     this.estimatedRedeemAmount$ = combineLatest([this.vault$, redeemLiquidity$]).pipe(
@@ -118,16 +129,110 @@ export class PoolComponent implements OnInit {
         if (!vault || !coins) {
           return undefined;
         }
-        const utCoin = coins.find((coin) => coin.denom === vault.denom);
+        const utCoin = coins.find((coin) => coin.denom === vault.deposit_denom);
         const ptCoin = coins.find((coin) => coin.denom?.includes('/pt'));
         return {
           utAmount: utCoin
-            ? (Number(utCoin.amount) / Math.pow(10, getDenomExponent(utCoin.denom!))) * 0.99
+            ? // Math.floor(Number(utCoin.amount) * 0.99) /
+              Number(utCoin.amount) / Math.pow(10, getDenomExponent(utCoin.denom!))
             : 0,
           ptAmount: ptCoin
-            ? (Number(ptCoin.amount) / Math.pow(10, getDenomExponent(ptCoin.denom!))) * 0.99
+            ? // Math.floor(Number(ptCoin.amount) * 0.99) /
+              Number(ptCoin.amount) / Math.pow(10, getDenomExponent(ptCoin.denom!))
             : 0,
         };
+      }),
+    );
+
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const symbol$ = combineLatest([this.pool$, denomMetadataMap$]).pipe(
+      map(([pool, metadata]) => metadata[pool?.deposit_denom || '']?.symbol),
+    );
+    const price$ = symbol$.pipe(
+      mergeMap((symbol) => {
+        if (!symbol) {
+          return of(0);
+        }
+        if (symbol.includes('st')) {
+          symbol = symbol.replace('st', '');
+        }
+        return this.bandProtocolService.getPrice(symbol);
+      }),
+    );
+    const lpBalance$ = combineLatest([this.lpDenom$, this.address$]).pipe(
+      mergeMap(([denom, address]) => this.bankQuery.getBalance$(address, [denom])),
+      map((coins) => coins[0]),
+    );
+    const fullRedeemLiquidity$ = combineLatest([this.pool$, lpBalance$]).pipe(
+      mergeMap(([pool, lpBalance]) =>
+        this.irsQuery.estimateRedeemLiquidity$(pool?.id!, lpBalance.amount!),
+      ),
+    );
+    const tranchePtAPYs$ = this.pool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool?.id!)),
+    );
+    this.trancheYtAPYs$ = this.pool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTrancheYtAPYs$(pool?.id!)),
+    );
+    this.lpBalanceUSD$ = combineLatest([
+      fullRedeemLiquidity$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([redeem, price, apy, ptDenom]) => {
+        let value = 0;
+        if (!price || !redeem) {
+          return 0;
+        }
+        for (const asset of redeem) {
+          const amount =
+            Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom || undefined));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy?.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            value += depositValue;
+          }
+        }
+        return value;
+      }),
+    );
+
+    this.totalLiquidityUSD$ = combineLatest([
+      this.pool$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([pool, price, apy, ptDenom]) => {
+        let value = 0;
+        let assets: { [denom: string]: number } = {};
+        if (!pool?.pool_assets || !price) {
+          return;
+        }
+        for (const asset of pool.pool_assets) {
+          const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy?.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            assets[asset.denom] = ptValue;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            assets[asset.denom!] = depositValue;
+            value += depositValue;
+          }
+        }
+        return { total: value, assets };
       }),
     );
   }
@@ -161,6 +266,16 @@ export class PoolComponent implements OnInit {
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',
+    });
+  }
+
+  onChangeTxMode(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
     });
   }
 }

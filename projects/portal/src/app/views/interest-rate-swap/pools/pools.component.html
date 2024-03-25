@@ -167,11 +167,13 @@
                     </div>
                   </td>
                   <td>
-                    <div class="text-xl font-bold">{{ 0 | currency }}</div>
+                    <div class="text-xl font-bold">
+                      {{ totalLiquiditiesUSD?.[i] || 0 | currency }}
+                    </div>
                   </td>
                   <td>
                     <div class="text-xl font-bold text-accent">
-                      {{ calcTotalPoolAPY(poolsAPYs?.[i]) || 0 | percent : '1.0-2' }}
+                      {{ calcTotalPoolAPY(poolsAPYs?.[i], poolsYtAPYs?.[i]) || 0 | percent : '1.0-2' }}
                     </div>
                   </td>
                 </tr>
@@ -213,7 +215,7 @@
                       <tr>
                         <td class="flex flex-row flex-wrap gap-2 items-end">
                           <div class="text-xl text-accent">
-                            {{ calcTotalPoolAPY(poolsAPYs?.[i]) || 0 | percent : '1.0-2' }}
+                            {{ calcTotalPoolAPY(poolsAPYs?.[i], poolsYtAPYs?.[i]) || 0 | percent : '1.0-2' }}
                           </div>
                           <div class="text-sm">p.a.</div>
                           <span class="material-symbols-outlined text-accent"> bolt </span>
@@ -233,7 +235,7 @@
                           <div class="text-xl font-bold">
                             {{ calcMaturity(pool) | date : 'mediumDate' }}
                           </div>
-                          <div class="text-sm opacity-50">{{ calcRestDays(pool) }}</div>
+                          <div class="text-sm opacity-50">{{ calcRestDays(pool) }} Days</div>
                         </td>
                       </tr>
                     </tbody>

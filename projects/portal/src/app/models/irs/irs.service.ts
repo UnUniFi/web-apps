@@ -87,13 +87,13 @@ export class IrsService {
     TrancheType: ununificlient.proto.ununifi.irs.TrancheType,
     readableAmountMap: { [denom: string]: number },
     denom?: string,
-    requiredUT?: number,
+    requiredDeposit?: number,
   ) {
     const coins = this.bankService.convertDenomReadableAmountMapToCoins(readableAmountMap);
-    const requiredUTAmount =
-      requiredUT && denom
+    const requiredRedeemAmount =
+      requiredDeposit && denom
         ? this.bankService.convertDenomReadableAmountMapToCoins({
-            [denom]: requiredUT,
+            [denom]: requiredDeposit,
           })[0].amount
         : '0';
     const msg = new ununificlient.proto.ununifi.irs.MsgWithdrawFromTranche({
@@ -101,7 +101,7 @@ export class IrsService {
       tranche_id: Long.fromString(trancheId),
       tranche_type: TrancheType,
       tokens: coins,
-      required_ut: requiredUTAmount,
+      required_redeem_amount: requiredRedeemAmount,
     });
     return msg;
   }

@@ -5,18 +5,14 @@
     <ng-template #exist>
       <h2 class="card-title">Transaction accepted!</h2>
       <p style="white-space: pre-wrap">{{ txData?.msg }}</p>
-      <form (submit)="onClickClose()">
-        <div class="hidden md:block mockup-code text-primary-content mb-4">
+      <form class="max-w-full" (submit)="onClickClose()">
+        <div class="mockup-code text-primary-content mb-4">
           <pre><code class="break-all font-mono">{{ txData?.txHash }}</code></pre>
-          <div class="flex flex-row justify-end mt-2 mr-4">
+          <div class="flex flex-row md:justify-end mt-2 mx-4">
             <label class="btn" (click)="copyClipboard(txData?.txHash!)">
               <span class="material-symbols-outlined">content_copy</span>Copy
             </label>
           </div>
-        </div>
-        <div class="flex flex-col md:hidden">
-          <P class="text-md">Tx hash</P>
-          <p class="text-lg break-all font-mono">{{ txData?.txHash }}</p>
         </div>
 
         <div class="flex flex-col md:flex-row justify-end">

@@ -16,6 +16,7 @@ import { ReadableEstimationInfo } from 'projects/portal/src/app/pages/interest-r
 import {
   AllTranches200ResponseTranchesInner,
   TranchePoolAPYs200Response,
+  TrancheYtAPYs200Response,
   VaultByContract200ResponseVault,
 } from 'ununifi-client/esm/openapi';
 
@@ -36,6 +37,8 @@ export class PoolComponent implements OnInit, OnChanges {
   @Input()
   poolAPYs?: TranchePoolAPYs200Response | null;
   @Input()
+  trancheYtAPYs?: TrancheYtAPYs200Response | null;
+  @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
   ptDenom?: string | null;
@@ -47,8 +50,12 @@ export class PoolComponent implements OnInit, OnChanges {
   estimatedMintAmount?: { mintAmount: number; utAmount?: number; ptAmount?: number } | null;
   @Input()
   estimatedRedeemAmount?: { utAmount: number; ptAmount: number } | null;
-
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  @Input()
+  lpBalanceUSD?: number | null;
+  @Input()
+  totalLiquidityUSD?: { total: number; assets: { [denom: string]: number } } | null;
+  @Input()
+  txMode?: 'deposit' | 'redeem' | null;
   inputUT?: string;
   inputPT?: string;
   inputLP?: string;
@@ -63,22 +70,22 @@ export class PoolComponent implements OnInit, OnChanges {
   @Output()
   appChangeRedeemLP: EventEmitter<ReadableEstimationInfo> =
     new EventEmitter<ReadableEstimationInfo>();
+  @Output()
+  appChangeTxMode: EventEmitter<'deposit' | 'redeem'> = new EventEmitter<'deposit' | 'redeem'>();
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.estimatedMintAmount) {
-      if (this.estimatedMintAmount?.utAmount) {
-        this.inputUT = this.estimatedMintAmount?.utAmount.toString();
-      } else if (this.estimatedMintAmount?.ptAmount) {
-        this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
-      } else if (this.inputPT && !this.inputUT) {
-        this.inputUT = this.inputPT;
-      } else if (this.inputUT && !this.inputPT) {
-        this.inputPT = this.inputUT;
-      }
+    if (this.estimatedMintAmount?.utAmount) {
+      this.inputUT = this.estimatedMintAmount?.utAmount.toString();
+    } else if (this.estimatedMintAmount?.ptAmount) {
+      this.inputPT = this.estimatedMintAmount?.ptAmount.toString();
+    } else if (this.inputPT && !this.inputUT) {
+      this.inputUT = this.inputPT;
+    } else if (this.inputUT && !this.inputPT) {
+      this.inputPT = this.inputUT;
     }
   }
 
@@ -103,7 +110,7 @@ export class PoolComponent implements OnInit, OnChanges {
       alert('Invalid mint amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -113,7 +120,7 @@ export class PoolComponent implements OnInit, OnChanges {
       lpDenom: `irs/tranche/${this.poolId}/ls`,
       readableAmountMapInMax: {
         [`irs/tranche/${this.poolId}/pt`]: Number(this.inputPT),
-        [this.vault.denom]: Number(this.inputUT),
+        [this.vault.deposit_denom]: Number(this.inputUT),
       },
     });
   }
@@ -135,17 +142,17 @@ export class PoolComponent implements OnInit, OnChanges {
   }
 
   onChangeDepositUt() {
-    if (this.poolId && this.inputUT && this.vault?.denom) {
+    if (this.poolId && this.inputUT && this.vault?.deposit_denom) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUT),
       });
     }
   }
 
   onChangeDepositPt() {
-    if (this.poolId && this.inputUT) {
+    if (this.poolId && this.inputPT) {
       this.appChangeMintLP.emit({
         poolId: this.poolId,
         denom: `irs/tranche/${this.poolId}/pt`,
@@ -179,18 +186,36 @@ export class PoolComponent implements OnInit, OnChanges {
     return days;
   }
 
-  calcTotalPoolAPY(apy: TranchePoolAPYs200Response | null | undefined) {
-    if (!apy) {
-      return 0;
+  calcUnderlyingAPY(
+    poolApy: TranchePoolAPYs200Response | null | undefined,
+    ytApy: TrancheYtAPYs200Response | null | undefined,
+  ): number {
+    let apy = 0;
+    if (poolApy && ytApy) {
+      apy += Number(ytApy.ls_apy) * Number(poolApy.pt_percentage_in_pool);
     }
-    return Number(apy.liquidity_apy) + Number(apy.discount_pt_apy);
+    return apy;
+  }
+
+  calcTotalPoolAPY(
+    poolApy: TranchePoolAPYs200Response | null | undefined,
+    ytApy: TrancheYtAPYs200Response | null | undefined,
+  ): number {
+    let apy = 0;
+    if (poolApy) {
+      apy += Number(poolApy.liquidity_apy) + Number(poolApy.discount_pt_apy);
+      if (ytApy) {
+        apy += Number(ytApy.ls_apy) * Number(poolApy.pt_percentage_in_pool);
+      }
+    }
+    return apy;
   }
 
   inputMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUT = amount.toString();
         this.onChangeDepositUt();
@@ -218,5 +243,10 @@ export class PoolComponent implements OnInit, OnChanges {
         this.onChangeWithdraw();
       }
     }
+  }
+
+  onChangeTxMode(mode: 'deposit' | 'redeem') {
+    this.txMode = mode;
+    this.appChangeTxMode.emit(mode);
   }
 }

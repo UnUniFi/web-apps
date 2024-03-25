@@ -41,10 +41,10 @@ const messageModules = [
 
 const apps = [
   { name: 'Utilities', link: '/', icon: 'assistant' },
-  { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
-  { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
+  // { name: 'NFT Backed Loan', link: '/nft-backed-loan', icon: 'loyalty' },
+  // { name: 'Yield Aggregator', link: '/yield-aggregator/vaults', icon: 'pie_chart' },
   { name: 'Interest Rate Swap', link: '/interest-rate-swap/simple-vaults', icon: 'table_chart' },
-  { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
+  // { name: 'Derivatives', link: '/derivatives/perpetual-futures', icon: 'show_chart' },
 ];
 
 const denomMetadata = [
@@ -258,6 +258,11 @@ const irsVaultsImages=[
     image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
     subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
   },
+  {
+    contract:'ununifi1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqhp8g9l',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png',
+    subImage: "https://s2.coinmarketcap.com/static/img/coins/64x64/21781.png"
+  }
 ]
 
 const configs = [

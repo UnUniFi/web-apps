@@ -1,6 +1,6 @@
 import { EstimationInfo, ReadableEstimationInfo } from '../../vaults/vault/vault.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
 import { IRSVaultImage, ConfigService } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
@@ -27,16 +27,17 @@ import {
 export class SimpleVaultComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
-  vault$: Observable<VaultByContract200ResponseVault>;
-  tranches$: Observable<AllTranches200ResponseTranchesInner[]>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
+  tranches$: Observable<AllTranches200ResponseTranchesInner[] | undefined>;
   trancheFixedAPYs$: Observable<(TranchePtAPYs200Response | undefined)[]>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
-  tranchePtBalance$: Observable<number>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   selectedPoolId$?: Observable<string | undefined>;
-  selectPoolId$?: BehaviorSubject<string | undefined>;
-  ptAmount$: Observable<number>;
-  ptValue$: Observable<number>;
+  selectedFixedAPYs$?: Observable<TranchePtAPYs200Response | undefined>;
+  ptCoin$: Observable<cosmosclient.proto.cosmos.base.v1beta1.ICoin | undefined>;
+  tranchePtAmount$: Observable<number>;
+  ptValue$: Observable<number | undefined>;
+  txMode$: Observable<'deposit' | 'redeem'>;
 
   utAmountForMintPt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateMintPt$: Observable<number | undefined>;
@@ -44,9 +45,11 @@ export class SimpleVaultComponent implements OnInit {
   estimateRedeemPt$: Observable<number | undefined>;
   afterPtAmount$: Observable<number>;
   afterPtValue$: Observable<number>;
+  actualFixedAPYs$: Observable<TranchePtAPYs200Response | undefined>;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly bankQuery: BankQueryService,
     private readonly irsQuery: IrsQueryService,
@@ -54,6 +57,8 @@ export class SimpleVaultComponent implements OnInit {
     private readonly bankService: BankService,
     private readonly configS: ConfigService,
   ) {
+    const selectPoolId$ = this.route.queryParams.pipe(map((params) => params.tranche));
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -65,65 +70,57 @@ export class SimpleVaultComponent implements OnInit {
     this.tranches$ = this.contractAddress$.pipe(
       mergeMap((contract) => this.irsQuery.listTranchesByContract$(contract)),
     );
-    this.selectPoolId$ = new BehaviorSubject<string | undefined>(undefined);
-    this.selectedPoolId$ = combineLatest([this.tranches$, this.selectPoolId$.asObservable()]).pipe(
+    this.selectedPoolId$ = combineLatest([this.tranches$, selectPoolId$]).pipe(
       map(([tranches, selected]) => {
         if (selected) {
-          console.log(selected);
           return selected;
         }
-        return tranches[0]?.id;
+        return tranches ? tranches[0].id : undefined;
       }),
+    );
+    this.selectedFixedAPYs$ = this.selectedPoolId$.pipe(
+      mergeMap((poolId) => (poolId ? this.irsQuery.getTranchePtAPYs$(poolId) : of(undefined))),
     );
 
     this.trancheFixedAPYs$ = this.tranches$.pipe(
       mergeMap((tranches) =>
         Promise.all(
-          tranches.map(async (tranche) =>
-            tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
-          ),
+          tranches
+            ? tranches.map(async (tranche) =>
+                tranche.id ? await this.irsQuery.getTranchePtAPYs(tranche.id) : undefined,
+              )
+            : [],
         ),
       ),
     );
     this.denomBalancesMap$ = this.address$.pipe(
       mergeMap((address) => this.bankQuery.getDenomBalanceMap$(address)),
     );
-    this.tranchePtBalance$ = combineLatest([this.selectedPoolId$, this.denomBalancesMap$]).pipe(
+    this.ptCoin$ = combineLatest([this.selectedPoolId$, this.denomBalancesMap$]).pipe(
       map(([poolId, denomBalancesMap]) => {
         const denom = `irs/tranche/${poolId}/pt`;
-        const balance = denomBalancesMap[denom];
-        if (!balance) {
-          return 0;
+        const coin = denomBalancesMap[denom];
+        if (!coin) {
+          return undefined;
         }
-        const exponent = getDenomExponent(denom);
-        return Number(balance?.amount || 0) / Math.pow(10, exponent);
+        return coin;
       }),
     );
-    const ptBalances$ = combineLatest([this.tranches$, this.denomBalancesMap$]).pipe(
-      map(([tranches, denomBalancesMap]) =>
-        tranches.map(
-          (tranche) =>
-            denomBalancesMap[`irs/tranche/${tranche.id}/pt`] || {
-              amount: '0',
-              denom: `irs/tranche/${tranche.id}/pt`,
-            },
-        ),
-      ),
-    );
-    this.ptAmount$ = ptBalances$.pipe(
-      map((ptBalances) => ptBalances.reduce((a, b) => a + Number(b.amount), 0)),
-    );
-    this.ptValue$ = combineLatest([ptBalances$, this.trancheFixedAPYs$]).pipe(
-      map(([ptBalance, fixedAPYs]) => {
-        let value = 0;
-        for (let i = 0; i < ptBalance.length; i++) {
-          if (ptBalance[i] && fixedAPYs[i]) {
-            if (fixedAPYs[i]?.pt_rate_per_ut) {
-              value += Number(ptBalance[i].amount) / Number(fixedAPYs[i]?.pt_rate_per_ut);
-            }
-          }
+    this.tranchePtAmount$ = this.ptCoin$.pipe(
+      map((coin) => {
+        if (!coin?.denom) {
+          return 0;
         }
-        return Math.floor(value);
+        const exponent = getDenomExponent(coin.denom);
+        return Number(coin.amount) / Math.pow(10, exponent);
+      }),
+    );
+    this.ptValue$ = combineLatest([this.ptCoin$, this.selectedFixedAPYs$]).pipe(
+      map(([ptCoin, fixedAPYs]) => {
+        if (!ptCoin?.amount || !fixedAPYs?.pt_rate_per_deposit) {
+          return 0;
+        }
+        return Number(ptCoin.amount) / Number(fixedAPYs.pt_rate_per_deposit);
       }),
     );
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
@@ -162,13 +159,13 @@ export class SimpleVaultComponent implements OnInit {
       }),
     );
     this.afterPtAmount$ = combineLatest([
-      this.ptAmount$,
+      this.ptCoin$,
       this.ptAmountForRedeemPt$.asObservable(),
       this.estimateMintPt$,
     ]).pipe(
       map(
-        ([ptAmount, redeemPt, mintPt]) =>
-          (ptAmount || 0) - Number(redeemPt?.amount || 0) + (mintPt || 0),
+        ([ptCoin, redeemPt, mintPt]) =>
+          Number(ptCoin?.amount || 0) - Number(redeemPt?.amount || 0) + (mintPt || 0),
       ),
     );
     this.afterPtValue$ = combineLatest([
@@ -180,12 +177,23 @@ export class SimpleVaultComponent implements OnInit {
       this.estimateMintPt$,
     ]).pipe(
       map(([ptValue, tranches, id, fixedAPYs, redeemPt, mintPt]) => {
-        const index = tranches.findIndex((tranche) => tranche?.id === id);
-        if (!fixedAPYs[index]?.pt_rate_per_ut) {
+        const index = tranches?.findIndex((tranche) => tranche?.id === id);
+        if (index == undefined || !fixedAPYs[index]?.pt_rate_per_deposit) {
           return ptValue || 0;
         }
-        const rate = Number(fixedAPYs[index]?.pt_rate_per_ut);
+        const rate = Number(fixedAPYs[index]?.pt_rate_per_deposit);
         return (ptValue || 0) + (mintPt || 0) / rate - Number(redeemPt?.amount || 0) / rate;
+      }),
+    );
+    this.actualFixedAPYs$ = combineLatest([
+      this.selectedPoolId$,
+      this.utAmountForMintPt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, depositAmount]) => {
+        if (!poolId || !depositAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTranchePtAPYs$(poolId, depositAmount.amount);
       }),
     );
   }
@@ -193,7 +201,7 @@ export class SimpleVaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onMintPT(data: MintPtRequest) {
-    // swap UT -> PT
+    // swap DepositToken -> PT
     this.irsAppService.mintPT(data);
   }
   onChangeMintPT(data: ReadableEstimationInfo) {
@@ -207,7 +215,7 @@ export class SimpleVaultComponent implements OnInit {
     });
   }
   onRedeemPT(data: RedeemPtRequest) {
-    // swap PT -> UT
+    // swap PT -> DepositToken
     this.irsAppService.redeemPT(data);
   }
   onChangeRedeemPT(data: ReadableEstimationInfo) {
@@ -227,6 +235,21 @@ export class SimpleVaultComponent implements OnInit {
     this.ptAmountForRedeemPt$.next(undefined);
   }
   onSelectTranche(id: string) {
-    this.selectPoolId$?.next(id);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tranche: id,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeTxMode(mode: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
   }
 }

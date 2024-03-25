@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import cosmosclient from '@cosmos-client/core';
+import { BandProtocolService } from 'projects/portal/src/app/models/band-protocols/band-protocol.service';
 import { ConfigService, IRSVaultImage } from 'projects/portal/src/app/models/config.service';
 import { getDenomExponent } from 'projects/portal/src/app/models/cosmos/bank.model';
 import { BankQueryService } from 'projects/portal/src/app/models/cosmos/bank.query.service';
@@ -46,12 +47,16 @@ export interface ReadableEstimationInfo {
 export class VaultComponent implements OnInit {
   address$: Observable<string>;
   contractAddress$: Observable<string>;
-  vault$: Observable<VaultByContract200ResponseVault>;
+  vault$: Observable<VaultByContract200ResponseVault | undefined>;
   trancheId$: Observable<string>;
-  tranchePool$: Observable<AllTranches200ResponseTranchesInner>;
-  trancheYtAPYs$: Observable<TrancheYtAPYs200Response>;
-  tranchePtAPYs$: Observable<TranchePtAPYs200Response>;
+  tranchePool$: Observable<AllTranches200ResponseTranchesInner | undefined>;
+  trancheYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
+  tranchePtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
+  actualYtAPYs$: Observable<TrancheYtAPYs200Response | undefined>;
+  actualPtAPYs$: Observable<TranchePtAPYs200Response | undefined>;
   swapTab$: Observable<'pt' | 'yt'>;
+  modeTab$: Observable<'mint' | 'swap'>;
+  txMode$: Observable<'deposit' | 'redeem'>;
   vaultImage$?: Observable<IRSVaultImage | undefined>;
   denomBalancesMap$: Observable<{ [symbol: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin }>;
   ptDenom$: Observable<string>;
@@ -67,20 +72,30 @@ export class VaultComponent implements OnInit {
   estimateRedeemPtYt$: Observable<
     { redeemAmount: number; ytAmount?: number; ptAmount?: number } | undefined
   >;
-  utAmountForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
-  estimateMintYt$: Observable<number | undefined>;
+  // utAmountForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
+  // estimateMintYt$: Observable<number | undefined>;
+  ytAmountDesiredForMintYt$: BehaviorSubject<EstimationInfo | undefined>;
+  estimateRequiredUtForYt$: Observable<number | undefined>;
   ytAmountForRedeemYt$: BehaviorSubject<EstimationInfo | undefined>;
   estimateRedeemMaturedYt$: Observable<number | undefined>;
+  totalLiquidityUSD$: Observable<
+    { total: number; assets: { [denom: string]: number } } | undefined
+  >;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private readonly walletService: WalletService,
     private readonly irsQuery: IrsQueryService,
     private readonly irsAppService: IrsApplicationService,
     private readonly bankService: BankService,
     private readonly bankQuery: BankQueryService,
     private readonly configS: ConfigService,
+    private readonly bandProtocolService: BandProtocolService,
   ) {
+    this.swapTab$ = this.route.queryParams.pipe(map((params) => params.swap || 'pt'));
+    this.modeTab$ = this.route.queryParams.pipe(map((params) => params.mode || 'mint'));
+    this.txMode$ = this.route.queryParams.pipe(map((params) => params.tx || 'deposit'));
     this.address$ = this.walletService.currentStoredWallet$.pipe(
       filter((wallet): wallet is StoredWallet => wallet !== undefined && wallet !== null),
       map((wallet) => wallet.address),
@@ -97,7 +112,6 @@ export class VaultComponent implements OnInit {
     this.tranchePtAPYs$ = this.trancheId$.pipe(
       mergeMap((id) => this.irsQuery.getTranchePtAPYs$(id)),
     );
-    this.swapTab$ = this.route.queryParams.pipe(map((params) => params.view || 'pt'));
     const images$ = this.configS.config$.pipe(map((config) => config?.irsVaultsImages ?? []));
     this.vaultImage$ = combineLatest([this.contractAddress$, images$]).pipe(
       map(([contract, images]) => images.find((image) => image.contract === contract)),
@@ -109,7 +123,8 @@ export class VaultComponent implements OnInit {
     this.ytDenom$ = this.trancheId$.pipe(map((id) => `irs/tranche/${id}/yt`));
 
     this.utAmountForMintPt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
-    this.utAmountForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
+    // this.utAmountForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
+    this.ytAmountDesiredForMintYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.ptAmountForRedeemPt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.utAmountForMintPtYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
     this.tokenInAmountForRedeemPtYt$ = new BehaviorSubject<EstimationInfo | undefined>(undefined);
@@ -181,9 +196,9 @@ export class VaultComponent implements OnInit {
           Math.pow(10, getDenomExponent(coins.additional_required_amount?.denom || ''));
         return {
           redeemAmount:
-            (Number(coins.redeem_amount?.amount) /
-              Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || ''))) *
-            0.99,
+            Number(coins.redeem_amount?.amount) /
+            Math.pow(10, getDenomExponent(coins.redeem_amount?.denom || '')),
+          // * 0.99,
           ytAmount: coins.additional_required_amount?.denom?.includes('/yt')
             ? additionalAmount
             : undefined,
@@ -193,19 +208,35 @@ export class VaultComponent implements OnInit {
         };
       }),
     );
-    this.estimateMintYt$ = this.utAmountForMintYt$.asObservable().pipe(
+    // this.estimateMintYt$ = this.utAmountForMintYt$.asObservable().pipe(
+    //   mergeMap((info) => {
+    //     if (!info) {
+    //       return of(undefined);
+    //     }
+    //     return this.irsQuery.estimateSwapToYt$(info.poolId, info.denom, info.amount);
+    //   }),
+    //   map((coin) => {
+    //     if (!coin) {
+    //       return undefined;
+    //     }
+    //     const exponent = getDenomExponent(coin.denom || '');
+    //     // return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent);
+    //     return Number(coin.amount) / Math.pow(10, exponent);
+    //   }),
+    // );
+    this.estimateRequiredUtForYt$ = this.ytAmountDesiredForMintYt$.asObservable().pipe(
       mergeMap((info) => {
         if (!info) {
           return of(undefined);
         }
-        return this.irsQuery.estimateSwapUtToYt$(info.poolId, info.denom, info.amount);
+        return this.irsQuery.estimateRequiredDepositSwapToYt$(info.poolId, info.amount);
       }),
       map((coin) => {
         if (!coin) {
-          return undefined;
+          return 0;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return (Number(coin.amount) / Math.pow(10, exponent)) * 0.99;
+        return Math.floor(Number(coin.amount) * 1.01) / Math.pow(10, exponent);
       }),
     );
     this.estimateRedeemMaturedYt$ = this.ytAmountForRedeemYt$.asObservable().pipe(
@@ -220,7 +251,81 @@ export class VaultComponent implements OnInit {
           return undefined;
         }
         const exponent = getDenomExponent(coin.denom || '');
-        return Number(coin.amount) / Math.pow(10, exponent);
+        return Math.floor(Number(coin.amount) * 0.99) / Math.pow(10, exponent); // 99%
+      }),
+    );
+
+    const denomMetadataMap$ = this.bankQuery.getDenomMetadataMap$();
+    const symbol$ = combineLatest([this.tranchePool$, denomMetadataMap$]).pipe(
+      map(([pool, metadata]) => {
+        return metadata[pool?.deposit_denom || '']?.symbol;
+      }),
+    );
+    const price$ = symbol$.pipe(
+      mergeMap((symbol) => {
+        if (!symbol) {
+          return of(0);
+        }
+        if (symbol.includes('st')) {
+          symbol = symbol.replace('st', '');
+        }
+        return this.bandProtocolService.getPrice(symbol);
+      }),
+    );
+    const tranchePtAPYs$ = this.tranchePool$.pipe(
+      mergeMap((pool) => this.irsQuery.getTranchePtAPYs$(pool?.id!)),
+    );
+    this.totalLiquidityUSD$ = combineLatest([
+      this.tranchePool$,
+      price$,
+      tranchePtAPYs$,
+      this.ptDenom$,
+    ]).pipe(
+      map(([pool, price, apy, ptDenom]) => {
+        let value = 0;
+        let assets: { [denom: string]: number } = {};
+        if (!pool?.pool_assets || !price) {
+          return;
+        }
+        for (const asset of pool.pool_assets) {
+          const amount = Number(asset.amount) / Math.pow(10, getDenomExponent(asset.denom));
+          if (asset.denom === ptDenom) {
+            const rate = Number(apy?.pt_rate_per_deposit);
+            if (!rate) {
+              continue;
+            }
+            const ptValue = (amount * price) / rate;
+            assets[asset.denom] = ptValue;
+            value += ptValue;
+          } else {
+            const depositValue = amount * price;
+            assets[asset.denom!] = depositValue;
+            value += depositValue;
+          }
+        }
+        return { total: value, assets };
+      }),
+    );
+    this.actualPtAPYs$ = combineLatest([
+      this.trancheId$,
+      this.utAmountForMintPt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, depositAmount]) => {
+        if (!poolId || !depositAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTranchePtAPYs$(poolId, depositAmount.amount);
+      }),
+    );
+    this.actualYtAPYs$ = combineLatest([
+      this.trancheId$,
+      this.ytAmountDesiredForMintYt$.asObservable(),
+    ]).pipe(
+      mergeMap(([poolId, desiredAmount]) => {
+        if (!poolId || !desiredAmount) {
+          return of(undefined);
+        }
+        return this.irsQuery.getTrancheYtAPYs$(poolId, desiredAmount.amount);
       }),
     );
   }
@@ -228,7 +333,7 @@ export class VaultComponent implements OnInit {
   ngOnInit(): void {}
 
   onMintPT(data: MintPtRequest) {
-    // swap UT -> PT
+    // swap DepositToken -> PT
     this.irsAppService.mintPT(data);
   }
   onChangeMintPT(data: ReadableEstimationInfo) {
@@ -242,7 +347,7 @@ export class VaultComponent implements OnInit {
     });
   }
   onRedeemPT(data: RedeemPtRequest) {
-    // swap PT -> UT
+    // swap PT -> DepositToken
     this.irsAppService.redeemPT(data);
   }
   onChangeRedeemPT(data: ReadableEstimationInfo) {
@@ -256,7 +361,7 @@ export class VaultComponent implements OnInit {
     });
   }
   onMintPTYT(data: MintPtYtRequest) {
-    // mint UT -> PT + YT
+    // mint DepositToken -> PT + YT
     this.irsAppService.mintPTYT(data);
   }
   onChangeMintPTYT(data: ReadableEstimationInfo) {
@@ -289,7 +394,12 @@ export class VaultComponent implements OnInit {
     const coin = this.bankService.convertDenomReadableAmountMapToCoins({
       [data.denom]: data.readableAmount,
     })[0];
-    this.utAmountForMintYt$.next({
+    // this.utAmountForMintYt$.next({
+    //   poolId: data.poolId,
+    //   denom: data.denom,
+    //   amount: coin.amount || '0',
+    // });
+    this.ytAmountDesiredForMintYt$.next({
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',
@@ -306,6 +416,33 @@ export class VaultComponent implements OnInit {
       poolId: data.poolId,
       denom: data.denom,
       amount: coin.amount || '0',
+    });
+  }
+  onChangeSwapTab(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        swap: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeModeTab(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        mode: mode,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  onChangeTxMode(mode: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tx: mode,
+      },
+      queryParamsHandling: 'merge',
     });
   }
 }

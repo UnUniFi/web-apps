@@ -26,6 +26,8 @@ export class ContractVaultsComponent implements OnInit {
   trancheLongAPYs?: (TrancheYtAPYs200Response | undefined)[] | null;
   @Input()
   vaultImage?: IRSVaultImage | null;
+  @Input()
+  trancheTokenPrices?: { depositPrice: number; ptPrice: number; ytPrice: number }[] | null;
 
   sortType?: string;
   viewMode?: 'table' | 'grid' = 'grid';

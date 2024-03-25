@@ -28,8 +28,6 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   denomBalancesMap?: { [denom: string]: cosmosclient.proto.cosmos.base.v1beta1.ICoin } | null;
   @Input()
-  tranchePtBalance?: number | null;
-  @Input()
   vaultImage?: IRSVaultImage | null;
   @Input()
   estimateMintPt?: number | null;
@@ -38,7 +36,11 @@ export class SimpleVaultComponent implements OnInit {
   @Input()
   selectedPoolId?: string | null;
   @Input()
-  ptAmount?: number | null;
+  selectedFixedAPYs?: TranchePtAPYs200Response | null;
+  @Input()
+  ptCoin?: cosmosclient.proto.cosmos.base.v1beta1.ICoin | null;
+  @Input()
+  tranchePtAmount?: number | null;
   @Input()
   ptValue?: number | null;
 
@@ -46,6 +48,10 @@ export class SimpleVaultComponent implements OnInit {
   afterPtAmount?: number | null;
   @Input()
   afterPtValue?: number | null;
+  @Input()
+  actualFixedAPYs?: TranchePtAPYs200Response | null;
+  @Input()
+  txMode?: 'deposit' | 'redeem' | null;
 
   inputUnderlying?: string;
   inputPT?: string;
@@ -66,8 +72,8 @@ export class SimpleVaultComponent implements OnInit {
   appDeleteWithdraw: EventEmitter<{}> = new EventEmitter<{}>();
   @Output()
   appSelectTranche: EventEmitter<string> = new EventEmitter<string>();
-
-  tab: 'deposit' | 'withdraw' = 'deposit';
+  @Output()
+  appChangeTxMode: EventEmitter<'deposit' | 'redeem'> = new EventEmitter<'deposit' | 'redeem'>();
 
   constructor(private router: Router) {}
 
@@ -92,7 +98,7 @@ export class SimpleVaultComponent implements OnInit {
       alert('Please input the token amount.');
       return;
     }
-    if (!this.vault?.denom) {
+    if (!this.vault?.deposit_denom) {
       alert('Invalid vault denom.');
       return;
     }
@@ -103,7 +109,7 @@ export class SimpleVaultComponent implements OnInit {
     this.appMintPT.emit({
       trancheId: this.selectedPoolId,
       trancheType: 1,
-      utDenom: this.vault.denom,
+      depositDenom: this.vault.deposit_denom,
       readableAmount: Number(this.inputUnderlying),
     });
   }
@@ -126,10 +132,10 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onChangeDeposit() {
-    if (this.selectedPoolId && this.vault?.denom && this.inputUnderlying !== undefined) {
+    if (this.selectedPoolId && this.vault?.deposit_denom && this.inputUnderlying !== undefined) {
       this.appChangeMintPT.emit({
         poolId: this.selectedPoolId,
-        denom: this.vault.denom,
+        denom: this.vault.deposit_denom,
         readableAmount: Number(this.inputUnderlying),
       });
     }
@@ -145,15 +151,17 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   onSwitchDepositTab() {
-    this.tab = 'deposit';
+    this.txMode = 'deposit';
     this.inputPT = undefined;
     this.appDeleteWithdraw.emit({});
+    this.appChangeTxMode.emit('deposit');
   }
 
   onSwitchWithdrawTab() {
-    this.tab = 'withdraw';
+    this.txMode = 'redeem';
     this.inputUnderlying = undefined;
     this.appDeleteDeposit.emit({});
+    this.appChangeTxMode.emit('redeem');
   }
 
   calcMaturity(pool: AllTranches200ResponseTranchesInner): number {
@@ -172,14 +180,36 @@ export class SimpleVaultComponent implements OnInit {
   }
 
   inputMaxUT() {
-    if (this.denomBalancesMap && this.vault?.denom) {
-      const balance = this.denomBalancesMap[this.vault.denom];
+    if (this.denomBalancesMap && this.vault?.deposit_denom) {
+      const balance = this.denomBalancesMap[this.vault.deposit_denom];
       if (balance) {
-        const exponent = getDenomExponent(this.vault.denom);
+        const exponent = getDenomExponent(this.vault.deposit_denom);
         const amount = Number(balance.amount) / Math.pow(10, exponent);
         this.inputUnderlying = amount.toString();
         this.onChangeDeposit();
       }
     }
+  }
+
+  isNegativeValue(value: string | undefined): boolean {
+    if (value === undefined) {
+      return false;
+    }
+    return Number(value) < 0;
+  }
+
+  depositPriceImpact(): number {
+    if (!this.actualFixedAPYs || !this.selectedFixedAPYs) {
+      return 0;
+    }
+    return Number(this.actualFixedAPYs.pt_apy) - Number(this.selectedFixedAPYs.pt_apy);
+  }
+
+  withdrawPriceImpact(): number {
+    if (!this.inputPT || !this.estimateRedeemPt) {
+      return 0;
+    }
+    const usedPt = Number(this.inputPT) * Math.pow(10, 6);
+    return Number(this.estimateRedeemPt) / usedPt - 1;
   }
 }

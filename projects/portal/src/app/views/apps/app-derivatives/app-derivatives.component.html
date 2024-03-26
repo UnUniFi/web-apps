@@ -77,7 +77,7 @@
             <span>Apps</span>
           </li>
           <ng-container *ngFor="let app of apps">
-            <li >
+            <li>
               <label class="flex gap-4" routerLink="{{ app.link }}">
                 <span class="flex-none">
                   <span class="material-symbols-outlined">{{ app.icon }}</span>
@@ -108,11 +108,14 @@
         </ul>
       </div>
 
-      <div class="flex-1 gap-4">
+      <div class="flex-1 gap-2">
         <button class="align-middle" routerLink="/">
-          <img class="p-1 h-12 sm:hidden" src="assets/no-logo-horizontal.png" />
-          <img class="p-1 h-12 hidden sm:block" src="assets/logo-horizontal.png" />
+          <img class="p-1 w-10 h-10" src="assets/favicon.png" />
         </button>
+        <h1 style="max-width: 200px">
+          <span style="font-family: Tomorrow; font-size: 24px; letter-spacing: 1.33px">GLUON</span>
+        </h1>
+
         <app-app-tool class="hidden md:block" [selectedAppName]="'Derivatives'"></app-app-tool>
       </div>
       <div class="flex-none gap-4">

@@ -36,7 +36,7 @@
               </div>
               <div class="text-xl flex flex-row">
                 <p class="text-accent font-bold">
-                  {{ trancheFixedAPYs?.[i]?.pt_apy | percent : '1.2-2' }}
+                  {{ trancheFixedAPYs?.[i]?.pt_apy || 0 | percent : '1.2-2' }}
                 </p>
                 Fixed APY
               </div>
@@ -124,7 +124,7 @@
         </a>
       </div>
 
-      <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="onMintPT()">
+      <form #depositFormRef="ngForm" *ngIf="txMode === 'deposit'" (submit)="checkAPYonMintPT()">
         <div class="form-control">
           <span class="label">
             <span class="label-text">Input</span>
@@ -274,6 +274,31 @@
           </button>
         </div>
       </form>
+
+      <dialog id="negative_apy_modal" class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Negative APY Alert</h3>
+          <p class="pt-4">The APY earned on this deposit will be negative.</p>
+          <p class="pb-4">Reducing the amount of deposits may increase this APY.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-title">Expected APY</div>
+              <div class="stat-value text-error">
+                {{ actualFixedAPYs?.pt_apy | percent : '1.2-2' }}
+              </div>
+              <div class="stat-desc"></div>
+            </div>
+          </div>
+          <div class="modal-action">
+            <button class="btn btn-warning" (click)="onMintPT()">Submit</button>
+            <button class="btn" onclick="negative_apy_modal.close()">Cancel</button>
+          </div>
+        </div>
+
+        <form method="dialog" class="modal-backdrop">
+          <button class="btn">Cancel</button>
+        </form>
+      </dialog>
 
       <form #withdrawFormRef="ngForm" *ngIf="txMode === 'redeem'" (submit)="onRedeemPT()">
         <div class="form-control my-8">

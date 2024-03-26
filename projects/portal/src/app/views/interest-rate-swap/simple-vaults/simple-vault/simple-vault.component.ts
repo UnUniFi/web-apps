@@ -93,6 +93,15 @@ export class SimpleVaultComponent implements OnInit {
     ]);
   }
 
+  checkAPYonMintPT() {
+    const apy = Number(this.actualFixedAPYs?.pt_apy || 0);
+    if (apy < 0) {
+      (global as any).negative_apy_modal.showModal();
+    } else {
+      this.onMintPT();
+    }
+  }
+
   onMintPT() {
     if (!this.inputUnderlying) {
       alert('Please input the token amount.');

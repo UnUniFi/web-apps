@@ -1063,7 +1063,7 @@
                           width="30px"
                           alt="st"
                         />
-                        <div class="font-bold">100 stATOM</div>
+                        <div class="font-bold">0.5 stATOM</div>
                       </div>
                     </div>
                   </div>
@@ -1109,7 +1109,7 @@
                 components, YT and PT.
               </div>
               <div class="text-lg sm:text-2xl">
-                let's say a user stakes their tokens for 3 months:
+                Let's say a user stakes their tokens for 3 months:
               </div>
               <div class="inline-flex gap-5">
                 <div class="flex-1 px-5 sm:px-9 py-4 rounded-2xl c-white01">
@@ -1152,7 +1152,7 @@
                   <div class="inline-flex items-center gap-2">
                     <div>
                       <div class="text-left">
-                        <span style="color: #58d6a9">Principal</span>Tokens
+                        <span style="color: #58d6a9">Principal</span> Tokens
                       </div>
                       <div
                         class="p-2 rounded-md items-center inline-flex gap-1"
@@ -1305,7 +1305,7 @@
                       width="24px"
                       alt="atom_blue"
                     />
-                    <div class="font-bold">100 YT stATOM</div>
+                    <div class="font-bold">1 YT stATOM</div>
                   </div>
                 </div>
 
@@ -1353,7 +1353,9 @@
                 <div class="flex-1 px-5 sm:px-9 py-4 rounded-2xl c-white01">
                   <div class="text-xl sm:text-3xl font-bold mb-5">Before Maturity</div>
                   <div class="text-sm sm:text-xl tracking-wide mb-5">
-                    a user can use 1 underlying asset to mint XX PT + 1 YT
+                    a user can use 1 ATOM to mint XX PT + 1 YT <br />(If underlying asset and
+                    deposit asset are different, the rate will be applied. If ATOM/stATOM is 1.25,
+                    then 0.8stATOM is required)
                   </div>
                   <ul
                     class="text-sm sm:text-xl tracking-wide text-left pl-8"
@@ -1378,8 +1380,8 @@
                     <li class="mb-2">Yield earned from holding YT can be redeemed at maturity</li>
                     <li class="mb-2">YT value will have appreciated due to auto-compounding</li>
                     <li>
-                      After maturity, 1 PT can be redeemed for the underlying asset 1:1 without
-                      needing YT
+                      After maturity, 1 PT can be redeemed for ATOM 1:1 without needing YT<br />
+                      (If the vault pay out stATOM, the ATOM/stATOM rate is applied)
                     </li>
                   </ul>
                 </div>
@@ -1401,7 +1403,7 @@
                     <div class="flex-auto text-left">
                       <div class="font-bold text-sm">Before Maturity</div>
                       <div>
-                        You can mint <span class="font-bold">XX* PT and 1YT from 100 units</span>
+                        You can mint <span class="font-bold">XX* PT and 1YT from 1 units</span>
                         of the underlying asset.
                       </div>
                     </div>
@@ -1603,7 +1605,7 @@
                     <div class="flex-auto text-left">
                       <div class="font-bold text-sm">After Maturity</div>
                       <div>
-                        <span class="font-bold">PT holders</span>can redeem underlying assets 1:1
+                        <span class="font-bold">PT holders</span> can redeem underlying assets 1:1
                         without YT
                       </div>
                     </div>
@@ -1915,7 +1917,7 @@
                 Interest Rate Swaps and Fixed Yield Tranche
               </div>
               <div class="text-sm sm:text-xl tracking-wide text-left">
-                First let’s discuss Interest Rate Derivatives: a financial instrument with a value
+                First, let’s discuss Interest Rate Derivatives: a financial instrument with a value
                 based on some underlying interest rate or interest bearing asset. These instruments
                 can include futures, options, swaps, and more.
               </div>
@@ -2244,7 +2246,7 @@
                   style="list-style: disc"
                 >
                   <li class="mb-5">
-                    if a user holds a long PT position, and the yield for the underlying asset
+                    If a user holds a long PT position, and the yield for the underlying asset
                     decreases below the value of the APY guaranteed by the PT position, the user
                     will net an additional profit on their position.
                   </li>
@@ -2312,7 +2314,8 @@
                 <div class="flex-1 p-1 rounded c-white01">YT Cost</div>
               </div>
               <div class="text-lg sm:text-2xl tracking-wide">
-                If the price of YT rises, the user can also secure a profit on their position.
+                If the price of YT rises,<br />
+                the user can also secure a profit on their position.
               </div>
               <div class="text-sm sm:text-xl tracking-wide text-left">
                 The user can sell their YT prior to maturity to secure their profit, which is known
@@ -3082,8 +3085,7 @@
                           Set your input amount (For swap to YT, set the output amount)
                         </div>
                         <div class="text-xl tracking-wide text-error">
-                          If swapping to more PT or YT, APY will decrease, if less, it will
-                          increase. (Price Impact).
+                          If swapping to more PT or YT, APY will decrease. (Price Impact).
                         </div>
                         <div
                           class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"

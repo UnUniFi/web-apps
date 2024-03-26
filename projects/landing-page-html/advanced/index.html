@@ -324,7 +324,10 @@
       <div class="mx-auto max-w-screen-xl">
         <div class="mx-auto w-11/12 sm:w-5/6 flex flex-col sm:flex-row gap-8 sm:gap-12">
           <div class="w-full sm:w-1/2 flex flex-col gap-6">
-            <div class="text-2xl sm:text-4xl font-bold text-left">
+            <div
+              class="text-2xl sm:text-4xl font-bold text-left items-center"
+              onclick="changeDetail('01')"
+            >
               <img
                 src="../assets/images/icons/icon_about.svg"
                 loading="lazy"
@@ -333,24 +336,73 @@
               />
               <span class="txt-green-to-white">What is Gluon Trade?</span>
             </div>
-            <div class="text-sm sm:text-xl text-left">
-              Gluon Trade is a function within Gluon Yield Aggregator App that enables Interest Rate
-              Swaps for Fixed Yield Tranche with auto-compounding yield. If that sounds confusing no
-              worries; a simplified comparison can be made to Yield Stripping Protocols such as
-              Pendle Finance or Delv Tech (formerly Element Finance).
+            <div id="content-detail-01" class="flex flex-col gap-6 content-detail">
+              <div class="text-sm sm:text-xl text-left">
+                Gluon Trade is a function within Gluon Yield Aggregator App that enables Interest
+                Rate Swaps for Fixed Yield Tranche with auto-compounding yield. If that sounds
+                confusing no worries; a simplified comparison can be made to Yield Stripping
+                Protocols such as Pendle Finance or Delv Tech (formerly Element Finance).
+              </div>
+              <div class="text-sm sm:text-xl text-left">
+                Our first Gluon Trade product will offer
+                <strong>Fixed Yield and Yield Trading for assets such stATOM</strong>
+                (Stride liquid staked ATOM). At first, Gluon Trade will be focused towards the
+                Cosmos Ecosystem, eventually supporting many cross-chain yield-bearing assets.
+              </div>
             </div>
-            <div class="text-sm sm:text-xl text-left">
-              Our first Gluon Trade product will offer
-              <strong>Fixed Yield and Yield Trading for assets such stATOM</strong>
-              (Stride liquid staked ATOM). At first, Gluon Trade will be focused towards the Cosmos
-              Ecosystem, eventually supporting many cross-chain yield-bearing assets.
+
+            <div
+              class="text-2xl sm:text-4xl font-bold text-left items-center"
+              onclick="changeDetail('02')"
+            >
+              <img
+                src="../assets/images/icons/icon_trend.svg"
+                loading="lazy"
+                class="inline w-8 sm:w-12"
+                alt="trend"
+              />
+              <span style="color: #1e565f">What is Yield Trading?</span>
+            </div>
+            <div id="content-detail-02" class="hidden flex-col gap-6 content-detail">
+              <div class="text-sm sm:text-xl text-left">
+                In DeFi, you put your assets into a yield farming pool, and get an APY that
+                fluctuates over time. With Yield Stripping (or Yield Splitting) Protocols, you can
+                do some DeFi magic and potentially get a much higher APY (by multiples) if you do it
+                right. This DeFi magic is called yield trading, and this guide is all you need to
+                become a master at it, broken down into 4 easy sections. Please continue reading our
+                guide below!
+              </div>
+              <div class="text-sm sm:text-xl text-left">
+                Section 1: Yield TokenizationSection<br />
+                2: Yield Tokenization in Further DetailSection<br />
+                3: Interest Rate Swaps & Fixed Yield TrancheSection<br />
+                4: Yield Trading
+              </div>
             </div>
           </div>
-          <div class="w-full sm:w-1/2 h-80 sm:h-auto c-gray rounded-3xl flex gap-2 justify-center">
+          <script>
+            function changeDetail(id) {
+              deleteAllDetail('content-detail');
+              const detailId = 'content-detail-' + id;
+              const element = document.getElementById(detailId);
+              element.style.display = 'flex';
+              return;
+            }
+            function deleteAllDetail(className) {
+              const elements = document.getElementsByClassName(className);
+              for (const el of elements) {
+                el.style.display = 'none';
+              }
+              return;
+            }
+          </script>
+          <div
+            class="w-full sm:w-1/2 h-80 sm:h-auto c-gray rounded-3xl flex items-center justify-center"
+          >
             <div class="flex justify-center gap-3">
               <img
                 src="../assets/images/advenced/top.png"
-                class="w-full max-h-80"
+                class="w-full"
                 loading="lazy"
                 alt="pic"
               />
@@ -476,18 +528,6 @@
         }
       </script>
 
-      <div
-        class="w-11/12 sm:w-5/6 mx-auto text-2xl sm:text-4xl font-bold text-left mb-6"
-        style="color: #1e565f"
-      >
-        <img
-          src="../assets/images/icons/icon_trend.svg"
-          loading="lazy"
-          class="inline w-8 sm:w-12"
-          alt="trend"
-        />
-        What is Yield Trading?
-      </div>
       <div
         class="w-11/12 sm:w-5/6 mx-auto flex flex-col sm:flex-row gap-10 justify-start items-start"
       >
@@ -2707,7 +2747,6 @@
                           Step <strong>3</strong>
                         </div>
                         <div class="text-xl tracking-wide">Select the Mint tab</div>
-                        <div class="text-xl tracking-wide text-warning">Select the Mint tab</div>
                         <div
                           class="btn-cursor c-green btn-next self-start sm:self-stretch px-4 py-2 rounded-md text-center"
                           onclick="nextStep('m04')"
@@ -3723,10 +3762,7 @@
         </div>
         <div class="footer-grid-item flex flex-col gap-8 sm:gap-0">
           <span class="mb-2 font-bold uppercase">Developers</span>
-          <a
-            class="link link-hover"
-            href="https://docs.sunriselayer.io/learn/gluon"
-            target="_blank"
+          <a class="link link-hover" href="https://docs.sunriselayer.io/learn/gluon" target="_blank"
             >Docs</a
           >
           <a class="link link-hover" href="https://github.com/UnUniFi" target="_blank">GitHub</a>

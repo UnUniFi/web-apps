@@ -101,6 +101,21 @@ const denomMetadata = [
     symbol: 'USDC',
   },
   {
+    description: 'The governance token of CosmosHub  ATOM',
+    denom_units: [
+      {
+        denom: 'uatom',
+        exponent: 0,
+        aliases: [],
+      },
+
+    ],
+    base: 'uatom',
+    display: 'ATOM',
+    name: 'ATOM (Cosmos)',
+    symbol: 'ATOM',
+  },
+  {
     description: 'Stablecoin pegged to ATOM',
     denom_units: [
       {

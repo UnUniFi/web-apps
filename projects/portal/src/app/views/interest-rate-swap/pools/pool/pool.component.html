@@ -340,9 +340,9 @@
             <h2 class="card-title">
               <span>APY</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{
-                calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2'
-              }}</span>
+              <span class="text-accent">
+                Over {{ calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2' }}
+              </span>
             </h2>
 
             <div class="overflow-x-auto">
@@ -356,10 +356,10 @@
                     <th>PT Yield</th>
                     <td>{{ poolAPYs?.discount_pt_apy | percent : '1.2-2' }}</td>
                   </tr>
-                  <tr class="bg-base-100">
+                  <!-- <tr class="bg-base-100">
                     <th>LP Yield</th>
                     <td>{{ poolAPYs?.liquidity_apy | percent : '1.2-2' }}</td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <th>My Liquidity</th>
                     <td>{{ lpBalanceUSD | currency }}</td>

@@ -79,7 +79,7 @@
                 <th class="text-xs">Redeem at Maturity</th>
                 <td class="font-bold flex flex-row items-center gap-2">
                   <div>
-                    {{ ptCoin?.amount | coinAmount | number }}
+                    {{ ptCoin?.amount || 0 | coinAmount | number }}
                     {{ vault?.deposit_denom | coinDenom | async }}
                   </div>
                   <ng-container *ngIf="inputUnderlying || inputPT">

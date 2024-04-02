@@ -74,7 +74,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span>
+                  <span class="gap-2 w-full">
                     <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -85,7 +85,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
+                    <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     #depositUtAmountNgModelRef="ngModel"
@@ -276,7 +276,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span>
+                <span class="gap-2 w-full">
                   <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -287,7 +287,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
+                  <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"

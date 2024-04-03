@@ -2332,7 +2332,7 @@
                 user will always be able to buy PT at a discount, since they will not be acquiring
                 the PT component.
               </div>
-              <div class="px-5 inline-flex gap-1 items-center text-xs">
+              <div class="px-5 inline-flex gap-1 items-center text-xs max-w-full overflow-x-auto">
                 <div
                   class="p-2 rounded-md items-center inline-flex gap-1"
                   style="background: rgba(88, 214, 169, 0.2)"
@@ -2343,33 +2343,39 @@
                     width="24px"
                     alt="atom_green"
                   />
-                  <div class="font-bold">1 PT ATOM</div>
+                  <div class="font-bold whitespace-nowrap">1 PT ATOM</div>
                 </div>
-                <div class="flex-1 h-0 border-w-dotted"></div>
-                <div>When Buying Directly</div>
-                <div class="flex-1 h-0 border-w-dotted"></div>
+                <div class="flex-1 h-0 border-w-dotted min-w-[32px]"></div>
+                <div class="whitespace-nowrap">When Buying Directly</div>
+                <div class="flex-1 h-0 border-w-dotted min-w-[32px]"></div>
                 <div class="p-2 rounded-md items-center inline-flex gap-1 self-stretch c-white01">
-                  <img
-                    src="../assets/images/icons/atom_black.svg"
-                    loading="lazy"
-                    width="30px"
-                    alt="atom_black"
-                  />
-                  <div class="font-bold">0.9 stATOM</div>
+                  <div class="w-6">
+                    <img
+                      src="../assets/images/icons/atom.svg"
+                      loading="lazy"
+                      width="24px"
+                      alt="atom"
+                    />
+                  </div>
+                  <div class="font-bold whitespace-nowrap">0.99 ATOM</div>
                   <div class="w-5"></div>
                 </div>
               </div>
-              <div class="px-5 py-2 inline-flex gap-2 items-center font-bold c-gray">
-                <div class="text-sm sm:text-xl">FY Earned:</div>
-                <div class="flex-1 h-0 border-w-dotted"></div>
+              <div
+                class="px-5 py-2 inline-flex gap-2 items-center font-bold c-gray max-w-full overflow-x-auto"
+              >
+                <div class="text-sm sm:text-xl whitespace-nowrap">FY Earned:</div>
+                <div class="flex-1 h-0 border-w-dotted min-w-[32px]"></div>
                 <div class="p-2 rounded-md items-center inline-flex gap-1 self-stretch c-white01">
-                  <img
-                    src="../assets/images/icons/atom_black.svg"
-                    loading="lazy"
-                    width="30px"
-                    alt="atom_black"
-                  />
-                  <div class="text-xs font-bold">0.1 stATOM</div>
+                  <div class="w-6">
+                    <img
+                      src="../assets/images/icons/atom.svg"
+                      loading="lazy"
+                      width="24px"
+                      alt="atom"
+                    />
+                  </div>
+                  <div class="text-xs font-bold">0.01 ATOM</div>
                   <div class="w-5"></div>
                 </div>
               </div>
@@ -2379,11 +2385,11 @@
                 risk. A long PT position is a short YT position. Therefore, if the market expects
                 yield to decrease, the price of PT increases.
               </div>
-              <div class="text-sm sm:text-xl tracking-wide text-left">
+              <!-- <div class="text-sm sm:text-xl tracking-wide text-left">
                 An important note is that time works against the price of YT. Provided no
                 circumstances change, and yield in the underlying asset remains unchanged, YT price
                 gradually falls over time to become zero at maturity.
-              </div>
+              </div> -->
               <div class="p-8 rounded-2xl" style="background: rgba(255, 255, 255, 0.1)">
                 <div class="text-xl sm:text-3xl font-bold tracking-wide mb-5">Example:</div>
                 <ul
@@ -2446,10 +2452,9 @@
               </div>
               <div class="text-xl sm:text-3xl font-bold">Long yield (YT)</div>
               <div class="text-sm sm:text-xl tracking-wide text-left">
-                Acquiring YT tokens gives the user the right to the yield of 1 underlying asset
-                until maturity. If the underlying asset generates more yield than the original
-                purchase price of the YT token, the holder will have secured a profit on their
-                position.
+                Acquiring YT tokens gives the user the right to the yield of underlying asset until
+                maturity. If the underlying asset generates more yield than the original purchase
+                price of the YT token, the holder will have secured a profit on their position.
               </div>
               <div class="px-5 py-2 inline-flex gap-2 items-center font-bold c-gray">
                 <div class="text-xl">Profit:</div>
@@ -2467,9 +2472,10 @@
                 as Active Yield Trading.
               </div>
               <div class="text-sm sm:text-xl tracking-wide text-left">
-                An important note is that time works against the price of YT. Provided no
+                YT price always grows from the yield on underlying asset.
+                <!-- An important note is that time works against the price of YT. Provided no
                 circumstances change, and yield in the underlying asset remains unchanged, YT price
-                gradually falls over time to become zero at maturity.
+                gradually falls over time to become zero at maturity. -->
               </div>
               <div class="p-8 rounded-2xl" style="background: rgba(255, 255, 255, 0.1)">
                 <div class="text-xl sm:text-3xl font-bold tracking-wide mb-4">

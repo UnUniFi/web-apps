@@ -56,7 +56,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span>
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -67,7 +67,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
+                    <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     *ngIf="swapTab === 'pt'"
@@ -153,7 +153,9 @@
                     </div>
                   </div>
                   <div>
-                    {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }}#{{ trancheId }}
+                    {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }} #{{
+                      trancheId
+                    }}
                   </div>
                 </span>
                 <input
@@ -315,7 +317,7 @@
                       </div>
                     </div>
                     <div>
-                      {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }}#{{
+                      {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }} #{{
                         trancheId
                       }}
                     </div>
@@ -395,7 +397,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span>
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -406,7 +408,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
+                  <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -475,7 +477,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span>
+                  <span class="gap-2 w-full">
                     <div class="avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -486,7 +488,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
+                    <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     class="join-item input input-bordered input-info w-full"
@@ -543,7 +545,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT {{ vault?.denom | coinDenom | async }}#{{ trancheId }}</div>
+                  <div>PT {{ vault?.denom | coinDenom | async }} #{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -563,7 +565,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>YT {{ vault?.denom | coinDenom | async }}#{{ trancheId }}</div>
+                  <div>YT {{ vault?.denom | coinDenom | async }} #{{ trancheId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -660,7 +662,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT {{ vault?.denom | coinDenom | async }}#{{ trancheId }}</div>
+                    <div>PT {{ vault?.denom | coinDenom | async }} #{{ trancheId }}</div>
                   </span>
                   <input
                     #pairPtAmountNgModelRef="ngModel"
@@ -711,7 +713,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>YT {{ vault?.denom | coinDenom | async }}#{{ trancheId }}</div>
+                    <div>YT {{ vault?.denom | coinDenom | async }} #{{ trancheId }}</div>
                   </span>
                   <input
                     #pairYtAmountNgModelRef="ngModel"
@@ -757,7 +759,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span>
+                <span class="gap-2 w-full">
                   <div class="avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -768,7 +770,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
+                  <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -831,7 +833,7 @@
               </div>
               <div class="mr-4">
                 <div class="text-xl font-bold">
-                  {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }}#{{ trancheId }}
+                  {{ swapTab | uppercase }} {{ vault?.denom | coinDenom | async }} #{{ trancheId }}
                 </div>
                 <div class="text-sm opacity-50"></div>
               </div>

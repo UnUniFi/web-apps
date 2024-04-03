@@ -74,7 +74,7 @@
               </span>
               <div>
                 <label class="input-group join">
-                  <span>
+                  <span class="gap-2 w-full">
                     <div class="hidden sm:avatar">
                       <div class="w-8 rounded-full">
                         <img src="{{ vaultImage?.image }}" />
@@ -85,7 +85,7 @@
                         </div>
                       </div>
                     </div>
-                    {{ vault?.deposit_denom | coinDenom | async }}
+                    <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     #depositUtAmountNgModelRef="ngModel"
@@ -136,7 +136,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT {{ vault?.denom | coinDenom | async }}#{{ poolId }}</div>
+                    <div>PT {{ vault?.denom | coinDenom | async }} #{{ poolId }}</div>
                   </span>
                   <input
                     #depositPtAmountNgModelRef="ngModel"
@@ -192,7 +192,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>LP {{ vault?.denom | coinDenom | async }}#{{ poolId }}</div>
+                  <div>LP {{ vault?.name }} #{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -230,7 +230,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>LP {{ vault?.denom | coinDenom | async }}#{{ poolId }}</div>
+                    <div>LP {{ vault?.name }} #{{ poolId }}</div>
                   </span>
                   <input
                     #withdrawAmountNgModelRef="ngModel"
@@ -276,7 +276,7 @@
                 <span class="label-text">Output (Estimated)</span>
               </span>
               <label class="input-group join">
-                <span>
+                <span class="gap-2 w-full">
                   <div class="hidden sm:avatar">
                     <div class="w-8 rounded-full">
                       <img src="{{ vaultImage?.image }}" />
@@ -287,7 +287,7 @@
                       </div>
                     </div>
                   </div>
-                  {{ vault?.deposit_denom | coinDenom | async }}
+                  <div>{{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -311,7 +311,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT {{ vault?.denom | coinDenom | async }}#{{ poolId }}</div>
+                  <div>PT {{ vault?.denom | coinDenom | async }} #{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -340,9 +340,9 @@
             <h2 class="card-title">
               <span>APY</span>
               <span class="flex-auto"></span>
-              <span class="text-accent">{{
-                calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2'
-              }}</span>
+              <span class="text-accent">
+                Over {{ calcTotalPoolAPY(poolAPYs, trancheYtAPYs) | percent : '1.2-2' }}
+              </span>
             </h2>
 
             <div class="overflow-x-auto">
@@ -356,10 +356,10 @@
                     <th>PT Yield</th>
                     <td>{{ poolAPYs?.discount_pt_apy | percent : '1.2-2' }}</td>
                   </tr>
-                  <tr class="bg-base-100">
+                  <!-- <tr class="bg-base-100">
                     <th>LP Yield</th>
                     <td>{{ poolAPYs?.liquidity_apy | percent : '1.2-2' }}</td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <th>My Liquidity</th>
                     <td>{{ lpBalanceUSD | currency }}</td>

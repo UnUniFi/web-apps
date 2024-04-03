@@ -874,7 +874,7 @@
         </div>
 
         <!-- content -->
-        <div class="w-full sm:w-2/3 flex flex-col gap-5 section-content-wrap text-center">
+        <div class="w-full sm:w-4/5 flex flex-col gap-5 section-content-wrap text-center">
           <!-- 1-0 -->
           <div id="section-content-s1-0" class="section-content">
             <div class="flex flex-col gap-5">
@@ -913,23 +913,28 @@
               </div>
 
               <div
-                class="px-2 sm:px-5 py-4 rounded-md inline-flex gap-1 items-center text-xs overflow-x-scroll"
+                class="px-2 sm:px-5 py-4 rounded-md inline-flex gap-1 items-center text-xs overflow-x-auto"
                 style="border: 1px #a6b0c3 dotted"
               >
-                <div class="p-2 rounded-md items-center inline-flex sm:gap-1 c-white01">
-                  <img
-                    src="../assets/images/icons/atom_black.svg"
-                    loading="lazy"
-                    width="30px"
-                    alt="atom_black"
-                  />
-                  <div class="font-bold">100 ATOM staked</div>
-                  <div class="w-5 only-pc"></div>
+                <div class="p-2 rounded-md items-center inline-flex sm:gap-1 c-white01 mt-4">
+                  <div class="w-8">
+                    <img
+                      src="../assets/images/icons/atom.svg"
+                      loading="lazy"
+                      width="30px"
+                      alt="atom"
+                    />
+                  </div>
+                  <div class="font-bold whitespace-nowrap">100 ATOM Staked</div>
                 </div>
-                <div class="flex flex-col sm:flex-row sm:gap-1">
-                  <img src="../assets/images/arrow.svg" class="sm:block sm:flex-auto only-pc" />
-                  <div>After (3) Months</div>
-                  <img src="../assets/images/arrow.svg" class="block sm:flex-auto" />
+                <div class="flex flex-row items-center sm:gap-1 mt-4">
+                  <div class="w-16">
+                    <img src="../assets/images/arrow.svg" width="64px" />
+                  </div>
+                  <div class="whitespace-nowrap">After (3) Months</div>
+                  <div class="w-16">
+                    <img src="../assets/images/arrow.svg" width="64px" />
+                  </div>
                 </div>
                 <div>
                   <div class="text-left" style="color: #58d6a9">Principal</div>
@@ -937,93 +942,150 @@
                     class="p-1 sm:p-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
                     style="background: rgba(88, 214, 169, 0.2)"
                   >
-                    <img
-                      src="../assets/images/icons/atom.svg"
-                      loading="lazy"
-                      width="24px"
-                      alt="atom"
-                    />
-                    <div class="font-bold">100 ATOM</div>
+                    <div class="w-6">
+                      <img
+                        src="../assets/images/icons/atom.svg"
+                        loading="lazy"
+                        width="24px"
+                        alt="atom"
+                      />
+                    </div>
+                    <div class="font-bold whitespace-nowrap">100 ATOM</div>
                   </div>
                 </div>
-                <div class="text-2xl">+</div>
+                <div class="text-2xl pt-4 px-4">+</div>
                 <div>
                   <div class="text-left" style="color: #4c94ff">Yield</div>
                   <div
                     class="px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
                     style="background: rgba(75.97, 147.58, 255, 0.2)"
                   >
+                    <div class="w-6">
+                      <img
+                        src="../assets/images/icons/atom.svg"
+                        loading="lazy"
+                        width="24px"
+                        alt="atom"
+                      />
+                    </div>
+                    <div class="font-bold whitespace-nowrap">0.5 ATOM</div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="px-2 sm:px-5 py-4 rounded-md inline-flex gap-1 items-center justify-between text-xs overflow-x-auto"
+                style="border: 1px #a6b0c3 dotted"
+              >
+                <div>
+                  <div
+                    class="p-1 sm:p-2 rounded-md items-center inline-flex sm:gap-1 c-white01 mt-4"
+                  >
+                    <div class="w-6">
+                      <img
+                        src="../assets/images/icons/atom_black.svg"
+                        loading="lazy"
+                        width="24px"
+                        alt="atom"
+                      />
+                    </div>
+                    <div class="font-bold">100 stATOM</div>
+                  </div>
+                  <div class="text-left whitespace-nowrap">Yield bearing Position</div>
+                </div>
+                <div class="flex">
+                  <div class="w-6">
+                    <img src="../assets/images/arrow.svg" width="24px" />
+                  </div>
+                </div>
+                <div class="p-1 sm:p-2 rounded-md items-center inline-flex sm:gap-1 c-white01">
+                  <div class="w-6">
                     <img
                       src="../assets/images/icons/atom.svg"
                       loading="lazy"
                       width="24px"
                       alt="atom"
                     />
-                    <div class="font-bold">0.5 ATOM</div>
+                  </div>
+                  <div class="font-bold whitespace-nowrap">100 ATOM</div>
+                </div>
+                <div class="flex">
+                  <div class="w-6">
+                    <img
+                      src="../assets/images/arrow_up.svg"
+                      class="block mb-5 mx-auto"
+                      width="24px"
+                    />
+                    <img src="../assets/images/arrow_down.svg" class="block mx-auto" width="24px" />
                   </div>
                 </div>
-              </div>
-              <div
-                class="px-2 sm:px-5 py-4 rounded-md inline-flex gap-1 items-center justify-between text-xs overflow-x-scroll"
-                style="border: 1px #a6b0c3 dotted"
-              >
-                <div
-                  class="flex-auto p-1 sm:p-2 rounded-md items-center inline-flex sm:gap-1 c-white01"
-                >
-                  <img
-                    src="../assets/images/icons/atom.svg"
-                    loading="lazy"
-                    width="24px"
-                    alt="atom"
-                  />
-                  <div class="font-bold">100 stATOM</div>
-                </div>
-                <div class="flex-auto">
-                  <img
-                    src="../assets/images/arrow_up.svg"
-                    class="block mb-5 mx-auto"
-                    width="40px"
-                  />
-                  <img src="../assets/images/arrow_down.svg" class="block mx-auto" width="40px" />
-                </div>
-                <div class="flex-auto flex flex-col gap-4">
+
+                <div class="flex flex-col gap-4">
                   <!-- PT -->
                   <div class="inline-flex items-center gap-1">
                     <div>
-                      <div class="text-left">
+                      <div class="text-left whitespace-nowrap">
                         <span style="color: #58d6a9">Principal</span> Tokens
                       </div>
                       <div
                         class="px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
                         style="background: rgba(88, 214, 169, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_green.svg"
-                          loading="lazy"
-                          width="24px"
-                          alt="pt"
-                        />
-                        <div class="font-bold">100 PT stATOM</div>
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom_green.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="pt"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">100 PT ATOM</div>
                       </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:gap-1">
-                      <img src="../assets/images/arrow.svg" class="sm:block sm:flex-auto only-pc" />
-                      <div>After (3) Months</div>
-                      <img src="../assets/images/arrow.svg" class="block sm:flex-auto" />
+                    <div class="flex flex-row items-center sm:gap-1 mt-4">
+                      <div class="w-6">
+                        <img src="../assets/images/arrow.svg" width="24px" />
+                      </div>
+                      <div class="whitespace-nowrap">After (3) Months</div>
+                      <div class="w-6">
+                        <img src="../assets/images/arrow.svg" width="24px" />
+                      </div>
                     </div>
                     <div>
-                      <div class="text-left"><span style="color: #58d6a9">Principal</span></div>
+                      <div
+                        class="mt-4 px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
+                        style="background: rgba(88, 214, 169, 0.2)"
+                      >
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="st"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">100 ATOM</div>
+                      </div>
+                    </div>
+                    <div class="w-6 mt-4">
+                      <img src="../assets/images/arrow.svg" width="24px" />
+                    </div>
+                    <div>
+                      <div class="text-left whitespace-nowrap">
+                        <span style="color: #58d6a9">Principal</span>
+                      </div>
                       <div
                         class="px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
                         style="background: rgba(88, 214, 169, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_black.svg"
-                          loading="lazy"
-                          width="30px"
-                          alt="st"
-                        />
-                        <div class="font-bold">100 stATOM</div>
+                        <div class="w-8">
+                          <img
+                            src="../assets/images/icons/atom_black.svg"
+                            loading="lazy"
+                            width="30px"
+                            alt="st"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">99.501 stATOM</div>
                       </div>
                     </div>
                   </div>
@@ -1035,33 +1097,62 @@
                         class="px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
                         style="background: rgba(75.97, 147.58, 255, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_blue.svg"
-                          loading="lazy"
-                          width="24px"
-                          alt="yt"
-                        />
-                        <div class="font-bold">100 YT stATOM</div>
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom_blue.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="yt"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">100 YT ATOM</div>
                       </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:gap-1">
-                      <img src="../assets/images/arrow.svg" class="sm:block sm:flex-auto only-pc" />
-                      <div>After (3) Months</div>
-                      <img src="../assets/images/arrow.svg" class="block sm:flex-auto" />
+                    <div class="flex flex-row items-center sm:gap-1 mt-4">
+                      <div class="w-6">
+                        <img src="../assets/images/arrow.svg" width="24px" />
+                      </div>
+                      <div class="whitespace-nowrap">After (3) Months</div>
+                      <div class="w-6">
+                        <img src="../assets/images/arrow.svg" width="24px" />
+                      </div>
                     </div>
                     <div>
-                      <div class="text-left"><span style="color: #4c94ff">Yield</span></div>
+                      <div
+                        class="mt-4 px-1 sm:px-2 py-2 rounded-md items-center inline-flex sm:gap-1 self-stretch"
+                        style="background: rgba(75.97, 147.58, 255, 0.2)"
+                      >
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="st"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">0.5 ATOM</div>
+                      </div>
+                    </div>
+                    <div class="w-6 mt-4">
+                      <img src="../assets/images/arrow.svg" width="24px" />
+                    </div>
+                    <div>
+                      <div class="text-left whitespace-nowrap">
+                        <span style="color: #4c94ff">Yield</span>
+                      </div>
                       <div
                         class="px-1 sm:px-2 py-2 rounded-md items-center inline-flex gap-1 self-stretch"
                         style="background: rgba(75.97, 147.58, 255, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_black.svg"
-                          loading="lazy"
-                          width="30px"
-                          alt="st"
-                        />
-                        <div class="font-bold">0.5 stATOM</div>
+                        <div class="w-8">
+                          <img
+                            src="../assets/images/icons/atom_black.svg"
+                            loading="lazy"
+                            width="30px"
+                            alt="st"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">0.499 stATOM</div>
                       </div>
                     </div>
                   </div>

@@ -874,7 +874,7 @@
         </div>
 
         <!-- content -->
-        <div class="w-full sm:w-4/5 flex flex-col gap-5 section-content-wrap text-center">
+        <div class="w-full sm:w-2/3 flex flex-col gap-5 section-content-wrap text-center">
           <!-- 1-0 -->
           <div id="section-content-s1-0" class="section-content">
             <div class="flex flex-col gap-5">
@@ -1217,24 +1217,32 @@
                 </div>
               </div>
               <div
-                class="px-5 py-4 rounded-md inline-flex gap-1 items-center justify-between text-xs"
+                class="px-5 py-4 rounded-md inline-flex gap-1 items-center justify-between text-xs overflow-x-auto"
                 style="border: 1px #a6b0c3 dotted; font-size: 10px"
               >
                 <div>
-                  <div>Yield bearing Position</div>
+                  <div class="whitespace-nowrap">Yield bearing Position</div>
                   <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
-                    <img
-                      src="../assets/images/icons/atom.svg"
-                      loading="lazy"
-                      width="24px"
-                      alt="atom"
-                    />
-                    <div class="font-bold">100 stATOM</div>
+                    <div class="w-8">
+                      <img
+                        src="../assets/images/icons/atom_black.svg"
+                        loading="lazy"
+                        width="30px"
+                        alt="statom"
+                      />
+                    </div>
+                    <div class="font-bold whitespace-nowrap">100 stATOM</div>
                   </div>
                 </div>
-                <div class="w-auto">
-                  <img src="../assets/images/arrow_up.svg" class="block mb-4" width="40px" />
-                  <img src="../assets/images/arrow_down.svg" class="block" width="40px" />
+                <div class="flex">
+                  <div class="w-10">
+                    <img
+                      src="../assets/images/arrow_up.svg"
+                      class="block mb-5 mx-auto"
+                      width="40px"
+                    />
+                    <img src="../assets/images/arrow_down.svg" class="block mx-auto" width="40px" />
+                  </div>
                 </div>
                 <div class="flex flex-col gap-8">
                   <!-- g -->
@@ -1247,30 +1255,22 @@
                         class="p-2 rounded-md items-center inline-flex gap-1"
                         style="background: rgba(88, 214, 169, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_green.svg"
-                          loading="lazy"
-                          width="24px"
-                          alt="pt"
-                        />
-                        <div class="font-bold">100 PT stATOM</div>
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom_green.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="pt"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">100 PT ATOM</div>
                       </div>
                     </div>
                     <div>
-                      <div>
+                      <div class="text-left whitespace-nowrap">
                         Can redeem the <span style="color: #58d6a9">Principal</span> after maturity
                       </div>
-                      <!-- <img src="../assets/images/arrow_dot.svg" width="80%" class="block" /> -->
-                    </div>
-
-                    <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
-                      <img
-                        src="../assets/images/icons/atom_black.svg"
-                        loading="lazy"
-                        width="30px"
-                        alt="st"
-                      />
-                      <div class="font-bold">100 stATOM</div>
+                      <img src="../assets/images/arrow_dot.svg" width="100%" class="block" />
                     </div>
                   </div>
                   <!-- b -->
@@ -1281,30 +1281,49 @@
                         class="p-2 rounded-md items-center inline-flex gap-1"
                         style="background: rgba(75.97, 147.58, 255, 0.2)"
                       >
-                        <img
-                          src="../assets/images/icons/atom_blue.svg"
-                          loading="lazy"
-                          width="24px"
-                          alt="yt"
-                        />
-                        <div class="font-bold">100 YT stATOM</div>
+                        <div class="w-6">
+                          <img
+                            src="../assets/images/icons/atom_blue.svg"
+                            loading="lazy"
+                            width="24px"
+                            alt="yt"
+                          />
+                        </div>
+                        <div class="font-bold whitespace-nowrap">100 YT ATOM</div>
                       </div>
                     </div>
-                    <div class="flex flex-col justify-center items-center">
-                      <div>
+                    <div>
+                      <div class="text-left marker:whitespace-nowrap">
                         Can redeem the <span style="color: #4c94ff">Yield</span> after maturity
                       </div>
-                      <!-- <img src="../assets/images/arrow_dot.svg" width="50%" /> -->
+                      <img src="../assets/images/arrow_dot.svg" width="100%" />
                     </div>
-                    <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
+                  </div>
+                </div>
+                <div class="w-4 justify-center">
+                  <img src="../assets/images/green_dot.svg" height="60px" class="block" />
+                </div>
+
+                <div class="flex flex-col gap-8 mt-2">
+                  <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
+                    <div class="w-8">
                       <img
                         src="../assets/images/icons/atom_black.svg"
                         loading="lazy"
                         width="30px"
                         alt="st"
                       />
-                      <div class="font-bold">0.5 stATOM</div>
                     </div>
+                    <div class="font-bold">99.501 stATOM</div>
+                  </div>
+                  <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
+                    <img
+                      src="../assets/images/icons/atom_black.svg"
+                      loading="lazy"
+                      width="30px"
+                      alt="st"
+                    />
+                    <div class="font-bold">0.499 stATOM</div>
                   </div>
                 </div>
               </div>
@@ -1394,7 +1413,7 @@
                       width="24px"
                       alt="atom_blue"
                     />
-                    <div class="font-bold">1 YT stATOM</div>
+                    <div class="font-bold">1 YT ATOM</div>
                   </div>
                 </div>
 
@@ -1420,7 +1439,7 @@
                   />
 
                   <div>
-                    <div class="font-bold text-sm">YT st ATOM</div>
+                    <div class="font-bold text-sm">YT ATOM</div>
                     <div class="text-xs">The yield generated by the underlying asset (ATOM)</div>
                   </div>
                 </div>

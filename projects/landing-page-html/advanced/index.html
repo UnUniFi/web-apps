@@ -890,14 +890,19 @@
                 </div>
                 <div class="text-3xl font-bold" onclick="changeContent('s1-1')">&gt;</div>
               </div>
-              <div class="text-xl sm:text-3xl font-bold">Yield Tokenization and Bond Stripping</div>
-              <div class="text-sm sm:text-xl tracking-wide">
+              <div class="text-sm sm:text-xl tracking-wide text-left">
                 In traditional finance, bond stripping is the practice of separating the principle
                 and coupon payments of a debt obligation and selling the two components separately.
                 The principle represents the bond itself, while the coupon represents the interest
                 rate of the bond.
               </div>
-              <div class="text-lg sm:text-2xl">
+              <div class="text-sm sm:text-xl tracking-wide text-left">
+                Note: In yield tokenisation process, the number of stATOM tokens after maturity does
+                not change, but it's split into PT/YT tokens to provide as liquidity for yield
+                traders. Liquidity providers get extra rewards from PT/YT traders.
+              </div>
+              <div class="text-xl sm:text-3xl font-bold">Yield Tokenization and Bond Stripping</div>
+              <div class="text-lg sm:text-2xl w-11/12 self-center">
                 Yield Tokenization emulates this process on-chain by stripping a yield-bearing asset
                 into two components:
               </div>
@@ -1971,10 +1976,10 @@
                 <div class="p-2 rounded-md items-center inline-flex gap-1 c-white01">
                   <div class="w-6">
                     <img
-                      src="../assets/images/icons/atom_black.svg"
+                      src="../assets/images/icons/atom.svg"
                       loading="lazy"
                       width="24px"
-                      alt="atom_black"
+                      alt="atom"
                     />
                   </div>
                   <div class="font-bold">1 ATOM</div>
@@ -2066,7 +2071,7 @@
                 interest generated from a specified principal amount is swapped for a guaranteed
                 fixed yield. Users wishing to earn FY without exposure to variable yield can simply
                 acquire FY directly (without first acquiring the underlying asset). Additionally,
-                with Fixed Yield, there is zero default risk (no impermanent loss).
+                with Fixed Yield, there is zero risk.
                 <br />
                 <span class="font-bold"> Fixed Yield = FY</span>
               </div>
@@ -2175,13 +2180,15 @@
               <div class="text-sm sm:text-xl tracking-wide text-left">
                 <span class="font-bold">Example:</span> a user is buying PT for ATOM liquid staked
                 in Stride (stATOM), also known as PT ATOM. Since PT ATOM does not include the yield
-                component, PT ATOM will always be cheaper than 1 stATOM.
-                <span class="font-bold">This is true for all PT.</span>
+                component, PT ATOM will always be cheaper than 1 ATOM.
+              </div>
+              <div class="text-sm sm:text-xl tracking-wide text-left font-bold">
+                This is true for all PT.
               </div>
               <div class="text-sm sm:text-xl tracking-wide text-left">
-                After buying 1 PT ATOM at a discounted price (0.9 stATOM), User can redeem 1 stATOM
+                After buying 1 PT ATOM at a discounted price (0.99 stATOM), User can redeem 1 ATOM
                 for his PT upon maturity. This is a fixed return (fixed yield) since the amount of
-                stATOM redeemable at maturity is fixed.
+                ATOM redeemable at maturity is fixed.
               </div>
               <div
                 class="p-5 rounded-lg inline-flex items-center text-xs max-w-full overflow-x-auto"
@@ -2207,7 +2214,7 @@
                 <div class="flex-1 h-0 border-w-dotted min-w-[32px]"></div>
                 <div class="mx-1">
                   <div class="mb-2 whitespace-nowrap">1 Year Later</div>
-                  <div class="whitespace-nowrap" style="color: #58d6a9">User gets 11% APY</div>
+                  <div class="whitespace-nowrap" style="color: #58d6a9">User gets 1% APY</div>
                 </div>
                 <div class="flex-1 h-0 border-w-dotted min-w-[32px]"></div>
                 <div>
@@ -2328,7 +2335,7 @@
                 Since the value of FY is determined directly based on the price difference between
                 PT and the underlying asset, FY is a long PT position. When buying PT directly, the
                 user will always be able to buy PT at a discount, since they will not be acquiring
-                the PT component.
+                the yield component.
               </div>
               <div class="px-5 inline-flex gap-1 items-center text-xs max-w-full overflow-x-auto">
                 <div
@@ -2455,9 +2462,9 @@
                 price of the YT token, the holder will have secured a profit on their position.
               </div>
               <div class="px-5 py-2 inline-flex gap-2 items-center font-bold c-gray">
-                <div class="text-xl">Profit:</div>
+                <div class="text-xl">Profits:</div>
                 <div class="text-sm">=</div>
-                <div class="flex-1 p-1 rounded c-white01">Future Yield</div>
+                <div class="flex-1 p-1 rounded c-white01">Future YT Cost</div>
                 <div class="text-sm">-</div>
                 <div class="flex-1 p-1 rounded c-white01">YT Cost</div>
               </div>

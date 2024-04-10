@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'vaults/:contract',
-    component: ContractVaultsComponent,
+    redirectTo: 'vaults',
   },
   {
     path: 'vaults/:contract/:id',
@@ -37,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: 'simple-vaults/:contract',
-    component: SimpleVaultComponent,
+    redirectTo: 'simple-vaults',
   },
   {
     path: 'pools',

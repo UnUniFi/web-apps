@@ -152,7 +152,9 @@
                       </div>
                     </div>
                   </div>
-                  <div>{{ swapTab | uppercase }} {{ vault?.name }} #{{ trancheId }}</div>
+                  <div>
+                    {{ swapTab | uppercase }} {{ vault?.deposit_denom | coinDenom | async }}
+                  </div>
                 </span>
                 <input
                   *ngIf="swapTab === 'pt'"
@@ -312,7 +314,9 @@
                         </div>
                       </div>
                     </div>
-                    <div>{{ swapTab | uppercase }} {{ vault?.name }} #{{ trancheId }}</div>
+                    <div>
+                      {{ swapTab | uppercase }} {{ vault?.deposit_denom | coinDenom | async }}
+                    </div>
                   </span>
                   <input
                     *ngIf="swapTab === 'pt'"
@@ -537,7 +541,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT {{ vault?.name }} #{{ trancheId }}</div>
+                  <div>PT {{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -557,7 +561,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>YT {{ vault?.name }} #{{ trancheId }}</div>
+                  <div>YT {{ vault?.deposit_denom | coinDenom | async }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"
@@ -654,7 +658,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT {{ vault?.name }} #{{ trancheId }}</div>
+                    <div>PT {{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     #pairPtAmountNgModelRef="ngModel"
@@ -705,7 +709,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>YT {{ vault?.name }} #{{ trancheId }}</div>
+                    <div>YT {{ vault?.deposit_denom | coinDenom | async }}</div>
                   </span>
                   <input
                     #pairYtAmountNgModelRef="ngModel"
@@ -825,7 +829,7 @@
               </div>
               <div class="mr-4">
                 <div class="text-xl font-bold">
-                  {{ swapTab | uppercase }} {{ vault?.name }} #{{ trancheId }}
+                  {{ swapTab | uppercase }} {{ vault?.deposit_denom | coinDenom | async }}
                 </div>
                 <div class="text-sm opacity-50"></div>
               </div>

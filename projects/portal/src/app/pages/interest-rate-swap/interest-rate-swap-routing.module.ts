@@ -37,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: 'simple-vaults/:contract',
-    redirectTo: 'simple-vaults',
+    component: SimpleVaultComponent,
   },
   {
     path: 'pools',

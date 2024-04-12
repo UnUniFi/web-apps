@@ -136,7 +136,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>PT {{ vault?.denom | coinDenom | async }} #{{ poolId }}</div>
+                    <div>PT {{ vault?.name }} #{{ poolId }}</div>
                   </span>
                   <input
                     #depositPtAmountNgModelRef="ngModel"
@@ -311,7 +311,7 @@
                       </div>
                     </div>
                   </div>
-                  <div>PT {{ vault?.denom | coinDenom | async }} #{{ poolId }}</div>
+                  <div>PT {{ vault?.name }} #{{ poolId }}</div>
                 </span>
                 <input
                   class="join-item input input-bordered w-full"

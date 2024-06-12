@@ -5,6 +5,7 @@ import {
 import { ConfigService } from '../config.service';
 import { SimulatedTxResultResponse } from '../cosmos/tx-common.model';
 import { TxCommonService } from '../cosmos/tx-common.service';
+import { KeplrService } from '../wallets/keplr/keplr.service';
 import { CosmosWallet, WalletType } from '../wallets/wallet.model';
 import { WalletService } from '../wallets/wallet.service';
 import { Dialog } from '@angular/cdk/dialog';
@@ -30,6 +31,7 @@ export class TxCommonApplicationService {
     private readonly walletService: WalletService,
     private readonly txCommon: TxCommonService,
     private readonly config: ConfigService,
+    private readonly keplr: KeplrService,
   ) {}
 
   async getPrerequisiteData() {
@@ -172,6 +174,15 @@ export class TxCommonApplicationService {
         throw Error('Failed to sign!');
       }
 
+      if (currentCosmosWallet.type === WalletType.keplr) {
+        console.log('keplr sendTx');
+        const txHash = await this.keplr.sendTx(signedTxBuilder);
+        if (!txHash) {
+          throw Error('Failed to broadcast Tx on Keplr!');
+        }
+        return txHash;
+      }
+      console.log('NOT keplr sendTx');
       txResult = await this.txCommon.announceTx(txBuilder);
       txHash = txResult?.tx_response?.txhash;
       if (txHash === undefined) {

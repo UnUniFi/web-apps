@@ -320,38 +320,4 @@ const configs = [
       messageModules,
     },
   },
-  // CauchyE B node without Monitor
-  {
-    id: domainCauchyEB,
-    rpc: `${location.protocol}//${domainCauchyEB}`,
-    restURL: `${location.protocol}//${domainCauchyEB}:${restPort}`,
-    websocketURL: `${location.protocol.replace('http', 'ws')}//${domainCauchyEB}:${websocketPort}`,
-    chainID,
-    chainName,
-    bech32Prefix,
-    minimumGasPrices: [
-      {
-        denom: 'uguu',
-        amount: 0.015,
-      },
-    ],
-    apps,
-    denomMetadata,
-    strategiesInfo,
-    certifiedVaults,
-    extension: {
-      faucet: [
-        {
-          hasFaucet: true,
-          faucetURL: `${location.protocol}//${domainCauchyEB}:${faucetUguuPort}`,
-          denom: 'uguu',
-          creditAmount: 2000,
-          maxCredit: 2000,
-        },
-      ],
-      // monitor: {},
-      navigations: [],
-      messageModules,
-    },
-  },
 ];
